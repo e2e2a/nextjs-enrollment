@@ -3,7 +3,6 @@
 // import { useToast } from "@/components/ui/use-toast";
 // import { Loader, UserCard } from "@/components/shared";
 import Loader from "@/components/shared/Loader";
-import PostCard from "@/components/shared/PostCard";
 import UserCard from "@/components/shared/UserCard";
 // import { useGetRecentPosts, useGetUsers } from "@/lib/react-query/queries";
 
@@ -47,7 +46,6 @@ const Home = () => {
                 {/* <li key={post.$id} className="flex justify-center w-full"> */}
                 <li className="flex justify-center w-full">
                   {/* <PostCard post={post} /> */}
-                  <PostCard />
                 </li>
               {/* ))} */}
             </ul>

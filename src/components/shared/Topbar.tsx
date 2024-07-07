@@ -1,20 +1,22 @@
+'use client';
 import { useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
-
 import { Button } from '../ui/button';
 import Link from 'next/link';
+import { bottombarLinks } from '@/constant';
+import { usePathname } from 'next/navigation';
 // import { useUserContext } from "@/context/AuthContext";
 // import { useSignOutAccount } from "@/lib/react-query/queries";
 
 const Topbar = () => {
-//   const navigate = useNavigate();
+  //   const navigate = useNavigate();
   //   const { user } = useUserContext();
   //   const { mutate: signOut, isSuccess } = useSignOutAccount();
 
   //   useEffect(() => {
   //     if (isSuccess) navigate(0);
   //   }, [isSuccess]);
-
+  const pathname = usePathname();
   return (
     <section className='topbar'>
       <div className='flex-between py-4 px-5'>
@@ -40,6 +42,22 @@ const Topbar = () => {
             />
           </Link>
         </div>
+      </div>
+      <div className='flex-between w-full rounded-b-[20px] bg-dark-2 px-[6rem] py-4 '>
+        {bottombarLinks.map((link) => {
+          const isActive = pathname === link.route;
+          return (
+            <Link
+              key={`bottombar-${link.label}`}
+              href={link.route}
+              className={`${isActive && ' rounded-[10px] bg-primary-500 '} flex-center flex-col gap-1 p-2 transition`}
+            >
+              <img src={link.imgURL} alt={link.label} width={16} height={16} className={`${isActive && 'invert-white'}`} />
+
+              <p className='tiny-medium text-light-2'>{link.label}</p>
+            </Link>
+          );
+        })}
       </div>
     </section>
   );
