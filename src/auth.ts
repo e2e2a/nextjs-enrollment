@@ -33,8 +33,23 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         return false;
       }
     },
+    async session({ session, token }) {
+      if (token.sub && session.user) {
+        const user = await getUserById(token.sub);
+        if(!user) return session
+        session.user.id = user.id;
+        session.user.firstname = user.firstname;
+        session.user.lastname = user.lastname;
+      }
+      if (token.role && session.user) {
+        session.user.role = token.role;
+      }
+      console.log('token',token);
+      console.log('session',session);
 
-    async jwt({ token, user }) {
+      return session;
+    },
+    async jwt({ token, user,account }) {
       if (!token.sub) {
         console.log({user})
         return token
@@ -49,18 +64,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return token;
     },
 
-    async session({ session, token }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
-      }
-      if (token.role && session.user) {
-        session.user.role = token.role;
-      }
-      console.log('token',token);
-
-      return session;
-    },
+    
   },
+  secret: process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(db),
   session: { strategy: 'jwt' },
   ...authConfig,
