@@ -1,0 +1,140 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model User {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  image           String?
+  firstname       String
+  lastname        String
+  username        String?   @unique
+  bio             String?
+  email           String?   @unique
+  emailVerified   DateTime?
+  accounts        Account[]
+  password        String?
+  post            Post[]
+  activeIpAddress String?
+  recentIpAddress String?
+  activation      Boolean   @default(false)
+  role            UserRole  @default(USER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+  file   File[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model File {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  url    String // URL or path to the file
+  postId String @db.ObjectId
+  post   Post   @relation(fields: [postId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+// instead of email try using userId ref to user.id
+model VerificationToken {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  email       String   @unique
+  token       String   @unique
+  code        String   @unique
+  tokenType   String
+  expires     DateTime
+  expiresCode DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([email, token, code])
+}
+
+model ResetPassword {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  email   String   @unique
+  token   String   @unique
+  expires DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([email, token])
+}
+
+model Attempt {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  ipAddress String
+  timestamp DateTime @default(now())
+}
+
+// # soon @todo try login by ipbased
+// model UserIp {
+//   id               String @id @default(auto()) @map("_id") @db.ObjectId
+//   userId           String @db.ObjectId
+//   relatedIpId      String @db.ObjectId
+//   currentIpAddress String
+//   recentIpAddress  String
+//   relatedIp RelatedIp[]
+
+//   user      User        @relation(fields: [userId], references: [id])
+//   createdAt DateTime    @default(now())
+//   updatedAt DateTime    @updatedAt
+// }
+
+// model RelatedIp {
+//   id        String @id @default(auto()) @map("_id") @db.ObjectId
+//   ipAddress String
+//   userIpId  String @db.ObjectId
+
+//   UserIp    UserIp   @relation(fields: [userIpId], references: [id])
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
