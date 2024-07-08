@@ -1,6 +1,6 @@
+"use server"
 import { getIpAddress } from './getIp';
 
-//@transfer this to helpers
 export const checkingIp = async (user: any) => {
   try {
     const ip = await getIpAddress();
@@ -12,7 +12,7 @@ export const checkingIp = async (user: any) => {
       return { error: 'New ip detected!' };
     }
 
-    return { error: 'User activation is false.' };
+    return { success: 'User using same ip.' };
   } catch (error) {
     return { error };
   }

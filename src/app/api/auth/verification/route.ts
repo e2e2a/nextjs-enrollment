@@ -1,9 +1,10 @@
 'use server';
-import { getUserByEmail, updateUserEmailVerifiedById } from '@/services/user';
+import { getUserByEmail, updateUserEmailVerifiedById, updateUserIpById } from '@/services/user';
 import { NextRequest, NextResponse } from 'next/server';
 import { deleteVerificationTokenByid, getVerificationTokenByEmail } from '@/services/verification-token';
 import { generateResetPasswordToken } from '@/lib/helpers/tokens';
 import { signIn } from '@/auth';
+import { getIpAddress } from '@/lib/helpers/getIp';
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,17 +32,20 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ token: RPtoken }, { status: 201 });
 
       case 'Activation':
+        const ip = await getIpAddress();
+        if(!ip) return NextResponse.json({ error: 'Something went wrong!' }, { status: 403 });
         await deleteVerificationTokenByid(userToken.id);
+        await updateUserIpById(user.id, ip)
         await signIn('credentials', {
           email: user.email,
           redirect: false,
         });
 
-        return NextResponse.json({ message: 'Login successful' }, { status: 201 });
+        return NextResponse.json({ redirect: '/admin' }, { status: 201 });
       case 'Verify':
         await updateUserEmailVerifiedById(user.id);
         await deleteVerificationTokenByid(userToken.id);
-        return NextResponse.json({ mesage: 'my message' }, { status: 201 });
+        return NextResponse.json({ redirect: '/sign-in' }, { status: 201 });
       default:
         return NextResponse.json({ error: 'Invalid request type' }, { status: 400 });
     }

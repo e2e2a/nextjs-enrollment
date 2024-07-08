@@ -35,7 +35,7 @@ const SignInForm = () => {
       mutation.mutate(data, {
         onSuccess: (res) => {
           if(!res.token){
-            return router.push('/');
+            return router.push('/admin');
             
           }
           return router.push(`/verification?token=${res.token}`);

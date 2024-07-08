@@ -3,6 +3,8 @@ import { cookies, headers } from "next/headers";
 
 export const mytest = async () => {
     try {
+      //use auth()
+      //the end
         const cookiesObj = cookies();
         const sessionCookie = cookiesObj.get('__session');
     

@@ -34,39 +34,43 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
     },
     async session({ session, token }) {
-      if (token.sub && session.user) {
-        const user = await getUserById(token.sub);
-        if(!user) return session
-        session.user.id = user.id;
-        session.user.firstname = user.firstname;
-        session.user.lastname = user.lastname;
+      if (token && session.user) {
+        if (token.sub) {
+          const user = await getUserById(token.sub);
+          if (user) {
+            session.user.id = user.id;
+            session.user.firstname = user.firstname;
+            session.user.lastname = user.lastname;
+            session.user.role = user.role;
+          }
+          // if (token.role) {
+          //   session.user.role = token.role;
+          // }
+        }
       }
-      if (token.role && session.user) {
-        session.user.role = token.role;
-      }
-      console.log('token',token);
-      console.log('session',session);
-
+      console.log('session', session);
       return session;
     },
-    async jwt({ token, user,account }) {
-      if (!token.sub) {
-        console.log({user})
-        return token
+    async jwt({ token, user, account }) {
+      if (user) {
+        token.sub = user.id;
+      }
+      // if (account) {
+      //   token.sub = account.id;
+      // }
+      if (token.sub) {
+        const existUser = await getUserById(token.sub);
+
+        console.log('tokenUser', { token });
+        if (!existUser) return token;
+
+        token.role = existUser.role;
       }
 
-      const existUser = await getUserById(token.sub);
-
-      if (!existUser) return token;
-      console.log('tokenUser', {token});
-
-      token.role = existUser.role;
       return token;
     },
-
-    
   },
-  secret: process.env.NEXTAUTH_SECRET,
+
   adapter: PrismaAdapter(db),
   session: { strategy: 'jwt' },
   ...authConfig,

@@ -9,6 +9,7 @@ import { checkingIp } from '@/lib/helpers/checkingIp';
 import { generateVerificationToken } from '@/lib/helpers/tokens';
 import { cookies } from 'next/headers';
 import { generateRandomString } from '@/lib/helpers/verificationCode';
+import { getSession } from 'next-auth/react';
 
 export async function POST(req: NextRequest) {
   if (req.method !== 'POST') {
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest) {
      */
 
     const userIp = await checkingIp(existingUser);
-    if (!userIp || userIp.error) {
+    if (!userIp || userIp.error || !userIp.success) {
       console.log(userIp.error);
       const tokenType = 'Activation';
       const verificationToken = await generateVerificationToken(email, tokenType);

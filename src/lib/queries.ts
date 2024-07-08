@@ -51,6 +51,7 @@ export const useVerificationcCodeMutation = () => {
     {
       error: string;
       success: string;
+      redirect: string;
       token?: {
         id: string;
         email: string;

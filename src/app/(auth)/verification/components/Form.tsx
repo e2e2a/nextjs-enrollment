@@ -153,7 +153,7 @@ const VerificationForm = () => {
             setMessage('Verification completed!');
             setTypeMessage('success');
             if (!res.token) {
-              router.push('/');
+              router.push(res.redirect);
               return;
             } else {
               router.push(`/recovery/reset-password?token=${res.token.token}`);
