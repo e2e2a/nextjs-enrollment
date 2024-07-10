@@ -1,11 +1,11 @@
-export const fetchURL = async (data: any, url: string, method: string, errMessage: string) => {
+export const fetchURL = async ( url: string, method: string, errMessage: string, data?: any,) => {
   const response = await fetch(`${url}`, {
     method: `${method}`,
     headers: {
       'Content-Type': 'application/json',
       'API-Key': process.env.NEXT_PUBLIC_API_KEY!,
     },
-    body: JSON.stringify(data),
+    body: data ? JSON.stringify(data) : undefined,
   });
   const res = await response.json();
 

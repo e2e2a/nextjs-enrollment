@@ -3,7 +3,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Icons } from "./Icons"
 import { siteConfig } from "@/constant/site"
-import { ModeToggle } from "./ModeToggle"
+import { ModeToggle } from "./nav/ModeToggle"
 
 export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
   return (
@@ -19,7 +19,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
               rel="noreferrer"
               className="font-medium underline underline-offset-4"
             >
-              shadcn
+              ShadcnUI
             </a>
             . Hosted on{" "}
             <a
@@ -37,7 +37,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
               rel="noreferrer"
               className="font-medium underline underline-offset-4"
             >
-              Popsy
+              e2e2a
             </a>
             . The source code is available on{" "}
             <a

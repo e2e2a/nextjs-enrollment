@@ -2,7 +2,7 @@
 import { User } from "@prisma/client"
 import { Avatar, AvatarFallback, AvatarImage, AvatarProps } from "@radix-ui/react-avatar"
 
-import { Icons } from "./Icons"
+import { Icons } from "../Icons"
 
 interface UserAvatarProps extends AvatarProps {
   user?: Pick<User, "image" | "firstname">

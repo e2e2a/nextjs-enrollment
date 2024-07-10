@@ -1,9 +1,6 @@
 "use client"
-
 import Link from "next/link"
-import { User } from "@prisma/client"
-import { signOut } from "next-auth/react"
-
+import { getSession, signOut } from "next-auth/react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,27 +9,56 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { UserAvatar } from "./UserAvatar"
+import { useCallback, useEffect, useState } from "react"
+import { IUser } from "@/types"
 
-interface UserAccountNavProps extends React.HTMLAttributes<HTMLDivElement> {
-  user: Pick<User, "firstname" | "image" | "email">
-}
+export function UserAccountNav() {
+  const [user, setUser] = useState<IUser | null>(null);
 
-export function UserAccountNav({ user }: UserAccountNavProps) {
+  
+  const checkSession = useCallback(async () => {
+    try {
+      const session = await getSession();
+      if (session) {
+        if(session.user){
+          setUser({
+            id: session.user.id!,
+            firstname: session.user.firstname!,
+            lastname: session.user.lastname!,
+            role: session.user.role!,
+          });
+        }
+      } else {
+        setUser(null);
+       
+      }
+    } catch (error) {
+      console.error('Error fetching session:', error);
+      setUser(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    checkSession();
+  }, [checkSession]);
+  console.log(user)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <UserAvatar
-          user={{ firstname: user.firstname, image: user.image || null }}
+        { user && <UserAvatar
+          user={{ firstname: user.firstname, image: user.imageUrl || null }}
           className="h-8 w-8"
         />
+
+        }
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <div className="flex items-center justify-start gap-2 p-2">
           <div className="flex flex-col space-y-1 leading-none">
-            {user.firstname && <p className="font-medium">{user.firstname}</p>}
-            {user.email && (
+            {user && user.firstname && <p className="font-medium">{user.firstname}</p>}
+            {user && user.email && (
               <p className="w-[200px] truncate text-sm text-muted-foreground">
-                {user.email}
+                {user!.email}
               </p>
             )}
           </div>

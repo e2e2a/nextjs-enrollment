@@ -1,9 +1,7 @@
 // import { Models } from "appwrite";
 "use client"
 // import { useToast } from "@/components/ui/use-toast";
-// import { Loader, UserCard } from "@/components/shared";
-import Loader from "@/components/shared/Loader";
-import UserCard from "@/components/shared/UserCard";
+// import { Loader } from "@/components/shared";
 // import { useGetRecentPosts, useGetUsers } from "@/lib/react-query/queries";
 
 const Home = () => {
@@ -63,7 +61,6 @@ const Home = () => {
               {/* <li key={creator?.$id}> */}
               <li >
                 {/* <UserCard user={creator} /> */}
-                <UserCard />
               </li>
             {/* ))} */}
           </ul>

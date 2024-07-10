@@ -22,7 +22,7 @@ import { QUERY_KEYS } from '@/lib/queryKeys';
 //   // deleteSavedPost,
 // } from "@/lib/api";
 import { INewPost, INewUser, IUpdatePost, IUpdateUser } from '@/types';
-import { fetchNewPassword, fetchRecoveryEmail, fetchRecoveryTokenEmail, fetchResendVCode, fetchSignIn, fetchSignUp, fetchTokenEmail, fetchVerficationCode } from './api';
+import { fetchAllUsers, fetchNewPassword, fetchRecoveryEmail, fetchRecoveryTokenEmail, fetchResendVCode, fetchSignIn, fetchSignUp, fetchTokenEmail, fetchVerficationCode } from './api';
 import { NewPasswordValidator, SigninValidator, SignupValidator } from './validators/Validator';
 import { z } from 'zod';
 
@@ -172,6 +172,37 @@ export const useNewPasswordMutation = () => {
   });
 };
 
+
+interface User {
+  id: string;
+  image: string | null;
+  firstname: string;
+  lastname: string;
+  username: string | null;
+  bio: string | null;
+  email: string | null;
+  emailVerified: Date | null;
+  role: string | null;
+  // password: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export const useUserQuery = () => {
+  return useQuery<
+    {
+      error: string;
+      success: string;
+      users: User[];
+    },
+    Error
+  >({
+    queryKey: ['Users'],
+    queryFn: fetchAllUsers,
+    retry: 0,
+    // retryDelay: (attemptIndex) => attemptIndex * 1000,
+  });
+};
 // export const useCreateUserAccount = () => {
 //   return useMutation({
 //     mutationFn: (user: INewUser) => createUserAccount(user),

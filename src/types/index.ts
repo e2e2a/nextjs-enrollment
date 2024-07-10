@@ -1,4 +1,5 @@
 import { Icons } from '@/components/shared/Icons';
+import { UserRole } from '@prisma/client';
 
 export interface INavLink {
   imgURL: string;
@@ -35,11 +36,13 @@ export type IUpdatePost = {
 
 export type IUser = {
   id: string;
-  name: string;
-  username: string;
-  email: string;
-  imageUrl: string;
-  bio: string;
+  firstname: string;
+  lastname?: string | null;
+  username?: string | null;
+  email?: string | null;
+  imageUrl?: string | null;
+  bio?: string | null;
+  role?: UserRole;
 };
 
 export type INewUser = {

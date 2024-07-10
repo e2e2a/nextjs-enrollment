@@ -3,7 +3,7 @@ import Link from "next/link"
 
 import { MainNavItem } from "@/types"
 import { cn } from "@/lib/utils"
-import { Icons } from "./Icons"
+import { Icons } from "../Icons"
 import { useLockBody } from "@/hook/useLockBody"
 import { siteConfig } from "@/constant/site"
 
