@@ -5,11 +5,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { handleChange, handlePaste } from '@/hook/verification/VerificationInputEvents';
-import { makeToastError } from '@/lib/helpers/makeToast';
 import { calculateRemainingTime, formatTime } from '@/lib/utils';
 import { useResendVCodeMutation, useTokenCheckQuery, useVerificationcCodeMutation } from '@/lib/queries';
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
+import { makeToastError } from '@/lib/toast/makeToast';
 
 const VerificationForm = () => {
   const [message, setMessage] = useState<string | undefined>('');
@@ -42,8 +42,8 @@ const VerificationForm = () => {
       if (result.error) return router.push('/recovery');
       setHeader('Confirming your verification code');
       setLoading(false);
-      if (result.existingToken && result.existingToken.expiresCode) {
-        setExpirationTime(new Date(result.existingToken.expiresCode));
+      if (result.token && result.token.expiresCode) {
+        setExpirationTime(new Date(result.token.expiresCode));
       }
     }
   }, [result]);
@@ -82,9 +82,9 @@ const VerificationForm = () => {
     setLoading(true);
     setIsPending(true);
     const data = {
-      email: result?.existingToken?.email,
+      email: result?.token?.email,
       verificationCode: verificationCode,
-      Ttype: result?.existingToken?.tokenType,
+      Ttype: result?.token?.tokenType,
     };
     setLabelLink('');
     mutationSubmit.mutate(data, {
@@ -112,7 +112,7 @@ const VerificationForm = () => {
   const onResendCode = async () => {
     setLabelLink('');
     const data = {
-      email: result?.existingToken?.email!,
+      email: result?.token?.email!,
     };
     mutationResend.mutate(data, {
       onSuccess: (res) => {

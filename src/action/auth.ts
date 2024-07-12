@@ -1,9 +1,9 @@
 'use server';
 import { signIn } from '@/auth';
-import { comparePassword } from '@/lib/helpers/bcrypt';
+import { comparePassword } from '@/lib/hash/bcrypt';
 import { checkingIp } from '@/lib/helpers/checkingIp';
-import { sendVerificationEmail } from '@/lib/helpers/mail';
 import rateLimit from '@/lib/helpers/rate-limit';
+import { sendVerificationEmail } from '@/lib/mail/mail';
 import { SigninValidator, SignupValidator } from '@/lib/validators/Validator';
 import { checkUserUsername, createUser, deleteUserByEmail, getUserByEmail } from '@/services/user';
 import { generateVerificationToken } from '@/services/verification-token';

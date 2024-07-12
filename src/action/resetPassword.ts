@@ -1,5 +1,5 @@
 'use server';
-import { sendVerificationEmail } from '@/lib/helpers/mail';
+import { sendVerificationEmail } from '@/lib/mail/mail';
 import { NewPasswordValidator, RecoveryValidator } from '@/lib/validators/Validator';
 import { deleteResetPasswordTokenByEmail } from '@/services/reset-password';
 import { getUserByEmail, updateUserPasswordById } from '@/services/user';

@@ -1,12 +1,28 @@
 import { Icons } from '@/components/shared/Icons';
 import { UserRole } from '@prisma/client';
 
-export interface INavLink {
-  imgURL: string;
-  route: string;
-  label: string;
-}
+//
+export type IVerificationToken = {
+  id: string;
+  email: string;
+  token: string;
+  code: string;
+  tokenType: string;
+  expires: Date;
+  expiresCode: Date;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
+export type IResetPasswordToken = {
+  id: string;
+  email: string;
+  token: string;
+  expires: Date;
+  createdAt: Date;
+  updatedAt: Date;
+};
+//
 export type IUpdateUser = {
   userId: string;
   name: string;
@@ -51,6 +67,12 @@ export type INewUser = {
   username: string;
   password: string;
 };
+
+export interface INavLink {
+  imgURL: string;
+  route: string;
+  label: string;
+}
 
 export type NavItem = {
   title: string;
@@ -112,92 +134,42 @@ export type SubscriptionPlan = {
 /**
  * @type responses
  */
-export type SignInResponse = {
+export type IResponse = {
   error?: string;
   message?: string;
-  token?: string;
   status: number;
   limit?: boolean;
 };
+
+export type SignInResponse = {
+  token?: string;
+} & IResponse;
 
 export type SignUpResponse = {
-  error?: string;
-  message?: string;
   token?: string;
-  status: number;
-  limit?: boolean;
-};
+} & IResponse;
 
 export type checkTokenResponse = {
-  error?: string;
-  success?: string;
-  existingToken?: {
-    id: string;
-    email: string;
-    token: string;
-    code: string;
-    tokenType: string;
-    expires: Date;
-    expiresCode: Date;
-  };
-  status: number;
-  limit?: boolean;
-};
+  token?: IVerificationToken;
+} & IResponse;
 
 export type verificationCodeProcessResponse = {
-  error?: string;
-  success?: string;
-  token?: {
-    id: string;
-    email: string;
-    token: string;
-    expires: Date;
-  };
+  token?: IResetPasswordToken;
   redirect?: string;
-  status: number;
-  limit?: boolean;
-};
+} & IResponse;
 
 export type verificationCodeResendResponse = {
-  error?: string;
-  message?: string;
-  verification?: {
-    id: string;
-    email: string;
-    token: string;
-    code: string;
-    expires: Date;
-    expiresCode: Date;
-  };
-  status: number;
-  limit?: boolean;
-};
+  verification?: IVerificationToken;
+} & IResponse;
 
 export type resetPasswordTokenResponse = {
-  error?: string;
-  message?: string;
-  existingToken?: {
-    id: string;
-    email: string;
-    token: string;
-    expires: Date;
-  };
-  status: number;
-  limit?: boolean;
-};
+  token?: IResetPasswordToken;
+} & IResponse;
 
 export type recoveryResponse = {
-  error?: string;
-  message?: string;
   token?: string;
-  status: number;
-  limit?: boolean;
-};
+} & IResponse;
 
 export type resetPasswordResponse = {
-  error?: string;
-  message?: string;
   token?: string;
-  status: number;
-  limit?: boolean;
-};
+} & IResponse;

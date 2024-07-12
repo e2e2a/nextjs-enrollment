@@ -8,23 +8,6 @@ interface Idata {
   verificationCode?: string;
 }
 
-export const fetchVerficationCode = async (data: Idata) => {
-  const res = await fetchURL('/api/auth/verification', 'POST', 'Failed to Verify. Please try again a few minutes.', data);
-
-  return res;
-};
-
-export const fetchResendVCode = async (data: Idata) => {
-  const res = await fetchURL(
-    '/api/auth/verification/resend',
-    'POST',
-    'Failed to Resend Code. Please try again a few minutes.',
-    data
-  );
-
-  return res;
-};
-
 export const fetchRecoveryEmail = async (data: Idata) => {
   const res = await fetchURL('/api/auth/recovery', 'POST', 'Failed to find the email. Please try again a few minutes.');
 

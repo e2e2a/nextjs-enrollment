@@ -1,8 +1,8 @@
 "use server"
 import { signIn } from '@/auth';
 import { getIpAddress } from '@/lib/helpers/getIp';
-import { sendVerificationEmail } from '@/lib/helpers/mail';
 import { generateVerificationCode } from '@/lib/helpers/verificationCode';
+import { sendVerificationEmail } from '@/lib/mail/mail';
 import { generateResetPasswordToken } from '@/services/reset-password';
 import { getUserByEmail, updateUserEmailVerifiedById, updateUserIpById } from '@/services/user';
 import { deleteVerificationTokenByid, getVerificationTokenByEmail } from '@/services/verification-token';

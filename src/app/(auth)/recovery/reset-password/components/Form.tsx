@@ -48,7 +48,7 @@ const ResetPasswordForm = () => {
     setIsPending(true);
     const newData = {
       ...data,
-      email: result?.existingToken?.email,
+      email: result?.token?.email,
     };
     mutation.mutate(newData, {
       onSuccess: (res) => {

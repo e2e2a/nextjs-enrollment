@@ -1,8 +1,8 @@
 'use server';
 import db from '@/lib/db';
-import { hashPassword } from '@/lib/helpers/bcrypt';
 import { deleteResetPasswordTokenByEmail } from './reset-password';
 import { deleteVerificationTokenByEmail } from './verification-token';
+import { hashPassword } from '@/lib/hash/bcrypt';
 
 type IId = {
   id: string;

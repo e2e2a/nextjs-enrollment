@@ -47,7 +47,7 @@ export const checkToken = async (token: string): Promise<checkTokenResponse> => 
       return { error: 'Token has expired', status: 400 };
     }
 
-    return { existingToken: existingToken, status: 200 };
+    return { token: existingToken, status: 200 };
   } catch (error: any) {
     return { error: `An unexpected error occurred ${error}`, status: 500 };
   }
@@ -77,7 +77,7 @@ export const checkResetPasswordToken = async (token: string): Promise<resetPassw
     if (!existingToken) {
       return{ error: 'Please ensure the token you provided.', status: 404 };
     }
-    return { existingToken: existingToken, status: 200  };
+    return { token: existingToken, status: 200  };
   } catch (err) {
     return { error: 'Internal server error.', status: 500 };
   }
