@@ -1,65 +1,30 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
-import { QUERY_KEYS } from '@/lib/queryKeys';
-// import {
-//   // createUserAccount,
-//   // signInAccount,
-//   // getCurrentUser,
-//   // signOutAccount,
-//   // getUsers,
-//   // createPost,
-//   // getPostById,
-//   // updatePost,
-//   // getUserPosts,
-//   // deletePost,
-//   // likePost,
-//   getUserProfileByUsername,
-//   // updateUser,
-//   // getRecentPosts,
-//   // getInfinitePosts,
-//   // searchPosts,
-//   // savePost,
-//   // deleteSavedPost,
-// } from "@/lib/api";
 import {
   checkTokenResponse,
   INewPost,
   INewUser,
   IUpdatePost,
   IUpdateUser,
+  recoveryResponse,
+  resetPasswordResponse,
+  resetPasswordTokenResponse,
   SignInResponse,
   SignUpResponse,
   verificationCodeProcessResponse,
   verificationCodeResendResponse,
 } from '@/types';
-import {
-  fetchAllUsers,
-  fetchNewPassword,
-  fetchRecoveryEmail,
-  fetchRecoveryTokenEmail,
-  fetchResendVCode,
-  fetchVerficationCode,
-} from './api';
+import { fetchAllUsers } from './api';
 import { NewPasswordValidator, SigninValidator, SignupValidator } from './validators/Validator';
 import { z } from 'zod';
 import { signInAction, signUpAction } from '@/action/auth';
-import { checkToken } from '@/action/token';
+import { checkResetPasswordToken, checkToken } from '@/action/token';
 import { verificationCodeProcess, verificationCodeResend } from '@/action/verification';
+import { recoveryProcess, resetPassword } from '@/action/resetPassword';
 
 // ============================================================
 // AUTH QUERIES
 // ============================================================
-// export const useSignUpMutation = () => {
-//   return useMutation<{ success: string; token: string; error: string }, Error, z.infer<typeof SignupValidator>>({
-//     mutationFn: fetchSignUp,
-//   });
-// };
-
-// export const useSignInMutation = () => {
-//   return useMutation<{ error: string, token?: string }, Error, z.infer<typeof SigninValidator>>({
-//     mutationFn: fetchSignIn,
-//   });
-// };
 export const useSignInMutation = () => {
   return useMutation<SignInResponse, Error, z.infer<typeof SigninValidator>>({
     mutationFn: async (data) => signInAction(data),
@@ -115,66 +80,30 @@ export const useVerificationcCodeMutation = () => {
 
 export const useResendVCodeMutation = () => {
   return useMutation<verificationCodeResendResponse, Error, data>({
-    mutationFn: async(data) => verificationCodeResend(data),
+    mutationFn: async (data) => verificationCodeResend(data),
   });
 };
-
-export const useRecoveryMutation = () => {
-  return useMutation<
-    {
-      error: string;
-      success: string;
-      token: string;
-    },
-    Error,
-    data
-  >({
-    mutationFn: fetchRecoveryEmail,
-  });
-};
-
-interface tokenCheck {
-  token: string;
-  Ttype?: string;
-}
 
 // ============================================================
 // AUTH Recovery
 // ============================================================
-export const useRecoveryTokenCheckQuery = (data: tokenCheck) => {
-  return useQuery<
-    {
-      error: string;
-      success: string;
-      existingToken: {
-        id: string;
-        email: string;
-        token: string;
-        code: string;
-        tokenType: string;
-        expires: Date;
-        expiresCode: Date;
-      };
-    },
-    Error
-  >({
-    queryKey: ['RecoveryTokenCheck', data],
-    queryFn: fetchRecoveryTokenEmail,
+export const useRecoveryMutation = () => {
+  return useMutation<recoveryResponse, Error, data>({
+    mutationFn: async (data) => recoveryProcess(data),
+  });
+};
+
+export const useRecoveryTokenCheckQuery = (token: string) => {
+  return useQuery<resetPasswordTokenResponse, Error>({
+    queryKey: ['RecoveryTokenCheck', token],
+    queryFn: async () => checkResetPasswordToken(token),
     retry: 0,
-    // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
 
 export const useNewPasswordMutation = () => {
-  return useMutation<
-    {
-      error: string;
-      success: string;
-    },
-    Error,
-    z.infer<typeof NewPasswordValidator>
-  >({
-    mutationFn: fetchNewPassword,
+  return useMutation<resetPasswordResponse, Error, z.infer<typeof NewPasswordValidator>>({
+    mutationFn: async (data) => resetPassword(data),
   });
 };
 

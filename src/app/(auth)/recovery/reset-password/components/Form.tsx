@@ -16,37 +16,27 @@ const ResetPasswordForm = () => {
   const [message, setMessage] = useState<string | undefined>('');
   const [typeMessage, setTypeMessage] = useState('');
   const [isPending, setIsPending] = useState(false);
-  const [tokenEmail, setTokenEmail] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const mutation = useNewPasswordMutation();
 
   const token = searchParams.get('token') ?? '';
-  const { data: result, error } = useRecoveryTokenCheckQuery({ token });
-  const checkToken = useCallback(async () => {
-    if (!token) {
-      return router.push('/recovery');
-    }
-    if (error) {
-      console.error('Error fetching token:', error.message);
-      router.push('/recovery');
-      return;
-    }
-  }, [token, error, router]);
-
+  const { data: result, error } = useRecoveryTokenCheckQuery(token);
+  if (error) {
+    console.error('Error fetching token:', error.message);
+    router.push('/recovery');
+    return;
+  }
   useEffect(() => {
-    checkToken();
     if (result) {
-      setLoading(false);
       console.log(result);
-      if (result.existingToken && result.existingToken.email) {
-        setTokenEmail(result.existingToken.email);
-      }
+      if (result.error) return router.push('/recovery');
+      setLoading(false);
     }
-  }, [checkToken, result]);
+  }, [result]);
+
   const form = useForm<z.infer<typeof NewPasswordValidator>>({
     resolver: zodResolver(NewPasswordValidator),
     defaultValues: {
@@ -55,30 +45,27 @@ const ResetPasswordForm = () => {
     },
   });
   const onSubmit: SubmitHandler<z.infer<typeof NewPasswordValidator>> = async (data) => {
-    try {
-      setIsPending(true);
-      const newData ={
-        ...data,
-        email: tokenEmail,
-      }
-      mutation.mutate(newData, {
-        onSuccess: (res) => {
-          setMessage(res.success);
-          setTypeMessage('success');
-          router.push(`/sign-in`);
-        },
-        onError: (error) => {
-          setMessage(error.message);
+    setIsPending(true);
+    const newData = {
+      ...data,
+      email: result?.existingToken?.email,
+    };
+    mutation.mutate(newData, {
+      onSuccess: (res) => {
+        if (res.error) {
+          setMessage(res.error);
           setTypeMessage('error');
           return;
-        },
-        onSettled: () => {
-          setIsPending(false);
-        },
-      });
-    } finally {
-      setIsPending(false);
-    }
+        }
+        setMessage(res.message);
+        setTypeMessage('success');
+        router.push(`/sign-in`);
+      },
+
+      onSettled: () => {
+        setIsPending(false);
+      },
+    });
   };
   return (
     <CardWrapper

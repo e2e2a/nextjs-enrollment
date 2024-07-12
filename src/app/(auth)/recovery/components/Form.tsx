@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { useRecoveryMutation } from '@/lib/queries';
 import { RecoveryValidator } from '@/lib/validators/Validator';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -26,33 +25,36 @@ const RecoveryForm = () => {
     },
   });
   const onSubmit: SubmitHandler<z.infer<typeof RecoveryValidator>> = async (data) => {
-    try {
-      setIsPending(true);
-      mutation.mutate(data, {
-        onSuccess: (res) => {
-          console.log(res);
-          setMessage(res.success);
-          setTypeMessage('success');
-          router.push(`/verification?token=${res.token}`);
-          return;
-        },
-        onError: (error) => {
-          setMessage(error.message);
+    setIsPending(true);
+    mutation.mutate(data, {
+      onSuccess: (res) => {
+        console.log(res);
+        if (res.error) {
+          setMessage(res.error);
           setTypeMessage('error');
           return;
-        },
-        onSettled: () => {
-          setIsPending(false);
-        },
-      });
-    } catch (error: any) {
-      console.log(error);
-    } finally {
-      setIsPending(false);
-    }
+        }
+        setMessage(res.message);
+        setTypeMessage('success');
+        router.push(`/verification?token=${res.token}`);
+        return;
+      },
+      onError: (error) => {
+        setMessage(error.message);
+        setTypeMessage('error');
+        return;
+      },
+      onSettled: () => {
+        setIsPending(false);
+      },
+    });
   };
   return (
-    <CardWrapper headerLabel='Enter your email to reset your password.' backButtonHref='/sign-in' backButtonLabel="Go back to signin?">
+    <CardWrapper
+      headerLabel='Enter your email to reset your password.'
+      backButtonHref='/sign-in'
+      backButtonLabel='Go back to signin?'
+    >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
           <div className='space-y-4'>

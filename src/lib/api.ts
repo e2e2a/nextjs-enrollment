@@ -3,21 +3,6 @@ import { NewPasswordValidator, SigninValidator, SignupValidator } from './valida
 import { QueryFunctionContext } from '@tanstack/react-query';
 import { fetchURL } from './helpers/fetchUrl';
 
-// ============================================================
-// AUTH fetch
-// ============================================================
-// export const fetchSignUp = async (data: z.infer<typeof SignupValidator>) => {
-//   const res = await fetchURL(`/api/auth/sign-up`, 'POST', 'Failed to sign up. Please try again a few minutes.', data);
-
-//   return res;
-// };
-
-// export const fetchSignIn = async (data: z.infer<typeof SigninValidator>) => {
-//   const res = await fetchURL('/api/auth/sign-in', 'POST', 'Failed to sign in. Please try again a few minutes.', data);
-
-//   return res;
-// };
-
 interface Idata {
   email: string;
   verificationCode?: string;

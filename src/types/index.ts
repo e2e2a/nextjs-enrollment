@@ -172,3 +172,32 @@ export type verificationCodeResendResponse = {
   status: number;
   limit?: boolean;
 };
+
+export type resetPasswordTokenResponse = {
+  error?: string;
+  message?: string;
+  existingToken?: {
+    id: string;
+    email: string;
+    token: string;
+    expires: Date;
+  };
+  status: number;
+  limit?: boolean;
+};
+
+export type recoveryResponse = {
+  error?: string;
+  message?: string;
+  token?: string;
+  status: number;
+  limit?: boolean;
+};
+
+export type resetPasswordResponse = {
+  error?: string;
+  message?: string;
+  token?: string;
+  status: number;
+  limit?: boolean;
+};
