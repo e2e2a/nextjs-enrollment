@@ -2,7 +2,7 @@
 import { getUserByEmail } from '@/services/user';
 import { NextRequest, NextResponse } from 'next/server';
 import { sendVerificationEmail } from '@/lib/helpers/mail';
-import { generateVerificationCode } from '@/lib/helpers/tokens';
+import { generateVerificationCode } from '@/lib/helpers/verificationCode';
 
 export async function POST(req: NextRequest) {
   if (req.method !== 'POST') {

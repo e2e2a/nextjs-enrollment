@@ -3,8 +3,8 @@ import { SignupValidator } from '@/lib/validators/Validator';
 import { createUser, deleteUserByEmail, getUserByEmail } from '@/services/user';
 import { AuthError } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
-import { generateVerificationToken } from '@/lib/helpers/tokens';
 import { sendVerificationEmail } from '@/lib/helpers/mail';
+import { generateVerificationToken } from '@/services/verification-token';
 
 export async function POST(req: NextRequest) {
   try {

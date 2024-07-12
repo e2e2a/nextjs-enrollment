@@ -36,13 +36,25 @@ const SignUpForm = () => {
 
       mutation.mutate(data, {
         onSuccess: (res) => {
-          setMessage(res.success);
-          setTypeMessage('success');
-          router.push(`/verification?token=${res.token}`);
+          switch (res.status) {
+            case 200:
+            case 201:
+            case 203:
+              setTypeMessage('success')
+              setMessage(res?.message);
+              if (!res.token) {
+                return router.push('/sign-up');
+              }
+              return router.push(`/verification?token=${res.token}`);
+            default:
+              setMessage(res.error);
+              setTypeMessage('error');
+              return;
+          }
         },
         onError: (error) => {
-          setMessage(error.message);
           setTypeMessage('error');
+          setMessage(error.message);
           return;
         },
         onSettled: () => {

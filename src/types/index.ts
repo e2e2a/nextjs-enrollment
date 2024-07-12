@@ -108,3 +108,67 @@ export type SubscriptionPlan = {
   description: string;
   stripePriceId: string;
 };
+
+/**
+ * @type responses
+ */
+export type SignInResponse = {
+  error?: string;
+  message?: string;
+  token?: string;
+  status: number;
+  limit?: boolean;
+};
+
+export type SignUpResponse = {
+  error?: string;
+  message?: string;
+  token?: string;
+  status: number;
+  limit?: boolean;
+};
+
+export type checkTokenResponse = {
+  error?: string;
+  success?: string;
+  existingToken?: {
+    id: string;
+    email: string;
+    token: string;
+    code: string;
+    tokenType: string;
+    expires: Date;
+    expiresCode: Date;
+  };
+  status: number;
+  limit?: boolean;
+};
+
+export type verificationCodeProcessResponse = {
+  error?: string;
+  success?: string;
+  token?: {
+    id: string;
+    email: string;
+    token: string;
+    expires: Date;
+  };
+  redirect?: string;
+  status: number;
+  limit?: boolean;
+};
+
+export type verificationCodeResendResponse = {
+  error?: string;
+  message?: string;
+  verification?: {
+    id: string;
+    email: string;
+    token: string;
+    code: string;
+    expires: Date;
+    expiresCode: Date;
+  };
+  status: number;
+  limit?: boolean;
+};

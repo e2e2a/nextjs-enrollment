@@ -1,7 +1,7 @@
 import { sendVerificationEmail } from '@/lib/helpers/mail';
-import { generateVerificationToken } from '@/lib/helpers/tokens';
 import { RecoveryValidator } from '@/lib/validators/Validator';
 import { getUserByEmail } from '@/services/user';
+import { generateVerificationToken } from '@/services/verification-token';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {

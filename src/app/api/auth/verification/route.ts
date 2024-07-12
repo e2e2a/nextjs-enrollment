@@ -2,9 +2,9 @@
 import { getUserByEmail, updateUserEmailVerifiedById, updateUserIpById } from '@/services/user';
 import { NextRequest, NextResponse } from 'next/server';
 import { deleteVerificationTokenByid, getVerificationTokenByEmail } from '@/services/verification-token';
-import { generateResetPasswordToken } from '@/lib/helpers/tokens';
 import { signIn } from '@/auth';
 import { getIpAddress } from '@/lib/helpers/getIp';
+import { generateResetPasswordToken } from '@/services/reset-password';
 
 export async function POST(req: NextRequest) {
   try {

@@ -21,23 +21,63 @@ import { QUERY_KEYS } from '@/lib/queryKeys';
 //   // savePost,
 //   // deleteSavedPost,
 // } from "@/lib/api";
-import { INewPost, INewUser, IUpdatePost, IUpdateUser } from '@/types';
-import { fetchAllUsers, fetchNewPassword, fetchRecoveryEmail, fetchRecoveryTokenEmail, fetchResendVCode, fetchSignIn, fetchSignUp, fetchTokenEmail, fetchVerficationCode } from './api';
+import {
+  checkTokenResponse,
+  INewPost,
+  INewUser,
+  IUpdatePost,
+  IUpdateUser,
+  SignInResponse,
+  SignUpResponse,
+  verificationCodeProcessResponse,
+  verificationCodeResendResponse,
+} from '@/types';
+import {
+  fetchAllUsers,
+  fetchNewPassword,
+  fetchRecoveryEmail,
+  fetchRecoveryTokenEmail,
+  fetchResendVCode,
+  fetchVerficationCode,
+} from './api';
 import { NewPasswordValidator, SigninValidator, SignupValidator } from './validators/Validator';
 import { z } from 'zod';
+import { signInAction, signUpAction } from '@/action/auth';
+import { checkToken } from '@/action/token';
+import { verificationCodeProcess, verificationCodeResend } from '@/action/verification';
 
 // ============================================================
 // AUTH QUERIES
 // ============================================================
-export const useSignUpMutation = () => {
-  return useMutation<{ success: string; token: string; error: string }, Error, z.infer<typeof SignupValidator>>({
-    mutationFn: fetchSignUp,
+// export const useSignUpMutation = () => {
+//   return useMutation<{ success: string; token: string; error: string }, Error, z.infer<typeof SignupValidator>>({
+//     mutationFn: fetchSignUp,
+//   });
+// };
+
+// export const useSignInMutation = () => {
+//   return useMutation<{ error: string, token?: string }, Error, z.infer<typeof SigninValidator>>({
+//     mutationFn: fetchSignIn,
+//   });
+// };
+export const useSignInMutation = () => {
+  return useMutation<SignInResponse, Error, z.infer<typeof SigninValidator>>({
+    mutationFn: async (data) => signInAction(data),
   });
 };
 
-export const useSignInMutation = () => {
-  return useMutation<{ error: string, token?: string }, Error, z.infer<typeof SigninValidator>>({
-    mutationFn: fetchSignIn,
+export const useSignUpMutation = () => {
+  return useMutation<SignUpResponse, Error, z.infer<typeof SignupValidator>>({
+    mutationFn: async (data) => signUpAction(data),
+  });
+};
+
+export const useTokenCheckQuery = (token: string) => {
+  return useQuery<checkTokenResponse, Error>({
+    queryKey: ['TokenCheck', token],
+    queryFn: async () => checkToken(token),
+    retry: 0,
+    // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
 
@@ -46,46 +86,36 @@ interface data {
   verificationCode?: string;
   Ttype?: string;
 }
+// export const useVerificationcCodeMutation = () => {
+//   return useMutation<
+//     {
+//       error: string;
+//       success: string;
+//       redirect: string;
+//       token?: {
+//         id: string;
+//         email: string;
+//         token: string;
+//         expires: Date;
+//         createdAt: Date;
+//         updatedAt: Date;
+//       };
+//     },
+//     Error,
+//     data
+//   >({
+//     mutationFn: fetchVerficastionCode,
+//   });
+// };
 export const useVerificationcCodeMutation = () => {
-  return useMutation<
-    {
-      error: string;
-      success: string;
-      redirect: string;
-      token?: {
-        id: string;
-        email: string;
-        token: string;
-        expires: Date;
-        createdAt: Date;
-        updatedAt: Date;
-      };
-    },
-    Error,
-    data
-  >({
-    mutationFn: fetchVerficationCode,
+  return useMutation<verificationCodeProcessResponse, Error, any>({
+    mutationFn: async (data) => verificationCodeProcess(data),
   });
 };
 
 export const useResendVCodeMutation = () => {
-  return useMutation<
-    {
-      error: string;
-      success: string;
-      verification: {
-        id: string;
-        email: string;
-        token: string;
-        code: string;
-        expires: Date;
-        expiresCode: Date;
-      };
-    },
-    Error,
-    data
-  >({
-    mutationFn: fetchResendVCode,
+  return useMutation<verificationCodeResendResponse, Error, data>({
+    mutationFn: async(data) => verificationCodeResend(data),
   });
 };
 
@@ -107,30 +137,6 @@ interface tokenCheck {
   token: string;
   Ttype?: string;
 }
-
-export const useTokenCheckQuery = (data: tokenCheck) => {
-  return useQuery<
-    {
-      error: string;
-      success: string;
-      existingToken: {
-        id: string;
-        email: string;
-        token: string;
-        code: string;
-        tokenType: string;
-        expires: Date;
-        expiresCode: Date;
-      };
-    },
-    Error
-  >({
-    queryKey: ['TokenCheck', data],
-    queryFn: fetchTokenEmail,
-    retry: 0,
-    // retryDelay: (attemptIndex) => attemptIndex * 1000,
-  });
-};
 
 // ============================================================
 // AUTH Recovery
@@ -171,7 +177,6 @@ export const useNewPasswordMutation = () => {
     mutationFn: fetchNewPassword,
   });
 };
-
 
 interface User {
   id: string;

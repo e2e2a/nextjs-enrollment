@@ -6,17 +6,17 @@ import { fetchURL } from './helpers/fetchUrl';
 // ============================================================
 // AUTH fetch
 // ============================================================
-export const fetchSignUp = async (data: z.infer<typeof SignupValidator>) => {
-  const res = await fetchURL(`/api/auth/sign-up`, 'POST', 'Failed to sign up. Please try again a few minutes.', data);
+// export const fetchSignUp = async (data: z.infer<typeof SignupValidator>) => {
+//   const res = await fetchURL(`/api/auth/sign-up`, 'POST', 'Failed to sign up. Please try again a few minutes.', data);
 
-  return res;
-};
+//   return res;
+// };
 
-export const fetchSignIn = async (data: z.infer<typeof SigninValidator>) => {
-  const res = await fetchURL('/api/auth/sign-in', 'POST', 'Failed to sign in. Please try again a few minutes.', data);
+// export const fetchSignIn = async (data: z.infer<typeof SigninValidator>) => {
+//   const res = await fetchURL('/api/auth/sign-in', 'POST', 'Failed to sign in. Please try again a few minutes.', data);
 
-  return res;
-};
+//   return res;
+// };
 
 interface Idata {
   email: string;
@@ -50,12 +50,12 @@ interface tokenCheck {
   token: string;
 }
 
-export const fetchTokenEmail = async ({ queryKey }: QueryFunctionContext) => {
-  const [_key, data] = queryKey as [string, tokenCheck];
-  const res = await fetchURL('/api/token', 'POST', 'Failed to check token. Please try again a few minutes.', data);
+// export const fetchTokenEmail = async ({ queryKey }: QueryFunctionContext) => {
+//   const [_key, data] = queryKey as [string, tokenCheck];
+//   const res = await fetchURL('/api/token', 'POST', 'Failed to check token. Please try again a few minutes.', data);
 
-  return res;
-};
+//   return res;
+// };
 
 // ============================================================
 // AUTH Recovery

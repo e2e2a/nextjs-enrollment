@@ -34,11 +34,20 @@ const SignInForm = () => {
       setIsPending(true);
       mutation.mutate(data, {
         onSuccess: (res) => {
-          if(!res.token){
-            return router.push('/admin');
-            
+          switch (res.status) {
+            case 200:
+            case 201:
+            case 203:
+              if (!res.token) {
+                setMessage(res?.message);
+                return router.push('/admin');
+              }
+              return router.push(`/verification?token=${res.token}`);
+            default:
+              setMessage(res.error);
+              setTypeMessage('error');
+              return router.push('/sign-in');
           }
-          return router.push(`/verification?token=${res.token}`);
         },
         onError: (error) => {
           setMessage(error.message);

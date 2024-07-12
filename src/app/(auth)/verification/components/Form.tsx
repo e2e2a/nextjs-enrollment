@@ -10,21 +10,6 @@ import { calculateRemainingTime, formatTime } from '@/lib/utils';
 import { useResendVCodeMutation, useTokenCheckQuery, useVerificationcCodeMutation } from '@/lib/queries';
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
-interface IResult {
-  result?: {
-    error: string;
-    success: string;
-    existingToken: {
-      id: string;
-      email: string;
-      token: string;
-      code: string;
-      tokenType: string;
-      expires: Date;
-      expiresCode: Date;
-    };
-  };
-}
 
 const VerificationForm = () => {
   const [message, setMessage] = useState<string | undefined>('');
@@ -35,7 +20,6 @@ const VerificationForm = () => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [inputCode, setInputCode] = useState<string[]>(Array(6).fill(''));
-  const [tokenEmail, setTokenEmail] = useState<any>(null);
   const [expirationTime, setExpirationTime] = useState<Date | null>(null);
   const [secondsRemaining, setSecondsRemaining] = useState(0);
   const inputRefs = useRef<Array<React.RefObject<HTMLInputElement>>>([]);
@@ -45,67 +29,24 @@ const VerificationForm = () => {
 
   const searchParams = useSearchParams();
   const token = searchParams.get('token') ?? '';
-  const { data: result, error } = useTokenCheckQuery({ token });
-  const checkToken = useCallback(async () => {
-    if (!token) {
-      return router.push('/recovery');
-    }
-    if (error) {
-      console.error('Error fetching token:', error.message);
-      router.push('/recovery');
-      return;
-    }
-  }, [token, error, router]);
-  useEffect(() => {
-    checkToken();
-  }, [checkToken]);
+  const { data: result, error } = useTokenCheckQuery(token);
+  if (error) {
+    console.error('Error fetching token:', error.message);
+    router.push('/recovery');
+    return;
+  }
 
   useEffect(() => {
     if (result) {
+      console.log(result);
+      if (result.error) return router.push('/recovery');
       setHeader('Confirming your verification code');
       setLoading(false);
-      if (
-        result.existingToken &&
-        result.existingToken.email &&
-        result.existingToken.expiresCode &&
-        result.existingToken.tokenType
-      ) {
-        setTokenEmail(result.existingToken.email);
+      if (result.existingToken && result.existingToken.expiresCode) {
         setExpirationTime(new Date(result.existingToken.expiresCode));
       }
     }
   }, [result]);
-  /**
-   * @todo set setHeader,setTokenEmail, setExpirationTime
-   */
-
-  //   const checkToken = useCallback(async () => {
-  //     try {
-  //     //   const data = await VerificationTokenSignUp(token, Ttype);
-  //     //   const result = await data.json()
-  //       console.log(result);
-  //     //   if(data.errorRecovery){
-  //     //     return router.push('/recovery')
-  //     //   }
-  //     //   if (data.error) {
-  //     //     setMessage(data.error);
-  //     //     setTypeMessage('error');
-  //     //   } else {
-  //     //     setHeader('Confirming your verification code');
-  //     //     setLoading(false);
-  //     //     if (data.existingToken && data.existingToken.email && data.existingToken.expiresCode) {
-  //     //       setTokenEmail(data.existingToken.email);
-  //     //       setExpirationTime(new Date(data.existingToken.expiresCode));
-  //     //     }
-  //     //   }
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }, [token, loading]);
-
-  //   useEffect(() => {
-  //     checkToken();
-  //   }, [checkToken, tokenEmail]);
 
   useEffect(() => {
     if (inputRefs.current.length !== inputCode.length) {
@@ -136,72 +77,58 @@ const VerificationForm = () => {
   }, [inputCode.length, secondsRemaining, expirationTime]);
 
   const handleSubmit = async () => {
-    try {
-      const verificationCode = inputCode.join('');
-      if (verificationCode.length !== 6) return makeToastError('Please complete the verification code.');
-      setLoading(true);
-      try {
-        setIsPending(true);
-        const data = {
-          email: tokenEmail,
-          verificationCode: verificationCode,
-          Ttype: result?.existingToken.tokenType,
-        };
-        setLabelLink('');
-        mutationSubmit.mutate(data, {
-          onSuccess: (res) => {
-            setMessage('Verification completed!');
-            setTypeMessage('success');
-            if (!res.token) {
-              router.push(res.redirect);
-              return;
-            } else {
-              router.push(`/recovery/reset-password?token=${res.token.token}`);
-              return;
-            }
-          },
-          onError: (error) => {
-            makeToastError(error.message);
+    const verificationCode = inputCode.join('');
+    if (verificationCode.length !== 6) return makeToastError('Please complete the verification code.');
+    setLoading(true);
+    setIsPending(true);
+    const data = {
+      email: result?.existingToken?.email,
+      verificationCode: verificationCode,
+      Ttype: result?.existingToken?.tokenType,
+    };
+    setLabelLink('');
+    mutationSubmit.mutate(data, {
+      onSuccess: (res) => {
+        if (res.error) return makeToastError(res.error);
+        setMessage('Verification completed!');
+        setTypeMessage('success');
+        if (!res.token) {
+          if (res.redirect) {
+            router.push(res.redirect);
             return;
-          },
-          onSettled: () => {
-            setIsPending(false);
-          },
-        });
-      } catch (error) {
-        console.log(error);
-      } finally {
+          }
+        } else {
+          router.push(`/recovery/reset-password?token=${res.token.token}`);
+          return;
+        }
+      },
+      onSettled: () => {
+        setLoading(false);
         setIsPending(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+      },
+    });
   };
 
   const onResendCode = async () => {
-    try {
-      setLabelLink('');
-      const data = {
-        email: tokenEmail,
-      };
-      mutationResend.mutate(data, {
-        onSuccess: (res) => {
-          setTimeout(() => {
-            window.location.reload();
-          }, 100);
-        },
-        onError: (error) => {
+    setLabelLink('');
+    const data = {
+      email: result?.existingToken?.email!,
+    };
+    mutationResend.mutate(data, {
+      onSuccess: (res) => {
+        if (res.error) {
           setLabelLink('Resend Verification Code');
-          makeToastError(error.message);
+          makeToastError(res.error);
           return;
-        },
-        onSettled: () => {
-          setIsPending(false);
-        },
-      });
-    } catch (error) {
-      console.log(error);
-    }
+        }
+        setTimeout(() => {
+          window.location.reload();
+        }, 100);
+      },
+      onSettled: () => {
+        setIsPending(false);
+      },
+    });
   };
 
   return (

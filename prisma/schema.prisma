@@ -23,7 +23,7 @@ model User {
   image           String?
   firstname       String
   lastname        String
-  username        String?   @unique
+  username        String?
   bio             String?
   email           String?   @unique
   emailVerified   DateTime?
