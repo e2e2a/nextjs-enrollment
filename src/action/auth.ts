@@ -1,11 +1,12 @@
 'use server';
 import { signIn } from '@/auth';
 import { comparePassword } from '@/lib/hash/bcrypt';
-import { checkingIp } from '@/lib/helpers/checkingIp';
-import rateLimit from '@/lib/helpers/rate-limit';
+import { checkingIp } from '@/lib/limiter/checkingIp';
+import { getIpAddress } from '@/lib/limiter/getIp';
+import rateLimit from '@/lib/limiter/rate-limit';
 import { sendVerificationEmail } from '@/lib/mail/mail';
 import { SigninValidator, SignupValidator } from '@/lib/validators/Validator';
-import { checkUserUsername, createUser, deleteUserByEmail, getUserByEmail } from '@/services/user';
+import { checkUserUsername, createUser, deleteUserByEmail, getUserByEmail, updateUserIpById } from '@/services/user';
 import { generateVerificationToken } from '@/services/verification-token';
 import { SignInResponse, SignUpResponse } from '@/types';
 import { AuthError } from 'next-auth';
@@ -41,12 +42,13 @@ export const signInAction = async (data: any): Promise<SignInResponse> => {
     if (!isMatch) return { error: 'Incorrect email or password.', status: 403 };
 
     const userIp = await checkingIp(existingUser);
+    if(userIp.errorIp) return { error: 'Forbidden.', status: 403 };
     if (!userIp || userIp.error || !userIp.success) {
-      console.log(userIp.error);
       const tokenType = 'Activation';
       const verificationToken = await generateVerificationToken(email, tokenType);
       return { token: verificationToken.token, status: 203 };
     }
+    console.log(userIp)
     try {
       await signIn('credentials', {
         email,
@@ -92,8 +94,8 @@ export const signUpAction = async (data: any): Promise<SignUpResponse> => {
       if (existingUser.emailVerified) {
         return { error: 'User already exist. Please sign in to continue.', status: 409 };
       }
-      const checkUsername = await checkUserUsername(username)
-      console.log('checkUsername', checkUsername)
+      const checkUsername = await checkUserUsername(username);
+      console.log('checkUsername', checkUsername);
       if (checkUsername) {
         return { error: 'Username already exist. Please provide another username.', status: 409 };
       }
@@ -107,7 +109,6 @@ export const signUpAction = async (data: any): Promise<SignUpResponse> => {
       password: password,
     };
     await createUser(dataToCreate);
-
     const tokenType = 'Verify';
     const verificationToken = await generateVerificationToken(email, tokenType);
     await sendVerificationEmail(verificationToken.email, verificationToken.code, firstname, 'Confirm your Email');

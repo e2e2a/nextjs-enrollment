@@ -59,11 +59,10 @@ export const checkUserUsername = async (username: string) => {
       },
     },
   });
-  console.log(`${users}`)
-  if(users && users.length > 0) return true
+  console.log(`${users}`);
+  if (users && users.length > 0) return true;
   return false;
 };
-
 
 export const getUserByEmail = async (email: string) => {
   try {
@@ -71,6 +70,7 @@ export const getUserByEmail = async (email: string) => {
       where: {
         email: email,
       },
+      include:{ activeIp: true}
     });
     return user;
   } catch (error) {
@@ -121,16 +121,49 @@ export const updateUserEmailVerifiedById = async (id: string) => {
 };
 
 export const updateUserIpById = async (id: string, ip: string) => {
-  const user = await getUserById(id);
-  if (user && user.activeIpAddress === ip) return null;
-  await db.user.update({
-    where: { id: id },
-    data: {
-      activeIpAddress: ip,
-      recentIpAddress: user?.activeIpAddress,
+  // const user = await getUserById(id);
+  const user = await db.user.findUnique({
+    where: {
+      id:id,
+    },
+    include: {activeIp: true}
+  });
+  if (!user) return null;
+  // const existingActiveIp = await db.activeIp.findUnique({
+  //   where: {
+  //     userId: user.id,
+  //   },
+  //   data: {
+  //     ip: { equals: [ip] },
+  //   },
+  // });
+
+  const existingActiveIp = await db.activeIp.findFirst({
+    where: {
+      userId: user.id,
     },
   });
-  return user;
+
+  if (existingActiveIp) {
+    const currentIpArray = existingActiveIp.ip || [];
+    if (currentIpArray.includes(ip)) {
+      // Do nothing if the IP is already the same
+      console.log(`ActiveIp entry for userId ${user.id} already exists with IP ${ip}`);
+    } else {
+      // Update the existing ActiveIp entry with the new IP
+      const updatedIpArray = [...currentIpArray, ip];
+      await db.activeIp.update({
+        where: { id: existingActiveIp.id },
+        data: {
+          ip: updatedIpArray,
+          updatedAt: new Date(),
+        },
+      });
+      console.log(`Updated IP for userId ${user.id} to ${ip}`);
+    }
+  }
+
+  return user
 };
 
 export const updateUserPasswordById = async (data: IUpdateUserPassword) => {

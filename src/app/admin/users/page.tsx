@@ -1,7 +1,7 @@
 'use client';
 import { DataTable } from '@/components/shared/DataTable';
 import { columns } from './components/columns';
-import { useUserQuery } from '@/lib/queries';
+import { UseUserQuery } from '@/lib/queries';
 
 // async function getUsers(): Promise<User[]> {
 //   const res = await fetch(
@@ -26,7 +26,7 @@ interface User {
 }
 export default function Page() {
   // const data = await getUsers()
-  const { data, error } = useUserQuery();
+  const { data, error } = UseUserQuery();
   if (error) {
     console.error(error)
     return null

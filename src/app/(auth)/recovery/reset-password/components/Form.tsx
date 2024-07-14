@@ -24,18 +24,19 @@ const ResetPasswordForm = () => {
 
   const token = searchParams.get('token') ?? '';
   const { data: result, error } = useRecoveryTokenCheckQuery(token);
-  if (error) {
-    console.error('Error fetching token:', error.message);
-    router.push('/recovery');
-    return;
-  }
+  
   useEffect(() => {
+    if (error) {
+      console.error('Error fetching token:', error.message);
+      router.push('/recovery');
+      return;
+    }
     if (result) {
       console.log(result);
       if (result.error) return router.push('/recovery');
       setLoading(false);
     }
-  }, [result]);
+  }, [result,error,router]);
 
   const form = useForm<z.infer<typeof NewPasswordValidator>>({
     resolver: zodResolver(NewPasswordValidator),

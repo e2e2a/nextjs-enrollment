@@ -472,23 +472,23 @@ import db from './db';
 // }
 
 // // ============================== GET USER BY ID
-export async function getUserProfileByUsername(username: string) {
-  try {
+// export async function getUserProfileByUsername(username: string) {
+//   try {
     
-    const user = await db.user.findUnique({
-      where: {
-        username:username,
-      },
-    });
-    if (!user) {
-        return {message:`User with username '${username}' not found`};
-      }
-    return user;
-  } catch (error) {
-    console.log(error);
-    throw new Error;
-  }
-}
+//     const user = await db.user.findUnique({
+//       where: {
+//         username:username,
+//       },
+//     });
+//     if (!user) {
+//         return {message:`User with username '${username}' not found`};
+//       }
+//     return user;
+//   } catch (error) {
+//     console.log(error);
+//     throw new Error;
+//   }
+// }
 
 // // ============================== UPDATE USER
 // export async function updateUser(user: IUpdateUser) {

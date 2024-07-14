@@ -29,14 +29,15 @@ const VerificationForm = () => {
 
   const searchParams = useSearchParams();
   const token = searchParams.get('token') ?? '';
+  
   const { data: result, error } = useTokenCheckQuery(token);
-  if (error) {
-    console.error('Error fetching token:', error.message);
-    router.push('/recovery');
-    return;
-  }
 
   useEffect(() => {
+    if (error) {
+      console.error('Error fetching token:', error.message);
+      router.push('/recovery');
+      return;
+    }
     if (result) {
       console.log(result);
       if (result.error) return router.push('/recovery');
@@ -46,7 +47,7 @@ const VerificationForm = () => {
         setExpirationTime(new Date(result.token.expiresCode));
       }
     }
-  }, [result]);
+  }, [result,error, router]);
 
   useEffect(() => {
     if (inputRefs.current.length !== inputCode.length) {

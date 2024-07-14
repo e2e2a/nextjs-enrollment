@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useRouter, useSearchParams } from 'next/navigation';
+import {  useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useSignInMutation } from '@/lib/queries';
 import CardWrapper from '@/components/shared/CardWrapper';
@@ -22,6 +22,7 @@ const SignInForm = () => {
   const mutation = useSignInMutation();
 
   const router = useRouter();
+  console.log('router', router)
   const form = useForm<z.infer<typeof SigninValidator>>({
     resolver: zodResolver(SigninValidator),
     defaultValues: {
@@ -34,19 +35,25 @@ const SignInForm = () => {
       setIsPending(true);
       mutation.mutate(data, {
         onSuccess: (res) => {
+          console.log(res);
           switch (res.status) {
             case 200:
             case 201:
             case 203:
               if (!res.token) {
+                setTypeMessage('success');
                 setMessage(res?.message);
-                return router.push('/admin');
+                // return router.push('/admin');
+                return window.location.href = '/admin';
               }
-              return router.push(`/verification?token=${res.token}`);
+              // return router.push(`/verification?token=${res.token}`);
+              return window.location.href = `/verification?token=${res.token}`;
             default:
               setMessage(res.error);
               setTypeMessage('error');
-              return router.push('/sign-in');
+              // return router.push('/sign-in');
+              // return window.location.reload()
+              return
           }
         },
         onError: (error) => {

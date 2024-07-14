@@ -122,7 +122,7 @@ interface User {
   updatedAt: Date;
 }
 
-export const useUserQuery = () => {
+export const UseUserQuery = () => {
   return useQuery<
     {
       error: string;

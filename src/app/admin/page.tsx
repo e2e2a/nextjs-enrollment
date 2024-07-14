@@ -1,16 +1,14 @@
 "use client"
-import { Button } from '@/components/ui/button'
-import { useSession } from 'next-auth/react'
 import React from 'react'
-import { mytest } from '../api/test/route'
+// import { mytest } from '../api/test/route'
 import { DashboardShell } from '@/components/shared/Shell'
-import { useUserQuery } from '@/lib/queries'
+import { UseUserQuery } from '@/lib/queries'
 
 const page = () => {
-  const handleSubmit = () => {
-    mytest()
-  }
-  const { data: res, error } = useUserQuery();
+  // const handleSubmit = () => {
+  //   mytest()
+  // }
+  const { data: res, error } = UseUserQuery();
   if (error) {
     console.error(error)
     return null
