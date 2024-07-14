@@ -2,11 +2,10 @@
 import { signIn } from '@/auth';
 import { comparePassword } from '@/lib/hash/bcrypt';
 import { checkingIp } from '@/lib/limiter/checkingIp';
-import { getIpAddress } from '@/lib/limiter/getIp';
 import rateLimit from '@/lib/limiter/rate-limit';
 import { sendVerificationEmail } from '@/lib/mail/mail';
 import { SigninValidator, SignupValidator } from '@/lib/validators/Validator';
-import { checkUserUsername, createUser, deleteUserByEmail, getUserByEmail, updateUserIpById } from '@/services/user';
+import { checkUserUsername, createUser, deleteUserByEmail, getUserByEmail } from '@/services/user';
 import { generateVerificationToken } from '@/services/verification-token';
 import { SignInResponse, SignUpResponse } from '@/types';
 import { AuthError } from 'next-auth';

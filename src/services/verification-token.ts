@@ -1,4 +1,4 @@
-"use server"
+'use server';
 import db from '@/lib/db';
 import { generateRandomString } from '@/lib/helpers/verificationCode';
 import jwt from 'jsonwebtoken';

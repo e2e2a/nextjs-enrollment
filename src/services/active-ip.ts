@@ -1,5 +1,4 @@
 'use server';
-
 import db from '@/lib/db';
 
 export const getActiveIpByUserId = async (userId: string) => {
@@ -26,7 +25,7 @@ export const createActiveIp = async (userId: any, ip: string) => {
 };
 
 export const updateActiveIp = async (userId: string, ip: string) => {
-  const existingActiveIp = await getActiveIpByUserId(userId)
+  const existingActiveIp = await getActiveIpByUserId(userId);
 
   if (existingActiveIp) {
     const currentIpArray = existingActiveIp.ip || [];

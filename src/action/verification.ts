@@ -4,7 +4,7 @@ import { getIpAddress } from '@/lib/limiter/getIp';
 import { generateVerificationCode } from '@/lib/helpers/verificationCode';
 import { sendVerificationEmail } from '@/lib/mail/mail';
 import { generateResetPasswordToken } from '@/services/reset-password';
-import { getUserByEmail, updateUserEmailVerifiedById, updateUserIpById } from '@/services/user';
+import { getUserByEmail, updateUserEmailVerifiedById } from '@/services/user';
 import { deleteVerificationTokenByid, getVerificationTokenByEmail } from '@/services/verification-token';
 import { verificationCodeProcessResponse, verificationCodeResendResponse } from '@/types';
 import { createActiveIp, updateActiveIp } from '@/services/active-ip';
