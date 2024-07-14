@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { useRecoveryMutation } from '@/lib/queries';
 import { RecoveryValidator } from '@/lib/validators/Validator';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -17,7 +16,6 @@ const RecoveryForm = () => {
   const [typeMessage, setTypeMessage] = useState('');
   const [isPending, setIsPending] = useState(false);
   const mutation = useRecoveryMutation();
-  const router = useRouter();
   const form = useForm<z.infer<typeof RecoveryValidator>>({
     resolver: zodResolver(RecoveryValidator),
     defaultValues: {
@@ -28,7 +26,6 @@ const RecoveryForm = () => {
     setIsPending(true);
     mutation.mutate(data, {
       onSuccess: (res) => {
-        console.log(res);
         if (res.error) {
           setMessage(res.error);
           setTypeMessage('error');
@@ -36,8 +33,7 @@ const RecoveryForm = () => {
         }
         setMessage(res.message);
         setTypeMessage('success');
-        router.push(`/verification?token=${res.token}`);
-        return;
+        return (window.location.href = `/verification?token=${res.token}`);
       },
       onError: (error) => {
         setMessage(error.message);

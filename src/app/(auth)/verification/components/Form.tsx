@@ -95,12 +95,10 @@ const VerificationForm = () => {
         setTypeMessage('success');
         if (!res.token) {
           if (res.redirect) {
-            router.push(res.redirect);
-            return;
+            return(window.location.href = `${res.redirect}`);
           }
         } else {
-          router.push(`/recovery/reset-password?token=${res.token.token}`);
-          return;
+          return(window.location.href = `/recovery/reset-password?token=${res.token.token}`);
         }
       },
       onSettled: () => {

@@ -7,7 +7,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { SignupValidator } from '@/lib/validators/Validator';
-import { useRouter } from 'next/navigation';
 import { useSignUpMutation } from '@/lib/queries';
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
@@ -16,7 +15,6 @@ const SignUpForm = () => {
   const [isPending, setIsPending] = useState(false);
   const [message, setMessage] = useState<string | undefined>('');
   const [typeMessage, setTypeMessage] = useState('');
-  const router = useRouter();
 
   const mutation = useSignUpMutation();
   const form = useForm<z.infer<typeof SignupValidator>>({
@@ -31,39 +29,36 @@ const SignUpForm = () => {
     },
   });
   const onSubmit = async (data: z.infer<typeof SignupValidator>) => {
-    try {
-      setIsPending(true);
+    setIsPending(true);
 
-      mutation.mutate(data, {
-        onSuccess: (res) => {
-          switch (res.status) {
-            case 200:
-            case 201:
-            case 203:
-              setTypeMessage('success')
-              setMessage(res?.message);
-              if (!res.token) {
-                return router.push('/sign-up');
-              }
-              return router.push(`/verification?token=${res.token}`);
-            default:
-              setMessage(res.error);
-              setTypeMessage('error');
+    mutation.mutate(data, {
+      onSuccess: (res) => {
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            setTypeMessage('success');
+            setMessage(res?.message);
+            if (!res.token) {
+              // return router.push('/sign-up');
               return;
-          }
-        },
-        onError: (error) => {
-          setTypeMessage('error');
-          setMessage(error.message);
-          return;
-        },
-        onSettled: () => {
-          setIsPending(false);
-        },
-      });
-    } finally {
-      setIsPending(false);
-    }
+            }
+            return (window.location.href = `/verification?token=${res.token}`);
+          default:
+            setMessage(res.error);
+            setTypeMessage('error');
+            return;
+        }
+      },
+      onError: (error) => {
+        setTypeMessage('error');
+        setMessage(error.message);
+        return;
+      },
+      onSettled: () => {
+        setIsPending(false);
+      },
+    });
   };
   return (
     <CardWrapper headerLabel='Create an Account' backButtonHref='/sign-in' backButtonLabel='Already have an account?' showSocial>

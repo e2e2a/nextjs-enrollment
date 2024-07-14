@@ -60,7 +60,7 @@ const ResetPasswordForm = () => {
         }
         setMessage(res.message);
         setTypeMessage('success');
-        router.push(`/sign-in`);
+        return (window.location.href = `/sign-in`);
       },
 
       onSettled: () => {
