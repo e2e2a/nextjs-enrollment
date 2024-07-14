@@ -50,11 +50,6 @@ const SignUpForm = () => {
             return;
         }
       },
-      onError: (error) => {
-        setTypeMessage('error');
-        setMessage(error.message);
-        return;
-      },
       onSettled: () => {
         setIsPending(false);
       },

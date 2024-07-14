@@ -35,11 +35,6 @@ const RecoveryForm = () => {
         setTypeMessage('success');
         return (window.location.href = `/verification?token=${res.token}`);
       },
-      onError: (error) => {
-        setMessage(error.message);
-        setTypeMessage('error');
-        return;
-      },
       onSettled: () => {
         setIsPending(false);
       },

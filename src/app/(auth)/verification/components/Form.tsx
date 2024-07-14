@@ -29,17 +29,15 @@ const VerificationForm = () => {
 
   const searchParams = useSearchParams();
   const token = searchParams.get('token') ?? '';
-  
+
   const { data: result, error } = useTokenCheckQuery(token);
 
   useEffect(() => {
     if (error) {
-      console.error('Error fetching token:', error.message);
       router.push('/recovery');
       return;
     }
     if (result) {
-      console.log(result);
       if (result.error) return router.push('/recovery');
       setHeader('Confirming your verification code');
       setLoading(false);
@@ -47,7 +45,7 @@ const VerificationForm = () => {
         setExpirationTime(new Date(result.token.expiresCode));
       }
     }
-  }, [result,error, router]);
+  }, [result, error, router]);
 
   useEffect(() => {
     if (inputRefs.current.length !== inputCode.length) {
@@ -95,10 +93,10 @@ const VerificationForm = () => {
         setTypeMessage('success');
         if (!res.token) {
           if (res.redirect) {
-            return(window.location.href = `${res.redirect}`);
+            return (window.location.href = `${res.redirect}`);
           }
         } else {
-          return(window.location.href = `/recovery/reset-password?token=${res.token.token}`);
+          return (window.location.href = `/recovery/reset-password?token=${res.token.token}`);
         }
       },
       onSettled: () => {

@@ -27,12 +27,10 @@ const ResetPasswordForm = () => {
   
   useEffect(() => {
     if (error) {
-      console.error('Error fetching token:', error.message);
       router.push('/recovery');
       return;
     }
     if (result) {
-      console.log(result);
       if (result.error) return router.push('/recovery');
       setLoading(false);
     }
