@@ -4,15 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && prisma generate",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "prisma generate"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@auth/prisma-adapter": "^2.1.0",
     "@hookform/resolvers": "^3.4.2",
-    "@prisma/client": "^5.14.0",
+    "@lucia-auth/adapter-mongodb": "^1.0.3",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-avatar": "^1.0.2",
     "@radix-ui/react-checkbox": "^1.1.1",
@@ -26,16 +24,19 @@
     "@tanstack/react-table": "^8.19.2",
     "@upstash/ratelimit": "^1.2.1",
     "@upstash/redis": "^1.31.5",
+    "arctic": "^1.9.2",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "i": "^0.3.7",
     "jsonwebtoken": "^8.5.1",
+    "lucia": "^3.2.0",
     "lucide-react": "^0.379.0",
     "mongodb": "^6.7.0",
+    "mongoose": "^8.5.1",
     "next": "14.2.3",
-    "next-auth": "^5.0.0-beta.18",
+    "next-auth": "^5.0.0-beta.19",
     "next-themes": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",
@@ -50,6 +51,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@auth/mongodb-adapter": "^3.4.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
@@ -59,7 +61,6 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
-    "prisma": "^5.14.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

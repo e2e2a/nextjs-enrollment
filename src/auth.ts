@@ -1,8 +1,12 @@
 import NextAuth from 'next-auth';
-import { PrismaAdapter } from '@auth/prisma-adapter';
-import db from '@/lib/db';
 import authConfig from '@/auth.config';
-import { getUserById } from './services/user';
+import { getUserByEmail, getUserById } from './services/user';
+import Users from './models/Users';
+import { MongoDBAdapter } from '@auth/mongodb-adapter';
+import dbConnect from './lib/db/db';
+import { MongoClient } from 'mongodb';
+import Accounts from './models/Accounts';
+const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -11,34 +15,63 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   events: {
     async linkAccount({ user, profile }) {
-      // console.log('profile', profile)
-      await db.user.update({
-        where: { id: user.id },
-        data: { emailVerified: new Date() },
+      await dbConnect();
+      await Users.findByIdAndUpdate(user.id, {
+        emailVerified: new Date(),
       });
     },
   },
   callbacks: {
-    async signIn({ user, account }) {
+    async signIn({ user, account, profile }) {
       try {
-        if (account?.provider !== 'credentials') return true;
-        const existUser = await getUserById(user.id as string);
-        // prevent signin without email verification
-        if (!existUser || !existUser?.emailVerified) return false;
-        /**
-         * @Todo add 2FA check
-         */
-        return true;
-      } catch (error) {
+        await dbConnect();
+        if (account?.provider === 'google') {
+          const existingUser = await getUserByEmail(user.email!);
+          if (existingUser) {
+            const existAccount = await Accounts.findOne({ userId: existingUser._id });
+            if (!existAccount) {
+              const newAccount = new Accounts({
+                provider: account?.provider,
+                type: account?.type,
+                providerAccountId: account?.providerAccountId,
+                access_token: account?.access_token,
+                expires_at: account?.expires_at,
+                scope: account?.scope,
+                token_type: account?.token_type,
+                id_token: account?.id_token,
+                userId: existingUser._id,
+              });
+
+              await newAccount.save();
+            }
+            return true;
+            // return false;
+          }
+          return true;
+        } else if (account?.provider === 'credentials') {
+          // @ts-ignore
+          const existingUser = await getUserById(user._id);
+
+          // Prevent sign-in without email verification
+          if (!existingUser || !existingUser.emailVerified) {
+            return false;
+          }
+
+          return true;
+        }
         return false;
+      } catch (error) {
+        console.error('Error during signIn callback:', error);
+        return false; // Return false for any error
       }
     },
     async session({ session, token }) {
+      await dbConnect();
       if (token && session.user) {
         if (token.sub) {
           const user = await getUserById(token.sub);
           if (user) {
-            session.user.id = user.id;
+            session.user.id = user._id;
             session.user.firstname = user.firstname;
             session.user.lastname = user.lastname;
             session.user.role = user.role;
@@ -48,20 +81,21 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           // }
         }
       }
-      console.log('session', session);
       return session;
     },
-    async jwt({ token, user, account }) {
-      if (user) {
-        token.sub = user.id;
+    async jwt({ token, user }) {
+      await dbConnect();
+      // @ts-ignore
+      if (user) token.sub = user._id;
+      if (!user && token.email) {
+        const existUser = await getUserByEmail(token.email);
+        token.sub = existUser._id;
       }
       // if (account) {
       //   token.sub = account.id;
       // }
       if (token.sub) {
         const existUser = await getUserById(token.sub);
-
-        console.log('tokenUser', { token });
         if (!existUser) return token;
 
         token.role = existUser.role;
@@ -70,8 +104,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return token;
     },
   },
-
-  adapter: PrismaAdapter(db),
+  adapter: MongoDBAdapter(clientPromise),
   session: { strategy: 'jwt' },
   ...authConfig,
 });

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { SidebarNavItem } from "@/types"
 import { Button } from "../../ui/button"
-import { signOut } from "@/auth"
+import { signOut } from "@/lib/auth"
 import { Icons } from "../Icons"
 import LogoutButton from "../LogoutButton"
 

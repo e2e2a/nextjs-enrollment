@@ -7,16 +7,17 @@ import { useSelectedLayoutSegment } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Icons } from '../Icons';
 import { MainNavItem } from '@/types';
-import { siteConfig } from '@/constant/site';
 import { MobileNav } from './MobileNav';
 import { UserAccountNav } from './UserAccountNav';
 
 interface MainNavProps {
+  session?: any;
   items?: MainNavItem[];
   children?: React.ReactNode;
 }
 
-export function MainNav({ items, children }: MainNavProps) {
+export function MainNav({ session, items, children }: MainNavProps) {
+  
   const segment = useSelectedLayoutSegment();
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false);
 
@@ -50,7 +51,7 @@ export function MainNav({ items, children }: MainNavProps) {
         </button>
         {showMobileMenu && items && <MobileNav items={items}>{children}</MobileNav>}
       </div>
-      <UserAccountNav />
+      <UserAccountNav session={session} />
     </div>
   );
 }

@@ -1,13 +1,15 @@
 'use server';
 import { sendVerificationEmail } from '@/lib/mail/mail';
 import { NewPasswordValidator, RecoveryValidator } from '@/lib/validators/Validator';
-import { deleteResetPasswordTokenByEmail } from '@/services/reset-password';
+import { deleteResetPasswordTokenByEmail } from '@/services/resetPassword';
 import { getUserByEmail, updateUserPasswordById } from '@/services/user';
-import { generateVerificationToken } from '@/services/verification-token';
+import { generateVerificationToken } from '@/services/token';
 import { recoveryResponse, resetPasswordResponse } from '@/types';
+import dbConnect from '@/lib/db/db';
 
 export const recoveryProcess = async (data: any): Promise<recoveryResponse> => {
   try {
+    await dbConnect()
     const validatedFields = RecoveryValidator.safeParse(data);
 
     if (!validatedFields.success) {
@@ -35,6 +37,7 @@ export const recoveryProcess = async (data: any): Promise<recoveryResponse> => {
 
 export const resetPassword = async (data:any): Promise<resetPasswordResponse> => {
   try {
+    await dbConnect()
     const { email } = data;
     const validatedFields = NewPasswordValidator.safeParse(data);
     if (!validatedFields.success) {

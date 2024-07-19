@@ -1,3 +1,4 @@
+"use client"
 import { SiteFooter } from '@/components/shared/SiteFooter';
 import { dashboardConfig } from '@/constant/dashboard';
 import { ReactNode } from 'react';
@@ -5,6 +6,9 @@ import { MainNav } from '@/components/shared/nav/MainNav';
 import { SidebarNav } from '@/components/shared/nav/SidebarNav';
 
 const AdminRootLayout = ({ children }: { children: ReactNode }) => {
+  // const {session, user} = useSession()
+  // const { user } = useSession()
+  // console.log('userssss',user)
   return (
     <div className='flex min-h-screen flex-col space-y-6'>
       <header className='sticky top-0 z-40 border-b bg-background'>

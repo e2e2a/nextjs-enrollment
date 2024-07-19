@@ -1,41 +1,24 @@
 'use server';
-import db from '../db';
+import { UserIp } from '@/models/UserIp';
 import { getIpAddress } from './getIp';
 
 export const checkingIp = async (user: any) => {
   try {
+    console.log('userId', user._id);
     const ip = await getIpAddress();
-    console.log(ip);
     if (!ip) return { errorIp: 'User has no IP address' };
-    // if (!user.activeIpAddress || user.activeIpAddress !== ip) {
-    //   if (user.recentIpAddress && user.recentIpAddress !== ip) {
-    //     return { error: 'Old ip detected!' };
-    //   }
-    //   return { error: 'New ip detected!' };
-    // }
-    const existingActiveIp = await db.activeIp.findFirst({
-      where: {
-        userId: user.id,
-      },
-    });
+    const existingActiveIp = await UserIp.findOne({ userId: user._id });
+    if (!existingActiveIp) return { errorIp: 'User has No activeIp.' };
 
-    if (!existingActiveIp) {
-      // await db.activeIp.create({
-      //   data: {
-      //     userId: user.id,
-      //     ip: [],
-      //   },
-      // });
-      return { errorIp: 'User has No activeIp.' };
-    }
-    const currentIpArray = existingActiveIp.ip || [];
-    if (currentIpArray.includes(ip)) {
-      // Do nothing if the IP is already the same
-      console.log(`ActiveIp entry for userId ${user.id} already exists with IP ${ip}`);
-      return { success: 'User using same ip.' };
+    const currentIpArray = existingActiveIp.ips.map((obj: any) => obj.address); 
+
+    if (currentIpArray.flat().includes(ip)) {
+      console.log(`ActiveIp entry for userId ${user._id} already exists with IP ${ip}`);
+      return { success: 'User using the same IP.' };
     }
     return { error: 'User has different ip. ' };
   } catch (error) {
+    console.log('error', error);
     return { error: 'Something went wrong' };
   }
 };

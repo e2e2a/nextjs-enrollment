@@ -42,36 +42,17 @@ export const useTokenCheckQuery = (token: string) => {
     queryKey: ['TokenCheck', token],
     queryFn: async () => checkToken(token),
     retry: 0,
+    refetchOnWindowFocus: false,
     // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
 
 interface data {
-  email: string;
+  userId: string;
   verificationCode?: string;
   Ttype?: string;
 }
-// export const useVerificationcCodeMutation = () => {
-//   return useMutation<
-//     {
-//       error: string;
-//       success: string;
-//       redirect: string;
-//       token?: {
-//         id: string;
-//         email: string;
-//         token: string;
-//         expires: Date;
-//         createdAt: Date;
-//         updatedAt: Date;
-//       };
-//     },
-//     Error,
-//     data
-//   >({
-//     mutationFn: fetchVerficastionCode,
-//   });
-// };
+
 export const useVerificationcCodeMutation = () => {
   return useMutation<verificationCodeProcessResponse, Error, any>({
     mutationFn: async (data) => verificationCodeProcess(data),
@@ -134,27 +115,10 @@ export const UseUserQuery = () => {
     queryKey: ['Users'],
     queryFn: fetchAllUsers,
     retry: 0,
+    refetchOnWindowFocus: false,
     // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
-// export const useCreateUserAccount = () => {
-//   return useMutation({
-//     mutationFn: (user: INewUser) => createUserAccount(user),
-//   });
-// };
-
-// export const useSignInAccount = () => {
-//   return useMutation({
-//     mutationFn: (user: { email: string; password: string }) =>
-//       signInAccount(user),
-//   });
-// };
-
-// export const useSignOutAccount = () => {
-//   return useMutation({
-//     mutationFn: signOutAccount,
-//   });
-// };
 
 // ============================================================
 // POST QUERIES

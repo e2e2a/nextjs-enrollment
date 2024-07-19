@@ -1,14 +1,10 @@
 'use server';
+import { ResetPassword } from '@/models/ResetPassword';
 import jwt from 'jsonwebtoken';
-import db from '@/lib/db';
 
 export const getResetPasswordTokenById = async (id: string) => {
   try {
-    const user = await db.user.findUnique({
-      where: {
-        id,
-      },
-    });
+    const user = await ResetPassword.findById(id);
     return user;
   } catch (error) {
     return null;
@@ -17,9 +13,7 @@ export const getResetPasswordTokenById = async (id: string) => {
 
 export const getResetPasswordTokenByEmail = async (email: string) => {
   try {
-    const verificationToken = await db.resetPassword.findFirst({
-      where: { email },
-    });
+    const verificationToken = await ResetPassword.findOne({ email });
     return verificationToken;
   } catch (error) {
     return null;
@@ -28,27 +22,19 @@ export const getResetPasswordTokenByEmail = async (email: string) => {
 
 export const deleteResetPasswordTokenById = async (id: string) => {
   try {
-    await db.user.delete({
-      where: {
-        id,
-      },
-    });
-    return;
+    await ResetPassword.findByIdAndDelete(id);
+    return true;
   } catch (error) {
-    return null;
+    return false;
   }
 };
 
 export const deleteResetPasswordTokenByEmail = async (email: string) => {
   try {
-    await db.resetPassword.delete({
-      where: {
-        email: email,
-      },
-    });
-    return;
+    await ResetPassword.findOneAndDelete({ email });
+    return true;
   } catch (error) {
-    return null;
+    return false;
   }
 };
 
@@ -61,12 +47,11 @@ export const generateResetPasswordToken = async (email: string) => {
     deleteResetPasswordTokenById(existingToken.id);
   }
 
-  const verificationToken = await db.resetPassword.create({
-    data: {
-      email,
-      token,
-      expires: expirationTime,
-    },
+  const verificationToken = await ResetPassword.create({
+    email,
+    token,
+    expires: expirationTime,
   });
+  if(!verificationToken) return null;
   return verificationToken;
 };

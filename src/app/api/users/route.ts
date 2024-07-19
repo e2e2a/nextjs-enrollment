@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import db from '@/lib/db';
-import { auth } from '@/auth';
-import { getToken } from 'next-auth/jwt';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
 import { headers } from 'next/headers';
+import Users from '@/models/Users';
+import { auth } from '@/auth';
 
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
@@ -32,13 +30,10 @@ export async function GET(req: NextRequest, res: NextResponse) {
     //   );
     // }
     if (req.method !== 'GET') {
-      return NextResponse.json(
-        { message: `Method ${req.method} Not Allowed` },
-        { status: 405 }
-      );
+      return NextResponse.json({ message: `Method ${req.method} Not Allowed` }, { status: 405 });
     }
 
-    const users = await db.user.findMany();
+    const users = await Users.find();
 
     return NextResponse.json({ users: users }, { status: 200 });
   } catch (error) {

@@ -6,7 +6,11 @@ import {
   authRoutes,
   publicRoutes,
 } from '@/routes';
-
+import db from './lib/db/db';
+// const mydb = async() => {
+//   const conn = await db()
+// }
+// mydb()
 const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {

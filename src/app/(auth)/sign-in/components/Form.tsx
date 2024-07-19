@@ -1,37 +1,42 @@
 'use client';
-import React, { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import { SigninValidator } from '@/lib/validators/Validator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { redirect, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useSignInMutation } from '@/lib/queries';
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
 
 const SignInForm = () => {
-  const searchParams = useSearchParams();
-  const urlError = searchParams.get('error') === 'OAuthAccountNotLinked' ? 'Email Error provider' : '';
   const [message, setMessage] = useState<string | undefined>('');
   const [typeMessage, setTypeMessage] = useState('');
   const [isPending, setIsPending] = useState(false);
   const mutation = useSignInMutation();
 
-  const form = useForm<z.infer<typeof SigninValidator>>({
-    resolver: zodResolver(SigninValidator),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
-  const onSubmit: SubmitHandler<z.infer<typeof SigninValidator>> = async (data) => {
+  const form = useForm<z.infer<typeof SigninValidator>>(
+    {
+      resolver: zodResolver(SigninValidator),
+      shouldFocusError: true,
+      defaultValues: {
+        email: '',
+        password: '',
+      },
+    }
+    
+  )
+  
+  
+  const onSubmit = (data: z.infer<typeof SigninValidator>) =>{
+  // const onSubmit: SubmitHandler<z.infer<typeof SigninValidator>> = async (data: any) => {
     setIsPending(true);
     mutation.mutate(data, {
       onSuccess: (res) => {
+        console.log(res)
         switch (res.status) {
           case 200:
           case 201:
@@ -40,6 +45,7 @@ const SignInForm = () => {
               setTypeMessage('success');
               setMessage(res?.message);
               return (window.location.href = '/admin');
+              return
             }
             return (window.location.href = `/verification?token=${res.token}`);
           default:
@@ -57,7 +63,7 @@ const SignInForm = () => {
   return (
     <CardWrapper headerLabel='Welcome Back' backButtonHref='/sign-up' backButtonLabel="Don't have an account?" showSocial>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+        <form onSubmit={form.handleSubmit(onSubmit)} method='POST' className='space-y-6'>
           <div className='space-y-4'>
             {message && <FormMessageDisplay message={message} typeMessage={typeMessage} />}
             <FormField
@@ -88,6 +94,7 @@ const SignInForm = () => {
             />
           </div>
           <Button
+            type='button'
             variant='link'
             className='font-normal w-full text-indigo-500 text-center flex justify-end items-center'
             size='sm'

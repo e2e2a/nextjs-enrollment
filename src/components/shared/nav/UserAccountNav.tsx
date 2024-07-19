@@ -1,6 +1,5 @@
 "use client"
 import Link from "next/link"
-import { getSession, signOut } from "next-auth/react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,28 +11,31 @@ import { UserAvatar } from "./UserAvatar"
 import { useCallback, useEffect, useState } from "react"
 import { IUser } from "@/types"
 
-export function UserAccountNav() {
+export function UserAccountNav({session}: any) {
+
   const [user, setUser] = useState<IUser | null>(null);
 
-  
   const checkSession = useCallback(async () => {
     try {
-      const session = await getSession();
+      // const session = await getSession();
       if (session) {
-        if(session.user){
+        // if(session.user){
           setUser({
-            id: session.user.id!,
-            firstname: session.user.firstname!,
-            lastname: session.user.lastname!,
-            role: session.user.role!,
+            id: session.id!,
+            firstname: session.firstname!,
+            lastname: session.lastname!,
+            role: session.role!,
+            // id: session.user.id!,
+            // firstname: session.user.firstname!,
+            // lastname: session.user.lastname!,
+            // role: session.user.role!,
           });
-        }
+        // }
       } else {
         setUser(null);
        
       }
     } catch (error) {
-      console.error('Error fetching session:', error);
       setUser(null);
     }
   }, []);
@@ -78,9 +80,9 @@ export function UserAccountNav() {
           className="cursor-pointer"
           onSelect={(event) => {
             event.preventDefault()
-            signOut({
-              callbackUrl: `${window.location.origin}/login`,
-            })
+            // signOut({
+            //   callbackUrl: `${window.location.origin}/login`,
+            // })
           }}
         >
           Sign out

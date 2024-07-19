@@ -1,13 +1,9 @@
 'use server';
-import db from '@/lib/db';
+import { UserIp } from '@/models/UserIp';
 
 export const getActiveIpByUserId = async (userId: string) => {
   try {
-    const activeIp = await db.activeIp.findFirst({
-      where: {
-        userId: userId,
-      },
-    });
+    const activeIp = await UserIp.findOne({ userId: userId });
     return activeIp;
   } catch (error) {
     return null;
@@ -15,11 +11,9 @@ export const getActiveIpByUserId = async (userId: string) => {
 };
 
 export const createActiveIp = async (userId: any, ip: string) => {
-  await db.activeIp.create({
-    data: {
+  await UserIp.create({
       userId: userId,
-      ip: [ip],
-    },
+      ips: [{ address: ip }],
   });
   return true;
 };
@@ -28,16 +22,15 @@ export const updateActiveIp = async (userId: string, ip: string) => {
   const existingActiveIp = await getActiveIpByUserId(userId);
 
   if (existingActiveIp) {
-    const currentIpArray = existingActiveIp.ip || [];
-
-    const updatedIpArray = [...currentIpArray, ip];
-    await db.activeIp.update({
-      where: { id: existingActiveIp.id },
-      data: {
-        ip: updatedIpArray,
-        updatedAt: new Date(),
-      },
-    });
+    const activeIp = await UserIp.findOne({ userId: userId, 'ips.address': ip });
+    if (!activeIp) {
+      existingActiveIp.ips.push({ address: ip });
+      existingActiveIp.updatedAt = new Date();
+      await existingActiveIp.save();
+      console.log(`Updated IP for userId ${userId} to ${ip}`);
+      return true;
+    }
+    await createActiveIp(userId, ip);
     console.log(`Updated IP for userId ${userId} to ${ip}`);
     return true;
   }

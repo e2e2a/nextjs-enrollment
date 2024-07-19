@@ -1,14 +1,15 @@
 'use server';
-import { signIn } from '@/auth';
 import { comparePassword } from '@/lib/hash/bcrypt';
 import { checkingIp } from '@/lib/limiter/checkingIp';
 import rateLimit from '@/lib/limiter/rate-limit';
 import { sendVerificationEmail } from '@/lib/mail/mail';
 import { SigninValidator, SignupValidator } from '@/lib/validators/Validator';
 import { checkUserUsername, createUser, deleteUserByEmail, getUserByEmail } from '@/services/user';
-import { generateVerificationToken } from '@/services/verification-token';
+import { generateVerificationToken } from '@/services/token';
 import { SignInResponse, SignUpResponse } from '@/types';
+import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
+import dbConnect from '@/lib/db/db';
 
 /**
  * Performs sign-in.
@@ -16,11 +17,9 @@ import { AuthError } from 'next-auth';
  */
 export const signInAction = async (data: any): Promise<SignInResponse> => {
   try {
+    await dbConnect()
     const validatedFields = SigninValidator.safeParse(data);
-
-    if (!validatedFields.success) {
-      return { error: 'Invalid fields!', status: 400 };
-    }
+    if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
 
     const { email, password } = validatedFields.data;
 
@@ -35,19 +34,17 @@ export const signInAction = async (data: any): Promise<SignInResponse> => {
     }
 
     if (!existingUser.emailVerified) return { error: 'Incorrect email or password.', status: 403 };
-
     const isMatch = await comparePassword(password, existingUser.password as string);
 
     if (!isMatch) return { error: 'Incorrect email or password.', status: 403 };
 
     const userIp = await checkingIp(existingUser);
-    if(userIp.errorIp) return { error: 'Forbidden.', status: 403 };
+    if (userIp.errorIp) return { error: `Forbidden.${userIp.errorIp}`, status: 403 };
     if (!userIp || userIp.error || !userIp.success) {
       const tokenType = 'Activation';
-      const verificationToken = await generateVerificationToken(email, tokenType);
+      const verificationToken = await generateVerificationToken(existingUser._id, tokenType);
       return { token: verificationToken.token, status: 203 };
     }
-    console.log(userIp)
     try {
       await signIn('credentials', {
         email,
@@ -79,41 +76,61 @@ export const signInAction = async (data: any): Promise<SignInResponse> => {
  */
 export const signUpAction = async (data: any): Promise<SignUpResponse> => {
   try {
+    await dbConnect()
     const validatedFields = SignupValidator.safeParse(data);
-
-    if (!validatedFields.success) {
-      return { error: 'Invalid fields!', status: 400 };
-    }
+    if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
 
     const { email, password, firstname, username, lastname } = validatedFields.data;
 
-    const existingUser = await getUserByEmail(email);
+    const checkConflict = await checkingConflict(email, username);
+    if (!checkConflict.success) return { error: checkConflict?.error, status: checkConflict?.status };
 
-    if (existingUser) {
-      if (existingUser.emailVerified) {
-        return { error: 'User already exist. Please sign in to continue.', status: 409 };
-      }
-      const checkUsername = await checkUserUsername(username);
-      console.log('checkUsername', checkUsername);
-      if (checkUsername) {
-        return { error: 'Username already exist. Please provide another username.', status: 409 };
-      }
-      await deleteUserByEmail(email);
-    }
-    const dataToCreate = {
-      email: email,
-      firstname: firstname,
-      lastname: lastname,
-      username: username,
-      password: password,
-    };
-    await createUser(dataToCreate);
-    const tokenType = 'Verify';
-    const verificationToken = await generateVerificationToken(email, tokenType);
-    await sendVerificationEmail(verificationToken.email, verificationToken.code, firstname, 'Confirm your Email');
-    return { message: 'Confirmation email sent!', token: verificationToken.token, status: 201 };
+    const newUser = await creatingUser(email, firstname, lastname, username, password);
+    return { message: 'Confirmation email sent!', token: newUser.token, status: 201 };
   } catch (error) {
-    console.error('Error processing request:', error);
     return { error: 'Something went wrong.', status: 500 };
   }
+};
+
+/**
+ * Perfoms checking conflict of email and username
+ * @returns string
+ */
+const checkingConflict = async (email: string, username: string) => {
+  await dbConnect()
+  const existingUser = await getUserByEmail(email);
+
+  if (existingUser) {
+    if (existingUser.emailVerified) {
+      return { error: 'User already exist. Please sign in to continue.', status: 409 };
+    }
+    const checkUsername = await checkUserUsername(username);
+    if (checkUsername) {
+      return { error: 'Username already exist. Please provide another username.', status: 409 };
+    }
+    await deleteUserByEmail(email);
+  }
+  return { success: 'success', status: 200 };
+};
+
+/**
+ * Performs creating user
+ * Performs creating verification token
+ * Performs email verification send
+ * @returns
+ */
+const creatingUser = async (email: string, username: string, firstname: string, lastname: string, password: string) => {
+  await dbConnect()
+  const user = await createUser({ email, username, firstname, lastname }, password);
+  console.log('user', user);
+  if (!user) return { error: 'Error creating User', status: 404 };
+
+  const tokenType = 'Verify';
+  const verificationToken = await generateVerificationToken(user._id, tokenType);
+
+  if (!verificationToken) return { error: 'Error creating verificationToken', status: 404 };
+
+  const send = await sendVerificationEmail(verificationToken.email, verificationToken.code, firstname, 'Confirm your Email');
+  if (!send) return { error: 'Error sending verification email', status: 404 };
+  return { user: user, token: verificationToken.token };
 };

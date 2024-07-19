@@ -1,10 +1,9 @@
 import { Icons } from '@/components/shared/Icons';
-import { UserRole } from '@prisma/client';
 
 //
 export type IVerificationToken = {
   id: string;
-  email: string;
+  userId: any;
   token: string;
   code: string;
   tokenType: string;
@@ -49,17 +48,37 @@ export type IUpdatePost = {
   location?: string;
   tags?: string;
 };
-
-export type IUser = {
+/**
+ * @type models
+ */
+export type IId = {
   id: string;
-  firstname: string;
-  lastname?: string | null;
-  username?: string | null;
-  email?: string | null;
+}
+export type UserRole = {
+  role?: "USER" | "ADMIN"
+}
+export type IUserPassword = IId & {
+  password: string;
+}
+/**
+ * @todo 
+ * create type User Profile
+ */
+export type IUserData = {
+  firstname?: string;
+  lastname?: string;
+  username?: string;
+  email?: string;
   imageUrl?: string | null;
-  bio?: string | null;
-  role?: UserRole;
 };
+
+export type IUser = IId & {
+  firstname?: string;
+  lastname?: string;
+  username?: string;
+  email?: string;
+  imageUrl?: string | null;
+} & UserRole;
 
 export type INewUser = {
   name: string;

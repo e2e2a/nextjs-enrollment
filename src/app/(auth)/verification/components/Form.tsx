@@ -37,6 +37,7 @@ const VerificationForm = () => {
       router.push('/recovery');
       return;
     }
+    console.log('result',result)
     if (result) {
       if (result.error) return router.push('/recovery');
       setHeader('Confirming your verification code');
@@ -81,7 +82,7 @@ const VerificationForm = () => {
     setLoading(true);
     setIsPending(true);
     const data = {
-      email: result?.token?.email,
+      userId: result?.token?.userId._id,
       verificationCode: verificationCode,
       Ttype: result?.token?.tokenType,
     };
@@ -109,7 +110,7 @@ const VerificationForm = () => {
   const onResendCode = async () => {
     setLabelLink('');
     const data = {
-      email: result?.token?.email!,
+      userId: result?.token?.userId._id,
     };
     mutationResend.mutate(data, {
       onSuccess: (res) => {
@@ -121,18 +122,18 @@ const VerificationForm = () => {
         setTimeout(() => {
           window.location.reload();
         }, 100);
+        return
       },
       onSettled: () => {
         setIsPending(false);
       },
     });
   };
-
   return (
     <CardWrapper
       headerLabel={header || 'Please double check your token or sign up again.'}
       backButtonHref=''
-      backButtonLabel={header ? labelLink : ''}
+      backButtonLabel= {header ? labelLink : ''}
       onResendCode={onResendCode}
     >
       {expirationTime && !message && (

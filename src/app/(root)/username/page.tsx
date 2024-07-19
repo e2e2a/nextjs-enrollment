@@ -11,7 +11,7 @@
 // import { useGetUserById } from "@/lib/react-query/queries";
 // import { GridPostList, Loader } from "@/components/shared";
 'use client';
-import { auth } from '@/auth';
+import { auth } from '@/lib/auth';
 import Loader from '@/components/shared/Loader';
 // import { getUserProfileByUsername } from '@/lib/api';
 // import { useGetUserProfileByUsername } from '@/lib/queries';

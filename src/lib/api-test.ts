@@ -2,7 +2,7 @@
 'use server'
 // import { appwriteConfig, account, databases, storage, avatars } from './config';
 import { IUpdatePost, INewPost, INewUser, IUpdateUser } from '@/types';
-import db from './db';
+import db from './db/db';
 
 // ============================================================
 // AUTH

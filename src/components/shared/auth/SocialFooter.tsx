@@ -1,24 +1,24 @@
-'use client';
-import { signIn } from 'next-auth/react';
+"use client"
 import { Button } from '@/components/ui/button';
+import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
+import { signIn, useSession } from 'next-auth/react';
 import React from 'react';
 import { FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
-import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 
 const SocialFooter = () => {
-  const onClick = (provider: 'google') => {
-    signIn(provider, {
-      callbackUrl: DEFAULT_LOGIN_REDIRECT
-    })
-  };
+  // const onClick = async (provider: 'google') => {
+  //   await signIn(provider)
+  // };
+  const { data: session } = useSession();
   return (
     <div className='flex items-center w-full'>
       <Button
         size='lg'
         className='w-full flex gap-4'
         variant='outline'
-        onClick={() => onClick('google')}
+        onClick={() => signIn("google")}
+        type='submit'
       >
         Continue with Google <FcGoogle className='h-7 w-7' />
       </Button>

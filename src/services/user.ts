@@ -1,60 +1,31 @@
 'use server';
-import db from '@/lib/db';
 import { hashPassword } from '@/lib/hash/bcrypt';
+import Users from '@/models/Users';
+import { IUser, IUserData, IUserPassword } from '@/types';
 
-type IId = {
-  id: string;
-};
-
-type IUserEmail = {
-  email: string;
-};
-
-type IUserPassword = {
-  password: string;
-};
-
-type IUserEmailVerified = IId & {
-  emailVerified: Date;
-};
-
-type INewUser = IUserEmail & {
-  firstname: string;
-  lastname: string;
-  username: string;
-} & IUserPassword;
-
-type IUpdateUserPassword = IId & IUserPassword;
-
-export const createUser = async (data: INewUser) => {
+export const createUser = async (data: IUserData, password: string) => {
   try {
-    const { password, ...userData } = data;
     const hashedPassword = await hashPassword(password);
-    const newUser = await db.user.create({
-      data: {
-        ...userData,
-        password: hashedPassword,
-      },
+    const newUser = await Users.create({
+      ...data,
+      password: hashedPassword,
     });
-    return newUser;
+    return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
-    throw new Error(`${error}`);
-    // return null;
+    return null;
   }
 };
 
 export const getUsers = async () => {
-  const users = await db.user.findMany();
+  const users = await Users.find();
   return users;
 };
 
 export const checkUserUsername = async (username: string) => {
-  const users = await db.user.findMany({
-    where: {
-      username,
-      emailVerified: {
-        not: null,
-      },
+  const users = await Users.find({
+    username,
+    emailVerified: {
+      $ne: null,
     },
   });
   if (users && users.length > 0) return true;
@@ -63,26 +34,17 @@ export const checkUserUsername = async (username: string) => {
 
 export const getUserByEmail = async (email: string) => {
   try {
-    const user = db.user.findUnique({
-      where: {
-        email: email,
-      },
-      include:{ activeIp: true}
-    });
-    return user;
+    const user = await Users.findOne({ email });
+    return JSON.parse(JSON.stringify(user));
   } catch (error) {
     return null;
   }
 };
 
-export const getUserById = async (id: string) => {
+export const getUserById: any = async (id: string) => {
   try {
-    const user = await db.user.findUnique({
-      where: {
-        id,
-      },
-    });
-    return user;
+    const user = await Users.findById(id);
+    return JSON.parse(JSON.stringify(user));
   } catch (error) {
     return null;
   }
@@ -97,46 +59,32 @@ export const deleteUserByEmail = async (email: string) => {
     return null;
   }
 
-  await db.user.delete({
-    where: {
-      email: email,
-    },
-  });
-  return existingUser;
+  await Users.findOneAndDelete({ email });
+  return true;
 };
 
 /**
  * @todo use the type in the update
  */
 export const updateUserEmailVerifiedById = async (id: string) => {
-  await db.user.update({
-    where: { id: id },
-    data: {
-      emailVerified: new Date(),
-    },
-  });
+  try {
+    const user = await Users.findByIdAndUpdate(id, { emailVerified: new Date() }, { new: true });
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 };
 
-export const updateUserPasswordById = async (data: IUpdateUserPassword) => {
-  try {
-    const { id, password } = data;
-    const existingUser = await getUserById(id);
-    if (!existingUser) {
-      throw new Error('Could not find user');
-    }
-
-    const hashedPassword = await hashPassword(password);
-
-    const newPassword = await db.user.update({
-      where: {
-        id: existingUser?.id,
-      },
-      data: {
-        password: hashedPassword,
-      },
-    });
-    return newPassword;
-  } catch (error) {
-    throw new Error('Failed to create user');
+export const updateUserPasswordById = async (data: IUserPassword) => {
+  const { id, password } = data;
+  const existingUser = await getUserById(id);
+  if (!existingUser) {
+    throw new Error('Could not find user');
   }
+
+  const hashedPassword = await hashPassword(password);
+
+  const newPassword = await Users.findByIdAndUpdate(existingUser?.id, { password: hashedPassword }, { new: true });
+  return newPassword;
 };

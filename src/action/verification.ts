@@ -1,24 +1,25 @@
 'use server';
-import { signIn } from '@/auth';
 import { getIpAddress } from '@/lib/limiter/getIp';
 import { generateVerificationCode } from '@/lib/helpers/verificationCode';
 import { sendVerificationEmail } from '@/lib/mail/mail';
-import { generateResetPasswordToken } from '@/services/reset-password';
-import { getUserByEmail, updateUserEmailVerifiedById } from '@/services/user';
-import { deleteVerificationTokenByid, getVerificationTokenByEmail } from '@/services/verification-token';
+import { generateResetPasswordToken } from '@/services/resetPassword';
+import { getUserById, updateUserEmailVerifiedById } from '@/services/user';
+import { deleteVerificationTokenByid, getVerificationTokenByUserId } from '@/services/token';
 import { verificationCodeProcessResponse, verificationCodeResendResponse } from '@/types';
-import { createActiveIp, updateActiveIp } from '@/services/active-ip';
+import { createActiveIp, updateActiveIp } from '@/services/userIp';
+import { signIn } from '@/auth';
+import dbConnect from '@/lib/db/db';
 
 /**
  * Performs submitting verification code(6-digit)
  *
  * @param token string
  */
-
 export const verificationCodeProcess = async (data: any): Promise<verificationCodeProcessResponse> => {
-  const { email, verificationCode, Ttype } = data;
+  const { userId, verificationCode, Ttype } = data;
   try {
-    const userToken = await getVerificationTokenByEmail(email);
+    await dbConnect()
+    const userToken = await getVerificationTokenByUserId(userId);
     if (!userToken) return { error: 'Somethings went wrong', status: 403 };
 
     const hasExpired = new Date(userToken.expiresCode) < new Date();
@@ -26,7 +27,7 @@ export const verificationCodeProcess = async (data: any): Promise<verificationCo
 
     if (verificationCode !== userToken.code) return { error: 'Verification Code not match.', status: 403 };
 
-    const user = await getUserByEmail(userToken.email);
+    const user = await getUserById(userToken.userId);
     if (!user) return { error: 'User not found', status: 404 };
 
     const ip = await getIpAddress();
@@ -34,14 +35,14 @@ export const verificationCodeProcess = async (data: any): Promise<verificationCo
 
     switch (Ttype) {
       case 'Recovery':
-        const RPtoken = await generateResetPasswordToken(email);
+        const RPtoken = await generateResetPasswordToken(userId);
         await deleteVerificationTokenByid(userToken.id);
         return { token: RPtoken, status: 201 };
 
       case 'Activation':
         await deleteVerificationTokenByid(userToken.id);
         //change this to active-ip services
-        await updateActiveIp(user.id, ip);
+        await updateActiveIp(user._id, ip);
         await signIn('credentials', {
           email: user.email,
           redirect: false,
@@ -49,25 +50,29 @@ export const verificationCodeProcess = async (data: any): Promise<verificationCo
 
         return { redirect: '/admin', status: 201 };
       case 'Verify':
-        await updateUserEmailVerifiedById(user.id);
-        await createActiveIp(user.id, ip);
-        await deleteVerificationTokenByid(userToken.id);
+        await updateUserEmailVerifiedById(user._id);
+        await createActiveIp(user._id, ip);
+        await deleteVerificationTokenByid(userToken._id);
         return { redirect: '/sign-in', status: 201 };
       default:
         return { error: 'Invalid request type', status: 400 };
     }
   } catch (error) {
+    console.log(error)
     return { error: 'Internal Server Error', status: 500 };
   }
 };
 
 export const verificationCodeResend = async (data: any): Promise<verificationCodeResendResponse> => {
-  const { email } = data;
-  const verification = await generateVerificationCode(email);
+  await dbConnect()
+  const { userId } = data;
+  console.log('userId',userId)
+  const verification = await generateVerificationCode(userId);
   if ('error' in verification) {
+    console.log(verification.error)
     return { error: 'Something went wrong.', status: 403 };
   }
-  const User = await getUserByEmail(verification.email);
+  const User = await getUserById(verification.userId);
   if (!User) return { error: 'User not found', status: 403 };
   await sendVerificationEmail(verification.email, verification.code, User.firstname, 'Resend Verification');
   return { verification: verification, message: 'hello', status: 200 };

@@ -1,10 +1,14 @@
 // import { Models } from "appwrite";
-"use client"
 // import { useToast } from "@/components/ui/use-toast";
 // import { Loader } from "@/components/shared";
 // import { useGetRecentPosts, useGetUsers } from "@/lib/react-query/queries";
+"use client"
+
+import { useSession } from "next-auth/react";
 
 const Home = () => {
+  const session = useSession()
+  console.log('sessionqq',session )
   // const { toast } = useToast();
 
 //   const {
@@ -32,6 +36,7 @@ const Home = () => {
 //   }
 
   return (
+    
     <div className="flex flex-1 md:pl-[270px]">
       <div className="home-container">
         <div className="home-posts">

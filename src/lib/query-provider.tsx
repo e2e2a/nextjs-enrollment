@@ -1,14 +1,16 @@
 // In Next.js, this file would be called: app/providers.jsx
-"use client"
+'use client';
+import { useState } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { SessionProvider } from 'next-auth/react';
 
-// We can not useState or useRef in a server component, which is why we are
-// extracting this part out into it's own file with 'use client' on top
-import { useState } from "react"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-import { SessionProvider } from "next-auth/react"
+type IProps = {
+  children: React.ReactNode;
+  sessionData: any;
+};
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({ children, sessionData }: IProps) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -18,17 +20,18 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             // above 0 to avoid refetching immediately on the client
             // staleTime: 1 * 1000,
             // refetchInterval: 2 * 1000,
+            // refetchOnWindowFocus: false,
           },
         },
       })
-  )
+  );
 
   return (
-    <SessionProvider>
+    <SessionProvider session={sessionData} refetchOnWindowFocus={false} refetchWhenOffline={false}>
       <QueryClientProvider client={queryClient}>
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         {children}
       </QueryClientProvider>
     </SessionProvider>
-  )
+  );
 }
