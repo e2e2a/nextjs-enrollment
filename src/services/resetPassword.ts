@@ -1,8 +1,12 @@
 'use server';
-import { ResetPassword } from '@/models/ResetPassword';
+import { ResetPassword } from '@/models/ResetPasswords';
 import jwt from 'jsonwebtoken';
-
-export const getResetPasswordTokenById = async (id: string) => {
+/**
+ * 
+ * @todo remove token naming convention
+ * @returns 
+ */
+export const getResetPasswordById = async (id: string) => {
   try {
     const user = await ResetPassword.findById(id);
     return user;
@@ -11,7 +15,7 @@ export const getResetPasswordTokenById = async (id: string) => {
   }
 };
 
-export const getResetPasswordTokenByEmail = async (email: string) => {
+export const getResetPasswordByEmail = async (email: string) => {
   try {
     const verificationToken = await ResetPassword.findOne({ email });
     return verificationToken;
@@ -20,7 +24,7 @@ export const getResetPasswordTokenByEmail = async (email: string) => {
   }
 };
 
-export const deleteResetPasswordTokenById = async (id: string) => {
+export const deleteResetPasswordById = async (id: string) => {
   try {
     await ResetPassword.findByIdAndDelete(id);
     return true;
@@ -29,7 +33,7 @@ export const deleteResetPasswordTokenById = async (id: string) => {
   }
 };
 
-export const deleteResetPasswordTokenByEmail = async (email: string) => {
+export const deleteResetPasswordByEmail = async (email: string) => {
   try {
     await ResetPassword.findOneAndDelete({ email });
     return true;
@@ -38,17 +42,17 @@ export const deleteResetPasswordTokenByEmail = async (email: string) => {
   }
 };
 
-export const generateResetPasswordToken = async (email: string) => {
+export const generateResetPasswordToken = async (userId: string) => {
   const expirationTime = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours in milliseconds
-  const token = jwt.sign({ email, exp: expirationTime.getTime() }, process.env.JWT_SECRET!, { algorithm: 'HS256' });
+  const token = jwt.sign({ userId, exp: expirationTime.getTime() }, process.env.JWT_SECRET!, { algorithm: 'HS256' });
 
-  const existingToken = await getResetPasswordTokenByEmail(email);
+  const existingToken = await getResetPasswordByEmail(userId);
   if (existingToken) {
-    deleteResetPasswordTokenById(existingToken.id);
+    deleteResetPasswordById(existingToken.id);
   }
 
   const verificationToken = await ResetPassword.create({
-    email,
+    userId,
     token,
     expires: expirationTime,
   });

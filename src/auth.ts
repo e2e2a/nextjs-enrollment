@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 import authConfig from '@/auth.config';
-import { getUserByEmail, getUserById } from './services/user';
+import { getUserByEmail, getUserById, updateUserLogin } from './services/user';
 import Users from './models/Users';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import dbConnect from './lib/db/db';
@@ -18,6 +18,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       await dbConnect();
       await Users.findByIdAndUpdate(user.id, {
         emailVerified: new Date(),
+        lastLogin: new Date(),
       });
     },
   },
@@ -44,6 +45,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
               await newAccount.save();
             }
+            await updateUserLogin(existingUser._id)
             return true;
             // return false;
           }
@@ -56,7 +58,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           if (!existingUser || !existingUser.emailVerified) {
             return false;
           }
-
+          await updateUserLogin(existingUser._id)
           return true;
         }
         return false;
@@ -74,6 +76,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             session.user.id = user._id;
             session.user.firstname = user.firstname;
             session.user.lastname = user.lastname;
+            session.user.imageUrl = user.imageUrl;
             session.user.role = user.role;
           }
           // if (token.role) {

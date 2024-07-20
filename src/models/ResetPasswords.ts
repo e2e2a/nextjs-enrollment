@@ -1,4 +1,3 @@
-import { DatabaseSession } from 'lucia';
 import mongoose, { Document, Schema, model, models } from 'mongoose';
 
 interface IResetPassword extends Document {

@@ -13,6 +13,7 @@ interface CardWrapperProps {
   onResendCode?: () => void;
   BackButtonSideLabelHref?: string;
   showSocial?: boolean;
+  className?: string | null;
 }
 
 const CardWrapper = ({
@@ -22,9 +23,10 @@ const CardWrapper = ({
   backButtonLabel,
   onResendCode,
   showSocial,
+  className,
 }: CardWrapperProps) => {
   return (
-    <Card className='sm:w-[500px] w-full shadow-md bg-white text-black'>
+    <Card className={`sm:w-[500px] w-full shadow-md bg-white text-black ${className}`}>
       <CardHeader>
         <Header label={headerLabel} />
       </CardHeader>
@@ -34,9 +36,9 @@ const CardWrapper = ({
           <SocialFooter />
         </CardFooter>
       )}
-      { backButtonLabel ? (
+      {backButtonLabel ? (
         <CardFooter>
-          <BackButton label={backButtonLabel} href={backButtonHref} onResendCode={onResendCode}/>
+          <BackButton label={backButtonLabel} href={backButtonHref} onResendCode={onResendCode} />
         </CardFooter>
       ) : null}
     </Card>

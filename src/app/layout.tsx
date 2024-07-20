@@ -18,7 +18,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang='en' className='' suppressHydrationWarning>
       <body className={inter.className}>
-        
           <Providers sessionData={sessionData}>
             {children}
             <Toaster position='top-center' reverseOrder={false} />

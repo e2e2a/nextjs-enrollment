@@ -7,8 +7,10 @@ export interface IUser extends Document {
   lastname: string;
   username: string;
   emailVerified: Date;
-  profilePictureUrl?: string;
+  imageUrl?: string;
   role: 'USER' | 'ADMIN';
+  lastLogin?: Date;
+  lastLogout?: Date;
 }
 
 const userSchema = new Schema<IUser>(
@@ -19,8 +21,10 @@ const userSchema = new Schema<IUser>(
     username: { type: String },
     password: { type: String },
     emailVerified: { type: Date },
-    profilePictureUrl: { type: String },
+    imageUrl: { type: String },
     role: { type: String, enum: ['USER', 'ADMIN'], default: 'USER' },
+    lastLogin: { type: Date },
+    lastLogout: { type: Date },
   },
   { timestamps: true }
 );

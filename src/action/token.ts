@@ -1,5 +1,5 @@
 'use server';
-import { ResetPassword } from '@/models/ResetPassword';
+import { ResetPassword } from '@/models/ResetPasswords';
 import { getUserByEmail, getUserById } from '@/services/user';
 import { getVerificationTokenByUserId } from '@/services/token';
 import { checkTokenResponse, resetPasswordTokenResponse } from '@/types';

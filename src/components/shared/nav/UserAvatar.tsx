@@ -1,25 +1,21 @@
+import { Avatar, AvatarFallback, AvatarImage, AvatarProps } from '@radix-ui/react-avatar';
 
-import { Avatar, AvatarFallback, AvatarImage, AvatarProps } from "@radix-ui/react-avatar"
-
-import { Icons } from "../Icons"
-import { User } from "lucia"
-
+import { Icons } from '../Icons';
 interface UserAvatarProps extends AvatarProps {
   // user?: Pick<User, "image" | "firstname">
-  user?: any
+  session?: any;
 }
 
-export function UserAvatar({ user, ...props }: UserAvatarProps) {
+export function UserAvatar({ session, ...props }: UserAvatarProps) {
+  let image = '';
+  console.log('session?.firstname', session?.firstname);
   return (
     <Avatar {...props}>
-      {user?.image ? (
-        <AvatarImage alt="Picture" src={user.image} />
+      {image ? (
+        <AvatarImage className='w-9 h-9 rounded-full' alt='Picture' src={session.imageUrl} />
       ) : (
-        <AvatarFallback>
-          <span className="sr-only">{user?.firstname}</span>
-          <Icons.user className="h-4 w-4" />
-        </AvatarFallback>
+        <AvatarImage className='w-9 h-9 rounded-full' alt='Picture' src={'/icons/profile-placeholder.svg'} />
       )}
     </Avatar>
-  )
+  );
 }

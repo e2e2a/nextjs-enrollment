@@ -1,7 +1,7 @@
 'use server';
 import { hashPassword } from '@/lib/hash/bcrypt';
 import Users from '@/models/Users';
-import { IUser, IUserData, IUserPassword } from '@/types';
+import { IUserData, IUserPassword } from '@/types';
 
 export const createUser = async (data: IUserData, password: string) => {
   try {
@@ -87,4 +87,24 @@ export const updateUserPasswordById = async (data: IUserPassword) => {
 
   const newPassword = await Users.findByIdAndUpdate(existingUser?.id, { password: hashedPassword }, { new: true });
   return newPassword;
+};
+
+export const updateUserLogin = async (id: string) => {
+  try {
+    const user = await Users.findByIdAndUpdate(id, { lastLogin: new Date() }, { new: true });
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const updateUserLogout = async (id: string) => {
+  try {
+    const user = await Users.findByIdAndUpdate(id, { lastLogout: new Date() }, { new: true });
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 };

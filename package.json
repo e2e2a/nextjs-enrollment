@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth/mongodb-adapter": "^3.4.1",
     "@hookform/resolvers": "^3.4.2",
-    "@lucia-auth/adapter-mongodb": "^1.0.3",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-avatar": "^1.0.2",
     "@radix-ui/react-checkbox": "^1.1.1",
@@ -31,7 +31,6 @@
     "dotenv": "^16.4.5",
     "i": "^0.3.7",
     "jsonwebtoken": "^8.5.1",
-    "lucia": "^3.2.0",
     "lucide-react": "^0.379.0",
     "mongodb": "^6.7.0",
     "mongoose": "^8.5.1",
@@ -51,7 +50,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@auth/mongodb-adapter": "^3.4.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",

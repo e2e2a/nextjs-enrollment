@@ -56,7 +56,7 @@ const SignUpForm = () => {
     });
   };
   return (
-    <CardWrapper headerLabel='Create an Account' backButtonHref='/sign-in' backButtonLabel='Already have an account?' showSocial>
+    <CardWrapper className={'my-16'} headerLabel='Create an Account' backButtonHref='/sign-in' backButtonLabel='Already have an account?' showSocial>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
           <div className='space-y-4'>

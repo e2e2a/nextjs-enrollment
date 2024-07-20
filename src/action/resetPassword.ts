@@ -1,7 +1,7 @@
 'use server';
 import { sendVerificationEmail } from '@/lib/mail/mail';
 import { NewPasswordValidator, RecoveryValidator } from '@/lib/validators/Validator';
-import { deleteResetPasswordTokenByEmail } from '@/services/resetPassword';
+import { deleteResetPasswordByEmail } from '@/services/resetPassword';
 import { getUserByEmail, updateUserPasswordById } from '@/services/user';
 import { generateVerificationToken } from '@/services/token';
 import { recoveryResponse, resetPasswordResponse } from '@/types';
@@ -56,7 +56,7 @@ export const resetPassword = async (data:any): Promise<resetPasswordResponse> =>
     };
     const updateUser = await updateUserPasswordById(newData);
     if (!updateUser) return { error: 'failed to update the password', status: 403 };
-    await deleteResetPasswordTokenByEmail(email);
+    await deleteResetPasswordByEmail(email);
     return { message: 'New Password has been set!', status: 200 };
   } catch (error) {
     console.error('Error processing request:', error);
