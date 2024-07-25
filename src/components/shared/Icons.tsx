@@ -1,6 +1,7 @@
 import {
     AlertTriangle,
     ArrowRight,
+    ArrowLeft,
     Check,
     ChevronLeft,
     ChevronRight,
@@ -44,6 +45,7 @@ import {
     add: Plus,
     warning: AlertTriangle,
     user: User,
+    arrowLeft: ArrowLeft,
     arrowRight: ArrowRight,
     help: HelpCircle,
     pizza: Pizza,

@@ -10,12 +10,14 @@ export default {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       profile: async (_profile) => {
+        console.log('_profile', _profile)
         return {
           id: _profile.sub,
           firstname: _profile.given_name,
           lastname: _profile.family_name,
           email: _profile.email,
           imageUrl: _profile.picture,
+          createdAt: new Date()
         };
       },
     }),

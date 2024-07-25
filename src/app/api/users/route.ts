@@ -7,7 +7,6 @@ import { auth } from '@/auth';
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
     const headersList = headers();
-
     const apiKey = headersList.get('x-api-key');
     const NEXT_PUBLIC_API_KEY = process.env.NEXT_PUBLIC_API_KEY!;
     const session = await auth();

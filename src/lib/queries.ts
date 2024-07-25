@@ -21,6 +21,7 @@ import { signInAction, signUpAction } from '@/action/auth';
 import { checkResetPasswordToken, checkToken } from '@/action/token';
 import { verificationCodeProcess, verificationCodeResend } from '@/action/verification';
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
+import { NewPassword } from '@/action/profile/NewPassword';
 
 // ============================================================
 // AUTH QUERIES
@@ -85,6 +86,11 @@ export const useRecoveryTokenCheckQuery = (token: string) => {
 export const useNewPasswordMutation = () => {
   return useMutation<resetPasswordResponse, Error, z.infer<typeof NewPasswordValidator>>({
     mutationFn: async (data) => resetPassword(data),
+  });
+};
+export const useUserNewPasswordMutation = () => {
+  return useMutation<resetPasswordResponse, Error, z.infer<typeof NewPasswordValidator>>({
+    mutationFn: async (data) => NewPassword(data),
   });
 };
 

@@ -232,7 +232,7 @@
     @apply h-12 bg-dark-4 px-5 text-light-1 flex gap-2 !important;
   }
 
-  .shad-button_ghost {
+  /* .shad-button_ghost {
     @apply flex gap-4 items-center justify-start hover:bg-transparent hover:text-white !important;
-  }
+  } */
 }

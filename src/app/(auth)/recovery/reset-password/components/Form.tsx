@@ -39,6 +39,10 @@ const ResetPasswordForm = () => {
   const form = useForm<z.infer<typeof NewPasswordValidator>>({
     resolver: zodResolver(NewPasswordValidator),
     defaultValues: {
+      /**
+       * @todo add this
+       */
+      // currentPassword: '1',
       password: '',
       CPassword: '',
     },

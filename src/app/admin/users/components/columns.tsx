@@ -1,5 +1,5 @@
+// @ts-nocheck
 'use client'
-
 import { ColumnDef } from '@tanstack/react-table'
 
 import { MoreHorizontal, ArrowUpDown } from 'lucide-react'
@@ -120,6 +120,18 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'))
       const formatted = date.toLocaleDateString()
+      // @example for formatted date ex. January 1, 2015
+      // const options: Intl.DateTimeFormatOptions = {
+      //   year: "numeric",
+      //   month: "short",
+      //   day: "numeric",
+      // };
+      
+      // const formattedDate = date.toLocaleDateString("en-US", options);
+      
+      // // Manually reformat the string to "Jul 20, 2024"
+      // const [month, day, year] = formattedDate.split(' ');
+      // const formatted = `${month} ${day}, ${year}`;
       return <div className='font-medium'>{formatted}</div>
     }
   },
@@ -132,15 +144,15 @@ export const columns: ColumnDef<User>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='ghost' className='h-8 w-8 p-0'>
+            <Button variant='' className='h-8 w-8 p-0'>
               <span className='sr-only'>Open menu</span>
               <MoreHorizontal className='h-4 w-4' />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
+          <DropdownMenuContent align='end' className='bg-white'>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(user.id)}
+              onClick={() => navigator.clipboard.writeText(user._id)}
             >
               Copy user ID
             </DropdownMenuItem>

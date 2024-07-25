@@ -14,7 +14,8 @@ export const fontPoppins = Poppins({
 export function formatDateString(dateString: string) {
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
-    month: "short",
+    // month: "short",
+    month: "long",
     day: "numeric",
   };
 
