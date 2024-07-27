@@ -153,7 +153,7 @@ const PasswordTab = () => {
                         htmlFor='CPassword'
                         className='absolute text-sm text-muted-foreground duration-200 transform -translate-y-2.5 scale-90 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-90 peer-focus:-translate-y-2.5'
                       >
-                        Confirm password
+                        Re-type new password
                       </label>
                     </div>
                   </FormControl>

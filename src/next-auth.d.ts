@@ -5,7 +5,9 @@ export type ExtendedUser = DefaultSession['user'] & {
   firstname: string;
   lastname: string;
   imageUrl: string;
+  birthday: Date;
   role: UserRole;
+  profileVerified: boolean;
 };
 
 declare module 'next-auth' {

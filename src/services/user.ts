@@ -2,6 +2,7 @@
 import { hashPassword } from '@/lib/hash/bcrypt';
 import Users from '@/models/Users';
 import { IUserData, IUserPassword } from '@/types';
+import { deleteStudentProfileByUserId } from './studentProfile';
 
 export const createUser = async (data: IUserData, password: string) => {
   try {
@@ -52,6 +53,17 @@ export const getUserById: any = async (id: string) => {
 /**
  * @todo
  */
+
+export const deleteUserById = async (id: string) => {
+  try {
+    const user = await getUserById(id)
+    await deleteStudentProfileByUserId(user._id)
+    await Users.findByIdAndDelete(id);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
 export const deleteUserByEmail = async (email: string) => {
   const existingUser = await getUserByEmail(email);
 

@@ -6,6 +6,8 @@ import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import dbConnect from './lib/db/db';
 import { MongoClient } from 'mongodb';
 import Accounts from './models/Accounts';
+import { createStudentProfile, createStudentProfileProvider } from './services/studentProfile';
+import { createAccount } from './services/account';
 const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
@@ -31,24 +33,22 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           if (existingUser) {
             const existAccount = await Accounts.findOne({ userId: existingUser._id });
             if (!existAccount) {
-              const newAccount = new Accounts({
-                provider: account?.provider,
-                type: account?.type,
-                providerAccountId: account?.providerAccountId,
-                access_token: account?.access_token,
-                expires_at: account?.expires_at,
-                scope: account?.scope,
-                token_type: account?.token_type,
-                id_token: account?.id_token,
-                userId: existingUser._id,
-              });
-
-              await newAccount.save();
+              await createAccount(account, existingUser._id as string);
             }
-            await updateUserLogin(existingUser._id)
+            await updateUserLogin(existingUser._id);
             return true;
             // return false;
           }
+          const userData = {
+            email: profile?.email,
+            imageUrl: profile?.picture,
+          };
+          const newUser = await Users.create({
+            ...userData,
+          });
+          await createAccount(account, newUser._id as string);
+          await updateUserLogin(newUser._id as string);
+          await createStudentProfileProvider(profile);
           return true;
         } else if (account?.provider === 'credentials') {
           // @ts-ignore
@@ -58,7 +58,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           if (!existingUser || !existingUser.emailVerified) {
             return false;
           }
-          await updateUserLogin(existingUser._id)
+          await updateUserLogin(existingUser._id);
           return true;
         }
         return false;
@@ -78,6 +78,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             session.user.lastname = user.lastname;
             session.user.imageUrl = user.imageUrl;
             session.user.role = user.role;
+            session.user.birthday = new Date(user.birthday);
+            if (user.birthday) {
+            }
           }
           // if (token.role) {
           //   session.user.role = token.role;

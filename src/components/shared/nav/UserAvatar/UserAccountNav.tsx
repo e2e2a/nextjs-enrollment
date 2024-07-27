@@ -15,13 +15,13 @@ export function UserAccountNav({ session }: any) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        disabled={isLoading}
+        // disabled={isLoading}
         className='select-none outline-none active:scale-[98%] transition-transform duration-100 active:opacity-85'
       >
-        <div className='active:scale-[98%] transition-transform duration-100 active:opacity-85'>
+        <div className='active:scale-[98%] active:drop-shadow-2xl transition-transform duration-100 active:opacity-85'>
           <UserAvatar
             session={{ firstname: session.firstname, imageUrl: session.imageUrl, asd: '' || null }}
-            className='h-11 w-11 '
+            className='h-10 w-10 '
           />
         </div>
       </DropdownMenuTrigger>

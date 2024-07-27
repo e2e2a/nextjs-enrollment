@@ -10,6 +10,7 @@ import { SignInResponse, SignUpResponse } from '@/types';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import dbConnect from '@/lib/db/db';
+import { createStudentProfile } from '@/services/studentProfile';
 
 /**
  * Performs sign-in.
@@ -17,7 +18,7 @@ import dbConnect from '@/lib/db/db';
  */
 export const signInAction = async (data: any): Promise<SignInResponse> => {
   try {
-    await dbConnect()
+    await dbConnect();
     const validatedFields = SigninValidator.safeParse(data);
     if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
 
@@ -76,16 +77,17 @@ export const signInAction = async (data: any): Promise<SignInResponse> => {
  */
 export const signUpAction = async (data: any): Promise<SignUpResponse> => {
   try {
-    await dbConnect()
+    await dbConnect();
     const validatedFields = SignupValidator.safeParse(data);
     if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
 
-    const { email, password, firstname, username, lastname } = validatedFields.data;
+    const { email, password, username } = validatedFields.data;
 
     const checkConflict = await checkingConflict(email, username);
     if (!checkConflict.success) return { error: checkConflict?.error, status: checkConflict?.status };
 
-    const newUser = await creatingUser(email, firstname, lastname, username, password);
+    const newUser = await creatingUser(email, username, password);
+    console.log('newUser auth:', newUser)
     return { message: 'Confirmation email sent!', token: newUser.token, status: 201 };
   } catch (error) {
     return { error: 'Something went wrong.', status: 500 };
@@ -97,7 +99,7 @@ export const signUpAction = async (data: any): Promise<SignUpResponse> => {
  * @returns string
  */
 const checkingConflict = async (email: string, username: string) => {
-  await dbConnect()
+  await dbConnect();
   const existingUser = await getUserByEmail(email);
 
   if (existingUser) {
@@ -119,10 +121,10 @@ const checkingConflict = async (email: string, username: string) => {
  * Performs email verification send
  * @returns
  */
-const creatingUser = async (email: string, username: string, firstname: string, lastname: string, password: string) => {
-  await dbConnect()
-  const user = await createUser({ email, username, firstname, lastname }, password);
-  console.log('user', user);
+const creatingUser = async (email: string, username: string, password: string) => {
+  await dbConnect();
+  const user = await createUser({ email, username }, password);
+  await createStudentProfile({ userId: user._id });
   if (!user) return { error: 'Error creating User', status: 404 };
 
   const tokenType = 'Verify';
@@ -130,7 +132,7 @@ const creatingUser = async (email: string, username: string, firstname: string, 
 
   if (!verificationToken) return { error: 'Error creating verificationToken', status: 404 };
 
-  const send = await sendVerificationEmail(verificationToken.email, verificationToken.code, firstname, 'Confirm your Email');
+  const send = await sendVerificationEmail(verificationToken.email, verificationToken.code, username, 'Confirm your Email');
   if (!send) return { error: 'Error sending verification email', status: 404 };
   return { user: user, token: verificationToken.token };
 };

@@ -13,15 +13,15 @@ interface UserAvatarProps {
 
 export function UserAvatar({ session, className, ...props }: UserAvatarProps) {
   return (
-    <Avatar {...props}>
+    <Avatar {...props} className='w-full h-full '>
       {session.imageUrl ? (
         <div>
-          <AvatarImage className={cn('rounded-full', className)} alt='Picture' src={session.imageUrl} />
+          <AvatarImage className={cn('rounded-full', className)} alt='Picture' src={session.imageUrl} onDragStart={(e) => e.preventDefault()}/>
           <AvatarFallback className={cn('rounded-full bg-gray-300 bg-opacity-50 flex items-center justify-center', className)} />
         </div>
       ) : (
         <div>
-          <AvatarImage className={cn('rounded-full', className)} alt='Picture' src={'/icons/profile-placeholder.svg'} />
+          <AvatarImage className={cn('rounded-full', className)} alt='Picture' src={'/icons/profile-placeholder.svg'} onDragStart={(e) => e.preventDefault()}/>
           <AvatarFallback className={cn('rounded-full bg-gray-300 bg-opacity-50 flex items-center justify-center', className)} />
         </div>
       )}

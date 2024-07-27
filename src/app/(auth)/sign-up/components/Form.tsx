@@ -21,8 +21,6 @@ const SignUpForm = () => {
     resolver: zodResolver(SignupValidator),
     defaultValues: {
       email: '',
-      firstname: '',
-      lastname: '',
       username: '',
       password: '',
       CPassword: '',
@@ -37,6 +35,7 @@ const SignUpForm = () => {
           case 200:
           case 201:
           case 203:
+            console.log('res',res)
             setTypeMessage('success');
             setMessage(res?.message);
             if (!res.token) {
@@ -74,7 +73,7 @@ const SignUpForm = () => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name='firstname'
               render={({ field }) => (
@@ -99,7 +98,7 @@ const SignUpForm = () => {
                   <FormMessage className='text-red' />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name='username'
@@ -107,7 +106,7 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={isPending} placeholder='Enter Lastname' className='bg-gray-50' />
+                    <Input {...field} disabled={isPending} placeholder='Enter Username' className='bg-gray-50' />
                   </FormControl>
                   <FormMessage className='text-red' />
                 </FormItem>
