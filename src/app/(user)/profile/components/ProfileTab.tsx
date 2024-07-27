@@ -1,26 +1,43 @@
-import React from 'react';
+"use client"
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { NewPasswordValidator } from '@/lib/validators/Validator';
+import { Form } from '@/components/ui/form';
+import { StudentProfileValidator } from '@/lib/validators/Validator';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useSession } from 'next-auth/react';
 import { Icons } from '@/components/shared/Icons';
 import Input from './Input';
-interface IProps {
-  isNotEditable: boolean;
-}
-const ProfileTab = ({ isNotEditable }: IProps) => {
+
+const ProfileTab = () => {
   const { data } = useSession();
+  const [isNotEditable, setIsNotEditable] = useState(false);
   const session = data?.user;
-  const form = useForm<z.infer<typeof NewPasswordValidator>>({
-    resolver: zodResolver(NewPasswordValidator),
+  const form = useForm<z.infer<typeof StudentProfileValidator>>({
+    resolver: zodResolver(StudentProfileValidator),
     defaultValues: {
-      currentPassword: '',
-      password: '',
-      CPassword: '',
+    firstname: '',
+    middlename: '',
+    lastname: '',
+    numberStreet: '',
+    barangay: '',
+    district: '',
+    cityMunicipality: '',
+    province: '',
+    region: '',
+    emailFbAcc: '',
+    contact: '',
+    nationality: '',
+    sex: '',
+    civilStatus: '',
+    employmentStatus: '',
+    birthPlaceCity: '',
+    birthPlaceProvince: '',
+    birthPlaceRegion: '',
+    educationAttainment: '',
+    learnerOrTraineeOrStudentClassification: '',
     },
   });
   return (
@@ -39,7 +56,13 @@ const ProfileTab = ({ isNotEditable }: IProps) => {
           </CardTitle>
         </CardHeader>
         <CardContent className='space-y-2 '>
-          <Input isNotEditable={isNotEditable} name={'currentPassword'} type={'password'} form={form} label={'Current Password'} />
+          <Input
+            isNotEditable={isNotEditable}
+            name={'firstname'}
+            type={'text'}
+            form={form}
+            label={'Firstname'}
+          />
           <Input isNotEditable={isNotEditable} name={'password'} type={'password'} form={form} label={'New Password'} />
           <Input isNotEditable={isNotEditable} name={'CPassword'} type={'password'} form={form} label={'Re-type new password'} />
         </CardContent>

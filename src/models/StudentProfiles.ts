@@ -3,7 +3,7 @@ import { IUser } from './Users';
 
 export interface IProfile extends Document {
   userId: IUser;
-  firstname: string;
+  firstname?: string;
   middlename?: string;
   lastname: string;
   numberStreet?: string;

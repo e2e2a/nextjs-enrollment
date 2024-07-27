@@ -3,13 +3,9 @@ import { Icons } from '@/components/shared/Icons';
 import { UserAvatar } from '@/components/shared/nav/UserAvatar/UserAvatar';
 import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Note from './components/Note';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useForm } from 'react-hook-form';
-import { SignupValidator } from '@/lib/validators/Validator';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import EmailTab from './components/EmailTab';
 import PasswordTab from './components/PasswordTab';
 import ProfileTab from './components/ProfileTab';
@@ -17,7 +13,7 @@ import ProfileTab from './components/ProfileTab';
 const ProfilePage = () => {
   const { data } = useSession();
   const [isOpen, setIsOpen] = useState(true);
-  const [isNotEditable, setIsNotEditable] = useState(false);
+  
   const [activeTab, setActiveTab] = useState('profile');
   const handleClose = () => {
     setIsOpen(false);
@@ -26,12 +22,7 @@ const ProfilePage = () => {
     setActiveTab(newTab);
   };
   const session = data?.user;
-  const form = useForm<z.infer<typeof SignupValidator>>({
-    resolver: zodResolver(SignupValidator),
-    defaultValues: {
-      email: `${session?.email}`,
-    },
-  });
+
   // useEffect(() => {
   //   // Reset scroll position when active tab changes
   //   console.log(activeTab)
@@ -43,7 +34,7 @@ const ProfilePage = () => {
         <div className='w-full justify-center items-center flex border-b-2 flex-col bg-gradient-to-t from-white via-blue-200 to-sky-300 mb-4'>
           <div className='flex items-center gap-8 flex-col relative mb-4 w-full max-w-[73rem] border-b border-r border-l border-gray-200 rounded-b-xl pt-10 pb-12 px-11 bg-sky-50 shadow-xl drop-shadow-xl'>
             <div className='flex flex-col items-center flex-1 gap-5'>
-              <div className='active:scale-[98%] active:drop-shadow-2xl active:select-none transition-transform duration-100 active:opacity-85 mt-1 select-none'>
+              <div className='active:scale-[98%] active:drop-shadow-2xl active:select-none transition-transform duration-100 active:opacity-85 mt-1 select-none cursor-pointer'>
                 <div className='flex flex-col h-[168px] w-[168px] relative select-none'>
                   <UserAvatar
                     session={{ firstname: session?.firstname, imageUrl: session?.imageUrl, asd: '' || null }}
@@ -102,13 +93,13 @@ const ProfilePage = () => {
         )}
         <div className='w-full flex justify-center items-center'>
           <TabsContent value='profile' className='w-full md:px-12 bg-white mb-3 max-w-[73rem]'>
-            <ProfileTab isNotEditable={isNotEditable} />
+            <ProfileTab />
           </TabsContent>
           <TabsContent value='email' className='w-full sm:px-12 mb-3 max-w-[73rem]'>
-            <EmailTab isNotEditable={isNotEditable} />
+            <EmailTab />
           </TabsContent>
           <TabsContent value='password' className='w-full sm:px-12 mb-3 max-w-[73rem]'>
-            <PasswordTab isNotEditable={isNotEditable} />
+            <PasswordTab/>
           </TabsContent>
         </div>
       </Tabs>

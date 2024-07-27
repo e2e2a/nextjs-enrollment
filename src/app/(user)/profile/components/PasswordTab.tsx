@@ -1,4 +1,5 @@
-import React from 'react';
+"use client"
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
@@ -9,10 +10,9 @@ import { z } from 'zod';
 import { useSession } from 'next-auth/react';
 import { Icons } from '@/components/shared/Icons';
 import Input from './Input';
-interface IProps {
-  isNotEditable: boolean;
-}
-const PasswordTab = ({ isNotEditable }: IProps) => {
+
+const PasswordTab = () => {
+  const [isNotEditable, setIsNotEditable] = useState(false);
   const { data } = useSession();
   const session = data?.user;
   const form = useForm<z.infer<typeof NewPasswordValidator>>({
