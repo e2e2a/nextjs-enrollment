@@ -17,7 +17,7 @@ const userSchema = new Schema<IAccount>(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'Users',
+      ref: 'User',
       required: true,
       unique: true,
     },
@@ -36,12 +36,12 @@ const userSchema = new Schema<IAccount>(
 
 // Check if the model is already defined to prevent OverwriteModelError
 
-let Accounts: mongoose.Model<IAccount>;
+let Account: mongoose.Model<IAccount>;
 
 try {
-  Accounts = mongoose.model<IAccount>('Accounts');
+  Account = mongoose.model<IAccount>('Account');
 } catch (error) {
-  Accounts = mongoose.model<IAccount>('Accounts', userSchema);
+  Account = mongoose.model<IAccount>('Account', userSchema);
 }
 
-export default Accounts;
+export default Account;

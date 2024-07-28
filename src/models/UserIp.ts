@@ -10,7 +10,7 @@ const schema = new Schema<IUser>(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'Users',
+      ref: 'User',
       required: true,
       unique: true,
     },
@@ -26,4 +26,4 @@ const schema = new Schema<IUser>(
   },
   { versionKey: false, timestamps: true }
 );
-export const UserIp = models.UserIps || model('UserIps', schema);
+export const UserIp = models.UserIp || model('UserIp', schema);

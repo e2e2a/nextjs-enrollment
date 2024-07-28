@@ -5,7 +5,7 @@ import React, { ReactNode } from 'react';
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
-    // <ProtectedLayout>
+    <ProtectedLayout>
       <div className=' flex-1 gap-12'>
         <aside className='hidden px-[2%] min-h-screen fixed top-16 w-[250px] flex-col md:flex border'>
           <SidebarNav items={dashboardConfig.sidebarNav} />
@@ -15,7 +15,7 @@ const layout = ({ children }: { children: ReactNode }) => {
           {/* {children} */}
         </main>
       </div>
-    // </ProtectedLayout>
+    </ProtectedLayout>
   );
 };
 

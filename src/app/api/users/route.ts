@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { headers } from 'next/headers';
-import Users from '@/models/Users';
+import {User} from '@/models/User';
 import { auth } from '@/auth';
+import dbConnect from '@/lib/db/db';
 
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
+    await dbConnect()
+   
     const headersList = headers();
     const apiKey = headersList.get('x-api-key');
     const NEXT_PUBLIC_API_KEY = process.env.NEXT_PUBLIC_API_KEY!;
@@ -32,10 +35,11 @@ export async function GET(req: NextRequest, res: NextResponse) {
       return NextResponse.json({ message: `Method ${req.method} Not Allowed` }, { status: 405 });
     }
 
-    const users = await Users.find();
+    const users = await User.find().exec();
 
     return NextResponse.json({ users: users }, { status: 200 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ error: error }, { status: 500 });
   }
 }

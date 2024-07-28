@@ -22,6 +22,7 @@ import { checkResetPasswordToken, checkToken } from '@/action/token';
 import { verificationCodeProcess, verificationCodeResend } from '@/action/verification';
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
 import { NewPassword } from '@/action/profile/NewPassword';
+import { getStudentProfileByUserId } from '@/services/studentProfile';
 
 // ============================================================
 // AUTH QUERIES
@@ -126,6 +127,18 @@ export const UseUserQuery = () => {
   });
 };
 
+export const useExampleQuery = (id:any) => {
+  console.log('receivedid', id)
+  return useQuery<
+    any,
+    Error
+  >({
+    queryKey: ['UsersProfile'],
+    queryFn: () => getStudentProfileByUserId(id),
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
+};
 // ============================================================
 // POST QUERIES
 // ============================================================

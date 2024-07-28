@@ -1,9 +1,9 @@
 'use server';
 
-import Accounts from '@/models/Accounts';
+import Account from '@/models/Account';
 
 export const createAccount = async (account: any, userId: string) => {
-  const newAccount = new Accounts({
+  const newAccount = new Account({
     provider: account?.provider,
     type: account?.type,
     providerAccountId: account?.providerAccountId,

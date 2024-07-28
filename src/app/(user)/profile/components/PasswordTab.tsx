@@ -38,7 +38,7 @@ const PasswordTab = () => {
                 <span className='hidden sm:flex tracking-normal text-sm'>Edit</span>
               </div>
             </div>
-            <CardDescription>Change your password here. After saving, you'll be logged out.</CardDescription>
+            <CardDescription>Change your password here. After saving, you&apos;ll be logged out.</CardDescription>
           </CardTitle>
         </CardHeader>
         <CardContent className='space-y-2 '>

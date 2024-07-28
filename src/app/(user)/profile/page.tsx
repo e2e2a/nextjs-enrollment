@@ -92,13 +92,13 @@ const ProfilePage = () => {
           </div>
         )}
         <div className='w-full flex justify-center items-center'>
-          <TabsContent value='profile' className='w-full md:px-12 bg-white mb-3 max-w-[73rem]'>
+          <TabsContent value='profile' className='w-full bg-white mb-3 max-w-[69rem]'>
             <ProfileTab />
           </TabsContent>
-          <TabsContent value='email' className='w-full sm:px-12 mb-3 max-w-[73rem]'>
+          <TabsContent value='email' className='w-full mb-3 max-w-[69rem]'>
             <EmailTab />
           </TabsContent>
-          <TabsContent value='password' className='w-full sm:px-12 mb-3 max-w-[73rem]'>
+          <TabsContent value='password' className='w-full mb-3 max-w-[69rem]'>
             <PasswordTab/>
           </TabsContent>
         </div>

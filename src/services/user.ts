@@ -1,13 +1,14 @@
 'use server';
 import { hashPassword } from '@/lib/hash/bcrypt';
-import Users from '@/models/Users';
+import {User} from '@/models/User';
 import { IUserData, IUserPassword } from '@/types';
 import { deleteStudentProfileByUserId } from './studentProfile';
+import dbConnect from '@/lib/db/db';
 
 export const createUser = async (data: IUserData, password: string) => {
   try {
     const hashedPassword = await hashPassword(password);
-    const newUser = await Users.create({
+    const newUser = await User.create({
       ...data,
       password: hashedPassword,
     });
@@ -18,12 +19,12 @@ export const createUser = async (data: IUserData, password: string) => {
 };
 
 export const getUsers = async () => {
-  const users = await Users.find();
+  const users = await User.find();
   return users;
 };
 
 export const checkUserUsername = async (username: string) => {
-  const users = await Users.find({
+  const users = await User.find({
     username,
     emailVerified: {
       $ne: null,
@@ -35,7 +36,7 @@ export const checkUserUsername = async (username: string) => {
 
 export const getUserByEmail = async (email: string) => {
   try {
-    const user = await Users.findOne({ email });
+    const user = await User.findOne({ email });
     return JSON.parse(JSON.stringify(user));
   } catch (error) {
     return null;
@@ -44,7 +45,7 @@ export const getUserByEmail = async (email: string) => {
 
 export const getUserById: any = async (id: string) => {
   try {
-    const user = await Users.findById(id);
+    const user = await User.findById(id);
     return JSON.parse(JSON.stringify(user));
   } catch (error) {
     return null;
@@ -58,7 +59,7 @@ export const deleteUserById = async (id: string) => {
   try {
     const user = await getUserById(id)
     await deleteStudentProfileByUserId(user._id)
-    await Users.findByIdAndDelete(id);
+    await User.findByIdAndDelete(id);
     return true;
   } catch (error) {
     return false;
@@ -71,7 +72,7 @@ export const deleteUserByEmail = async (email: string) => {
     return null;
   }
 
-  await Users.findOneAndDelete({ email });
+  await User.findOneAndDelete({ email });
   return true;
 };
 
@@ -80,7 +81,7 @@ export const deleteUserByEmail = async (email: string) => {
  */
 export const updateUserEmailVerifiedById = async (id: string) => {
   try {
-    const user = await Users.findByIdAndUpdate(id, { emailVerified: new Date() }, { new: true });
+    const user = await User.findByIdAndUpdate(id, { emailVerified: new Date() }, { new: true });
     return true;
   } catch (error) {
     console.log(error);
@@ -89,6 +90,7 @@ export const updateUserEmailVerifiedById = async (id: string) => {
 };
 
 export const updateUserPasswordById = async (data: IUserPassword) => {
+  await dbConnect()
   const { id, password } = data;
   const existingUser = await getUserById(id);
   if (!existingUser) {
@@ -97,13 +99,13 @@ export const updateUserPasswordById = async (data: IUserPassword) => {
 
   const hashedPassword = await hashPassword(password);
 
-  const newPassword = await Users.findByIdAndUpdate(existingUser?.id, { password: hashedPassword }, { new: true });
+  const newPassword = await User.findByIdAndUpdate(existingUser?.id, { password: hashedPassword }, { new: true });
   return newPassword;
 };
 
 export const updateUserLogin = async (id: string) => {
   try {
-    const user = await Users.findByIdAndUpdate(id, { lastLogin: new Date() }, { new: true });
+    const user = await User.findByIdAndUpdate(id, { lastLogin: new Date() }, { new: true });
     return true;
   } catch (error) {
     console.log(error);
@@ -113,7 +115,7 @@ export const updateUserLogin = async (id: string) => {
 
 export const updateUserLogout = async (id: string) => {
   try {
-    const user = await Users.findByIdAndUpdate(id, { lastLogout: new Date() }, { new: true });
+    const user = await User.findByIdAndUpdate(id, { lastLogout: new Date() }, { new: true });
     return true;
   } catch (error) {
     console.log(error);

@@ -1,7 +1,7 @@
 'use server';
 import { getVerificationTokenByUserId } from '@/services/token';
 import db from '../db/db';
-import { Token } from '@/models/Tokens';
+import { Token } from '@/models/Token';
 
 export const generateRandomString = async () => {
   const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Uppercase letters and numbers

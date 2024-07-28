@@ -8,7 +8,7 @@ interface ISession extends Document {
 const sessionSchema = new Schema<ISession>({
   userId: {
     type: Schema.Types.ObjectId,
-    ref: "Users",
+    ref: "User",
     required: true,
     unique: true,
   },
@@ -18,4 +18,4 @@ const sessionSchema = new Schema<ISession>({
   },
 });
 
-export const Session = models.Sessions || model("Sessions", sessionSchema);
+export const Session = models.Session || model("Session", sessionSchema);

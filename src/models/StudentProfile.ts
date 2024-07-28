@@ -1,8 +1,7 @@
 import mongoose, { Schema, models, model } from 'mongoose';
-import { IUser } from './Users';
 
 export interface IProfile extends Document {
-  userId: IUser;
+  userId: mongoose.Schema.Types.ObjectId;
   firstname?: string;
   middlename?: string;
   lastname: string;
@@ -48,16 +47,6 @@ const schema = new Schema<IProfile>(
     //   type: mongoose.Schema.Types.ObjectId,
     //   ref: 'Section',
     // },
-    /**
-     * this is an optional
-     */
-    // ULI: {
-    //   type: String,
-    // },
-    // entryDate: {
-    //   type: String,
-    // },
-    // end
     firstname: { type: String },
     middlename: { type: String },
     lastname: { type: String },
@@ -118,13 +107,13 @@ const schema = new Schema<IProfile>(
     timestamps: true,
   }
 );
-let StudentProfiles: mongoose.Model<IProfile>;
+let StudentProfile: mongoose.Model<IProfile>;
 
 try {
-  StudentProfiles = mongoose.model<IProfile>('StudentProfiles');
+  StudentProfile = mongoose.model<IProfile>('StudentProfile');
 } catch (error) {
-  StudentProfiles = mongoose.model<IProfile>('StudentProfiles', schema);
+  StudentProfile = mongoose.model<IProfile>('StudentProfile', schema);
 }
 
-export default StudentProfiles;
+export default StudentProfile;
 // export const StudentProfiles = models.StudentProfiles || model('StudentProfiles', schema);

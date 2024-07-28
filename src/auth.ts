@@ -1,11 +1,11 @@
 import NextAuth from 'next-auth';
 import authConfig from '@/auth.config';
 import { getUserByEmail, getUserById, updateUserLogin } from './services/user';
-import Users from './models/Users';
+import {User} from './models/User';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import dbConnect from './lib/db/db';
 import { MongoClient } from 'mongodb';
-import Accounts from './models/Accounts';
+import Account from './models/Account';
 import { createStudentProfile, createStudentProfileProvider } from './services/studentProfile';
 import { createAccount } from './services/account';
 const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
@@ -18,7 +18,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   events: {
     async linkAccount({ user, profile }) {
       await dbConnect();
-      await Users.findByIdAndUpdate(user.id, {
+      await User.findByIdAndUpdate(user.id, {
         emailVerified: new Date(),
         lastLogin: new Date(),
       });
@@ -31,7 +31,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         if (account?.provider === 'google') {
           const existingUser = await getUserByEmail(user.email!);
           if (existingUser) {
-            const existAccount = await Accounts.findOne({ userId: existingUser._id });
+            const existAccount = await Account.findOne({ userId: existingUser._id });
             if (!existAccount) {
               await createAccount(account, existingUser._id as string);
             }
@@ -43,7 +43,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             email: profile?.email,
             imageUrl: profile?.picture,
           };
-          const newUser = await Users.create({
+          const newUser = await User.create({
             ...userData,
           });
           await createAccount(account, newUser._id as string);
@@ -110,6 +110,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return token;
     },
   },
+  //we cant remove this adapter 
   adapter: MongoDBAdapter(clientPromise),
   session: { strategy: 'jwt' },
   ...authConfig,

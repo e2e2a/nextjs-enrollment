@@ -31,12 +31,13 @@ const userSchema = new Schema<IUser>(
 
 // Check if the model is already defined to prevent OverwriteModelError
 
-let Users: mongoose.Model<IUser>;
+// let User: mongoose.Model<IUser>;
 
-try {
-  Users = mongoose.model<IUser>('Users');
-} catch (error) {
-  Users = mongoose.model<IUser>('Users', userSchema);
-}
+// try {
+//   User = mongoose.model<IUser>('User');
+// } catch (error) {
+//   User = mongoose.model<IUser>('User', userSchema);
+// }
 
-export default Users;
+// export default User;
+export const User =  mongoose.models.User ||  mongoose.model('User', userSchema);

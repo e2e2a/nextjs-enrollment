@@ -6,7 +6,7 @@ import Loader from './Loader';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { useExampleQuery } from '@/lib/queries';
 
-const ProtectedLayout = ({ children }: { children: ReactNode }) => {
+const UnauthenticatedLayout = ({ children }: { children: ReactNode }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +18,7 @@ const ProtectedLayout = ({ children }: { children: ReactNode }) => {
     // } else if (session && !session.user.profileVerified) {
     } else if (session ) {
       // User is not verified, redirect to profile page
-      router.push('/profile');
+      // router.push('/profile');
     } else {
       // User is verified or session is not available, stop loading
       setIsLoading(false);
@@ -41,4 +41,4 @@ const ProtectedLayout = ({ children }: { children: ReactNode }) => {
   return <div className=''>{children}</div>;
 };
 
-export default ProtectedLayout;
+export default UnauthenticatedLayout;

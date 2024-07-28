@@ -26,7 +26,7 @@ const UserNavSettingDialog = () => {
           <div className=''>
             <DialogHeader>
               <DialogTitle>Account Center</DialogTitle>
-              <DialogDescription>Make changes to your profile here. Click save when you're done.</DialogDescription>
+              <DialogDescription>Make changes to your profile here. Click save when you&apos;re done.</DialogDescription>
             </DialogHeader>
             <div className='flex-col gap-4 py-4'>
               <div className={`items-center gap-4 ${view === 'Profile' ? ' bg-gray-600 rounded-lg text-white' : null}`}>
@@ -55,7 +55,7 @@ const UserNavSettingDialog = () => {
           <div className='max-h-[400px] overflow-y-auto'>
             <DialogHeader>
               <DialogTitle>Edit profile</DialogTitle>
-              <DialogDescription>Make changes to your profile here. Click save when you're done.</DialogDescription>
+              <DialogDescription>Make changes to your profile here. Click save when you&apos;re done.</DialogDescription>
             </DialogHeader>
             {view === 'Profile' ? (
               <div className='grid gap-4 '>

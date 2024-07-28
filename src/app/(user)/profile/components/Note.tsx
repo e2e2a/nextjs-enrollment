@@ -31,7 +31,7 @@ const Note = ({handleClose}: IProps) => {
             <h2 className='text-lg font-bold tracking-wide text-orange-500'>Note</h2>
             <p className='text-muted-foreground text-justify'>
               &nbsp;&nbsp;&nbsp;&nbsp;To ensure a smooth and complete enrollment process, please be aware that you must fill out
-              your profile before proceeding. You won't be able to navigate to other pages or access further enrollment steps
+              your profile before proceeding. You won&apos;t be able to navigate to other pages or access further enrollment steps
               until your profile is completed. This helps us provide you with the best experience possible and ensures all your
               information is accurately recorded. If you encounter any issues or have questions, our support team is here to help!
             </p>

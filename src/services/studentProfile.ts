@@ -1,10 +1,10 @@
 'use server';
 
-import StudentProfiles from "@/models/StudentProfiles";
+import StudentProfile from "@/models/StudentProfile";
 
 export const createStudentProfileProvider = async (profile: any) => {
   try {
-    const newProfile = await StudentProfiles.create({
+    const newProfile = await StudentProfile.create({
       firstname: profile.given_name,
       lastname: profile.family_name,
       email: profile.email,
@@ -18,7 +18,7 @@ export const createStudentProfileProvider = async (profile: any) => {
 
 export const createStudentProfile = async (data: any) => {
   try {
-    const newProfile = await StudentProfiles.create({
+    const newProfile = await StudentProfile.create({
       ...data,
     });
     return JSON.parse(JSON.stringify(newProfile));
@@ -29,7 +29,7 @@ export const createStudentProfile = async (data: any) => {
 
 export const getStudentProfileById = async (id: any) => {
   try {
-    const studentProfile = await StudentProfiles.findOne(id).populate('userId').exec();
+    const studentProfile = await StudentProfile.findOne(id).populate('userId').exec();
     console.log(studentProfile);
     return JSON.parse(JSON.stringify(studentProfile));
   } catch (error) {
@@ -39,8 +39,9 @@ export const getStudentProfileById = async (id: any) => {
 
 export const getStudentProfileByUserId = async (userId: any) => {
   try {
-    const studentProfile = await StudentProfiles.findOne({ userId }).populate('userId').exec();
-    console.log(studentProfile);
+    console.log('received student profileid: ' + userId);
+    const studentProfile = await StudentProfile.findOne({ userId }).populate('userId').exec();
+    console.log('studentProfile', studentProfile);
     return JSON.parse(JSON.stringify(studentProfile));
   } catch (error) {
     return null;
@@ -49,7 +50,7 @@ export const getStudentProfileByUserId = async (userId: any) => {
 
 export const deleteStudentProfileByUserId = async (userId: string) => {
   try {
-    await StudentProfiles.findOneAndDelete({ userId: userId });
+    await StudentProfile.findOneAndDelete({ userId: userId });
     return true;
   } catch (error) {
     return false;

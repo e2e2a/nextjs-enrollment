@@ -14,7 +14,7 @@ const schema = new Schema<IUser>(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'Users',
+      ref: 'User',
       required: true,
       unique: true,
     },
@@ -36,4 +36,4 @@ const schema = new Schema<IUser>(
   },
   { versionKey: false, timestamps: true }
 );
-export const Token = models.Tokens || model('Tokens', schema);
+export const Token = models.Token || model('Token', schema);

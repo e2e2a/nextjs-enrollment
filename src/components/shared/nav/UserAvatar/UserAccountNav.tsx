@@ -20,7 +20,7 @@ export function UserAccountNav({ session }: any) {
       >
         <div className='active:scale-[98%] active:drop-shadow-2xl transition-transform duration-100 active:opacity-85'>
           <UserAvatar
-            session={{ firstname: session.firstname, imageUrl: session.imageUrl, asd: '' || null }}
+            session={{ firstname: session?.firstname, imageUrl: session?.imageUrl, asd: '' || null }}
             className='h-10 w-10 '
           />
         </div>

@@ -10,7 +10,7 @@ const schema = new Schema<IResetPassword>(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'Users',
+      ref: 'User',
       required: true,
       unique: true,
     },
@@ -26,4 +26,4 @@ const schema = new Schema<IResetPassword>(
   { timestamps: true }
 );
 
-export const ResetPassword = models.ResetPasswords || model('ResetPasswords', schema);
+export const ResetPassword = models.ResetPassword || model('ResetPassword', schema);
