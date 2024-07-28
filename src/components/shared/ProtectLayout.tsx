@@ -3,33 +3,31 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Loader from './Loader';
-import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { useExampleQuery } from '@/lib/queries';
+import { getStudentProfileByUserId } from '@/services/studentProfile';
 
 const ProtectedLayout = ({ children }: { children: ReactNode }) => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const { data: res, error } = useExampleQuery(session?.user?.id);
+  const checkProfile = useCallback(async (userId: any) => {
+    const profile = await getStudentProfileByUserId(userId);
+    if (!profile) return null;
+    return profile;
+  }, []);
+
   useEffect(() => {
-    if (status === 'loading') {
-      // Session is being fetched, show the loader
-      setIsLoading(true);
-    // } else if (session && !session.user.profileVerified) {
-    } else if (session ) {
-      // User is not verified, redirect to profile page
-      router.push('/profile');
+    if (session) {
+      checkProfile(session.user.id).then((profile) => {
+        console.log('profile', profile);
+        if (profile && !profile.isVerified) {
+          router.push('/profile');}
+      });
     } else {
-      // User is verified or session is not available, stop loading
       setIsLoading(false);
     }
-  }, [session, status, router]);
-  console.log(session?.user.id)
-  if(session?.user.id){
+  }, [session, router]);
 
-    
-    console.log(res)
-  }
   if (isLoading) {
     return <Loader />;
   }

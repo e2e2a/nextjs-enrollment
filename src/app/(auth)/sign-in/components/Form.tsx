@@ -44,7 +44,7 @@ const SignInForm = () => {
             if (!res.token) {
               setTypeMessage('success');
               setMessage(res?.message);
-              return (window.location.href = '/admin');
+              return (window.location.href = '/');
               return
             }
             return (window.location.href = `/verification?token=${res.token}`);

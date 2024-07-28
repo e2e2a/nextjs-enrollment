@@ -78,9 +78,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             session.user.lastname = user.lastname;
             session.user.imageUrl = user.imageUrl;
             session.user.role = user.role;
-            session.user.birthday = new Date(user.birthday);
-            if (user.birthday) {
-            }
+            // session.user.birthday = new Date(user.birthday);
+            // if (user.birthday) {
+            // }
           }
           // if (token.role) {
           //   session.user.role = token.role;

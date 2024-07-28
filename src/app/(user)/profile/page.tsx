@@ -86,13 +86,13 @@ const ProfilePage = () => {
         </div>
         {isOpen && (
           <div className='flex justify-center items-center'>
-            <div className='md:px-12 '>
+            <div className='md:px-5'>
               <Note handleClose={handleClose} />
             </div>
           </div>
         )}
         <div className='w-full flex justify-center items-center'>
-          <TabsContent value='profile' className='w-full bg-white mb-3 max-w-[69rem]'>
+          <TabsContent value='profile' className='w-full bg-white mb-3 max-w-[69rem] md:px-5'>
             <ProfileTab />
           </TabsContent>
           <TabsContent value='email' className='w-full mb-3 max-w-[69rem]'>
