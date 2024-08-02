@@ -4,7 +4,6 @@
 // import { useGetRecentPosts, useGetUsers } from "@/lib/react-query/queries";
 'use client';
 
-import ProtectedLayout from '@/components/shared/ProtectLayout';
 import { useSession } from 'next-auth/react';
 
 const Home = () => {

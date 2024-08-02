@@ -192,3 +192,7 @@ export type recoveryResponse = {
 export type resetPasswordResponse = {
   token?: string;
 } & IResponse;
+
+export type updateStudentProfileResponse = {
+  profile?: any;
+} & IResponse;

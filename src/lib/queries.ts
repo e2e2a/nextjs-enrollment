@@ -11,11 +11,12 @@ import {
   resetPasswordTokenResponse,
   SignInResponse,
   SignUpResponse,
+  updateStudentProfileResponse,
   verificationCodeProcessResponse,
   verificationCodeResendResponse,
 } from '@/types';
 import { fetchAllUsers } from './api';
-import { NewPasswordValidator, SigninValidator, SignupValidator } from './validators/Validator';
+import { NewPasswordValidator, SigninValidator, SignupValidator, StudentProfileValidator } from './validators/Validator';
 import { z } from 'zod';
 import { signInAction, signUpAction } from '@/action/auth';
 import { checkResetPasswordToken, checkToken } from '@/action/token';
@@ -23,6 +24,7 @@ import { verificationCodeProcess, verificationCodeResend } from '@/action/verifi
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
 import { NewPassword } from '@/action/profile/NewPassword';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
+import { updateStudentProfile } from '@/action/profile/updateData';
 
 // ============================================================
 // AUTH QUERIES
@@ -137,6 +139,12 @@ export const useExampleQuery = (id:any) => {
     queryFn: () => getStudentProfileByUserId(id),
     retry: 0,
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useStudentProfileMutation = () => {
+  return useMutation<updateStudentProfileResponse, Error, z.infer<typeof StudentProfileValidator>>({
+    mutationFn: async (data) => updateStudentProfile(data),
   });
 };
 // ============================================================

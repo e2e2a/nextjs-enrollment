@@ -5,6 +5,7 @@ export interface IProfile extends Document {
   firstname?: string;
   middlename?: string;
   lastname: string;
+  extensionName?: string;
   numberStreet?: string;
   barangay?: string;
   district?: string;
@@ -50,6 +51,7 @@ const schema = new Schema<IProfile>(
     firstname: { type: String },
     middlename: { type: String },
     lastname: { type: String },
+    extensionName: { type: String },
     numberStreet: { type: String },
     barangay: { type: String },
     district: { type: String },

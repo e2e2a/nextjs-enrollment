@@ -1,6 +1,6 @@
 'use server';
 
-import StudentProfile from "@/models/StudentProfile";
+import StudentProfile from '@/models/StudentProfile';
 
 export const createStudentProfileProvider = async (profile: any) => {
   try {
@@ -23,6 +23,7 @@ export const createStudentProfile = async (data: any) => {
     });
     return JSON.parse(JSON.stringify(newProfile));
   } catch (error) {
+    console.log(error);
     return null;
   }
 };
@@ -39,10 +40,10 @@ export const getStudentProfileById = async (id: any) => {
 
 export const getStudentProfileByUserId = async (userId: any) => {
   try {
-    console.log('received student profileid: ' + userId);
     const studentProfile = await StudentProfile.findOne({ userId }).populate('userId').exec();
-    console.log('studentProfile', studentProfile);
+    console.log(studentProfile);
     return JSON.parse(JSON.stringify(studentProfile));
+    // return studentProfile;
   } catch (error) {
     return null;
   }
@@ -54,5 +55,15 @@ export const deleteStudentProfileByUserId = async (userId: string) => {
     return true;
   } catch (error) {
     return false;
+  }
+};
+
+export const updateStudentProfileByUserId = async (userId: string, {data}: any) => {
+  try {
+    console.log('data',data)
+    const updatedProfile = await StudentProfile.findOneAndUpdate({ userId }, {...data, isVerified: true}, { new: true });
+    return JSON.parse(JSON.stringify(updatedProfile));
+  } catch (error) {
+    return null;
   }
 };

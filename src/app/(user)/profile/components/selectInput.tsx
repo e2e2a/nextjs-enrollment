@@ -9,9 +9,11 @@ interface IProps {
   form: any;
   label: string;
   classNameInput?: string;
+  selectItems: any[];
+  placeholder: string;
 }
 
-export function SelectInput({ form, name, label, isNotEditable, classNameInput }: IProps) {
+export function SelectInput({ form, name, label, isNotEditable, classNameInput, selectItems, placeholder }: IProps) {
   return (
     <FormField
       control={form.control}
@@ -21,18 +23,19 @@ export function SelectInput({ form, name, label, isNotEditable, classNameInput }
           <FormControl>
             <div className={`${isNotEditable ? 'flex flex-row-reverse' : 'relative'}`}>
               {isNotEditable ? (
-                <span className='w-full flex items-center'>{field.value.employmentStatus}</span>
+                <span className='w-full flex items-center' id={name}>{field.value}</span>
               ) : (
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <SelectTrigger className='w-full pt-10 pb-4 text-black rounded-xl focus:border-gray-400 ring-0 focus:ring-0 px-4'>
-                    <SelectValue placeholder='Select employment status' />
+                  <SelectTrigger id={name} className='w-full pt-10 pb-4 text-black rounded-xl focus:border-gray-400 ring-0 focus:ring-0 px-4'>
+                    <SelectValue placeholder={placeholder} />
                   </SelectTrigger>
                   <SelectContent className='bg-white border-gray-300'>
-                    <SelectGroup>
-                      <SelectLabel>Options</SelectLabel>
-                      <SelectItem value='option1'>Option 1</SelectItem>
-                      <SelectItem value='option2'>Option 2</SelectItem>
-                      <SelectItem value='option3'>Option 3</SelectItem>
+                    
+                    <SelectGroup >
+                      {/* <SelectLabel>Options</SelectLabel> */}
+                      {selectItems.map((item, index) => (
+                        <SelectItem value={item.value} key={index} className='capitalize'>{item.title}</SelectItem>
+                    ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>

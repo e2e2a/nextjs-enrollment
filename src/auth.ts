@@ -6,7 +6,7 @@ import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import dbConnect from './lib/db/db';
 import { MongoClient } from 'mongodb';
 import Account from './models/Account';
-import { createStudentProfile, createStudentProfileProvider } from './services/studentProfile';
+import { createStudentProfile, createStudentProfileProvider, getStudentProfileByUserId } from './services/studentProfile';
 import { createAccount } from './services/account';
 const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
 
@@ -78,6 +78,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             session.user.lastname = user.lastname;
             session.user.imageUrl = user.imageUrl;
             session.user.role = user.role;
+            const profile = await getStudentProfileByUserId(user._id)
+            session.user.profileVerified = profile.isVerified
             // session.user.birthday = new Date(user.birthday);
             // if (user.birthday) {
             // }
