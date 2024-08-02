@@ -30,7 +30,6 @@ export function SelectInput({ form, name, label, isNotEditable, classNameInput, 
                     <SelectValue placeholder={placeholder} />
                   </SelectTrigger>
                   <SelectContent className='bg-white border-gray-300'>
-                    
                     <SelectGroup >
                       {/* <SelectLabel>Options</SelectLabel> */}
                       {selectItems.map((item, index) => (

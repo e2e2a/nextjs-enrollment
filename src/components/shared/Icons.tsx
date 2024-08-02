@@ -21,6 +21,7 @@ import {
   Settings,
   SunMedium,
   Trash,
+  ChevronDown,
   Twitter,
   Camera,
   User,
@@ -32,6 +33,7 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
+  chevronDown: ChevronDown,
   squarePen: SquarePen,
   camera: Camera,
   logo: Command,
