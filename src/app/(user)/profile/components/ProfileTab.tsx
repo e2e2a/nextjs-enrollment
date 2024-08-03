@@ -24,7 +24,29 @@ const ProfileTab = () => {
   profile = data?.user.profileVerified;
   const mutation = useStudentProfileMutation();
   const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile);
-  const [defaultValues, setDefaultValues] = useState({});
+  const [defaultValues, setDefaultValues] = useState({
+    firstname: '',
+    middlename: '',
+    lastname: '',
+    numberStreet: '',
+    barangay: '',
+    district: '',
+    cityMunicipality: '',
+    province: '',
+    region: '',
+    emailFbAcc: '',
+    contact: '',
+    nationality: '',
+    sex: '',
+    civilStatus: '',
+    employmentStatus: '',
+    birthday: new Date(), // Default to current date if no profile date
+    birthPlaceCity: '',
+    birthPlaceProvince: '',
+    birthPlaceRegion: '',
+    educationAttainment: '',
+    learnerOrTraineeOrStudentClassification: '',
+  });
 
   const handleEditable = async () => {
     // setIsNotEditable(prev => !prev);
@@ -121,7 +143,8 @@ const ProfileTab = () => {
               <CardDescription className='text-muted-foreground'>Change your password here. After saving, you&apos;ll be logged out.</CardDescription>
             </CardTitle>
           </CardHeader>
-          <CardContent className=''>
+          {/* note if its not editable its pb-0 @button */}
+          <CardContent className=' pb-0'>
             <div className='flex flex-col lg:flex-row lg:gap-2'>
               <div className='flex-col flex-1 flex gap-4'>
                 <div className='flex-1 mb-5 lg:mb-0'>
@@ -186,7 +209,7 @@ const ProfileTab = () => {
                     {isNotEditable && (
                       <div className={`${isNotEditable ? 'flex flex-row-reverse' : 'hidden'}`}>
                         <span className='text-sm font-normal flex w-full items-center'>Diploma Program in Information Technology</span>
-                        <label htmlFor={'course'} className={`text-nowrap px-3 text-normal font-normal text-md py-2`}>
+                        <label htmlFor={'course'} className={`text-nowrap px-1 text-normal font-normal text-md py-2`}>
                           Course/Qualification:
                         </label>
                       </div>
@@ -196,11 +219,11 @@ const ProfileTab = () => {
               </div>
             </div>
           </CardContent>
-          <CardFooter className='w-full flex justify-center items-center '>
+          {/* <CardFooter className='w-full flex justify-center items-center '>
             <Button type='submit' className=' bg-blue-500 hover:bg-blue-400 text-white font-medium tracking-wide' onClick={form.handleSubmit(onSubmit)}>
               Submit
             </Button>
-          </CardFooter>
+          </CardFooter> */}
         </form>
       </Card>
     </Form>

@@ -74,12 +74,13 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           const user = await getUserById(token.sub);
           if (user) {
             session.user.id = user._id;
-            session.user.firstname = user.firstname;
-            session.user.lastname = user.lastname;
-            session.user.imageUrl = user.imageUrl;
             session.user.role = user.role;
+            session.user.username = user.username;
             const profile = await getStudentProfileByUserId(user._id)
             session.user.profileVerified = profile.isVerified
+            session.user.firstname = profile.firstname;
+            session.user.lastname = profile.lastname;
+            session.user.imageUrl = profile.imageUrl;
             // session.user.birthday = new Date(user.birthday);
             // if (user.birthday) {
             // }

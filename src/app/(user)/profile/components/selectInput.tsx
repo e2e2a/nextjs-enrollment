@@ -21,7 +21,7 @@ export function SelectInput({ form, name, label, isNotEditable, classNameInput, 
       render={({ field }) => (
         <FormItem>
           <FormControl>
-            <div className={`${isNotEditable ? 'flex flex-row-reverse' : 'relative'}`}>
+            <div className={`${isNotEditable ? 'flex flex-row-reverse ' : 'relative bg-slate-50 rounded-lg'}`}>
               {isNotEditable ? (
                 <span className='w-full flex items-center' id={name}>{field.value}</span>
               ) : (
@@ -43,7 +43,7 @@ export function SelectInput({ form, name, label, isNotEditable, classNameInput, 
                 htmlFor={name}
                 className={`text-nowrap text-right ${
                   isNotEditable
-                    ? 'px-3 text-normal text-left font-normal text-md py-2'
+                    ? 'px-1 text-normal text-left font-normal text-md py-2'
                     : 'absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'
                 }`}
               >

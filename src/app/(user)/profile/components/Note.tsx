@@ -10,7 +10,7 @@ interface IProps {
 }
 const Note = ({handleClose}: IProps) => {
   return (
-    <div className='flex my-3 flex-col relative max-w-[69rem] w-full border border-gray-200 rounded-b-xl pt-16 pb-12 px-11 bg-white rounded-lg space-y-4'>
+    <div className='flex drop-shadow-md shadow-md shadow-orange-200 my-3 flex-col relative max-w-[69rem] w-full border border-gray-40 rounded-b-xl pt-16 pb-12 px-11 bg-white rounded-lg space-y-4'>
           <div className='absolute top-9 right-5'>
             <Icons.close className='h-4 w-4 cursor-pointer' onClick={handleClose} />
           </div>
