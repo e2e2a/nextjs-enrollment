@@ -45,7 +45,6 @@ const SignInForm = () => {
               setTypeMessage('success');
               setMessage(res?.message);
               return (window.location.href = '/');
-              return
             }
             return (window.location.href = `/verification?token=${res.token}`);
           default:
@@ -54,7 +53,6 @@ const SignInForm = () => {
             return;
         }
       },
-
       onSettled: () => {
         setIsPending(false);
       },

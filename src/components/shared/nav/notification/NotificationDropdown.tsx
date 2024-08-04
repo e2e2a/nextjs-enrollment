@@ -41,7 +41,7 @@ export function NotificationDropdown({ session }: any) {
               </div>
             </TooltipTrigger>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='center' className='bg-white px-0 z-20 mr-5'>
+          <DropdownMenuContent align='center' className='bg-white px-0 lg:z-20 md:z-50 mr-5'>
             {/* <UserAvatarTabs /> */}
             <Content notifications={notifications} />
           </DropdownMenuContent>

@@ -15,14 +15,14 @@ export function MenuDropdown({ session }: any) {
       <Tooltip>
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger className='select-none outline-none transition-transform duration-0 active:opacity-85 rounded-full bg-slate-200 p-[6.5px]'>
-            <TooltipTrigger asChild>
+            <TooltipTrigger asChild >
               <div className='active:scale-[98.5%] relative  rounded-full transition-transform duration-0 active:opacity-95 '>
                 {/* <UserAvatar session={{ firstname: session?.firstname, imageUrl: session?.imageUrl, asd: '' || null }} className='h-10 w-10 ' /> */}
                 <Icons.grip className='h-7 w-7 text-muted-foreground stroke-black' />
               </div>
             </TooltipTrigger>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='center' className='bg-white px-0 z-20 mr-5'>
+          <DropdownMenuContent align='center' className='bg-white px-0 lg:z-20 md:z-50 mr-5 lg:hidden flex'>
             {/* <UserAvatarTabs /> */}
             <Content items={dashboardConfig.sidebarNav} />
           </DropdownMenuContent>

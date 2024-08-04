@@ -27,7 +27,7 @@ export function UserAccountNav({ session }: any) {
               </div>
             </TooltipTrigger>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='center' className='bg-white z-20 mr-5'>
+          <DropdownMenuContent align='center' className='bg-white lg:z-20 md:z-50 mr-5'>
             <UserAvatarTabs />
             {/* <DropdownMenuSeparator /> */}
           </DropdownMenuContent>
