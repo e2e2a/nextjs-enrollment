@@ -4,6 +4,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Icons } from '../../Icons';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useState } from 'react';
+import Content from './Content';
+import { SidebarNavItem } from '@/types';
+import { dashboardConfig } from '@/constant/dashboard';
 
 export function MenuDropdown({ session }: any) {
   const isLoading = !session?.imageUrl;
@@ -11,9 +14,7 @@ export function MenuDropdown({ session }: any) {
     <TooltipProvider delayDuration={10}>
       <Tooltip>
         <DropdownMenu modal={false}>
-          <DropdownMenuTrigger
-            className='select-none outline-none transition-transform duration-0 active:opacity-85 rounded-full bg-slate-200 p-[6.5px]'
-          >
+          <DropdownMenuTrigger className='select-none outline-none transition-transform duration-0 active:opacity-85 rounded-full bg-slate-200 p-[6.5px]'>
             <TooltipTrigger asChild>
               <div className='active:scale-[98.5%] relative  rounded-full transition-transform duration-0 active:opacity-95 '>
                 {/* <UserAvatar session={{ firstname: session?.firstname, imageUrl: session?.imageUrl, asd: '' || null }} className='h-10 w-10 ' /> */}
@@ -21,8 +22,9 @@ export function MenuDropdown({ session }: any) {
               </div>
             </TooltipTrigger>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='end' className='bg-white'>
+          <DropdownMenuContent align='center' className='bg-white px-0 z-20 mr-5'>
             {/* <UserAvatarTabs /> */}
+            <Content items={dashboardConfig.sidebarNav} />
           </DropdownMenuContent>
         </DropdownMenu>
 

@@ -15,7 +15,7 @@ const LogoutButton = () => {
   };
   return (
     <Button type='button' className='group select-none border-0 w-full hover:bg-slate-300 hover:bg-opacity-70 px-10 py-5 flex items-center gap-x-1 justify-start pl-3' onClick={handleSubmit}>
-      <Icons.settings className='h-6 w-6' />
+      <Icons.settings className='h-8 w-8' />
       <span>Logout</span>
     </Button>
   );

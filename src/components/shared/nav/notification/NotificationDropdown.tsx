@@ -1,10 +1,9 @@
 'use client';
-import Link from 'next/link';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Icons } from '../../Icons';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import DropdownContent from './dropdownContent/DropdownContent';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import Content from './Content';
 const notifications = [
   {
     title: 'Your call has been confirmed.',
@@ -38,13 +37,13 @@ export function NotificationDropdown({ session }: any) {
             <TooltipTrigger asChild>
               <div className='active:scale-[98.5%] relative  rounded-full transition-transform duration-0 active:opacity-95 '>
                 <Icons.bell className='h-7 w-7 fill-white animate-wiggle duration-400 transition-transform' />
-                {fresh > 0 && <div className='absolute px-1 top-[-8px] right-[-4px] bg-red border-white border-opacity-40 border rounded-full text-[9px] font-bold'>{fresh}</div>}
+                {fresh > 0 && <div className='absolute px-1.5 py-[1.5px] top-[-12px] right-[-10px] bg-red text-white border-white border-opacity-40 border rounded-full text-[9px] font-bold'>{fresh}</div>}
               </div>
             </TooltipTrigger>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='center' className='bg-white px-0 z-20 mr-5'>
             {/* <UserAvatarTabs /> */}
-            <DropdownContent notifications={notifications} />
+            <Content notifications={notifications} />
           </DropdownMenuContent>
         </DropdownMenu>
         {/* <audio id='audio_tag' ref={audioRef} src={'/ring2.mp3'} /> */}

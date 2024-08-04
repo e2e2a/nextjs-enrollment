@@ -5,7 +5,7 @@ interface IProps {
 }
 const NavbarFooter = ({classname}: IProps) => {
   return (
-    <div className={`${classname} flex flex-wrap items-center  text-[15px] text-muted-foreground`}>
+    <div className={`${classname} flex flex-wrap items-center text-[13px] text-muted-foreground`}>
       <Link href='/about'>Privacy</Link>
       <span className=' text-[8px] flex items-center'>•</span>
       <Link href='/about'>Cookies</Link>

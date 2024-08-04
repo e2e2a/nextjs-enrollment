@@ -1,9 +1,9 @@
 import React from 'react'
 import { MenuDropdown } from './MenuDropdown'
 
-const Menu = () => {
+const Menu = ({classname}: any) => {
   return (
-    <div><MenuDropdown /></div>
+    <div className={`${classname}`}><MenuDropdown /></div>
   )
 }
 

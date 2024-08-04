@@ -19,12 +19,12 @@ const AdminRootLayout = ({ children }: { children: ReactNode }) => {
           <header className='sticky top-0 z-40 border-b bg-background'>
             <MainNav items={dashboardConfig.mainNav} session={session?.user} />
           </header>
-          <div className=' flex-1 gap-12'>
+          <div className='flex flex-1 gap-6'>
             {/* <div className='container grid flex-1 gap-12 md:grid-cols-[200px_1fr]'> */}
-            <aside className='hidden px-[2%] min-h-screen fixed top-16 w-[250px] flex-col md:flex border'>
+            <div className='flex-shrink-0 w-[290px] hidden lg:flex '>
               <SidebarNav items={dashboardConfig.sidebarNav} />
-            </aside>
-            <main className='ml-[250px] flex flex-1 flex-col overflow-hidden'>{children}</main>
+            </div>
+            <main className='flex flex-1 flex-col overflow-hidden'>{children}</main>
             {/* <main className=' ml-[200px] flex w-full flex-1 flex-col overflow-hidden'>{children}</main> */}
           </div>
           {/* <SiteFooter className='border-t' /> */}

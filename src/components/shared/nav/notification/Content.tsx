@@ -12,7 +12,7 @@ interface DropdownContentProps extends CardProps {
   // notifications: Array<{ title: string; description: string }>;
   notifications: Array<any>;
 }
-const DropdownContent = ({ className,notifications= [], ...props }: DropdownContentProps) => {
+const Content = ({ className,notifications= [], ...props }: DropdownContentProps) => {
   const [visibleCount, setVisibleCount] = useState(3);
   
   const handleShowMore = () => {
@@ -78,4 +78,4 @@ const DropdownContent = ({ className,notifications= [], ...props }: DropdownCont
   );
 };
 
-export default DropdownContent;
+export default Content;

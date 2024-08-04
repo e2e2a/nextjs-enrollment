@@ -25,17 +25,17 @@ export function MainNav({ session, items, children, }: MainNavProps) {
   return (
     <div className='px-[1.2%] flex h-14 pt-1 items-center justify-between bg-white '>
       {/* <div className='container flex h-16 items-center justify-between py-4'> */}
-      <div className='flex gap-6 md:gap-10'>
-        <Link href='/' className='hidden items-center space-x-2 md:flex'>
-          <Icons.logo />
+      <div className='flex gap-0 md:gap-10'>
+        <Link href='/' className='flex items-center space-x-2 md:flex ml-1.5 md:ml-0'>
+          <Icons.logo className='h-8 w-8' />
           <span className='hidden font-bold sm:inline-block'>{/* {siteConfig.name} */}e2e2a</span>
         </Link>
 
-        <button className='flex items-center space-x-2 md:hidden' onClick={() => setShowMobileMenu(!showMobileMenu)}>
+        {/* <button className='flex items-center space-x-2 md:hidden' onClick={() => setShowMobileMenu(!showMobileMenu)}>
           {showMobileMenu ? <Icons.close /> : <Icons.logo />}
           <span className='font-bold'>Menu</span>
         </button>
-        {showMobileMenu && items && <MobileNav items={items}>{children}</MobileNav>}
+        {showMobileMenu && items && <MobileNav items={items}>{children}</MobileNav>} */}
       </div>
       {session?.profileVerified && items?.length ? (
         <nav className='hidden gap-1 md:flex'>
@@ -62,7 +62,7 @@ export function MainNav({ session, items, children, }: MainNavProps) {
         </nav>
       ) : null}
       <div className='flex items-center gap-2'>
-        <Menu />
+        <Menu classname={"lg:hidden flex"}/>
         <Notification />
         <UserAccountNav session={session} />
       </div>
