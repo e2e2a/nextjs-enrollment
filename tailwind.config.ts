@@ -51,6 +51,10 @@ module.exports = {
 
       },
       keyframes: {
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-3deg)' },
+          '50%': { transform: 'rotate(3deg)' },
+        },
         'fadeOut': {
           '0%': { opacity: 1, transform: 'translateX(0)' },
           '100%': { opacity: 0, transform: 'translateX(-20px)' },
@@ -69,6 +73,7 @@ module.exports = {
         },
       },
       animation: {
+        wiggle: 'wiggle 1s ease-in-out infinite',
         'fadeOut': 'fadeOut 0.1s ease-in-out',
         'fadeIn': 'fadeIn 0.1s ease-in-out',
         'accordion-down': 'accordion-down 0.2s ease-out',

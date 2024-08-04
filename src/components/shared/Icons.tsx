@@ -1,4 +1,7 @@
 import {
+  Grip ,
+  Bell,
+  BellRing,
   Notebook,
   School,
   FileStack,
@@ -39,6 +42,9 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
+  grip :Grip ,
+  bell: Bell,
+  bellRing: BellRing,
   notebook: Notebook,
   school: School,
   fileStack: FileStack,

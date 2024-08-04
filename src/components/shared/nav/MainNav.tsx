@@ -10,18 +10,18 @@ import { MobileNav } from './MobileNav';
 import { UserAccountNav } from './UserAvatar/UserAccountNav';
 import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
-
+import { Notification } from './notification/Notification';
+import Menu from './menu/Menu';
 interface MainNavProps {
   session?: any;
   items?: MainNavItem[];
   children?: React.ReactNode;
 }
 
-export function MainNav({ session, items, children }: MainNavProps) {
+export function MainNav({ session, items, children, }: MainNavProps) {
   const segment = usePathname();
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false);
-
-  console.log('segment', segment);
+  
   return (
     <div className='px-[1.2%] flex h-14 pt-1 items-center justify-between bg-white '>
       {/* <div className='container flex h-16 items-center justify-between py-4'> */}
@@ -61,7 +61,11 @@ export function MainNav({ session, items, children }: MainNavProps) {
           })}
         </nav>
       ) : null}
-      <UserAccountNav session={session} />
+      <div className='flex items-center gap-2'>
+        <Menu />
+        <Notification />
+        <UserAccountNav session={session} />
+      </div>
     </div>
   );
 }

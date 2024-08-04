@@ -19,7 +19,7 @@ export function UserAccountNav({ session }: any) {
             className='select-none outline-none transition-transform duration-0 active:opacity-85 '
           >
             <TooltipTrigger asChild>
-              <div className='active:scale-[98.5%] relative  rounded-full transition-transform duration-0 active:opacity-95 '>
+              <div className='active:scale-[98.5%] relative rounded-full transition-transform duration-0 active:opacity-95 '>
                 <UserAvatar session={{ firstname: session?.firstname, imageUrl: session?.imageUrl, asd: '' || null }} className='h-10 w-10 ' />
                 <div className='absolute bottom-0 right-[.5px] bg-slate-100 border-white border-opacity-40 border rounded-full'>
                   <Icons.chevronDown className='h-3 w-3 stroke-[3px]' />
@@ -27,13 +27,13 @@ export function UserAccountNav({ session }: any) {
               </div>
             </TooltipTrigger>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='end' className='bg-white'>
+          <DropdownMenuContent align='center' className='bg-white z-20 mr-5'>
             <UserAvatarTabs />
             {/* <DropdownMenuSeparator /> */}
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <TooltipContent className='bg-white py-1 px-2'>
+        <TooltipContent className='bg-white py-1 px-2 z-50'>
           <p className='text-sm'>Account</p>
         </TooltipContent>
       </Tooltip>
