@@ -188,7 +188,7 @@ export function UserAvatarTabs() {
             </div>
           </div>
         )}
-        <NavbarFooter />
+        <NavbarFooter classname={'py-2 px-3'}/>
       </div>
     </div>
   );

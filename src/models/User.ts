@@ -7,7 +7,7 @@ export interface IUser extends Document {
   lastname: string;
   username: string;
   emailVerified: Date;
-  imageUrl?: string;
+
   role: 'USER' | 'ADMIN';
   lastLogin?: Date;
   lastLogout?: Date;
@@ -21,7 +21,6 @@ const userSchema = new Schema<IUser>(
     username: { type: String },
     password: { type: String },
     emailVerified: { type: Date },
-    imageUrl: { type: String },
     role: { type: String, enum: ['USER', 'ADMIN'], default: 'USER' },
     lastLogin: { type: Date },
     lastLogout: { type: Date },
@@ -40,4 +39,4 @@ const userSchema = new Schema<IUser>(
 // }
 
 // export default User;
-export const User =  mongoose.models.User ||  mongoose.model('User', userSchema);
+export const User = mongoose.models.User || mongoose.model('User', userSchema);

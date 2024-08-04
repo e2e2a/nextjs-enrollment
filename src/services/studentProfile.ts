@@ -2,12 +2,12 @@
 
 import StudentProfile from '@/models/StudentProfile';
 
-export const createStudentProfileProvider = async (profile: any) => {
+export const createStudentProfileProvider = async (userId: any, profile: any) => {
   try {
     const newProfile = await StudentProfile.create({
+      userId: userId,
       firstname: profile.given_name,
-      lastname: profile.family_name,
-      email: profile.email,
+      lastname: profile.family_name,  
       imageUrl: profile.picture,
     });
     return JSON.parse(JSON.stringify(newProfile));
@@ -58,10 +58,9 @@ export const deleteStudentProfileByUserId = async (userId: string) => {
   }
 };
 
-export const updateStudentProfileByUserId = async (userId: string, {data}: any) => {
+export const updateStudentProfileByUserId = async (userId: string, { data }: any) => {
   try {
-    console.log('data',data)
-    const updatedProfile = await StudentProfile.findOneAndUpdate({ userId }, {...data, isVerified: true}, { new: true });
+    const updatedProfile = await StudentProfile.findOneAndUpdate({ userId }, { ...data, isVerified: true }, { new: true });
     return JSON.parse(JSON.stringify(updatedProfile));
   } catch (error) {
     return null;

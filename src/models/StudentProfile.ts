@@ -30,6 +30,7 @@ export interface IProfile extends Document {
   enrollStatus?: 'Pending' | 'Continue' | 'Completed';
   studentType?: 'Regular' | 'Non-Regular';
   scholarType: string;
+  imageUrl?: string;
   isVerified: boolean;
   lastLogin?: Date;
   lastLogout?: Date;
@@ -100,6 +101,7 @@ const schema = new Schema<IProfile>(
     //   type: Number,
     //   default: 0,
     // },
+    imageUrl: { type: String },
     isVerified: { type: Boolean, default: false },
     lastLogin: { type: Date },
     lastLogout: { type: Date },

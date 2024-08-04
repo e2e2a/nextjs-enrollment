@@ -96,6 +96,7 @@ export interface INavLink {
 export type NavItem = {
   title: string;
   href: string;
+  icon?: keyof typeof Icons;
   buttonAction?: () => void;
   disabled?: boolean;
 };

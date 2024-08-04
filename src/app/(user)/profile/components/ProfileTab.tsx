@@ -100,6 +100,7 @@ const ProfileTab = () => {
       mutation.mutate(profileData, {
         onSuccess: (res) => {
           console.log(res);
+          window.location.reload();
           // switch (res.status) {
           //   case 200:
           //   case 201:
@@ -219,11 +220,11 @@ const ProfileTab = () => {
               </div>
             </div>
           </CardContent>
-          {/* <CardFooter className='w-full flex justify-center items-center '>
+          <CardFooter className='w-full flex justify-center items-center '>
             <Button type='submit' className=' bg-blue-500 hover:bg-blue-400 text-white font-medium tracking-wide' onClick={form.handleSubmit(onSubmit)}>
               Submit
             </Button>
-          </CardFooter> */}
+          </CardFooter>
         </form>
       </Card>
     </Form>

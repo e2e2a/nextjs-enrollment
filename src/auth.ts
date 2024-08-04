@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import authConfig from '@/auth.config';
 import { getUserByEmail, getUserById, updateUserLogin } from './services/user';
-import {User} from './models/User';
+import { User } from './models/User';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import dbConnect from './lib/db/db';
 import { MongoClient } from 'mongodb';
@@ -48,7 +48,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           });
           await createAccount(account, newUser._id as string);
           await updateUserLogin(newUser._id as string);
-          await createStudentProfileProvider(profile);
+          await createStudentProfileProvider(newUser._id, profile);
           return true;
         } else if (account?.provider === 'credentials') {
           // @ts-ignore
@@ -76,8 +76,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             session.user.id = user._id;
             session.user.role = user.role;
             session.user.username = user.username;
-            const profile = await getStudentProfileByUserId(user._id)
-            session.user.profileVerified = profile.isVerified
+            const profile = await getStudentProfileByUserId(user._id);
+            session.user.profileVerified = profile.isVerified;
             session.user.firstname = profile.firstname;
             session.user.lastname = profile.lastname;
             session.user.imageUrl = profile.imageUrl;
@@ -113,7 +113,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return token;
     },
   },
-  //we cant remove this adapter 
+  //we cant remove this adapter
   adapter: MongoDBAdapter(clientPromise),
   session: { strategy: 'jwt' },
   ...authConfig,

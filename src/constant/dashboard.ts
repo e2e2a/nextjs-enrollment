@@ -3,30 +3,77 @@ import { DashboardConfig } from '@/types';
 export const dashboardConfig: DashboardConfig = {
   mainNav: [
     {
-      title: 'Documentation',
-      href: '/docs',
+      title: 'Home',
+      href: '/',
+      icon: 'home'
     },
     {
-      title: 'Support',
-      href: '/support',
-      disabled: true,
+      title: 'Courses',
+      href: '/courses',
+      icon: 'libraryBig'
+    },
+    // {
+    //   title: 'Classes',
+    //   href: '/prospectus',
+    //   icon: 'fileBadge',
+    //   // disabled: true,
+    // },
+    {
+      title: 'Subjects',
+      href: '/courses',
+      icon: 'notebook'
+    },
+    {
+      title: 'Records',
+      href: '/records',
+      icon: 'fileStack',
     },
   ],
   sidebarNav: [
+    // {
+    //   title: 'Home',
+    //   href: '/',
+    //   icon: 'home',
+    // },
     {
-      title: 'Posts',
-      href: '/dashboard',
-      icon: 'post',
+      title: 'Courses',
+      href: '/',
+      icon: 'libraryBig',
+    },
+    // {
+    //   title: 'Classes',
+    //   href: '/',
+    //   icon: 'fileBadge',
+    // },
+    {
+      title: 'Subjects',
+      href: '/courses',
+      icon: 'notebook'
     },
     {
-      title: 'Billing',
-      href: '/dashboard/billing',
-      icon: 'billing',
+      title: 'Records',
+      href: '/',
+      icon: 'fileStack',
     },
     {
-      title: 'Settings',
-      href: '/dashboard/settings',
-      icon: 'settings',
+      title: 'School & Policies',
+      href: '/',
+      icon: 'school',
     },
+    {
+      title: 'Documentation',
+      href: '/',
+      icon: 'page',
+    },
+    // {
+    //   title: 'Billing',
+    //   href: '/dashboard/billing',
+    //   icon: 'billing',
+    // },
+    // {
+    //   title: 'Settings',
+    //   href: '/dashboard/settings',
+    //   icon: 'settings',
+    // },
   ],
 };
