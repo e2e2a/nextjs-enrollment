@@ -33,7 +33,7 @@ export function UserAvatarTabs() {
         <div className='w-full text-left bg-white space-y-1'>
             <div className='w-full px-2 py-2'>
               <div className='border rounded-md p-2 flex flex-col sm:gap-y-2'>
-                <Link href={'/asdw'} className='flex items-center w-full p-2 hover:bg-slate-300 hover:text-white rounded-md'>
+                <Link href={'/profile'} className='flex items-center w-full p-2 hover:bg-slate-300 hover:text-white rounded-md'>
                   <div className=''>
                     <UserAvatar session={{ firstname: session?.firstname, imageUrl: session?.imageUrl, asd: 'asdas1' || null }} className='h-10 w-10' />
                   </div>

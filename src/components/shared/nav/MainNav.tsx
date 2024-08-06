@@ -38,7 +38,7 @@ export function MainNav({ session, items, children, }: MainNavProps) {
                   <TooltipTrigger className='' asChild>
                     <Link href={item.disabled ? '#' : item.href} className={cn('flex flex-col items-center text-lg font-medium sm:text-sm w-full')}>
                       <Button className='group border border-white hover:bg-slate-200 hover:bg-opacity-45 px-10 py-6 flex items-center justify-center'>
-                        <Icon className={cn('h-6 w-6 lg:h-8 lg:w-8 ', item.href === segment ? ' stroke-blue-500 scale-[105%]' : 'group-hover:scale-[115%] transition-transform duration-200')} />
+                        <Icon className={cn('h-6 w-6 lg:h-6 lg:w-6 ', item.href === segment ? ' stroke-blue-500 scale-[105%]' : 'group-hover:scale-[115%] transition-transform duration-200')} />
                       </Button>
                       <span className={cn(item.href === segment ? 'text-foreground border-blue-500 border-b-4 w-full ' : 'text-foreground/60', item.disabled && 'cursor-not-allowed opacity-80')}></span>
                     </Link>

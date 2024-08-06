@@ -1,5 +1,5 @@
 import {
-  Grip ,
+  Grip,
   Bell,
   BellRing,
   Notebook,
@@ -42,7 +42,7 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
-  grip :Grip ,
+  grip: Grip,
   bell: Bell,
   bellRing: BellRing,
   notebook: Notebook,
