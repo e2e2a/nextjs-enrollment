@@ -16,11 +16,11 @@ const layout = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <div className='gap-6 flex-1 flex bg-slate-100 min-h-[100vh]'>
-      <div className='flex-shrink-0 w-[290px] hidden lg:flex '>
+    <div className=' flex-1 flex bg-slate-100 '>
+      <div className=' w-[290px] hidden lg:flex '>
         <SidebarNav items={dashboardConfig.sidebarNav} />
       </div>
-      <main className='flex flex-1 flex-col overflow-hidden'>{children}</main>
+      <main className='py-2 md:py-4 px-1 md:px-10 flex flex-1 flex-col overflow-hidden'>{children}</main>
     </div>
   );
 };

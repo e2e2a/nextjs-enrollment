@@ -12,6 +12,11 @@ export const dashboardConfig: DashboardConfig = {
       href: '/courses',
       icon: 'libraryBig'
     },
+    {
+      title: 'Enrollment',
+      href: '/enrollment',
+      icon: 'graduationCap'
+    },
     // {
     //   title: 'Classes',
     //   href: '/prospectus',
@@ -20,7 +25,7 @@ export const dashboardConfig: DashboardConfig = {
     // },
     {
       title: 'Subjects',
-      href: '/courses',
+      href: '/subjects',
       icon: 'notebook'
     },
     {
@@ -37,7 +42,7 @@ export const dashboardConfig: DashboardConfig = {
     // },
     {
       title: 'Courses',
-      href: '/',
+      href: '/courses',
       icon: 'libraryBig',
     },
     // {
@@ -45,6 +50,11 @@ export const dashboardConfig: DashboardConfig = {
     //   href: '/',
     //   icon: 'fileBadge',
     // },
+    {
+      title: 'Enrollment',
+      href: '/enrollment',
+      icon: 'graduationCap'
+    },
     {
       title: 'Subjects',
       href: '/courses',

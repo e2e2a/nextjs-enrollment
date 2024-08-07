@@ -1,4 +1,6 @@
 import {
+  LogOut ,
+  GraduationCap ,
   Grip,
   Bell,
   BellRing,
@@ -42,6 +44,8 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
+  logout :LogOut ,
+  graduationCap :GraduationCap ,
   grip: Grip,
   bell: Bell,
   bellRing: BellRing,

@@ -31,7 +31,7 @@ const Content = ({ className, items, ...props }: DropdownContentProps) => {
         <CardTitle>Menu</CardTitle>
         <CardDescription>Discover with our pages</CardDescription>
       </CardHeader>
-      <CardContent className='grid gap-1 pb-0 px-3 max-h-72 overflow-y-auto'>
+      <CardContent className='grid gap-1 pb-0 px-3 max-h-72 overflow-hidden overflow-y-auto custom-scrollbar'>
         {items.map((item, index) => {
           const Icon = Icons[item.icon || 'arrowRight'];
           return (
@@ -45,8 +45,8 @@ const Content = ({ className, items, ...props }: DropdownContentProps) => {
             )
           );
         })}
-        <NavbarFooter classname={'py-2 px-1 text-[14px] justify-start w-full'} />
       </CardContent>
+        <NavbarFooter classname={'py-2 px-3 text-[14px] justify-start w-full'} />
     </Card>
   );
 };
