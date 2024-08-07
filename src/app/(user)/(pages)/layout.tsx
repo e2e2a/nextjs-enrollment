@@ -16,7 +16,7 @@ const layout = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <div className=' flex-1 flex bg-slate-100 '>
+    <div className=' flex-1 flex bg-slate-100 min-h-screen'>
       <div className=' w-[290px] hidden lg:flex '>
         <SidebarNav items={dashboardConfig.sidebarNav} />
       </div>
