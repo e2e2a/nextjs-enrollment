@@ -43,7 +43,7 @@ export function SelectInput({ form, name, label, isNotEditable, classNameInput, 
                 htmlFor={name}
                 className={`text-nowrap text-right ${
                   isNotEditable
-                    ? 'px-1 text-normal text-left font-normal text-md py-2'
+                    ? 'px-1 text-normal text-left font-medium text-md py-2'
                     : ' pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'
                 }`}
               >

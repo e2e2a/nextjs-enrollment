@@ -10,13 +10,13 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EnrollmentStep1 } from '@/lib/validators/Validator';
-import { coursesData } from '@/constant/test/courses';
+import { coursesData, studentSemesterData, studentYearData } from '@/constant/test/courses';
 
-const Step1 = () => {
+const Step1 = ({search}: any) => {
   const form = useForm<z.infer<typeof EnrollmentStep1>>({
     resolver: zodResolver(EnrollmentStep1),
     defaultValues: {
-      course: '',
+      course: search || '',
       studentYear: '',
       studentSemester: '',
     },
@@ -35,9 +35,9 @@ const Step1 = () => {
           <form action='' method='post'>
             <CardContent className='w-full space-y-2' onSubmit={form.handleSubmit(onSubmit)}>
               <div className='flex flex-col gap-4'>
-                <SelectInput label='course' form={form} name={'Course'} selectItems={coursesData} placeholder='Select course' />
-                <SelectInput label='studentYear' form={form} name={'studentYear'} selectItems={coursesData} placeholder='studentYear' />
-                <SelectInput label='studentSemester' form={form} name={'studentSemester'} selectItems={coursesData} placeholder='studentSemester' />
+                <SelectInput label='Course' form={form} name={'course'} selectItems={coursesData} placeholder='Select course' />
+                <SelectInput label='Student Year' form={form} name={'studentYear'} selectItems={studentYearData} placeholder='Select year' />
+                <SelectInput label='Student Semester' form={form} name={'studentSemester'} selectItems={studentSemesterData} placeholder='Select semester' />
               </div>
             </CardContent>
             <CardFooter>

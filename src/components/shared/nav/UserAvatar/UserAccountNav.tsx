@@ -6,8 +6,11 @@ import { UserAvatar } from './UserAvatar';
 import { Icons } from '../../Icons';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useState } from 'react';
-
-export function UserAccountNav({ session }: any) {
+type IProps = {
+  session:any;
+  profile:any
+}
+export function UserAccountNav({ session, profile }: IProps) {
   const isLoading = !session?.imageUrl;
   return (
     <TooltipProvider delayDuration={10}>
@@ -19,8 +22,8 @@ export function UserAccountNav({ session }: any) {
             className='select-none outline-none transition-transform duration-0 active:opacity-85 '
           >
             <TooltipTrigger asChild>
-              <div className='active:scale-[98.5%] relative rounded-full transition-transform duration-0 active:opacity-95 '>
-                <UserAvatar session={{ firstname: session?.firstname, imageUrl: session?.imageUrl, asd: '' || null }} className='h-10 w-10 ' />
+              <div className='active:scale-[98.5%] relative rounded-full transition-transform duration-0 active:opacity-95 border shadow-sm drop-shadow-sm border-gray-200'>
+                <UserAvatar session={{ firstname: session?.firstname, imageUrl: profile?.imageUrl, asd: '' || null }} className='h-10 w-10 ' />
                 <div className='absolute bottom-0 right-[.5px] bg-slate-100 border-white border-opacity-40 border rounded-full'>
                   <Icons.chevronDown className='h-3 w-3 stroke-[3px]' />
                 </div>

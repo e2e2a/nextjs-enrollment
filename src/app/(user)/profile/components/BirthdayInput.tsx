@@ -44,7 +44,7 @@ export function BirthdayInput({ name, isNotEditable, form, label, classNameInput
                     className={`
                     ${
                       isNotEditable
-                        ? `border-0 cursor-default select-none w-full ${classNameInput} text-sm bg-white px-3`
+                        ? `border-0 cursor-default select-none w-full ${classNameInput} bg-white px-3`
                         : 'block rounded-xl px-5 pb-2 pt-7 w-full text-sm bg-slate-50 border border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom'
                     }`}
                     onChange={(e) => {
@@ -92,7 +92,7 @@ export function BirthdayInput({ name, isNotEditable, form, label, classNameInput
                 htmlFor={name}
                 className={`text-nowrap ${
                   isNotEditable
-                    ? 'px-1 text-normal font-normal text-md py-2'
+                    ? 'px-1 text-normal font-medium text-md py-2'
                     : 'absolute cursor-text text-md select-none text-muted-foreground duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'
                 }`}
               >

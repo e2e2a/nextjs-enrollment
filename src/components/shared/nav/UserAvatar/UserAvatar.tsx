@@ -1,3 +1,4 @@
+"use client"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 // import { Avatar, AvatarFallback, AvatarImage, AvatarProps } from '@radix-ui/react-avatar';
 import { cn } from '@/lib/utils';

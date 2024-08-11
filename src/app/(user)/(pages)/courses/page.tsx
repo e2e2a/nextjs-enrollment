@@ -13,10 +13,10 @@ const page = () => {
         <h1 className='font-bold font-poppins text-3xl lg:text-left text-center w-full'>Courses</h1>
         <p className='text-sm text-muted-foreground text-justify'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem officiis fugiat culpa temporibus commodi blanditiis quo cum. Aperiam, delectus. Sequi cumque labore quasi placeat libero?</p>
       </div>
-      <div className='grid lg:grid-cols-2 xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 my-5 w-full place-items-center bg-white shadow-sm drop-shadow-sm'>
+      <div className='grid lg:grid-cols-2 xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 my-5 w-full place-items-center bg-white'>
         {coursesData.map((course, index) => (
           <Card className='w-full group ' key={index}>
-            <div className='group-hover:bg-slate-100'>
+            <div className='group-hover:bg-slate-100 '>
               <CardHeader>
                 <CardTitle className=''>{course.name} - ({course.title})</CardTitle>
                 <Image src={'/images/login.jpg'} className='w-full rounded-sm' width={95} height={95} priority alt='images' />

@@ -197,3 +197,8 @@ export type resetPasswordResponse = {
 export type updateStudentProfileResponse = {
   profile?: any;
 } & IResponse;
+export type testResponse = {
+  status: number;
+  profile?: any;
+}
+export type updateStudentProfilePhotoResponse = IResponse;

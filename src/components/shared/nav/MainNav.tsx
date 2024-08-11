@@ -14,9 +14,10 @@ interface MainNavProps {
   session?: any;
   items?: MainNavItem[];
   children?: React.ReactNode;
+  profile?: any
 }
 
-export function MainNav({ session, items, children, }: MainNavProps) {
+export function MainNav({ session, items, children, profile }: MainNavProps) {
   const segment = usePathname();
   
   return (
@@ -55,7 +56,7 @@ export function MainNav({ session, items, children, }: MainNavProps) {
       <div className='flex items-center gap-2'>
         <Menu classname={"lg:hidden flex"}/>
         <Notification />
-        <UserAccountNav session={session} />
+        <UserAccountNav session={session} profile={profile}/>
       </div>
     </div>
   );

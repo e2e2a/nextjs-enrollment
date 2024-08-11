@@ -32,11 +32,17 @@ export function SelectInput({ form, name, label, selectItems, placeholder }: IPr
                 </SelectTrigger>
                 <SelectContent className='bg-white border-gray-300'>
                   <SelectGroup>
-                    {selectItems.map((item, index) => (
-                      <SelectItem value={item.title} key={index} className='capitalize'>
-                        {item.name}
-                      </SelectItem>
-                    ))}
+                    {selectItems.map((item, index) => {
+                      return item.name ? (
+                        <SelectItem value={item.title} key={index} className='capitalize'>
+                          {item.name}
+                        </SelectItem>
+                      ) : (
+                        <SelectItem value={item.title} key={index} className='capitalize'>
+                          {item.title}
+                        </SelectItem>
+                      );
+                    })}
                   </SelectGroup>
                 </SelectContent>
               </Select>

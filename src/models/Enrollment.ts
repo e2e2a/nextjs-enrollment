@@ -2,6 +2,7 @@ import mongoose, { Schema, models, model } from 'mongoose';
 
 export interface IEnrollment extends Document {
   userId: mongoose.Schema.Types.ObjectId;
+  courseId: mongoose.Schema.Types.ObjectId;
   studentYear?: string;
   semester?: string;
   enrollStatus?: 'Pending' | 'Continue' | 'Completed';
@@ -14,10 +15,10 @@ const schema = new Schema<IEnrollment>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-    // courseId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Course',
-    // },
+    courseId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course',
+    },
     // sectionId: {
     //   type: mongoose.Schema.Types.ObjectId,
     //   ref: 'Section',
@@ -50,13 +51,13 @@ const schema = new Schema<IEnrollment>(
     timestamps: true,
   }
 );
-let StudentProfile: mongoose.Model<IEnrollment>;
+let Enrollment: mongoose.Model<IEnrollment>;
 
 try {
-  StudentProfile = mongoose.model<IEnrollment>('StudentProfile');
+  Enrollment = mongoose.model<IEnrollment>('Enrollment');
 } catch (error) {
-  StudentProfile = mongoose.model<IEnrollment>('StudentProfile', schema);
+  Enrollment = mongoose.model<IEnrollment>('Enrollment', schema);
 }
 
-export default StudentProfile;
+export default Enrollment;
 // export const StudentProfiles = models.StudentProfiles || model('StudentProfiles', schema);

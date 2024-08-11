@@ -122,3 +122,13 @@ export const updateUserLogout = async (id: string) => {
     return false;
   }
 };
+
+export const updateUserImageById = async (id: string, data:any)=> {
+  try {
+    const user = await User.findByIdAndUpdate(id, ...data, { new: true });
+    return user
+  } catch (error) {
+    console.log(error);
+    return null
+  }
+}

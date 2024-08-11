@@ -11,6 +11,7 @@ import {
   resetPasswordTokenResponse,
   SignInResponse,
   SignUpResponse,
+  testResponse,
   updateStudentProfileResponse,
   verificationCodeProcessResponse,
   verificationCodeResendResponse,
@@ -24,7 +25,8 @@ import { verificationCodeProcess, verificationCodeResend } from '@/action/verifi
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
 import { NewPassword } from '@/action/profile/NewPassword';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
-import { updateStudentProfile } from '@/action/profile/updateData';
+import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updateData';
+import { getStudentProfileBySessionId } from '@/action/profile/getProfile';
 
 // ============================================================
 // AUTH QUERIES
@@ -129,16 +131,24 @@ export const UseUserQuery = () => {
   });
 };
 
-export const useExampleQuery = (id:any) => {
-  console.log('receivedid', id)
-  return useQuery<
-    any,
-    Error
-  >({
-    queryKey: ['UsersProfile'],
-    queryFn: () => getStudentProfileByUserId(id),
+export const useExampleQuery = (id: any) => {
+  console.log('receivedid', id);
+  return useQuery<testResponse, Error>({
+    queryKey: ['userProfile', id],
+    queryFn: () => getStudentProfileBySessionId(id),
     retry: 0,
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useUpdateProfilePhoto = () => {
+  const queryClient = useQueryClient();
+  return useMutation<updateStudentProfileResponse, Error, any>({
+    mutationFn: async (data) => updateStudentPhoto(data),
+    onSuccess: () => {
+      // Invalidate the 'userProfile' query to trigger a refetch
+      queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+    },
   });
 };
 

@@ -16,14 +16,14 @@ import { profileSelectItems } from '@/constant/profile/selectItems';
 import { useExampleQuery, useStudentProfileMutation } from '@/lib/queries';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 type FormData = z.infer<typeof StudentProfileValidator>;
-const ProfileTab = () => {
-  const { data } = useSession();
-  const session = data?.user;
-
-  let profile;
-  profile = data?.user.profileVerified;
+type Iprops = {
+  session: any;
+  profile: any;
+};
+const ProfileTab = ({ session, profile }: Iprops) => {
+  console.log('Profile', profile);
   const mutation = useStudentProfileMutation();
-  const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile);
+  const [isNotEditable, setIsNotEditable] = useState<boolean>(!!session.profileVerified);
   const [defaultValues, setDefaultValues] = useState({
     firstname: '',
     middlename: '',
@@ -60,7 +60,7 @@ const ProfileTab = () => {
 
   useEffect(() => {
     const fetchProfileData = async () => {
-      const profile = await getStudentProfileByUserId(session?.id);
+      // const profile = await getStudentProfileByUserId(session?.id);
       const profileDefaultValues = {
         firstname: profile?.firstname || '',
         middlename: profile?.middlename || '',
@@ -77,7 +77,7 @@ const ProfileTab = () => {
         sex: profile?.sex || '',
         civilStatus: profile?.civilStatus || '',
         employmentStatus: profile?.employmentStatus || '',
-        birthday:  profile.birthday || new Date(), // Handle date conversion profile?.birthday ? new Date(profile.birthday) :
+        birthday: profile.birthday || new Date(), // Handle date conversion profile?.birthday ? new Date(profile.birthday) :
         birthPlaceCity: profile?.birthPlaceCity || '',
         birthPlaceProvince: profile?.birthPlaceProvince || '',
         birthPlaceRegion: profile?.birthPlaceRegion || '',
@@ -134,7 +134,7 @@ const ProfileTab = () => {
             <CardTitle className='pt-3 pb-5'>
               <div className='flex justify-between'>
                 <h1 className='text-3xl font-bold leading-[140%] tracking-wide'>Profile</h1>
-                {profile && (
+                {session.profileVerified && (
                   <div className='bg-slate-100 rounded-full py-1.5 px-2 cursor-pointer flex items-center gap-1' title='Edit' onClick={handleEditable}>
                     <Icons.squarePen className='h-5 w-5 fill-white stroke-blue-600' />
                     <span className='hidden sm:flex tracking-normal text-sm'>Edit</span>
@@ -184,7 +184,7 @@ const ProfileTab = () => {
                     <SelectInput isNotEditable={isNotEditable} name={'educationAttainment'} form={form} label={'Education Attainment:'} classNameInput={'capitalize'} selectItems={profileSelectItems.educationAttainment} placeholder='Select employment status' />
                     {/* <BirthdayInput isNotEditable={isNotEditable} name={'birthday'} form={form} label={'Birthday:'} classNameInput={'capitalize'} /> */}
                   </div>
-                  <div className='mb-5 mt-5 lg:mb-0'>
+                  <div className='mb-5 mt-7 lg:mb-0'>
                     <h1 className='text-lg font-bold border-b text-center lg:text-left '>Birthdate & Birth Place</h1>
                     <div className={`space-y-3 mt-2 mb-3`}>
                       <BirthdayInput isNotEditable={isNotEditable} name={'birthday'} form={form} label={'Birthday:'} classNameInput={'capitalize'} />
@@ -207,24 +207,29 @@ const ProfileTab = () => {
                       selectItems={profileSelectItems.learnerOrTraineeOrStudentClassification}
                       placeholder='Select employment status'
                     />
-                    {isNotEditable && (
-                      <div className={`${isNotEditable ? 'flex flex-row-reverse' : 'hidden'}`}>
-                        <span className='text-sm font-normal flex w-full items-center'>Diploma Program in Information Technology</span>
-                        <label htmlFor={'course'} className={`text-nowrap px-1 text-normal font-normal text-md py-2`}>
-                          Course/Qualification:
-                        </label>
-                      </div>
-                    )}
                   </div>
+                  {isNotEditable && (
+                    <div className='mb-5 mt-7 lg:mb-0'>
+                      <h1 className={`${isNotEditable ? 'flex flex-row text-lg font-bold border-b lg:text-left text-center' : 'hidden'}`}>Course/Qualification:</h1>
+                      <div className={`space-y-3 mt-2 mb-3`}>
+                        <div className='flex flex-row'>
+                          <span className='font-medium'>Department:</span>
+                          <span className='font-normal flex w-full items-center px-1 gap-2 text-center'>Diploma Program in Information Technology</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           </CardContent>
-          <CardFooter className='w-full flex justify-center items-center '>
-            <Button type='submit' className=' bg-blue-500 hover:bg-blue-400 text-white font-medium tracking-wide' onClick={form.handleSubmit(onSubmit)}>
-              Submit
-            </Button>
-          </CardFooter>
+          {!isNotEditable && (
+            <CardFooter className='w-full flex justify-center items-center '>
+              <Button type='submit' className=' bg-blue-500 hover:bg-blue-400 text-white font-medium tracking-wide' onClick={form.handleSubmit(onSubmit)}>
+                Submit
+              </Button>
+            </CardFooter>
+          )}
         </form>
       </Card>
     </Form>

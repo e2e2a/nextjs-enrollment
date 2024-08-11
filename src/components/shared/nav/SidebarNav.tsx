@@ -13,9 +13,10 @@ import { useSession } from 'next-auth/react';
 
 interface DashboardNavProps {
   items: SidebarNavItem[];
+  profile: any;
 }
 
-export function SidebarNav({ items }: DashboardNavProps) {
+export function SidebarNav({ items,profile }: DashboardNavProps) {
   const path = usePathname();
   const { data } = useSession();
   const session = data?.user;
@@ -27,9 +28,9 @@ export function SidebarNav({ items }: DashboardNavProps) {
     <aside className='px-[5px] fixed top-14 left-0 flex-col overflow-auto h-[calc(100vh-3.5rem)] custom-scrollbar'>
       <nav className='flex-col w-full flex justify-between items-start p-0'>
         <div className='flex-col w-full flex gap-y-1 items-start p-0'>
-          <Link href={'/profile'} className='flex items-center w-full px-2 py-[5.5px] mt-4 hover:bg-slate-200 hover:bg-opacity-70 rounded-md'>
-            <div className=''>
-              <UserAvatar session={{ firstname: session?.firstname, imageUrl: session?.imageUrl, asd: 'asdas1' || null }} className='h-[36px] w-[36px]' />
+          <Link href={'/profile'} className='flex items-center gap-[2px] w-full px-2 py-[5.5px] mt-4 hover:bg-slate-200 hover:bg-opacity-70 rounded-md'>
+            <div className='border shadow-sm drop-shadow-sm border-gray-200 rounded-full'>
+              <UserAvatar session={{ firstname: session?.firstname, imageUrl: profile?.imageUrl, asd: 'asdas1' || null }} className='h-[32px] w-[32px]' />
             </div>
             <div className='flex items-center p-2'>
               <div className='flex flex-col leading-none'>

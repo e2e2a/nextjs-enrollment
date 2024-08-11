@@ -40,6 +40,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
+    "firebase": "^10.12.5",
     "i": "^0.3.7",
     "jsonwebtoken": "^8.5.1",
     "lucide-react": "^0.379.0",

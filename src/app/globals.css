@@ -37,7 +37,7 @@
   }
 } */
 /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap'); */
-@import "~@fontsource/poppins/index.css";
+@import '~@fontsource/poppins/index.css';
 
 @tailwind base;
 @tailwind components;
@@ -131,15 +131,18 @@
   .flex-start {
     @apply flex justify-start items-center;
   }
- 
+
   .custom-scrollbar::-webkit-scrollbar {
     width: 0;
     height: 3px;
     border-radius: 2px;
   }
+  .text-stroke-3 {
+    -webkit-text-stroke: 0.3px black;
+  }
   .text-stroke-4 {
     -webkit-text-stroke: 0.4px black;
-}
+  }
   /* .custom-scrollbar::-webkit-scrollbar-track {
     background: #09090a;
   } */
@@ -149,7 +152,7 @@
     border-radius: 50px;
   }
   .custom-scrollbar:hover {
-    scrollbar-width: thin; 
+    scrollbar-width: thin;
   }
 
   /* .custom-scrollbar::-webkit-scrollbar-thumb:hover {
