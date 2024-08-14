@@ -10,7 +10,7 @@ import EmailTab from './components/EmailTab';
 import PasswordTab from './components/PasswordTab';
 import ProfileTab from './components/ProfileTab';
 import ProfileDialog from './components/ProfileDialog';
-import { useExampleQuery } from '@/lib/queries';
+import { useProfileQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 
 const ProfilePage = () => {
@@ -26,7 +26,7 @@ const ProfilePage = () => {
     setActiveTab(newTab);
   };
   const session = data?.user;
-  const { data: res, isLoading, error } = useExampleQuery(data?.user.id as string);
+  const { data: res, isLoading, error } = useProfileQuery(data?.user.id as string);
 
   const profile = res?.profile;
   useEffect(() => {

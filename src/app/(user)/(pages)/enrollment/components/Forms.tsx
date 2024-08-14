@@ -85,11 +85,6 @@ const EnrollmentForms = ({search}: any) => {
           </Card>
         </TabsContent>
       </Tabs>
-      {/* <div className=''>
-        <Button className='bg-yellow-300' onClick={onClick}>
-          click me
-        </Button>
-      </div> */}
     </div>
   );
 };

@@ -13,8 +13,9 @@ const Page = () => {
   const searchParams = useSearchParams();
   const search = searchParams.get('courses');
   const router = useRouter();
-
+  
   // Allowed course codes
+  //@todo uppercase the value before checking
   const allowedCourses = ['DPIT', 'DPTTH', 'DPWT', 'DPET', 'DPFT'];
   
   const {data: d} = useSession()

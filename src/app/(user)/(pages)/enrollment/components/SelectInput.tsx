@@ -2,18 +2,12 @@
 import * as React from 'react';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { coursesData } from '@/constant/test/courses';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import { useState } from 'react';
 
 interface IProps {
   name: string;
   form: any;
   label: string;
-  selectItems: any[];
+  selectItems: any;
   placeholder: string;
 }
 
@@ -32,9 +26,9 @@ export function SelectInput({ form, name, label, selectItems, placeholder }: IPr
                 </SelectTrigger>
                 <SelectContent className='bg-white border-gray-300'>
                   <SelectGroup>
-                    {selectItems.map((item, index) => {
+                    {selectItems && selectItems.map((item:any, index:any) => {
                       return item.name ? (
-                        <SelectItem value={item.title} key={index} className='capitalize'>
+                        <SelectItem value={item.courseCode} key={index} className='capitalize'>
                           {item.name}
                         </SelectItem>
                       ) : (

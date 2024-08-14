@@ -3,7 +3,7 @@ import { dashboardConfig } from '@/constant/dashboard';
 import { ReactNode, useEffect, useState } from 'react';
 import { MainNav } from '@/components/shared/nav/MainNav';
 import { MobileNav } from '@/components/shared/nav/MobileNav';
-import { useExampleQuery } from '@/lib/queries';
+import { useProfileQuery } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import Loader from '@/components/shared/Loader';
 
@@ -11,7 +11,7 @@ const UserRootLayout = ({ children }: { children: ReactNode }) => {
     const {data} = useSession()
     // const session = await auth();
     const [loading, setLoading] = useState(true);
-    const { data: res,isLoading, error } = useExampleQuery(data?.user.id as string);
+    const { data: res,isLoading, error } = useProfileQuery(data?.user.id as string);
     
     const profile = res?.profile
     useEffect(() => {

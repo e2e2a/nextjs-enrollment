@@ -1,7 +1,7 @@
 import mongoose, { Schema, models, model } from 'mongoose';
 
 export interface ICourse extends Document {
-  title: string;
+  courseCode: string;
   name: string;
   imageUrl?: string;
   description: string;
@@ -12,7 +12,8 @@ const schema = new Schema<ICourse>(
     //   type: mongoose.Schema.Types.ObjectId,
     //   ref: 'Section',
     // },
-    title: {
+    //change this title to Department
+    courseCode: {
       type: String,
     },
     name: {

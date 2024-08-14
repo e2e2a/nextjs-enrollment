@@ -14,8 +14,8 @@ const CourseToast = (title: string, imagePreview: string) => {
           <Icons.close className='w-4 h-4' />
         </button>
       </div>
-      <div className='flex flex-row gap-4 text-black '>
-        <Image src={`${imagePreview}`} alt='asd' width={50} height={50} className='w-16 h-16 border border-gray-100 bg-slate-50' />
+      <div className='flex flex-row gap-4 text-black items-center'>
+        <Image src={`${imagePreview}`} alt='asd' width={50} height={50} className='w-16 h-16 border mt-2 border-gray-200 bg-slate-100 rounded-lg shadow-sm drop-shadow-sm' />
         <div className=''>
           <h1 className='text-lg font-medium '>Successfully added!</h1>
           <span className='text-[16px] font-normal'>Course {title} has been added in the courses page to view by students.</span>

@@ -4,7 +4,7 @@ import Course from '@/models/Course';
 export const createCourse = async (data: any) => {
   try {
     const newC = new Course({
-      title: data.title,
+      courseCode: data.courseCode,
       name: data.name,
       description: data.description,
     });
@@ -16,9 +16,9 @@ export const createCourse = async (data: any) => {
   }
 };
 
-export const getCourseByTitle = async (title: any) => {
+export const getCourseByCrouseCode = async (courseCode: any) => {
   try {
-    const c = await Course.findOne({ title: title });
+    const c = await Course.findOne({ courseCode });
     return c;
   } catch (error) {
     console.log(error);
@@ -45,3 +45,13 @@ export const updateCoursePhotoById = async (id: any, imageUrl: any) => {
     return null;
   }
 };
+
+export const getCourses = async () => {
+  try {
+    const courses = await Course.find().exec();
+    return JSON.parse(JSON.stringify(courses));
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}

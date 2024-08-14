@@ -11,23 +11,16 @@ import Photo from './components/Photo';
 import { useSession } from 'next-auth/react';
 import Input from './components/Input';
 import TextareaField from './components/Textarea';
-import { ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll } from 'firebase/storage';
-import { storage } from '@/firebase';
-import Image from 'next/image';
 import { useCreateCourseMutation } from '@/lib/queries';
 import { makeToastError } from '@/lib/toast/makeToast';
-import { Icons } from '@/components/shared/Icons';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { cn } from '@/lib/utils';
 import CourseToast from '@/lib/toast/CourseToast';
 
 const page = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);
-  const [imageFile, setImageFile] = useState<File>();
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [photoError, setPhotoError] = useState('');
-  const [progressUpload, setProgressUpload] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mutation = useCreateCourseMutation();
   const { data } = useSession();
@@ -35,7 +28,7 @@ const page = () => {
   const form = useForm<z.infer<typeof CourseValidator>>({
     resolver: zodResolver(CourseValidator),
     defaultValues: {
-      title: '',
+      courseCode: '',
       name: '',
       description: '',
     },
@@ -53,7 +46,6 @@ const page = () => {
         };
         reader.readAsDataURL(file);
 
-        console.log(file);
       } else {
         makeToastError('File size too large');
       }
@@ -71,9 +63,9 @@ const page = () => {
       formData.append('file', imageFile!);
       const dataa = {
         ...data,
-        formData: formData
-      }
-    console.log(dataa);
+        formData: formData,
+      };
+      console.log(dataa);
 
       mutation.mutate(dataa, {
         onSuccess: (res) => {
@@ -83,28 +75,11 @@ const page = () => {
             case 201:
             case 203:
               // return (window.location.reload());
-              // const name = imageFile.name;
-              // const storageRef = ref(storage, `courses/${session?.id}/${name}`);
-              // const uploadTask = uploadBytesResumable(storageRef, imageFile);
+              CourseToast(data.courseCode, imagePreview!);
 
-              // uploadTask.on(
-              //   'state_changed',
-              //   (snapshot) => {
-              //     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              //     setProgressUpload(progress);
-              //   },
-              //   (error) => {
-              //     makeToastError(error.message);
-              //   },
-              //   () => {
-              //     getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
-              //       console.log(url);
-              //     });
-              //   }
-              // );
-              CourseToast(data.title, imagePreview!);
               return;
             default:
+              if (res.error) return makeToastError(res.error);
               return;
           }
         },
@@ -112,8 +87,10 @@ const page = () => {
           console.error(error.message);
         },
         onSettled: () => {
-          // setDialogOpen(false);
-          // setIsUploading(false);
+          setIsUploading(false);
+          form.reset();
+          setImageFile(null);
+          setImagePreview(null);
         },
       });
     } else {
@@ -134,8 +111,8 @@ const page = () => {
               <Photo session={session} handleSelectedFile={handleSelectedFile} handleClick={handleClick} fileInputRef={fileInputRef} imagePreview={imagePreview} photoError={photoError} isUploading={isUploading} />
 
               <div className='flex flex-col gap-4'>
-                <Input isNotEditable={isNotEditable} name={'title'} type={'text'} form={form} label={'Title:'} classNameInput={'capitalize'} />
-                <Input isNotEditable={isNotEditable} name={'name'} type={'text'} form={form} label={'Name:'} classNameInput={'capitalize'} />
+                <Input isNotEditable={isNotEditable} name={'courseCode'} type={'text'} form={form} label={'Course Code:'} classNameInput={'capitalize'} />
+                <Input isNotEditable={isNotEditable} name={'name'} type={'text'} form={form} label={'Course Name:'} classNameInput={'capitalize'} />
                 <TextareaField isNotEditable={isNotEditable} name={'description'} type={'text'} form={form} label={'Description:'} classNameInput={'capitalize'} />
               </div>
             </CardContent>

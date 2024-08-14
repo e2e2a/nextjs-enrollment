@@ -6,7 +6,7 @@ import { MainNav } from '@/components/shared/nav/MainNav';
 import { useSession } from 'next-auth/react';
 import SignInPage from '../(auth)/sign-in/page';
 import { redirect } from 'next/navigation';
-import { useExampleQuery } from '@/lib/queries';
+import { useProfileQuery } from '@/lib/queries';
 import { MobileNav } from '@/components/shared/nav/MobileNav';
 import { SidebarNav } from './components/SidebarNav';
 
@@ -21,7 +21,7 @@ const AdminRootLayout = ({ children }: { children: ReactNode }) => {
     return redirect('/profile');
   }
 
-  const { data: res, isLoading, error } = useExampleQuery(session?.user.id as string);
+  const { data: res, isLoading, error } = useProfileQuery(session?.user.id as string);
 
   useEffect(() => {
     if (error || !res || !res.profile) {

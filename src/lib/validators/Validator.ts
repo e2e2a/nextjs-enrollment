@@ -87,7 +87,7 @@ export const StudentProfileValidator = z.object({
 
 export const CourseValidator = z
 .object({
-  title: z.string().min(1, { message: 'course is required...' }),
+  courseCode: z.string().min(1, { message: 'course is required...' }),
   name: z.string().min(1, { message: 'year must atleast 1 characters.' }),
   description: z.string().min(1, { message: 'year must atleast 6 characters.' }),
 })

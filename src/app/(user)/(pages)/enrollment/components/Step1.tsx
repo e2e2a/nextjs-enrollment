@@ -2,17 +2,26 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TabsContent } from '@/components/ui/tabs';
-import React from 'react';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useEffect } from 'react';
 import { SelectInput } from './SelectInput';
 import { Form } from '@/components/ui/form';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EnrollmentStep1 } from '@/lib/validators/Validator';
-import { coursesData, studentSemesterData, studentYearData } from '@/constant/test/courses';
+import { studentSemesterData, studentYearData } from '@/constant/test/courses';
+import { useCourseQuery } from '@/lib/queries';
 
 const Step1 = ({search}: any) => {
+  const { data: res,isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
+  useEffect(() => {
+    if (isCoursesError || !res || !res.courses) {
+      return;
+    }
+    if (res) console.log('courses logs:', res.courses)
+      
+  }, [ res,isCoursesLoading ,isCoursesError]);
+  
   const form = useForm<z.infer<typeof EnrollmentStep1>>({
     resolver: zodResolver(EnrollmentStep1),
     defaultValues: {
@@ -35,7 +44,7 @@ const Step1 = ({search}: any) => {
           <form action='' method='post'>
             <CardContent className='w-full space-y-2' onSubmit={form.handleSubmit(onSubmit)}>
               <div className='flex flex-col gap-4'>
-                <SelectInput label='Course' form={form} name={'course'} selectItems={coursesData} placeholder='Select course' />
+                <SelectInput label='Course' form={form} name={'course'} selectItems={res?.courses!} placeholder='Select course' />
                 <SelectInput label='Student Year' form={form} name={'studentYear'} selectItems={studentYearData} placeholder='Select year' />
                 <SelectInput label='Student Semester' form={form} name={'studentSemester'} selectItems={studentSemesterData} placeholder='Select semester' />
               </div>

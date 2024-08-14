@@ -206,9 +206,22 @@ export type resetPasswordResponse = {
 export type updateStudentProfileResponse = {
   profile?: any;
 } & IResponse;
-export type testResponse = {
-  status: number;
+export type getSingleProfileResponse = {
   profile?: any;
-}
+} & IResponse;
 export type updateStudentProfilePhotoResponse = IResponse;
 export type testResponseaa = IResponse;
+
+
+type ICourse ={
+  _id: any;
+  courseCode: string;
+  name: string;
+  imageUrl?: string;
+  description: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export type getCourseResponse = {
+  courses?: ICourse[];
+}& IResponse;

@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tansta
 
 import {
   checkTokenResponse,
+  getCourseResponse,
+  getSingleProfileResponse,
   INewPost,
   INewUser,
   IUpdatePost,
@@ -11,7 +13,6 @@ import {
   resetPasswordTokenResponse,
   SignInResponse,
   SignUpResponse,
-  testResponse,
   testResponseaa,
   updateStudentProfileResponse,
   verificationCodeProcessResponse,
@@ -28,7 +29,7 @@ import { NewPassword } from '@/action/profile/NewPassword';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updateData';
 import { getStudentProfileBySessionId } from '@/action/profile/getProfile';
-import { createCourseAction } from '@/action/courses';
+import { createCourseAction, getAllCourses } from '@/action/courses';
 
 // ============================================================
 // AUTH QUERIES
@@ -128,18 +129,17 @@ export const UseUserQuery = () => {
     queryKey: ['Users'],
     queryFn: fetchAllUsers,
     retry: 0,
-    refetchOnWindowFocus: false,
+    // refetchOnWindowFocus: false,
     // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
 
-export const useExampleQuery = (id: any) => {
-  console.log('receivedid', id);
-  return useQuery<testResponse, Error>({
+export const useProfileQuery = (id: any) => {
+  return useQuery<getSingleProfileResponse, Error>({
     queryKey: ['userProfile', id],
     queryFn: () => getStudentProfileBySessionId(id),
     retry: 0,
-    refetchOnWindowFocus: false,
+    // refetchOnWindowFocus: false,
   });
 };
 
@@ -159,9 +159,29 @@ export const useStudentProfileMutation = () => {
     mutationFn: async (data) => updateStudentProfile(data),
   });
 };
+
+export const useCourseQuery = () => {
+  return useQuery<
+  getCourseResponse,
+    Error
+  >({
+    queryKey: ['Course'],
+    queryFn:() => getAllCourses(),
+    retry: 0,
+    // refetchOnWindowFocus: false,
+    // retryDelay: (attemptIndex) => attemptIndex * 1000,
+  });
+};
+
 export const useCreateCourseMutation = () => {
+  const queryClient = useQueryClient();
   return useMutation<testResponseaa, Error, any>({
     mutationFn: async (data) => createCourseAction(data),
+    onSuccess: () => {
+      // Invalidate the 'userProfile' query to trigger a refetch
+      console.log('refetching')
+      queryClient.invalidateQueries({ queryKey: ['Course'] });
+    },
   });
 };
 // ============================================================

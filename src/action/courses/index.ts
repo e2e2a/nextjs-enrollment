@@ -1,23 +1,20 @@
 'use server';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll } from 'firebase/storage';
 import { storage } from '@/firebase';
-import { testResponseaa } from '@/types';
+import { getCourseResponse, testResponseaa } from '@/types';
 import { Readable } from 'stream';
-import { createCourse, getCourseByName, getCourseByTitle, updateCoursePhotoById } from '@/services/course';
+import { createCourse, getCourseByName, getCourseByCrouseCode, getCourses, updateCoursePhotoById } from '@/services/course';
+import dbConnect from '@/lib/db/db';
 export const createCourseAction = async (data: any): Promise<testResponseaa> => {
-  /**
-   * create a course model
-   * use the model course _id in folder path
-   * use filename to create the image
-   */
+  await dbConnect();
   const file = data.formData.get('file') as File;
   console.log('filename ', file.name);
   try {
-    const checkTitle = await getCourseByTitle(data.title);
-    if (checkTitle) return { message: 'Course title already exist, please choose another title.', status: 409 };
+    const checkTitle = await getCourseByCrouseCode(data.courseCode);
+    if (checkTitle) return { error: 'Course title already exist, please choose another title.', status: 409 };
 
     const checkName = await getCourseByName(data.name);
-    if (checkName) return { message: 'Course name already exist, please choose another name.', status: 409 };
+    if (checkName) return { error: 'Course name already exist, please choose another name.', status: 409 };
 
     // const ccData = {
     //   // imageUrl: `${imageUrl}`,
@@ -49,4 +46,15 @@ export const createCourseAction = async (data: any): Promise<testResponseaa> => 
     console.log(error);
   }
   return { message: 'hello world success', status: 201 };
+};
+
+export const getAllCourses = async (): Promise<getCourseResponse> => {
+  await dbConnect();
+  try {
+    const courses = await getCourses()
+    return { courses: courses, status: 200 };
+  } catch (error) {
+    console.log(error);
+    return { error: 'Something went wrong.', status: 500 };
+  }
 };
