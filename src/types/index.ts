@@ -119,6 +119,14 @@ export type SidebarNavItem = {
       items?: never;
     }
 );
+export type SidebarNavItemAdmin = {
+  title: string;
+  disabled?: boolean;
+  i?: SidebarNavItem[]
+  href?: string;
+  external?: boolean;
+  icon?: keyof typeof Icons;
+} 
 
 export type SiteConfig = {
   name: string;
@@ -143,6 +151,7 @@ export type MarketingConfig = {
 export type DashboardConfig = {
   mainNav: MainNavItem[];
   sidebarNav: SidebarNavItem[];
+  sidebarAdmin: SidebarNavItemAdmin[]
 };
 
 export type SubscriptionPlan = {
@@ -202,3 +211,4 @@ export type testResponse = {
   profile?: any;
 }
 export type updateStudentProfilePhotoResponse = IResponse;
+export type testResponseaa = IResponse;

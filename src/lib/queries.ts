@@ -12,6 +12,7 @@ import {
   SignInResponse,
   SignUpResponse,
   testResponse,
+  testResponseaa,
   updateStudentProfileResponse,
   verificationCodeProcessResponse,
   verificationCodeResendResponse,
@@ -27,6 +28,7 @@ import { NewPassword } from '@/action/profile/NewPassword';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updateData';
 import { getStudentProfileBySessionId } from '@/action/profile/getProfile';
+import { createCourseAction } from '@/action/courses';
 
 // ============================================================
 // AUTH QUERIES
@@ -155,6 +157,11 @@ export const useUpdateProfilePhoto = () => {
 export const useStudentProfileMutation = () => {
   return useMutation<updateStudentProfileResponse, Error, z.infer<typeof StudentProfileValidator>>({
     mutationFn: async (data) => updateStudentProfile(data),
+  });
+};
+export const useCreateCourseMutation = () => {
+  return useMutation<testResponseaa, Error, any>({
+    mutationFn: async (data) => createCourseAction(data),
   });
 };
 // ============================================================

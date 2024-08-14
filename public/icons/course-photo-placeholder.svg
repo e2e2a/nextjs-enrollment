@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    width="54" height="54" viewBox="0 0 256 256" xml:space="preserve">
+
+    <defs>
+    </defs>
+    <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)" >
+        <path d="M 47.599 57.166 l -0.578 -3.267 l 1.01 -1.749 l 1.876 -3.249 c 0.514 -0.89 -0.128 -2.001 -1.156 -2.001 H 45 h -3.752 c -1.027 0 -1.669 1.112 -1.156 2.001 l 1.876 3.249 l 1.01 1.749 l -0.578 3.267 l -2.599 14.701 L 45 76.102 l 5.198 -4.236 L 47.599 57.166 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(240,88,47); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+        <path d="M 54.457 47.401 l -4.433 12.973 L 45 75.075 l -5.024 -14.701 l -4.433 -12.973 C 24.21 49.458 15.543 59.429 15.543 71.332 v 16.005 c 0 1.465 1.198 2.663 2.663 2.663 h 53.589 c 1.465 0 2.663 -1.198 2.663 -2.663 V 71.332 C 74.457 59.429 65.79 49.458 54.457 47.401 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(110,177,225); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+        <path d="M 63.252 19.64 h -0.627 V 19.22 c 0 -7.93 -5.31 -14.673 -12.548 -16.868 C 50.056 1.05 48.997 0 47.689 0 h -5.378 c -1.308 0 -2.367 1.05 -2.389 2.353 c -7.238 2.194 -12.548 8.938 -12.548 16.868 v 0.419 h -0.627 c -0.379 0 -0.686 0.307 -0.686 0.686 v 1.369 c 0 0.379 0.307 0.686 0.686 0.686 h 36.505 c 0.379 0 0.686 -0.307 0.686 -0.686 v -1.369 C 63.938 19.947 63.631 19.64 63.252 19.64 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(251,212,10); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+        <path d="M 29.528 24.189 v 5.486 c 0 8.51 6.962 15.472 15.472 15.472 s 15.472 -6.962 15.472 -15.472 v -5.486 H 29.528 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(110,177,225); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+    </g>
+    </svg>

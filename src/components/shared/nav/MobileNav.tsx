@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { MainNavItem } from '@/types';
 import { cn } from '@/lib/utils';
 import { Icons } from '../Icons';
-import { useLockBody } from '@/hook/useLockBody';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
@@ -15,7 +14,6 @@ interface MobileNavProps {
 }
 
 export function MobileNav({ items, session }: MobileNavProps) {
-  // useLockBody()
   const segment = usePathname();
   return (
     // <div

@@ -5,17 +5,17 @@ export const dashboardConfig: DashboardConfig = {
     {
       title: 'Home',
       href: '/',
-      icon: 'home'
+      icon: 'home',
     },
     {
       title: 'Courses',
       href: '/courses',
-      icon: 'libraryBig'
+      icon: 'libraryBig',
     },
     {
       title: 'Enrollment',
       href: '/enrollment',
-      icon: 'graduationCap'
+      icon: 'graduationCap',
     },
     // {
     //   title: 'Classes',
@@ -26,7 +26,7 @@ export const dashboardConfig: DashboardConfig = {
     {
       title: 'Subjects',
       href: '/subjects',
-      icon: 'notebook'
+      icon: 'notebook',
     },
     {
       title: 'Records',
@@ -53,12 +53,75 @@ export const dashboardConfig: DashboardConfig = {
     {
       title: 'Enrollment',
       href: '/enrollment',
-      icon: 'graduationCap'
+      icon: 'graduationCap',
     },
     {
       title: 'Subjects',
       href: '/courses',
-      icon: 'notebook'
+      icon: 'notebook',
+    },
+    {
+      title: 'Records',
+      href: '/',
+      icon: 'fileStack',
+    },
+    {
+      title: 'School & Policies',
+      href: '/',
+      icon: 'school',
+    },
+    {
+      title: 'Documentation',
+      href: '/',
+      icon: 'page',
+    },
+    // {
+    //   title: 'Billing',
+    //   href: '/dashboard/billing',
+    //   icon: 'billing',
+    // },
+    // {
+    //   title: 'Settings',
+    //   href: '/dashboard/settings',
+    //   icon: 'settings',
+    // },
+  ],
+  sidebarAdmin: [
+    {
+      title: 'Courses',
+      i: [
+        {
+          title: 'Preview Course Page',
+          href: '/courses',
+          icon: 'eye',
+        },
+        {
+          title: 'Course Inventory',
+          href: '/admin/courses',
+          icon: 'libraryBig',
+        },
+        {
+          title: 'Add Course',
+          href: '/admin/courses/add',
+          icon: 'add',
+        },
+      ],
+      icon: 'libraryBig',
+    },
+    // {
+    //   title: 'Classes',
+    //   href: '/',
+    //   icon: 'fileBadge',
+    // },
+    {
+      title: 'Enrollment',
+      href: '/enrollment',
+      icon: 'graduationCap',
+    },
+    {
+      title: 'Subjects',
+      href: '/courses',
+      icon: 'notebook',
     },
     {
       title: 'Records',

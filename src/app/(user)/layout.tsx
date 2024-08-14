@@ -1,11 +1,5 @@
 "use client"
-import { dashboardConfig } from '@/constant/dashboard';
-import { ReactNode, useEffect, useState } from 'react';
-import { MainNav } from '@/components/shared/nav/MainNav';
-import { auth } from '@/auth';
-import { MobileNav } from '@/components/shared/nav/MobileNav';
-import { useExampleQuery } from '@/lib/queries';
-import { useSession } from 'next-auth/react';
+import { ReactNode } from 'react';
 
 const UserRootLayout = ({ children }: { children: ReactNode }) => {
   // this layout will be a useless

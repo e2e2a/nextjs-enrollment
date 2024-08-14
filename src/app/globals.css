@@ -53,7 +53,7 @@
   }
 
   body {
-    @apply min-h-screen font-inter;
+    @apply min-h-screen bg-slate-100 font-inter;
   }
 }
 
@@ -132,10 +132,15 @@
     @apply flex justify-start items-center;
   }
 
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 0;
+  
+  .custom-scrollbar-body::-webkit-scrollbar {
+    width: 0.6vw;
     height: 3px;
-    border-radius: 2px;
+    scrollbar-width:auto;
+  }
+  .custom-scrollbar-body::-webkit-scrollbar-thumb {
+    background: #9cb1b8;
+    border-radius: 1px;
   }
   .text-stroke-3 {
     -webkit-text-stroke: 0.3px black;
@@ -146,11 +151,16 @@
   /* .custom-scrollbar::-webkit-scrollbar-track {
     background: #09090a;
   } */
-
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 0;
+    height: 3px;
+    border-radius: 2px;
+  }
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: #5c5c7b;
     border-radius: 50px;
   }
+  
   .custom-scrollbar:hover {
     scrollbar-width: thin;
   }

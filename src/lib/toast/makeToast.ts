@@ -1,4 +1,5 @@
 import toast from 'react-hot-toast';
+import CourseToast from './CourseToast';
 
 export const makeToastSucess = (text: string) => {
     toast.success(text, {

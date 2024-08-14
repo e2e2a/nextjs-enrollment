@@ -1,4 +1,6 @@
 import {
+
+  Eye,
   LogOut ,
   GraduationCap ,
   Grip,
@@ -44,6 +46,7 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
+  eye: Eye,
   logout :LogOut ,
   graduationCap :GraduationCap ,
   grip: Grip,

@@ -19,6 +19,11 @@ module.exports = {
       },
     },
     extend: {
+      zIndex: {
+        '60': '60', // Custom z-index value
+        '75': '75', // Another custom z-index value
+        '100': '100', // Another custom z-index value
+      },
       // @Note adding colors
       colors: {
         muted: "hsl(var(--muted))",
