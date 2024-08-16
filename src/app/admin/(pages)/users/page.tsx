@@ -36,11 +36,9 @@ export default function Page() {
     return <div>Error: Failed to fetch users</div>;
   }
   return (
-    <section className=''>
-      <div className='container'>
+      <div className='w-full rounded-md flex flex-col gap-4 items-center px-6 py-8 justify-center bg-white'>
         <h1 className='mb-6 text-3xl font-bold'>All Users</h1>
         {res && <DataTable columns={columns} data={res.users as User[]} />}
       </div>
-    </section>
   );
 }

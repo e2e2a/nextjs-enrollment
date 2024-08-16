@@ -32,9 +32,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
- 
+  const validData = Array.isArray(data) ? data : [];
   const table = useReactTable({
-    data,
+    data:validData,
     columns,
     state: {
       sorting,
@@ -55,7 +55,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
       {/* Filters */}
       <div className='flex items-center justify-between w-full'>
         <div className='flex items-center  py-4 text-black'>
-          <Input
+          {/* <Input
             placeholder='Search by name...'
             value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
             onChange={event =>{
@@ -63,7 +63,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             }
             }
             className='max-w-sm'
-          />
+          /> */}
         </div>
 
         {/* Column visibility */}

@@ -1,5 +1,5 @@
 import {
-
+  PackageSearch,
   Eye,
   LogOut ,
   GraduationCap ,
@@ -46,6 +46,7 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
+  packageSearch:PackageSearch,
   eye: Eye,
   logout :LogOut ,
   graduationCap :GraduationCap ,

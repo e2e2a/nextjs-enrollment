@@ -3,6 +3,7 @@ import Enrollment from '@/models/Enrollment';
 
 export const createEnrollment = async (data: any) => {
   try {
+    console.log('serverdata', data)
     const newE = new Enrollment({
       ...data,
     });
@@ -39,13 +40,29 @@ export const getEnrollmentByUserId = async (userId: string) => {
   }
 };
 
+export const getEnrollmentByStep = async (step: number) => {
+  try {
+    console.log('i am exec...', step);
+    const enrollment = await Enrollment.find({ step })
+      .populate('userId') // Populate the `userId` reference
+      .populate('courseId') // Populate the `courseId` reference
+      .populate('profileId')
+      .exec();
+    console.log('i am exec...', enrollment);
+    return JSON.parse(JSON.stringify(enrollment));
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
 export const deleteEnrollmentById = async (id: any) => {
   try {
-    const e = await Enrollment.findByIdAndDelete(id)
-    if(!e) return false
-    return true
+    const e = await Enrollment.findByIdAndDelete(id);
+    if (!e) return false;
+    return true;
   } catch (error) {
     console.log(error);
     return false;
   }
-}
+};

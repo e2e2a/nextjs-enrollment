@@ -2,6 +2,7 @@
 import dbConnect from '@/lib/db/db';
 import { getCourseByCourseCode } from '@/services/course';
 import { createEnrollment, deleteEnrollmentById, getEnrollmentById, getEnrollmentByUserId } from '@/services/enrollment';
+import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { getEnrollmentResponse, getSingleEnrollmentResponse, IResponse } from '@/types';
 
 export const createEnrollmentAction = async (data: any): Promise<getEnrollmentResponse> => {
@@ -9,10 +10,13 @@ export const createEnrollmentAction = async (data: any): Promise<getEnrollmentRe
   try {
     const checkEnrollment = await getEnrollmentByUserId(data.userId);
     if (checkEnrollment) return { error: 'You are already Enrolled/Enrolling.', status: 409 };
-
+    const getProfile = await getStudentProfileByUserId(data.userId)
+    if (!getProfile) return { error: 'You are enrolling without a course.', status: 403 };
     const course = await getCourseByCourseCode(data.courseCode);
     if (!course) return { error: 'You are enrolling without a course.', status: 403 };
+    console.log('course: ' + course)
     delete data.courseCode;
+    data.profileId = getProfile.id
     data.courseId = course.id;
     // data.steps = 1;
     data.onProcess = true;
@@ -22,8 +26,10 @@ export const createEnrollmentAction = async (data: any): Promise<getEnrollmentRe
      * review the steps
      *
      */
+
     const cc = await createEnrollment(data);
     if (!cc) return { message: 'Something went wrong.', status: 500 };
+
     /**
      * @todo
      * create a message notification

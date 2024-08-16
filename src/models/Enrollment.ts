@@ -2,6 +2,7 @@ import mongoose, { Schema, models, model } from 'mongoose';
 
 export interface IEnrollment extends Document {
   userId: mongoose.Schema.Types.ObjectId;
+  profileId: mongoose.Schema.Types.ObjectId;
   courseId: mongoose.Schema.Types.ObjectId;
   studentYear?: string;
   studentSemester?: string;
@@ -16,6 +17,10 @@ const schema = new Schema<IEnrollment>(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
+    },
+    profileId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'StudentProfile',
     },
     courseId: {
       type: mongoose.Schema.Types.ObjectId,

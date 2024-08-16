@@ -111,13 +111,13 @@ const schema = new Schema<IProfile>(
     timestamps: true,
   }
 );
-let StudentProfile: mongoose.Model<IProfile>;
+// let StudentProfile: mongoose.Model<IProfile>;
 
-try {
-  StudentProfile = mongoose.model<IProfile>('StudentProfile');
-} catch (error) {
-  StudentProfile = mongoose.model<IProfile>('StudentProfile', schema);
-}
-
+// try {
+//   StudentProfile = mongoose.model<IProfile>('StudentProfile');
+// } catch (error) {
+//   StudentProfile = mongoose.model<IProfile>('StudentProfile', schema);
+// }
+const StudentProfile = models.StudentProfile || model<IProfile>('StudentProfile', schema);
 export default StudentProfile;
 // export const StudentProfiles = models.StudentProfiles || model('StudentProfiles', schema);

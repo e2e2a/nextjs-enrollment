@@ -42,8 +42,8 @@ export const getStudentProfileByUserId = async (userId: any) => {
   try {
     const studentProfile = await StudentProfile.findOne({ userId }).populate('userId').exec();
     // console.log(studentProfile);
-    return JSON.parse(JSON.stringify(studentProfile));
-    // return studentProfile;
+    // return JSON.parse(JSON.stringify(studentProfile));
+    return studentProfile;
   } catch (error) {
     return null;
   }

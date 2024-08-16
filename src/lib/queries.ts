@@ -29,11 +29,11 @@ import { checkResetPasswordToken, checkToken } from '@/action/token';
 import { verificationCodeProcess, verificationCodeResend } from '@/action/verification';
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
 import { NewPassword } from '@/action/profile/NewPassword';
-import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updateData';
 import { getStudentProfileBySessionId } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses } from '@/action/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction } from '@/action/enrollment/user';
+import { getEnrollmentByStepAction } from '@/action/enrollment/admin';
 
 // ============================================================
 // AUTH QUERIES
@@ -132,8 +132,8 @@ export const UseUserQuery = () => {
   >({
     queryKey: ['Users'],
     queryFn: fetchAllUsers,
-    retry: 2,
-    refetchInterval: 100,
+    retry: 0,
+    // refetchInterval: 100,
     refetchOnWindowFocus: false,
     // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
@@ -195,6 +195,21 @@ export const useEnrollmentQuery = (data: any) => {
   return useQuery<getSingleEnrollmentResponse, Error>({
     queryKey: ['Enrollment'],
     queryFn: () => getSingleEnrollmentAction(data),
+    retry: 0,
+    refetchOnMount: false,
+    /**
+     * this refetch interval is will be used in production
+     */
+    // refetchInterval: 5000,
+    refetchOnWindowFocus: false,
+    // retryDelay: (attemptIndex) => attemptIndex * 1000,
+  });
+};
+
+export const useEnrollmentQueryByStep = (data: any) => {
+  return useQuery<getEnrollmentResponse, Error>({
+    queryKey: ['EnrollmentByStep'],
+    queryFn: () => getEnrollmentByStepAction(data),
     retry: 0,
     refetchOnMount: false,
     /**

@@ -13,8 +13,7 @@ import Input from './Input';
 import { BirthdayInput } from './BirthdayInput';
 import { SelectInput } from './selectInput';
 import { profileSelectItems } from '@/constant/profile/selectItems';
-import { useExampleQuery, useStudentProfileMutation } from '@/lib/queries';
-import { getStudentProfileByUserId } from '@/services/studentProfile';
+import { useStudentProfileMutation } from '@/lib/queries';
 type FormData = z.infer<typeof StudentProfileValidator>;
 type Iprops = {
   session: any;

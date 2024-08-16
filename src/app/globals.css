@@ -132,11 +132,10 @@
     @apply flex justify-start items-center;
   }
 
-  
   .custom-scrollbar-body::-webkit-scrollbar {
     width: 0.6vw;
     height: 3px;
-    scrollbar-width:auto;
+    scrollbar-width: auto;
   }
   .custom-scrollbar-body::-webkit-scrollbar-thumb {
     background: #9cb1b8;
@@ -155,14 +154,17 @@
     width: 0;
     height: 3px;
     border-radius: 2px;
+    
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: #5c5c7b;
     border-radius: 50px;
   }
-  
+
   .custom-scrollbar:hover {
     scrollbar-width: thin;
+    overflow-y: auto; /* Allows vertical scrolling */
+    overflow-x: hidden; /* Hides horizontal scrollbar */
   }
 
   /* .custom-scrollbar::-webkit-scrollbar-thumb:hover {

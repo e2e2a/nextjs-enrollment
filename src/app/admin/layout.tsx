@@ -42,11 +42,15 @@ const AdminRootLayout = ({ children }: { children: ReactNode }) => {
             <MainNav items={dashboardConfig.mainNav} session={session?.user} profile={profile} />
             <MobileNav items={dashboardConfig.mainNav} session={session?.user} />
           </header>
-          <div className='flex-1 flex bg-slate-100 min-h-screen'>
+          <div className='flex-1 flex flex-row bg-slate-100 '>
             <div className=' w-[290px] xl:w-[330px] hidden lg:flex '>
               <SidebarNav items={dashboardConfig.sidebarAdmin} profile={profile} />
             </div>
-            <main className='flex flex-1 flex-col'>{children}</main>
+            <main className='py-2 w-full md:py-4 px-1 md:px-5 xl:px-7 flex flex-1 flex-col overflow-hidden'>
+    <div className="overflow-y-auto overflow-x-auto flex-1 w-full">
+      {children}
+    </div>
+  </main>
           </div>
         </div>
       ) : (

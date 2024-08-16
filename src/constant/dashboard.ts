@@ -108,6 +108,48 @@ export const dashboardConfig: DashboardConfig = {
       ],
       icon: 'libraryBig',
     },
+    {
+      title: 'Enrollment',
+      i: [
+        {
+          title: 'Enrollment Process',
+          i: [
+            {
+              title: 'Step 1 Management',
+              href: '/admin/enrollment/management?step=1',
+              icon: 'packageSearch',
+            },
+            {
+              title: 'Step 2 Management',
+              href: '/admin/enrollment/management?step=2',
+              icon: 'packageSearch',
+            },
+            {
+              title: 'Step 3 Management',
+              href: '/admin/enrollment/management?step=3',
+              icon: 'packageSearch',
+            },
+            {
+              title: 'Step 4 Management',
+              href: '/admin/enrollment/management?step=4',
+              icon: 'packageSearch',
+            },
+          ],
+          icon: 'eye',
+        },
+        {
+          title: 'Course Inventory',
+          href: '/admin/courses',
+          icon: 'libraryBig',
+        },
+        {
+          title: 'Add Course',
+          href: '/admin/courses/add',
+          icon: 'add',
+        },
+      ],
+      icon: 'graduationCap',
+    },
     // {
     //   title: 'Classes',
     //   href: '/',

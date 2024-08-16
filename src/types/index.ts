@@ -103,8 +103,11 @@ export type NavItem = {
 
 export type MainNavItem = NavItem;
 
+type ExternalItem = SidebarNavItem
+
 export type SidebarNavItem = {
   title: string;
+  i?: ExternalItem[]
   disabled?: boolean;
   external?: boolean;
   icon?: keyof typeof Icons;
@@ -230,7 +233,11 @@ export type getCourseResponse = {
  * this getEnrollment should be called if we query whose session id is login
  */
 type IEnrollment ={
+  id?: any
   _id: any;
+  userId?: any;
+  courseId?: any
+  step?:any;
   courseCode: string;
   studentYear: string;
   studentSemester?: string;

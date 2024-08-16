@@ -28,8 +28,8 @@ export function SidebarNav({ items, profile }: DashboardNavProps) {
   }
 
   return (
-    <aside className='px-[5px] xl:w-[330px] shadow-md drop-shadow-md fixed top-14 left-0 flex-col overflow-auto h-[calc(100vh-3.5rem)] custom-scrollbar'>
-      <nav className='flex-col w-full flex justify-between items-start p-0'>
+    <aside className='px-[5px] xl:w-[330px] border-r fixed top-14 left-0 flex-col overflow-auto h-[calc(100vh-3.5rem)] custom-scrollbar'>
+      <nav className='flex-col w-full flex justify-between items-start p-0 xl:w-[310px]'>
         <div className='flex-col w-full flex gap-y-1 items-start p-0'>
           <Link href={'/profile'} className='flex items-center gap-[2px] w-full px-2 py-[5.5px] mt-4 hover:bg-slate-300 hover:bg-opacity-70 rounded-md'>
             <div className='border shadow-sm drop-shadow-sm border-gray-200 rounded-full'>
@@ -46,7 +46,7 @@ export function SidebarNav({ items, profile }: DashboardNavProps) {
             return (
               item.href && (
                 <Link key={index} href={item.disabled ? '/' : item.href} className='flex w-full select-none'>
-                  <Button type='button' className='group select-none border-0 w-full hover:bg-slate-300 hover:bg-opacity-70 px-5 py-6 flex space-x-2 items-center gap-x-1 justify-start pl-3'>
+                  <Button type='button' className='group select-none border-0 w-full hover:bg-slate-300 px-5 py-6 flex space-x-2 items-center gap-x-1 justify-start pl-3'>
                     <Icon className='h-7 w-7 group-hover:stroke-blue-500' />
                     <span className='text-stroke-4 text-[15px]  tracking-tight'>{item.title}</span>
                   </Button>
