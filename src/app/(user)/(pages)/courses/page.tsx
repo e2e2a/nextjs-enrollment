@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useCourseQuery } from '@/lib/queries';
 
 const page = () => {
+  
   const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
   useEffect(() => {
     if (isCoursesError || !res || !res.courses) {
@@ -14,8 +15,9 @@ const page = () => {
     }
     if (res) console.log('courses logs:', res.courses);
   }, [res, isCoursesLoading, isCoursesError]);
+  
   return (
-    <div className='w-full rounded-md flex flex-col gap-4 bg-white items-center px-4 py-8 justify-center'>
+    <div className='w-full rounded-md flex flex-col gap-4 bg-white items-center px-6 py-8 justify-center'>
       <div className='flex w-full flex-col'>
         <h1 className='font-bold font-poppins text-3xl lg:text-left text-center w-full'>Courses</h1>
         <p className='text-sm text-muted-foreground text-justify'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem officiis fugiat culpa temporibus commodi blanditiis quo cum. Aperiam, delectus. Sequi cumque labore quasi placeat libero?</p>
@@ -31,7 +33,7 @@ const page = () => {
               </CardHeader>
               <CardContent className='w-full space-y-2'>
                 <div className='w-full border block shadow-sm mb-2 bg-white rounded-md'>
-                  <Image src={`${course.imageUrl}`} className='w-full sm:h-56 lg:h-64' width={200} height={200} priority alt={course.name} />
+                  <Image src={`${course.imageUrl ? course.imageUrl : ''}`} className='w-full sm:h-56 lg:h-64' width={200} height={200} priority alt={course.name} />
                 </div>
                 <div className='space-y-1.5 flex flex-col'>
                   <h1 className='font-medium text-[15px]'>Description</h1>
@@ -41,7 +43,7 @@ const page = () => {
               <CardFooter>
                 <div className='flex w-full justify-end items-center'>
                   <Link href={`/enrollment?courses=${course.courseCode}`} className=''>
-                    <Button className='bg-yellow-300  text-center font-bold tracking-wide' type='button'>
+                    <Button className='bg-blue-500 hover:bg-blue-700 text-white  text-center font-bold tracking-wide' type='button'>
                       Enroll me now!
                     </Button>
                   </Link>

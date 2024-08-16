@@ -13,8 +13,8 @@ const NavbarFooter = ({classname}: IProps) => {
       <Link href='/about'>About</Link>
       <span className=' text-[8px] flex items-center'>•</span>
       <Link href='/about'>Developers</Link>
-      <span className='text-sm ml-1'>&#169;</span>
-      <Link href='/about'>2024</Link>
+      <span className='ml-1 flex gap-x-[1px]'>&#169;<Link href='/about'>2024</Link></span>
+      
     </div>
   );
 };

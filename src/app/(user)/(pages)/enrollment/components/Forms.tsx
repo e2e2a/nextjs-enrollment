@@ -7,8 +7,11 @@ import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useEffect, useState } from 'react';
 import Step1 from './Step1';
 import { useSession } from 'next-auth/react';
-
-const EnrollmentForms = ({search}: any) => {
+type IProps ={
+  search: any;
+  enrollment: any
+}
+const EnrollmentForms = ({search, enrollment}: IProps) => {
   const [value, setValue] = useState(1);
   useEffect(() => {}, [value]);
 
@@ -24,7 +27,7 @@ const EnrollmentForms = ({search}: any) => {
         </div>
       </div>
       <Tabs value={`${value}`} className='w-full gap-4 mt-5'>
-        <Step1 search={search}/>
+        <Step1 search={search} enrollment={enrollment}/>
 
 
         <TabsContent value='2'>

@@ -16,7 +16,7 @@ export const createCourse = async (data: any) => {
   }
 };
 
-export const getCourseByCrouseCode = async (courseCode: any) => {
+export const getCourseByCourseCode = async (courseCode: any) => {
   try {
     const c = await Course.findOne({ courseCode });
     return c;

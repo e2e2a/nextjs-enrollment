@@ -94,7 +94,7 @@ export const CourseValidator = z
 
 export const EnrollmentStep1 = z
   .object({
-    course: z.string().min(1, { message: 'course is required...' }),
+    courseCode: z.string().min(1, { message: 'course is required...' }),
     studentYear: z.string().min(1, { message: 'year must atleast 1 characters.' }),
     studentSemester: z.string().min(1, { message: 'year must atleast 6 characters.' }),
   })

@@ -3,9 +3,12 @@ import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tansta
 import {
   checkTokenResponse,
   getCourseResponse,
+  getEnrollmentResponse,
+  getSingleEnrollmentResponse,
   getSingleProfileResponse,
   INewPost,
   INewUser,
+  IResponse,
   IUpdatePost,
   IUpdateUser,
   recoveryResponse,
@@ -30,6 +33,7 @@ import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updateData';
 import { getStudentProfileBySessionId } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses } from '@/action/courses';
+import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction } from '@/action/enrollment/user';
 
 // ============================================================
 // AUTH QUERIES
@@ -128,8 +132,9 @@ export const UseUserQuery = () => {
   >({
     queryKey: ['Users'],
     queryFn: fetchAllUsers,
-    retry: 0,
-    // refetchOnWindowFocus: false,
+    retry: 2,
+    refetchInterval: 100,
+    refetchOnWindowFocus: false,
     // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
@@ -139,7 +144,7 @@ export const useProfileQuery = (id: any) => {
     queryKey: ['userProfile', id],
     queryFn: () => getStudentProfileBySessionId(id),
     retry: 0,
-    // refetchOnWindowFocus: false,
+    refetchOnWindowFocus: false,
   });
 };
 
@@ -161,14 +166,16 @@ export const useStudentProfileMutation = () => {
 };
 
 export const useCourseQuery = () => {
-  return useQuery<
-  getCourseResponse,
-    Error
-  >({
+  return useQuery<getCourseResponse, Error>({
     queryKey: ['Course'],
-    queryFn:() => getAllCourses(),
+    queryFn: () => getAllCourses(),
     retry: 0,
-    // refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    /**
+     * this refetch interval is will be used in production
+     */
+    // refetchInterval: 5000,
+    refetchOnWindowFocus: false,
     // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
@@ -179,8 +186,46 @@ export const useCreateCourseMutation = () => {
     mutationFn: async (data) => createCourseAction(data),
     onSuccess: () => {
       // Invalidate the 'userProfile' query to trigger a refetch
-      console.log('refetching')
       queryClient.invalidateQueries({ queryKey: ['Course'] });
+    },
+  });
+};
+
+export const useEnrollmentQuery = (data: any) => {
+  return useQuery<getSingleEnrollmentResponse, Error>({
+    queryKey: ['Enrollment'],
+    queryFn: () => getSingleEnrollmentAction(data),
+    retry: 0,
+    refetchOnMount: false,
+    /**
+     * this refetch interval is will be used in production
+     */
+    // refetchInterval: 5000,
+    refetchOnWindowFocus: false,
+    // retryDelay: (attemptIndex) => attemptIndex * 1000,
+  });
+};
+
+export const useEnrollmentStep1Mutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<getEnrollmentResponse, Error, any>({
+    mutationFn: async (data) => createEnrollmentAction(data),
+    onSuccess: () => {
+      // Invalidate the 'userProfile' query to trigger a refetch
+      queryClient.refetchQueries({ queryKey: ['Enrollment'] });
+      // queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
+    },
+  });
+};
+
+export const useEnrollmentDeleteMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<IResponse, Error, any>({
+    mutationFn: async (data) => deleteEnrollmentAction(data),
+    onSuccess: () => {
+      // Invalidate the 'userProfile' query to trigger a refetch
+      queryClient.refetchQueries({ queryKey: ['Enrollment'] });
+      // queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
     },
   });
 };

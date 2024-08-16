@@ -4,10 +4,12 @@ export interface IEnrollment extends Document {
   userId: mongoose.Schema.Types.ObjectId;
   courseId: mongoose.Schema.Types.ObjectId;
   studentYear?: string;
-  semester?: string;
+  studentSemester?: string;
+  onProcess: Boolean;
+  step: Number;
   enrollStatus?: 'Pending' | 'Continue' | 'Completed';
   studentType?: 'Regular' | 'Non-Regular';
-  scholarType: string;
+  scholarType: 'TWSP' | 'STEP' | 'PESFA' | 'UAQTEA' | 'None';
 }
 const schema = new Schema<IEnrollment>(
   {
@@ -26,7 +28,7 @@ const schema = new Schema<IEnrollment>(
     studentYear: {
       type: String,
     },
-    semester: {
+    studentSemester: {
       type: String,
     },
     // isEnrolled: {
@@ -41,9 +43,20 @@ const schema = new Schema<IEnrollment>(
     //   type: Boolean,
     //   default: false,
     // },
+    onProcess: { type: Boolean, default: false },
+    step: { type: Number, default: 1 },
     enrollStatus: {
       type: String,
+      default: 'Pending',
       enum: ['Pending', 'Continue', 'Completed'],
+    },
+    studentType: {
+      type: String,
+      enum: ['Regular', 'Non-Regular'],
+    },
+    scholarType: {
+      type: String,
+      enum: ['TWSP', 'STEP', 'PESFA', 'UAQTEA', 'None'],
     },
   },
   {

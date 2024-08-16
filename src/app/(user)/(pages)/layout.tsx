@@ -46,10 +46,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
             <MobileNav items={dashboardConfig.mainNav} session={sessionData?.user} />
           </header>
           <div className={` flex-1 flex bg-slate-100 ${loading ? '' :''} `}>
-            <div className=' w-[290px] hidden lg:flex '>
+            <div className=' w-[290px] xl:w-[330px] hidden lg:flex'>
               <SidebarNav items={dashboardConfig.sidebarNav} profile={profile} />
             </div>
-            <main className='py-2 md:py-4 px-1 md:px-10 flex flex-1 flex-col '>{children}</main>
+            <main className='py-2 md:py-4 px-1 md:px-5 xl:px-7 flex flex-1 flex-col '>{children}</main>
           </div>
         </div>
     </>

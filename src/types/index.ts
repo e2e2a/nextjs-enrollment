@@ -225,3 +225,25 @@ type ICourse ={
 export type getCourseResponse = {
   courses?: ICourse[];
 }& IResponse;
+
+/**
+ * this getEnrollment should be called if we query whose session id is login
+ */
+type IEnrollment ={
+  _id: any;
+  courseCode: string;
+  studentYear: string;
+  studentSemester?: string;
+  onProcess: Boolean;
+  enrollStatus?: string;
+  studentType?: string;
+  scholarType?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export type getSingleEnrollmentResponse = {
+  enrollment?: IEnrollment;
+}& IResponse;
+export type getEnrollmentResponse = {
+  enrollment?: IEnrollment[];
+}& IResponse;

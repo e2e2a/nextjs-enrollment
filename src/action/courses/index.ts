@@ -3,15 +3,15 @@ import { ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll } from
 import { storage } from '@/firebase';
 import { getCourseResponse, testResponseaa } from '@/types';
 import { Readable } from 'stream';
-import { createCourse, getCourseByName, getCourseByCrouseCode, getCourses, updateCoursePhotoById } from '@/services/course';
+import { createCourse, getCourseByName, getCourseByCourseCode, getCourses, updateCoursePhotoById } from '@/services/course';
 import dbConnect from '@/lib/db/db';
 export const createCourseAction = async (data: any): Promise<testResponseaa> => {
   await dbConnect();
   const file = data.formData.get('file') as File;
   console.log('filename ', file.name);
   try {
-    const checkTitle = await getCourseByCrouseCode(data.courseCode);
-    if (checkTitle) return { error: 'Course title already exist, please choose another title.', status: 409 };
+    const checkCourseCode = await getCourseByCourseCode(data.courseCode);
+    if (checkCourseCode) return { error: 'Course code already exist, please choose another code.', status: 409 };
 
     const checkName = await getCourseByName(data.name);
     if (checkName) return { error: 'Course name already exist, please choose another name.', status: 409 };
