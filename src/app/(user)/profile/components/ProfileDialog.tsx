@@ -49,7 +49,7 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
     if (imageFile) {
       setIsUploading(true);
       const name = imageFile.name;
-      const storageRef = ref(storage, `profile/${session.id}/${name}`);
+      const storageRef = ref(storage, `profile/${profile._id}/${name}`);
       const uploadTask = uploadBytesResumable(storageRef, imageFile);
 
       uploadTask.on(
@@ -73,7 +73,7 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
             //url is download url of file
             const data = {
-              userId: session.id,
+              profileId: profile._id,
               imageUrl: url,
             };
             mutation.mutate(data, {
@@ -125,7 +125,7 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
           <DialogTrigger asChild>
             <div className='active:scale-[99.5%] active:drop-shadow-2xl active:select-none transition-transform duration-100 active:opacity-85 mt-1 select-none cursor-pointer'>
               <div className='flex flex-col h-[168px] w-[168px] relative select-none border shadow-md drop-shadow-md border-gray-200 rounded-full'>
-                <UserAvatar session={{ firstname: session?.firstname, imageUrl: profile?.imageUrl, asd: '' || null }} className='' />
+                <UserAvatar session={{ firstname: profile?.firstname, imageUrl: profile?.imageUrl }} className='' />
                 <div className='absolute bottom-3 right-5 bg-slate-300 p-1 rounded-full'>
                   <Icons.camera className='h-6 w-6 text-muted-foreground fill-white' />
                 </div>
@@ -172,12 +172,12 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
 
         <div className='flex flex-col flex-1 md:mt-2'>
           <div className='flex flex-col w-full'>
-            {session?.firstname && session?.lastname ? (
+            {profile?.firstname && profile?.lastname ? (
               <h1 className='text-center h3-bold md:h1-semibold w-full'>
-                {session.firstname} {session.lastname}
+                {profile.firstname} {profile.lastname}
               </h1>
             ) : null}
-            <p className='small-regular md:body-medium text-light-3 text-center'>@e2e2a</p>
+            <p className='small-regular md:body-medium text-light-3 text-center'>@{profile.userId.username}</p>
           </div>
         </div>
         <div className='flex justify-center'>

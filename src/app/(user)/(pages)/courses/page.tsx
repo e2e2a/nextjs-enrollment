@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { useCourseQuery } from '@/lib/queries';
 
 const page = () => {
-  
   const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
   useEffect(() => {
     if (isCoursesError || !res || !res.courses) {
@@ -15,17 +14,17 @@ const page = () => {
     }
     if (res) console.log('courses logs:', res.courses);
   }, [res, isCoursesLoading, isCoursesError]);
-  
+
   return (
-    <div className='w-full rounded-md flex flex-col gap-4 bg-white items-center px-6 py-8 justify-center'>
+    <div className='w-full rounded-md flex flex-col gap-4 bg-neutral-50 shadow-md drop-shadow-none filter-none  items-center px-6 py-8 justify-center'>
       <div className='flex w-full flex-col'>
         <h1 className='font-bold font-poppins text-3xl lg:text-left text-center w-full'>Courses</h1>
         <p className='text-sm text-muted-foreground text-justify'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem officiis fugiat culpa temporibus commodi blanditiis quo cum. Aperiam, delectus. Sequi cumque labore quasi placeat libero?</p>
       </div>
-      <div className='grid lg:grid-cols-2 xl:grid-cols-3 gap-y-8 sm:grid-cols-2 grid-cols-1 gap-4 my-5 w-full place-items-center bg-white'>
+      <div className='grid lg:grid-cols-2 shadow-none drop-shadow-none xl:grid-cols-3 gap-y-8 sm:grid-cols-2 grid-cols-1 gap-4 my-5 w-full place-items-center bg-transparent'>
         {res?.courses?.map((course, index) => (
-          <Card className='w-full group' key={index}>
-            <div className='group-hover:bg-slate-100 '>
+          <Card className='w-full group shadow-sm drop-shadow-sm bg-white ' key={index}>
+            <div className='group-hover:bg-neutral-200 '>
               <CardHeader>
                 <CardTitle className=''>
                   {course.name} - ({course.courseCode})

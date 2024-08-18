@@ -1,6 +1,6 @@
 'use server';
 import { hashPassword } from '@/lib/hash/bcrypt';
-import {User} from '@/models/User';
+import { User } from '@/models/User';
 import { IUserData, IUserPassword } from '@/types';
 import { deleteStudentProfileByUserId } from './studentProfile';
 import dbConnect from '@/lib/db/db';
@@ -34,6 +34,14 @@ export const checkUserUsername = async (username: string) => {
   return false;
 };
 
+export const getUserByUsername = async (username: string) => {
+  try {
+    const u = await User.findOne({ username });
+    return u;
+  } catch (error) {
+    return null;
+  }
+};
 export const getUserByEmail = async (email: string) => {
   try {
     const user = await User.findOne({ email });
@@ -57,8 +65,8 @@ export const getUserById: any = async (id: string) => {
 
 export const deleteUserById = async (id: string) => {
   try {
-    const user = await getUserById(id)
-    await deleteStudentProfileByUserId(user._id)
+    const user = await getUserById(id);
+    await deleteStudentProfileByUserId(user._id);
     await User.findByIdAndDelete(id);
     return true;
   } catch (error) {
@@ -90,7 +98,7 @@ export const updateUserEmailVerifiedById = async (id: string) => {
 };
 
 export const updateUserPasswordById = async (data: IUserPassword) => {
-  await dbConnect()
+  await dbConnect();
   const { id, password } = data;
   const existingUser = await getUserById(id);
   if (!existingUser) {
@@ -123,12 +131,12 @@ export const updateUserLogout = async (id: string) => {
   }
 };
 
-export const updateUserImageById = async (id: string, data:any)=> {
+export const updateUserImageById = async (id: string, data: any) => {
   try {
     const user = await User.findByIdAndUpdate(id, ...data, { new: true });
-    return user
+    return user;
   } catch (error) {
     console.log(error);
-    return null
+    return null;
   }
-}
+};

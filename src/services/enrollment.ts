@@ -42,13 +42,13 @@ export const getEnrollmentByUserId = async (userId: string) => {
 
 export const getEnrollmentByStep = async (step: number) => {
   try {
-    console.log('i am exec...', step);
+    // console.log('i am exec...', step);
     const enrollment = await Enrollment.find({ step })
       .populate('userId') // Populate the `userId` reference
       .populate('courseId') // Populate the `courseId` reference
       .populate('profileId')
       .exec();
-    console.log('i am exec...', enrollment);
+    // console.log('i am exec...', enrollment);
     return JSON.parse(JSON.stringify(enrollment));
   } catch (error) {
     console.log(error);

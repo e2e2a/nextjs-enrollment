@@ -7,7 +7,6 @@ import { StudentProfileValidator } from '@/lib/validators/Validator';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useSession } from 'next-auth/react';
 import { Icons } from '@/components/shared/Icons';
 import Input from './Input';
 import { BirthdayInput } from './BirthdayInput';
@@ -16,13 +15,13 @@ import { profileSelectItems } from '@/constant/profile/selectItems';
 import { useStudentProfileMutation } from '@/lib/queries';
 type FormData = z.infer<typeof StudentProfileValidator>;
 type Iprops = {
-  session: any;
+  session?: any;
   profile: any;
 };
-const ProfileTab = ({ session, profile }: Iprops) => {
+const ProfileTab = ({ profile }: Iprops) => {
   console.log('Profile', profile);
   const mutation = useStudentProfileMutation();
-  const [isNotEditable, setIsNotEditable] = useState<boolean>(!!session.profileVerified);
+  const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile.isVerified);
   const [defaultValues, setDefaultValues] = useState({
     firstname: '',
     middlename: '',
@@ -76,7 +75,7 @@ const ProfileTab = ({ session, profile }: Iprops) => {
         sex: profile?.sex || '',
         civilStatus: profile?.civilStatus || '',
         employmentStatus: profile?.employmentStatus || '',
-        birthday: profile.birthday || new Date(), // Handle date conversion profile?.birthday ? new Date(profile.birthday) :
+        birthday:  new Date(profile.birthday) || new Date(), // Handle date conversion profile?.birthday ? new Date(profile.birthday) :
         birthPlaceCity: profile?.birthPlaceCity || '',
         birthPlaceProvince: profile?.birthPlaceProvince || '',
         birthPlaceRegion: profile?.birthPlaceRegion || '',
@@ -87,13 +86,13 @@ const ProfileTab = ({ session, profile }: Iprops) => {
       form.reset(profileDefaultValues); // Reset form with fetched default values
     };
     fetchProfileData();
-  }, [session?.id, form]);
+  }, [ form]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       // console.log('Form Submitted: ', data);
       const profileData = {
-        userId: session?.id!,
+        profileId: profile?._id!,
         ...data,
       };
       mutation.mutate(profileData, {
@@ -130,23 +129,23 @@ const ProfileTab = ({ session, profile }: Iprops) => {
       <Card className=''>
         <form action='' method='post' onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader>
-            <CardTitle className='pt-3 pb-5'>
-              <div className='flex justify-between'>
-                <h1 className='text-3xl font-bold leading-[140%] tracking-wide'>Profile</h1>
-                {session.profileVerified && (
-                  <div className='bg-slate-100 rounded-full py-1.5 px-2 cursor-pointer flex items-center gap-1' title='Edit' onClick={handleEditable}>
-                    <Icons.squarePen className='h-5 w-5 fill-white stroke-blue-600' />
+            <CardTitle className='pt-3 pb-5 pl-0'>
+              <div className='flex '>
+                <div className="w-full pl-11"><h1 className='text-3xl font-bold leading-[140%] tracking-wide text-center'>Profile</h1></div>
+                {profile.isVerified && (
+                  <div className='bg-slate-200 hover:bg-slate-300 relative right-2 rounded-xl py-1.5 px-2 cursor-pointer flex items-center gap-1' title='Edit' onClick={handleEditable}>
+                    <Icons.squarePen className='h-5 w-5 fill-white stroke-blue-600 relative' />
                     <span className='hidden sm:flex tracking-normal text-sm'>Edit</span>
                   </div>
                 )}
               </div>
-              <CardDescription className='text-muted-foreground'>Change your password here. After saving, you&apos;ll be logged out.</CardDescription>
+              <CardDescription className='text-sm font-normal w-full text-center'>Change your password here. After saving, you&apos;ll be logged out.</CardDescription>
             </CardTitle>
           </CardHeader>
           {/* note if its not editable its pb-0 @button */}
-          <CardContent className=' pb-0'>
-            <div className='flex flex-col lg:flex-row lg:gap-2'>
-              <div className='flex-col flex-1 flex gap-4'>
+          <CardContent className=''>
+            <div className={`flex flex-col lg:flex-row lg:gap-8 ${isNotEditable ? 'justify-around ': 'px-11'}`}>
+              <div className={`flex-col flex gap-4 ${isNotEditable ? '' : 'flex-1'}`}>
                 <div className='flex-1 mb-5 lg:mb-0'>
                   <h1 className='text-lg font-bold border-b text-center lg:text-left'>Manpower Profile</h1>
                   <div className={`space-y-3 mt-2 mb-3`}>
@@ -171,9 +170,9 @@ const ProfileTab = ({ session, profile }: Iprops) => {
                   </div>
                 </div>
               </div>
-
-              <div className='w-px border border-gray-300 hidden md:flex mx-2 h-auto' />
-              <div className='flex-col flex-1 flex gap-4'>
+              {!isNotEditable && <div className='w-px border border-gray-300 hidden md:flex mx-1 h-auto' />}
+              
+              <div className={`flex-col flex gap-4 ${isNotEditable ? '' : 'flex-1'}`}>
                 <div className='lg:mb-0'>
                   <h1 className='text-lg font-bold border-b text-center lg:text-left'>Personal Information</h1>
                   <div className={`space-y-3 mt-2 mb-3`}>

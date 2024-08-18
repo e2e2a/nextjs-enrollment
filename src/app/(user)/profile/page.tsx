@@ -61,7 +61,7 @@ const ProfilePage = () => {
               <Note handleClose={handleClose} />
             </div>
           )}
-          <TabsContent value='profile' className={`w-full bg-white my-10 max-w-[69rem] rounded-lg`}>
+          <TabsContent value='profile' className={`w-full bg-neutral-50  my-10 max-w-[69rem] rounded-lg`}>
             <ProfileTab session={session} profile={res?.profile} />
           </TabsContent>
           <TabsContent value='email' className='w-full mb-3 max-w-[69rem]'>

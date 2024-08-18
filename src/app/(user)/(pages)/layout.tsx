@@ -25,33 +25,31 @@ const Layout = ({ children }: { children: ReactNode }) => {
    * change this name to use profileQuery instead of exampleQuery
    */
   const { data: res, isLoading, error } = useProfileQuery(sessionData?.user.id as string);
-  
+
   useEffect(() => {
-    
     if (error || !res || !res.profile) {
       return;
     }
-    if (res)
-      setProfile(res.profile);
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
+    if (res) setProfile(res.profile);
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   }, [isLoading, res]);
   return (
     <>
       {loading && <Loader />}
-        <div className='flex flex-col '>
-          <header className='sticky top-0 z-40 border-b bg-background'>
-            <MainNav items={dashboardConfig.mainNav} session={sessionData?.user} profile={profile} />
-            <MobileNav items={dashboardConfig.mainNav} session={sessionData?.user} />
-          </header>
-          <div className={` flex-1 flex bg-slate-100 ${loading ? '' :''} `}>
-            <div className=' w-[290px] xl:w-[330px] hidden lg:flex'>
-              <SidebarNav items={dashboardConfig.sidebarNav} profile={profile} />
-            </div>
-            <main className='py-2 md:py-4 px-1 md:px-5 xl:px-7 flex flex-1 flex-col '>{children}</main>
+      <div className='flex flex-col '>
+        <header className='sticky top-0 z-40 border-b bg-background'>
+          <MainNav items={dashboardConfig.mainNav} session={sessionData?.user} profile={profile} />
+          <MobileNav items={dashboardConfig.mainNav} session={sessionData?.user} />
+        </header>
+        <div className={` flex-1 flex bg-slate-100 ${loading ? '' : ''} `}>
+          <div className=' w-[290px] xl:w-[330px] hidden lg:flex'>
+            <SidebarNav items={dashboardConfig.sidebarNav} profile={profile} />
           </div>
+          <main className='py-2 md:py-4 px-1 md:px-5 xl:px-7 flex flex-1 flex-col'>{children}</main>
         </div>
+      </div>
     </>
   );
 };

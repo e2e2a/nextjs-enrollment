@@ -1,8 +1,9 @@
 import {
+  Hourglass,
   PackageSearch,
   Eye,
-  LogOut ,
-  GraduationCap ,
+  LogOut,
+  GraduationCap,
   Grip,
   Bell,
   BellRing,
@@ -46,10 +47,11 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
-  packageSearch:PackageSearch,
+  hourglass: Hourglass,
+  packageSearch: PackageSearch,
   eye: Eye,
-  logout :LogOut ,
-  graduationCap :GraduationCap ,
+  logout: LogOut,
+  graduationCap: GraduationCap,
   grip: Grip,
   bell: Bell,
   bellRing: BellRing,

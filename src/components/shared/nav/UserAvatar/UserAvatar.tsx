@@ -17,7 +17,7 @@ export function UserAvatar({ session, className, ...props }: UserAvatarProps) {
     <Avatar {...props} className='w-full h-full '>
       {session.imageUrl ? (
         <div>
-          <AvatarImage className={cn('rounded-full', className)} alt='Picture' src={session.imageUrl} onDragStart={(e) => e.preventDefault()}/>
+          <AvatarImage className={cn('rounded-full', className)} alt={session.firstname} src={session.imageUrl} onDragStart={(e) => e.preventDefault()}/>
           <AvatarFallback className={cn('rounded-full bg-gray-300 bg-opacity-50 flex items-center justify-center', className)} />
         </div>
       ) : (

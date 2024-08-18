@@ -30,7 +30,7 @@ import { verificationCodeProcess, verificationCodeResend } from '@/action/verifi
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
 import { NewPassword } from '@/action/profile/NewPassword';
 import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updateData';
-import { getStudentProfileBySessionId } from '@/action/profile/getProfile';
+import { getStudentProfileBySessionId, getStudentProfileByUsernameAction } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses } from '@/action/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction } from '@/action/enrollment/user';
 import { getEnrollmentByStepAction } from '@/action/enrollment/admin';
@@ -146,6 +146,15 @@ export const useProfileQuery = (id: any) => {
     retry: 0,
     refetchOnWindowFocus: false,
   });
+};  
+
+export const useProfileQueryByUsername = (username: string) => {
+  return useQuery<getSingleProfileResponse, Error>({
+    queryKey: ['userProfile', username],
+    queryFn: () => getStudentProfileByUsernameAction(username),
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
 };
 
 export const useUpdateProfilePhoto = () => {
@@ -206,18 +215,14 @@ export const useEnrollmentQuery = (data: any) => {
   });
 };
 
-export const useEnrollmentQueryByStep = (data: any) => {
+export const useEnrollmentQueryByStep = (step: any) => {
   return useQuery<getEnrollmentResponse, Error>({
-    queryKey: ['EnrollmentByStep'],
-    queryFn: () => getEnrollmentByStepAction(data),
+    queryKey: ['EnrollmentByStep', step],
+    queryFn: () => getEnrollmentByStepAction(step),
     retry: 0,
+    enabled: !!step,
     refetchOnMount: false,
-    /**
-     * this refetch interval is will be used in production
-     */
-    // refetchInterval: 5000,
     refetchOnWindowFocus: false,
-    // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
 

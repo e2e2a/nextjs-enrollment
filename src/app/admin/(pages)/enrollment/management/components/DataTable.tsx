@@ -28,7 +28,13 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  console.log(data)
+  // console.log(data)
+  useEffect(() =>{
+    if(!data){
+      console.log('no data');
+      return;
+    }
+  },[data])
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -55,15 +61,15 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
       {/* Filters */}
       <div className='flex items-center justify-between w-full'>
         <div className='flex items-center  py-4 text-black'>
-          {/* <Input
+          <Input
             placeholder='Search by name...'
-            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+            value={(table.getColumn('fullname')?.getFilterValue() as string) ?? ''}
             onChange={event =>{
-              table.getColumn('name')?.setFilterValue(event.target.value)
+              table.getColumn('fullname')?.setFilterValue(event.target.value)
             }
             }
             className='max-w-sm'
-          /> */}
+          />
         </div>
 
         {/* Column visibility */}

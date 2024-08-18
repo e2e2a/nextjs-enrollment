@@ -108,6 +108,7 @@ type ExternalItem = SidebarNavItem
 export type SidebarNavItem = {
   title: string;
   i?: ExternalItem[]
+  query?: string
   disabled?: boolean;
   external?: boolean;
   icon?: keyof typeof Icons;
@@ -127,6 +128,7 @@ export type SidebarNavItemAdmin = {
   disabled?: boolean;
   i?: SidebarNavItem[]
   href?: string;
+  
   external?: boolean;
   icon?: keyof typeof Icons;
 } 
@@ -251,6 +253,7 @@ type IEnrollment ={
 export type getSingleEnrollmentResponse = {
   enrollment?: IEnrollment;
 }& IResponse;
+
 export type getEnrollmentResponse = {
   enrollment?: IEnrollment[];
 }& IResponse;

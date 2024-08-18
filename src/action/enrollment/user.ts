@@ -44,6 +44,7 @@ export const createEnrollmentAction = async (data: any): Promise<getEnrollmentRe
 
 export const deleteEnrollmentAction = async (EId: any): Promise<IResponse> => {
   try {
+    await dbConnect();
     const e = await getEnrollmentById(EId);
     if (!e) return { error: 'You are deleting with non-existing enrollment.', status: 403 };
     console.log('server e :', e);
@@ -57,6 +58,7 @@ export const deleteEnrollmentAction = async (EId: any): Promise<IResponse> => {
 
 export const getSingleEnrollmentAction = async (userId: any): Promise<getSingleEnrollmentResponse> => {
   try {
+    await dbConnect();
     const enrollment = await getEnrollmentByUserId(userId);
     return {enrollment: enrollment, status: 200};
   } catch (error) {

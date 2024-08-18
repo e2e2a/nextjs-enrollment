@@ -1,7 +1,7 @@
 // @ts-nocheck
-"use server"
+'use server';
 import mongoose from 'mongoose';
-
+import initializeModel from './initialize';
 async function dbConnect() {
   const MONGODB_URI = process.env.MONGODB_URI || '';
   // console.log(`Connecting to database at: ${MONGODB_URI}`);
@@ -17,7 +17,7 @@ async function dbConnect() {
 
   // Create a new connection if not already cached
   if (!global.mongoose) {
-    global.mongoose = { conn: null, promise: null };
+    global.mongoose = { conn: null, promise: null, initialized: false };
   }
 
   // Set options for connection
@@ -29,13 +29,23 @@ async function dbConnect() {
 
   // Create and cache the connection promise
   if (!global.mongoose.promise) {
-    global.mongoose.promise = mongoose.connect(MONGODB_URI, opts).then((mongooseInstance) => {
-      console.log('Connected to MongoDB');
-      return mongooseInstance;
-    }).catch((err) => {
-      console.error('MongoDB connection error:', err);
-      throw err;
-    });
+    global.mongoose.promise = mongoose
+      .connect(MONGODB_URI, opts)
+      .then(async (mongooseInstance) => {
+        // Add all your models here
+        console.log('Connected to MongoDB');
+        // Initialize models only on the first connection
+        if (!global.mongoose.initialized) {
+          const modelsToInitialize = ['Course', 'User', 'StudentProfile', 'Account', 'Enrollment'];
+          await initializeModel(modelsToInitialize);
+          global.mongoose.initialized = true;
+        }
+        return mongooseInstance;
+      })
+      .catch((err) => {
+        console.error('MongoDB connection error:', err);
+        throw err;
+      });
   }
 
   try {

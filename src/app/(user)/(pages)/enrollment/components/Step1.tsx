@@ -13,12 +13,13 @@ import { studentSemesterData, studentYearData } from '@/constant/test/courses';
 import { useCourseQuery, useEnrollmentDeleteMutation, useEnrollmentStep1Mutation } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { Icons } from '@/components/shared/Icons';
 type IProps = {
   search: any;
   enrollment: any;
 };
 const Step1 = ({ search, enrollment }: IProps) => {
-  console.log('enrollment step: ', enrollment)
+  console.log('enrollment step: ', enrollment);
   const { data: s } = useSession();
   const session = s?.user;
   const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
@@ -55,7 +56,7 @@ const Step1 = ({ search, enrollment }: IProps) => {
             // setMessage(res?.message);
             // return (window.location.href = '/');
             // return (window.location.reload());
-            return
+            return;
           default:
             // setMessage(res.error);
             // setTypeMessage('error');
@@ -81,7 +82,7 @@ const Step1 = ({ search, enrollment }: IProps) => {
             console.log(res);
             // setMessage(res?.message);
             // return (window.location.reload());
-            return
+            return;
           default:
             // setMessage(res.error);
             // setTypeMessage('error');
@@ -92,25 +93,27 @@ const Step1 = ({ search, enrollment }: IProps) => {
   };
   return (
     <TabsContent value='1' className='p-5 focus-visible:ring-0 border-0'>
-      <Card className={`${enrollment?.onProcess ? 'min-h-[35vh] items-center justify-center flex border-0' : ''}`}>
-        {enrollment?.onProcess ? (
-          <>
+      {enrollment?.onProcess ? (
+        <>
+          <Card className={`${enrollment?.onProcess ? 'min-h-[35vh] shadow-none drop-shadow-none items-center justify-center flex border-0' : ''}`}>
             <CardHeader className='space-y-3 hidden'>
-              {/* @TODO put an icon at the top of approval */}
               <CardTitle className=' hidden'>Waiting for Approval!</CardTitle>
               <CardDescription className='text-center hidden'></CardDescription>
             </CardHeader>
-            <CardContent className='flex w-full justify-center flex-col items-center space-y-5 px-0 mx-0'>
+            <CardContent className='flex w-full justify-center flex-col items-center border-0 focus-visible:ring-0 space-y-5 px-0 mx-0'>
               <div className='w-full flex flex-col items-center justify-center h-full'>
-                <h1 className='text-center text-3xl font-bold font-poppins text-green-400'>Wating for Approval!</h1>
-                <span>This may take time to review your credentials. We will notify you as soon as possible.</span>
+                <div className='w-full flex justify-center items-center md:my-4'>
+                    <Icons.hourglass className='md:h-14 md:w-14 h-10 w-10 my-3 stroke-green-400 animate-spin' style={{ animationDuration: '6s' }}/>
+                </div>
+                <h1 className='text-center text-xl sm:text-3xl font-bold font-poppins text-green-400'>Wating for Approval!</h1>
+                <span className='text-sm text-center mt-2'>This may take time to review your credentials. We will notify you as soon as possible.</span>
               </div>
               <div className='flex flex-col w-full space-y-3'>
-                <span className='text-center text-muted-foreground'>If you are undecided with your course you can cancel it anytime.</span>
+                <span className='text-center text-sm text-muted-foreground'>If you are undecided with your course you can cancel it anytime.</span>
                 <div className=' w-full flex justify-center items-center'>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button variant={'outline'} size={'sm'} className=' focus-visible:ring-0 text-[15px] bg-red text-white tracking-normal font-medium font-poppins'>
+                      <Button variant={'outline'} size={'sm'} className='select-none focus-visible:ring-0 text-[15px] bg-red text-white tracking-normal font-medium font-poppins'>
                         Cancel Enrollment
                       </Button>
                     </AlertDialogTrigger>
@@ -130,9 +133,11 @@ const Step1 = ({ search, enrollment }: IProps) => {
                 </div>
               </div>
             </CardContent>
-          </>
-        ) : (
-          <>
+          </Card>
+        </>
+      ) : (
+        <>
+          <Card className={`${enrollment?.onProcess ? 'min-h-[35vh] shadow-none drop-shadow-none items-center justify-center flex border-0' : ''}`}>
             <CardHeader className='space-y-3'>
               <CardTitle className='text-center lg:text-left font-poppins'>Step 1</CardTitle>
               <CardDescription>Make changes to your account here. Click save when you're done.</CardDescription>
@@ -155,9 +160,9 @@ const Step1 = ({ search, enrollment }: IProps) => {
                 </CardFooter>
               </form>
             </Form>
-          </>
-        )}
-      </Card>
+          </Card>
+        </>
+      )}
     </TabsContent>
   );
 };

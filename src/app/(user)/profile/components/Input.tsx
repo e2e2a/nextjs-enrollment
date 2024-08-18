@@ -23,7 +23,7 @@ const Input = ({ name, type, isNotEditable, form, label,classNameInput }: IProps
                       className={`
                                  ${
                                    isNotEditable
-                                     ? `border-0 cursor-default select-none w-full ${classNameInput} text-md bg-white px-3`
+                                     ? `border-0 cursor-default select-none w-full ${classNameInput} text-md bg-transparent px-3`
                                      : 'block rounded-xl px-5 pb-2 pt-7 w-full text-sm bg-slate-50 border border-gray-200 appearance-nonefocus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom'
                                  }`}
                       onDragStart={(e) => e.preventDefault()}

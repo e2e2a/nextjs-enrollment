@@ -24,23 +24,23 @@ const Page = () => {
     }
     if (res) {
       console.log('courses logs:', res.courses);
-      
+
       const courseTitles = res?.courses?.map((course) => course.courseCode.toLowerCase());
       setAllowedCourses(courseTitles);
     }
   }, [res, isCoursesLoading, isCoursesError]);
-  
+
   // Allowed course codes
   const { data: d } = useSession();
   const session = d!.user;
   const { data: resE, isLoading: isResELoading, error: isResError } = useEnrollmentQuery(session.id);
   useEffect(() => {
     if (isResError || !resE || !resE.enrollment) {
-      setEn(null)
+      setEn(null);
       return;
     }
     if (resE) {
-      setEn(resE.enrollment)
+      setEn(resE.enrollment);
       const courseTitles = res?.courses?.map((course) => course.courseCode.toLowerCase());
       setAllowedCourses(courseTitles);
     }
@@ -69,7 +69,7 @@ const Page = () => {
     validateSearchParam();
   }, [search, allowedCourses]);
 
-  return <>{isLoading ? <Loader /> : <div className='bg-white min-h-[86vh] py-5 rounded-xl'>{isError ? <ErrorPage /> : <EnrollmentForms search={search} enrollment={en} />}</div>}</>;
+  return <>{isLoading ? <Loader /> : <div className=' bg-neutral-50 shadow-lg drop-shadow-none filter-none min-h-[86vh] py-5 rounded-xl'>{isError ? <ErrorPage /> : <EnrollmentForms search={search} enrollment={en} />}</div>}</>;
 };
 
 export default Page;

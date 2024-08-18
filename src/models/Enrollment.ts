@@ -1,5 +1,5 @@
 import mongoose, { Schema, models, model } from 'mongoose';
-
+import Course from './Course';
 export interface IEnrollment extends Document {
   userId: mongoose.Schema.Types.ObjectId;
   profileId: mongoose.Schema.Types.ObjectId;
@@ -9,6 +9,7 @@ export interface IEnrollment extends Document {
   onProcess: Boolean;
   step: Number;
   enrollStatus?: 'Pending' | 'Continue' | 'Completed';
+  onAccepted?: 'Accepted' | 'Decline';
   studentType?: 'Regular' | 'Non-Regular';
   scholarType: 'TWSP' | 'STEP' | 'PESFA' | 'UAQTEA' | 'None';
 }
@@ -55,6 +56,7 @@ const schema = new Schema<IEnrollment>(
       default: 'Pending',
       enum: ['Pending', 'Continue', 'Completed'],
     },
+    onAccepted: { type: String, default: 'Accepted', enum: ['Accepted', 'Decline'] },
     studentType: {
       type: String,
       enum: ['Regular', 'Non-Regular'],

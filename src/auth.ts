@@ -78,7 +78,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             session.user.username = user.username;
             const p = await getStudentProfileByUserId(user._id);
             const profile = JSON.parse(JSON.stringify(p))
-            console.log('sessionprofile', profile);
+            // console.log('sessionprofile', profile);
             session.user.profileVerified = profile.isVerified;
             session.user.firstname = profile.firstname;
             session.user.lastname = profile.lastname;

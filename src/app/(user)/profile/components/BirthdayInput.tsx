@@ -44,7 +44,7 @@ export function BirthdayInput({ name, isNotEditable, form, label, classNameInput
                     className={`
                     ${
                       isNotEditable
-                        ? `border-0 cursor-default select-none w-full ${classNameInput} bg-white px-3`
+                        ? `border-0 cursor-default select-none w-full ${classNameInput} bg-transparent px-3`
                         : 'block rounded-xl px-5 pb-2 pt-7 w-full text-sm bg-slate-50 border border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom'
                     }`}
                     onChange={(e) => {

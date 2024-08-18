@@ -54,7 +54,7 @@ export function MobileNav({ items, session }: MobileNavProps) {
                   <TooltipTrigger className='' asChild>
                     <Link href={item.disabled ? '#' : item.href} className={cn('flex flex-col items-center text-lg font-medium sm:text-sm w-full')}>
                       <Button className='group border border-white hover:bg-slate-200 hover:bg-opacity-45 flex items-center justify-center w-full'>
-                        <Icon className={cn('h-6 w-6 lg:h-8 lg:w-8 ', item.href === segment ? ' stroke-blue-500 scale-[105%]' : '')} />
+                        <Icon className={cn('w-4 h-4 sm:w-6 sm:h-6 md:h-6 md:w-6 lg:h-8 lg:w-8 ', item.href === segment ? ' stroke-blue-500 scale-[105%]' : '')} />
                       </Button>
                       <span className={cn(item.href === segment ? 'text-foreground border-blue-500 border-b-4 w-full ' : 'text-foreground/60')}></span>
                     </Link>

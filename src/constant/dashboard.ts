@@ -156,11 +156,6 @@ export const dashboardConfig: DashboardConfig = {
     //   icon: 'fileBadge',
     // },
     {
-      title: 'Enrollment',
-      href: '/enrollment',
-      icon: 'graduationCap',
-    },
-    {
       title: 'Subjects',
       href: '/courses',
       icon: 'notebook',
