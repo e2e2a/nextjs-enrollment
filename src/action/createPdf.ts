@@ -453,8 +453,8 @@ export const createPDF = async (checkE: any) => {
         // makeToastError(error.message);
         return console.log(error);
       },
-      async () => {
-        await getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
+       () => {
+         getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
           console.log(url);
           // const updatedE = await updateEnrollmentPDFById(cc._id, url);
           // console.log('updatedE', updatedCE);
