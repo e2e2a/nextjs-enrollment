@@ -140,7 +140,7 @@ const Step1 = ({ search, enrollment }: IProps) => {
           <Card className={`${enrollment?.onProcess ? 'min-h-[35vh] shadow-none drop-shadow-none items-center justify-center flex border-0' : ''}`}>
             <CardHeader className='space-y-3'>
               <CardTitle className='text-center lg:text-left font-poppins'>Step 1</CardTitle>
-              <CardDescription>Make changes to your account here. Click save when you're done.</CardDescription>
+              <CardDescription>Make changes to your account here. Click save when you&apos;re done.</CardDescription>
             </CardHeader>
             <Form {...form}>
               <form action='' method='post' onSubmit={form.handleSubmit(onSubmit)}>

@@ -1,13 +1,15 @@
 // @ts-nocheck
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-
-import { MoreHorizontal, ArrowUpDown } from 'lucide-react';
-
+import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
-
+import { DataTableDrawer } from './Drawer';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 interface Enrollment {
   id: string;
   userId: any;
@@ -126,30 +128,77 @@ export const columns: ColumnDef<Enrollment>[] = [
       return <div className='font-medium'>{formatted}</div>;
     },
   },
+  // {
+  //   id: 'actions',
+  //   header: 'Actions',
+  //   cell: ({ row }) => {
+  //     const user = row.original;
+
+  //     return (
+  //       <DropdownMenu modal={false}>
+  //         <DropdownMenuTrigger asChild>
+  //           <div className='flex justify-center items-center w-full'>
+  //             <Button size={'sm'} className='w-auto focus-visible:ring-0 flex bg-blue-500 px-2 py-0 text-neutral-50 font-medium'>
+  //               <span className='sr-only'>Open menu</span>
+  //               Options
+  //             </Button>
+  //           </div>
+  //         </DropdownMenuTrigger>
+  //         <DropdownMenuContent align='end' className='bg-white'>
+  //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+  //           <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user._id)}>Copy user ID</DropdownMenuItem>
+  //           <DropdownMenuItem>
+  //             <DataTableDrawer user={user} />
+  //           </DropdownMenuItem>
+  //           <DropdownMenuSeparator />
+  //           <DropdownMenuItem>
+  //             <Link href={`/profile/${user.userId.username}`}>View profile</Link>
+  //           </DropdownMenuItem>
+  //           <DropdownMenuItem>View payment details</DropdownMenuItem>
+  //         </DropdownMenuContent>
+  //       </DropdownMenu>
+  //     );
+  //   },
+  // },
   {
-    id: 'actions',
-    header: 'Actions',
+    id: 'examples',
+    header: 'Example',
     cell: ({ row }) => {
       const user = row.original;
-
+      // const languages = [
+      //   { label: 'English', value: 'en' },
+      //   { label: 'French', value: 'fr' },
+      //   { label: 'German', value: 'de' },
+      //   { label: 'Spanish', value: 'es' },
+      //   { label: 'Portuguese', value: 'pt' },
+      //   { label: 'Russian', value: 'ru' },
+      //   { label: 'Japanese', value: 'ja' },
+      //   { label: 'Korean', value: 'ko' },
+      //   { label: 'Chinese', value: 'zh' },
+      // ] as const;
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className='h-8 w-8 p-0'>
-              <span className='sr-only'>Open menu</span>
-              <MoreHorizontal className='h-4 w-4' />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end' className='bg-white'>
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user._id)}>Copy user ID</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Link href={`/profile/${user.userId.username}`}>View profile</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className=''>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-blue-500 px-2 py-0 text-neutral-50 font-medium'}>
+                Options
+                <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align='center' className='w-[150px] bg-neutral-50 px-1 py-0'>
+              <Command>
+                {/* <CommandInput placeholder='Search language...' /> */}
+                <CommandList>
+                  {/* <CommandEmpty>No language found.</CommandEmpty> */}
+                  <CommandGroup>
+                    
+                    <DataTableDrawer user={user} />
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
       );
     },
   },

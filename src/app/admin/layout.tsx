@@ -14,13 +14,6 @@ const AdminRootLayout = ({ children }: { children: ReactNode }) => {
   const { data: session } = useSession();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState({});
-  if (!session) {
-    return redirect('/sign-in');
-  }
-  if (session && !session.user.profileVerified) {
-    return redirect('/profile');
-  }
-
   const { data: res, isLoading, error } = useProfileQuery(session?.user.id as string);
 
   useEffect(() => {
@@ -32,7 +25,15 @@ const AdminRootLayout = ({ children }: { children: ReactNode }) => {
       setTimeout(() => {
         setLoading(false);
       }, 500);
-  }, [isLoading, res]);
+  }, [isLoading, res,error]);
+  if (!session) {
+    return redirect('/sign-in');
+  }
+  if (session && !session.user.profileVerified) {
+    return redirect('/profile');
+  }
+
+  
   return (
     <>
       {session ? (

@@ -3,7 +3,7 @@ import Enrollment from '@/models/Enrollment';
 
 export const createEnrollment = async (data: any) => {
   try {
-    console.log('serverdata', data)
+    console.log('serverdata', data);
     const newE = new Enrollment({
       ...data,
     });
@@ -21,8 +21,9 @@ export const getEnrollmentById = async (id: any) => {
      * @todo
      * populate userId, courseId and the ProfileId in the user fields
      */
-    const e = await Enrollment.findById(id);
-    return JSON.parse(JSON.stringify(e));
+    const e = await Enrollment.findById(id).populate('userId').populate('courseId').populate('profileId');
+    // return JSON.parse(JSON.stringify(e));
+    return e;
   } catch (error) {
     console.log(error);
     return null;

@@ -238,13 +238,14 @@ type IEnrollment ={
   id?: any
   _id: any;
   userId?: any;
-  courseId?: any
+  courseId?: any;
   step?:any;
   courseCode: string;
   studentYear: string;
   studentSemester?: string;
   onProcess: Boolean;
   enrollStatus?: string;
+  studentStatus?: string;
   studentType?: string;
   scholarType?: string;
   createdAt: Date;

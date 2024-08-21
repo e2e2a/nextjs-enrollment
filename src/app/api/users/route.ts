@@ -9,10 +9,10 @@ export async function GET(req: NextRequest, res: NextResponse) {
   try {
     await dbConnect()
    
-    const headersList = headers();
-    const apiKey = headersList.get('x-api-key');
-    const NEXT_PUBLIC_API_KEY = process.env.NEXT_PUBLIC_API_KEY!;
-    const session = await auth();
+    // const headersList = headers();
+    // const apiKey = headersList.get('x-api-key');
+    // const NEXT_PUBLIC_API_KEY = process.env.NEXT_PUBLIC_API_KEY!;
+    // const session = await auth();
     // if (!session) {
     //     return res.status(401).json({ error: 'User not authenticated' });
     //   }

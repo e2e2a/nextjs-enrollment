@@ -34,7 +34,7 @@ const EnrollmentForms = ({search, enrollment}: IProps) => {
           <Card>
             <CardHeader>
               <CardTitle>Password</CardTitle>
-              <CardDescription>Change your password here. After saving, you'll be logged out.</CardDescription>
+              <CardDescription>Change your password here. After saving, you&apos;ll be logged out.</CardDescription>
             </CardHeader>
             <CardContent className='space-y-2'>
               <div className='space-y-1'>
@@ -55,7 +55,7 @@ const EnrollmentForms = ({search, enrollment}: IProps) => {
           <Card>
             <CardHeader>
               <CardTitle>Account</CardTitle>
-              <CardDescription>Make changes to your account here. Click save when you're done.</CardDescription>
+              <CardDescription>Make changes to your account here. Click save when you&apos;re done.</CardDescription>
             </CardHeader>
             <CardContent className='w-full space-y-2'>3</CardContent>
             <CardFooter>
@@ -67,7 +67,7 @@ const EnrollmentForms = ({search, enrollment}: IProps) => {
           <Card>
             <CardHeader>
               <CardTitle>Account</CardTitle>
-              <CardDescription>Make changes to your account here. Click save when you're done.</CardDescription>
+              <CardDescription>Make changes to your account here. Click save when you&apos;re done.</CardDescription>
             </CardHeader>
             <CardContent className='w-full space-y-2'>4</CardContent>
             <CardFooter>
@@ -79,7 +79,7 @@ const EnrollmentForms = ({search, enrollment}: IProps) => {
           <Card>
             <CardHeader>
               <CardTitle>Account</CardTitle>
-              <CardDescription>Make changes to your account here. Click save when you're done.</CardDescription>
+              <CardDescription>Make changes to your account here. Click save when you&apos;re done.</CardDescription>
             </CardHeader>
             <CardContent className='w-full space-y-2'>5</CardContent>
             <CardFooter>

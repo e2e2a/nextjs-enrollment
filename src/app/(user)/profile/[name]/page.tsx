@@ -57,7 +57,7 @@ const ProfilePage = () => {
     }
     setProfile(res.profile);
     setLoading(false);
-  }, [isLoading, error, res, profile]);
+  }, [isLoading, error, res, profile, session]);
   return (
     <>
       {loading ? (

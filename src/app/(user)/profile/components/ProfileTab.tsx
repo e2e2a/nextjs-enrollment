@@ -86,7 +86,7 @@ const ProfileTab = ({ profile }: Iprops) => {
       form.reset(profileDefaultValues); // Reset form with fetched default values
     };
     fetchProfileData();
-  }, [ form]);
+  }, [ form,profile]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {

@@ -31,7 +31,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   // console.log(data)
   useEffect(() =>{
     if(!data){
-      console.log('no data');
       return;
     }
   },[data])

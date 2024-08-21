@@ -44,7 +44,7 @@ const Page = () => {
       const courseTitles = res?.courses?.map((course) => course.courseCode.toLowerCase());
       setAllowedCourses(courseTitles);
     }
-  }, [resE, isResELoading, isResError]);
+  }, [resE, isResELoading, isResError,res]);
   useEffect(() => {
     // const checkEnrollment = async () => {
     //   const enrollment = await getEnrollmentByUserId(session!.id as string);

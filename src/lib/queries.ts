@@ -22,7 +22,7 @@ import {
   verificationCodeResendResponse,
 } from '@/types';
 import { fetchAllUsers } from './api';
-import { NewPasswordValidator, SigninValidator, SignupValidator, StudentProfileValidator } from './validators/Validator';
+import { EnrollmentApprovedStep1, NewPasswordValidator, SigninValidator, SignupValidator, StudentProfileValidator } from './validators/Validator';
 import { z } from 'zod';
 import { signInAction, signUpAction } from '@/action/auth';
 import { checkResetPasswordToken, checkToken } from '@/action/token';
@@ -33,7 +33,7 @@ import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updat
 import { getStudentProfileBySessionId, getStudentProfileByUsernameAction } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses } from '@/action/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction } from '@/action/enrollment/user';
-import { getEnrollmentByStepAction } from '@/action/enrollment/admin';
+import { approvedEnrollmentStep1Action, getEnrollmentByStepAction } from '@/action/enrollment/admin';
 
 // ============================================================
 // AUTH QUERIES
@@ -223,6 +223,12 @@ export const useEnrollmentQueryByStep = (step: any) => {
     enabled: !!step,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useApprovedEnrollmentStep1Mutation = () => {
+  return useMutation<getEnrollmentResponse, Error, z.infer<typeof EnrollmentApprovedStep1>>({
+    mutationFn: async (data) => approvedEnrollmentStep1Action(data),
   });
 };
 

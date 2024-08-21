@@ -15,7 +15,7 @@ import { useCreateCourseMutation } from '@/lib/queries';
 import { makeToastError } from '@/lib/toast/makeToast';
 import CourseToast from '@/lib/toast/CourseToast';
 
-const page = () => {
+const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -102,7 +102,7 @@ const page = () => {
       <Card className='border-0 bg-transparent'>
         <CardHeader className='space-y-3'>
           <CardTitle className='text-center text-3xl font-poppins'>Register a new course!</CardTitle>
-          <CardDescription className='hidden'>Make changes to your account here. Click save when you're done.</CardDescription>
+          <CardDescription className='hidden'>Make changes to your account here. Click save when you&apos;re done.</CardDescription>
         </CardHeader>
         <Form {...form}>
           <form method='post' onSubmit={form.handleSubmit(onSubmit)}>
@@ -130,4 +130,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

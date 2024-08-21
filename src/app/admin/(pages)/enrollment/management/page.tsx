@@ -2,10 +2,12 @@
 import Loader from '@/components/shared/Loader';
 import { useEnrollmentQueryByStep } from '@/lib/queries';
 import { usePathname, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { columns } from './components/columns';
 import { DataTable } from './components/DataTable';
 import { Button } from '@/components/ui/button';
+import { DialogCloseButton } from './components/dialog';
+import { DataTableDrawer } from './components/Drawer';
 interface Enrollment {
   id: string;
   userId: any;
@@ -16,15 +18,15 @@ interface Enrollment {
   createdAt: Date;
   updatedAt: Date;
 }
-const page = () => {
+const Page = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const search = searchParams.get('step');
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const isAllowed = ['1', '2', '3', '4'];
-  const [isStep, setIsStep] = useState('1');
-  console.log(search)
+  // const isAllowed = ['1', '2', '3', '4'];
+  const isAllowed = useMemo(() => ['1', '2', '3', '4'], []);
+  // console.log(search);
   // Validate the step parameter whenever the search parameter changes
   useEffect(() => {
     if (search === null || !isAllowed.includes(search)) {
@@ -33,7 +35,7 @@ const page = () => {
       setIsError(false);
     }
     setIsPageLoading(false); // Loading is done after validation
-  }, [search, isAllowed]);
+  }, [search, isAllowed,isPageLoading]);
 
   // Query data based on the validated step parameter
   const { data, isLoading, error: isEnError } = useEnrollmentQueryByStep(search || '');
@@ -46,17 +48,17 @@ const page = () => {
 
   return (
     <>
-      {isPageLoading ? <Loader /> : <div className='bg-white min-h-[86vh] py-5 rounded-xl'>{isError ? <div className=''>404</div> : <DataTable columns={columns} data={data?.enrollment as Enrollment[]} />}<Button
-        onClick={() => {
-          setIsStep(isStep + 1);
-        }}
-      >
-        click me
-      </Button></div>}
-
-      
+      {isPageLoading ? (
+        <Loader />
+      ) : (
+        <div className='bg-white min-h-[86vh] py-5 rounded-xl'>
+          {isError ? <div className=''>404</div> : <DataTable columns={columns} data={data?.enrollment as Enrollment[]} />}
+          {/* <DataTableDrawer /> */}
+          <DialogCloseButton />
+        </div>
+      )}
     </>
   );
 };
 
-export default page;
+export default Page;

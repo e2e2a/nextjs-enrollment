@@ -58,6 +58,16 @@
 }
 
 @layer utilities {
+  /* PDF */
+  .pdfContainer {
+    width: 816px; /* Width for legal size at 96 DPI */
+    height: 1344px; /* Height for legal size at 96 DPI */
+    background-image: url('/pdf/123.jpg'); /* Path to your image */
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    color: #fff; /* Adjust text color for visibility */
+  }
   /* TYPOGRAPHY */
   .h1-bold {
     @apply text-[36px] font-bold leading-[140%] tracking-tighter;

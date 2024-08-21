@@ -12,7 +12,7 @@ export function ToastDemo() {
       variant="outline"
       onClick={() => {
         toast({
-          description: <ToastDescription>"Friday, February 10, 2023 at 5:57 PM"</ToastDescription>,
+          description: <ToastDescription>&quot;Friday, February 10, 2023 at 5:57 PM&quot;</ToastDescription>,
           action: (
             <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
             

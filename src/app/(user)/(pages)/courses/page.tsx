@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useCourseQuery } from '@/lib/queries';
 
-const page = () => {
+const Page = () => {
   const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
   useEffect(() => {
     if (isCoursesError || !res || !res.courses) {
@@ -56,4 +56,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

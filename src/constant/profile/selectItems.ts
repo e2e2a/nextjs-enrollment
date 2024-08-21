@@ -43,6 +43,10 @@ export const profileSelectItems = {
   ],
   educationAttainment: [
     {
+      title: 'no grade completed/Pre-School(Nursery/Kinder/Prep)',
+      value: 'no grade completed/Pre-School',
+    },
+    {
       title: 'elementary level',
       value: 'elementary level',
     },

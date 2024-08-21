@@ -12,18 +12,6 @@ import React, { ReactNode, useEffect, useState } from 'react';
 const Layout = ({ children }: { children: ReactNode }) => {
   const { data: sessionData } = useSession();
   const [loading, setLoading] = useState(true);
-
-  const [profile, setProfile] = useState({});
-  if (!sessionData) {
-    return redirect('/sign-in');
-  }
-  if (sessionData && !sessionData.user.profileVerified) {
-    return redirect('/profile');
-  }
-  /**
-   * @todo
-   * change this name to use profileQuery instead of exampleQuery
-   */
   const { data: res, isLoading, error } = useProfileQuery(sessionData?.user.id as string);
 
   useEffect(() => {
@@ -34,7 +22,16 @@ const Layout = ({ children }: { children: ReactNode }) => {
     setTimeout(() => {
       setLoading(false);
     }, 500);
-  }, [isLoading, res]);
+  }, [isLoading, res,error]);
+  const [profile, setProfile] = useState({});
+  if (!sessionData) {
+    return redirect('/sign-in');
+  }
+  if (sessionData && !sessionData.user.profileVerified) {
+    return redirect('/profile');
+  }
+  
+  
   return (
     <>
       {loading && <Loader />}
