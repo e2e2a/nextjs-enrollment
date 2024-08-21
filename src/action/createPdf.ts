@@ -13,7 +13,7 @@ export const createPDF = async (checkE: any) => {
     // const pdfDoc = await PDFDocument.create();
     // const page = pdfDoc.addPage([600, 400]);
     // const url = 'https://pdf-lib.js.org/assets/with_update_sections.pdf'
-    const url = 'http://localhost:3000/pdf/Annex-5.pdf';
+    const url = 'https://nextjs-enrollment.vercel.app/pdf/Annex-5.pdf';
     const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer());
     const pdfDoca = await PDFDocument.load(existingPdfBytes);
     const helveticaFont = await pdfDoca.embedFont(StandardFonts.TimesRoman);
