@@ -1,7 +1,10 @@
 'use server';
 import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll } from 'firebase/storage';
+import { storage } from '@/firebase';
 import fs from 'fs';
 import path from 'path';
+import dbConnect from '@/lib/db/db';
 export const createPDF = async (checkE: any) => {
   try {
     console.log('createPDF', checkE);
@@ -427,13 +430,45 @@ export const createPDF = async (checkE: any) => {
     //   // rotate: degrees(-45),
     // })
     // Save the PDF and get bytes
-    const pdfBytes = await pdfDoca.save();
     // const filePath = path.join(__dirname, 'pdf', '../../../../../../../public/pdf/exampldPDF1.pdf');
-    const filePath = path.join(process.cwd(), 'public', 'pdf', 'exampldPDF1.pdf');
-    console.log(`PDF saved to ${filePath}`);
-    fs.writeFileSync(filePath, pdfBytes);
+
+    const pdfBytes = await pdfDoca.save();
+
     // Convert the PDF bytes to base64
     const pdfBase64 = Buffer.from(pdfBytes).toString('base64');
+    const metadata = {
+      contentType: 'application/pdf',
+    };
+    const storageRef = ref(storage, `enrollment/${checkE._id}`);
+    const uploadTask = uploadBytesResumable(storageRef, pdfBytes,metadata);
+    let imageUrl = '';
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        // setProgressUpload(progress);
+        console.log(progress)
+      },  
+      (error) => {
+        // makeToastError(error.message);
+        return console.log(error);
+      },
+      async () => {
+        await getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
+          console.log(url);
+          // const updatedE = await updateEnrollmentPDFById(cc._id, url);
+          // console.log('updatedE', updatedCE);
+        });
+      }
+    );
+
+    // const pdfBytes = await pdfDoca.save();
+
+    // const filePath = path.join(process.cwd(), 'public', 'pdf', 'exampldPDF1.pdf');
+    // console.log(`PDF saved to ${filePath}`);
+    // fs.writeFileSync(filePath, pdfBytes);
+    // // Convert the PDF bytes to base64
+    // const pdfBase64 = Buffer.from(pdfBytes).toString('base64');
 
     return pdfBase64;
   } catch (error) {
