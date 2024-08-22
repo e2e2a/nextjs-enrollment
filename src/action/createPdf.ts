@@ -433,6 +433,9 @@ export const createPDF = async (checkE: any) => {
     // const filePath = path.join(__dirname, 'pdf', '../../../../../../../public/pdf/exampldPDF1.pdf');
 
     const pdfBytes = await pdfDoca.save();
+    if(!pdfBytes){
+      console.log('no pdfbytes')
+    }
 
     // Convert the PDF bytes to base64
     const pdfBase64 = Buffer.from(pdfBytes).toString('base64');
@@ -453,12 +456,12 @@ export const createPDF = async (checkE: any) => {
         // makeToastError(error.message);
         return console.log(error);
       },
-       () => {
+        () => {
          getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
-          console.log(url);
+          console.log('url',url);
           // const updatedE = await updateEnrollmentPDFById(cc._id, url);
           // console.log('updatedE', updatedCE);
-        });
+        }).catch((error) => console.log(error));
       }
     );
 
