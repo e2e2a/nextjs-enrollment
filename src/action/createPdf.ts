@@ -1,6 +1,6 @@
 'use server';
 import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import { ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll } from 'firebase/storage';
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll, uploadBytes } from 'firebase/storage';
 import { storage } from '@/firebase';
 import fs from 'fs';
 import path from 'path';
@@ -442,29 +442,39 @@ export const createPDF = async (checkE: any) => {
     const metadata = {
       contentType: 'application/pdf',
     };
+    // const storageRef = ref(storage, `enrollment/${checkE._id}`);
+    // const uploadTask = uploadBytesResumable(storageRef, pdfBytes,metadata);
+    // let imageUrl = '';
+    // uploadTask.on(
+    //   'state_changed',
+    //   (snapshot) => {
+    //     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    //     // setProgressUpload(progress);
+    //     console.log(progress)
+    //   },  
+    //   (error) => {
+    //     // makeToastError(error.message);
+    //     return console.log(error);
+    //   },
+    //     () => {
+    //      getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
+    //       console.log('url',url);
+    //       // const updatedE = await updateEnrollmentPDFById(cc._id, url);
+    //       // console.log('updatedE', updatedCE);
+    //     }).catch((error) => console.log(error));
+    //   }
+    // );
     const storageRef = ref(storage, `enrollment/${checkE._id}`);
-    const uploadTask = uploadBytesResumable(storageRef, pdfBytes,metadata);
-    let imageUrl = '';
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        // setProgressUpload(progress);
-        console.log(progress)
-      },  
-      (error) => {
-        // makeToastError(error.message);
-        return console.log(error);
-      },
-        () => {
-         getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
-          console.log('url',url);
-          // const updatedE = await updateEnrollmentPDFById(cc._id, url);
-          // console.log('updatedE', updatedCE);
-        }).catch((error) => console.log(error));
-      }
-    );
-
+    uploadBytes(storageRef, pdfBytes, { contentType: 'application/pdf' })
+       .then((snapshot) => {
+          return getDownloadURL(snapshot.ref);
+       })
+       .then((url) => {
+          console.log('File available at', url);
+       })
+       .catch((error) => {
+          console.error('Upload failed:', error);
+       });
     // const pdfBytes = await pdfDoca.save();
 
     // const filePath = path.join(process.cwd(), 'public', 'pdf', 'exampldPDF1.pdf');
