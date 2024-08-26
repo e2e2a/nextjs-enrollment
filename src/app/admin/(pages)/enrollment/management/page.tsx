@@ -3,11 +3,11 @@ import Loader from '@/components/shared/Loader';
 import { useEnrollmentQueryByStep } from '@/lib/queries';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
-import { columns } from './components/columns';
-import { DataTable } from './components/DataTable';
+import { columns } from './components/step1/columns';
+import { DataTable1 } from './components/step1/DataTable';
 import { Button } from '@/components/ui/button';
-import { DialogCloseButton } from './components/dialog';
 import { DataTableDrawer } from './components/Drawer';
+
 interface Enrollment {
   id: string;
   userId: any;
@@ -51,10 +51,17 @@ const Page = () => {
       {isPageLoading ? (
         <Loader />
       ) : (
-        <div className='bg-white min-h-[86vh] py-5 rounded-xl'>
-          {isError ? <div className=''>404</div> : <DataTable columns={columns} data={data?.enrollment as Enrollment[]} />}
+        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
+          {isError ? <div className=''>404</div> : 
+          search === '1' ? <DataTable1 columns={columns} data={data?.enrollment as Enrollment[]} />
+            : search === '2'
+            // : search === '3'
+            // : search === '4'
+          //else if === 2
+          //else if === 3
+          //else if === 4
+          }
           {/* <DataTableDrawer /> */}
-          <DialogCloseButton />
         </div>
       )}
     </>

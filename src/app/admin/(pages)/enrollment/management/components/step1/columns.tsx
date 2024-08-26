@@ -1,15 +1,21 @@
-// @ts-nocheck
+//@ts-nocheck
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
-import { DataTableDrawer } from './Drawer';
+import { DataTableDrawer } from '../Drawer';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { Icons } from '@/components/shared/Icons';
+import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
+import { useState } from 'react';
+import { DialogStep1Button } from './Dialog';
+import ActionsCell from './ActionsCell';
+
 interface Enrollment {
   id: string;
   userId: any;
@@ -26,7 +32,7 @@ export const columns: ColumnDef<Enrollment>[] = [
     header: ({ column }) => {
       return (
         <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Name
+          FullName
           <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       );
@@ -39,7 +45,10 @@ export const columns: ColumnDef<Enrollment>[] = [
         </div>
       );
     },
-    // accessorFn: (row) => console.log('row', row.orignal),
+    accessorFn: (row) => {
+      const { lastname, firstname, middlename } = row.profileId;
+      return `${lastname}, ${firstname} ${middlename}`;
+    },
     filterFn: (row, columnId, filterValue) => {
       const fullName = `${row.original.profileId.lastname}, ${row.original.profileId.firstname}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
@@ -48,17 +57,24 @@ export const columns: ColumnDef<Enrollment>[] = [
 
   {
     accessorFn: (row) => row.courseId.courseCode, // Use accessorFn for nested fields
-    id: 'courseCode',
+    id: 'course Code',
     header: 'Course',
     cell: ({ cell }) => cell.getValue(), // Directly use cell value
   },
   {
-    accessorKey: 'studentYear',
+    accessorFn: (row) => row.studentYear,
+    accessorKey: 'student year',
     header: 'Student Year',
   },
   {
-    accessorKey: 'studentSemester',
+    accessorFn: (row) => row.studentSemester,
+    accessorKey: 'student semester',
     header: 'Student Semester',
+  },
+  {
+    accessorFn: (row) => row.studentStatus,
+    accessorKey: 'student status',
+    header: 'Student Status',
   },
   //   {
   //     accessorKey: 'emailVerified',
@@ -161,45 +177,36 @@ export const columns: ColumnDef<Enrollment>[] = [
   //   },
   // },
   {
-    id: 'examples',
-    header: 'Example',
+    id: 'actions',
+    header: 'Actions',
     cell: ({ row }) => {
+      
       const user = row.original;
-      // const languages = [
-      //   { label: 'English', value: 'en' },
-      //   { label: 'French', value: 'fr' },
-      //   { label: 'German', value: 'de' },
-      //   { label: 'Spanish', value: 'es' },
-      //   { label: 'Portuguese', value: 'pt' },
-      //   { label: 'Russian', value: 'ru' },
-      //   { label: 'Japanese', value: 'ja' },
-      //   { label: 'Korean', value: 'ko' },
-      //   { label: 'Chinese', value: 'zh' },
-      // ] as const;
+     
       return (
-        <div className=''>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-blue-500 px-2 py-0 text-neutral-50 font-medium'}>
-                Options
-                <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent align='center' className='w-[150px] bg-neutral-50 px-1 py-0'>
-              <Command>
-                {/* <CommandInput placeholder='Search language...' /> */}
-                <CommandList>
-                  {/* <CommandEmpty>No language found.</CommandEmpty> */}
-                  <CommandGroup>
-                    
-                    <DataTableDrawer user={user} />
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </div>
+        <ActionsCell user={user} />
       );
     },
   },
+  // {
+  //   id: 'actions',
+  //   header: 'Actions',
+  //   cell: ({ row }) => {
+  //     const user = row.original;
+  //     return (
+  //       <div className=''>
+  //         <div className='flex justify-center items-center w-full gap-1'>
+  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-green-500 px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
+  //             Make an appointment
+  //             <Icons.check className='h-4 w-4' />
+  //           </Button>
+  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-red px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
+  //             Reject
+  //             <Icons.close className='h-4 w-4' />
+  //           </Button>
+  //         </div>
+  //       </div>
+  //     );
+  //   },
+  // },
 ];

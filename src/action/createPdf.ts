@@ -5,15 +5,15 @@ import { storage } from '@/firebase';
 import fs from 'fs';
 import path from 'path';
 import dbConnect from '@/lib/db/db';
+import { updateEnrollmentById } from '@/services/enrollment';
 export const createPDF = async (checkE: any) => {
   try {
     console.log('createPDF', checkE);
-    let mybool = false;
-    // Create a new PDF document
     // const pdfDoc = await PDFDocument.create();
     // const page = pdfDoc.addPage([600, 400]);
     // const url = 'https://pdf-lib.js.org/assets/with_update_sections.pdf'
-    const url = 'https://nextjs-enrollment.vercel.app/pdf/Annex-5.pdf';
+    // const url = 'https://nextjs-enrollment.vercel.app/pdf/Annex-5.pdf';
+    const url = 'http://localhost:3000/pdf/Annex-5.pdf';
     const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer());
     const pdfDoca = await PDFDocument.load(existingPdfBytes);
     const helveticaFont = await pdfDoca.embedFont(StandardFonts.TimesRoman);
@@ -469,8 +469,11 @@ export const createPDF = async (checkE: any) => {
        .then((snapshot) => {
           return getDownloadURL(snapshot.ref);
        })
-       .then((url) => {
+       .then(async (url) => {
           console.log('File available at', url);
+          await dbConnect()
+          const p = await updateEnrollmentById(checkE._id,{pdfUrl: url})
+          return p
        })
        .catch((error) => {
           console.error('Upload failed:', error);

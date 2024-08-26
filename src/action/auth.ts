@@ -87,7 +87,7 @@ export const signUpAction = async (data: any): Promise<SignUpResponse> => {
     if (!checkConflict.success) return { error: checkConflict?.error, status: checkConflict?.status };
 
     const newUser = await creatingUser(email, username, password);
-    console.log('newUser auth:', newUser)
+    console.log('newUser auth:', newUser);
     return { message: 'Confirmation email sent!', token: newUser.token, status: 201 };
   } catch (error) {
     return { error: 'Something went wrong.', status: 500 };

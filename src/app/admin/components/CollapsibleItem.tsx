@@ -20,7 +20,7 @@ const CollapsibleItem = ({ Icon, item }: IProps) => {
           <Button type='button' className={`group select-none border-0 w-full hover:bg-slate-300  ${isOpen && 'bg-slate-300 bg-opacity-70'} px-5 py-6 flex space-x-3 items-center gap-x-1 pl-3 justify-start`}>
             <Icon className={`h-7 w-7 group-hover:stroke-blue-500 ${isOpen && 'stroke-blue-500'}`} />
             <div className='flex items-center w-full justify-between'>
-              <span className='text-stroke-4  stroke-black text-sm tracking-tight '>{item.title}</span>
+              <span className='font-semibold  stroke-black text-sm tracking-tight '>{item.title}</span>
               <ChevronsUpDown className='h-4 w-4' />
             </div>
           </Button>
@@ -36,7 +36,7 @@ const CollapsibleItem = ({ Icon, item }: IProps) => {
                   {/* <Link key={e} href={''} className='flex w-full select-none'> */}
                   <Button type='button' className='group select-none border-0 w-full hover:bg-slate-300 px-5 py-6 flex space-x-2 items-center gap-x-1 justify-start pl-3'>
                     <Icon className='h-6 w-6 group-hover:stroke-blue-500' />
-                    <span className='text-stroke-3  stroke-black text-sm tracking-tight'>{i.title}</span>
+                    <span className='font-medium  stroke-black text-sm tracking-tight'>{i.title}</span>
                   </Button>
                 </Link>
               ) : (

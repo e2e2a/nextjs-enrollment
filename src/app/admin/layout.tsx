@@ -20,12 +20,11 @@ const AdminRootLayout = ({ children }: { children: ReactNode }) => {
     if (error || !res || !res.profile) {
       return;
     }
-    if (res)
-      setProfile(res.profile);
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
-  }, [isLoading, res,error]);
+    if (res) setProfile(res.profile);
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  }, [isLoading, res, error]);
   if (!session) {
     return redirect('/sign-in');
   }
@@ -33,7 +32,6 @@ const AdminRootLayout = ({ children }: { children: ReactNode }) => {
     return redirect('/profile');
   }
 
-  
   return (
     <>
       {session ? (
@@ -48,10 +46,8 @@ const AdminRootLayout = ({ children }: { children: ReactNode }) => {
               <SidebarNav items={dashboardConfig.sidebarAdmin} profile={profile} />
             </div>
             <main className='py-2 w-full md:py-4 px-1 md:px-5 xl:px-7 flex flex-1 flex-col overflow-hidden'>
-    <div className="overflow-y-auto overflow-x-auto flex-1 w-full">
-      {children}
-    </div>
-  </main>
+              <div className='overflow-y-auto overflow-x-auto flex-1 w-full'>{children}</div>
+            </main>
           </div>
         </div>
       ) : (

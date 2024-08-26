@@ -180,13 +180,13 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
             <p className='small-regular md:body-medium text-light-3 text-center'>@{profile.userId.username}</p>
           </div>
         </div>
-        <div className='flex justify-center'>
+        {/* <div className='flex justify-center'>
           <div className={``}>
             <Button type='button' className='shad-button_primary px-8'>
               Enroll now!
             </Button>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

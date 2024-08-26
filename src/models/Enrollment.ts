@@ -8,7 +8,9 @@ export interface IEnrollment extends Document {
   studentSemester?: string;
   onProcess: Boolean;
   step: Number;
+  pdfUrl: string;
   enrollStatus?: 'Pending' | 'Approved' | 'Rejected';
+  blockType: string;
   studentStatus?: 'New Student' | 'Continued' | 'Completed';
   studentType?: 'Regular' | 'Non-Regular';
   scholarType: 'TWSP' | 'STEP' | 'PESFA' | 'UAQTEA' | 'None';
@@ -51,6 +53,9 @@ const schema = new Schema<IEnrollment>(
     // },
     onProcess: { type: Boolean, default: false },
     step: { type: Number, default: 1 },
+    pdfUrl: {
+      type: String,
+    },
     enrollStatus: {
       type: String,
       default: 'Pending',
@@ -62,6 +67,9 @@ const schema = new Schema<IEnrollment>(
       enum: ['New Student', 'Continue', 'Completed'],
     },
     // onAccepted: { type: String, default: 'Accepted', enum: ['Accepted', 'Decline'] },
+    blockType: {
+      type: String,
+    },
     studentType: {
       type: String,
       enum: ['Regular', 'Non-Regular'],

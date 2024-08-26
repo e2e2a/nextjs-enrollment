@@ -7,50 +7,33 @@ import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useEffect, useState } from 'react';
 import Step1 from './Step1';
 import { useSession } from 'next-auth/react';
-type IProps ={
+import Step2 from './Step2';
+type IProps = {
   search: any;
-  enrollment: any
-}
-const EnrollmentForms = ({search, enrollment}: IProps) => {
-  const [value, setValue] = useState(1);
-  useEffect(() => {}, [value]);
-
+  enrollment: any;
+};
+const EnrollmentForms = ({ search, enrollment }: IProps) => {
+  // if (!enrollment) return;
+  const [value, setValue] = useState('');
+  useEffect(() => {
+    if (enrollment && enrollment.step) return setValue(enrollment.step as string);
+    if (!enrollment) return setValue('1');
+  }, [value, enrollment]);
   return (
     <div className=''>
       <div className='flex flex-col gap-y-4 justify-center items-center'>
         <div className='text-center font-semibold tracking-wider font-poppins pointer-events-none select-none'>Enrollment Progress</div>
         <div className='w-full flex flex-row gap-6 bg-transparent justify-center pointer-events-none select-none'>
-          <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == 1 ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>1</div>
-          <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == 2 ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>2</div>
-          <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == 3 ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>3</div>
+          <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '1' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>1</div>
+          <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '2' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>2</div>
+          <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '3' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>3</div>
           {/* <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == 4 ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>4</div> */}
         </div>
       </div>
       <Tabs value={`${value}`} className='w-full gap-4 mt-5'>
-        <Step1 search={search} enrollment={enrollment}/>
+        <Step1 search={search} enrollment={enrollment} />
+        <Step2 enrollment={enrollment} />
 
-
-        <TabsContent value='2'>
-          <Card>
-            <CardHeader>
-              <CardTitle>Password</CardTitle>
-              <CardDescription>Change your password here. After saving, you&apos;ll be logged out.</CardDescription>
-            </CardHeader>
-            <CardContent className='space-y-2'>
-              <div className='space-y-1'>
-                <Label htmlFor='current'>Current password</Label>
-                <Input id='current' type='password' />
-              </div>
-              <div className='space-y-1'>
-                <Label htmlFor='new'>New password</Label>
-                <Input id='new' type='password' />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button>Save password</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
         <TabsContent value='3'>
           <Card>
             <CardHeader>

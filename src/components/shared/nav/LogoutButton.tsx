@@ -16,7 +16,7 @@ const LogoutButton = () => {
   return (
     <Button type='button' className='group select-none border-0 w-full hover:bg-slate-300 hover:bg-opacity-70 px-5 py-6 flex space-x-2 items-center gap-x-1 justify-start pl-3'>
       <Icons.logout className='h-7 w-7 group-hover:stroke-blue-500' />
-      <span className='text-stroke-4 text-[15px] tracking-tight' onClick={handleSubmit}>Sign out</span>
+      <span className='font-semibold text-sm tracking-tight' onClick={handleSubmit}>Sign out</span>
     </Button>
   );
 };

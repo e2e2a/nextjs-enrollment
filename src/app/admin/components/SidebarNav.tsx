@@ -38,7 +38,7 @@ export function SidebarNav({ items, profile }: DashboardNavProps) {
             </div>
             <div className='flex items-center p-2'>
               <div className='flex flex-col leading-none'>
-                <p className={`text-stroke-4 text-sm capitalize`}>{session?.firstname && session?.lastname ? `${session?.firstname} ${session.lastname}` : `${session?.username}`}</p>
+                <p className={`font-semibold text-sm capitalize`}>{session?.firstname && session?.lastname ? `${session?.firstname} ${session.lastname}` : `${session?.username}`}</p>
               </div>
             </div>
           </Link>
@@ -49,7 +49,7 @@ export function SidebarNav({ items, profile }: DashboardNavProps) {
               <Link key={index} href={item.disabled ? '/' : item.href} className='flex w-full select-none'>
                 <Button type='button' className='group select-none border-0 w-full hover:bg-slate-300 px-5 py-6 flex space-x-2 items-center gap-x-1 justify-start pl-3'>
                   <Icon className='h-7 w-7 group-hover:stroke-blue-500' />
-                  <span className='text-stroke-4  stroke-black text-sm tracking-tight'>{item.title}</span>
+                  <span className='font-semibold text-sm tracking-tight'>{item.title}</span>
                 </Button>
               </Link>
             ) : (

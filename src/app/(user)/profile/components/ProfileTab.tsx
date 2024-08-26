@@ -144,7 +144,7 @@ const ProfileTab = ({ profile }: Iprops) => {
           </CardHeader>
           {/* note if its not editable its pb-0 @button */}
           <CardContent className=''>
-            <div className={`flex flex-col lg:flex-row lg:gap-8 ${isNotEditable ? 'justify-around ': 'px-11'}`}>
+            <div className={`flex flex-col lg:flex-row lg:gap-8 ${isNotEditable ? 'justify-around ': 'px-0 lg:px-11'}`}>
               <div className={`flex-col flex gap-4 ${isNotEditable ? '' : 'flex-1'}`}>
                 <div className='flex-1 mb-5 lg:mb-0'>
                   <h1 className='text-lg font-bold border-b text-center lg:text-left'>Manpower Profile</h1>
@@ -211,7 +211,7 @@ const ProfileTab = ({ profile }: Iprops) => {
                       <h1 className={`${isNotEditable ? 'flex flex-row text-lg font-bold border-b lg:text-left text-center' : 'hidden'}`}>Course/Qualification:</h1>
                       <div className={`space-y-3 mt-2 mb-3`}>
                         <div className='flex flex-row'>
-                          <span className='font-medium'>Department:</span>
+                          <span className='font-medium px-1'>Department:</span>
                           <span className='font-normal flex w-full items-center px-1 gap-2 text-center'>Diploma Program in Information Technology</span>
                         </div>
                       </div>

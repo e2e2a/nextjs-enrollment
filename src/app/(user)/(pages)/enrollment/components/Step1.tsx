@@ -19,16 +19,15 @@ type IProps = {
   enrollment: any;
 };
 const Step1 = ({ search, enrollment }: IProps) => {
-  console.log('enrollment step: ', enrollment);
   const { data: s } = useSession();
-  const session = s?.user;
   const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
   useEffect(() => {
+    if(!enrollment) return
     if (isCoursesError || !res || !res.courses) {
       return;
     }
-    // if (res) console.log('courses logs:', res.courses)
-  }, [res, isCoursesLoading, isCoursesError]);
+    if (res) console.log('courses logs:', res.courses)
+  }, [res, isCoursesLoading, isCoursesError,enrollment]);
   const mutation = useEnrollmentStep1Mutation();
   const deleteMutation = useEnrollmentDeleteMutation();
   const form = useForm<z.infer<typeof EnrollmentStep1>>({
@@ -43,7 +42,7 @@ const Step1 = ({ search, enrollment }: IProps) => {
     console.log(data);
     const EData = {
       ...data,
-      userId: session?.id,
+      userId: s?.user.id,
     };
     mutation.mutate(EData, {
       onSuccess: (res) => {
@@ -100,16 +99,29 @@ const Step1 = ({ search, enrollment }: IProps) => {
               <CardTitle className=' hidden'>Waiting for Approval!</CardTitle>
               <CardDescription className='text-center hidden'></CardDescription>
             </CardHeader>
-            <CardContent className='flex w-full justify-center flex-col items-center border-0 focus-visible:ring-0 space-y-5 px-0 mx-0'>
+            <CardContent className='flex w-full justify-center flex-col rounded-lg shadow-sm bg-white items-center border focus-visible:ring-0 space-y-5 px-0 mx-0'>
               <div className='w-full flex flex-col items-center justify-center h-full'>
                 <div className='w-full flex justify-center items-center md:my-4'>
-                    <Icons.hourglass className='md:h-14 md:w-14 h-10 w-10 my-3 stroke-green-400 animate-spin' style={{ animationDuration: '6s' }}/>
+                  <Icons.hourglass className='md:h-14 md:w-14 h-10 w-10 my-3 stroke-green-400 animate-spin' style={{ animationDuration: '6s' }} />
                 </div>
-                <h1 className='text-center text-xl sm:text-3xl font-bold font-poppins text-green-400'>Wating for Approval!</h1>
-                <span className='text-sm text-center mt-2'>This may take time to review your credentials. We will notify you as soon as possible.</span>
+                <h1 className='text-center text-xl sm:text-3xl font-bold font-poppins text-green-400 px-4'>Awaiting Confirmation!</h1>
+                <span className='text-sm text-left sm:mt-10 mt-5 w-full px-5 sm:px-10'>
+                  Dear{' '}
+                  <span className='font-semibold capitalize'>
+                    <span className='capitalize'>{enrollment.profileId.firstname} </span>
+                    <span className='capitalize'>{enrollment.profileId.lastname}</span>
+                  </span>
+                  ,
+                </span>
+                <span className='text-sm text-left mt-4 px-5 sm:px-10 w-full'>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please wait a couple of hours, once the administrator sees your submission, they will begin reviewing your credentials and process it right away. After approval, you will automatically proceed to step 2, and we will notify you via email
+                  and on this website. If you have any questions or need further assistance, please do not hesitate to contact us +639123456789
+                </span>
               </div>
               <div className='flex flex-col w-full space-y-3'>
-                <span className='text-center text-sm text-muted-foreground'>If you are undecided with your course you can cancel it anytime.</span>
+                <span className='text-left sm:text-center w-full px-5 sm:px-10 mt-5 sm:mt-10 text-sm text-muted-foreground'>
+                  <span className=' relative sm:hidden'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>If you are undecided with your course you can cancel it anytime.
+                </span>
                 <div className=' w-full flex justify-center items-center'>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>

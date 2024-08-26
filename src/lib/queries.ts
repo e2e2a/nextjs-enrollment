@@ -22,7 +22,7 @@ import {
   verificationCodeResendResponse,
 } from '@/types';
 import { fetchAllUsers } from './api';
-import { EnrollmentApprovedStep1, NewPasswordValidator, SigninValidator, SignupValidator, StudentProfileValidator } from './validators/Validator';
+import { EnrollmentApprovedStep2, NewPasswordValidator, SigninValidator, SignupValidator, StudentProfileValidator } from './validators/Validator';
 import { z } from 'zod';
 import { signInAction, signUpAction } from '@/action/auth';
 import { checkResetPasswordToken, checkToken } from '@/action/token';
@@ -33,7 +33,7 @@ import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updat
 import { getStudentProfileBySessionId, getStudentProfileByUsernameAction } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses } from '@/action/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction } from '@/action/enrollment/user';
-import { approvedEnrollmentStep1Action, getEnrollmentByStepAction } from '@/action/enrollment/admin';
+import { approvedEnrollmentStep1Action, approvedEnrollmentStep2Action, getEnrollmentByStepAction } from '@/action/enrollment/admin';
 
 // ============================================================
 // AUTH QUERIES
@@ -146,11 +146,11 @@ export const useProfileQuery = (id: any) => {
     retry: 0,
     refetchOnWindowFocus: false,
   });
-};  
+};
 
 export const useProfileQueryByUsername = (username: string) => {
   return useQuery<getSingleProfileResponse, Error>({
-    queryKey: ['userProfile', username],
+    queryKey: ['userProfile'],
     queryFn: () => getStudentProfileByUsernameAction(username),
     retry: 0,
     refetchOnWindowFocus: false,
@@ -206,12 +206,7 @@ export const useEnrollmentQuery = (data: any) => {
     queryFn: () => getSingleEnrollmentAction(data),
     retry: 0,
     refetchOnMount: false,
-    /**
-     * this refetch interval is will be used in production
-     */
-    // refetchInterval: 5000,
     refetchOnWindowFocus: false,
-    // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
 
@@ -221,14 +216,21 @@ export const useEnrollmentQueryByStep = (step: any) => {
     queryFn: () => getEnrollmentByStepAction(step),
     retry: 0,
     enabled: !!step,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    // refetchInterval: 2000, //2s
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 };
 
 export const useApprovedEnrollmentStep1Mutation = () => {
-  return useMutation<getEnrollmentResponse, Error, z.infer<typeof EnrollmentApprovedStep1>>({
+  return useMutation<getEnrollmentResponse, Error, any>({
     mutationFn: async (data) => approvedEnrollmentStep1Action(data),
+  });
+};
+
+export const useApprovedEnrollmentStep2Mutation = () => {
+  return useMutation<getEnrollmentResponse, Error, z.infer<typeof EnrollmentApprovedStep2>>({
+    mutationFn: async (data) => approvedEnrollmentStep2Action(data),
   });
 };
 
@@ -237,9 +239,10 @@ export const useEnrollmentStep1Mutation = () => {
   return useMutation<getEnrollmentResponse, Error, any>({
     mutationFn: async (data) => createEnrollmentAction(data),
     onSuccess: () => {
-      // Invalidate the 'userProfile' query to trigger a refetch
       queryClient.refetchQueries({ queryKey: ['Enrollment'] });
-      // queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
+    },
+    onError: (error) => {
+      console.error('Error during mutation:', error);
     },
   });
 };
@@ -249,9 +252,7 @@ export const useEnrollmentDeleteMutation = () => {
   return useMutation<IResponse, Error, any>({
     mutationFn: async (data) => deleteEnrollmentAction(data),
     onSuccess: () => {
-      // Invalidate the 'userProfile' query to trigger a refetch
       queryClient.refetchQueries({ queryKey: ['Enrollment'] });
-      // queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
     },
   });
 };

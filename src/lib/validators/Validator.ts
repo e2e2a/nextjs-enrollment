@@ -92,13 +92,16 @@ export const CourseValidator = z.object({
   description: z.string().min(1, { message: 'year must atleast 6 characters.' }),
 });
 
+export const EnrollmentBlockTypeValidator = z.object({
+  blockType: z.string().min(1, { message: 'Block Type is required...' }),
+});
 export const EnrollmentStep1 = z.object({
   courseCode: z.string().min(1, { message: 'course is required...' }),
   studentYear: z.string().min(1, { message: 'year must atleast 1 characters.' }),
   studentSemester: z.string().min(1, { message: 'year must atleast 6 characters.' }),
 });
 
-export const EnrollmentApprovedStep1 = z.object({
+export const EnrollmentApprovedStep2 = z.object({
   studentType: z.string().min(1, { message: 'course is required...' }),
   scholarType: z.string().min(1, { message: 'year must atleast 1 characters.' }),
 });

@@ -3,7 +3,6 @@ import Enrollment from '@/models/Enrollment';
 
 export const createEnrollment = async (data: any) => {
   try {
-    console.log('serverdata', data);
     const newE = new Enrollment({
       ...data,
     });
@@ -17,11 +16,7 @@ export const createEnrollment = async (data: any) => {
 
 export const getEnrollmentById = async (id: any) => {
   try {
-    /**
-     * @todo
-     * populate userId, courseId and the ProfileId in the user fields
-     */
-    const e = await Enrollment.findById(id).populate('userId').populate('courseId').populate('profileId');
+    const e = await Enrollment.findById(id).populate('userId').populate('courseId').populate('profileId').exec();;
     // return JSON.parse(JSON.stringify(e));
     return e;
   } catch (error) {
@@ -32,8 +27,8 @@ export const getEnrollmentById = async (id: any) => {
 
 export const getEnrollmentByUserId = async (userId: string) => {
   try {
-    const enrollment = await Enrollment.findOne({ userId });
-    console.log('i am exec...', enrollment);
+    const enrollment = await Enrollment.findOne({ userId }).populate('userId').populate('courseId').populate('profileId').exec();
+    // console.log('i am exec...', enrollment);
     return JSON.parse(JSON.stringify(enrollment));
   } catch (error) {
     console.log(error);
@@ -43,7 +38,6 @@ export const getEnrollmentByUserId = async (userId: string) => {
 
 export const getEnrollmentByStep = async (step: number) => {
   try {
-    // console.log('i am exec...', step);
     const enrollment = await Enrollment.find({ step })
       .populate('userId') // Populate the `userId` reference
       .populate('courseId') // Populate the `courseId` reference
@@ -51,6 +45,18 @@ export const getEnrollmentByStep = async (step: number) => {
       .exec();
     // console.log('i am exec...', enrollment);
     return JSON.parse(JSON.stringify(enrollment));
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const updateEnrollmentById = async (id: any, data: any) => {
+  try {
+    // console.log('i am exec...', step);
+    const e = await Enrollment.findByIdAndUpdate(id, { ...data }, { new: true });
+    // console.log('i am exec...', enrollment);
+    return e;
   } catch (error) {
     console.log(error);
     return null;

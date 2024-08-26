@@ -17,6 +17,7 @@ import Loader from '@/components/shared/Loader';
 import ErrorPage from '../components/ErrorPage';
 
 const ProfilePage = () => {
+  console.log('heelllooo')
   const { data } = useSession();
   const [isError, setIsError] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
@@ -48,6 +49,7 @@ const ProfilePage = () => {
       setLoading(false);
       return;
     }
+    console.log('asdasdasdres', res)
     if (session?.role !== 'ADMIN') {
       if (res?.profile === 'HIDE') {
         setIsError(true);
@@ -55,7 +57,9 @@ const ProfilePage = () => {
         return;
       }
     }
+    if(res){
     setProfile(res.profile);
+  }
     setLoading(false);
   }, [isLoading, error, res, profile, session]);
   return (
