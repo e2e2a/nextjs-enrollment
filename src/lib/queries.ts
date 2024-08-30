@@ -37,7 +37,7 @@ import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentActi
 import { approvedEnrollmentStep1Action, approvedEnrollmentStep2Action, getEnrollmentByStepAction, undoEnrollmentToStep } from '@/action/enrollment/admin';
 import { createCourseBlockAction, getAllBlockTypeAction } from '@/action/courses/blocks';
 import { io } from 'socket.io-client';
-const socket = io('http://localhost:3000'); 
+const socket = io('https://nextjs-enrollment.vercel.app'); 
 // ============================================================
 // AUTH QUERIES
 // ============================================================
