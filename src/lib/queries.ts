@@ -36,11 +36,15 @@ import { createCourseAction, getAllCourses } from '@/action/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction } from '@/action/enrollment/user';
 import { approvedEnrollmentStep1Action, approvedEnrollmentStep2Action, getEnrollmentByStepAction, undoEnrollmentToStep } from '@/action/enrollment/admin';
 import { createCourseBlockAction, getAllBlockTypeAction } from '@/action/courses/blocks';
-import { io } from 'socket.io-client';
-const socket = io('https://nextjs-enrollment.vercel.app/socket.io'); 
+import { supabase } from './supabaseClient';
 // ============================================================
 // AUTH QUERIES
 // ============================================================
+const myChannel = supabase.channel('global-channel', {
+  config: {
+    broadcast: { ack: true },
+  },
+});
 export const useSignInMutation = () => {
   return useMutation<SignInResponse, Error, z.infer<typeof SigninValidator>>({
     mutationFn: async (data) => signInAction(data),
@@ -261,16 +265,15 @@ export const useApprovedEnrollmentStep1Mutation = () => {
   const queryClient = useQueryClient();
   return useMutation<getEnrollmentResponse, Error, any>({
     mutationFn: async (data) => approvedEnrollmentStep1Action(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
-      socket.emit('refresh-data', { key: 'EnrollmentByStep' });
-      /**
-       * @todo use broadcast in logout
-       */
-      // Broadcast the query key to other tabs/windows
-      // const channel = new BroadcastChannel('my-channel');
-      // channel.postMessage({ type: 'data-updated', queryKey: 'EnrollmentByStep' });
-      // channel.postMessage({ type: 'data-updated', queryKey: 'Enrollment' });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{queryKey: 'EnrollmentByStep'}, {querKey: 'Enrollment'}] },
+      });
+      console.log('Server response:', serverResponse);
+
     },
   });
 };

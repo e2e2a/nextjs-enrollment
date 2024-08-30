@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import Providers from '@/lib/query-provider';
 import { auth } from '@/auth';
 import Broadcast from '@/lib/Broadcast';
-import { SocketProvier } from '@/lib/Socket';
+import MessageListener from '@/lib/MessageListener';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,11 +22,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       {/* <body className={`custom-scrollbar-body ${inter.className}`} > */}
       <body className={inter.className}>
         <Providers sessionData={sessionData}>
-          <Broadcast />
-          <SocketProvier>
+          <MessageListener>
+            <Broadcast />
             {children}
             <Toaster position='top-center' reverseOrder={false} />
-          </SocketProvier>
+          </MessageListener>
         </Providers>
       </body>
     </html>
