@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { io } from 'socket.io-client';
 
-export const socket = io('https://nextjs-enrollment.vercel.app', {
+export const socket = io('https://nextjs-enrollment.vercel.app/socket.io', {
   path: '/socket.io', // Same path as server configuration
   transports: ['websocket', 'polling'],
 });
