@@ -1,5 +1,6 @@
 import mongoose, { Schema, models, model } from 'mongoose';
 import Course from './Course';
+import { string } from 'zod';
 export interface IEnrollment extends Document {
   userId: mongoose.Schema.Types.ObjectId;
   profileId: mongoose.Schema.Types.ObjectId;
@@ -11,6 +12,7 @@ export interface IEnrollment extends Document {
   pdfUrl: string;
   enrollStatus?: 'Pending' | 'Approved' | 'Rejected';
   blockType: string;
+  isStudentProfile: string;
   studentStatus?: 'New Student' | 'Continued' | 'Completed';
   studentType?: 'Regular' | 'Non-Regular';
   scholarType: 'TWSP' | 'STEP' | 'PESFA' | 'UAQTEA' | 'None';
@@ -68,6 +70,9 @@ const schema = new Schema<IEnrollment>(
     },
     // onAccepted: { type: String, default: 'Accepted', enum: ['Accepted', 'Decline'] },
     blockType: {
+      type: String,
+    },
+    isStudentProfile:{
       type: String,
     },
     studentType: {

@@ -1,4 +1,5 @@
 import {
+  RotateCcw,
   Hourglass,
   PackageSearch,
   Eye,
@@ -47,6 +48,7 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
+  rotateCcw: RotateCcw,
   hourglass: Hourglass,
   packageSearch: PackageSearch,
   eye: Eye,

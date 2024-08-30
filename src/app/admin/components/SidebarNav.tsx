@@ -1,18 +1,16 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
-import { SidebarNavItem, SidebarNavItemAdmin } from '@/types';
+import { SidebarNavItemAdmin } from '@/types';
 import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
-
-import { useState } from 'react';
-
 import { UserAvatar } from '@/components/shared/nav/UserAvatar/UserAvatar';
 import { Icons } from '@/components/shared/Icons';
 import LogoutButton from '@/components/shared/nav/LogoutButton';
 import NavbarFooter from '@/components/shared/nav/NavbarFooter';
 import CollapsibleItem from './CollapsibleItem';
+import { useBlockCourseQuery } from '@/lib/queries';
+import { useEffect, useState } from 'react';
 
 interface DashboardNavProps {
   items: SidebarNavItemAdmin[];
@@ -21,8 +19,8 @@ interface DashboardNavProps {
 
 export function SidebarNav({ items, profile }: DashboardNavProps) {
   const path = usePathname();
-  
   const { data } = useSession();
+  
   const session = data?.user;
   if (!items?.length) {
     return null;
@@ -42,7 +40,6 @@ export function SidebarNav({ items, profile }: DashboardNavProps) {
               </div>
             </div>
           </Link>
-
           {items.map((item, index) => {
             const Icon = Icons[item.icon || 'arrowRight'];
             return item.href ? (
@@ -53,8 +50,8 @@ export function SidebarNav({ items, profile }: DashboardNavProps) {
                 </Button>
               </Link>
             ) : (
-              <div className="w-full" key={index}>
-                <CollapsibleItem item={item}Icon={Icon}  />
+              <div className='w-full' key={index}>
+                <CollapsibleItem item={item} Icon={Icon} />
               </div>
             );
           })}

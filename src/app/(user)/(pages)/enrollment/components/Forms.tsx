@@ -16,8 +16,8 @@ const EnrollmentForms = ({ search, enrollment }: IProps) => {
   // if (!enrollment) return;
   const [value, setValue] = useState('');
   useEffect(() => {
-    if (enrollment && enrollment.step) return setValue(enrollment.step as string);
     if (!enrollment) return setValue('1');
+    if (enrollment && enrollment.step) return setValue(enrollment.step as string);
   }, [value, enrollment]);
   return (
     <div className=''>

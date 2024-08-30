@@ -258,3 +258,17 @@ export type getSingleEnrollmentResponse = {
 export type getEnrollmentResponse = {
   enrollment?: IEnrollment[];
 }& IResponse;
+
+type IBlockType ={
+  id?: any
+  _id: any;
+  courseId: any;
+  semester: string;
+  year: string;
+  section: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export type getBlockCourseResponse = {
+  blockTypes?: IBlockType[];
+}& IResponse;

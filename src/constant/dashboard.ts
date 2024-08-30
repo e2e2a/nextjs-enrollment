@@ -91,6 +91,22 @@ export const dashboardConfig: DashboardConfig = {
       title: 'Courses',
       i: [
         {
+          title: 'Course Blocks',
+          i: [
+            {
+              title: 'Block Management',
+              href: '/admin/courses/blocks',
+              icon: 'eye',
+            },
+            {
+              title: 'Add Block',
+              href: '/admin/courses/blocks/add',
+              icon: 'add',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
           title: 'Preview Course Page',
           href: '/courses',
           icon: 'eye',
@@ -117,25 +133,25 @@ export const dashboardConfig: DashboardConfig = {
             {
               title: 'Step 1 Management',
               href: '/admin/enrollment/management?step=1',
-              icon: 'packageSearch',
+              icon: 'eye',
             },
             {
               title: 'Step 2 Management',
               href: '/admin/enrollment/management?step=2',
-              icon: 'packageSearch',
+              icon: 'eye',
             },
             {
               title: 'Step 3 Management',
               href: '/admin/enrollment/management?step=3',
-              icon: 'packageSearch',
+              icon: 'eye',
             },
             {
               title: 'Step 4 Management',
               href: '/admin/enrollment/management?step=4',
-              icon: 'packageSearch',
+              icon: 'eye',
             },
           ],
-          icon: 'eye',
+          icon: 'packageSearch',
         },
         {
           title: 'Course Inventory',

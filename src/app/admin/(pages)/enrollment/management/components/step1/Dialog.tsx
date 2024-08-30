@@ -11,12 +11,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { EnrollmentBlockTypeValidator } from '@/lib/validators/Validator';
 import { selectType } from '@/constant/enrollment';
 import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
+import Image from 'next/image';
+import { useState } from 'react';
 
 type IProps = {
   isPending: boolean;
   user: any;
 };
-export function DialogStep1Button({ isPending, user }: IProps) {
+export function DialogStep1Button({ isPending, user}: IProps) {
+  const [loader, setLoader] = useState<boolean>(false);
+
   const mutation = useApprovedEnrollmentStep1Mutation();
   const form = useForm<z.infer<typeof EnrollmentBlockTypeValidator>>({
     resolver: zodResolver(EnrollmentBlockTypeValidator),
@@ -58,7 +62,7 @@ export function DialogStep1Button({ isPending, user }: IProps) {
       <DialogTrigger asChild>
         <Button size={'sm'} className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}>
           <Icons.check className='h-4 w-4' />
-          Confirm Enrollee
+          Complete Current Step
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -69,8 +73,8 @@ export function DialogStep1Button({ isPending, user }: IProps) {
         }}
       >
         <DialogHeader>
-          <DialogTitle className='flex flex-col'>
-            <span>Confirm Enrollee</span>{' '}
+          <DialogTitle className='flex flex-col space-y-1'>
+            <span>Complete Current Step</span>{' '}
             <span className='text-sm sm:text-[15px] font-normal'>
               Student Name:{' '}
               <span className='text-sm sm:text-[15px] font-medium capitalize'>
@@ -80,9 +84,17 @@ export function DialogStep1Button({ isPending, user }: IProps) {
           </DialogTitle>
           <DialogDescription>To confirm the enrollee, please fill in the required input indicating the type of block assigned to them.</DialogDescription>
         </DialogHeader>
-        {/* here */}
+
         <Form {...form}>
           <form action='' method='post'>
+            {loader && (
+              <div className=' absolute inset-0 flex justify-center top-0 items-center bg-transparent z-50 select-none'>
+                <div className='flex flex-col items-center'>
+                  <Image src='/icons/loader.svg' alt='loader' width={48} height={48} priority className='animate-spin' />
+                  <p className='mt-4 text-gray-700'>Loading...</p>
+                </div>
+              </div>
+            )}
             <FormField
               control={form.control}
               name={'blockType'}

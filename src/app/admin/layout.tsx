@@ -14,8 +14,7 @@ const AdminRootLayout = ({ children }: { children: ReactNode }) => {
   const { data: session } = useSession();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState({});
-  const { data: res, isLoading, error } = useProfileQuery(session?.user.id as string);
-
+  const { data: res, isLoading, error } = useProfileQuery(session?.user.id as string)
   useEffect(() => {
     if (error || !res || !res.profile) {
       return;

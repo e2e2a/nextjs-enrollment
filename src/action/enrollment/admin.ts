@@ -22,11 +22,10 @@ export const getEnrollmentByStepAction = async (userId: any): Promise<getEnrollm
 
 export const approvedEnrollmentStep1Action = async (data: any): Promise<getEnrollmentResponse> => {
   try {
-    console.log('server e :', data);
     await dbConnect();
     const checkE = await getEnrollmentById(data.EId);
     if (!checkE) return { error: 'id not valid', status: 500 };
-    const pdf = await sendEmailWithPDF(checkE);
+    // const pdf = await sendEmailWithPDF(checkE);
     await updateEnrollmentById(data.EId, { step: 2, blockType: data.blockType });
 
     return { enrollment: [], status: 200 };
@@ -38,19 +37,10 @@ export const approvedEnrollmentStep1Action = async (data: any): Promise<getEnrol
 
 export const approvedEnrollmentStep2Action = async (data: any): Promise<getEnrollmentResponse> => {
   try {
-    console.log('server e :', data);
     await dbConnect();
     const checkE = await getEnrollmentById(data.EId);
     if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
-    sendEmailWithPDF(checkE);
-    //update step to 2
-    //update onProcess to false
-
-    // next step is to update the data in enrollment by using checkE._id
-    // deliver a notification
-    // and deliver a email notification
-    // last step is to send an email notification with pdf file
-    // console.log('server e :', checkE);
+    await sendEmailWithPDF(checkE);
     return { enrollment: [], status: 200 };
   } catch (error) {
     console.log('server e :', error);
@@ -101,5 +91,21 @@ const sendEmailWithPDF = async (checkE: any) => {
     return;
   } catch (error) {
     console.error('Error sending email:', error);
+  }
+};
+
+export const undoEnrollmentToStep = async (data: any): Promise<getEnrollmentResponse> => {
+  try {
+    await dbConnect();
+    const checkE = await getEnrollmentById(data.EId);
+    if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
+    data.step = checkE.step as number - 1;
+    data.blockType = '';
+    const updated = await updateEnrollmentById(data.EId, { ...data });
+    console.log('success', updated);
+    return { enrollment: [], status: 200 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
   }
 };

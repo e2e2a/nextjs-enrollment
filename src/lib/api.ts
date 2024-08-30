@@ -57,3 +57,8 @@ export const fetchAllUsers = async () => {
 
   return res;
 };
+export const fetchAllEnrollments = async () => {
+  const res = await fetchURL('/api/enrollment/step1', 'GET', 'Failed to fetch all users. Please try again a few minutes.');
+
+  return res;
+};

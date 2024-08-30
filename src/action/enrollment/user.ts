@@ -47,7 +47,7 @@ export const deleteEnrollmentAction = async (EId: any): Promise<IResponse> => {
     await dbConnect();
     const e = await getEnrollmentById(EId);
     if (!e) return { error: 'You are deleting with non-existing enrollment.', status: 403 };
-    console.log('server e :', e);
+    if(e.step != 1) return { error: 'You are deleting with non-existing enrollment.', status: 403 };
     const deletedE = await deleteEnrollmentById(EId);
     if (!deletedE) return { error: 'Something went wrong.', status: 500 };
     return { message: 'Deleted successfully', status: 201 };

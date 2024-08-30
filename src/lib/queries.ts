@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tansta
 
 import {
   checkTokenResponse,
+  getBlockCourseResponse,
   getCourseResponse,
   getEnrollmentResponse,
   getSingleEnrollmentResponse,
@@ -33,8 +34,10 @@ import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updat
 import { getStudentProfileBySessionId, getStudentProfileByUsernameAction } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses } from '@/action/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction } from '@/action/enrollment/user';
-import { approvedEnrollmentStep1Action, approvedEnrollmentStep2Action, getEnrollmentByStepAction } from '@/action/enrollment/admin';
-
+import { approvedEnrollmentStep1Action, approvedEnrollmentStep2Action, getEnrollmentByStepAction, undoEnrollmentToStep } from '@/action/enrollment/admin';
+import { createCourseBlockAction, getAllBlockTypeAction } from '@/action/courses/blocks';
+import { io } from 'socket.io-client';
+const socket = io('http://localhost:3000'); 
 // ============================================================
 // AUTH QUERIES
 // ============================================================
@@ -174,17 +177,18 @@ export const useStudentProfileMutation = () => {
   });
 };
 
+/**
+ * Courses Queries And Mutations
+ * @returns
+ */
 export const useCourseQuery = () => {
   return useQuery<getCourseResponse, Error>({
     queryKey: ['Course'],
     queryFn: () => getAllCourses(),
     retry: 0,
     refetchOnMount: false,
-    /**
-     * this refetch interval is will be used in production
-     */
     // refetchInterval: 5000,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
@@ -200,6 +204,11 @@ export const useCreateCourseMutation = () => {
   });
 };
 
+
+/**
+ * Students Enrollment
+ * @returns Queries and mutations
+ */
 export const useEnrollmentQuery = (data: any) => {
   return useQuery<getSingleEnrollmentResponse, Error>({
     queryKey: ['Enrollment'],
@@ -207,30 +216,6 @@ export const useEnrollmentQuery = (data: any) => {
     retry: 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
-  });
-};
-
-export const useEnrollmentQueryByStep = (step: any) => {
-  return useQuery<getEnrollmentResponse, Error>({
-    queryKey: ['EnrollmentByStep', step],
-    queryFn: () => getEnrollmentByStepAction(step),
-    retry: 0,
-    enabled: !!step,
-    // refetchInterval: 2000, //2s
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-  });
-};
-
-export const useApprovedEnrollmentStep1Mutation = () => {
-  return useMutation<getEnrollmentResponse, Error, any>({
-    mutationFn: async (data) => approvedEnrollmentStep1Action(data),
-  });
-};
-
-export const useApprovedEnrollmentStep2Mutation = () => {
-  return useMutation<getEnrollmentResponse, Error, z.infer<typeof EnrollmentApprovedStep2>>({
-    mutationFn: async (data) => approvedEnrollmentStep2Action(data),
   });
 };
 
@@ -252,7 +237,86 @@ export const useEnrollmentDeleteMutation = () => {
   return useMutation<IResponse, Error, any>({
     mutationFn: async (data) => deleteEnrollmentAction(data),
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: ['Enrollment'] });
+      queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
+    },
+  });
+};
+
+/**
+ * Admin Enrollment
+ * @returns Queries and mutations
+ */
+export const useEnrollmentQueryByStep = (step: any) => {
+  return useQuery<getEnrollmentResponse, Error>({
+    queryKey: ['EnrollmentByStep', step],
+    queryFn: () => getEnrollmentByStepAction(step),
+    retry: 0,
+    enabled: !!step,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+  });
+};
+
+export const useApprovedEnrollmentStep1Mutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<getEnrollmentResponse, Error, any>({
+    mutationFn: async (data) => approvedEnrollmentStep1Action(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
+      socket.emit('refresh-data', { key: 'EnrollmentByStep' });
+      /**
+       * @todo use broadcast in logout
+       */
+      // Broadcast the query key to other tabs/windows
+      // const channel = new BroadcastChannel('my-channel');
+      // channel.postMessage({ type: 'data-updated', queryKey: 'EnrollmentByStep' });
+      // channel.postMessage({ type: 'data-updated', queryKey: 'Enrollment' });
+    },
+  });
+};
+
+export const useApprovedEnrollmentStep2Mutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<getEnrollmentResponse, Error, z.infer<typeof EnrollmentApprovedStep2>>({
+    mutationFn: async (data) => approvedEnrollmentStep2Action(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
+    },
+  });
+};
+
+export const useUndoEnrollmentToStepMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<getEnrollmentResponse, Error, any>({
+    mutationFn: async (data) => undoEnrollmentToStep(data),
+    onSuccess: () => {
+      queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
+    },
+  });
+};
+
+/**
+ * Admin Course BlockType
+ * @returns Queries and mutations
+ */
+export const useBlockCourseQuery = () => {
+  return useQuery<getBlockCourseResponse, Error>({
+    queryKey: ['BlockType'],
+    queryFn: () => getAllBlockTypeAction(),
+    retry: 0,
+    refetchOnMount: false,
+    // refetchInterval: 5000,
+    refetchOnWindowFocus: true,
+    // retryDelay: (attemptIndex) => attemptIndex * 1000,
+  });
+};
+
+export const useCreateCourseBlockMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => createCourseBlockAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['BlockType'] });
     },
   });
 };

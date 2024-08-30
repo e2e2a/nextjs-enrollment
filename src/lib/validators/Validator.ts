@@ -86,11 +86,7 @@ export const StudentProfileValidator = z
     };
   });
 
-export const CourseValidator = z.object({
-  courseCode: z.string().min(1, { message: 'course is required...' }),
-  name: z.string().min(1, { message: 'year must atleast 1 characters.' }),
-  description: z.string().min(1, { message: 'year must atleast 6 characters.' }),
-});
+
 
 export const EnrollmentBlockTypeValidator = z.object({
   blockType: z.string().min(1, { message: 'Block Type is required...' }),
@@ -142,4 +138,22 @@ export const PostValidation = z.object({
   file: z.custom<File[]>(),
   location: z.string().min(1, { message: 'This field is required' }).max(1000, { message: 'Maximum 1000 characters.' }),
   tags: z.string(),
+});
+
+/**
+ * Admin Courses Validation
+ * @validate
+ */
+export const CourseValidator = z.object({
+  courseCode: z.string().min(1, { message: 'course is required...' }),
+  name: z.string().min(1, { message: 'year must atleast 1 characters.' }),
+  description: z.string().min(1, { message: 'year must atleast 6 characters.' }),
+});
+
+export const CourseBlockValidator = z.object({
+  courseCode: z.string().min(1, { message: 'course is required...' }),
+  year: z.string().min(1, { message: 'year must atleast 6 characters.' }),
+  semester: z.string().min(1, { message: 'year must atleast 1 characters.' }),
+  section: z.string().min(1, { message: 'year must atleast 6 characters.' }),
+  description: z.string().min(1, { message: 'year must atleast 6 characters.' }),
 });

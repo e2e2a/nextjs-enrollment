@@ -22,12 +22,12 @@ const Step1 = ({ search, enrollment }: IProps) => {
   const { data: s } = useSession();
   const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
   useEffect(() => {
-    if(!enrollment) return
+    if (!enrollment) return;
     if (isCoursesError || !res || !res.courses) {
       return;
     }
-    if (res) console.log('courses logs:', res.courses)
-  }, [res, isCoursesLoading, isCoursesError,enrollment]);
+    if (res) console.log('courses logs:', res.courses);
+  }, [res, isCoursesLoading, isCoursesError, enrollment]);
   const mutation = useEnrollmentStep1Mutation();
   const deleteMutation = useEnrollmentDeleteMutation();
   const form = useForm<z.infer<typeof EnrollmentStep1>>({
@@ -79,6 +79,7 @@ const Step1 = ({ search, enrollment }: IProps) => {
           case 201:
           case 203:
             console.log(res);
+            if (res.error) return window.location.reload();
             // setMessage(res?.message);
             // return (window.location.reload());
             return;
@@ -92,7 +93,7 @@ const Step1 = ({ search, enrollment }: IProps) => {
   };
   return (
     <TabsContent value='1' className='p-5 focus-visible:ring-0 border-0'>
-      {enrollment?.onProcess ? (
+      {enrollment && enrollment?.onProcess ? (
         <>
           <Card className={`${enrollment?.onProcess ? 'min-h-[35vh] shadow-none drop-shadow-none items-center justify-center flex border-0' : ''}`}>
             <CardHeader className='space-y-3 hidden'>
@@ -114,8 +115,8 @@ const Step1 = ({ search, enrollment }: IProps) => {
                   ,
                 </span>
                 <span className='text-sm text-left mt-4 px-5 sm:px-10 w-full'>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please wait a couple of hours, once the administrator sees your submission, they will begin reviewing your credentials and process it right away. After approval, you will automatically proceed to step 2, and we will notify you via email
-                  and on this website. If you have any questions or need further assistance, please do not hesitate to contact us +639123456789
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please wait a couple of hours, once the administrator sees your submission, they will begin reviewing your credentials and process it right away. After approval, you will automatically proceed to step 2,
+                  and we will notify you via email and on this website. If you have any questions or need further assistance, please do not hesitate to contact us +639123456789
                 </span>
               </div>
               <div className='flex flex-col w-full space-y-3'>

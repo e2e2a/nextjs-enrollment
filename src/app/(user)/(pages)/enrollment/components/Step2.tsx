@@ -3,11 +3,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { TabsContent } from '@/components/ui/tabs';
 import { Icons } from '@/components/shared/Icons';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+
 type IProps = {
   enrollment: any;
 };
 const Step2 = ({ enrollment }: IProps) => {
+  if (!enrollment) return;
   return (
     <TabsContent value='2' className='p-5 focus-visible:ring-0 border-0'>
       <Card className={`${enrollment?.onProcess ? 'min-h-[35vh] shadow-none drop-shadow-none items-center justify-center flex border-0' : ''}`}>
@@ -25,9 +26,6 @@ const Step2 = ({ enrollment }: IProps) => {
               Dear{' '}
               <span className='font-semibold capitalize'>
                 <span className='capitalize'>{enrollment.profileId.firstname} </span>
-                {/* <span className='capitalize'>
-                  {enrollment.profileId.middlename[0] + '.'}{' '}
-                </span> */}
                 <span className='capitalize'>{enrollment.profileId.lastname}</span>
               </span>
               ,

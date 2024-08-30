@@ -61,6 +61,7 @@ const Page = () => {
       setIsUploading(true);
       const formData = new FormData();
       formData.append('file', imageFile!);
+      data.name = data.name.toLowerCase()
       const dataa = {
         ...data,
         formData: formData,

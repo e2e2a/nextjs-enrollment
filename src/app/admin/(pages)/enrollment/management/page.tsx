@@ -4,9 +4,11 @@ import { useEnrollmentQueryByStep } from '@/lib/queries';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import { columns } from './components/step1/columns';
+import { columns2 } from './components/step2/columns';
 import { DataTable1 } from './components/step1/DataTable';
 import { Button } from '@/components/ui/button';
 import { DataTableDrawer } from './components/Drawer';
+import { DataTable2 } from './components/step2/DataTable2';
 
 interface Enrollment {
   id: string;
@@ -35,10 +37,10 @@ const Page = () => {
       setIsError(false);
     }
     setIsPageLoading(false); // Loading is done after validation
-  }, [search, isAllowed,isPageLoading]);
+  }, [search, isAllowed, isPageLoading]);
 
   // Query data based on the validated step parameter
-  const { data, isLoading, error: isEnError } = useEnrollmentQueryByStep(search || '');
+  const { data, isLoading, error: isEnError } = useEnrollmentQueryByStep(search);
 
   useEffect(() => {
     if (isLoading || !data || !data.enrollment) return;
@@ -52,14 +54,13 @@ const Page = () => {
         <Loader />
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
-          {isError ? <div className=''>404</div> : 
-          search === '1' ? <DataTable1 columns={columns} data={data?.enrollment as Enrollment[]} />
-            : search === '2'
+          {
+            isError ? <div className=''>404</div> : search === '1' ? <DataTable1 columns={columns} data={data?.enrollment as Enrollment[]} /> : search === '2' ? <DataTable2 columns={columns2} data={data?.enrollment as Enrollment[]} /> : search === '3'
             // : search === '3'
             // : search === '4'
-          //else if === 2
-          //else if === 3
-          //else if === 4
+            //else if === 2
+            //else if === 3
+            //else if === 4
           }
           {/* <DataTableDrawer /> */}
         </div>

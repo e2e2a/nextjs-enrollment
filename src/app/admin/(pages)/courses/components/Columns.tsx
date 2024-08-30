@@ -1,11 +1,9 @@
-//@ts-nocheck
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
-import { DataTableDrawer } from '../Drawer';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -13,22 +11,34 @@ import { cn } from '@/lib/utils';
 import { Icons } from '@/components/shared/Icons';
 import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
 import { useState } from 'react';
-import { DialogStep1Button } from './Dialog';
 import ActionsCell from './ActionsCell';
+import Image from 'next/image';
 
-interface Enrollment {
+interface ICourse {
   id: string;
-  userId: any;
-  courseId: any;
-  studentYear: string;
-  studentSemester: string;
-  step: any;
+  courseCode: string;
+  name: string;
+  imageUrl: string;
+  description?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
-export const columns: ColumnDef<Enrollment>[] = [
+export const columns: ColumnDef<ICourse>[] = [
   {
-    accessorKey: 'fullname',
+    accessorFn: (row) => row.imageUrl,
+    accessorKey: 'course image',
+    header: 'Course Image',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' flex justify-center items-center'>
+            <Image className='w-32 h-20 border rounded-md shadow-sm drop-shadow-sm' src={`${user.imageUrl}`} alt={`${user.courseCode}`} width={100} priority height={100} />
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'name',
     header: ({ column }) => {
       return (
         <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
@@ -41,48 +51,34 @@ export const columns: ColumnDef<Enrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.profileId.lastname}, {user.profileId.firstname} {user.profileId.middlename}
+          {user.name}
         </div>
       );
     },
     accessorFn: (row) => {
-      const { lastname, firstname, middlename } = row.profileId;
-      return `${lastname}, ${firstname} ${middlename}`;
+      const { name } = row;
+      return `${name}`;
     },
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.profileId.lastname}, ${row.original.profileId.firstname}`.toLowerCase();
+      const fullName = `${row.original.name}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
 
   {
-    accessorFn: (row) => row.courseId.courseCode, // Use accessorFn for nested fields
+    accessorFn: (row) => row.courseCode, // Use accessorFn for nested fields
     id: 'course Code',
     header: 'Course',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.courseId.courseCode}
+          {user.courseCode}
         </div>
       );
     },
   },
-  {
-    accessorFn: (row) => row.studentYear,
-    accessorKey: 'student year',
-    header: 'Student Year',
-  },
-  {
-    accessorFn: (row) => row.studentSemester,
-    accessorKey: 'student semester',
-    header: 'Student Semester',
-  },
-  {
-    accessorFn: (row) => row.studentStatus,
-    accessorKey: 'student status',
-    header: 'Student Status',
-  },
+
   //   {
   //     accessorKey: 'emailVerified',
   //     // header: 'Email Verified',
