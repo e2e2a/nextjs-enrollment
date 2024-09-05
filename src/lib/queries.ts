@@ -2,11 +2,14 @@ import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tansta
 
 import {
   checkTokenResponse,
+  getAllStudentProfileResponse,
+  getAllTeacherProfileResponse,
   getBlockCourseResponse,
   getCourseResponse,
   getEnrollmentResponse,
   getSingleEnrollmentResponse,
   getSingleProfileResponse,
+  getSubjectCategoryCollegeResponse,
   INewPost,
   INewUser,
   IResponse,
@@ -32,19 +35,23 @@ import { recoveryProcess, resetPassword } from '@/action/resetPassword';
 import { NewPassword } from '@/action/profile/NewPassword';
 import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updateData';
 import { getStudentProfileBySessionId, getStudentProfileByUsernameAction } from '@/action/profile/getProfile';
-import { createCourseAction, getAllCourses } from '@/action/courses';
-import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction } from '@/action/enrollment/user';
-import { approvedEnrollmentStep1Action, approvedEnrollmentStep2Action, getEnrollmentByStepAction, undoEnrollmentToStep } from '@/action/enrollment/admin';
-import { createCourseBlockAction, getAllBlockTypeAction } from '@/action/courses/blocks';
-import { supabase } from './supabaseClient';
+import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
+import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction } from '@/action/college/enrollment/user';
+import { approvedEnrollmentStep1Action, approvedEnrollmentStep2Action, getEnrollmentByStepAction, undoEnrollmentToStep } from '@/action/college/enrollment/admin';
+import { createCollegeCourseBlockAction, getAllBlockTypeAction } from '@/action/college/courses/blocks';
+import { createSubjectCollegeAction, getSubjectCategoryCollegeAction } from '@/action/college/subjects/admin';
+import { adminCreateUserWithRoleAction, getUserRoleStudentAction, getUserRoleTeachertAction } from '@/action/user';
+const channel = new BroadcastChannel('my-channel');
+// import { supabase } from './supabaseClient';
+
 // ============================================================
 // AUTH QUERIES
 // ============================================================
-const myChannel = supabase.channel('global-channel', {
-  config: {
-    broadcast: { ack: true },
-  },
-});
+// const myChannel = supabase.channel('global-channel', {
+//   config: {
+//     broadcast: { ack: true },
+//   },
+// });
 export const useSignInMutation = () => {
   return useMutation<SignInResponse, Error, z.infer<typeof SigninValidator>>({
     mutationFn: async (data) => signInAction(data),
@@ -52,8 +59,13 @@ export const useSignInMutation = () => {
 };
 
 export const useSignUpMutation = () => {
+  const queryClient = useQueryClient();
   return useMutation<SignUpResponse, Error, z.infer<typeof SignupValidator>>({
     mutationFn: async (data) => signUpAction(data),
+    onSuccess: () => {
+      // Invalidate the 'userProfile' query to trigger a refetch
+      queryClient.invalidateQueries({ queryKey: ['Students'] });
+    },
   });
 };
 
@@ -113,36 +125,46 @@ export const useUserNewPasswordMutation = () => {
   });
 };
 
-interface User {
-  id: string;
-  image: string | null;
-  firstname: string;
-  lastname: string;
-  username: string | null;
-  bio: string | null;
-  email: string | null;
-  emailVerified: Date | null;
-  role: string | null;
-  // password: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export const UseUserQuery = () => {
-  return useQuery<
-    {
-      error: string;
-      success: string;
-      users: User[];
-    },
-    Error
-  >({
-    queryKey: ['Users'],
-    queryFn: fetchAllUsers,
+export const useUserRolesStudentQuery = () => {
+  return useQuery<getAllStudentProfileResponse, Error>({
+    queryKey: ['Students'],
+    queryFn: () => getUserRoleStudentAction(),
     retry: 0,
     // refetchInterval: 100,
     refetchOnWindowFocus: false,
-    // retryDelay: (attemptIndex) => attemptIndex * 1000,
+  });
+};
+//added
+export const useUserRolesTeacherQuery = () => {
+  return useQuery<getAllTeacherProfileResponse, Error>({
+    queryKey: ['Teachers'],
+    queryFn: () => getUserRoleTeachertAction(),
+    retry: 0,
+    // refetchInterval: 100,
+    refetchOnWindowFocus: false,
+  });
+};
+export const useAdminCreateUserRoleMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => adminCreateUserWithRoleAction(data),
+    onSuccess: (data) => {
+      if (data.role) {
+        if (data.role === 'ADMIN') {
+          /**
+           * @todo invalidate user role ADMIN
+           */
+        } else if (data.role === 'DEAN') {
+          /**
+           * @todo invalidate user role DEAN
+           */
+        } else if (data.role === 'TEACHER') {
+          queryClient.invalidateQueries({ queryKey: ['Teachers'] });
+        } else if (data.role === 'STUDENT') {
+          queryClient.invalidateQueries({ queryKey: ['Students'] });
+        }
+      }
+    },
   });
 };
 
@@ -197,6 +219,19 @@ export const useCourseQuery = () => {
   });
 };
 
+export const useCourseQueryByCategory = (category: any) => {
+  return useQuery<getCourseResponse, Error>({
+    queryKey: ['Course', category],
+    queryFn: () => getAllCoursesByCategory(category),
+    retry: 0,
+    enabled: !!category,
+    refetchOnMount: false,
+    // refetchInterval: 5000,
+    refetchOnWindowFocus: true,
+    // retryDelay: (attemptIndex) => attemptIndex * 1000,
+  });
+};
+
 export const useCreateCourseMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<testResponseaa, Error, any>({
@@ -207,7 +242,6 @@ export const useCreateCourseMutation = () => {
     },
   });
 };
-
 
 /**
  * Students Enrollment
@@ -267,13 +301,14 @@ export const useApprovedEnrollmentStep1Mutation = () => {
     mutationFn: async (data) => approvedEnrollmentStep1Action(data),
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
-      const serverResponse = await myChannel.send({
-        type: 'broadcast',
-        event: 'message',
-        payload: { message: [{queryKey: 'EnrollmentByStep'}, {querKey: 'Enrollment'}] },
-      });
-      console.log('Server response:', serverResponse);
-
+      // const serverResponse = await myChannel.send({
+      //   type: 'broadcast',
+      //   event: 'message',
+      //   payload: { message: [{queryKey: 'EnrollmentByStep'}, {querKey: 'Enrollment'}] },
+      // });
+      // console.log('Server response:', serverResponse);
+      // Send a message to the channel
+      channel.postMessage({ type: 'data-updated', queryKey: 'exampleQueryKey' });
     },
   });
 };
@@ -317,9 +352,35 @@ export const useBlockCourseQuery = () => {
 export const useCreateCourseBlockMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
-    mutationFn: async (data) => createCourseBlockAction(data),
+    mutationFn: async (data) => createCollegeCourseBlockAction(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
+    },
+  });
+};
+
+/**
+ * Admin Subject College
+ * @returns Queries and mutations
+ */
+export const useSubjectCollegeQuery = () => {
+  return useQuery<getSubjectCategoryCollegeResponse, Error>({
+    queryKey: ['SubjectCollege'],
+    queryFn: () => getSubjectCategoryCollegeAction(),
+    retry: 0,
+    refetchOnMount: false,
+    // refetchInterval: 5000,
+    refetchOnWindowFocus: true,
+    // retryDelay: (attemptIndex) => attemptIndex * 1000,
+  });
+};
+
+export const useCreateSubjectCollegeMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => createSubjectCollegeAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['SubjectCollege'] });
     },
   });
 };

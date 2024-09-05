@@ -27,10 +27,11 @@ export const getAllBlockType = async () => {
 }
 export const getfilterBlockType = async (data: any) => {
   try {
-    delete data.description
-    console.log(' data filter', data)
+    // delete data.description
+    const { description, ...datas } = data
+    console.log(' data filter', datas)
     const newB = await BlockType.find({
-      ...data,
+      ...datas,
     });
     return newB
   } catch (error) {

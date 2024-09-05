@@ -1,11 +1,10 @@
 'use server';
 import { hashPassword } from '@/lib/hash/bcrypt';
 import { User } from '@/models/User';
-import { IUserData, IUserPassword } from '@/types';
 import { deleteStudentProfileByUserId } from './studentProfile';
 import dbConnect from '@/lib/db/db';
 
-export const createUser = async (data: IUserData, password: string) => {
+export const createUser = async (data: any, password: string) => {
   try {
     const hashedPassword = await hashPassword(password);
     const newUser = await User.create({
@@ -24,14 +23,14 @@ export const getUsers = async () => {
 };
 
 export const checkUserUsername = async (username: string) => {
-  const users = await User.find({
+  const user = await User.findOne({
     username,
     emailVerified: {
-      $ne: null,
+      $ne: undefined,
     },
   });
-  if (users && users.length > 0) return true;
-  return false;
+  if (user) return user;
+  return null;
 };
 
 export const getUserByUsername = async (username: string) => {
@@ -45,7 +44,7 @@ export const getUserByUsername = async (username: string) => {
 export const getUserByEmail = async (email: string) => {
   try {
     const user = await User.findOne({ email });
-    return JSON.parse(JSON.stringify(user));
+    return user;
   } catch (error) {
     return null;
   }
@@ -97,7 +96,7 @@ export const updateUserEmailVerifiedById = async (id: string) => {
   }
 };
 
-export const updateUserPasswordById = async (data: IUserPassword) => {
+export const updateUserPasswordById = async (data: any) => {
   await dbConnect();
   const { id, password } = data;
   const existingUser = await getUserById(id);

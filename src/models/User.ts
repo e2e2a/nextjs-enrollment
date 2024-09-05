@@ -3,12 +3,9 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IUser extends Document {
   email: string;
   password?: string;
-  firstname: string;
-  lastname: string;
   username: string;
   emailVerified: Date;
-
-  role: 'USER' | 'ADMIN';
+  role: 'STUDENT' | 'ADMIN';
   lastLogin?: Date;
   lastLogout?: Date;
 }
@@ -16,12 +13,10 @@ export interface IUser extends Document {
 const userSchema = new Schema<IUser>(
   {
     email: { type: String, required: true },
-    firstname: { type: String },
-    lastname: { type: String },
     username: { type: String },
     password: { type: String },
     emailVerified: { type: Date },
-    role: { type: String, enum: ['USER', 'ADMIN'], default: 'USER' },
+    role: { type: String, enum: ['STUDENT', 'TEACHER', 'ADMIN'], default: 'STUDENT' },
     lastLogin: { type: Date },
     lastLogout: { type: Date },
   },

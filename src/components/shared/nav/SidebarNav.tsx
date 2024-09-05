@@ -12,6 +12,7 @@ import { useSession } from 'next-auth/react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useState } from 'react';
 import { ChevronsUpDown } from 'lucide-react';
+import CollapsibleItem from './CollapsibleItem';
 
 interface DashboardNavProps {
   items: SidebarNavItem[];
@@ -44,13 +45,17 @@ export function SidebarNav({ items, profile }: DashboardNavProps) {
           {items.map((item, index) => {
             const Icon = Icons[item.icon || 'arrowRight'];
             return (
-              item.href && (
+              item.href ? (
                 <Link key={index} href={item.disabled ? '/' : item.href} className='flex w-full select-none'>
                   <Button type='button' className='group select-none border-0 w-full hover:bg-slate-300 px-5 py-6 flex space-x-2 items-center gap-x-1 justify-start pl-3'>
                     <Icon className='h-7 w-7 group-hover:stroke-blue-500' />
                     <span className='text-sm font-semibold tracking-tight'>{item.title}</span>
                   </Button>
                 </Link>
+              ): (
+                <div className='w-full' key={index}>
+                  <CollapsibleItem item={item} Icon={Icon} />
+                </div>
               )
             );
           })}

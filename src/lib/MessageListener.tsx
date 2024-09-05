@@ -35,7 +35,7 @@ const MessageListener = ({ children }: { children: React.ReactNode }) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [queryClient]);
 
   return <div>{children}</div>;
 };

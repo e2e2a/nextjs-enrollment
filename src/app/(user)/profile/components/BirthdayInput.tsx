@@ -39,6 +39,7 @@ export function BirthdayInput({ name, isNotEditable, form, label, classNameInput
                 <div className={`${isNotEditable ? 'flex w-full items-center' : 'relative w-full'}`}>
                   <input
                     type='text'
+                    id={name}
                     value={stringDate ? stringDate : formatDate(field.value)}
                     // value={stringDate ? stringDate : undefined}
                     className={`

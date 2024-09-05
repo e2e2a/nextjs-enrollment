@@ -16,6 +16,7 @@ export interface IEnrollment extends Document {
   studentStatus?: 'New Student' | 'Continued' | 'Completed';
   studentType?: 'Regular' | 'Non-Regular';
   scholarType: 'TWSP' | 'STEP' | 'PESFA' | 'UAQTEA' | 'None';
+  
 }
 const schema = new Schema<IEnrollment>(
   {
@@ -83,6 +84,7 @@ const schema = new Schema<IEnrollment>(
       type: String,
       enum: ['TWSP', 'STEP', 'PESFA', 'UAQTEA', 'None'],
     },
+    
   },
   {
     versionKey: false,

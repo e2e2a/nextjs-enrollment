@@ -1,4 +1,8 @@
 import {
+  UserSearch,
+  UsersRound,
+  BookOpenText,
+  Timer,
   RotateCcw,
   Hourglass,
   PackageSearch,
@@ -48,6 +52,10 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
+  userSearch: UserSearch,
+  usersRound: UsersRound,
+  bookOpenText: BookOpenText,
+  timer: Timer,
   rotateCcw: RotateCcw,
   hourglass: Hourglass,
   packageSearch: PackageSearch,

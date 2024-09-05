@@ -53,15 +53,15 @@ export type IUpdatePost = {
  */
 export type IId = {
   id: string;
-}
+};
 export type UserRole = {
-  role?: "USER" | "ADMIN"
-}
+  role?: 'STUDENT' | 'ADMIN';
+};
 export type IUserPassword = IId & {
   password: string;
-}
+};
 /**
- * @todo 
+ * @todo
  * create type User Profile
  */
 export type IUserData = {
@@ -73,8 +73,6 @@ export type IUserData = {
 };
 
 export type IUser = IId & {
-  firstname?: string;
-  lastname?: string;
   username?: string;
   email?: string;
   imageUrl?: string | null;
@@ -103,12 +101,12 @@ export type NavItem = {
 
 export type MainNavItem = NavItem;
 
-type ExternalItem = SidebarNavItem
+type ExternalItem = SidebarNavItem;
 
 export type SidebarNavItem = {
   title: string;
-  i?: ExternalItem[]
-  query?: string
+  i?: ExternalItem[];
+  query?: string;
   disabled?: boolean;
   external?: boolean;
   icon?: keyof typeof Icons;
@@ -126,12 +124,12 @@ export type SidebarNavItem = {
 export type SidebarNavItemAdmin = {
   title: string;
   disabled?: boolean;
-  i?: SidebarNavItem[]
+  i?: SidebarNavItem[];
   href?: string;
-  
+
   external?: boolean;
   icon?: keyof typeof Icons;
-} 
+};
 
 export type SiteConfig = {
   name: string;
@@ -156,7 +154,7 @@ export type MarketingConfig = {
 export type DashboardConfig = {
   mainNav: MainNavItem[];
   sidebarNav: SidebarNavItem[];
-  sidebarAdmin: SidebarNavItemAdmin[]
+  sidebarAdmin: SidebarNavItemAdmin[];
 };
 
 export type SubscriptionPlan = {
@@ -217,8 +215,7 @@ export type getSingleProfileResponse = {
 export type updateStudentProfilePhotoResponse = IResponse;
 export type testResponseaa = IResponse;
 
-
-type ICourse ={
+type ICourse = {
   _id: any;
   courseCode: string;
   name: string;
@@ -226,20 +223,20 @@ type ICourse ={
   description: string;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 export type getCourseResponse = {
   courses?: ICourse[];
-}& IResponse;
+} & IResponse;
 
 /**
  * this getEnrollment should be called if we query whose session id is login
  */
-type IEnrollment ={
-  id?: any
+type IEnrollment = {
+  id?: any;
   _id: any;
   userId?: any;
   courseId?: any;
-  step?:any;
+  step?: any;
   courseCode: string;
   studentYear: string;
   studentSemester?: string;
@@ -250,17 +247,17 @@ type IEnrollment ={
   scholarType?: string;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 export type getSingleEnrollmentResponse = {
   enrollment?: IEnrollment;
-}& IResponse;
+} & IResponse;
 
 export type getEnrollmentResponse = {
   enrollment?: IEnrollment[];
-}& IResponse;
+} & IResponse;
 
-type IBlockType ={
-  id?: any
+type IBlockType = {
+  id?: any;
   _id: any;
   courseId: any;
   semester: string;
@@ -268,7 +265,87 @@ type IBlockType ={
   section: string;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 export type getBlockCourseResponse = {
   blockTypes?: IBlockType[];
-}& IResponse;
+} & IResponse;
+interface ISubject {
+  id: string;
+  category: string;
+  subjectCode: string;
+  name: string;
+  lec?: string;
+  lab?: string;
+  unit?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export type getSubjectCategoryCollegeResponse = {
+  subjects?: ISubject[];
+} & IResponse;
+
+export interface IStudentProfile {
+  _id: string;
+  id: string;
+  userId: any;
+  firstname?: string;
+  middlename?: string;
+  lastname: string;
+  extensionName?: string;
+  numberStreet?: string;
+  barangay?: string;
+  district?: string;
+  cityMunicipality?: string;
+  province?: string;
+  region?: string;
+  emailFbAcc?: string;
+  contact?: string;
+  nationality?: string;
+  sex?: string;
+  civilStatus?: string;
+  employmentStatus?: string;
+  birthday?: Date;
+  age?: Number;
+  birthPlaceCity?: string;
+  birthPlaceProvince?: string;
+  birthPlaceRegion?: string;
+  educationAttainment?: string;
+  learnerOrTraineeOrStudentClassification?: string;
+  studentYear?: string;
+  semester?: string;
+  enrollStatus?: 'Pending' | 'Continue' | 'Completed';
+  studentType?: 'Regular' | 'Non-Regular';
+  scholarType: string;
+  imageUrl?: string;
+  isVerified: boolean;
+  lastLogin?: Date;
+  lastLogout?: Date;
+}
+export type getAllStudentProfileResponse = {
+  students?: IStudentProfile[];
+  role?: string;
+} & IResponse;
+
+export interface ITeacherProfile {
+  _id: string;
+  id: string;
+  userId: any;
+  firstname?: string;
+  middlename?: string;
+  lastname: string;
+  extensionName?: string;
+  emailFbAcc?: string;
+  contact?: string;
+  sex?: string;
+  civilStatus?: string;
+  birthday?: Date;
+  age?: Number;
+  imageUrl?: string;
+  isVerified: boolean;
+  lastLogin?: Date;
+  lastLogout?: Date;
+}
+export type getAllTeacherProfileResponse = {
+  teachers?: ITeacherProfile[];
+  role?: string;
+} & IResponse;

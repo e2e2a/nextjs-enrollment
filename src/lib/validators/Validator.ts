@@ -147,13 +147,36 @@ export const PostValidation = z.object({
 export const CourseValidator = z.object({
   courseCode: z.string().min(1, { message: 'course is required...' }),
   name: z.string().min(1, { message: 'year must atleast 1 characters.' }),
+  category: z.string().min(1, { message: 'year must atleast 1 characters.' }),
   description: z.string().min(1, { message: 'year must atleast 6 characters.' }),
 });
 
-export const CourseBlockValidator = z.object({
+export const CourseBlockCollegeValidator = z.object({
+  category: z.string().min(1, { message: 'year must atleast 1 characters.' }),
   courseCode: z.string().min(1, { message: 'course is required...' }),
   year: z.string().min(1, { message: 'year must atleast 6 characters.' }),
   semester: z.string().min(1, { message: 'year must atleast 1 characters.' }),
   section: z.string().min(1, { message: 'year must atleast 6 characters.' }),
   description: z.string().min(1, { message: 'year must atleast 6 characters.' }),
+});
+
+export const SubjectCollegeValidator = z.object({
+  category: z.string().min(1, { message: 'year must atleast 1 characters.' }),
+  subjectCode: z.string().min(1, { message: 'Subject Code is required...' }),
+  name: z.string().min(1, { message: 'name is required...' }),
+  lec: z
+    .string()
+    .length(1, { message: 'Lec must be exactly 1 digit.' })
+    .regex(/^[0-9]+$/, { message: 'Lec must only contain numbers 0-9.' })
+    .refine((val) => Number(val) > 0, { message: 'Lec must be greater than 0.' }),
+  lab: z
+    .string()
+    .length(1, { message: 'Lab must be exactly 1 digit.' })
+    .regex(/^[0-9]+$/, { message: 'Lab must only contain numbers 0-9.' })
+    .refine((val) => Number(val) > 0, { message: 'Lab must be greater than 0.' }),
+  unit: z
+    .string()
+    .length(1, { message: 'Unit must be exactly 1 digit.' })
+    .regex(/^[0-9]+$/, { message: 'Unit must only contain numbers 0-9.' })
+    .refine((val) => Number(val) > 0, { message: 'Unit must be greater than 0.' }),
 });

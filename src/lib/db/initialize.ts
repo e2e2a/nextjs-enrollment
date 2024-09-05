@@ -6,9 +6,10 @@ import StudentProfile from '@/models/StudentProfile';
 import Account from '@/models/Account';
 import Enrollment from '@/models/Enrollment';
 import BlockType from '@/models/BlockType';
-import Subject from '@/models/Subjects';
+import Subject from '@/models/Subject';
+import TeacherProfile from '@/models/TeacherProfile';
 
-type ModelName = 'Course' | 'User' | 'StudentProfile' | 'Account' | 'Enrollment' | 'BlockType' | 'Subject';
+type ModelName = 'Course' | 'User' | 'StudentProfile' | 'Account' | 'Enrollment' | 'BlockType' | 'Subject' | 'TeacherProfile';
 
 const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   Course,
@@ -17,7 +18,8 @@ const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   Account,
   Enrollment,
   BlockType,
-  Subject
+  Subject,
+  TeacherProfile
 };
 
 const initializeModel = async (modelNames: ModelName[]) => {

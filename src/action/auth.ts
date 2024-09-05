@@ -4,13 +4,13 @@ import { checkingIp } from '@/lib/limiter/checkingIp';
 import rateLimit from '@/lib/limiter/rate-limit';
 import { sendVerificationEmail } from '@/lib/mail/mail';
 import { SigninValidator, SignupValidator } from '@/lib/validators/Validator';
-import { checkUserUsername, createUser, deleteUserByEmail, getUserByEmail } from '@/services/user';
+import { checkUserUsername, createUser, deleteUserByEmail, getUserByEmail, getUserByUsername } from '@/services/user';
 import { generateVerificationToken } from '@/services/token';
 import { SignInResponse, SignUpResponse } from '@/types';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import dbConnect from '@/lib/db/db';
-import { createStudentProfile } from '@/services/studentProfile';
+import { createStudentProfile, deleteStudentProfileByUserId } from '@/services/studentProfile';
 
 /**
  * Performs sign-in.
@@ -101,16 +101,33 @@ export const signUpAction = async (data: any): Promise<SignUpResponse> => {
 const checkingConflict = async (email: string, username: string) => {
   await dbConnect();
   const existingUser = await getUserByEmail(email);
-
-  if (existingUser) {
-    if (existingUser.emailVerified) {
-      return { error: 'User already exist. Please sign in to continue.', status: 409 };
+  try {
+    if (existingUser) {
+      if (existingUser.emailVerified) {
+        return { error: 'User already exist. Please sign in to continue.', status: 409 };
+      }
+      const checkUsername = await getUserByUsername(username);
+      if (checkUsername) {
+        if (checkUsername.emailVerified) {
+          return { error: 'Username already exist. Please provide another username.', status: 409 };
+        } else {
+          await deleteStudentProfileByUserId(checkUsername._id);
+          await deleteUserByEmail(checkUsername.email);
+        }
+      }
+    } else {
+      const checkUsername = await getUserByUsername(username);
+      if (checkUsername) {
+        if (checkUsername.emailVerified) {
+          return { error: 'Username already exist. Please provide another username.', status: 409 };
+        } else {
+          await deleteStudentProfileByUserId(checkUsername._id);
+          await deleteUserByEmail(checkUsername.email);
+        }
+      }
     }
-    const checkUsername = await checkUserUsername(username);
-    if (checkUsername) {
-      return { error: 'Username already exist. Please provide another username.', status: 409 };
-    }
-    await deleteUserByEmail(email);
+  } catch (error) {
+    console.log('this is my erro in conflict', error);
   }
   return { success: 'success', status: 200 };
 };
@@ -122,17 +139,23 @@ const checkingConflict = async (email: string, username: string) => {
  * @returns
  */
 const creatingUser = async (email: string, username: string, password: string) => {
-  await dbConnect();
-  const user = await createUser({ email, username }, password);
-  await createStudentProfile({ userId: user._id });
-  if (!user) return { error: 'Error creating User', status: 404 };
+  try {
+    await dbConnect();
+    const user = await createUser({ email, username }, password);
+    console.log('my user: ', user);
+    await createStudentProfile({ userId: user._id });
+    if (!user) return { error: 'Error creating User', status: 404 };
 
-  const tokenType = 'Verify';
-  const verificationToken = await generateVerificationToken(user._id, tokenType);
+    const tokenType = 'Verify';
+    const verificationToken = await generateVerificationToken(user._id, tokenType);
 
-  if (!verificationToken) return { error: 'Error creating verificationToken', status: 404 };
+    if (!verificationToken) return { error: 'Error creating verificationToken', status: 404 };
 
-  const send = await sendVerificationEmail(verificationToken.email, verificationToken.code, username, 'Confirm your Email');
-  if (!send) return { error: 'Error sending verification email', status: 404 };
-  return { user: user, token: verificationToken.token };
+    const send = await sendVerificationEmail(verificationToken.email, verificationToken.code, username, 'Confirm your Email');
+    if (!send) return { error: 'Error sending verification email', status: 404 };
+    return { user: user, token: verificationToken.token };
+  } catch (error) {
+    console.log(error);
+    return { user: null, token: null };
+  }
 };

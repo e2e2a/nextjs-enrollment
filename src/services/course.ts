@@ -6,6 +6,7 @@ export const createCourse = async (data: any) => {
     const newC = new Course({
       courseCode: data.courseCode,
       name: data.name,
+      category: data.category,
       description: data.description,
     });
     const c = await newC.save();
@@ -54,4 +55,14 @@ export const getCourses = async () => {
     console.log(error);
     return [];
   }
-}
+};
+
+export const getCoursesByCategory = async (category: string) => {
+  try {
+    const courses = await Course.find({ category }).exec();
+    return courses;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};

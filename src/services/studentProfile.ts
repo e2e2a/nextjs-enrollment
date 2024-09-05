@@ -1,5 +1,4 @@
 'use server';
-
 import StudentProfile from '@/models/StudentProfile';
 
 export const createStudentProfileProvider = async (userId: any, profile: any) => {
@@ -24,6 +23,16 @@ export const createStudentProfile = async (data: any) => {
     return JSON.parse(JSON.stringify(newProfile));
   } catch (error) {
     console.log(error);
+    return null;
+  }
+};
+
+export const getAllStudentProfile = async () => {
+  try {
+    const studentProfile = await StudentProfile.find().populate('userId').exec();
+    // console.log(studentProfile);
+    return studentProfile;
+  } catch (error) {
     return null;
   }
 };

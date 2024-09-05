@@ -10,6 +10,7 @@ export interface IBlockSubject {
 }
 export interface IBlockType extends Document {
   courseId: mongoose.Schema.Types.ObjectId;
+  category: string;
   semester: string;
   year: string;
   section: string;
@@ -20,6 +21,9 @@ const schema = new Schema<IBlockType>(
     courseId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Course',
+    },
+    category: {
+      type: String,
     },
     semester: {
       type: String,
