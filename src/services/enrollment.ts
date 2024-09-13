@@ -16,7 +16,7 @@ export const createEnrollment = async (data: any) => {
 
 export const getEnrollmentById = async (id: any) => {
   try {
-    const e = await Enrollment.findById(id).populate('userId').populate('courseId').populate('profileId').exec();;
+    const e = await Enrollment.findById(id).populate('userId').populate('courseId').populate('profileId').populate('blockTypeId').exec();
     // return JSON.parse(JSON.stringify(e));
     return e;
   } catch (error) {
@@ -35,6 +35,16 @@ export const getEnrollmentByUserId = async (userId: string) => {
     return null;
   }
 };
+export const getEnrollmentByProfileId = async (profileId: string) => {
+  try {
+    const enrollment = await Enrollment.findOne({ profileId }).populate('userId').populate('courseId').populate('profileId').exec();
+    // console.log('i am exec...', enrollment);
+    return JSON.parse(JSON.stringify(enrollment));
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
 
 export const getEnrollmentByStep = async (step: number) => {
   try {
@@ -42,6 +52,7 @@ export const getEnrollmentByStep = async (step: number) => {
       .populate('userId') // Populate the `userId` reference
       .populate('courseId') // Populate the `courseId` reference
       .populate('profileId')
+      .populate('blockTypeId')
       .exec();
     // console.log('i am exec...', enrollment);
     return JSON.parse(JSON.stringify(enrollment));

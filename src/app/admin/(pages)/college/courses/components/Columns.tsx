@@ -32,7 +32,13 @@ export const columns: ColumnDef<ICourse>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='flex justify-center items-center'>
-            <Image className='w-20 h-12 border rounded-md shadow-sm drop-shadow-sm' src={`${user.imageUrl}`} alt={`${user.courseCode}`} width={100} priority height={100} />
+            { user.imageUrl ? 
+            <Image className='w-20 h-12 border rounded-md shadow-sm drop-shadow-sm' src={`${user.imageUrl}`} alt={`${user.courseCode}`} width={100} priority height={100} />:
+            <div className='flex justify-center items-center'>
+              No Photo
+            </div>
+
+            }
         </div>
       );
     },

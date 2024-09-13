@@ -113,10 +113,6 @@ const Page = () => {
     };
     mutation.mutate(dataa, {
       onSuccess: (res) => {
-        console.log(res);
-        setTimeout(() => {
-          console.log('hiiii')
-          }, 10000)
         switch (res.status) {
           case 200:
           case 201:

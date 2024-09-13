@@ -7,14 +7,14 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
-import { useUndoEnrollmentToStepMutation } from '@/lib/queries';
+import { useUndoEnrollmentToStep1Mutation } from '@/lib/queries';
 import Step1 from '@/app/(user)/(pages)/enrollment/components/Step1';
 type IProps = {
   user: any;
 };
 const ActionsCell3 = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
-  const undoMutation = useUndoEnrollmentToStepMutation();
+  const undoMutation = useUndoEnrollmentToStep1Mutation();
   const actionFormSubmit = () => {
     const data = {
       EId: user._id,

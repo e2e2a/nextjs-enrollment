@@ -1,12 +1,24 @@
 import { values } from 'pdf-lib';
 
 export const selectType = {
+  studentStatus: [
+    {
+      title: 'New Student',
+      value: 'new student',
+    },
+    {
+      title: 'Transfer Student',
+      value: 'transfer student',
+    },
+  ],
   studentType: [
     {
       name: 'Regular',
+      value: 'regular',
     },
     {
       name: 'Non-Regular',
+      value: 'non-regular',
     },
   ],
   scholarType: [
@@ -81,5 +93,8 @@ export const studentSemesterData = [
   },
   {
     title: '2nd semester',
+  },
+  {
+    title: 'summer',
   },
 ];

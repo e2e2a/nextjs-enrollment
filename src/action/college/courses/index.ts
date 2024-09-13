@@ -5,6 +5,7 @@ import { getCourseResponse, testResponseaa } from '@/types';
 import { Readable } from 'stream';
 import { createCourse, getCourseByName, getCourseByCourseCode, getCourses, updateCoursePhotoById, getCoursesByCategory } from '@/services/course';
 import dbConnect from '@/lib/db/db';
+import { createCurriculum } from '@/services/curriculum';
 export const createCourseAction = async (data: any): Promise<testResponseaa> => {
   await dbConnect();
   const file = data.formData.get('file') as File;
@@ -42,16 +43,19 @@ export const createCourseAction = async (data: any): Promise<testResponseaa> => 
         });
       }
     );
+    const cp = await createCurriculum({ courseId: cc._id });
+    if (!cp) return { error: 'Something went wrong.', status: 404 };
+    console.log(cp);
   } catch (error) {
     console.log(error);
   }
-  return { message: 'hello world success', status: 201 };
+  return { message: 'New Course has been added.', status: 201 };
 };
 
 export const getAllCourses = async (): Promise<getCourseResponse> => {
   await dbConnect();
   try {
-    const courses = await getCourses()
+    const courses = await getCourses();
     return { courses: courses, status: 200 };
   } catch (error) {
     console.log(error);
@@ -62,7 +66,7 @@ export const getAllCourses = async (): Promise<getCourseResponse> => {
 export const getAllCoursesByCategory = async (category: any): Promise<getCourseResponse> => {
   await dbConnect();
   try {
-    const courses = await getCoursesByCategory(category)
+    const courses = await getCoursesByCategory(category);
     return { courses: JSON.parse(JSON.stringify(courses)), status: 200 };
   } catch (error) {
     console.log(error);

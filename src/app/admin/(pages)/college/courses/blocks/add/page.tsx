@@ -9,7 +9,7 @@ import { CourseBlockCollegeValidator } from '@/lib/validators/Validator';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
 import { useCourseQuery, useCreateCourseBlockMutation, useCreateCourseMutation } from '@/lib/queries';
-import { makeToastError } from '@/lib/toast/makeToast';
+import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import TextareaField from './components/Textarea';
 import Input from './components/Input';
 import { SelectInput } from './components/SelectInput';
@@ -42,6 +42,7 @@ const Page = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof CourseBlockCollegeValidator>> = async (data) => {
+    setIsNotEditable(true)
     data.courseCode = data.courseCode.toLowerCase();
     data.section = data.section.toLowerCase();
   
@@ -54,7 +55,8 @@ const Page = () => {
           case 201:
           case 203:
             // return (window.location.reload());
-            // form.reset();
+            formCollege.reset();
+            if(res.message) makeToastSucess(res.message)
             return;
           default:
             if (res.error) return makeToastError(res.error);
@@ -64,7 +66,9 @@ const Page = () => {
       onError: (error) => {
         console.error(error.message);
       },
-      onSettled: () => {},
+      onSettled: () => {
+        setIsNotEditable(false)
+      },
     });
   };
   return (
@@ -91,7 +95,7 @@ const Page = () => {
             </CardContent>
             <CardFooter>
               <div className='flex w-full justify-center md:justify-end items-center mt-4'>
-                <Button type='submit' variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-bold'>
+                <Button type='submit' disabled={isNotEditable} variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-bold'>
                   Register now!
                 </Button>
               </div>

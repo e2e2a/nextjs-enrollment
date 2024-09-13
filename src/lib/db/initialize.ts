@@ -8,8 +8,13 @@ import Enrollment from '@/models/Enrollment';
 import BlockType from '@/models/BlockType';
 import Subject from '@/models/Subject';
 import TeacherProfile from '@/models/TeacherProfile';
+import TeacherSchedule from '@/models/TeacherSchedule';
+import Room from '@/models/Room';
+import SchoolYear from '@/models/SchoolYear';
+import Curriculum from '@/models/Curriculum';
+import StudentCurriculum from '@/models/StudentCurriculum';
 
-type ModelName = 'Course' | 'User' | 'StudentProfile' | 'Account' | 'Enrollment' | 'BlockType' | 'Subject' | 'TeacherProfile';
+type ModelName = 'Course' | 'User' | 'StudentProfile' | 'Account' | 'Enrollment' | 'BlockType' | 'Subject' | 'TeacherProfile' | 'TeacherSchedule' | 'Room' | 'SchoolYear' | 'Curriculum' | 'StudentCurriculum';
 
 const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   Course,
@@ -19,20 +24,25 @@ const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   Enrollment,
   BlockType,
   Subject,
-  TeacherProfile
+  TeacherProfile,
+  TeacherSchedule,
+  Room,
+  SchoolYear,
+  Curriculum,
+  StudentCurriculum,
 };
 
 const initializeModel = async (modelNames: ModelName[]) => {
-    for (const name of modelNames) {
-      const model = modelsMap[name];
-      if (!model) {
-        throw new Error(`Unknown model: ${name}`);
-      }
-      
-      // Force model initialization by executing a dummy query
-      await model.findOne();
-      console.log(`${name} model initialized`);
+  for (const name of modelNames) {
+    const model = modelsMap[name];
+    if (!model) {
+      throw new Error(`Unknown model: ${name}`);
     }
-  };
+
+    // Force model initialization by executing a dummy query
+    await model.findOne();
+    console.log(`${name} model initialized`);
+  }
+};
 
 export default initializeModel;

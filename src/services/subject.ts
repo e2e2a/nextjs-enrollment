@@ -23,3 +23,12 @@ export const getSubjectCategoryCollege = async () => {
     return [];
   }
 };
+export const getSubjecByCourseCode = async (courseCode: string) => {
+  try {
+    const subjects = await Subject.findOne({ courseCode });
+    return subjects;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};

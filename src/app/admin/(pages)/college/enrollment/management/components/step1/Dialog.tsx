@@ -1,5 +1,5 @@
+'use client';
 import { Copy } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
@@ -8,26 +8,58 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EnrollmentBlockTypeValidator } from '@/lib/validators/Validator';
 import { selectType } from '@/constant/enrollment';
-import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
+import { useApprovedEnrollmentStep1Mutation, useBlockCourseQuery, useSchoolYearQuery } from '@/lib/queries';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { EnrollmentBlockTypeValidator } from '@/lib/validators/AdminValidator';
 
 type IProps = {
   isPending: boolean;
   user: any;
 };
-export function DialogStep1Button({ isPending, user}: IProps) {
+export function DialogStep1Button({ isPending, user }: IProps) {
   const [loader, setLoader] = useState<boolean>(false);
+  const [blocks, setBlocks] = useState<any>([]);
+  const [sy, setSy] = useState<any>([]);
+  const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
+  const { data: syData, isLoading: syLoading, error: syError } = useSchoolYearQuery();
+  const { data: bData, isLoading: bLoading, isError: bError } = useBlockCourseQuery();
   const mutation = useApprovedEnrollmentStep1Mutation();
+
   const form = useForm<z.infer<typeof EnrollmentBlockTypeValidator>>({
     resolver: zodResolver(EnrollmentBlockTypeValidator),
     defaultValues: {
       blockType: '',
+      schoolYear: '',
     },
   });
+  useEffect(() => {
+    if (syLoading || !syData || !syData.sy) return;
+    if (syError) console.log(syError.message);
+    if (syData) {
+      setSy(syData.sy);
+      console.log('courses logs:', syData.sy);
+    }
+  }, [syData, syLoading, syError]);
+  useEffect(() => {
+    const enabledItem = sy.find((item: any) => item.isEnable);
+    if (enabledItem) {
+      form.setValue('schoolYear', enabledItem.schoolYear);
+      setSelectedValue(enabledItem.schoolYear);
+    }
+  }, [sy,form]);
+  useEffect(() => {
+    if (!bData || !bData.blockTypes || bError) return;
+
+    if (bData) {
+      const filteredBlocks = bData.blockTypes.filter((block) => block.courseId._id === user.courseId._id);
+      setBlocks(filteredBlocks);
+      setLoader(false);
+      return;
+    }
+  }, [bData, bError, bLoading, user]);
   const actionFormSubmit = (data: z.infer<typeof EnrollmentBlockTypeValidator>) => {
     // setIsPending(true);
     const dataa = {
@@ -35,7 +67,7 @@ export function DialogStep1Button({ isPending, user}: IProps) {
       ...data,
     };
     mutation.mutate(dataa, {
-      onSuccess: (res) => {
+      onSuccess: (res:any) => {
         console.log(res);
         switch (res.status) {
           case 200:
@@ -86,7 +118,7 @@ export function DialogStep1Button({ isPending, user}: IProps) {
         </DialogHeader>
 
         <Form {...form}>
-          <form action='' method='post'>
+          <form action='' method='post' className='gap-4 flex flex-col'>
             {loader && (
               <div className=' absolute inset-0 flex justify-center top-0 items-center bg-transparent z-50 select-none'>
                 <div className='flex flex-col items-center'>
@@ -103,16 +135,17 @@ export function DialogStep1Button({ isPending, user}: IProps) {
                   <FormControl>
                     <div className='relative bg-slate-50 rounded-lg'>
                       <Select onValueChange={field.onChange} value={field.value}>
-                        <SelectTrigger id={'scholarType'} className='w-full pt-10 pb-4 capitalize focus-visible:ring-0 text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
+                        <SelectTrigger id={'blockType'} className='w-full pt-10 pb-4 capitalize focus-visible:ring-0 text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
                           <SelectValue placeholder={'Select student type'} />
                         </SelectTrigger>
                         <SelectContent className='bg-white border-gray-300 focus-visible:ring-0'>
                           <SelectGroup className='focus-visible:ring-0'>
-                            {selectType.blockType.map((item, index) => (
-                              <SelectItem value={item.value} key={index} className='capitalize'>
-                                {item.name}
-                              </SelectItem>
-                            ))}
+                            {blocks.length > 0 &&
+                              blocks.map((item: any, index: any) => (
+                                <SelectItem value={item._id} key={index} className='capitalize'>
+                                  Block {item.section}
+                                </SelectItem>
+                              ))}
                           </SelectGroup>
                         </SelectContent>
                       </Select>
@@ -121,6 +154,48 @@ export function DialogStep1Button({ isPending, user}: IProps) {
                         className='pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'
                       >
                         {'Block type'}
+                      </label>
+                    </div>
+                  </FormControl>
+                  <FormMessage className='text-red pl-2' />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={'schoolYear'}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <div className='relative bg-slate-50 rounded-lg'>
+                      <Select
+                        onValueChange={(value) => {
+                          setSelectedValue(value); // Update the selected value
+                          
+                          field.onChange(value); // Sync with form state
+                        }}
+                        value={selectedValue || field.value}
+                      >
+                        <SelectTrigger id={'schoolYear'} className='w-full pt-10 pb-4 uppercase focus-visible:ring-0 text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
+                          <SelectValue placeholder={'Select student type'} />
+                        </SelectTrigger>
+                        <SelectContent className='bg-white border-gray-300 focus-visible:ring-0'>
+                          <SelectGroup className='focus-visible:ring-0'>
+                            {sy.length > 0 &&
+                              sy.map((item: any, index: any) => (
+                                // if this item.isEnable is true then must be selected and how
+                                <SelectItem value={item.schoolYear} key={index} className='capitalize'>
+                                  {item.schoolYear}
+                                </SelectItem>
+                              ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <label
+                        htmlFor={'schoolYear'}
+                        className='pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'
+                      >
+                        {'School Year'}
                       </label>
                     </div>
                   </FormControl>

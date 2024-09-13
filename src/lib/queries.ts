@@ -2,10 +2,15 @@ import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tansta
 
 import {
   checkTokenResponse,
+  getAllCurriculumsResponse,
+  getAllRoomResponse,
+  getAllSchoolYearResponse,
+  getAllStudentCurriculumsResponse,
   getAllStudentProfileResponse,
   getAllTeacherProfileResponse,
   getBlockCourseResponse,
   getCourseResponse,
+  getCurriculumsResponse,
   getEnrollmentResponse,
   getSingleEnrollmentResponse,
   getSingleProfileResponse,
@@ -37,10 +42,14 @@ import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updat
 import { getStudentProfileBySessionId, getStudentProfileByUsernameAction } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction } from '@/action/college/enrollment/user';
-import { approvedEnrollmentStep1Action, approvedEnrollmentStep2Action, getEnrollmentByStepAction, undoEnrollmentToStep } from '@/action/college/enrollment/admin';
+import { approvedEnrollmentStep1Action, approvedEnrollmentStep2Action, getEnrollmentByStepAction, undoEnrollmentToStep1 } from '@/action/college/enrollment/admin';
 import { createCollegeCourseBlockAction, getAllBlockTypeAction } from '@/action/college/courses/blocks';
 import { createSubjectCollegeAction, getSubjectCategoryCollegeAction } from '@/action/college/subjects/admin';
 import { adminCreateUserWithRoleAction, getUserRoleStudentAction, getUserRoleTeachertAction } from '@/action/user';
+import { createRoomAction, getAllRoomAction } from '@/action/rooms';
+import { createTeacherScheduleAction } from '@/action/college/schedules/teachers';
+import { createSchoolYearAction, getAllSchoolYearAction } from '@/action/schoolyear';
+import { createStudentCurriculumAction, getAllCurriculumAction, getAllStudentCurriculumAction, getCurriculumByCourseIdAction, getCurriculumByIdAction, getStudentCurriculumByStudentIdAction, updateCurriculumByIdAction, updateCurriculumSubjectByIdAction, updateStudentCurriculumByIdAction, updateStudentCurriculumSubjectByIdAction } from '@/action/college/curriculums';
 const channel = new BroadcastChannel('my-channel');
 // import { supabase } from './supabaseClient';
 
@@ -238,6 +247,7 @@ export const useCreateCourseMutation = () => {
     mutationFn: async (data) => createCourseAction(data),
     onSuccess: () => {
       // Invalidate the 'userProfile' query to trigger a refetch
+      queryClient.invalidateQueries({ queryKey: ['Curriculum'] });
       queryClient.invalidateQueries({ queryKey: ['Course'] });
     },
   });
@@ -315,7 +325,7 @@ export const useApprovedEnrollmentStep1Mutation = () => {
 
 export const useApprovedEnrollmentStep2Mutation = () => {
   const queryClient = useQueryClient();
-  return useMutation<getEnrollmentResponse, Error, z.infer<typeof EnrollmentApprovedStep2>>({
+  return useMutation<getEnrollmentResponse, Error, any>({
     mutationFn: async (data) => approvedEnrollmentStep2Action(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
@@ -323,10 +333,10 @@ export const useApprovedEnrollmentStep2Mutation = () => {
   });
 };
 
-export const useUndoEnrollmentToStepMutation = () => {
+export const useUndoEnrollmentToStep1Mutation = () => {
   const queryClient = useQueryClient();
   return useMutation<getEnrollmentResponse, Error, any>({
-    mutationFn: async (data) => undoEnrollmentToStep(data),
+    mutationFn: async (data) => undoEnrollmentToStep1(data),
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
     },
@@ -358,7 +368,30 @@ export const useCreateCourseBlockMutation = () => {
     },
   });
 };
-
+/**
+ * Admin Room Management
+ * @returns Queries and mutations
+ */
+export const useRoomQuery = () => {
+  return useQuery<getAllRoomResponse, Error>({
+    queryKey: ['Rooms'],
+    queryFn: () => getAllRoomAction(),
+    retry: 0,
+    refetchOnMount: false,
+    // refetchInterval: 5000,
+    refetchOnWindowFocus: true,
+    // retryDelay: (attemptIndex) => attemptIndex * 1000,
+  });
+};
+export const useCreateRoomMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => createRoomAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['Rooms'] });
+    },
+  });
+};
 /**
  * Admin Subject College
  * @returns Queries and mutations
@@ -381,6 +414,162 @@ export const useCreateSubjectCollegeMutation = () => {
     mutationFn: async (data) => createSubjectCollegeAction(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['SubjectCollege'] });
+    },
+  });
+};
+
+/**
+ * Admin Teacher Schedule Management
+ * @returns Queries and mutations
+ */
+export const useCreateTeacherScheduleCollegeMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => createTeacherScheduleAction(data),
+    onSuccess: () => {
+      // queryClient.invalidateQueries({ queryKey: [''] });
+    },
+  });
+};
+
+
+/**
+ * Admin School Year
+ * @returns Queries and mutations
+ */
+export const useSchoolYearQuery = () => {
+  return useQuery<getAllSchoolYearResponse, Error>({
+    queryKey: ['SchoolYear'],
+    queryFn: () => getAllSchoolYearAction(),
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
+
+export const useCreateSchoolYearMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => createSchoolYearAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['SchoolYear'] });
+    },
+  });
+};
+
+/**
+ * Admin Curriculum
+ * @returns Queries and mutations
+ */
+export const useCurriculumQuery = () => {
+  return useQuery<getAllCurriculumsResponse, Error>({
+    queryKey: ['Curriculum'],
+    queryFn: () => getAllCurriculumAction(),
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
+
+export const useProspectusQueryById = (id: any) => {
+  return useQuery<getCurriculumsResponse, Error>({
+    queryKey: ['CurriculumById', id],
+    queryFn: () => getCurriculumByIdAction(id),
+    retry: 0,
+    enabled: !!id,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
+export const useCurriculumQueryByCourseId = (course: any) => {
+  return useQuery<getCurriculumsResponse, Error>({
+    queryKey: ['CurriculumByCourse', course],
+    queryFn: () => getCurriculumByCourseIdAction(course),
+    retry: 0,
+    enabled: !!course,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
+
+export const useUpdateCurriculumLayerMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => updateCurriculumByIdAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['Curriculum'] });
+      queryClient.invalidateQueries({ queryKey: ['CurriculumById'] });
+      queryClient.invalidateQueries({ queryKey: ['CurriculumByCourse'] });
+    },
+  });
+};
+
+export const useUpdateCurriculumLayerSubjectMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => updateCurriculumSubjectByIdAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['Curriculum'] });
+      queryClient.invalidateQueries({ queryKey: ['CurriculumById'] });
+      queryClient.invalidateQueries({ queryKey: ['CurriculumByCourse'] });
+    },
+  });
+};
+
+/**
+ * Admin Student Curriculum
+ * @returns Queries and mutations
+ */
+export const useStudentCurriculumQuery = () => {
+  return useQuery<getAllStudentCurriculumsResponse, Error>({
+    queryKey: ['StudentCurriculum'],
+    queryFn: () => getAllStudentCurriculumAction(),
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
+
+export const useStudentCurriculumQueryByStudentId = (id: any) => {
+  return useQuery<getCurriculumsResponse, Error>({
+    queryKey: ['StudentCurriculumById', id],
+    queryFn: () => getStudentCurriculumByStudentIdAction(id),
+    retry: 0,
+    enabled: !!id,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
+
+export const useCreateStudentCurriculumMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => createStudentCurriculumAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['StudentCurriculum'] });
+      queryClient.invalidateQueries({ queryKey: ['StudentCurriculumById'] });
+    },
+  });
+};
+
+export const useUpdateStudentCurriculumLayerMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => updateStudentCurriculumByIdAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['StudentCurriculum'] });
+      queryClient.invalidateQueries({ queryKey: ['StudentCurriculumById'] });
+    },
+  });
+};
+
+export const useUpdateStudentCurriculumLayerSubjectMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => updateStudentCurriculumSubjectByIdAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['StudentCurriculum'] });
+      queryClient.invalidateQueries({ queryKey: ['StudentCurriculumById'] });
     },
   });
 };

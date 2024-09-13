@@ -42,6 +42,9 @@ export function DataTable1<TData, TValue>({ columns, data }: DataTableProps<TDat
   return (
     <div>
       {/* Filters */}
+      <div className='flex items-center py-4 text-black'>
+        <h1 className='text-3xl font-bold'>Step1: Verify Enrollee Information</h1>
+      </div>
       <div className='flex items-center justify-between w-full '>
         <div className='flex items-center  py-4 text-black'>
           <Input

@@ -159,287 +159,280 @@ export const dashboardConfig: DashboardConfig = {
     //   ],
     //   icon: 'bookOpenText',
     // },
+
     {
-      title: 'Junior High School',
+      title: 'Secondary Education',
       i: [
         {
-          title: 'Sections',
+          title: 'Junior High School',
           i: [
             {
-              title: 'Section Management',
+              title: 'Sections',
+              i: [
+                {
+                  title: 'Section Management',
+                  href: '/admin/courses/blocks',
+                  icon: 'eye',
+                },
+                {
+                  title: 'Add Section',
+                  href: '/admin/courses/blocks/add',
+                  icon: 'add',
+                },
+              ],
+              icon: 'packageSearch',
+            },
+            {
+              title: 'Level Management',
               href: '/admin/courses/blocks',
               icon: 'eye',
             },
             {
-              title: 'Add Section',
+              title: 'Add Level',
               href: '/admin/courses/blocks/add',
               icon: 'add',
             },
           ],
-          icon: 'packageSearch',
+          icon: 'bookOpenText',
         },
         {
-          title: 'Level Management',
-          href: '/admin/courses/blocks',
-          icon: 'eye',
-        },
-        {
-          title: 'Add Level',
-          href: '/admin/courses/blocks/add',
-          icon: 'add',
-        },
-      ],
-      icon: 'bookOpenText',
-    },
-    {
-      title: 'Senior High School',
-      i: [
-        {
-          title: 'Sections',
+          title: 'Senior High School',
           i: [
             {
-              title: 'Section Management',
+              title: 'Sections',
+              i: [
+                {
+                  title: 'Section Management',
+                  href: '/admin/courses/blocks',
+                  icon: 'eye',
+                },
+                {
+                  title: 'Add Section',
+                  href: '/admin/courses/blocks/add',
+                  icon: 'add',
+                },
+              ],
+              icon: 'packageSearch',
+            },
+            {
+              title: 'Strand/Tracks Management',
               href: '/admin/courses/blocks',
               icon: 'eye',
             },
             {
-              title: 'Add Section',
+              title: 'Add Strand/Tracks',
               href: '/admin/courses/blocks/add',
               icon: 'add',
             },
           ],
-          icon: 'packageSearch',
-        },
-        {
-          title: 'Strand/Tracks Management',
-          href: '/admin/courses/blocks',
-          icon: 'eye',
-        },
-        {
-          title: 'Add Strand/Tracks',
-          href: '/admin/courses/blocks/add',
-          icon: 'add',
+          icon: 'bookOpenText',
         },
       ],
-      icon: 'bookOpenText',
+      icon: 'packageSearch',
     },
     {
-      title: 'Tesda',
+      title: 'Vocational Education',
       i: [
         {
-          title: 'Blocks',
+          title: 'Tesda',
           i: [
             {
-              title: 'Block Management',
-              href: '/admin/courses/blocks',
-              icon: 'eye',
+              title: 'Blocks',
+              i: [
+                {
+                  title: 'Block Management',
+                  href: '/admin/courses/blocks',
+                  icon: 'eye',
+                },
+                {
+                  title: 'Add Block',
+                  href: '/admin/courses/blocks/add',
+                  icon: 'add',
+                },
+              ],
+              icon: 'packageSearch',
             },
-            {
-              title: 'Add Block',
-              href: '/admin/courses/blocks/add',
-              icon: 'add',
-            },
-          ],
-          icon: 'packageSearch',
-        },
-        {
-          title: 'Course Management',
-          href: '/admin/courses/blocks',
-          icon: 'eye',
-        },
-        {
-          title: 'Add Course',
-          href: '/admin/courses/blocks/add',
-          icon: 'add',
-        },
-      ],
-      icon: 'bookOpenText',
-    },
-    {
-      title: 'College',
-      i: [
-        {
-          title: 'Blocks',
-          i: [
-            {
-              title: 'Block Management',
-              href: '/admin/college/courses/blocks',
-              icon: 'eye',
-            },
-            {
-              title: 'Add Block',
-              href: '/admin/college/courses/blocks/add',
-              icon: 'add',
-            },
-          ],
-          icon: 'packageSearch',
-        },
-        {
-          title: 'Courses',
-          i: [
             {
               title: 'Course Management',
-              href: '/admin/college/courses',
+              href: '/admin/courses/blocks',
               icon: 'eye',
             },
             {
               title: 'Add Course',
-              href: '/admin/college/courses/add',
+              href: '/admin/courses/blocks/add',
               icon: 'add',
             },
           ],
-          icon: 'packageSearch',
+          icon: 'bookOpenText',
         },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Tertiary Education',
+      i: [
         {
-          title: 'Subjects',
+          title: 'College',
           i: [
             {
-              title: 'Subject Management',
-              href: '/admin/college/subjects',
-              icon: 'eye',
+              title: 'Courses',
+              i: [
+                {
+                  title: 'Courses Management',
+                  href: '/admin/college/courses',
+                  icon: 'eye',
+                },
+                {
+                  title: 'Add Course',
+                  href: '/admin/college/courses/add',
+                  icon: 'add',
+                },
+              ],
+              icon: 'packageSearch',
             },
             {
-              title: 'Add Subject',
-              href: '/admin/college/subjects/add',
-              icon: 'add',
+              title: 'Blocks',
+              i: [
+                {
+                  title: 'Blocks Management',
+                  href: '/admin/college/courses/blocks',
+                  icon: 'eye',
+                },
+                {
+                  title: 'Add Block',
+                  href: '/admin/college/courses/blocks/add',
+                  icon: 'add',
+                },
+              ],
+              icon: 'packageSearch',
+            },
+            {
+              title: 'Subjects',
+              i: [
+                {
+                  title: 'Subjects Management',
+                  href: '/admin/college/subjects',
+                  icon: 'eye',
+                },
+                {
+                  title: 'Add Subject',
+                  href: '/admin/college/subjects/add',
+                  icon: 'add',
+                },
+              ],
+              icon: 'packageSearch',
+            },
+            {
+              title: 'Schedules',
+              i: [
+                {
+                  title: `Instructor's Schedules`,
+                  i: [
+                    {
+                      title: 'Schedules Management',
+                      href: '/admin/college/schedules/instructors',
+                      icon: 'eye',
+                    },
+                    {
+                      title: 'Add Instructor Schedule',
+                      href: '/admin/college/schedules/instructors/add',
+                      icon: 'add',
+                    },
+                  ],
+                  icon: 'packageSearch',
+                },
+                {
+                  title: `Block's Schedules`,
+                  i: [
+                    {
+                      title: `Schedules Management`,
+                      href: '/admin/college/schedules',
+                      icon: 'eye',
+                    },
+                    {
+                      title: 'Add Block Schedule',
+                      href: '/admin/college/schedules/add',
+                      icon: 'add',
+                    },
+                  ],
+                  icon: 'packageSearch',
+                },
+              ],
+              icon: 'packageSearch',
+            },
+            {
+              title: 'Enrollment',
+              i: [
+                {
+                  title: 'Enrollment Process',
+                  i: [
+                    {
+                      title: 'Step 1 Management',
+                      href: '/admin/college/enrollment/management?step=1',
+                      icon: 'eye',
+                    },
+                    {
+                      title: 'Step 2 Management',
+                      href: '/admin/college/enrollment/management?step=2',
+                      icon: 'eye',
+                    },
+                    {
+                      title: 'Step 3 Management',
+                      href: '/admin/college/enrollment/management?step=3',
+                      icon: 'eye',
+                    },
+                    {
+                      title: 'Step 4 Management',
+                      href: '/admin/college/enrollment/management?step=4',
+                      icon: 'eye',
+                    },
+                  ],
+                  icon: 'packageSearch',
+                },
+              ],
+              icon: 'packageSearch',
+            },
+            {
+              title: 'Rooms',
+              i: [
+                {
+                  title: 'Rooms Management',
+                  href: '/admin/college/rooms',
+                  icon: 'eye',
+                },
+                {
+                  title: 'Add Room',
+                  href: '/admin/college/rooms/add',
+                  icon: 'add',
+                },
+              ],
+              icon: 'packageSearch',
+            },
+            {
+              title: 'Curriculums',
+              i: [
+                {
+                  title: 'Curriculum Management',
+                  href: '/admin/college/curriculums',
+                  icon: 'eye',
+                },
+                {
+                  title: 'Student Curriculum Mng.',
+                  href: '/admin/college/curriculums/students',
+                  icon: 'eye',
+                },
+              ],
+              icon: 'packageSearch',
             },
           ],
-          icon: 'packageSearch',
+          icon: 'bookOpenText',
         },
-        // {
-        //   title: 'Course Management',
-        //   href: '/admin/courses/blocks',
-        //   icon: 'eye',
-        // },
-        // {
-        //   title: 'Add Course',
-        //   href: '/admin/college/courses/add',
-        //   icon: 'add',
-        // },
       ],
-      icon: 'bookOpenText',
+      icon: 'packageSearch',
     },
-    // {
-    //   title: 'Courses',
-    //   i: [
-    //     {
-    //       title: 'Course Blocks',
-    //       i: [
-    //         {
-    //           title: 'Block Management',
-    //           href: '/admin/courses/blocks',
-    //           icon: 'eye',
-    //         },
-    //         {
-    //           title: 'Add Block',
-    //           href: '/admin/courses/blocks/add',
-    //           icon: 'add',
-    //         },
-    //       ],
-    //       icon: 'packageSearch',
-    //     },
-
-    //     {
-    //       title: 'Add Course',
-    //       href: '/admin/courses/add',
-    //       icon: 'add',
-    //     },
-    //     // {
-    //     //   title: 'Course Management',
-    //     //   href: '/admin/courses',
-    //     //   icon: 'libraryBig',
-    //     // },
-    //   ],
-    //   icon: 'libraryBig',
-    // },
-    // {
-    //   title: 'Enrollment',
-    //   i: [
-    //     {
-    //       title: 'Enrollment Process',
-    //       i: [
-    //         {
-    //           title: 'Step 1 Management',
-    //           href: '/admin/enrollment/management?step=1',
-    //           icon: 'eye',
-    //         },
-    //         {
-    //           title: 'Step 2 Management',
-    //           href: '/admin/enrollment/management?step=2',
-    //           icon: 'eye',
-    //         },
-    //         {
-    //           title: 'Step 3 Management',
-    //           href: '/admin/enrollment/management?step=3',
-    //           icon: 'eye',
-    //         },
-    //         {
-    //           title: 'Step 4 Management',
-    //           href: '/admin/enrollment/management?step=4',
-    //           icon: 'eye',
-    //         },
-    //       ],
-    //       icon: 'packageSearch',
-    //     },
-    //     {
-    //       title: 'Course Inventory',
-    //       href: '/admin/courses',
-    //       icon: 'libraryBig',
-    //     },
-    //     {
-    //       title: 'Add Course',
-    //       href: '/admin/courses/add',
-    //       icon: 'add',
-    //     },
-    //   ],
-    //   icon: 'graduationCap',
-    // },
-    // // {
-    // //   title: 'Classes',
-    // //   href: '/',
-    // //   icon: 'fileBadge',
-    // // },
-    // {
-    //   title: 'Schedules',
-    //   i: [
-    //     {
-    //       title: `Professor's Schedules`,
-    //       href: '/courses',
-    //       icon: 'eye',
-    //     },
-    //     {
-    //       title: `Schedules Management`,
-    //       href: '/admin/schedules',
-    //       icon: 'eye',
-    //     },
-    //     {
-    //       title: 'Add Professor Schedules',
-    //       href: '/admin/courses/add',
-    //       icon: 'add',
-    //     },
-    //   ],
-    //   icon: 'timer',
-    // },
-    // {
-    //   title: 'Subjects',
-    //   i: [
-    //     {
-    //       title: `Subject Management`,
-    //       href: '/admin/subjects',
-    //       icon: 'eye',
-    //     },
-    //     {
-    //       title: 'Add Subject',
-    //       href: '/admin/subjects/add',
-    //       icon: 'add',
-    //     },
-    //   ],
-    //   icon: 'notebook',
-    // },
     {
       title: 'User Roles',
       i: [
-        
         {
           title: `Admins Management`,
           href: '/admin/subjects',
@@ -451,16 +444,16 @@ export const dashboardConfig: DashboardConfig = {
           icon: 'userSearch',
         },
         {
-          title: 'Role Teacher',
+          title: 'Role Instructor',
           i: [
             {
-              title: 'Teachers Management',
-              href: '/admin/users/teachers',
+              title: 'Instructors Management',
+              href: '/admin/users/instructors',
               icon: 'eye',
             },
             {
-              title: 'Add Teacher',
-              href: '/admin/users/teachers/add',
+              title: 'Add Instructor',
+              href: '/admin/users/instructors/add',
               icon: 'add',
             },
           ],
@@ -484,6 +477,17 @@ export const dashboardConfig: DashboardConfig = {
         },
       ],
       icon: 'usersRound',
+    },
+    {
+      title: 'School Year',
+      i: [
+        {
+          title: 'School Year Management',
+          href: '/admin/schoolyear',
+          icon: 'eye',
+        },
+      ],
+      icon: 'calendarFold',
     },
     {
       title: 'Records',

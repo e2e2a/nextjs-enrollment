@@ -1,4 +1,3 @@
-//@ts-nocheck
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
@@ -15,18 +14,11 @@ import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
 import { useState } from 'react';
 import { DialogStep1Button } from './Dialog';
 import ActionsCell from './ActionsCell';
+import { IEnrollment } from '@/types';
+import PSAFile from './PSAFile';
+import StudentPhoto from './StudentPhoto';
 
-interface Enrollment {
-  id: string;
-  userId: any;
-  courseId: any;
-  studentYear: string;
-  studentSemester: string;
-  step: any;
-  createdAt: Date;
-  updatedAt: Date;
-}
-export const columns: ColumnDef<Enrollment>[] = [
+export const columns: ColumnDef<IEnrollment>[] = [
   {
     accessorKey: 'fullname',
     header: ({ column }) => {
@@ -131,6 +123,26 @@ export const columns: ColumnDef<Enrollment>[] = [
   //     },
   //   },
   {
+    accessorFn: (row) => row.psaUrl,
+    accessorKey: 'psa file',
+    header: 'PSA file',
+    cell: ({ row }) => {
+      const user = row.original;
+      
+      return <PSAFile user={user} />;
+    },
+  },
+  {
+    accessorFn: (row) => row.photoUrl,
+    accessorKey: 'student photo',
+    header: 'Student Photo',
+    cell: ({ row }) => {
+      const user = row.original;
+      
+      return <StudentPhoto user={user} />;
+    },
+  },
+  {
     accessorKey: 'createdAt',
     header: 'CreatedAt',
     cell: ({ row }) => {
@@ -151,38 +163,7 @@ export const columns: ColumnDef<Enrollment>[] = [
       return <div className='font-medium'>{formatted}</div>;
     },
   },
-  // {
-  //   id: 'actions',
-  //   header: 'Actions',
-  //   cell: ({ row }) => {
-  //     const user = row.original;
-
-  //     return (
-  //       <DropdownMenu modal={false}>
-  //         <DropdownMenuTrigger asChild>
-  //           <div className='flex justify-center items-center w-full'>
-  //             <Button size={'sm'} className='w-auto focus-visible:ring-0 flex bg-blue-500 px-2 py-0 text-neutral-50 font-medium'>
-  //               <span className='sr-only'>Open menu</span>
-  //               Options
-  //             </Button>
-  //           </div>
-  //         </DropdownMenuTrigger>
-  //         <DropdownMenuContent align='end' className='bg-white'>
-  //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-  //           <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user._id)}>Copy user ID</DropdownMenuItem>
-  //           <DropdownMenuItem>
-  //             <DataTableDrawer user={user} />
-  //           </DropdownMenuItem>
-  //           <DropdownMenuSeparator />
-  //           <DropdownMenuItem>
-  //             <Link href={`/profile/${user.userId.username}`}>View profile</Link>
-  //           </DropdownMenuItem>
-  //           <DropdownMenuItem>View payment details</DropdownMenuItem>
-  //         </DropdownMenuContent>
-  //       </DropdownMenu>
-  //     );
-  //   },
-  // },
+ 
   {
     id: 'actions',
     header: 'Actions',
@@ -192,25 +173,5 @@ export const columns: ColumnDef<Enrollment>[] = [
       return <ActionsCell user={user} />;
     },
   },
-  // {
-  //   id: 'actions',
-  //   header: 'Actions',
-  //   cell: ({ row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div className=''>
-  //         <div className='flex justify-center items-center w-full gap-1'>
-  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-green-500 px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
-  //             Make an appointment
-  //             <Icons.check className='h-4 w-4' />
-  //           </Button>
-  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-red px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
-  //             Reject
-  //             <Icons.close className='h-4 w-4' />
-  //           </Button>
-  //         </div>
-  //       </div>
-  //     );
-  //   },
-  // },
+  
 ];

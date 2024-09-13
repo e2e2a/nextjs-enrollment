@@ -21,7 +21,7 @@ export function SelectInput({ form, name, label, selectItems, placeholder }: IPr
           <FormControl>
             <div className='relative bg-slate-50 rounded-lg'>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <SelectTrigger id={name} className='w-full pt-10 pb-4 text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
+                <SelectTrigger id={name} className='w-full pt-10 pb-4 capitalize text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
                   <SelectValue placeholder={placeholder} />
                 </SelectTrigger>
                 <SelectContent className='bg-white border-gray-300'>

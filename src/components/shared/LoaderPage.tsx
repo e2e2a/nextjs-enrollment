@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 const LoaderPage = () => (
-  <div className=" h-screen justify-center items-center bg-slate-100 z-50 select-none">
+  <div className=" h-screen justify-center items-center z-50 select-none">
   <div className="flex flex-col justify-center top-16 items-center w-full h-full animate-out ease-out transition-transform duration-200">
     <Image
       src="/icons/loader.svg"

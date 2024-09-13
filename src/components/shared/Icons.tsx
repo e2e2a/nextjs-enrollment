@@ -1,4 +1,6 @@
 import {
+  CalendarFold,
+  Paperclip,
   UserSearch,
   UsersRound,
   BookOpenText,
@@ -52,6 +54,8 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
+  calendarFold: CalendarFold,
+  paperclip: Paperclip,
   userSearch: UserSearch,
   usersRound: UsersRound,
   bookOpenText: BookOpenText,

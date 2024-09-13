@@ -7,21 +7,23 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
-import { useUndoEnrollmentToStepMutation } from '@/lib/queries';
-import Step1 from '@/app/(user)/(pages)/enrollment/components/Step1';
+import { useApprovedEnrollmentStep2Mutation, useUndoEnrollmentToStep1Mutation } from '@/lib/queries';
+import { DialogStep1Button } from './Dialog';
 type IProps = {
   user: any;
 };
 const ActionsCell2 = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
-  const undoMutation = useUndoEnrollmentToStepMutation();
-  const actionFormSubmit = () => {
+  const undoMutation = useUndoEnrollmentToStep1Mutation();
+  const mutation = useApprovedEnrollmentStep2Mutation();
+  console.log('user', user);
+  const actionFormUndo = () => {
     const data = {
       EId: user._id,
       step: user.step,
-      blockType: user.blockType
+      blockType: user.blockType,
     };
-    console.log(data)
+
     undoMutation.mutate(data, {
       onSuccess: (res) => {
         console.log(res);
@@ -45,6 +47,33 @@ const ActionsCell2 = ({ user }: IProps) => {
       onSettled: () => {},
     });
   };
+  const actionFormSubmit = () => {
+    // setIsPending(true);
+    const dataa = {
+      EId: user._id,
+    };
+    mutation.mutate(dataa, {
+      onSuccess: (res) => {
+        console.log(res);
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            // setTypeMessage('success');
+            // setMessage(res?.message);
+            console.log(res);
+            return;
+          default:
+            //create maketoast
+            // setIsPending(false);
+            // setMessage(res.error);
+            // setTypeMessage('error');
+            return;
+        }
+      },
+      onSettled: () => {},
+    });
+  }
   return (
     <div className=''>
       <Popover>
@@ -58,9 +87,7 @@ const ActionsCell2 = ({ user }: IProps) => {
         </PopoverTrigger>
         <PopoverContent align='center' className='w-[215px] bg-neutral-50 px-1 py-0'>
           <Command>
-            {/* <CommandInput placeholder='Search language...' /> */}
             <CommandList>
-              {/* <CommandEmpty>No language found.</CommandEmpty> */}
               <CommandGroup className=''>
                 <Link href={`/profile/${user.userId.username}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
                   <div className='flex justify-center items-center text-sm font-medium gap-x-1'>
@@ -68,11 +95,26 @@ const ActionsCell2 = ({ user }: IProps) => {
                     View student profile
                   </div>
                 </Link>
-                <Button type='button' disabled={isPending} size={'sm'} className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}>
+                <Link href={`/admin/college/curriculums/students/${user.profileId._id}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
+                  <div className='flex justify-center items-center text-sm font-medium gap-x-1'>
+                    <Icons.fileStack className='h-4 w-4' />
+                    Apply Credits
+                  </div>
+                </Link>
+                {/* @todo */}
+
+                {/* {user.studentStatus === 'new student' || user.studentStatus === 'transfer student' ? (
+                  <Button type='button' disabled={isPending} size={'sm'} className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}>
+                    <Icons.check className='h-4 w-4' />
+                    Apply Credits
+                  </Button>
+                ) : null} */}
+                {/* <DialogStep1Button isPending={isPending} user={user} /> */}
+                <Button size={'sm'} type='submit' onClick={actionFormSubmit} className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}>
                   <Icons.check className='h-4 w-4' />
                   Complete Current Step
                 </Button>
-                <Button disabled={isPending} type='button' size={'sm'} onClick={actionFormSubmit} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-yellow-400 px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
+                <Button disabled={isPending} type='button' size={'sm'} onClick={actionFormUndo} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-yellow-400 px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
                   <Icons.rotateCcw className='h-4 w-4' />
                   Undo last Step
                 </Button>
@@ -80,7 +122,6 @@ const ActionsCell2 = ({ user }: IProps) => {
                   <Icons.close className='h-4 w-4' />
                   Reject Enrollee
                 </Button>
-                {/* <DataTableDrawer user={user} /> */}
               </CommandGroup>
             </CommandList>
           </Command>

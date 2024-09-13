@@ -231,20 +231,26 @@ export type getCourseResponse = {
 /**
  * this getEnrollment should be called if we query whose session id is login
  */
-type IEnrollment = {
+export type IEnrollment = {
   id?: any;
   _id: any;
   userId?: any;
+  profileId?: any;
   courseId?: any;
-  step?: any;
+  blockTypeId?: any;
   courseCode: string;
   studentYear: string;
   studentSemester?: string;
   onProcess: Boolean;
-  enrollStatus?: string;
+  step?: any;
+  psaUrl?: string;
+  photoUrl?: string;
+  pdfUrl?: string;
   studentStatus?: string;
+  enrollStatus?: string;
   studentType?: string;
   scholarType?: string;
+  schoolYear: string;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -344,8 +350,64 @@ export interface ITeacherProfile {
   isVerified: boolean;
   lastLogin?: Date;
   lastLogout?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 export type getAllTeacherProfileResponse = {
   teachers?: ITeacherProfile[];
   role?: string;
+} & IResponse;
+
+export interface IRoom {
+  _id: string;
+  id: string;
+  educationLevel: string;
+  roomName: string;
+  roomType: string;
+  floorLocation: string;
+  isRoomAvailable: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export type getAllRoomResponse = {
+  rooms?: IRoom[];
+} & IResponse;
+export type ISchoolYear = {
+  id?: any;
+  _id: any;
+  schoolYear: any;
+  isEnable: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+export type getAllSchoolYearResponse = {
+  sy?: ISchoolYear[];
+} & IResponse;
+
+export type ICurriculum = {
+  id?: any;
+  _id: any;
+  courseId: any;
+  curriculum: any;
+  createdAt: Date;
+  updatedAt: Date;
+};
+export type getAllCurriculumsResponse = {
+  curriculums?: ICurriculum[];
+} & IResponse;
+export type getCurriculumsResponse = {
+  curriculum?: ICurriculum;
+} & IResponse;
+
+export type IStudentCurriculum = {
+  id?: any;
+  _id: any;
+  studentId: any;
+  courseId: any;
+  curriculum: any;
+  createdAt: Date;
+  updatedAt: Date;
+};
+export type getAllStudentCurriculumsResponse = {
+  curriculums?: IStudentCurriculum[];
 } & IResponse;

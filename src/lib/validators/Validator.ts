@@ -88,13 +88,12 @@ export const StudentProfileValidator = z
 
 
 
-export const EnrollmentBlockTypeValidator = z.object({
-  blockType: z.string().min(1, { message: 'Block Type is required...' }),
-});
+
 export const EnrollmentStep1 = z.object({
-  courseCode: z.string().min(1, { message: 'course is required...' }),
-  studentYear: z.string().min(1, { message: 'year must atleast 1 characters.' }),
-  studentSemester: z.string().min(1, { message: 'year must atleast 6 characters.' }),
+  courseCode: z.string().min(1, { message: 'Course is required...' }),
+  studentStatus: z.string().min(1, { message: 'Student Status is required...' }),
+  studentYear: z.string().min(1, { message: 'Student Year is required...' }),
+  studentSemester: z.string().min(1, { message: 'Student Semester is required...' }),
 });
 
 export const EnrollmentApprovedStep2 = z.object({
@@ -167,13 +166,11 @@ export const SubjectCollegeValidator = z.object({
   lec: z
     .string()
     .length(1, { message: 'Lec must be exactly 1 digit.' })
-    .regex(/^[0-9]+$/, { message: 'Lec must only contain numbers 0-9.' })
-    .refine((val) => Number(val) > 0, { message: 'Lec must be greater than 0.' }),
+    .regex(/^[0-9]+$/, { message: 'Lec must only contain numbers 0-9.' }),
   lab: z
     .string()
     .length(1, { message: 'Lab must be exactly 1 digit.' })
-    .regex(/^[0-9]+$/, { message: 'Lab must only contain numbers 0-9.' })
-    .refine((val) => Number(val) > 0, { message: 'Lab must be greater than 0.' }),
+    .regex(/^[0-9]+$/, { message: 'Lab must only contain numbers 0-9.' }),
   unit: z
     .string()
     .length(1, { message: 'Unit must be exactly 1 digit.' })

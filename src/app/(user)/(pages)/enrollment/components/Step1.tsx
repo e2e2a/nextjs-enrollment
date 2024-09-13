@@ -2,23 +2,35 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TabsContent } from '@/components/ui/tabs';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SelectInput } from './SelectInput';
 import { Form } from '@/components/ui/form';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EnrollmentStep1 } from '@/lib/validators/Validator';
-import { studentSemesterData, studentYearData } from '@/constant/test/courses';
 import { useCourseQuery, useEnrollmentDeleteMutation, useEnrollmentStep1Mutation } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Icons } from '@/components/shared/Icons';
+import { selectType, studentSemesterData, studentYearData } from '@/constant/enrollment';
+import { makeToastError } from '@/lib/toast/makeToast';
+import FileBirth from './FileBirth';
+import Photo from './Photo';
 type IProps = {
   search: any;
   enrollment: any;
 };
 const Step1 = ({ search, enrollment }: IProps) => {
+  const [photoPreview, setPhotoPreview] = useState<File | null>(null);
+  const [photoError, setPhotoError] = useState('');
+  const PhotoInputRef = useRef<HTMLInputElement>(null);
+  console.log(photoPreview);
+
+  const [filePreview, setFilePreview] = useState<File | null>(null);
+  const [fileError, setFileError] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const { data: s } = useSession();
   const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
   useEffect(() => {
@@ -28,23 +40,77 @@ const Step1 = ({ search, enrollment }: IProps) => {
     }
     if (res) console.log('courses logs:', res.courses);
   }, [res, isCoursesLoading, isCoursesError, enrollment]);
+  const handleSelectedPhoto = (files: FileList | null) => {
+    if (files && files?.length > 0) {
+      if (files[0].size < 10000000) {
+        if (files[0].type === 'image/jpeg' || files[0].type === 'image/png') {
+          setPhotoError('');
+          const file = files[0];
+          setPhotoPreview(file);
+        } else {
+          makeToastError('Student Photo Only allowed JPEG and PNG files.');
+        }
+      } else {
+        makeToastError('File size too large');
+      }
+    }
+  };
+  const handleSelectedFile = (files: FileList | null) => {
+    if (files && files?.length > 0) {
+      if (files[0].size < 10000000) {
+        if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
+          setFileError('');
+          const file = files[0];
+          setFilePreview(file);
+        } else {
+          makeToastError('PSA file Only allowed JPEG, PNG and PDF files.');
+        }
+      } else {
+        makeToastError('File size too large');
+      }
+    }
+  };
+  const handleClickPhoto = () => {
+    if (PhotoInputRef.current) {
+      PhotoInputRef.current.click();
+    }
+  };
+  const handleClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+  const handleRemoveFile = () => setFilePreview(null);
+  const handleRemovePhoto = () => setPhotoPreview(null);
   const mutation = useEnrollmentStep1Mutation();
   const deleteMutation = useEnrollmentDeleteMutation();
   const form = useForm<z.infer<typeof EnrollmentStep1>>({
     resolver: zodResolver(EnrollmentStep1),
     defaultValues: {
       courseCode: search !== null ? search.toLowerCase() : '',
+      studentStatus: '',
       studentYear: '',
       studentSemester: '',
     },
   });
   const onSubmit: SubmitHandler<z.infer<typeof EnrollmentStep1>> = async (data) => {
     console.log(data);
-    const EData = {
+    const formData = new FormData();
+    formData.append('file', filePreview!);
+    formData.append('photo', photoPreview!);
+    data.courseCode = data.courseCode.toLowerCase();
+    data.studentSemester = data.studentSemester.toLowerCase()
+    const dataa = {
       ...data,
       userId: s?.user.id,
+      formData: formData,
     };
-    mutation.mutate(EData, {
+    console.log(dataa);
+    // const EData = {
+    //   ...data,
+
+    // };
+    mutation.mutate(dataa, {
       onSuccess: (res) => {
         console.log(res);
         switch (res.status) {
@@ -68,8 +134,6 @@ const Step1 = ({ search, enrollment }: IProps) => {
     });
   };
 
-  //implement cancelation of enrollment by deleting the enrollment model by the enrollment found ${enrollment}
-  console.log(enrollment);
   const handleDeleteEnrollment = (EId: any) => {
     deleteMutation.mutate(EId, {
       onSuccess: (res) => {
@@ -158,10 +222,17 @@ const Step1 = ({ search, enrollment }: IProps) => {
             <Form {...form}>
               <form action='' method='post' onSubmit={form.handleSubmit(onSubmit)}>
                 <CardContent className='w-full space-y-2'>
-                  <div className='flex flex-col gap-4'>
-                    <SelectInput label='Course name' form={form} name={'courseCode'} selectItems={res?.courses!} placeholder='Select course' />
-                    <SelectInput label='Student year' form={form} name={'studentYear'} selectItems={studentYearData} placeholder='Select year' />
-                    <SelectInput label='Student semester' form={form} name={'studentSemester'} selectItems={studentSemesterData} placeholder='Select semester' />
+                  <div className='flex flex-col gap-4 w-full'>
+                    <div className='grid sm:grid-cols-2 gap-4 w-full'>
+                      <SelectInput label='Course name' form={form} name={'courseCode'} selectItems={res?.courses!} placeholder='Select course' />
+                      <SelectInput label='Student Status' form={form} name={'studentStatus'} selectItems={selectType.studentStatus} placeholder='Select semester' />
+                      <SelectInput label='Student year' form={form} name={'studentYear'} selectItems={studentYearData} placeholder='Select year' />
+                      <SelectInput label='Student semester' form={form} name={'studentSemester'} selectItems={studentSemesterData} placeholder='Select semester' />
+                    </div>
+                    <div className='flex flex-col w-full sm:flex-row sm:gap-0 gap-4'>
+                      <FileBirth handleSelectedFile={handleSelectedFile} handleRemoveFile={handleRemoveFile} handleClick={handleClick} fileInputRef={fileInputRef} filePreview={filePreview} fileError={fileError} isUploading={isUploading} />
+                      <Photo handleSelectedPhoto={handleSelectedPhoto} handleRemovePhoto={handleRemovePhoto} handleClickPhoto={handleClickPhoto} PhotoInputRef={PhotoInputRef} photoPreview={photoPreview} photoError={photoError} isUploading={isUploading} />
+                    </div>
                   </div>
                 </CardContent>
                 <CardFooter>

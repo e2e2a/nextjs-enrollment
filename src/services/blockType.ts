@@ -13,16 +13,22 @@ export const createBlockType = async (data: any) => {
   }
 };
 
-/**
- * @todo
- * @returns 
- */
 export const getAllBlockType = async () => {
   try {
     const p = await BlockType.find().populate('courseId').exec()
     return p
   } catch (error) {
     return []
+  }
+}
+
+export const getBlockTypeById = async (id:any) => {
+  try {
+    const p = await BlockType.findById(id).populate('courseId').exec()
+    return p
+  } catch (error) {
+    console.log(error);
+    return null
   }
 }
 export const getfilterBlockType = async (data: any) => {

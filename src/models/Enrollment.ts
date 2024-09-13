@@ -5,13 +5,16 @@ export interface IEnrollment extends Document {
   userId: mongoose.Schema.Types.ObjectId;
   profileId: mongoose.Schema.Types.ObjectId;
   courseId: mongoose.Schema.Types.ObjectId;
+  blockTypeId: mongoose.Schema.Types.ObjectId;
   studentYear?: string;
   studentSemester?: string;
   onProcess: Boolean;
   step: Number;
+  psaUrl: string;
+  photoUrl: string;
   pdfUrl: string;
+  schoolYear: string;
   enrollStatus?: 'Pending' | 'Approved' | 'Rejected';
-  blockType: string;
   isStudentProfile: string;
   studentStatus?: 'New Student' | 'Continued' | 'Completed';
   studentType?: 'Regular' | 'Non-Regular';
@@ -31,6 +34,10 @@ const schema = new Schema<IEnrollment>(
     courseId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Course',
+    },
+    blockTypeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'BlockType',
     },
     // sectionId: {
     //   type: mongoose.Schema.Types.ObjectId,
@@ -56,7 +63,14 @@ const schema = new Schema<IEnrollment>(
     // },
     onProcess: { type: Boolean, default: false },
     step: { type: Number, default: 1 },
+    psaUrl:{type: String,},
+    photoUrl: {
+      type: String,
+    },
     pdfUrl: {
+      type: String,
+    },
+    schoolYear: {
       type: String,
     },
     enrollStatus: {
@@ -70,9 +84,7 @@ const schema = new Schema<IEnrollment>(
       enum: ['New Student', 'Continue', 'Completed'],
     },
     // onAccepted: { type: String, default: 'Accepted', enum: ['Accepted', 'Decline'] },
-    blockType: {
-      type: String,
-    },
+    
     isStudentProfile:{
       type: String,
     },

@@ -121,8 +121,8 @@ const Page = () => {
     <div className='border py-5 bg-white rounded-xl'>
       <Card className='border-0 bg-transparent'>
         <CardHeader className='space-y-3'>
-          <CardTitle className='text-left text-lg xs:text-2xl sm:text-3xl font-poppins'>Register a New Teacher!</CardTitle>
-          <CardDescription className='text-xs sm:text-sm'>To register a new teacher, please provide the necessary information. This information is essential for administrative purposes and will help enable additional features in the system.</CardDescription>
+          <CardTitle className='text-left text-lg xs:text-2xl sm:text-3xl font-poppins'>Register a New Instructor!</CardTitle>
+          <CardDescription className='text-xs sm:text-sm'>To register a new instructor, please provide the necessary information. This information is essential for administrative purposes and will help enable additional features in the system.</CardDescription>
         </CardHeader>
         <Form {...formCollege}>
           <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>

@@ -8,6 +8,8 @@ import fs from 'fs';
 import path from 'path';
 import nodemailer from 'nodemailer';
 import { createPDF } from '../../createPdf';
+import { getBlockTypeById } from '@/services/blockType';
+import { getSchoolYearByYear } from '@/services/schoolYear';
 // import { verificationTemplate } from './emailTemplate/verificationTemplate';
 export const getEnrollmentByStepAction = async (userId: any): Promise<getEnrollmentResponse> => {
   try {
@@ -23,11 +25,16 @@ export const getEnrollmentByStepAction = async (userId: any): Promise<getEnrollm
 export const approvedEnrollmentStep1Action = async (data: any): Promise<getEnrollmentResponse> => {
   try {
     await dbConnect();
+    console.log(data);
     const checkE = await getEnrollmentById(data.EId);
-    if (!checkE) return { error: 'id not valid', status: 500 };
+    if (!checkE) return { error: 'Id is not valid', status: 403 };
+    const checkBlock = await getBlockTypeById(data.blockType);
+    if (!checkBlock) return { error: 'Block Type is not valid', status: 403 };
+    const checkSY = await getSchoolYearByYear(data.schoolYear);
+    if (!checkSY) return { error: 'SchoolYear is not valid', status: 403 };
+    console.log('check:', checkSY);
+    await updateEnrollmentById(data.EId, { step: 2, blockTypeId: data.blockType, schoolYear: data.schoolYear });
     // const pdf = await sendEmailWithPDF(checkE);
-    await updateEnrollmentById(data.EId, { step: 2, blockType: data.blockType });
-
     return { enrollment: [], status: 200 };
   } catch (error) {
     console.log('server e :', error);
@@ -40,7 +47,8 @@ export const approvedEnrollmentStep2Action = async (data: any): Promise<getEnrol
     await dbConnect();
     const checkE = await getEnrollmentById(data.EId);
     if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
-    await sendEmailWithPDF(checkE);
+    await updateEnrollmentById(data.EId, { step: 3 });
+    // await sendEmailWithPDF(checkE);
     return { enrollment: [], status: 200 };
   } catch (error) {
     console.log('server e :', error);
@@ -94,15 +102,17 @@ const sendEmailWithPDF = async (checkE: any) => {
   }
 };
 
-export const undoEnrollmentToStep = async (data: any): Promise<getEnrollmentResponse> => {
+export const undoEnrollmentToStep1 = async (data: any): Promise<getEnrollmentResponse> => {
   try {
     await dbConnect();
     const checkE = await getEnrollmentById(data.EId);
     if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
-    data.step = checkE.step as number - 1;
-    data.blockType = '';
-    const updated = await updateEnrollmentById(data.EId, { ...data });
-    console.log('success', updated);
+    if (checkE.step === 2) {
+      data.step = (checkE.step as number) - 1;
+      data.schoolYear = '';
+      const updated = await updateEnrollmentById(data.EId, { ...data, $unset: { blockTypeId: 1 } });
+      console.log('success', updated);
+    }
     return { enrollment: [], status: 200 };
   } catch (error) {
     console.log('server e :', error);

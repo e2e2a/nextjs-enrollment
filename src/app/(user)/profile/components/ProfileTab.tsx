@@ -26,6 +26,7 @@ const ProfileTab = ({ profile }: Iprops) => {
     firstname: '',
     middlename: '',
     lastname: '',
+    extensionName: '',
     numberStreet: '',
     barangay: '',
     district: '',
@@ -63,6 +64,7 @@ const ProfileTab = ({ profile }: Iprops) => {
         firstname: profile?.firstname || '',
         middlename: profile?.middlename || '',
         lastname: profile?.lastname || '',
+        extensionName: profile?.extensionName || '',
         numberStreet: profile?.numberStreet || '',
         barangay: profile?.barangay || '',
         district: profile?.district || '',
@@ -75,7 +77,7 @@ const ProfileTab = ({ profile }: Iprops) => {
         sex: profile?.sex || '',
         civilStatus: profile?.civilStatus || '',
         employmentStatus: profile?.employmentStatus || '',
-        birthday:  new Date(profile.birthday) || new Date(), // Handle date conversion profile?.birthday ? new Date(profile.birthday) :
+        birthday: new Date(profile.birthday) || new Date(), // Handle date conversion profile?.birthday ? new Date(profile.birthday) :
         birthPlaceCity: profile?.birthPlaceCity || '',
         birthPlaceProvince: profile?.birthPlaceProvince || '',
         birthPlaceRegion: profile?.birthPlaceRegion || '',
@@ -86,9 +88,13 @@ const ProfileTab = ({ profile }: Iprops) => {
       form.reset(profileDefaultValues); // Reset form with fetched default values
     };
     fetchProfileData();
-  }, [ form,profile]);
+  }, [form, profile]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
+    data.firstname = data.firstname.toLowerCase();
+    data.lastname = data.lastname.toLowerCase();
+    data.middlename = data.middlename.toLowerCase();
+    data.middlename = data.middlename.toLowerCase();
     try {
       // console.log('Form Submitted: ', data);
       const profileData = {
@@ -131,7 +137,9 @@ const ProfileTab = ({ profile }: Iprops) => {
           <CardHeader>
             <CardTitle className='pt-3 pb-5 pl-0'>
               <div className='flex '>
-                <div className="w-full pl-11"><h1 className='text-3xl font-bold leading-[140%] tracking-wide text-center'>Profile</h1></div>
+                <div className='w-full pl-11'>
+                  <h1 className='text-3xl font-bold leading-[140%] tracking-wide text-center'>Profile</h1>
+                </div>
                 {profile.isVerified && (
                   <div className='bg-slate-200 hover:bg-slate-300 relative right-2 rounded-xl py-1.5 px-2 cursor-pointer flex items-center gap-1' title='Edit' onClick={handleEditable}>
                     <Icons.squarePen className='h-5 w-5 fill-white stroke-blue-600 relative' />
@@ -144,7 +152,7 @@ const ProfileTab = ({ profile }: Iprops) => {
           </CardHeader>
           {/* note if its not editable its pb-0 @button */}
           <CardContent className=''>
-            <div className={`flex flex-col lg:flex-row lg:gap-8 ${isNotEditable ? 'justify-around ': 'px-0 lg:px-11'}`}>
+            <div className={`flex flex-col lg:flex-row lg:gap-8 ${isNotEditable ? 'justify-around ' : 'px-0 lg:px-11'}`}>
               <div className={`flex-col flex gap-4 ${isNotEditable ? '' : 'flex-1'}`}>
                 <div className='flex-1 mb-5 lg:mb-0'>
                   <h1 className='text-lg font-bold border-b text-center lg:text-left'>Manpower Profile</h1>
@@ -152,7 +160,7 @@ const ProfileTab = ({ profile }: Iprops) => {
                     <Input isNotEditable={isNotEditable} name={'firstname'} type={'text'} form={form} label={'Firstname:'} classNameInput={'capitalize'} />
                     <Input isNotEditable={isNotEditable} name={'middlename'} type={'text'} form={form} label={'Middlename:'} classNameInput={'capitalize'} />
                     <Input isNotEditable={isNotEditable} name={'lastname'} type={'text'} form={form} label={'Lastname:'} classNameInput={'capitalize'} />
-                    <Input isNotEditable={isNotEditable} name={'extensionName'} type={'text'} form={form} label={'Extension Name:'} classNameInput={'capitalize'} />
+                    <Input isNotEditable={isNotEditable} name={'extensionName'} type={'text'} form={form} label={'Suffix:'} classNameInput={'capitalize'} />
                   </div>
                 </div>
                 <div className='flex-1 mb-5 lg:mb-0'>
@@ -171,7 +179,7 @@ const ProfileTab = ({ profile }: Iprops) => {
                 </div>
               </div>
               {!isNotEditable && <div className='w-px border border-gray-300 hidden md:flex mx-1 h-auto' />}
-              
+
               <div className={`flex-col flex gap-4 ${isNotEditable ? '' : 'flex-1'}`}>
                 <div className='lg:mb-0'>
                   <h1 className='text-lg font-bold border-b text-center lg:text-left'>Personal Information</h1>

@@ -9,17 +9,9 @@ import { DataTable1 } from './components/step1/DataTable';
 import { Button } from '@/components/ui/button';
 import { DataTableDrawer } from './components/Drawer';
 import { DataTable2 } from './components/step2/DataTable2';
+import { DataTable3 } from './components/step3/DataTable3';
+import { IEnrollment } from '@/types';
 
-interface Enrollment {
-  id: string;
-  userId: any;
-  courseId: any;
-  studentYear: string;
-  studentSemester: string;
-  step: any;
-  createdAt: Date;
-  updatedAt: Date;
-}
 const Page = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -55,8 +47,20 @@ const Page = () => {
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {
-            isError ? <div className=''>404</div> : search === '1' ? <DataTable1 columns={columns} data={data?.enrollment as Enrollment[]} /> : search === '2' ? <DataTable2 columns={columns2} data={data?.enrollment as Enrollment[]} /> : search === '3'
-            // : search === '3'
+            isError ? (
+              <div className=''>404</div>
+            ) : search === '1' ? (
+              <DataTable1 columns={columns} data={data?.enrollment as IEnrollment[]} />
+            ) : search === '2' ? (
+              <DataTable2 columns={columns2} data={data?.enrollment as IEnrollment[]} />
+            ) : search === '3' ? (
+              <DataTable3 columns={columns2} data={data?.enrollment as IEnrollment[]} />
+            ) : search === '4' ? (
+              <DataTable3 columns={columns2} data={data?.enrollment as IEnrollment[]} />
+            ) : (
+              search === '5'
+            )
+
             // : search === '4'
             //else if === 2
             //else if === 3

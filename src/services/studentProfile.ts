@@ -33,16 +33,18 @@ export const getAllStudentProfile = async () => {
     // console.log(studentProfile);
     return studentProfile;
   } catch (error) {
+    console.log(error)
     return null;
   }
 };
 
 export const getStudentProfileById = async (id: any) => {
   try {
-    const studentProfile = await StudentProfile.findOne(id).populate('userId').exec();
+    const studentProfile = await StudentProfile.findById(id).populate('userId').exec();
     // console.log(studentProfile);
     return JSON.parse(JSON.stringify(studentProfile));
   } catch (error) {
+    console.log(error)
     return null;
   }
 };

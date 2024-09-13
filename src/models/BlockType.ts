@@ -36,6 +36,12 @@ const schema = new Schema<IBlockType>(
     },
     blockSubjects: [
       {
+        //remember this is not like this instead this will be a reference to the teacherSchedule
+        teacherScheduleId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'TeacherSchedule',
+        },
+        //
         subjectId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Subject',

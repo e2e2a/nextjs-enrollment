@@ -12,7 +12,7 @@ import { useSession } from 'next-auth/react';
 import Input from './components/Input';
 import TextareaField from './components/Textarea';
 import { useCreateCourseMutation } from '@/lib/queries';
-import { makeToastError } from '@/lib/toast/makeToast';
+import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import CourseToast from '@/lib/toast/CourseToast';
 import { SelectInput } from './components/SelectInput';
 import { selectType } from '@/constant/course';
@@ -48,7 +48,6 @@ const Page = () => {
           setImagePreview(reader.result as string);
         };
         reader.readAsDataURL(file);
-
       } else {
         makeToastError('File size too large');
       }
@@ -65,7 +64,7 @@ const Page = () => {
       const formData = new FormData();
       formData.append('file', imageFile!);
       data.courseCode = data.courseCode.toLowerCase();
-      data.name = data.name.toLowerCase()
+      data.name = data.name.toLowerCase();
       const dataa = {
         ...data,
         formData: formData,
@@ -80,8 +79,8 @@ const Page = () => {
             case 201:
             case 203:
               // return (window.location.reload());
-              CourseToast(data.courseCode, imagePreview!);
-
+              // CourseToast(data.courseCode, imagePreview!);
+              if (res.message) makeToastSucess(res.message);
               return;
             default:
               if (res.error) return makeToastError(res.error);
@@ -115,9 +114,9 @@ const Page = () => {
             <CardContent className='w-full space-y-2'>
               <Photo session={session} handleSelectedFile={handleSelectedFile} handleClick={handleClick} fileInputRef={fileInputRef} imagePreview={imagePreview} photoError={photoError} isUploading={isUploading} />
 
-              <div className='flex flex-col gap-4'> 
+              <div className='flex flex-col gap-4'>
                 {/* <SelectInput name={'category'} selectItems={selectType.courseType} form={form} label={'Select Course Category:'} placeholder={'Select Course Category'} /> */}
-                <Input isNotEditable={isNotEditable} name={'courseCode'} type={'text'} form={form} label={'Course Initialism:'} classNameInput={'capitalize'} />
+                <Input isNotEditable={isNotEditable} name={'courseCode'} type={'text'} form={form} label={'Course Initialism:'} classNameInput={'uppercase'} />
                 <Input isNotEditable={isNotEditable} name={'name'} type={'text'} form={form} label={'Course Name:'} classNameInput={'capitalize'} />
                 <TextareaField isNotEditable={isNotEditable} name={'description'} type={'text'} form={form} label={'Description:'} classNameInput={'capitalize'} />
               </div>
