@@ -135,7 +135,7 @@ const isAfter = (startTime: string, endTime: string) => {
 export const TeacherScheduleCollegeValidator = z
   .object({
     teacherId: z.string().min(1, { message: 'Teacher is required...' }),
-    subject: z.string().min(1, { message: 'Subject is required...' }),
+    subjectId: z.string().min(1, { message: 'Subject is required...' }),
     roomId: z.string().min(1, { message: 'Room is required...' }),
     days: z
       .array(z.string().min(1, { message: 'Day must be a non-empty string.' }))

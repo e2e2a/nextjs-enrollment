@@ -8,13 +8,16 @@ import {
   getAllStudentCurriculumsResponse,
   getAllStudentProfileResponse,
   getAllTeacherProfileResponse,
+  getAllTeacherScheduleResponse,
   getBlockCourseResponse,
   getCourseResponse,
   getCurriculumsResponse,
   getEnrollmentResponse,
+  getSingleBlockCourseResponse,
   getSingleEnrollmentResponse,
   getSingleProfileResponse,
   getSubjectCategoryCollegeResponse,
+  getTeacherScheduleResponse,
   INewPost,
   INewUser,
   IResponse,
@@ -43,13 +46,25 @@ import { getStudentProfileBySessionId, getStudentProfileByUsernameAction } from 
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction } from '@/action/college/enrollment/user';
 import { approvedEnrollmentStep1Action, approvedEnrollmentStep2Action, getEnrollmentByStepAction, undoEnrollmentToStep1 } from '@/action/college/enrollment/admin';
-import { createCollegeCourseBlockAction, getAllBlockTypeAction } from '@/action/college/courses/blocks';
+import { createCollegeCourseBlockAction, getAllBlockTypeAction, getBlockTypeByIdAction } from '@/action/college/courses/blocks';
 import { createSubjectCollegeAction, getSubjectCategoryCollegeAction } from '@/action/college/subjects/admin';
 import { adminCreateUserWithRoleAction, getUserRoleStudentAction, getUserRoleTeachertAction } from '@/action/user';
 import { createRoomAction, getAllRoomAction } from '@/action/rooms';
-import { createTeacherScheduleAction } from '@/action/college/schedules/teachers';
+import { createTeacherScheduleAction, getAllTeacherScheduleAction, getTeacherScheduleByIdAction } from '@/action/college/schedules/teachers';
 import { createSchoolYearAction, getAllSchoolYearAction } from '@/action/schoolyear';
-import { createStudentCurriculumAction, getAllCurriculumAction, getAllStudentCurriculumAction, getCurriculumByCourseIdAction, getCurriculumByIdAction, getStudentCurriculumByStudentIdAction, updateCurriculumByIdAction, updateCurriculumSubjectByIdAction, updateStudentCurriculumByIdAction, updateStudentCurriculumSubjectByIdAction } from '@/action/college/curriculums';
+import {
+  createStudentCurriculumAction,
+  getAllCurriculumAction,
+  getAllStudentCurriculumAction,
+  getCurriculumByCourseIdAction,
+  getCurriculumByIdAction,
+  getStudentCurriculumByStudentIdAction,
+  updateCurriculumByIdAction,
+  updateCurriculumSubjectByIdAction,
+  updateStudentCurriculumByIdAction,
+  updateStudentCurriculumSubjectByIdAction,
+} from '@/action/college/curriculums';
+import { removeCourseBlockScheduleAction, updateCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
 const channel = new BroadcastChannel('my-channel');
 // import { supabase } from './supabaseClient';
 
@@ -169,6 +184,8 @@ export const useAdminCreateUserRoleMutation = () => {
            */
         } else if (data.role === 'TEACHER') {
           queryClient.invalidateQueries({ queryKey: ['Teachers'] });
+          queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
+          queryClient.invalidateQueries({ queryKey: ['TeacherScheduleById'] });
         } else if (data.role === 'STUDENT') {
           queryClient.invalidateQueries({ queryKey: ['Students'] });
         }
@@ -342,6 +359,15 @@ export const useUndoEnrollmentToStep1Mutation = () => {
     },
   });
 };
+export const useUndoEnrollmentToStep2Mutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<getEnrollmentResponse, Error, any>({
+    mutationFn: async (data) => undoEnrollmentToStep1(data),
+    onSuccess: () => {
+      queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
+    },
+  });
+};
 
 /**
  * Admin Course BlockType
@@ -358,6 +384,16 @@ export const useBlockCourseQuery = () => {
     // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
+export const useBlockCourseQueryById = (data: any) => {
+  return useQuery<getSingleBlockCourseResponse, Error>({
+    queryKey: ['BlockTypeById', data],
+    queryFn: () => getBlockTypeByIdAction(data),
+    enabled: !!data,
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
 
 export const useCreateCourseBlockMutation = () => {
   const queryClient = useQueryClient();
@@ -365,6 +401,29 @@ export const useCreateCourseBlockMutation = () => {
     mutationFn: async (data) => createCollegeCourseBlockAction(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
+      queryClient.invalidateQueries({ queryKey: ['BlockTypeById'] });
+    },
+  });
+};
+export const useUpdateCourseBlockScheduleMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => updateCourseBlockScheduleAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['BlockType'] });
+      queryClient.invalidateQueries({ queryKey: ['BlockTypeById'] });
+      queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
+    },
+  });
+};
+export const useRemoveCourseBlockScheduleMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => removeCourseBlockScheduleAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['BlockType'] });
+      queryClient.invalidateQueries({ queryKey: ['BlockTypeById'] });
+      queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
     },
   });
 };
@@ -402,9 +461,7 @@ export const useSubjectCollegeQuery = () => {
     queryFn: () => getSubjectCategoryCollegeAction(),
     retry: 0,
     refetchOnMount: false,
-    // refetchInterval: 5000,
     refetchOnWindowFocus: true,
-    // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
 
@@ -422,16 +479,36 @@ export const useCreateSubjectCollegeMutation = () => {
  * Admin Teacher Schedule Management
  * @returns Queries and mutations
  */
+export const useTeacherScheduleCollegeQuery = () => {
+  return useQuery<getAllTeacherScheduleResponse, Error>({
+    queryKey: ['TeacherSchedule'],
+    queryFn: () => getAllTeacherScheduleAction(),
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
+export const useTeacherScheduleCollegeQueryById = (data: any) => {
+  return useQuery<getTeacherScheduleResponse, Error>({
+    queryKey: ['TeacherScheduleById', data],
+    queryFn: () => getTeacherScheduleByIdAction(data),
+    retry: 0,
+    enabled: !!data,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
+
 export const useCreateTeacherScheduleCollegeMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createTeacherScheduleAction(data),
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: [''] });
+      queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
+      queryClient.invalidateQueries({ queryKey: ['TeacherScheduleById'] });
     },
   });
 };
-
 
 /**
  * Admin School Year

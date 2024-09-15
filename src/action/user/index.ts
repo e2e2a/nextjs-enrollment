@@ -2,6 +2,7 @@
 import dbConnect from '@/lib/db/db';
 import { createStudentProfile, deleteStudentProfileByUserId, getAllStudentProfile } from '@/services/studentProfile';
 import { createTeacherProfile, getAllTeacherProfile } from '@/services/teacherProfile';
+import { createTeacherSchedule } from '@/services/teacherSchedule';
 import { checkUserUsername, createUser, deleteUserByEmail, getUserByEmail, getUserByUsername } from '@/services/user';
 import { getAllStudentProfileResponse, getAllTeacherProfileResponse } from '@/types';
 
@@ -35,7 +36,7 @@ export const adminCreateUserWithRoleAction = async (data: any): Promise<getAllSt
   try {
     await dbConnect();
     const { email, password, username, role, createProfile, ...remainDatas } = data;
-    
+
     const checkConflict = await checkingConflict(email, username);
     if (!checkConflict.success) return { error: checkConflict?.error, status: checkConflict?.status };
 
@@ -50,9 +51,13 @@ export const adminCreateUserWithRoleAction = async (data: any): Promise<getAllSt
       if (createProfile) {
         const createdP = await createTeacherProfile({ userId: createdU._id, ...remainDatas, isVerified: true });
         if (!createdP) return { error: 'Error Creating Teacher Profile', status: 404 };
+        const createdS = await createTeacherSchedule({ profileId: createdP._id, category: 'College' });
+        if (!createdS) return { error: 'Error Creating Schedule', status: 404 };
       } else {
         const createdP = await createTeacherProfile({ userId: createdU._id });
         if (!createdP) return { error: 'Error Creating Teacher Profile', status: 404 };
+        const createdS = await createTeacherSchedule({ profileId: createdU._id, category: 'College' });
+        if (!createdS) return { error: 'Error Creating Schedule', status: 404 };
       }
     } else if (role === 'STUDENT') {
       const createdP = await createStudentProfile({ userId: createdU._id });

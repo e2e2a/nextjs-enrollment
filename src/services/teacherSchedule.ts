@@ -13,65 +13,55 @@ export const createTeacherSchedule = async (data: any) => {
   }
 };
 
-export const getTeacherScheduleByProfileId = async (profileId: any) => {
+// export const getAllTeacherSchedule = async () => {
+//   try {
+//     const TProfiles = await TeacherSchedule.find().populate('profileId').populate('schedule.blockTypeId').populate('schedule.subjectId').populate('schedule.roomId').exec();
+//     return TProfiles;
+//   } catch (error) {
+//     return [];
+//   }
+// };
+// export const getTeacherScheduleById = async (id: any) => {
+//   try {
+//     const TProfile = await TeacherSchedule.findById(id).populate('profileId').populate('schedule.blockTypeId').populate('schedule.subjectId').populate('schedule.roomId').exec();
+//     return TProfile;
+//   } catch (error) {
+//     return null;
+//   }
+// };
+// export const getTeacherScheduleByProfileId = async (profileId: any) => {
+//   try {
+//     const TProfile = await TeacherSchedule.findOne({ profileId }).populate('profileId').populate('schedule.blockTypeId').populate('schedule.subjectId').populate('schedule.roomId').exec();
+//     return TProfile;
+//   } catch (error) {
+//     return null;
+//   }
+// };
+
+export const getAllTeacherScheduleByScheduleRoomId = async (roomId: any) => {
   try {
-    const TProfile = await TeacherSchedule.findOne({ profileId })
-    .populate('profileId')
-    .populate('schedule.blockTypeId')
-    .populate('schedule.subjectId')
-    .populate('schedule.roomId')
-    .exec();
+    const TProfile = await TeacherSchedule.find({ 'roomId': roomId });
     return TProfile;
   } catch (error) {
-    return null;
+    console.log('error e:', error);
+    return [];
+  }
+};
+export const getAllTeacherScheduleByProfileId = async (profileId: any) => {
+  try {
+    const TProfiles = await TeacherSchedule.find({ profileId }).populate('profileId').populate('blockTypeId').populate('subjectId').populate('roomId').exec();
+    return TProfiles;
+  } catch (error) {
+    console.log('error e:', error);
+    return [];
   }
 };
 
-export const getTeacherScheduleByScheduleRoomId = async (roomId: any) => {
+export const getAllTeacherSchedule = async () => {
   try {
-    const TProfile = await TeacherSchedule.find({ 'schedule.roomId': roomId });
-    return TProfile;
+    const TProfiles = await TeacherSchedule.find().populate('profileId').populate('blockTypeId').populate('subjectId').populate('roomId').exec();
+    return TProfiles;
   } catch (error) {
     return [];
   }
 };
-// ive added roomId
-
-// const schema = new Schema<ITeacherSchedule>(
-//   {
-//     category: { type: String },
-//     profileId: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: 'TeacherProfile',
-//     },
-//     schedule: [
-//       {
-//         // this sectionId will be used to compare which section and subject to compare with students
-//         // this will only added when its being selected in the list of schedules to add in the section
-//         sectionId: {
-//           type: mongoose.Schema.Types.ObjectId,
-//           ref: 'Section',
-//         },
-//         subjectId: {
-//           type: mongoose.Schema.Types.ObjectId,
-//           ref: 'Subject',
-//         },
-//         roomId: {
-//           type: mongoose.Schema.Types.ObjectId,
-//           ref: 'Room',
-//         },
-//         days: {
-//           type: [String],
-//           default: [],
-//         },
-//         startTime: {
-//           type: String,
-//         },
-//         endTime: {
-//           type: String,
-//         },
-//       },
-//     ],
-//   },
-
-// we still need to check if the room is has a conflict. but the

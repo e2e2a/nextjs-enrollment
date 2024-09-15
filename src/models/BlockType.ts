@@ -41,25 +41,6 @@ const schema = new Schema<IBlockType>(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'TeacherSchedule',
         },
-        //
-        subjectId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Subject',
-        },
-        // professorId: {
-        //   type: mongoose.Schema.Types.ObjectId,
-        //   ref: 'ProfessorProfile',
-        // },
-        days: {
-          type: [String],
-          default: [],
-        },
-        startTime: {
-          type: String,
-        },
-        endTime: {
-          type: String,
-        },
       },
     ],
   },

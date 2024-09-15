@@ -1,8 +1,8 @@
 'use server';
 import dbConnect from '@/lib/db/db';
-import { createBlockType, getAllBlockType, getfilterBlockType } from '@/services/blockType';
+import { createBlockType, getAllBlockType, getBlockTypeById, getfilterBlockType } from '@/services/blockType';
 import { getCourseByCourseCode } from '@/services/course';
-import { getBlockCourseResponse } from '@/types';
+import { getBlockCourseResponse, getSingleBlockCourseResponse } from '@/types';
 
 export const createCollegeCourseBlockAction = async (data: any) => {
   await dbConnect();
@@ -29,6 +29,16 @@ export const getAllBlockTypeAction = async (): Promise<getBlockCourseResponse> =
     await dbConnect();
     const blockTypes = await getAllBlockType();
     return { blockTypes: JSON.parse(JSON.stringify(blockTypes)), status: 200 };
+  } catch (error) {
+    return { error: 'Something went wrong.', status: 500 };
+  }
+};
+
+export const getBlockTypeByIdAction = async (data: any): Promise<getSingleBlockCourseResponse> => {
+  try {
+    await dbConnect();
+    const blockType = await getBlockTypeById(data);
+    return { blockType: JSON.parse(JSON.stringify(blockType)), status: 200 };
   } catch (error) {
     return { error: 'Something went wrong.', status: 500 };
   }

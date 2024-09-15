@@ -17,7 +17,7 @@ const CollapsibleItem = ({ Icon, item }: IProps) => {
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className='w-full'>
       <CollapsibleTrigger asChild>
         <div className='flex w-full select-none'>
-          <Button type='button' className={`group select-none border-0 w-full hover:bg-slate-300  ${isOpen && 'bg-slate-300 bg-opacity-70'} px-5 pr-2 py-6 flex space-x-3 items-center gap-x-1 pl-3 justify-start`}>
+          <Button type='button' className={`group select-none ${isOpen ? 'rounded-none rounded-tl-lg rounded-tr-lg' : ''} border-0 w-full hover:bg-slate-300  ${isOpen && 'bg-slate-300 bg-opacity-70'} px-5 pr-2 py-6 flex space-x-3 items-center gap-x-1 pl-3 justify-start`}>
             <Icon className={`h-7 w-7 group-hover:stroke-blue-500 ${isOpen && 'stroke-blue-500'}`} />
             <div className='flex items-center w-full justify-between'>
               <span className='font-semibold  stroke-black text-sm tracking-tight '>{item.title}</span>
@@ -26,8 +26,8 @@ const CollapsibleItem = ({ Icon, item }: IProps) => {
           </Button>
         </div>
       </CollapsibleTrigger>
-      <CollapsibleContent className=' shadow-sm drop-shadow-sm'>
-        <div className='flex flex-col border px-1.5 py-1'>
+      <CollapsibleContent className=''>
+        <div className='flex flex-col border border-gray-300 mb-2 outline-none px-1.5 py-1'>
           {item.i &&
             item.i.map((i, e) => {
               const Icon = Icons[i.icon || 'arrowRight'];

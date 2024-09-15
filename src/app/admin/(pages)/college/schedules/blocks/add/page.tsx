@@ -13,11 +13,11 @@ import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 import { Combobox } from './components/Combobox';
 import Input from './components/Input';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { SelectInput } from './components/SelectInput';
 import Link from 'next/link';
 import { ComboboxDays } from './components/ComboboxDays';
 import { TeacherScheduleCollegeValidator } from '@/lib/validators/AdminValidator';
 import { ComboboxRoom } from './components/ComboboxRoom';
-import { ComboboxSubjects } from './components/ComboboxSubjects';
 const daysOfWeek = [
   { label: 'Monday', value: 'M' },
   { label: 'Tuesday', value: 'T' },
@@ -36,9 +36,6 @@ const Page = () => {
   const [courseId, setCourseId] = useState('');
   const [teacherId, setTeacherId] = useState('');
   const [roomId, setRoomId] = useState('');
-  const [showLink, setShowLink] = useState(false);
-  const [instructorLink, setInstructorLink] = useState('');
-  const [roomLink, setRoomLink] = useState('');
   const [teachers, setTeachers] = useState<any[]>([]);
   const { data: tData, isLoading, isError } = useUserRolesTeacherQuery();
   const { data: sData, isLoading: sLoading, isError: sError } = useSubjectCollegeQuery();
@@ -79,10 +76,6 @@ const Page = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof TeacherScheduleCollegeValidator>> = async (data) => {
-    //we need to revised the room to roomId and teacher to teacherId
-    setShowLink(false);
-    setRoomLink('');
-    setInstructorLink('');
     data.roomId = roomId;
     data.teacherId = teacherId;
     const dataa = {
@@ -102,10 +95,7 @@ const Page = () => {
           default:
             if (res.error) {
               makeToastError(res.error);
-              setShowLink(true);
             }
-            if (res.errorRoomLink) setRoomLink(res.errorRoomLink);
-            if (res.errorInsLink) setInstructorLink(res.errorInsLink);
 
             return;
         }
@@ -139,42 +129,19 @@ const Page = () => {
                 </div>
               </div>
             </CardHeader>
-            {showLink && (
-              <div className='px-3 mb-5'>
-                <div className='border px-2 rounded-lg shadow-sm drop-shadow-sm bg-white'>
-                  <div className='flex flex-col py-5 w-full sm:flex-row gap-5 items-center'>
-                    <span className='text-red'>Schedule Conflict</span>
-                    {/* <span>See here:</span> */}
-                    {instructorLink && (
-                      <Link href={instructorLink} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
-                        See Professor Schedule
-                      </Link>
-                    )}
-                    {roomLink && (
-                      <Link href={roomLink} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
-                        See Room Schedule
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
+            
             <Form {...formCollege}>
               <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
                 <CardContent className='w-full '>
                   <div className='flex flex-col gap-4'>
                     <Combobox name={'teacherId'} selectItems={teachers} form={formCollege} label={'Select Instructor:'} placeholder={'Select Instructor'} setTeacherId={setTeacherId} />
-                    <ComboboxSubjects name={'subjectId'} selectItems={sData!.subjects} form={formCollege} label={'Select Subject:'} placeholder={'Select Subject'} />
+                    <SelectInput name={'subjectId'} selectItems={sData!.subjects} form={formCollege} label={'Select Subject:'} placeholder={'Select Subject'} />
                     <ComboboxRoom name={'roomId'} selectItems={rooms} form={formCollege} label={'Select Room:'} placeholder={'Select Room'} setRoomId={setRoomId} />
                     <ComboboxDays name={'days'} selectItems={daysOfWeek} form={formCollege} label={'Select Day/s:'} placeholder={'Select Day/s'} />
                     <Input name={'startTime'} type={'time'} form={formCollege} label={'Start Time:'} classNameInput={''} />
                     <Input name={'endTime'} type={'time'} form={formCollege} label={'End Time:'} classNameInput={''} />
                   </div>
                 </CardContent>
-                {/* this link is helpful. sending an id to view the teacher schedules if its conflict */}
-                {/* <Link href='http://localhost:3000' target='_blank' rel='noopener noreferrer'>
-                  Open Example in New Tab
-                </Link> */}
                 <CardFooter>
                   <div className='flex w-full justify-center md:justify-end items-center mt-4'>
                     <Button type='submit' variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-bold'>

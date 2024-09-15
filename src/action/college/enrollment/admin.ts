@@ -119,3 +119,19 @@ export const undoEnrollmentToStep1 = async (data: any): Promise<getEnrollmentRes
     return { error: 'Something went wrong', status: 500 };
   }
 };
+export const undoEnrollmentToStep2 = async (data: any): Promise<getEnrollmentResponse> => {
+  try {
+    await dbConnect();
+    const checkE = await getEnrollmentById(data.EId);
+    if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
+    if (checkE.step === 3) {
+      data.step = (checkE.step as number) - 1;
+      const updated = await updateEnrollmentById(data.EId, { ...data});
+      console.log('success', updated);
+    }
+    return { enrollment: [], status: 200 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};

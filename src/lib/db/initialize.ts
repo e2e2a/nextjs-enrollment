@@ -13,8 +13,9 @@ import Room from '@/models/Room';
 import SchoolYear from '@/models/SchoolYear';
 import Curriculum from '@/models/Curriculum';
 import StudentCurriculum from '@/models/StudentCurriculum';
+import StudentSchedule from '@/models/StudentSchedule';
 
-type ModelName = 'Course' | 'User' | 'StudentProfile' | 'Account' | 'Enrollment' | 'BlockType' | 'Subject' | 'TeacherProfile' | 'TeacherSchedule' | 'Room' | 'SchoolYear' | 'Curriculum' | 'StudentCurriculum';
+type ModelName = 'Course' | 'User' | 'StudentProfile' | 'Account' | 'Enrollment' | 'BlockType' | 'Subject' | 'TeacherProfile' | 'TeacherSchedule' | 'Room' | 'SchoolYear' | 'Curriculum' | 'StudentCurriculum' | 'StudentSchedule';
 
 const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   Course,
@@ -30,6 +31,7 @@ const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   SchoolYear,
   Curriculum,
   StudentCurriculum,
+  StudentSchedule
 };
 
 const initializeModel = async (modelNames: ModelName[]) => {

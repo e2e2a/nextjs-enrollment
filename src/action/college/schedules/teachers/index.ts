@@ -1,25 +1,29 @@
 'use server';
 import dbConnect from '@/lib/db/db';
+import TeacherSchedule from '@/models/TeacherSchedule';
 import { getRoomById } from '@/services/room';
+import { getSubjecByCourseCode } from '@/services/subject';
 import { getTeacherProfileById } from '@/services/teacherProfile';
-import { createTeacherSchedule, getTeacherScheduleByProfileId, getTeacherScheduleByScheduleRoomId } from '@/services/teacherSchedule';
+import { createTeacherSchedule, getAllTeacherSchedule, getAllTeacherScheduleByProfileId, getAllTeacherScheduleByScheduleRoomId } from '@/services/teacherSchedule';
+// import { createTeacherSchedule, getAllTeacherSchedule, getTeacherScheduleById, getTeacherScheduleByProfileId, getTeacherScheduleByScheduleRoomId } from '@/services/teacherSchedule';
+import { getAllTeacherScheduleResponse, getTeacherScheduleResponse } from '@/types';
 
 export const createTeacherScheduleAction = async (data: any) => {
   try {
     await dbConnect();
-    console.log('createRoom action', data);
     const teacher = await getTeacherProfileById(data.teacherId);
     if (!teacher) return { error: 'There is no Teacher found.', status: 404 };
     const room = await getRoomById(data.roomId);
     if (!room) return { error: 'There is no Room found.', status: 404 };
-
-    const teacherSchedule = await getTeacherScheduleByProfileId(teacher._id);
+    const teacherSchedules = await getAllTeacherScheduleByProfileId(teacher._id);
+    console.log('teacherSchedules', teacherSchedules);
     const [newStartHours, newStartMinutes] = data.startTime.split(':').map(Number);
     const [newEndHours, newEndMinutes] = data.endTime.split(':').map(Number);
-    
-    if (teacherSchedule) {
+
+    if (teacherSchedules && teacherSchedules.length > 0) {
       //checking conflict in teacher schedule
-      for (const schedule of teacherSchedule.schedule) {
+      for (const schedule of teacherSchedules) {
+        console.log('my new schedules: ' + schedule);
         const existingDays = schedule.days; // Existing schedule days
         const [existingStartHours, existingStartMinutes] = schedule.startTime.split(':').map(Number);
         const [existingEndHours, existingEndMinutes] = schedule.endTime.split(':').map(Number);
@@ -31,23 +35,23 @@ export const createTeacherScheduleAction = async (data: any) => {
 
           if (isTimeOverlap) {
             // we need to pass the teacherSchedule._id to the frontend and use to see the schedule of the teacher
-            return { error: 'Teacher Schedule conflict. Please adjust the times or days.',errorInsLink: `/${teacherSchedule._id}` , status: 409 };
+            // return { error: 'Teacher Schedule conflict. Please adjust the times or days.', errorInsLink: `/${teacherSchedule._id}`, status: 409 };
+            return { error: 'Teacher Schedule conflict. Please adjust the times or days.', errorInsLink: `/`, status: 409 };
           }
         }
       }
-      const getRooms = await getTeacherScheduleByScheduleRoomId(data.roomId);
+      const getRooms = await getAllTeacherScheduleByScheduleRoomId(data.roomId);
+      console.log('getRooms', getRooms);
       let existingSchedules: { days: string[]; startTime: string; endTime: string }[] = [];
 
       // Collect all existing schedules for the room
       if (getRooms && getRooms.length > 0) {
         for (const teacherSchedule of getRooms) {
-          for (const existingSchedule of teacherSchedule.schedule) {
             existingSchedules.push({
-              days: existingSchedule.days,
-              startTime: existingSchedule.startTime,
-              endTime: existingSchedule.endTime,
+              days: teacherSchedule.days,
+              startTime: teacherSchedule.startTime,
+              endTime: teacherSchedule.endTime,
             });
-          }
         }
       }
 
@@ -70,13 +74,15 @@ export const createTeacherScheduleAction = async (data: any) => {
             return {
               error: 'Room Schedule conflict. Please adjust the times or days.',
               status: 409,
-              errorRoomLink: `/${data.roomId}`  
+              errorRoomLink: `/${data.roomId}`,
             };
           }
         }
       }
-      teacherSchedule.schedule.push({
-        // sectionId: data.sectionId,
+      
+      const newTeacherSchedul = new TeacherSchedule({
+        category: 'College',
+        profileId: teacher._id,
         subjectId: data.subjectId,
         roomId: data.roomId,
         days: data.days,
@@ -84,21 +90,19 @@ export const createTeacherScheduleAction = async (data: any) => {
         endTime: data.endTime,
       });
 
-      await teacherSchedule.save();
+      await newTeacherSchedul.save();
     } else {
-      const getRooms = await getTeacherScheduleByScheduleRoomId(data.roomId);
+      const getRooms = await getAllTeacherScheduleByScheduleRoomId(data.roomId);
       let existingSchedules: { days: string[]; startTime: string; endTime: string }[] = [];
 
       // Collect all existing schedules for the room
       if (getRooms && getRooms.length > 0) {
         for (const teacherSchedule of getRooms) {
-          for (const existingSchedule of teacherSchedule.schedule) {
             existingSchedules.push({
-              days: existingSchedule.days,
-              startTime: existingSchedule.startTime,
-              endTime: existingSchedule.endTime,
+              days: teacherSchedule.days,
+              startTime: teacherSchedule.startTime,
+              endTime: teacherSchedule.endTime,
             });
-          }
         }
       }
 
@@ -125,7 +129,7 @@ export const createTeacherScheduleAction = async (data: any) => {
                * @todo
                * pass link to the client where to see the room schedule individual
                */
-              errorRoomLink: `/${data.roomId}` 
+              errorRoomLink: `/${data.roomId}`,
               // scheduleId: teacherSchedule._id,
             };
           }
@@ -135,16 +139,12 @@ export const createTeacherScheduleAction = async (data: any) => {
       const createdSched = await createTeacherSchedule({
         profileId: teacher._id,
         category: data.category,
-        schedule: [
-          {
-            sectionId: data.sectionId,
-            subjectId: data.subjectId,
-            roomId: data.roomId,
-            days: data.days,
-            startTime: data.startTime,
-            endTime: data.endTime,
-          },
-        ],
+
+        subjectId: data.subjectId,
+        roomId: data.roomId,
+        days: data.days,
+        startTime: data.startTime,
+        endTime: data.endTime,
       });
       if (!createdSched) return { error: 'Something went wrong.', status: 500 };
     }
@@ -155,3 +155,35 @@ export const createTeacherScheduleAction = async (data: any) => {
   }
 };
 
+export const getAllTeacherScheduleAction = async (): Promise<getAllTeacherScheduleResponse> => {
+  try {
+    await dbConnect();
+    const subjects = await getAllTeacherSchedule();
+    return { teacherSchedules: JSON.parse(JSON.stringify(subjects)), status: 200 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+export const getTeacherScheduleByIdAction = async (id: any): Promise<getTeacherScheduleResponse> => {
+  try {
+    await dbConnect();
+    // const subjects = await getTeacherScheduleById(id);
+    // return { teacherSchedule: JSON.parse(JSON.stringify(subjects)), status: 200 };
+    return { teacherSchedule: JSON.parse(JSON.stringify('asd')), status: 200 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+
+// export const getTeacherScheduleAction = async (): Promise<getAllTeacherScheduleResponse> => {
+//   try {
+//     await dbConnect();
+//     const subjects = await getAllTeacherSchedule();
+//     return { teacherSchedules: JSON.parse(JSON.stringify(subjects)), status: 200 };
+//   } catch (error) {
+//     console.log('server e :', error);
+//     return { error: 'Something went wrong', status: 500 };
+//   }
+// };

@@ -11,7 +11,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-export function DataTable2<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   // console.log(data)
   useEffect(() => {
     if (!data) {
@@ -41,17 +41,14 @@ export function DataTable2<TData, TValue>({ columns, data }: DataTableProps<TDat
 
   return (
     <div>
-      <div className='flex items-center py-4 text-black'>
-        <h1 className='text-3xl font-bold'>Step2: Evaluation of Subjects</h1>
-      </div>
       {/* Filters */}
       <div className='flex items-center justify-between w-full '>
-        <div className='flex items-center py-4 text-black'>
+        <div className='flex items-center  py-4 text-black'>
           <Input
-            placeholder='Search by name...'
-            value={(table.getColumn('fullname')?.getFilterValue() as string) ?? ''}
+            placeholder='Search by Descriptive Title...'
+            value={(table.getColumn('Descriptive Title')?.getFilterValue() as string) ?? ''}
             onChange={(event) => {
-              table.getColumn('fullname')?.setFilterValue(event.target.value);
+              table.getColumn('Descriptive Title')?.setFilterValue(event.target.value);
             }}
             className='max-w-sm'
           />

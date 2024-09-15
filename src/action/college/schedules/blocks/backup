@@ -1,0 +1,127 @@
+// 'use server';
+// import dbConnect from '@/lib/db/db';
+// import BlockType from '@/models/BlockType';
+// import TeacherSchedule from '@/models/TeacherSchedule';
+// import { getBlockTypeById } from '@/services/blockType';
+// // import { getAllTeacherSchedule, getTeacherScheduleById } from '@/services/teacherSchedule';
+
+// export const updateCourseBlockScheduleAction = async (data: any) => {
+//   try {
+//     await dbConnect();
+//     console.log('recieved data in e:', data);
+//     const blockType = await getBlockTypeById(data.blockTypeId);
+//     if (!blockType) return { error: 'Block Type ID is not valid.', status: 404 };
+//     //forEach of the selectedItems.teacherScheduleId
+//     /**
+//      * @todo
+//      */
+//     const updatedTs = await updateTS(data.blockTypeId);
+//     for (const item of data.selectedItems) {
+//       // Find the Teacher Schedule
+//       const teacherSchedule = await TeacherSchedule.findById(item.teacherScheduleId).populate('blockTypeId');
+//       if (!teacherSchedule) {
+//         return { error: `Teacher Schedule ID ${item.teacherScheduleId} is not valid.`, status: 404 };
+//       }
+//       //   Update the blockTypeId in the schedule array
+//       // const updatedSchedule = teacherSchedule.schedule.map((sched: any) => {
+//       //   if (sched._id.toString() === item.scheduleId) {
+//       //     // Update blockTypeId to the new value
+//       //     sched.blockTypeId = data.blockTypeId;
+//       //   }
+//       //   return sched;
+//       // });
+
+//       // Save the updated Teacher Schedule
+//       await TeacherSchedule.findByIdAndUpdate(item.teacherScheduleId, { blockTypeId: data.blockTypeId }, { new: true });
+//     }
+//     const updatedBlock = await updateBlock(blockType._id);
+//     if (!updatedBlock) return { message: 'Subject created successfully.', status: 404 };
+//     return { message: 'Subject created successfully.', status: 201 };
+//   } catch (error) {
+//     console.log('server e :', error);
+//     return { error: 'Something went wrong', status: 500 };
+//   }
+// };
+
+// const updateBlock = async (blockTypeId: any) => {
+//   try {
+//     await dbConnect();
+
+//     // Fetch the BlockType by its ID
+//     const blockType = await BlockType.findById(blockTypeId);
+//     if (!blockType) {
+//       return { error: '', status: 500 };
+//     }
+//     const cleaned = await BlockType.findByIdAndUpdate(blockTypeId, { blockSubjects: [] }, { new: true });
+
+//     // Retrieve all TeacherSchedules
+//     const allTeacherSchedules = await TeacherSchedule.find({
+//       blockTypeId: blockTypeId,
+//     }).populate('blockTypeId');
+//     for (const allTS of allTeacherSchedules) {
+//       let needsUpdate = false;
+
+//       // Iterate over the schedule within each teacher schedule
+//       if (allTS.blockTypeId && allTS.blockTypeId._id.toString() === blockTypeId.toString()) {
+//         needsUpdate = true;
+//       }
+
+//       if (needsUpdate) {
+//         await BlockType.findByIdAndUpdate(
+//           blockTypeId, // Update the BlockType document using the blockTypeId
+//           { $addToSet: { blockSubjects: { teacherScheduleId: allTS._id } } }, // Add teacherScheduleId to blockSubjects
+//           { new: true }
+//         );
+//       }
+//     }
+//     // for (const block of blockType.blockSubjects) {
+//     //   const teacherSchedule = await TeacherSchedule.findById(block.teacherScheduleId, {
+//     //     blockTypeId: blockTypeId,
+//     //   }).populate('blockTypeId');
+//     //   if (!teacherSchedule || !teacherSchedule.some((sched: any) => sched.blockTypeId && sched.blockTypeId._id.toString() === blockTypeId.toString())) {
+//     //     // Remove the teacherScheduleId from blockSubjects
+//     //     await BlockType.findByIdAndUpdate(
+//     //       blockTypeId,
+//     //       { $pull: { blockSubjects: { teacherScheduleId: block.teacherScheduleId } } }, // Remove the teacherScheduleId
+//     //       { new: true }
+//     //     );
+//     //   }
+//     // }
+
+//     return { message: 'Block subjects updated successfully.', status: 200 };
+//   } catch (error) {
+//     console.error('Error updating block subjects:', error);
+//     return { error: 'Something went wrong', status: 500 };
+//   }
+// };
+
+// const updateTS = async (blockTypesId: string) => {
+//   /**
+//    * reason why we dont need to query by the teacherScheduleId
+//    * 1. when it's already been added
+//    * @return
+//    */
+//   try {
+//     const allTeacherSchedules = await TeacherSchedule.find().populate('blockTypeId');
+//     // Iterate over all teacher schedules
+//     for (const allTS of allTeacherSchedules) {
+//       let needsUpdate = false;
+
+//       // Iterate over the schedule within each teacher schedule
+//       if (allTS.blockTypeId && allTS.blockTypeId._id.toString() === blockTypesId.toString()) {
+//         needsUpdate = true;
+//       }
+
+//       // If any schedule was updated, save the changes
+//       if (needsUpdate) {
+//         await TeacherSchedule.findByIdAndUpdate(
+//           allTS._id,
+//           { blockTypeId: null }, // Save the updated schedule array
+//           { new: true }
+//         );
+//       }
+//     }
+//   } catch (error) {
+//     console.log('error updating', error);
+//   }
+// };

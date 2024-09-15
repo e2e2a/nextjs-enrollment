@@ -262,18 +262,22 @@ export type getEnrollmentResponse = {
   enrollment?: IEnrollment[];
 } & IResponse;
 
-type IBlockType = {
+export type IBlockType = {
   id?: any;
   _id: any;
   courseId: any;
   semester: string;
   year: string;
   section: string;
+  blockSubjects:any[];
   createdAt: Date;
   updatedAt: Date;
 };
 export type getBlockCourseResponse = {
   blockTypes?: IBlockType[];
+} & IResponse;
+export type getSingleBlockCourseResponse = {
+  blockType?: IBlockType;
 } & IResponse;
 interface ISubject {
   id: string;
@@ -410,4 +414,20 @@ export type IStudentCurriculum = {
 };
 export type getAllStudentCurriculumsResponse = {
   curriculums?: IStudentCurriculum[];
+} & IResponse;
+
+export type ITeacherSchedule = {
+  id?: any;
+  _id: any;
+  category: any;
+  profileId: any;
+  schedule: any;
+  createdAt: Date;
+  updatedAt: Date;
+};
+export type getAllTeacherScheduleResponse = {
+  teacherSchedules?: ITeacherSchedule[];
+} & IResponse;
+export type getTeacherScheduleResponse = {
+  teacherSchedule?: ITeacherSchedule;
 } & IResponse;
