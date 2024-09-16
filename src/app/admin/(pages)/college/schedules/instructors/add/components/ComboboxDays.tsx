@@ -56,7 +56,8 @@ export function ComboboxDays({ form, name, label, selectItems, placeholder }: IP
                 <PopoverTrigger asChild className='w-full pt-10 pb-4 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
                   <Button variant='outline' role='combobox' aria-expanded={open} className='w-full font-normal justify-between' onClick={() => setOpen(!open)}>
                     {/* Display the selected days or placeholder */}
-                    {selectedItems.length > 0 ? selectedItems.map((value) => selectItems.find((item: any) => item.value === value)?.label).join(', ') : placeholder}
+                    {/* {selectedItems.length > 0 ? selectedItems.map((value) => selectItems.find((item: any) => item.value === value)?.label).join(', ') : placeholder} */}
+                    {field.value && field.value.length > 0 ? field.value.map((value: string) => selectItems.find((item: any) => item.value === value)?.label).join(', ') : placeholder}
                     <ChevronDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                   </Button>
                 </PopoverTrigger>
@@ -75,7 +76,7 @@ export function ComboboxDays({ form, name, label, selectItems, placeholder }: IP
                             //   field.onChange(selectedItems);
                             // }}
                           >
-                            <Check className={cn('mr-2 h-4 w-4', selectedItems.includes(item.value) ? 'opacity-100' : 'opacity-0')} />
+                            <Check className={cn('mr-2 h-4 w-4', field.value.includes(item.value) ? 'opacity-100' : 'opacity-0')} />
                             {item.label}
                           </CommandItem>
                         ))}

@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
 import { useUserRolesTeacherQuery, useCreateCourseBlockMutation, useCreateCourseMutation, useSubjectCollegeQuery, useRoomQuery, useCreateTeacherScheduleCollegeMutation, useCourseQueryByCategory } from '@/lib/queries';
-import { makeToastError } from '@/lib/toast/makeToast';
+import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 import { Combobox } from './components/Combobox';
 import Input from './components/Input';
@@ -46,7 +46,7 @@ const Page = () => {
   useEffect(() => {
     if (!tData || !tData.teachers || isError) return;
     if (!sData || !sData.subjects || sError) return;
-    
+
     if (tData && sData) {
       setLoading(false);
       setTeachers(tData.teachers);
@@ -55,14 +55,14 @@ const Page = () => {
   }, [tData, sData, sError, sLoading, isLoading, isError]);
   useEffect(() => {
     if (!rData || !rData.rooms || rError) return;
-    
+
     if (rData) {
       const filteredRooms = rData.rooms.filter((room: any) => room.educationLevel === 'tertiary');
       setRooms(filteredRooms);
       return;
     }
   }, [rData, rLoading, rError]);
-  
+
   const mutation = useCreateTeacherScheduleCollegeMutation();
   const { data } = useSession();
   const session = data?.user;
@@ -97,7 +97,11 @@ const Page = () => {
           case 200:
           case 201:
           case 203:
-            // form.reset();
+            setShowLink(false);
+            setRoomLink('');
+            setInstructorLink('');
+            formCollege.reset();
+            makeToastSucess(res.message);
             return;
           default:
             if (res.error) {

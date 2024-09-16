@@ -15,20 +15,19 @@ import ActionsCell from './ActionsCell';
 import Image from 'next/image';
 
 export const columns: ColumnDef<any>[] = [
-  // {
-  //   accessorFn: (row) => row.teacherScheduleId.blockTypeId.section, // Use accessorFn for nested fields
-  //   id: 'block type',
-  //   header: 'Block Type',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className=' uppercase'>
-  //         {user.teacherScheduleId.blockTypeId && user.teacherScheduleId.blockTypeId.section ? `Block ${user.teacherScheduleId.blockTypeId.section}` : 'No assign block type'}
-  //       </div>
-  //     );
-  //   },
-  // },
-
+  {
+    accessorFn: (row) => '#',
+    id: '#',
+    header: '#',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {row.index + 1}
+        </div>
+      );
+    },
+  },
   {
     accessorFn: (row) => row.teacherScheduleId.subjectId.subjectCode,
     id: 'subject code',
@@ -43,7 +42,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.subjectCode,
+    accessorFn: (row) => row.teacherScheduleId.subjectId.name,
     id: 'subject title',
     header: 'Subject Title',
     cell: ({ cell, row }) => {
@@ -70,8 +69,8 @@ export const columns: ColumnDef<any>[] = [
   },
   {
     accessorFn: (row) => row.teacherScheduleId.startTime,
-    id: 'startTime',
-    header: 'startTime',
+    id: 'start time',
+    header: 'Start Time',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
@@ -82,9 +81,9 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.startTime,
-    id: 'startTime',
-    header: 'startTime',
+    accessorFn: (row) => row.teacherScheduleId.endTime,
+    id: 'end time',
+    header: 'End Time',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (

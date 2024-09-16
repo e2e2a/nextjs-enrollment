@@ -361,6 +361,10 @@ export type getAllTeacherProfileResponse = {
   teachers?: ITeacherProfile[];
   role?: string;
 } & IResponse;
+export type getTeacherProfileResponse = {
+  teacher?: ITeacherProfile;
+  role?: string;
+} & IResponse;
 
 export interface IRoom {
   _id: string;

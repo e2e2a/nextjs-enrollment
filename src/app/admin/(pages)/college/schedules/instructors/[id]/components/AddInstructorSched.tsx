@@ -1,0 +1,143 @@
+'use client';
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Icons } from '@/components/shared/Icons';
+import { useCreateTeacherScheduleCollegeMutation } from '@/lib/queries';
+import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { Form } from '@/components/ui/form';
+import { CardContent, CardFooter } from '@/components/ui/card';
+import { ComboboxSubjects } from '../../add/components/ComboboxSubjects';
+import { ComboboxRoom } from '../../add/components/ComboboxRoom';
+import { ComboboxDays } from '../../add/components/ComboboxDays';
+import Input from '../../add/components/Input';
+import { TeacherScheduleCollegeValidator } from '@/lib/validators/AdminValidator';
+import { z } from 'zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+interface IProps {
+  teacher: any;
+  r: any;
+  s: any;
+}
+const daysOfWeek = [
+  { label: 'Monday', value: 'M' },
+  { label: 'Tuesday', value: 'T' },
+  { label: 'Wednesday', value: 'W' },
+  { label: 'Thursday', value: 'Th' },
+  { label: 'Friday', value: 'F' },
+  { label: 'Saturday', value: 'Sa' },
+  { label: 'Sunday', value: 'Su' },
+];
+const AddInstructorSched = ({ teacher, r, s }: IProps) => {
+  const [roomId, setRoomId] = useState('');
+  const [showLink, setShowLink] = useState(false);
+  const [instructorLink, setInstructorLink] = useState('');
+  const [roomLink, setRoomLink] = useState('');
+  const mutation = useCreateTeacherScheduleCollegeMutation();
+  const formCollege = useForm<z.infer<typeof TeacherScheduleCollegeValidator>>({
+    resolver: zodResolver(TeacherScheduleCollegeValidator),
+    defaultValues: {
+      teacherId: teacher._id,
+      subjectId: '',
+      roomId: '',
+      days: [],
+      startTime: '',
+      endTime: '',
+    },
+  });
+  const onSubmit: SubmitHandler<z.infer<typeof TeacherScheduleCollegeValidator>> = async (data) => {
+    //we need to revised the room to roomId and teacher to teacherId
+    setShowLink(false);
+    setRoomLink('');
+    setInstructorLink('');
+    data.roomId = roomId;
+    const dataa = {
+      ...data,
+      category: 'College',
+    };
+    console.log('data', dataa);
+    data.roomId = roomId;
+    mutation.mutate(dataa, {
+      onSuccess: (res) => {
+        console.log(res);
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            setShowLink(false);
+    setRoomLink('');
+    setInstructorLink('');
+            formCollege.reset();
+            makeToastSucess(res.message)
+            return;
+          default:
+            if (res.error) {
+              makeToastError(res.error);
+              setShowLink(true);
+            }
+            if (res.errorRoomLink) setRoomLink(res.errorRoomLink);
+            if (res.errorInsLink) setInstructorLink(res.errorInsLink);
+
+            return;
+        }
+      },
+      onError: (error) => {
+        console.error(error.message);
+      },
+      onSettled: () => {},
+    });
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button size={'sm'} className={'focus-visible:ring-0 flex mb-2 bg-transparent bg-blue-500 px-2 py-0 gap-x-1 justify-center text-neutral-50 font-medium'}>
+          <Icons.squarePen className='h-4 w-4' />
+          <span className='flex'>Edit Schedule</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent
+        className='sm:max-w-6xl w-full bg-white focus-visible:ring-0 '
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        onInteractOutside={(e) => {
+          e.preventDefault();
+        }}
+      >
+        <DialogHeader>
+          <DialogTitle className='flex flex-col space-y-1'>
+            <span>Add New Instructor Schedule</span>
+            <span className='text-sm font-bold capitalize'>
+              {teacher.firstname} {teacher.middlename} {teacher.lastname} {teacher.extensionName ? teacher.extensionName : ''}
+            </span>
+          </DialogTitle>
+          <DialogDescription>Please fill the all the required fields.</DialogDescription>
+        </DialogHeader>
+        <div className='overflow-auto w-full bg-slate-50 rounded-lg'>
+          <Form {...formCollege}>
+            <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
+              <CardContent className='w-full '>
+                <div className='flex flex-col gap-4'>
+                  <ComboboxSubjects name={'subjectId'} selectItems={s} form={formCollege} label={'Select Subject:'} placeholder={'Select Subject'} />
+                  <ComboboxRoom name={'roomId'} selectItems={r} form={formCollege} label={'Select Room:'} placeholder={'Select Room'} setRoomId={setRoomId} />
+                  <ComboboxDays name={'days'} selectItems={daysOfWeek} form={formCollege} label={'Select Day/s:'} placeholder={'Select Day/s'} />
+                  <Input name={'startTime'} type={'time'} form={formCollege} label={'Start Time:'} classNameInput={''} />
+                  <Input name={'endTime'} type={'time'} form={formCollege} label={'End Time:'} classNameInput={''} />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <div className='flex w-full justify-center md:justify-end items-center mt-4'>
+                  <Button type='submit' variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-bold'>
+                    Register now!
+                  </Button>
+                </div>
+              </CardFooter>
+            </form>
+          </Form>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default AddInstructorSched;

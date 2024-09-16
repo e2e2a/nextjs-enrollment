@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data: TData;
 }
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
@@ -43,7 +43,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     <div>
       {/* Filters */}
       <div className='flex items-center justify-between w-full '>
-        <div className='flex items-center  py-4 text-black'>
+        {/* <div className='flex items-center  py-4 text-black'>
           <Input
             placeholder='Search by Descriptive Title...'
             value={(table.getColumn('Descriptive Title')?.getFilterValue() as string) ?? ''}
@@ -52,7 +52,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             }}
             className='max-w-sm'
           />
-        </div>
+        </div> */}
 
         {/* Column visibility */}
         <DropdownMenu>

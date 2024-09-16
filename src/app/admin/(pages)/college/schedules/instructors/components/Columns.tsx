@@ -13,9 +13,22 @@ import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
 import { useState } from 'react';
 import ActionsCell from './ActionsCell';
 import Image from 'next/image';
-import { ITeacherSchedule } from '@/types';
+import { ITeacherProfile } from '@/types';
 
-export const columns: ColumnDef<ITeacherSchedule>[] = [
+export const columns: ColumnDef<ITeacherProfile>[] = [
+  {
+    accessorFn: (row) => '#',
+    id: '#',
+    header: '#',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {row.index + 1}
+        </div>
+      );
+    },
+  },
   // {
   //   accessorFn: (row) => row.subjectCode,
   //   accessorKey: 'subjectCode',
@@ -42,25 +55,50 @@ export const columns: ColumnDef<ITeacherSchedule>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original;
-      return <div key={cell.id}>{user.profileId.lastname && user.profileId.firstname ? user.profileId.lastname + ',' + ' ' + user.profileId.firstname + ' ' + user.profileId.middlename : 'Unknown'}</div>;
+      return <div key={cell.id}>{user.lastname && user.firstname ? user.lastname + ',' + ' ' + user.firstname + ' ' + user.middlename : 'Unknown'}</div>;
     },
-    accessorFn: (row) => `${row.profileId.lastname}, ${row.profileId.firstname} ${row.profileId.middlename}`,
+    accessorFn: (row) => `${row.lastname}, ${row.firstname} ${row.middlename}`,
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${row.original.profileId.lastname}, ${row.original.profileId.firstname} ${row.original.profileId.middlename}`.toLowerCase();
+      const fullName = `${row.original.lastname}, ${row.original.firstname} ${row.original.middlename}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
   {
-    accessorFn: (row) => row.schedule, // Use accessorFn for nested fields
-    id: 'schedule',
-    header: 'Schedule',
+    accessorFn: (row) => row.sex,
+    id: 'sex',
+    header: 'Sex',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {/* {Array.isArray(user.schedule) ? user.schedule.length : 0} */}
-          {user.schedule.length}
+          {user.sex}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.userId.email, // Use accessorFn for nested fields
+    id: 'email',
+    header: 'Email',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=''>
+          {user.userId.email}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.isVerified,
+    id: 'ProfileVerified',
+    header: 'Profile Verified',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.isVerified ? <span className="text-green-500">TRUE</span> : <span className="text-red">FALSE</span> }
         </div>
       );
     },

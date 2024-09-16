@@ -25,8 +25,8 @@ const Page = ({ params }: { params: { id: string } }) => {
   }, [s, sLoading, sError]);
   useEffect(() => {
     if (s && data) {
-      // const filteredSchedules = s?.teacherSchedules?.filter((schedule: any) => schedule.blockTypeId === null && !schedule.blockTypeId);
-      // setTeachersSchedules(filteredSchedules);
+      const filteredSchedules = s?.teacherSchedules?.filter((schedule: any) => schedule.blockTypeId === null && !schedule.blockTypeId);
+      setTeachersSchedules(filteredSchedules);
       setIsPageLoading(false);
     }
   }, [s, data]);
@@ -39,26 +39,25 @@ const Page = ({ params }: { params: { id: string } }) => {
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {isError ? (
             <div className=''>404</div>
+          ) : data && data.blockType ? (
+            <>
+              <div className='flex items-center py-4 text-black w-full text-center flex-col'>
+                <div>
+                  <h1 className='sm:text-lg text-xl font-bold uppercase'>Block {data.blockType.section}</h1>
+                </div>
+                <div className=''>
+                  <h1 className='sm:text-sm text-lg font-bold'>
+                    {data.blockType.year} - {data.blockType.semester}
+                  </h1>
+                </div>
+              </div>
+              <div className='w-full flex justify-end items-center'>
+                <AddBlockSched blockType={data} s={s?.teacherSchedules} />
+              </div>
+              <DataTable columns={columns} data={data?.blockType.blockSubjects} />
+            </>
           ) : (
-            data &&
-            data.blockType && (
-              <>
-                <div className='flex items-center py-4 text-black w-full text-center flex-col'>
-                  <div>
-                    <h1 className='sm:text-lg text-xl font-bold uppercase'>Block {data.blockType.section}</h1>
-                  </div>
-                  <div className=''>
-                    <h1 className='sm:text-sm text-lg font-bold'>
-                      {data.blockType.year} - {data.blockType.semester}
-                    </h1>
-                  </div>
-                </div>
-                <div className='w-full flex justify-end items-center'>
-                  <AddBlockSched blockType={data} s={s?.teacherSchedules} />
-                </div>
-                <DataTable columns={columns} data={data?.blockType.blockSubjects} />
-              </>
-            )
+            <div className=''>404</div>
           )}
         </div>
       )}

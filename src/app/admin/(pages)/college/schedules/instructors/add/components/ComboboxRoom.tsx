@@ -34,7 +34,7 @@ export function ComboboxRoom({ form, name, label, selectItems, placeholder, setR
                 <PopoverTrigger asChild className='w-full pt-10 pb-4 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
                   <Button variant='outline' role='combobox' aria-expanded={open} className='w-full justify-between font-normal'>
                     {/* {value ? frameworks.find((framework) => framework.value === value)?.label : 'Select framework...'} */}
-                    {value
+                    {/* {value
                       ? (() => {
                           const selectedItem = selectItems.find((item: any) => item.roomName === value);
                           if (selectedItem) {
@@ -42,7 +42,16 @@ export function ComboboxRoom({ form, name, label, selectItems, placeholder, setR
                           }
                           return placeholder;
                         })()
-                      : placeholder}
+                      : placeholder} */}
+                      {field.value
+                  ? (() => {
+                      const selectedItem = selectItems.find((item: any) => item.roomName === field.value);
+                      if (selectedItem) {
+                        return `${selectedItem.roomName}`;
+                      }
+                      return placeholder; // In case the value doesn't match any item
+                    })()
+                  : placeholder}
                     <ChevronDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                   </Button>
                 </PopoverTrigger>
@@ -66,7 +75,7 @@ export function ComboboxRoom({ form, name, label, selectItems, placeholder, setR
                               setOpen(false);
                             }}
                           >
-                            <Check className={cn('mr-2 h-4 w-4', value === item.roomName ? 'opacity-100' : 'opacity-0')} />
+                            <Check className={cn('mr-2 h-4 w-4', field.value === item.roomName ? 'opacity-100' : 'opacity-0')} />
                             {item.roomName}
                           </CommandItem>
                         )): <CommandEmpty>No Result Room.</CommandEmpty>}

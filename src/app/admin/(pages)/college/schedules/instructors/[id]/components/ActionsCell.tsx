@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -6,45 +7,45 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
+import { useRemoveTeacherScheduleCollegeMutation } from '@/lib/queries';
+import { makeToastSucess } from '@/lib/toast/makeToast';
 // import { DialogStep1Button } from './Dialog';
 type IProps = {
   user: any;
 };
 const ActionsCell = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
+  const mutation = useRemoveTeacherScheduleCollegeMutation();
+  const actionFormSubmit = () => {
+    const data = {
+      teacherScheduleId: user._id,
+      profileId: user.profileId._id,
+    };
+    console.log('user submitted:', data);
+
+    mutation.mutate(data, {
+      onSuccess: (res: any) => {
+        console.log(res);
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            // return (window.location.href = '/');
+            makeToastSucess(res.message)
+            return;
+          default:
+            return;
+        }
+      },
+      onSettled: () => {},
+    });
+  };
   return (
-    <div className=''>
-      <Popover>
-        <PopoverTrigger className='' asChild>
-          <div className='flex justify-center items-center w-full'>
-            <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-blue-500 px-2 py-0 text-neutral-50 font-medium'}>
-              Options
-              <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
-            </Button>
-          </div>
-        </PopoverTrigger>
-        <PopoverContent align='center' className='w-[230px] bg-neutral-50 px-1 py-0'>
-          <Command>
-            {/* <CommandInput placeholder='Search language...' /> */}
-            <CommandList>
-              {/* <CommandEmpty>No language found.</CommandEmpty> */}
-              <CommandGroup className=''>
-                <Button disabled={isPending} size={'sm'} className={'w-full group focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-0 gap-x-1 justify-start items-center hover:text-neutral-50 font-medium'}>
-                  <Link href={`${isPending ? '' : '/profile/${user.userId.username}'}`} className={'w-full h-full group/item rounded-md focus-visible:ring-0 flex text-black bg-transparent gap-x-1 justify-start items-center group-hover:hover:text-neutral-50'}>
-                    <Icons.eye className='h-4 w-4' />
-                    View Instructor Schedule
-                  </Link>
-                </Button>
-                <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
-                  <Icons.close className='h-4 w-4' />
-                  Delete Course
-                </Button>
-                {/* <DataTableDrawer user={user} /> */}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
+    <div className='flex items-center justify-center'>
+      <Button disabled={isPending} type='button' onClick={() => actionFormSubmit()} size={'sm'} className={'w-auto focus-visible:ring-0 mb-2 bg-transparent flex justify-start bg-red px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
+        <Icons.trash className='h-4 w-4' />
+        Remove
+      </Button>
     </div>
   );
 };

@@ -3,10 +3,10 @@ import dbConnect from '@/lib/db/db';
 import TeacherSchedule from '@/models/TeacherSchedule';
 import { getRoomById } from '@/services/room';
 import { getSubjecByCourseCode } from '@/services/subject';
-import { getTeacherProfileById } from '@/services/teacherProfile';
-import { createTeacherSchedule, getAllTeacherSchedule, getAllTeacherScheduleByProfileId, getAllTeacherScheduleByScheduleRoomId } from '@/services/teacherSchedule';
+import { getAllTeacherProfile, getTeacherProfileById } from '@/services/teacherProfile';
+import { createTeacherSchedule, getAllTeacherSchedule, getAllTeacherScheduleByProfileId, getAllTeacherScheduleByScheduleRoomId, getTeacherScheduleById, removeTeacherScheduleById } from '@/services/teacherSchedule';
 // import { createTeacherSchedule, getAllTeacherSchedule, getTeacherScheduleById, getTeacherScheduleByProfileId, getTeacherScheduleByScheduleRoomId } from '@/services/teacherSchedule';
-import { getAllTeacherScheduleResponse, getTeacherScheduleResponse } from '@/types';
+import { getAllTeacherProfileResponse, getAllTeacherScheduleResponse, getTeacherProfileResponse, getTeacherScheduleResponse } from '@/types';
 
 export const createTeacherScheduleAction = async (data: any) => {
   try {
@@ -36,7 +36,7 @@ export const createTeacherScheduleAction = async (data: any) => {
           if (isTimeOverlap) {
             // we need to pass the teacherSchedule._id to the frontend and use to see the schedule of the teacher
             // return { error: 'Teacher Schedule conflict. Please adjust the times or days.', errorInsLink: `/${teacherSchedule._id}`, status: 409 };
-            return { error: 'Teacher Schedule conflict. Please adjust the times or days.', errorInsLink: `/`, status: 409 };
+            return { error: 'Instructor Schedule conflict. Please adjust the times or days.', errorInsLink: `/`, status: 409 };
           }
         }
       }
@@ -47,11 +47,11 @@ export const createTeacherScheduleAction = async (data: any) => {
       // Collect all existing schedules for the room
       if (getRooms && getRooms.length > 0) {
         for (const teacherSchedule of getRooms) {
-            existingSchedules.push({
-              days: teacherSchedule.days,
-              startTime: teacherSchedule.startTime,
-              endTime: teacherSchedule.endTime,
-            });
+          existingSchedules.push({
+            days: teacherSchedule.days,
+            startTime: teacherSchedule.startTime,
+            endTime: teacherSchedule.endTime,
+          });
         }
       }
 
@@ -79,7 +79,7 @@ export const createTeacherScheduleAction = async (data: any) => {
           }
         }
       }
-      
+
       const newTeacherSchedul = new TeacherSchedule({
         category: 'College',
         profileId: teacher._id,
@@ -98,11 +98,11 @@ export const createTeacherScheduleAction = async (data: any) => {
       // Collect all existing schedules for the room
       if (getRooms && getRooms.length > 0) {
         for (const teacherSchedule of getRooms) {
-            existingSchedules.push({
-              days: teacherSchedule.days,
-              startTime: teacherSchedule.startTime,
-              endTime: teacherSchedule.endTime,
-            });
+          existingSchedules.push({
+            days: teacherSchedule.days,
+            startTime: teacherSchedule.startTime,
+            endTime: teacherSchedule.endTime,
+          });
         }
       }
 
@@ -148,7 +148,7 @@ export const createTeacherScheduleAction = async (data: any) => {
       });
       if (!createdSched) return { error: 'Something went wrong.', status: 500 };
     }
-    return { message: 'Subject created successfully.', status: 201 };
+    return { message: 'Schedule has been added to instructor.', status: 201 };
   } catch (error) {
     console.log('server e :', error);
     return { error: 'Something went wrong', status: 500 };
@@ -165,12 +165,27 @@ export const getAllTeacherScheduleAction = async (): Promise<getAllTeacherSchedu
     return { error: 'Something went wrong', status: 500 };
   }
 };
-export const getTeacherScheduleByIdAction = async (id: any): Promise<getTeacherScheduleResponse> => {
+export const getTeacherScheduleByProfileIdAction = async (id: any): Promise<getAllTeacherScheduleResponse> => {
   try {
     await dbConnect();
-    // const subjects = await getTeacherScheduleById(id);
-    // return { teacherSchedule: JSON.parse(JSON.stringify(subjects)), status: 200 };
-    return { teacherSchedule: JSON.parse(JSON.stringify('asd')), status: 200 };
+    const t = await getAllTeacherScheduleByProfileId(id);
+    return { teacherSchedules: JSON.parse(JSON.stringify(t)), status: 200 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+
+export const removeTeacherScheduleCollegeMutation = async (data: any) => {
+  try {
+    await dbConnect();
+    const p = await getTeacherProfileById(data.profileId);
+    if (!p) return { error: 'Invalid Profile Id.', status: 404 };
+    const t = await getTeacherScheduleById(data.teacherScheduleId);
+    if (!t) return { error: 'Invalid Schedule Id.', status: 404 };
+    const deletedT = await removeTeacherScheduleById(t._id);
+    if (!deletedT) return { error: 'Something went wrong.', status: 500 };
+    return { message: 'Schedule has been removed.', status: 201 };
   } catch (error) {
     console.log('server e :', error);
     return { error: 'Something went wrong', status: 500 };
@@ -187,3 +202,24 @@ export const getTeacherScheduleByIdAction = async (id: any): Promise<getTeacherS
 //     return { error: 'Something went wrong', status: 500 };
 //   }
 // };
+
+export const getAllTeacherProfileAction = async (): Promise<getAllTeacherProfileResponse> => {
+  try {
+    await dbConnect();
+    const t = await getAllTeacherProfile();
+    return { teachers: JSON.parse(JSON.stringify(t)), status: 200 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+export const getTeacherProfileByIdAction = async (id: string): Promise<getTeacherProfileResponse> => {
+  try {
+    await dbConnect();
+    const t = await getTeacherProfileById(id);
+    return { teacher: JSON.parse(JSON.stringify(t)), status: 200 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};

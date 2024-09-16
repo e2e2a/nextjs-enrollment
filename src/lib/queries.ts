@@ -17,6 +17,7 @@ import {
   getSingleEnrollmentResponse,
   getSingleProfileResponse,
   getSubjectCategoryCollegeResponse,
+  getTeacherProfileResponse,
   getTeacherScheduleResponse,
   INewPost,
   INewUser,
@@ -50,7 +51,7 @@ import { createCollegeCourseBlockAction, getAllBlockTypeAction, getBlockTypeById
 import { createSubjectCollegeAction, getSubjectCategoryCollegeAction } from '@/action/college/subjects/admin';
 import { adminCreateUserWithRoleAction, getUserRoleStudentAction, getUserRoleTeachertAction } from '@/action/user';
 import { createRoomAction, getAllRoomAction } from '@/action/rooms';
-import { createTeacherScheduleAction, getAllTeacherScheduleAction, getTeacherScheduleByIdAction } from '@/action/college/schedules/teachers';
+import { createTeacherScheduleAction, getAllTeacherProfileAction, getAllTeacherScheduleAction, getTeacherProfileByIdAction, getTeacherScheduleByProfileIdAction, removeTeacherScheduleCollegeMutation } from '@/action/college/schedules/teachers';
 import { createSchoolYearAction, getAllSchoolYearAction } from '@/action/schoolyear';
 import {
   createStudentCurriculumAction,
@@ -158,7 +159,7 @@ export const useUserRolesStudentQuery = () => {
     refetchOnWindowFocus: false,
   });
 };
-//added
+
 export const useUserRolesTeacherQuery = () => {
   return useQuery<getAllTeacherProfileResponse, Error>({
     queryKey: ['Teachers'],
@@ -185,7 +186,7 @@ export const useAdminCreateUserRoleMutation = () => {
         } else if (data.role === 'TEACHER') {
           queryClient.invalidateQueries({ queryKey: ['Teachers'] });
           queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
-          queryClient.invalidateQueries({ queryKey: ['TeacherScheduleById'] });
+          queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
         } else if (data.role === 'STUDENT') {
           queryClient.invalidateQueries({ queryKey: ['Students'] });
         }
@@ -226,6 +227,29 @@ export const useUpdateProfilePhoto = () => {
 export const useStudentProfileMutation = () => {
   return useMutation<updateStudentProfileResponse, Error, z.infer<typeof StudentProfileValidator>>({
     mutationFn: async (data) => updateStudentProfile(data),
+  });
+};
+
+/**
+ * Admin Teacher Profile
+ * @returns Queries And Mutations
+ */
+export const useAllTeacherProfileQuery = () => {
+  return useQuery<getAllTeacherProfileResponse, Error>({
+    queryKey: ['TeacherProfile'],
+    queryFn: () => getAllTeacherProfileAction(),
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useTeacherProfileQueryById = (id: string) => {
+  return useQuery<getTeacherProfileResponse, Error>({
+    queryKey: ['TeacherProfileById', id],
+    queryFn: () => getTeacherProfileByIdAction(id),
+    enabled: !!id,
+    retry: 0,
+    refetchOnWindowFocus: false,
   });
 };
 
@@ -379,9 +403,7 @@ export const useBlockCourseQuery = () => {
     queryFn: () => getAllBlockTypeAction(),
     retry: 0,
     refetchOnMount: false,
-    // refetchInterval: 5000,
     refetchOnWindowFocus: true,
-    // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
 export const useBlockCourseQueryById = (data: any) => {
@@ -413,6 +435,7 @@ export const useUpdateCourseBlockScheduleMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
       queryClient.invalidateQueries({ queryKey: ['BlockTypeById'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
+      queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
     },
   });
 };
@@ -424,6 +447,7 @@ export const useRemoveCourseBlockScheduleMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
       queryClient.invalidateQueries({ queryKey: ['BlockTypeById'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
+      queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
     },
   });
 };
@@ -437,9 +461,7 @@ export const useRoomQuery = () => {
     queryFn: () => getAllRoomAction(),
     retry: 0,
     refetchOnMount: false,
-    // refetchInterval: 5000,
     refetchOnWindowFocus: true,
-    // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
 export const useCreateRoomMutation = () => {
@@ -488,10 +510,10 @@ export const useTeacherScheduleCollegeQuery = () => {
     refetchOnWindowFocus: true,
   });
 };
-export const useTeacherScheduleCollegeQueryById = (data: any) => {
-  return useQuery<getTeacherScheduleResponse, Error>({
-    queryKey: ['TeacherScheduleById', data],
-    queryFn: () => getTeacherScheduleByIdAction(data),
+export const useTeacherScheduleCollegeQueryByProfileId = (data: any) => {
+  return useQuery<getAllTeacherScheduleResponse, Error>({
+    queryKey: ['TeacherScheduleByProfileId', data],
+    queryFn: () => getTeacherScheduleByProfileIdAction(data),
     retry: 0,
     enabled: !!data,
     refetchOnMount: false,
@@ -505,7 +527,17 @@ export const useCreateTeacherScheduleCollegeMutation = () => {
     mutationFn: async (data) => createTeacherScheduleAction(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
-      queryClient.invalidateQueries({ queryKey: ['TeacherScheduleById'] });
+      queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
+    },
+  });
+};
+export const useRemoveTeacherScheduleCollegeMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => removeTeacherScheduleCollegeMutation(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
+      queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
     },
   });
 };
