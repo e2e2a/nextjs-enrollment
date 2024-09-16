@@ -33,7 +33,7 @@ const Page = () => {
   useEffect(() => {
     if (isLoading || !data ) return;
     if (isEnError) console.log(isEnError.message);
-    if (data) console.log('courses logs:', data.blockTypes);
+    if (data) setIsPageLoading(false)
     if (data.blockTypes) {
       // setSubjects(data.teacherSchedules);
       console.log('data:', data.blockTypes)

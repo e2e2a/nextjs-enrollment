@@ -36,7 +36,7 @@ async function dbConnect() {
         console.log('Connected to MongoDB');
         // Initialize models only on the first connection
         if (!global.mongoose.initialized) {
-          const modelsToInitialize = ['Course', 'User', 'StudentProfile', 'Account', 'Enrollment', 'BlockType', 'Subject', 'TeacherProfile', 'TeacherSchedule', 'Room', 'SchoolYear','Curriculum', 'StudentCurriculum','StudentSchedule'];
+          const modelsToInitialize = ['Course', 'User', 'UserIp', 'StudentProfile', 'Account', 'Enrollment', 'BlockType', 'Subject', 'TeacherProfile', 'TeacherSchedule', 'Room', 'SchoolYear', 'Curriculum', 'StudentCurriculum', 'StudentSchedule'];
           await initializeModel(modelsToInitialize);
           global.mongoose.initialized = true;
         }
