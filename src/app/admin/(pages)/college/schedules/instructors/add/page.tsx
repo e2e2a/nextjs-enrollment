@@ -148,7 +148,6 @@ const Page = () => {
                 <div className='border px-2 rounded-lg shadow-sm drop-shadow-sm bg-white'>
                   <div className='flex flex-col py-5 w-full sm:flex-row gap-5 items-center'>
                     <span className='text-red'>Schedule Conflict</span>
-                    {/* <span>See here:</span> */}
                     {instructorLink && (
                       <Link href={instructorLink} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
                         See Professor Schedule

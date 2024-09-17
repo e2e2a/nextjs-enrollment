@@ -24,7 +24,9 @@ const Page = () => {
   return (
     <>
       {isPageLoading ? (
-        <Loader />
+        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>
+          <Loader />
+        </div>
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           <div className='flex items-center py-4 text-black w-full text-center'>

@@ -12,8 +12,6 @@ export const createEnrollmentAction = async (data: any): Promise<getEnrollmentRe
   try {
     const file = data.formData.get('file') as File;
     const photo = data.formData.get('photo') as File;
-    console.log('photo ', photo);
-    console.log('file ', file.name);
     if (!file.name || !photo.name || photo === null || file === null) {
       return { error: 'File or photo is missing.', status: 403 };
     }
@@ -50,7 +48,7 @@ export const createEnrollmentAction = async (data: any): Promise<getEnrollmentRe
     const [fileUrl, photoUrl] = await Promise.all([getDownloadURL(fileSnapshot.ref), getDownloadURL(photoSnapshot.ref)]);
 
     // Update enrollment with both URLs in a single DB call
-    const updatedEnrollment = await updateEnrollmentById(cc._id, { psaUrl:fileUrl, photoUrl});
+    const updatedEnrollment = await updateEnrollmentById(cc._id, { psaUrl: fileUrl, photoUrl });
     if (!updatedEnrollment) return { message: 'Something went wrong.', status: 500 };
     /**
      * @todo
@@ -82,7 +80,7 @@ export const getSingleEnrollmentAction = async (userId: any): Promise<getSingleE
   try {
     await dbConnect();
     const enrollment = await getEnrollmentByUserId(userId);
-    return { enrollment: enrollment, status: 200 };
+    return { enrollment: JSON.parse(JSON.stringify(enrollment)), status: 200 };
   } catch (error) {
     console.log('server e :', error);
     return { error: 'Something went wrong', status: 500 };
@@ -92,7 +90,18 @@ export const getAllEnrollmentAction = async (userId: any): Promise<getEnrollment
   try {
     await dbConnect();
     const enrollment = await getEnrollmentByUserId(userId);
-    return { enrollment: enrollment, status: 200 };
+    return { enrollment: JSON.parse(JSON.stringify(enrollment)), status: 200 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+export const getSingleEnrollmentByUserIdIdAction = async (userId: any): Promise<getSingleEnrollmentResponse> => {
+  try {
+    await dbConnect();
+    const enrollment = await getEnrollmentByUserId(userId);
+    if (!enrollment) return { error: 'No enrollment found.', status: 404 };
+    return { enrollment: JSON.parse(JSON.stringify(enrollment)), status: 200 };
   } catch (error) {
     console.log('server e :', error);
     return { error: 'Something went wrong', status: 500 };

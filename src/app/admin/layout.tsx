@@ -11,33 +11,32 @@ import { MobileNav } from '@/components/shared/nav/MobileNav';
 import { SidebarNav } from './components/SidebarNav';
 
 const AdminRootLayout = ({ children }: { children: ReactNode }) => {
-  
   const { data: session } = useSession();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState({});
-  const { data: res, isLoading, error } = useProfileQuery(session?.user.id as string)
-  const path = usePathname()
+  const { data: res, isLoading, error } = useProfileQuery(session?.user.id as string);
+  const path = usePathname();
   const [hideSidebar, setHideSidebar] = useState(false);
   useEffect(() => {
     // const regex = /^\/admin\/college\/curriculums\/[a-zA-Z0-9]{24}$/;
     const regex = /^\/admin\/college\/curriculums\/[a-zA-Z0-9]+$/;
     const studentRegex = /^\/admin\/college\/curriculums\/students\/[a-zA-Z0-9]+$/;
-  if (regex.test(path)) {
-    // Path matches: proceed as needed
-    setHideSidebar(true)
-    return;
-  } else {
-    setHideSidebar(false)
-    // Handle cases where the path doesn't match the desired pattern
-  }
-  if (studentRegex.test(path)) {
-    // Path matches: proceed as needed
-    setHideSidebar(true)
-    return;
-  } else {
-    setHideSidebar(false)
-    // Handle cases where the path doesn't match the desired pattern
-  }
+    if (regex.test(path)) {
+      // Path matches: proceed as needed
+      setHideSidebar(true);
+      return;
+    } else {
+      setHideSidebar(false);
+      // Handle cases where the path doesn't match the desired pattern
+    }
+    if (studentRegex.test(path)) {
+      // Path matches: proceed as needed
+      setHideSidebar(true);
+      return;
+    } else {
+      setHideSidebar(false);
+      // Handle cases where the path doesn't match the desired pattern
+    }
   }, [path]);
   useEffect(() => {
     if (error || !res || !res.profile) {

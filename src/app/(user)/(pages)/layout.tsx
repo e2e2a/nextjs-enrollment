@@ -22,7 +22,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     setTimeout(() => {
       setLoading(false);
     }, 500);
-  }, [isLoading, res,error]);
+  }, [isLoading, res, error]);
   const [profile, setProfile] = useState({});
   if (!sessionData) {
     return redirect('/sign-in');
@@ -30,8 +30,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   if (sessionData && !sessionData.user.profileVerified) {
     return redirect('/profile');
   }
-  
-  
+
   return (
     <>
       {loading && <Loader />}
@@ -40,11 +39,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
           <MainNav items={dashboardConfig.mainNav} session={sessionData?.user} profile={profile} />
           <MobileNav items={dashboardConfig.mainNav} session={sessionData?.user} />
         </header>
-        <div className={` flex-1 flex bg-slate-100 ${loading ? '' : ''} `}>
+        {/* <div className={` flex-1 flex flex-row bg-slate-100 ${loading ? '' : ''} `}> */}
+        <div className='flex-1 flex flex-row bg-slate-100 '>
           <div className=' w-[290px] xl:w-[330px] hidden lg:flex'>
             <SidebarNav items={dashboardConfig.sidebarNav} profile={profile} />
           </div>
-          <main className='py-2 md:py-4 px-1 md:px-5 xl:px-7 flex flex-1 flex-col'>{children}</main>
+          <main className='py-2 w-full md:py-4 px-1 md:px-5 xl:px-7 flex flex-1 flex-col overflow-hidden'>
+            <div className='overflow-y-auto overflow-x-auto flex-1 w-full'>{children}</div>
+          </main>
         </div>
       </div>
     </>

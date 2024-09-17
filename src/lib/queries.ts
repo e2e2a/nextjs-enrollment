@@ -45,7 +45,7 @@ import { NewPassword } from '@/action/profile/NewPassword';
 import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updateData';
 import { getStudentProfileBySessionId, getStudentProfileByUsernameAction } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
-import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction } from '@/action/college/enrollment/user';
+import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction, getSingleEnrollmentByUserIdIdAction } from '@/action/college/enrollment/user';
 import {
   approvedEnrollmentStep1Action,
   approvedEnrollmentStep2Action,
@@ -316,6 +316,16 @@ export const useEnrollmentQuery = (data: any) => {
   return useQuery<getSingleEnrollmentResponse, Error>({
     queryKey: ['Enrollment'],
     queryFn: () => getSingleEnrollmentAction(data),
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useEnrollmentQueryByUserId = (data: any) => {
+  return useQuery<getSingleEnrollmentResponse, Error>({
+    queryKey: ['EnrollmentByUserId'],
+    queryFn: () => getSingleEnrollmentByUserIdIdAction(data),
     retry: 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,

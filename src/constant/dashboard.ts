@@ -24,9 +24,9 @@ export const dashboardConfig: DashboardConfig = {
     //   // disabled: true,
     // },
     {
-      title: 'Subjects',
-      href: '/subjects',
-      icon: 'notebook',
+      title: 'Schedules',
+      href: '/schedules',
+      icon: 'hourglass',
     },
     {
       title: 'Records',
@@ -91,9 +91,9 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'graduationCap',
     },
     {
-      title: 'Subjects',
-      href: '/courses',
-      icon: 'notebook',
+      title: 'Schedules',
+      href: '/schedules',
+      icon: 'hourglass',
     },
     {
       title: 'Records',
