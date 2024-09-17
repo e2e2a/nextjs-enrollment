@@ -37,7 +37,7 @@ export const generateVerificationToken = async (userId: string, TokenType: strin
 
   const existingToken = await getVerificationTokenByUserId(userId);
   if (existingToken) {
-    await deleteVerificationTokenByid(existingToken.id);
+    await deleteVerificationTokenByid(existingToken._id);
   }
 
   const activitionCode = await generateRandomString();

@@ -1,4 +1,3 @@
-import { UserRole } from '@prisma/client';
 import NextAuth, { type DefaultSession } from 'next-auth';
 
 export type ExtendedUser = DefaultSession['user'] & {
@@ -7,7 +6,7 @@ export type ExtendedUser = DefaultSession['user'] & {
   username: string;
   imageUrl: string;
   birthday: Date;
-  role: UserRole;
+  role: 'ADMIN' | 'STUDENT' | 'TEACHER';
   profileVerified: boolean;
 };
 
@@ -27,6 +26,6 @@ declare module 'next-auth/jwt' {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
   interface JWT {
     /** OpenID ID Token */
-    role: UserRole;
+    role: 'ADMIN' | 'STUDENT' | 'TEACHER';
   }
 }

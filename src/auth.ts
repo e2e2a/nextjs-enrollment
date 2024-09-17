@@ -8,6 +8,7 @@ import { MongoClient } from 'mongodb';
 import Account from './models/Account';
 import { createStudentProfile, createStudentProfileProvider, getStudentProfileByUserId } from './services/studentProfile';
 import { createAccount } from './services/account';
+import { getTeacherProfileByUserId } from './services/teacherProfile';
 const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
@@ -76,8 +77,23 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             session.user.id = user._id;
             session.user.role = user.role;
             session.user.username = user.username;
-            const p = await getStudentProfileByUserId(user._id);
-            const profile = JSON.parse(JSON.stringify(p))
+            let p;
+            if (user.role === 'STUDENT') {
+              p = await getStudentProfileByUserId(user._id);
+            } else if (user.role === 'TEACHER') {
+              p = await getTeacherProfileByUserId(user._id);
+            } else if (user.role === 'DEAN') {
+              /**
+               * @todo
+               * DEAN ROLE
+               */
+            } else if (user.role === 'ADMIN') {
+              /**
+               * @todo
+               * ADMIN ROLE
+               */
+            }
+            const profile = JSON.parse(JSON.stringify(p));
             // console.log('sessionprofile', profile);
             session.user.profileVerified = profile.isVerified;
             session.user.firstname = profile.firstname;

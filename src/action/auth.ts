@@ -40,7 +40,7 @@ export const signInAction = async (data: any): Promise<SignInResponse> => {
     if (!isMatch) return { error: 'Incorrect email or password.', status: 403 };
 
     const userIp = await checkingIp(existingUser);
-    if (userIp.errorIp) return { error: `Forbidden.${userIp.errorIp}`, status: 403 };
+    if (userIp.errorIp) return { error: `Forbidden ${userIp.errorIp}`, status: 403 };
     if (!userIp || userIp.error || !userIp.success) {
       const tokenType = 'Activation';
       const verificationToken = await generateVerificationToken(existingUser._id, tokenType);

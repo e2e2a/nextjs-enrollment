@@ -42,7 +42,7 @@ export const verificationCodeProcess = async (data: any): Promise<verificationCo
       case 'Activation':
         await deleteVerificationTokenByid(userToken.id);
         //change this to active-ip services
-        await updateActiveIp(user._id, ip);
+        // await updateActiveIp(user._id, ip);
         await signIn('credentials', {
           email: user.email,
           redirect: false,
@@ -50,8 +50,9 @@ export const verificationCodeProcess = async (data: any): Promise<verificationCo
 
         return { redirect: '/admin', status: 201 };
       case 'Verify':
+        console.log('here')
         await updateUserEmailVerifiedById(user._id);
-        await createActiveIp(user._id, ip);
+        // await createActiveIp(user._id, ip);
         await deleteVerificationTokenByid(userToken._id);
         return { redirect: '/sign-in', status: 201 };
       default:

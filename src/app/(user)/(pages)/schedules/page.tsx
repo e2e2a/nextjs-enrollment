@@ -26,7 +26,6 @@ const Page = () => {
       setIsPageLoading(false);
     }
   }, [b, data]);
-  console.log(data);
   return (
     <>
       {isPageLoading ? (
