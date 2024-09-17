@@ -128,7 +128,7 @@ const Page = () => {
         ) : (
           <>
             <CardHeader className='space-y-3'>
-              <CardTitle className='text-left text-lg xs:text-2xl sm:text-3xl font-poppins'>Register a New Teacher Schedule!</CardTitle>
+              <CardTitle className='text-left text-lg xs:text-2xl sm:text-3xl font-poppins'>Register a New Instructor Schedule!</CardTitle>
               <CardDescription className='text-xs sm:text-sm hidden'></CardDescription>
               <div className='text-xs sm:text-sm'>
                 To register a new teacher schedule, start by selecting the course from the list provided. This list is populated with courses created and managed by the administrator. Next, specify the academic year and semester for the block to ensure it is

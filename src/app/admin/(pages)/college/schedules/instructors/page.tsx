@@ -20,9 +20,19 @@ const Page = () => {
     //   console.log('data:', data.teachers);
     //   setIsPageLoading(false);
     // }
-  }, [data, isLoading, isEnError]); 
+  }, [data, isLoading, isEnError]);
 
-  return <>{isPageLoading ? <Loader /> : <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>{isError ? <div className=''>404</div> : data && data.teachers && <DataTable columns={columns} data={data?.teachers as ITeacherProfile[]} />}</div>}</>;
+  return (
+    <>
+      {isPageLoading ? (
+        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>
+          <Loader />
+        </div>
+      ) : (
+        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>{isError ? <div className=''>404</div> : data && data.teachers && <DataTable columns={columns} data={data?.teachers as ITeacherProfile[]} />}</div>
+      )}
+    </>
+  );
 };
 
 export default Page;

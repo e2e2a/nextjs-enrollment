@@ -24,7 +24,7 @@ const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
-  const isAllowed = useMemo(() => ['1', '2', '3', '4','5'], []);
+  const isAllowed = useMemo(() => ['1', '2', '3', '4', '5'], []);
   // Validate the step parameter whenever the search parameter changes
   useEffect(() => {
     if (search === null || !isAllowed.includes(search)) {
@@ -32,7 +32,7 @@ const Page = () => {
     } else {
       setIsError(false);
     }
-     // Loading is done after validation
+    // Loading is done after validation
   }, [search, isAllowed]);
 
   // Query data based on the validated step parameter
@@ -45,13 +45,15 @@ const Page = () => {
       const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus !== 'Enrolled');
       setEnrolledStudents(filteredEnrollment);
       setIsPageLoading(false);
-    };
+    }
   }, [data, isLoading, isEnError]);
 
   return (
     <>
       {isPageLoading ? (
-        <Loader />
+        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>
+          <Loader />
+        </div>
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {

@@ -24,7 +24,17 @@ const Page = () => {
     setIsPageLoading(false);
   }, [data, isLoading, isEnError]);
 
-  return <>{isPageLoading ? <Loader /> : <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>{isError ? <div className=''>404</div> : <DataTable columns={columns} data={rooms as IRoom[]} />}</div>}</>;
+  return (
+    <>
+      {isPageLoading ? (
+        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>
+          <Loader />
+        </div>
+      ) : (
+        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>{isError ? <div className=''>404</div> : <DataTable columns={columns} data={rooms as IRoom[]} />}</div>
+      )}
+    </>
+  );
 };
 
 export default Page;

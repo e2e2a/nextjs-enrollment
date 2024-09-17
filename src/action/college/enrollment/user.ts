@@ -88,3 +88,13 @@ export const getSingleEnrollmentAction = async (userId: any): Promise<getSingleE
     return { error: 'Something went wrong', status: 500 };
   }
 };
+export const getAllEnrollmentAction = async (userId: any): Promise<getEnrollmentResponse> => {
+  try {
+    await dbConnect();
+    const enrollment = await getEnrollmentByUserId(userId);
+    return { enrollment: enrollment, status: 200 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};

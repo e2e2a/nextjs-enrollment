@@ -46,7 +46,20 @@ import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updat
 import { getStudentProfileBySessionId, getStudentProfileByUsernameAction } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction } from '@/action/college/enrollment/user';
-import { approvedEnrollmentStep1Action, approvedEnrollmentStep2Action, approvedEnrollmentStep3Action, approvedEnrollmentStep4Action, approvedEnrollmentStep5Action, getEnrollmentByIdAction, getEnrollmentByStepAction, undoEnrollmentToStep1, undoEnrollmentToStep2, undoEnrollmentToStep3, undoEnrollmentToStep4 } from '@/action/college/enrollment/admin';
+import {
+  approvedEnrollmentStep1Action,
+  approvedEnrollmentStep2Action,
+  approvedEnrollmentStep3Action,
+  approvedEnrollmentStep4Action,
+  approvedEnrollmentStep5Action,
+  getAllEnrollmentAction,
+  getEnrollmentByIdAction,
+  getEnrollmentByStepAction,
+  undoEnrollmentToStep1,
+  undoEnrollmentToStep2,
+  undoEnrollmentToStep3,
+  undoEnrollmentToStep4,
+} from '@/action/college/enrollment/admin';
 import { createCollegeCourseBlockAction, getAllBlockTypeAction, getBlockTypeByIdAction } from '@/action/college/courses/blocks';
 import { createSubjectCollegeAction, getSubjectCategoryCollegeAction } from '@/action/college/subjects/admin';
 import { adminCreateUserWithRoleAction, getUserRoleStudentAction, getUserRoleTeachertAction } from '@/action/user';
@@ -336,6 +349,16 @@ export const useEnrollmentDeleteMutation = () => {
  * Admin Enrollment
  * @returns Queries and mutations
  */
+export const useAllEnrollmentQuery = () => {
+  return useQuery<getEnrollmentResponse, Error>({
+    queryKey: ['CollegeEnrollment'],
+    queryFn: () => getAllEnrollmentAction(),
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
+};
+
 export const useEnrollmentQueryByStep = (step: any) => {
   return useQuery<getEnrollmentResponse, Error>({
     queryKey: ['EnrollmentByStep', step],
@@ -442,6 +465,7 @@ export const useApprovedEnrollmentStep5Mutation = () => {
     mutationFn: async (data) => approvedEnrollmentStep5Action(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
+      queryClient.invalidateQueries({ queryKey: ['CollegeEnrollment'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
     },
   });

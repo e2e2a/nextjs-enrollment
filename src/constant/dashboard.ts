@@ -406,18 +406,33 @@ export const dashboardConfig: DashboardConfig = {
                   icon: 'packageSearch',
                 },
                 {
-                  title: 'Students Management',
+                  title: `Student's Enrollment`,
                   i: [
                     {
-                      title: 'Students Management',
-                      href: '/admin/college/schedules/instructors',
-                      icon: 'eye',
+                      title: 'Enrolled Students',
+                      i: [
+                        {
+                          title: 'View Enrolled Students',
+                          href: '/admin/college/enrollment/enrolled',
+                          icon: 'eye',
+                        },
+                        
+                      ],
+                      icon: 'packageSearch',
                     },
                     {
-                      title: 'Add Instructor Schedule',
-                      href: '/admin/college/schedules/instructors/add',
-                      icon: 'add',
+                      title: `Student's Schedule`,
+                      i: [
+                        {
+                          title: 'View Enrolled Students',
+                          href: '/admin/college/schedules/instructors',
+                          icon: 'eye',
+                        },
+                        
+                      ],
+                      icon: 'packageSearch',
                     },
+                    
                   ],
                   icon: 'packageSearch',
                 },

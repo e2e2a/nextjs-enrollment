@@ -102,11 +102,39 @@ export const getEnrollmentByStep = async (step: number) => {
   }
 };
 
+export const getAllEnrollment = async () => {
+  try {
+    const enrollment = await Enrollment.find()
+      .populate('userId') 
+      .populate('courseId')
+      .populate('profileId')
+      .populate('blockTypeId')
+      .populate({
+        path: 'studentSubjects.teacherScheduleId',
+        populate: [
+          { path: 'profileId' },
+          { path: 'subjectId' },
+          { path: 'roomId' },
+          { path: 'blockTypeId' },
+        ],
+      })
+      .populate({
+        path: 'studentSubjects.profileId',
+        populate: [
+          { path: 'userId' },
+        ],
+      })
+      .exec();
+    return enrollment;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
 export const updateEnrollmentById = async (id: any, data: any) => {
   try {
-    // console.log('i am exec...', step);
     const e = await Enrollment.findByIdAndUpdate(id, { ...data }, { new: true });
-    // console.log('i am exec...', enrollment);
     return e;
   } catch (error) {
     console.log(error);
