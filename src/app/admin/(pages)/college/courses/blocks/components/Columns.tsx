@@ -16,20 +16,19 @@ import Image from 'next/image';
 import { IBlockType } from '@/types';
 
 export const columns: ColumnDef<IBlockType>[] = [
-  // {
-  //   accessorFn: (row) => row.subjectCode,
-  //   accessorKey: 'subjectCode',
-  //   header: 'subjectCode',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     console.log(user);
-  //     return (
-  //       <div key={cell.id} className='flex justify-center items-center'>
-  //           {user.subjectCode}
-  //       </div>
-  //     );
-  //   },
-  // },
+  {
+    accessorFn: (row) => '#',
+    id: '#',
+    header: '#',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {row.index + 1}
+        </div>
+      );
+    },
+  },
   {
     accessorKey: 'name',
     header: ({ column }) => {
@@ -75,6 +74,45 @@ export const columns: ColumnDef<IBlockType>[] = [
         <div key={cell.id} className=' uppercase'>
           {/* {Array.isArray(user.schedule) ? user.schedule.length : 0} */}
           {user.courseId.name}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.year, // Use accessorFn for nested fields
+    id: 'year',
+    header: 'Year',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' capitalize'>
+          {user.year}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.semester, // Use accessorFn for nested fields
+    id: 'semester',
+    header: 'Semester',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' capitalize'>
+          {user.semester}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.blockSubjects.length, // Use accessorFn for nested fields
+    id: 'schedules count',
+    header: 'Schedules Count',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' '>
+          {user.blockSubjects.length === 0 ? <span className='text-red'>{user.blockSubjects.length}</span> : <span className='text-green-500'>{user.blockSubjects.length}</span>}
         </div>
       );
     },

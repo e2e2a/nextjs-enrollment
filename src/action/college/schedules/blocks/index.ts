@@ -22,7 +22,7 @@ export const updateCourseBlockScheduleAction = async (data: any) => {
       }
 
       // Save the updated Teacher Schedule
-      await TeacherSchedule.findByIdAndUpdate(item.teacherScheduleId, { blockTypeId: data.blockTypeId }, { new: true });
+      await TeacherSchedule.findByIdAndUpdate(item.teacherScheduleId, { blockTypeId: data.blockTypeId, courseId: blockType.courseId._id }, { new: true });
     }
     const updatedBlock = await updateBlock(blockType._id, data);
     if (!updatedBlock) return { message: 'Subject created successfully.', status: 404 };
@@ -69,7 +69,7 @@ const updateBlock = async (blockTypeId: any, data: any) => {
         { new: true }
       );
     }
-    return { message: 'Block subjects updated successfully.', status: 200 };
+    return { message: 'New Schedule has been added.', status: 200 };
   } catch (error) {
     console.error('Error updating block subjects:', error);
     return { error: 'Something went wrong', status: 500 };
@@ -90,7 +90,7 @@ export const removeCourseBlockScheduleAction = async (data: any) => {
       return { error: `Teacher Schedule ID is not valid.`, status: 404 };
     }
     // Save the updated Teacher Schedule
-    await TeacherSchedule.findByIdAndUpdate(teacherSchedule._id, { blockTypeId: null }, { new: true });
+    await TeacherSchedule.findByIdAndUpdate(teacherSchedule._id, { blockTypeId: null, courseId: null }, { new: true });
 
     await BlockType.findByIdAndUpdate(data.blockTypeId, { $pull: { blockSubjects: { teacherScheduleId: teacherSchedule._id } } }, { new: true });
   } catch (error) {

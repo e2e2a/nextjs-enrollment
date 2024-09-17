@@ -11,8 +11,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-export function DataTable3<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  // console.log(data)
+export function DataTable5<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   useEffect(() => {
     if (!data) {
       return;
@@ -42,7 +41,8 @@ export function DataTable3<TData, TValue>({ columns, data }: DataTableProps<TDat
   return (
     <div>
       <div className='flex items-center py-4 text-black'>
-        <h1 className='text-lg sm:text-3xl font-bold'>Step3: Add Subjects of Enrollee</h1>
+        <h1 className='text-lg sm:text-3xl font-bold'>Step5: Finalizing Student Enrollment</h1>
+
       </div>
       {/* Filters */}
       <div className='flex items-center justify-between w-full '>

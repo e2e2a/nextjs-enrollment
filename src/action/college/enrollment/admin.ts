@@ -1,7 +1,7 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { getEnrollmentById, getEnrollmentByStep, updateEnrollmentById } from '@/services/enrollment';
-import { getEnrollmentResponse } from '@/types';
+import { getEnrollmentResponse, getSingleEnrollmentResponse } from '@/types';
 import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { Resend } from 'resend';
 import fs from 'fs';
@@ -22,7 +22,7 @@ export const getEnrollmentByStepAction = async (userId: any): Promise<getEnrollm
   }
 };
 
-export const approvedEnrollmentStep1Action = async (data: any): Promise<getEnrollmentResponse> => {
+export const approvedEnrollmentStep1Action = async (data: any) => {
   try {
     await dbConnect();
     console.log(data);
@@ -35,21 +35,58 @@ export const approvedEnrollmentStep1Action = async (data: any): Promise<getEnrol
     console.log('check:', checkSY);
     await updateEnrollmentById(data.EId, { step: 2, blockTypeId: data.blockType, schoolYear: data.schoolYear });
     // const pdf = await sendEmailWithPDF(checkE);
-    return { enrollment: [], status: 200 };
+    return { message: 'Student has been completed step 1.', status: 201 };
   } catch (error) {
     console.log('server e :', error);
     return { error: 'Something went wrong', status: 500 };
   }
 };
 
-export const approvedEnrollmentStep2Action = async (data: any): Promise<getEnrollmentResponse> => {
+export const approvedEnrollmentStep2Action = async (data: any) => {
   try {
     await dbConnect();
     const checkE = await getEnrollmentById(data.EId);
     if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
     await updateEnrollmentById(data.EId, { step: 3 });
     // await sendEmailWithPDF(checkE);
-    return { enrollment: [], status: 200 };
+    return { message: 'Student has been completed step 2.', status: 201 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+
+export const approvedEnrollmentStep3Action = async (data: any) => {
+  try {
+    await dbConnect();
+    const checkE = await getEnrollmentById(data.EId);
+    if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
+    await updateEnrollmentById(data.EId, { step: 4 });
+    return { message: 'Student has been completed step 3.', status: 201 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+export const approvedEnrollmentStep4Action = async (data: any) => {
+  try {
+    await dbConnect();
+    const checkE = await getEnrollmentById(data.EId);
+    if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
+    await updateEnrollmentById(data.EId, { step: 5 });
+    return { message: 'Student has been completed step 4.', status: 201 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+export const approvedEnrollmentStep5Action = async (data: any) => {
+  try {
+    await dbConnect();
+    const checkE = await getEnrollmentById(data.EId);
+    if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
+    await updateEnrollmentById(data.EId, { enrollStatus: 'Enrolled' });
+    return { message: 'Student has been completed all steps.', status: 201 };
   } catch (error) {
     console.log('server e :', error);
     return { error: 'Something went wrong', status: 500 };
@@ -102,7 +139,7 @@ const sendEmailWithPDF = async (checkE: any) => {
   }
 };
 
-export const undoEnrollmentToStep1 = async (data: any): Promise<getEnrollmentResponse> => {
+export const undoEnrollmentToStep1 = async (data: any) => {
   try {
     await dbConnect();
     const checkE = await getEnrollmentById(data.EId);
@@ -111,25 +148,69 @@ export const undoEnrollmentToStep1 = async (data: any): Promise<getEnrollmentRes
       data.step = (checkE.step as number) - 1;
       data.schoolYear = '';
       const updated = await updateEnrollmentById(data.EId, { ...data, $unset: { blockTypeId: 1 } });
-      console.log('success', updated);
     }
-    return { enrollment: [], status: 200 };
+    return { message: 'Student has been undo to step 1.', status: 201 };
   } catch (error) {
     console.log('server e :', error);
     return { error: 'Something went wrong', status: 500 };
   }
 };
-export const undoEnrollmentToStep2 = async (data: any): Promise<getEnrollmentResponse> => {
+
+export const undoEnrollmentToStep2 = async (data: any) => {
   try {
     await dbConnect();
     const checkE = await getEnrollmentById(data.EId);
     if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
     if (checkE.step === 3) {
       data.step = (checkE.step as number) - 1;
-      const updated = await updateEnrollmentById(data.EId, { ...data});
-      console.log('success', updated);
+      const updated = await updateEnrollmentById(data.EId, { ...data });
     }
-    return { enrollment: [], status: 200 };
+    return { message: 'Student has been undo to step 2.', status: 201 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+
+export const undoEnrollmentToStep3 = async (data: any) => {
+  try {
+    await dbConnect();
+    const checkE = await getEnrollmentById(data.EId);
+    if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
+    if (checkE.step === 4) {
+      data.step = (checkE.step as number) - 1;
+      const updated = await updateEnrollmentById(data.EId, { ...data });
+    }
+    return { message: 'Student has been undo to step 3.', status: 201 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+
+export const undoEnrollmentToStep4 = async (data: any) => {
+  try {
+    await dbConnect();
+    const checkE = await getEnrollmentById(data.EId);
+    if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
+    if (checkE.step === 5) {
+      data.step = (checkE.step as number) - 1;
+      const updated = await updateEnrollmentById(data.EId, { ...data });
+    }
+    return { message: 'Student has been undo to step 4.', status: 201 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+
+//separate for adding subjects/schedules in student
+
+export const getEnrollmentByIdAction = async (id: any): Promise<getSingleEnrollmentResponse> => {
+  try {
+    await dbConnect();
+    const enrollment = await getEnrollmentById(id);
+    return { enrollment: JSON.parse(JSON.stringify(enrollment)), status: 200 };
   } catch (error) {
     console.log('server e :', error);
     return { error: 'Something went wrong', status: 500 };

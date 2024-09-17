@@ -14,7 +14,17 @@ export const createBlockType = async (data: any) => {
 
 export const getAllBlockType = async () => {
   try {
-    const p = await BlockType.find().populate('courseId').exec();
+    const p = await BlockType.find()
+      .populate('courseId')
+      .populate({
+        path: 'blockSubjects.teacherScheduleId',
+        populate: [
+          { path: 'profileId' }, // Populate profileId inside teacherScheduleId
+          { path: 'subjectId' }, // Populate profileId inside teacherScheduleId
+          { path: 'blockTypeId' }, // Populate profileId inside teacherScheduleId
+        ],
+      })
+      .exec();
     return p;
   } catch (error) {
     return [];

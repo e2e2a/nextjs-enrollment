@@ -41,6 +41,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
   return (
     <div>
+      <div className='flex items-center py-4 text-black'>
+        <h1 className='text-lg sm:text-3xl font-bold'> Blocks Management</h1>
+      </div>
       {/* Filters */}
       <div className='flex items-center justify-between w-full '>
         <div className='flex items-center  py-4 text-black'>

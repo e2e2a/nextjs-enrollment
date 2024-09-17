@@ -16,8 +16,28 @@ export const createEnrollment = async (data: any) => {
 
 export const getEnrollmentById = async (id: any) => {
   try {
-    const e = await Enrollment.findById(id).populate('userId').populate('courseId').populate('profileId').populate('blockTypeId').exec();
-    // return JSON.parse(JSON.stringify(e));
+    const e = await Enrollment.findById(id)
+      .populate('userId')
+      .populate('courseId')
+      .populate('profileId')
+      .populate('blockTypeId')
+      // .populate('studentSubjects.teacherScheduleId')
+      .populate({
+        path: 'studentSubjects.teacherScheduleId',
+        populate: [
+          { path: 'profileId' }, // Populate profileId inside teacherScheduleId
+          { path: 'subjectId' },
+          { path: 'roomId' },
+          { path: 'blockTypeId' },
+        ],
+      })
+      .populate({
+        path: 'studentSubjects.profileId',
+        populate: [
+          { path: 'userId' }, // Populate profileId inside teacherScheduleId
+        ],
+      })
+      .exec();
     return e;
   } catch (error) {
     console.log(error);
@@ -27,7 +47,7 @@ export const getEnrollmentById = async (id: any) => {
 
 export const getEnrollmentByUserId = async (userId: string) => {
   try {
-    const enrollment = await Enrollment.findOne({ userId }).populate('userId').populate('courseId').populate('profileId').exec();
+    const enrollment = await Enrollment.findOne({ userId }).populate('userId').populate('courseId').populate('profileId').populate('studentSubjects.teacherScheduleId').exec();
     // console.log('i am exec...', enrollment);
     return JSON.parse(JSON.stringify(enrollment));
   } catch (error) {
@@ -37,7 +57,27 @@ export const getEnrollmentByUserId = async (userId: string) => {
 };
 export const getEnrollmentByProfileId = async (profileId: string) => {
   try {
-    const enrollment = await Enrollment.findOne({ profileId }).populate('userId').populate('courseId').populate('profileId').exec();
+    const enrollment = await Enrollment.findOne({ profileId })
+      .populate('userId')
+      .populate('courseId')
+      .populate('profileId')
+      .populate('blockTypeId')
+      .populate({
+        path: 'studentSubjects.teacherScheduleId',
+        populate: [
+          { path: 'profileId' }, // Populate profileId inside teacherScheduleId
+          { path: 'subjectId' },
+          { path: 'roomId' },
+          { path: 'blockTypeId' },
+        ],
+      })
+      .populate({
+        path: 'studentSubjects.profileId',
+        populate: [
+          { path: 'userId' }, // Populate profileId inside teacherScheduleId
+        ],
+      })
+      .exec();
     // console.log('i am exec...', enrollment);
     return JSON.parse(JSON.stringify(enrollment));
   } catch (error) {

@@ -18,7 +18,6 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
   const [isEnabled, setIsEnabled] = React.useState(false);
   const [selectedItems, setSelectedItems] = React.useState<{ teacherScheduleId: string }[]>([]);
   const mutation = useUpdateCourseBlockScheduleMutation();
-  console.log('selectedItems', selectedItems);
   const handleSelect = (teacherScheduleId: string) => {
     setSelectedItems((prevSelectedItems) => {
       const itemIndex = prevSelectedItems.findIndex((item) => item.teacherScheduleId === teacherScheduleId);

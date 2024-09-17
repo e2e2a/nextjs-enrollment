@@ -1,129 +1,179 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
-import { ColumnDef, flexRender, SortingState, VisibilityState, ColumnFiltersState, getCoreRowModel, getSortedRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { ColumnDef } from '@tanstack/react-table';
+import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { DataTableDrawer } from '../Drawer';
+import ActionsCell from './ActionsCell';
+import { IEnrollment } from '@/types';
+import StudentPhoto from '../step1/StudentPhoto';
+import PSAFile from '../step1/PSAFile';
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-}
-
-export function DataTable3<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  // console.log(data)
-  useEffect(() => {
-    if (!data) {
-      return;
-    }
-  }, [data]);
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const validData = Array.isArray(data) ? data : [];
-  const table = useReactTable({
-    data: validData,
-    columns,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-    },
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-  });
-
-  return (
-    <div>
-      <div className='flex items-center py-4 text-black'>
-        <h1 className='text-3xl font-bold'>Step3: Payment Method</h1>
-      </div>
-      {/* Filters */}
-      <div className='flex items-center justify-between w-full '>
-        <div className='flex items-center py-4 text-black'>
-          <Input
-            placeholder='Search by name...'
-            value={(table.getColumn('fullname')?.getFilterValue() as string) ?? ''}
-            onChange={(event) => {
-              table.getColumn('fullname')?.setFilterValue(event.target.value);
-            }}
-            className='max-w-sm'
-          />
+export const columns4: ColumnDef<IEnrollment>[] = [
+  {
+    accessorFn: (row) => '#',
+    id: '#',
+    header: '#',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {row.index + 1}
         </div>
-
-        {/* Column visibility */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant='outline' className='ml-auto'>
-              Columns
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end' className='bg-neutral-50'>
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem key={column.id} className='capitalize' checked={column.getIsVisible()} onCheckedChange={(value) => column.toggleVisibility(!!value)}>
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
-      {/* Table */}
-      <div className='rounded-md border w-full '>
-        <Table className=''>
-          <TableHeader className='whitespace-pre'>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id} className='text-center'>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody className='text-center '>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow className='whitespace-pre' key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow className='whitespace-pre'>
-                <TableCell colSpan={columns.length} className='h-24 text-center'>
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-
-      {/* Pagination */}
-      <div className='flex items-center justify-end space-x-2 py-4 w-full'>
-        <Button variant='outline' size='sm' onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-          Previous
+      );
+    },
+  },
+  {
+    accessorKey: 'fullname',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          FullName
+          <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
-        <Button variant='outline' size='sm' onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-          Next
-        </Button>
-      </div>
-    </div>
-  );
-}
+      );
+    },
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' capitalize'>
+          {user.profileId.lastname}, {user.profileId.firstname} {user.profileId.middlename}
+        </div>
+      );
+    },
+    accessorFn: (row) => {
+      const { lastname, firstname, middlename } = row.profileId;
+      return `${lastname}, ${firstname} ${middlename}`;
+    },
+    filterFn: (row, columnId, filterValue) => {
+      const fullName = `${row.original.profileId.lastname}, ${row.original.profileId.firstname}`.toLowerCase();
+      return fullName.includes(filterValue.toLowerCase());
+    },
+  },
+
+  {
+    accessorFn: (row) => row.courseId.courseCode, // Use accessorFn for nested fields
+    id: 'course Code',
+    header: 'Course',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.courseId.courseCode}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.studentYear,
+    accessorKey: 'student year',
+    header: 'Student Year',
+  },
+  {
+    accessorFn: (row) => row.studentSemester,
+    accessorKey: 'student semester',
+    header: 'Student Semester',
+  },
+  {
+    accessorFn: (row) => row.studentStatus,
+    accessorKey: 'student status',
+    header: 'Student Status',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' capitalize'>
+          {user.studentStatus}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.psaUrl,
+    accessorKey: 'psa file',
+    header: 'PSA file',
+    cell: ({ row }) => {
+      const user = row.original;
+
+      return <PSAFile user={user} />;
+    },
+  },
+  {
+    accessorFn: (row) => row.photoUrl,
+    accessorKey: 'student photo',
+    header: 'Student Photo',
+    cell: ({ row }) => {
+      const user = row.original;
+
+      return <StudentPhoto user={user} />;
+    },
+  },
+  {
+    accessorFn: (row) => row.blockTypeId.section,
+    accessorKey: 'block type',
+    header: 'Block Type',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.blockTypeId.section && `block ${user.blockTypeId.section}`}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.schoolYear,
+    accessorKey: 'school year',
+    header: 'School Year',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.schoolYear}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.studentSubjects.length,
+    accessorKey: 'Subjects Count',
+    header: 'Subjects Count',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' '>
+          {user.studentSubjects.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green'>{user.studentSubjects.length}</span>}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'createdAt',
+    header: 'CreatedAt',
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('createdAt'));
+      const formatted = date.toLocaleDateString();
+      // @example for formatted date ex. January 1, 2015
+      // const options: Intl.DateTimeFormatOptions = {
+      //   year: "numeric",
+      //   month: "short",
+      //   day: "numeric",
+      // };
+
+      // const formattedDate = date.toLocaleDateString("en-US", options);
+
+      // // Manually reformat the string to "Jul 20, 2024"
+      // const [month, day, year] = formattedDate.split(' ');
+      // const formatted = `${month} ${day}, ${year}`;
+      return <div className='font-medium'>{formatted}</div>;
+    },
+  },
+
+  {
+    id: 'actions',
+    header: 'Actions',
+    cell: ({ row }) => {
+      const user = row.original;
+
+      return <ActionsCell user={user} />;
+    },
+  },
+];

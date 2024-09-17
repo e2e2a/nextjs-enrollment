@@ -38,16 +38,14 @@ export const signInAction = async (data: any): Promise<SignInResponse> => {
     const isMatch = await comparePassword(password, existingUser.password as string);
 
     if (!isMatch) return { error: 'Incorrect email or password.', status: 403 };
-/**
- * @todo remove comments
- */
-    // const userIp = await checkingIp(existingUser);
-    // if (userIp.errorIp) return { error: `Forbidden.${userIp.errorIp}`, status: 403 };
-    // if (!userIp || userIp.error || !userIp.success) {
-    //   const tokenType = 'Activation';
-    //   const verificationToken = await generateVerificationToken(existingUser._id, tokenType);
-    //   return { token: verificationToken.token, status: 203 };
-    // }
+
+    const userIp = await checkingIp(existingUser);
+    if (userIp.errorIp) return { error: `Forbidden.${userIp.errorIp}`, status: 403 };
+    if (!userIp || userIp.error || !userIp.success) {
+      const tokenType = 'Activation';
+      const verificationToken = await generateVerificationToken(existingUser._id, tokenType);
+      return { token: verificationToken.token, status: 203 };
+    }
     try {
       await signIn('credentials', {
         email,

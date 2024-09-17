@@ -8,7 +8,7 @@ import { IEnrollment } from '@/types';
 import StudentPhoto from '../step1/StudentPhoto';
 import PSAFile from '../step1/PSAFile';
 
-export const columns3: ColumnDef<IEnrollment>[] = [
+export const columns5: ColumnDef<IEnrollment>[] = [
   {
     accessorFn: (row) => '#',
     id: '#',

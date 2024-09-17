@@ -405,6 +405,22 @@ export const dashboardConfig: DashboardConfig = {
                   ],
                   icon: 'packageSearch',
                 },
+                {
+                  title: 'Students Management',
+                  i: [
+                    {
+                      title: 'Students Management',
+                      href: '/admin/college/schedules/instructors',
+                      icon: 'eye',
+                    },
+                    {
+                      title: 'Add Instructor Schedule',
+                      href: '/admin/college/schedules/instructors/add',
+                      icon: 'add',
+                    },
+                  ],
+                  icon: 'packageSearch',
+                },
               ],
               icon: 'packageSearch',
             },

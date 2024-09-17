@@ -1,6 +1,5 @@
 import mongoose, { Schema, models, model } from 'mongoose';
-import Course from './Course';
-import { string } from 'zod';
+
 export interface IEnrollment extends Document {
   userId: mongoose.Schema.Types.ObjectId;
   profileId: mongoose.Schema.Types.ObjectId;
@@ -14,13 +13,14 @@ export interface IEnrollment extends Document {
   photoUrl: string;
   pdfUrl: string;
   schoolYear: string;
-  enrollStatus?: 'Pending' | 'Approved' | 'Rejected';
+  enrollStatus?: 'Pending' | 'Approved' | 'Rejected' | 'Enrolled';
   isStudentProfile: string;
   studentStatus?: 'New Student' | 'Continued' | 'Completed';
   studentType?: 'Regular' | 'Non-Regular';
   scholarType: 'TWSP' | 'STEP' | 'PESFA' | 'UAQTEA' | 'None';
-  
+  studentSubjects: Number;
 }
+
 const schema = new Schema<IEnrollment>(
   {
     userId: {
@@ -63,7 +63,7 @@ const schema = new Schema<IEnrollment>(
     // },
     onProcess: { type: Boolean, default: false },
     step: { type: Number, default: 1 },
-    psaUrl:{type: String,},
+    psaUrl: { type: String },
     photoUrl: {
       type: String,
     },
@@ -76,7 +76,7 @@ const schema = new Schema<IEnrollment>(
     enrollStatus: {
       type: String,
       default: 'Pending',
-      enum: ['Pending', 'Approved', 'Rejected'],
+      enum: ['Pending', 'Approved', 'Rejected', 'Enrolled'],
     },
     studentStatus: {
       type: String,
@@ -84,8 +84,8 @@ const schema = new Schema<IEnrollment>(
       enum: ['New Student', 'Continue', 'Completed'],
     },
     // onAccepted: { type: String, default: 'Accepted', enum: ['Accepted', 'Decline'] },
-    
-    isStudentProfile:{
+
+    isStudentProfile: {
       type: String,
     },
     studentType: {
@@ -96,7 +96,24 @@ const schema = new Schema<IEnrollment>(
       type: String,
       enum: ['TWSP', 'STEP', 'PESFA', 'UAQTEA', 'None'],
     },
-    
+    studentSubjects: [
+      {
+        //remember this is not like this instead this will be a reference to the teacherSchedule
+        teacherScheduleId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'TeacherSchedule',
+        },
+        // studentScheduleId: {
+        //   type: mongoose.Schema.Types.ObjectId,
+        //   ref: 'StudentSchedule',
+        // },
+        profileId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'StudentProfile',
+        },
+        grade: {type: String}
+      },
+    ],
   },
   {
     versionKey: false,

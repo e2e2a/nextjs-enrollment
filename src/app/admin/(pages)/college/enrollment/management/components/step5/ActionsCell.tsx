@@ -7,16 +7,17 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
-import { useApprovedEnrollmentStep3Mutation, useUndoEnrollmentToStep2Mutation } from '@/lib/queries';
+import { useApprovedEnrollmentStep5Mutation, useUndoEnrollmentToStep4Mutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 
 type IProps = {
   user: any;
 };
+
 const ActionsCell3 = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
-  const mutation = useApprovedEnrollmentStep3Mutation();
-  const undoMutation = useUndoEnrollmentToStep2Mutation();
+  const mutation = useApprovedEnrollmentStep5Mutation();
+  const undoMutation = useUndoEnrollmentToStep4Mutation();
   const actionFormUndo = () => {
     setIsPending(true);
     const data = {
@@ -76,7 +77,7 @@ const ActionsCell3 = ({ user }: IProps) => {
             </Button>
           </div>
         </PopoverTrigger>
-        <PopoverContent align='center' className='w-[215px] bg-neutral-50 px-1 py-0'>
+        <PopoverContent align='center' className='w-[270px] bg-neutral-50 px-1 py-0'>
           <Command>
             {/* <CommandInput placeholder='Search language...' /> */}
             <CommandList>
@@ -103,14 +104,20 @@ const ActionsCell3 = ({ user }: IProps) => {
                 <Button
                   type='button'
                   disabled={isPending}
-                  size={'sm'}
                   onClick={actionFormSubmit}
+                  size={'sm'}
                   className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}
                 >
                   <Icons.check className='h-4 w-4' />
-                  Complete Current Step
+                  Complete Student Enrollment
                 </Button>
-                <Button disabled={isPending} type='button' size={'sm'} onClick={actionFormUndo} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-yellow-400 px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
+                <Button
+                  disabled={isPending}
+                  type='button'
+                  size={'sm'}
+                  onClick={actionFormUndo}
+                  className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-yellow-400 px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}
+                >
                   <Icons.rotateCcw className='h-4 w-4' />
                   Undo last Step
                 </Button>

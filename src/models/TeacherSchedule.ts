@@ -58,6 +58,7 @@ import mongoose, { Schema, models, model } from 'mongoose';
 export interface ITeacherSchedule extends Document {
   category: string;
   profileId: mongoose.Schema.Types.ObjectId;
+  courseId: mongoose.Schema.Types.ObjectId;
   schedule?: any;
   blockTypeId?: any;
   subjectId?: any;
@@ -72,6 +73,10 @@ const schema = new Schema<ITeacherSchedule>(
     profileId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'TeacherProfile',
+    },
+    courseId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course',
     },
     // this sectionId will be used to compare which section and subject to compare with students
     blockTypeId: {

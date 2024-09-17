@@ -2,16 +2,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import Link from 'next/link';
 import { DataTableDrawer } from '../Drawer';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-import { Icons } from '@/components/shared/Icons';
-import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
-import { useState } from 'react';
 import { DialogStep1Button } from './Dialog';
 import ActionsCell from './ActionsCell';
 import { IEnrollment } from '@/types';
@@ -19,6 +10,19 @@ import StudentPhoto from '../step1/StudentPhoto';
 import PSAFile from '../step1/PSAFile';
 
 export const columns2: ColumnDef<IEnrollment>[] = [
+  {
+    accessorFn: (row) => '#',
+    id: '#',
+    header: '#',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {row.index + 1}
+        </div>
+      );
+    },
+  },
   {
     accessorKey: 'fullname',
     header: ({ column }) => {
@@ -74,6 +78,14 @@ export const columns2: ColumnDef<IEnrollment>[] = [
     accessorFn: (row) => row.studentStatus,
     accessorKey: 'student status',
     header: 'Student Status',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' capitalize'>
+          {user.studentStatus}
+        </div>
+      );
+    },
   },
   {
     accessorFn: (row) => row.psaUrl,

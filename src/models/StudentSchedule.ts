@@ -3,8 +3,10 @@ import mongoose, { Schema, models, model } from 'mongoose';
 export interface IStudentSchedule extends Document {
   category: string;
   studentId: mongoose.Schema.Types.ObjectId;
-  blockTypeId: mongoose.Schema.Types.ObjectId;
-  schedule?: any;
+  enrollmentId: mongoose.Schema.Types.ObjectId;
+  // blockTypeId: mongoose.Schema.Types.ObjectId;
+  teacherScheduleId: mongoose.Schema.Types.ObjectId;
+  grade: string;
 }
 const schema = new Schema<IStudentSchedule>(
   {
@@ -13,39 +15,21 @@ const schema = new Schema<IStudentSchedule>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'StudentProfile',
     },
-    blockTypeId: {
+    enrollmentId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'BlockType',
+      ref: 'Enrollment',
     },
-    schedule: [
-      {
-        teacherScheduleId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'TeacherSchedule',
-        },
-        subjectId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Subject',
-        },
-        roomId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Room',
-        },
-        days: {
-          type: [String],
-          default: [],
-        },
-        startTime: {
-          type: String,
-        },
-        endTime: {
-          type: String,
-        },
-        grade: {
-          type: String,
-        },
-      },
-    ],
+    // blockTypeId: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: 'BlockType',
+    // },
+    teacherScheduleId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'TeacherSchedule',
+    },
+    grade: {
+      type: String,
+    },
   },
   {
     versionKey: false,

@@ -11,6 +11,11 @@ import { DataTableDrawer } from './components/Drawer';
 import { DataTable2 } from './components/step2/DataTable2';
 import { DataTable3 } from './components/step3/DataTable3';
 import { IEnrollment } from '@/types';
+import { columns3 } from './components/step3/Columns3';
+import { columns4 } from './components/step4/Columns4';
+import { DataTable4 } from './components/step4/DataTable4';
+import { DataTable5 } from './components/step5/DataTable5';
+import { columns5 } from './components/step5/Columns5';
 
 const Page = () => {
   const pathname = usePathname();
@@ -18,9 +23,8 @@ const Page = () => {
   const search = searchParams.get('step');
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  // const isAllowed = ['1', '2', '3', '4'];
-  const isAllowed = useMemo(() => ['1', '2', '3', '4'], []);
-  // console.log(search);
+  const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
+  const isAllowed = useMemo(() => ['1', '2', '3', '4','5'], []);
   // Validate the step parameter whenever the search parameter changes
   useEffect(() => {
     if (search === null || !isAllowed.includes(search)) {
@@ -28,8 +32,8 @@ const Page = () => {
     } else {
       setIsError(false);
     }
-    setIsPageLoading(false); // Loading is done after validation
-  }, [search, isAllowed, isPageLoading]);
+     // Loading is done after validation
+  }, [search, isAllowed]);
 
   // Query data based on the validated step parameter
   const { data, isLoading, error: isEnError } = useEnrollmentQueryByStep(search);
@@ -37,7 +41,11 @@ const Page = () => {
   useEffect(() => {
     if (isLoading || !data || !data.enrollment) return;
     if (isEnError) console.log(isEnError.message);
-    if (data) console.log('courses logs:', data.enrollment);
+    if (data) {
+      const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus !== 'Enrolled');
+      setEnrolledStudents(filteredEnrollment);
+      setIsPageLoading(false);
+    };
   }, [data, isLoading, isEnError]);
 
   return (
@@ -54,12 +62,12 @@ const Page = () => {
             ) : search === '2' ? (
               <DataTable2 columns={columns2} data={data?.enrollment as IEnrollment[]} />
             ) : search === '3' ? (
-              <DataTable3 columns={columns2} data={data?.enrollment as IEnrollment[]} />
+              <DataTable3 columns={columns3} data={data?.enrollment as IEnrollment[]} />
             ) : search === '4' ? (
-              <DataTable3 columns={columns2} data={data?.enrollment as IEnrollment[]} />
-            ) : (
-              search === '5'
-            )
+              <DataTable4 columns={columns4} data={data?.enrollment as IEnrollment[]} />
+            ) : search === '5' ? (
+              <DataTable5 columns={columns5} data={enrolledStudents as IEnrollment[]} />
+            ) : null
 
             // : search === '4'
             //else if === 2

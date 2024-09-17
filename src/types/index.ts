@@ -251,6 +251,7 @@ export type IEnrollment = {
   studentType?: string;
   scholarType?: string;
   schoolYear: string;
+  studentSubjects: any;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -269,7 +270,7 @@ export type IBlockType = {
   semester: string;
   year: string;
   section: string;
-  blockSubjects:any[];
+  blockSubjects: any[];
   createdAt: Date;
   updatedAt: Date;
 };

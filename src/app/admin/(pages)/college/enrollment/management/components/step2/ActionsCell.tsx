@@ -16,7 +16,7 @@ const ActionsCell2 = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const undoMutation = useUndoEnrollmentToStep1Mutation();
   const mutation = useApprovedEnrollmentStep2Mutation();
-  console.log('user', user);
+  
   const actionFormUndo = () => {
     const data = {
       EId: user._id,

@@ -49,7 +49,7 @@ export const getAllTeacherScheduleByScheduleRoomId = async (roomId: any) => {
 };
 export const getAllTeacherScheduleByProfileId = async (profileId: any) => {
   try {
-    const TProfiles = await TeacherSchedule.find({ profileId }).populate('profileId').populate('blockTypeId').populate('subjectId').populate('roomId').exec();
+    const TProfiles = await TeacherSchedule.find({ profileId }).populate('profileId').populate('courseId').populate('blockTypeId').populate('subjectId').populate('roomId').exec();
     return TProfiles;
   } catch (error) {
     console.log('error e:', error);
@@ -59,7 +59,7 @@ export const getAllTeacherScheduleByProfileId = async (profileId: any) => {
 
 export const getAllTeacherSchedule = async () => {
   try {
-    const TProfiles = await TeacherSchedule.find().populate('profileId').populate('blockTypeId').populate('subjectId').populate('roomId').exec();
+    const TProfiles = await TeacherSchedule.find().populate('profileId').populate('courseId').populate('blockTypeId').populate('subjectId').populate('roomId').exec();
     return TProfiles;
   } catch (error) {
     return [];
@@ -68,7 +68,7 @@ export const getAllTeacherSchedule = async () => {
 
 export const getTeacherScheduleById = async (id: any) => {
   try {
-    const TProfiles = await TeacherSchedule.findById(id).populate('profileId').populate('blockTypeId').populate('subjectId').populate('roomId').exec();
+    const TProfiles = await TeacherSchedule.findById(id).populate('profileId').populate('courseId').populate('blockTypeId').populate('subjectId').populate('roomId').exec();
     return TProfiles;
   } catch (error) {
     return null;
