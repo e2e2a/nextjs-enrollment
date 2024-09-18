@@ -26,6 +26,7 @@ export const getEnrollmentById = async (id: any) => {
         path: 'studentSubjects.teacherScheduleId',
         populate: [
           { path: 'profileId' }, // Populate profileId inside teacherScheduleId
+          { path: 'courseId' },
           { path: 'subjectId' },
           { path: 'roomId' },
           { path: 'blockTypeId' },
@@ -53,18 +54,11 @@ export const getEnrollmentByUserId = async (userId: string) => {
       .populate('profileId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
-        populate: [
-          { path: 'profileId' },
-          { path: 'subjectId' },
-          { path: 'roomId' },
-          { path: 'blockTypeId' },
-        ],
+        populate: [{ path: 'profileId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
       })
       .populate({
         path: 'studentSubjects.profileId',
-        populate: [
-          { path: 'userId' },
-        ],
+        populate: [{ path: 'userId' }],
       })
       .exec();
     // console.log('i am exec...', enrollment);
@@ -86,6 +80,7 @@ export const getEnrollmentByProfileId = async (profileId: string) => {
         populate: [
           { path: 'profileId' }, // Populate profileId inside teacherScheduleId
           { path: 'subjectId' },
+          { path: 'courseId' },
           { path: 'roomId' },
           { path: 'blockTypeId' },
         ],
@@ -130,7 +125,30 @@ export const getAllEnrollment = async () => {
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
-        populate: [{ path: 'profileId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
+        populate: [{ path: 'profileId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
+      })
+      .populate({
+        path: 'studentSubjects.profileId',
+        populate: [{ path: 'userId' }],
+      })
+      .exec();
+    return enrollment;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getAllEnrollmentByTeacherScheduleId = async (teacherScheduleId: any) => {
+  try {
+    const enrollment = await Enrollment.find({ 'studentSubjects.teacherScheduleId': teacherScheduleId })
+      .populate('userId')
+      .populate('courseId')
+      .populate('profileId')
+      .populate('blockTypeId')
+      .populate({
+        path: 'studentSubjects.teacherScheduleId',
+        populate: [{ path: 'profileId' },{ path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
       })
       .populate({
         path: 'studentSubjects.profileId',

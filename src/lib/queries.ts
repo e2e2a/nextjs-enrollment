@@ -53,6 +53,7 @@ import {
   approvedEnrollmentStep4Action,
   approvedEnrollmentStep5Action,
   getAllEnrollmentAction,
+  getAllEnrollmentByTeacherScheduleIdAction,
   getEnrollmentByIdAction,
   getEnrollmentByStepAction,
   undoEnrollmentToStep1,
@@ -64,7 +65,7 @@ import { createCollegeCourseBlockAction, getAllBlockTypeAction, getBlockTypeById
 import { createSubjectCollegeAction, getSubjectCategoryCollegeAction } from '@/action/college/subjects/admin';
 import { adminCreateUserWithRoleAction, getUserRoleStudentAction, getUserRoleTeachertAction } from '@/action/user';
 import { createRoomAction, getAllRoomAction } from '@/action/rooms';
-import { createTeacherScheduleAction, getAllTeacherProfileAction, getAllTeacherScheduleAction, getTeacherProfileByIdAction, getTeacherScheduleByProfileIdAction, removeTeacherScheduleCollegeMutation } from '@/action/college/schedules/teachers';
+import { createTeacherScheduleAction, getAllTeacherProfileAction, getAllTeacherScheduleAction, getTeacherProfileByIdAction, getTeacherProfileByUserIdAction, getTeacherScheduleByIdAction, getTeacherScheduleByProfileIdAction, removeTeacherScheduleCollegeMutation } from '@/action/college/schedules/teachers';
 import { createSchoolYearAction, getAllSchoolYearAction } from '@/action/schoolyear';
 import {
   createStudentCurriculumAction,
@@ -267,6 +268,16 @@ export const useTeacherProfileQueryById = (id: string) => {
   });
 };
 
+export const useTeacherProfileQueryByUserId = (id: string) => {
+  return useQuery<getTeacherProfileResponse, Error>({
+    queryKey: ['TeacherProfileByUserId', id],
+    queryFn: () => getTeacherProfileByUserIdAction(id),
+    enabled: !!id,
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
+};
+
 /**
  * Courses Queries And Mutations
  * @returns
@@ -308,6 +319,20 @@ export const useCreateCourseMutation = () => {
   });
 };
 
+/**
+ * Instructor Query Students Schedules/Subjects
+ * @returns Queries and mutations
+ */
+export const useAllEnrollmentByTeacherScheduleIdQuery = (data: any) => {
+  return useQuery<any, Error>({
+    queryKey: ['EnrollmentByTeacherScheduleId', data],
+    queryFn: () => getAllEnrollmentByTeacherScheduleIdAction(data),
+    enabled: !!data,
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
+};
 /**
  * Students Enrollment
  * @returns Queries and mutations
@@ -632,6 +657,20 @@ export const useCreateSubjectCollegeMutation = () => {
   });
 };
 
+/**
+ * Instructor Teacher Schedule By Id
+ * @returns Queries and mutations
+ */
+export const useTeacherScheduleCollegeQueryById = (data: any) => {
+  return useQuery<getTeacherScheduleResponse, Error>({
+    queryKey: ['TeacherScheduleByProfileId', data],
+    queryFn: () => getTeacherScheduleByIdAction(data),
+    retry: 0,
+    enabled: !!data,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
 /**
  * Admin Teacher Schedule Management
  * @returns Queries and mutations

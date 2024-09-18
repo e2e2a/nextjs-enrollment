@@ -1,6 +1,6 @@
 'use server';
 import dbConnect from '@/lib/db/db';
-import { getAllEnrollment, getEnrollmentById, getEnrollmentByStep, updateEnrollmentById } from '@/services/enrollment';
+import { getAllEnrollment, getAllEnrollmentByTeacherScheduleId, getEnrollmentById, getEnrollmentByStep, updateEnrollmentById } from '@/services/enrollment';
 import { getEnrollmentResponse, getSingleEnrollmentResponse } from '@/types';
 import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { Resend } from 'resend';
@@ -221,6 +221,17 @@ export const getEnrollmentByIdAction = async (id: any): Promise<getSingleEnrollm
     await dbConnect();
     const enrollment = await getEnrollmentById(id);
     return { enrollment: JSON.parse(JSON.stringify(enrollment)), status: 200 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+
+export const getAllEnrollmentByTeacherScheduleIdAction = async (id: string): Promise<getEnrollmentResponse> => {
+  try {
+    await dbConnect();
+    const enrollments = await getAllEnrollmentByTeacherScheduleId(id);
+    return { enrollment: JSON.parse(JSON.stringify(enrollments)), status: 200 };
   } catch (error) {
     console.log('server e :', error);
     return { error: 'Something went wrong', status: 500 };

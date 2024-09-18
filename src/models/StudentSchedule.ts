@@ -19,10 +19,6 @@ const schema = new Schema<IStudentSchedule>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Enrollment',
     },
-    // blockTypeId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'BlockType',
-    // },
     teacherScheduleId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'TeacherSchedule',

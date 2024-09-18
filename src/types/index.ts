@@ -175,6 +175,7 @@ export type IResponse = {
 
 export type SignInResponse = {
   token?: string;
+  role?: string;
 } & IResponse;
 
 export type SignUpResponse = {
@@ -188,6 +189,7 @@ export type checkTokenResponse = {
 export type verificationCodeProcessResponse = {
   token?: IResetPasswordToken;
   redirect?: string;
+  role?: string;
 } & IResponse;
 
 export type verificationCodeResendResponse = {
@@ -238,7 +240,6 @@ export type IEnrollment = {
   profileId?: any;
   courseId?: any;
   blockTypeId?: any;
-  courseCode: string;
   studentYear: string;
   studentSemester?: string;
   onProcess: Boolean;
@@ -246,11 +247,11 @@ export type IEnrollment = {
   psaUrl?: string;
   photoUrl?: string;
   pdfUrl?: string;
-  studentStatus?: string;
+  schoolYear: string;
   enrollStatus?: string;
+  studentStatus?: string;
   studentType?: string;
   scholarType?: string;
-  schoolYear: string;
   studentSubjects: any;
   createdAt: Date;
   updatedAt: Date;
@@ -425,8 +426,14 @@ export type ITeacherSchedule = {
   id?: any;
   _id: any;
   category: any;
+  courseId: any;
   profileId: any;
-  schedule: any;
+  blockTypeId: any;
+  subjectId: any;
+  roomId: any;
+  days: any;
+  startTime: any;
+  endTime: any;
   createdAt: Date;
   updatedAt: Date;
 };

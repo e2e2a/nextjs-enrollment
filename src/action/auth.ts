@@ -53,7 +53,7 @@ export const signInAction = async (data: any): Promise<SignInResponse> => {
         redirect: false,
       });
 
-      return { message: 'Login successful', status: 200 };
+      return { message: 'Login successful', role: existingUser.role, status: 200 };
     } catch (error: any) {
       if (error instanceof AuthError) {
         switch (error.type) {

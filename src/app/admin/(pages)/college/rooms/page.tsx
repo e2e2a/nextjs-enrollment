@@ -16,12 +16,13 @@ const Page = () => {
   useEffect(() => {
     if (isLoading || !data || !data.rooms) return;
     if (isEnError) console.log(isEnError.message);
-    if (data) console.log('courses logs:', data.rooms);
-    if (data.rooms) {
-      const filteredRooms = data?.rooms.filter((room: IRoom) => room.educationLevel === 'tertiary');
-      setRooms(filteredRooms);
+    if (data) {
+      if (data.rooms) {
+        const filteredRooms = data?.rooms.filter((room: IRoom) => room.educationLevel === 'tertiary');
+        setRooms(filteredRooms);
+      }
+      setIsPageLoading(false);
     }
-    setIsPageLoading(false);
   }, [data, isLoading, isEnError]);
 
   return (

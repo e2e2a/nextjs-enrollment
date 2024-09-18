@@ -30,6 +30,7 @@ export const getTeacherProfileById = async (id: any) => {
     return null;
   }
 };
+
 export const getTeacherProfileByUserId = async (userId: any) => {
   try {
     const TProfile = await TeacherProfile.findOne({ userId }).populate('userId').exec();

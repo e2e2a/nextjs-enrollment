@@ -18,7 +18,7 @@ import dbConnect from '@/lib/db/db';
 export const verificationCodeProcess = async (data: any): Promise<verificationCodeProcessResponse> => {
   const { userId, verificationCode, Ttype } = data;
   try {
-    await dbConnect()
+    await dbConnect();
     const userToken = await getVerificationTokenByUserId(userId);
     if (!userToken) return { error: 'Somethings went wrong', status: 403 };
 
@@ -47,10 +47,19 @@ export const verificationCodeProcess = async (data: any): Promise<verificationCo
           email: user.email,
           redirect: false,
         });
-
+        let redirect;
+        if (user.role === 'ADMIN') {
+          redirect = '/admin';
+        } else if (user.role === 'STUDENT') {
+          redirect = '/';
+        } else if (user.role === 'TEACHER') {
+          redirect = '/';
+        }else if (user.role === 'DEAN') {
+          redirect = '/dean';
+        }
         return { redirect: '/admin', status: 201 };
       case 'Verify':
-        console.log('here')
+        console.log('here');
         await updateUserEmailVerifiedById(user._id);
         // await createActiveIp(user._id, ip);
         await deleteVerificationTokenByid(userToken._id);
@@ -59,18 +68,18 @@ export const verificationCodeProcess = async (data: any): Promise<verificationCo
         return { error: 'Invalid request type', status: 400 };
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return { error: 'Internal Server Error', status: 500 };
   }
 };
 
 export const verificationCodeResend = async (data: any): Promise<verificationCodeResendResponse> => {
-  await dbConnect()
+  await dbConnect();
   const { userId } = data;
-  console.log('userId',userId)
+  console.log('userId', userId);
   const verification = await generateVerificationCode(userId);
   if ('error' in verification) {
-    console.log(verification.error)
+    console.log(verification.error);
     return { error: 'Something went wrong.', status: 403 };
   }
   const User = await getUserById(verification.userId);

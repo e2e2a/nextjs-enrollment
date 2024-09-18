@@ -3,7 +3,7 @@ import dbConnect from '@/lib/db/db';
 import TeacherSchedule from '@/models/TeacherSchedule';
 import { getRoomById } from '@/services/room';
 import { getSubjecByCourseCode } from '@/services/subject';
-import { getAllTeacherProfile, getTeacherProfileById } from '@/services/teacherProfile';
+import { getAllTeacherProfile, getTeacherProfileById, getTeacherProfileByUserId } from '@/services/teacherProfile';
 import { createTeacherSchedule, getAllTeacherSchedule, getAllTeacherScheduleByProfileId, getAllTeacherScheduleByScheduleRoomId, getTeacherScheduleById, removeTeacherScheduleById } from '@/services/teacherSchedule';
 // import { createTeacherSchedule, getAllTeacherSchedule, getTeacherScheduleById, getTeacherScheduleByProfileId, getTeacherScheduleByScheduleRoomId } from '@/services/teacherSchedule';
 import { getAllTeacherProfileResponse, getAllTeacherScheduleResponse, getTeacherProfileResponse, getTeacherScheduleResponse } from '@/types';
@@ -192,16 +192,16 @@ export const removeTeacherScheduleCollegeMutation = async (data: any) => {
   }
 };
 
-// export const getTeacherScheduleAction = async (): Promise<getAllTeacherScheduleResponse> => {
-//   try {
-//     await dbConnect();
-//     const subjects = await getAllTeacherSchedule();
-//     return { teacherSchedules: JSON.parse(JSON.stringify(subjects)), status: 200 };
-//   } catch (error) {
-//     console.log('server e :', error);
-//     return { error: 'Something went wrong', status: 500 };
-//   }
-// };
+export const getTeacherScheduleByIdAction = async (id:string): Promise<getTeacherScheduleResponse> => {
+  try {
+    await dbConnect();
+    const t = await getTeacherScheduleById(id);
+    return { teacherSchedule: JSON.parse(JSON.stringify(t)), status: 200 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
 
 export const getAllTeacherProfileAction = async (): Promise<getAllTeacherProfileResponse> => {
   try {
@@ -217,6 +217,17 @@ export const getTeacherProfileByIdAction = async (id: string): Promise<getTeache
   try {
     await dbConnect();
     const t = await getTeacherProfileById(id);
+    return { teacher: JSON.parse(JSON.stringify(t)), status: 200 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+
+export const getTeacherProfileByUserIdAction = async (id: string): Promise<getTeacherProfileResponse> => {
+  try {
+    await dbConnect();
+    const t = await getTeacherProfileByUserId(id);
     return { teacher: JSON.parse(JSON.stringify(t)), status: 200 };
   } catch (error) {
     console.log('server e :', error);

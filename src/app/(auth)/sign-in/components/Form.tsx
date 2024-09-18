@@ -18,25 +18,21 @@ const SignInForm = () => {
   const [isPending, setIsPending] = useState(false);
   const mutation = useSignInMutation();
 
-  const form = useForm<z.infer<typeof SigninValidator>>(
-    {
-      resolver: zodResolver(SigninValidator),
-      shouldFocusError: true,
-      defaultValues: {
-        email: '',
-        password: '',
-      },
-    }
-    
-  )
-  
-  
-  const onSubmit = (data: z.infer<typeof SigninValidator>) =>{
-  // const onSubmit: SubmitHandler<z.infer<typeof SigninValidator>> = async (data: any) => {
+  const form = useForm<z.infer<typeof SigninValidator>>({
+    resolver: zodResolver(SigninValidator),
+    shouldFocusError: true,
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof SigninValidator>) => {
+    // const onSubmit: SubmitHandler<z.infer<typeof SigninValidator>> = async (data: any) => {
     setIsPending(true);
     mutation.mutate(data, {
       onSuccess: (res) => {
-        console.log(res)
+        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
@@ -44,7 +40,14 @@ const SignInForm = () => {
             if (!res.token) {
               setTypeMessage('success');
               setMessage(res?.message);
-              return (window.location.href = '/');
+              if (res.role === 'ADMIN') {
+                window.location.href = '/admin';
+              } else if (res.role === 'STUDENT') {
+                window.location.href = '/';
+              } else if (res.role === 'TEACHER') {
+                window.location.href = '/instructor';
+              }
+              return;
             }
             return (window.location.href = `/verification?token=${res.token}`);
           default:
@@ -91,12 +94,7 @@ const SignInForm = () => {
               )}
             />
           </div>
-          <Button
-            type='button'
-            variant='link'
-            className='font-normal w-full text-indigo-500 text-center flex justify-end items-center'
-            size='sm'
-          >
+          <Button type='button' variant='link' className='font-normal w-full text-indigo-500 text-center flex justify-end items-center' size='sm'>
             <Link href={'/recovery'} className=''>
               Forgot Password?
             </Link>
