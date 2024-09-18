@@ -14,7 +14,7 @@ const Home = () => {
               {s?.user?.firstname} {s?.user?.lastname}
             </span>
           </h1>
-          <p className='text-sm sm:text-[15px] font-normal text-muted-foreground'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thank you for Joining Our School, We’re excited to have you as part of our educational community.</p>
+          <p className='text-sm sm:text-[15px] font-normal text-muted-foreground'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Welcome to our team! We&apos;re excited to have you on board as an instructor and look forward to the knowledge and inspiration you&apos;ll share with our students and staff.</p>
         </div>
       </div>
     </div>
