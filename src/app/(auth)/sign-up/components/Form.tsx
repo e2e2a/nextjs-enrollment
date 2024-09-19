@@ -44,18 +44,19 @@ const SignUpForm = () => {
             }
             return (window.location.href = `/verification?token=${res.token}`);
           default:
+            setIsPending(false);
             setMessage(res.error);
             setTypeMessage('error');
             return;
         }
       },
       onSettled: () => {
-        setIsPending(false);
+        
       },
     });
   };
   return (
-    <CardWrapper className={'my-16'} headerLabel='Create an Account' backButtonHref='/sign-in' backButtonLabel='Already have an account?' showSocial>
+    <CardWrapper header={'Sign Up'} className={''} headerLabel='Create an Account' backButtonHref='/sign-in' backButtonLabel='Already have an account?' showSocial>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
           <div className='space-y-4'>
@@ -73,32 +74,6 @@ const SignUpForm = () => {
                 </FormItem>
               )}
             />
-            {/* <FormField
-              control={form.control}
-              name='firstname'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Firstname</FormLabel>
-                  <FormControl>
-                    <Input {...field} disabled={isPending} placeholder='Enter Firstname' className='bg-gray-50' />
-                  </FormControl>
-                  <FormMessage className='text-red' />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='lastname'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Lastname</FormLabel>
-                  <FormControl>
-                    <Input {...field} disabled={isPending} placeholder='Enter Lastname' className='bg-gray-50' />
-                  </FormControl>
-                  <FormMessage className='text-red' />
-                </FormItem>
-              )}
-            /> */}
             <FormField
               control={form.control}
               name='username'

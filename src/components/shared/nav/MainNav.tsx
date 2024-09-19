@@ -10,6 +10,7 @@ import { UserAccountNav } from './UserAvatar/UserAccountNav';
 import { Button } from '@/components/ui/button';
 import { Notification } from './notification/Notification';
 import Menu from './menu/Menu';
+import Image from 'next/image';
 interface MainNavProps {
   session?: any;
   items?: MainNavItem[];
@@ -20,11 +21,14 @@ export function MainNav({ session, items, profile }: MainNavProps) {
   const segment = usePathname();
   
   return (
-    <div className='md:px-[1.2%] px-1 flex h-14 pt-1 items-center justify-between bg-white'>
+    <div className='md:px-[0.7%] px-1 flex h-14 pt-1 items-center justify-between bg-white'>
       <div className='flex gap-0 md:gap-10'>
         <Link href='/' className='flex items-center space-x-2 md:flex ml-1.5 md:ml-0'>
-          <Icons.logo className='h-8 w-8' />
-          <span className='hidden font-bold sm:inline-block'>{/* {siteConfig.name} */}e2e2a</span>
+          {/* <Icons.logo className='h-8 w-8' /> */}
+          <Image src={'/images/logo.jpg'} alt='nothing to say' width={40} height={40} priority className='rounded-full' />
+          <span className='hidden font-bold sm:inline-block font-poppins'>
+            {/* {siteConfig.name} */}
+            DCIT</span>
         </Link>
         
       </div>

@@ -24,24 +24,25 @@ const RecoveryForm = () => {
   });
   const onSubmit: SubmitHandler<z.infer<typeof RecoveryValidator>> = async (data) => {
     setIsPending(true);
-    // mutation.mutate(data, {
-    //   onSuccess: (res) => {
-    //     if (res.error) {
-    //       setMessage(res.error);
-    //       setTypeMessage('error');
-    //       return;
-    //     }
-    //     setMessage(res.message);
-    //     setTypeMessage('success');
-    //     return (window.location.href = `/verification?token=${res.token}`);
-    //   },
-    //   onSettled: () => {
-    //     setIsPending(false);
-    //   },
-    // });
+    mutation.mutate(data, {
+      onSuccess: (res) => {
+        if (res.error) {
+          setMessage(res.error);
+          setTypeMessage('error');
+          return;
+        }
+        setMessage(res.message);
+        setTypeMessage('success');
+        return (window.location.href = `/verification?token=${res.token}`);
+      },
+      onSettled: () => {
+        setIsPending(false);
+      },
+    });
   };
   return (
     <CardWrapper
+    header={'Find your email'}
       headerLabel='Enter your email to reset your password.'
       backButtonHref='/sign-in'
       backButtonLabel='Go back to signin?'

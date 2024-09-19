@@ -37,7 +37,7 @@ const VerificationForm = () => {
       router.push('/recovery');
       return;
     }
-    console.log('result',result)
+    console.log('result', result);
     if (result) {
       if (result.error) return router.push('/recovery');
       setHeader('Confirming your verification code');
@@ -122,7 +122,7 @@ const VerificationForm = () => {
         setTimeout(() => {
           window.location.reload();
         }, 100);
-        return
+        return;
       },
       onSettled: () => {
         setIsPending(false);
@@ -130,12 +130,7 @@ const VerificationForm = () => {
     });
   };
   return (
-    <CardWrapper
-      headerLabel={header || 'Please double check your token or sign up again.'}
-      backButtonHref=''
-      backButtonLabel= {header ? labelLink : ''}
-      onResendCode={onResendCode}
-    >
+    <CardWrapper header={'Verification'} headerLabel={header || 'Please double check your token or sign up again.'} backButtonHref='' backButtonLabel={header ? labelLink : ''} onResendCode={onResendCode}>
       {expirationTime && !message && (
         <div className='flex items-center justify-center'>
           <div className='text-center rounded-md mb-[3%] sm:text-3xl text-xl font-medium'>{formatTime(secondsRemaining)}</div>
@@ -152,9 +147,7 @@ const VerificationForm = () => {
                 value={value}
                 ref={inputRefs.current[index]}
                 className='text-center rounded-md h-16 sm:text-3xl text-xl font-medium'
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  handleChange(index, e.target.value, inputCode, setInputCode, inputRefs)
-                }
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(index, e.target.value, inputCode, setInputCode, inputRefs)}
                 onPaste={(e) => handlePaste(e, inputCode, setInputCode, inputRefs)}
               />
             ))
@@ -168,12 +161,7 @@ const VerificationForm = () => {
           <p className='text-muted-foreground mt-3 sm:mt-0 text-sm'>• This link only available for only 24hrs.</p>
 
           <div className='flex justify-center items-center mt-5'>
-            <Button
-              type='submit'
-              disabled={isPending || labelLink == null}
-              className='w-[50%] bg-blue-600 hover:bg-blue-700 text-white'
-              onClick={handleSubmit}
-            >
+            <Button type='submit' disabled={isPending || labelLink == null} className='w-[50%] bg-blue-600 hover:bg-blue-700 text-white' onClick={handleSubmit}>
               Verify
             </Button>
           </div>

@@ -141,7 +141,7 @@ export const useResendVCodeMutation = () => {
 // AUTH Recovery
 // ============================================================
 export const useRecoveryMutation = () => {
-  return useMutation<recoveryResponse, Error, data>({
+  return useMutation<recoveryResponse, Error, any>({
     mutationFn: async (data) => recoveryProcess(data),
   });
 };

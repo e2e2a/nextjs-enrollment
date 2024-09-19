@@ -25,7 +25,7 @@ export const recoveryProcess = async (data: any): Promise<recoveryResponse> => {
     }
 
     const tokenType = 'Recovery';
-    const verificationToken = await generateVerificationToken(email, tokenType);
+    const verificationToken = await generateVerificationToken(existingUser._id, tokenType);
     await sendVerificationEmail(verificationToken.email, verificationToken.code, existingUser.firstname, 'Recovery Activation');
 
     return { message: 'Confirmation email sent!', token: verificationToken.token, status: 200 };

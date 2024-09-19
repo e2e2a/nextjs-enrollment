@@ -24,7 +24,7 @@ const ResetPasswordForm = () => {
 
   const token = searchParams.get('token') ?? '';
   const { data: result, error } = useRecoveryTokenCheckQuery(token);
-  
+
   useEffect(() => {
     if (error) {
       router.push('/recovery');
@@ -34,7 +34,7 @@ const ResetPasswordForm = () => {
       if (result.error) return router.push('/recovery');
       setLoading(false);
     }
-  }, [result,error,router]);
+  }, [result, error, router]);
 
   const form = useForm<z.infer<typeof NewPasswordValidator>>({
     resolver: zodResolver(NewPasswordValidator),
@@ -71,11 +71,7 @@ const ResetPasswordForm = () => {
     });
   };
   return (
-    <CardWrapper
-      headerLabel='Enter your email to reset your password.'
-      backButtonHref='/sign-in'
-      backButtonLabel='Go back to signin?'
-    >
+    <CardWrapper header={'Reset Password'} headerLabel='Enter your email to reset your password.' backButtonHref='/sign-in' backButtonLabel='Go back to signin?'>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
           <div className='space-y-4'>
