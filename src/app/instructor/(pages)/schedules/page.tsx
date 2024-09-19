@@ -6,7 +6,7 @@ import { columns } from './components/Columns';
 import { useTeacherProfileQueryByUserId, useTeacherScheduleCollegeQueryByProfileId } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 
-const Page = ({ params }: { params: { id: string } }) => {
+const Page = () => {
   const [isError, setIsError] = useState(false);
   const { data: session } = useSession();
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -14,11 +14,11 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleCollegeQueryByProfileId(data?.teacher?._id);
   useEffect(() => {
     if (isLoading || !data) return;
-    if (isEnError) console.log(isEnError.message);
+    if (isEnError) return setIsError(true);
   }, [data, isLoading, isEnError]);
   useEffect(() => {
     if (tsLoading || !ts) return;
-    if (tsError) console.log(tsError.message);
+    if (tsError) return setIsError(true);
   }, [ts, tsLoading, tsError]);
 
   useEffect(() => {
@@ -50,7 +50,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                 </div>
               </div>
               <div className='w-full flex justify-end items-center'></div>
-              {/* <DataTable columns={columns} data={data?.blockType.blockSubjects} /> */}
               <DataTable columns={columns} data={ts?.teacherSchedules} />
             </>
           ) : (

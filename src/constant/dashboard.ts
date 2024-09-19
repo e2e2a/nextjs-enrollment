@@ -45,10 +45,7 @@ export const dashboardConfig: DashboardConfig = {
       href: '/courses',
       icon: 'libraryBig',
     },
-    /**
-     * @todo think of way if this is to remove or not
-     * advantage to display courses is having a description to read by students
-     */
+
     // {
     //   title: 'Subjects',
     //   i: [
@@ -79,11 +76,6 @@ export const dashboardConfig: DashboardConfig = {
     //     },
     //   ],
     //   icon: 'libraryBig',
-    // },
-    // {
-    //   title: 'Classes',
-    //   href: '/',
-    //   icon: 'fileBadge',
     // },
     {
       title: 'Enrollment',
@@ -120,6 +112,82 @@ export const dashboardConfig: DashboardConfig = {
     //   href: '/dashboard/settings',
     //   icon: 'settings',
     // },
+  ],
+  mainNavInstructor: [
+    {
+      title: 'Home',
+      href: '/instructor',
+      icon: 'home',
+    },
+    {
+      title: 'Schedules',
+      href: '/instructor/schedules',
+      icon: 'hourglass',
+    },
+    {
+      title: 'School & Policies',
+      href: '/school',
+      icon: 'school',
+    },
+    {
+      title: 'Documentation',
+      href: '',
+      icon: 'page',
+    },
+  ],
+  sidebarInstructor: [
+    {
+      title: 'Schedules',
+      href: '/instructor/schedules',
+      icon: 'hourglass',
+    },
+    {
+      title: 'Records',
+      href: '/',
+      icon: 'fileStack',
+    },
+    {
+      title: 'School & Policies',
+      href: '/',
+      icon: 'school',
+    },
+    {
+      title: 'Documentation',
+      href: '/',
+      icon: 'page',
+    },
+    // {
+    //   title: 'Settings',
+    //   href: '/dashboard/settings',
+    //   icon: 'settings',
+    // },
+  ],
+  mainNavAdmin: [
+    {
+      title: 'Home',
+      href: '/admin',
+      icon: 'home',
+    },
+    {
+      title: 'Dashboard',
+      href: '/courses',
+      icon: 'layoutDashboard',
+    },
+    // {
+    //   title: 'Enrollment',
+    //   href: '/enrollment',
+    //   icon: 'graduationCap',
+    // },
+    // {
+    //   title: 'Records',
+    //   href: '/records',
+    //   icon: 'fileStack',
+    // },
+    {
+      title: 'Documentation',
+      href: '',
+      icon: 'page',
+    },
   ],
   sidebarAdmin: [
     // {
@@ -416,7 +484,6 @@ export const dashboardConfig: DashboardConfig = {
                           href: '/admin/college/enrollment/enrolled',
                           icon: 'eye',
                         },
-                        
                       ],
                       icon: 'packageSearch',
                     },
@@ -428,11 +495,9 @@ export const dashboardConfig: DashboardConfig = {
                           href: '/admin/college/schedules/instructors',
                           icon: 'eye',
                         },
-                        
                       ],
                       icon: 'packageSearch',
                     },
-                    
                   ],
                   icon: 'packageSearch',
                 },

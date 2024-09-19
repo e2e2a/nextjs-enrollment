@@ -43,6 +43,19 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row.subjectId.subjectCode,
+    id: 'subject code',
+    header: 'Subject Code',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.subjectId.subjectCode}
+        </div>
+      );
+    },
+  },
+  {
     accessorFn: (row) => row.subjectId.name,
     id: 'subject title',
     header: 'Subject Title',

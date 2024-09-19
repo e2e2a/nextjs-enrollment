@@ -131,6 +131,15 @@ export type SidebarNavItemAdmin = {
   icon?: keyof typeof Icons;
 };
 
+export type SidebarNavItemInstructor = {
+  title: string;
+  disabled?: boolean;
+  i?: SidebarNavItem[];
+  href?: string;
+  external?: boolean;
+  icon?: keyof typeof Icons;
+};
+
 export type SiteConfig = {
   name: string;
   description: string;
@@ -153,7 +162,10 @@ export type MarketingConfig = {
 
 export type DashboardConfig = {
   mainNav: MainNavItem[];
+  mainNavInstructor: MainNavItem[];
   sidebarNav: SidebarNavItem[];
+  sidebarInstructor: SidebarNavItemInstructor[];
+  mainNavAdmin: MainNavItem[];
   sidebarAdmin: SidebarNavItemAdmin[];
 };
 
