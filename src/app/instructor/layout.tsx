@@ -1,11 +1,11 @@
-'use client';
-import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import React, { ReactNode, useEffect, useState } from 'react';
 import Nav from './components/Nav';
+import { auth } from '@/auth';
 
-const Layout = ({ children }: { children: ReactNode }) => {
-  const { data: sessionData } = useSession();
+const Layout = async ({ children }: { children: ReactNode }) => {
+  
+  const sessionData = await auth();
   if (!sessionData) {
     return redirect('/sign-in');
   }
