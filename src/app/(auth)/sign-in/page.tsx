@@ -5,9 +5,7 @@ import Image from 'next/image';
 
 const SignInPage = () => {
   return (
-    // <div className='flex px-2 sm:p-0 min-h-screen flex-col items-center justify-center bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-sky-400 to-blue-800'>
     <div className='flex p-0 min-h-screen flex-col items-center justify-start  '>
-      {/* <div className='w-full flex justify-center h-[45vh] bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-sky-200 to-blue-600'> */}
       <div className='w-full flex justify-center h-[45vh] bg-gradient-to-b from-blue-600 to-blue-400'>
         <div className='flex flex-col items-center mt-5 mb-10'>
           <Image src={'/images/logo.jpg'} alt='nothing to say' width={100} height={100} className='rounded-full ' />

@@ -12,8 +12,8 @@ const nextConfig = {
       },
     ],
   },
-  runtime: 'edge',
-  unstable_allowDynamic: ['/node_modules/mongoose/dist/browser.umd.js'],
+  // runtime: 'edge',
+  // unstable_allowDynamic: ['/node_modules/mongoose/dist/browser.umd.js'],
 };
 
 export default nextConfig;

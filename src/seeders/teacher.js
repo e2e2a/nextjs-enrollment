@@ -52,8 +52,8 @@ const createTeacherUsers = async () => {
       email: teacherEmail,
       username: `teach${i}`,
       password: hashedPassword,
-      role: 'ADMIN',
-      isVerified: true,
+      role: 'TEACHER',
+      emailVerified: '2000-09-19T16:00:00.000Z',
     });
     await teacher.save();
     const teacherProfile = new TeacherProfile({
