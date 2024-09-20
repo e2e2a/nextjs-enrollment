@@ -73,6 +73,8 @@ const createTeacherUsers = async () => {
     });
     await teacherProfile.save();
   }
+  console.log('Teacher seeding complete');
+  mongoose.connection.close();
 };
 
 createTeacherUsers();

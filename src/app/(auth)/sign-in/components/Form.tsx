@@ -51,14 +51,13 @@ const SignInForm = () => {
             }
             return (window.location.href = `/verification?token=${res.token}`);
           default:
+            setIsPending(false);
             setMessage(res.error);
             setTypeMessage('error');
             return;
         }
       },
-      onSettled: () => {
-        setIsPending(false);
-      },
+      onSettled: () => {},
     });
   };
   return (
