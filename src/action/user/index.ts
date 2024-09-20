@@ -120,7 +120,9 @@ const creatingUserRoleTeacher = async (email: string, username: string, password
   const user = await createUser({ email, username }, password);
   await createStudentProfile({ userId: user._id });
   if (!user) return { error: 'Error creating User', status: 404 };
-
+  /**
+   * @todo remove comment
+   */
   // const tokenType = 'Verify';
   // const verificationToken = await generateVerificationToken(user._id, tokenType);
 

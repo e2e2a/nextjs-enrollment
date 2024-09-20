@@ -1,27 +1,26 @@
-'use client';
 import { ReactNode, useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import Nav from './components/Nav';
+import { auth } from '@/auth';
 
-const AdminRootLayout = ({ children }: { children: ReactNode }) => {
-  const { data: session } = useSession();
+const AdminRootLayout = async ({ children }: { children: ReactNode }) => {
+  const sessionData = await auth();
 
-  if (!session) {
+  if (!sessionData) {
     return redirect('/sign-in');
   }
 
-  if (session.user.role !== 'ADMIN') {
+  if (sessionData.user.role !== 'ADMIN') {
     return redirect('/sign-in');
   }
 
-  if (session && !session.user.profileVerified) {
+  if (sessionData && !sessionData.user.profileVerified) {
     return redirect('/profile');
   }
 
   return (
     <>
-      <Nav session={session}>{children}</Nav>
+      <Nav session={sessionData}>{children}</Nav>
     </>
   );
 };

@@ -65,7 +65,7 @@ const Room = models.Room || model('Room', schema);
 
 const createRooms = async () => {
   try {
-    const conn = await mongoose.connect("mongodb://localhost:27017/mydbaseeeesd");
+    const conn = await mongoose.connect('mongodb+srv://marzvelasco73019:F3AcEj0UXbkwn1lX@school.zcndgqd.mongodb.net/godoy?retryWrites=true&w=majority&appName=school');
 
     const rooms = [];
 

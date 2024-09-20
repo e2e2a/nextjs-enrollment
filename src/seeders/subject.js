@@ -35,7 +35,7 @@ const Subject = models.Subject || model('Subject', schema);
 
 const createSubjects = async () => {
   try {
-    const conn = await mongoose.connect('mongodb://localhost:27017/mydbaseeeesd');
+    const conn = await mongoose.connect('mongodb+srv://marzvelasco73019:F3AcEj0UXbkwn1lX@school.zcndgqd.mongodb.net/godoy?retryWrites=true&w=majority&appName=school');
     const subjects = [];
 
     // Loop to create subjects from 1 to 50
