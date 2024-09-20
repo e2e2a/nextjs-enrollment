@@ -9,6 +9,7 @@
     "lint": "next lint",
     "seedAdmin": "ts-node src/seeders/admin.js",
     "seedStudent": "ts-node src/seeders/student.js",
+    "seedStudentEnrollment": "ts-node src/seeders/enrollingStudent.js",
     "seedTeacher": "ts-node src/seeders/teacher.js",
     "seedRoom": "ts-node src/seeders/room.js",
     "seedSubject": "ts-node src/seeders/subject.js",

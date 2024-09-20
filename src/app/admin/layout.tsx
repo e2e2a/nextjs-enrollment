@@ -11,9 +11,9 @@ const AdminRootLayout = ({ children }: { children: ReactNode }) => {
     return redirect('/sign-in');
   }
 
-  // if (session.user.role !== 'ADMIN') {
-  //   return redirect('/sign-in');
-  // }
+  if (session.user.role !== 'ADMIN') {
+    return redirect('/sign-in');
+  }
 
   if (session && !session.user.profileVerified) {
     return redirect('/profile');

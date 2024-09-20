@@ -9,17 +9,14 @@ import AddForm from './components/AddForm';
 
 const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
-
   const { data, isLoading, error: isEnError } = useSchoolYearQuery();
 
   useEffect(() => {
-    setIsPageLoading(false);
-    if (isLoading || !data || !data.sy) return;
-    if (isEnError) console.log(isEnError.message);
+    if (isEnError || !data) return; //setError 500;
     if (data) {
-      console.log('courses logs:', data.sy);
+      setIsPageLoading(false);
     }
-  }, [data, isLoading, isEnError, isPageLoading]);
+  }, [data, isEnError, isPageLoading]);
 
   return (
     <>

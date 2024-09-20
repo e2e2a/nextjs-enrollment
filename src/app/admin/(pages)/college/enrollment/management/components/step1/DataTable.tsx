@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import SearchBy from './SearchBy';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -12,7 +13,7 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable1<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  // console.log(data)
+  const [searchBy, setSearchBy] = useState('fullname');
   useEffect(() => {
     if (!data) {
       return;
@@ -49,12 +50,13 @@ export function DataTable1<TData, TValue>({ columns, data }: DataTableProps<TDat
         <div className='flex items-center  py-4 text-black'>
           <Input
             placeholder='Search by name...'
-            value={(table.getColumn('fullname')?.getFilterValue() as string) ?? ''}
+            value={(table.getColumn(searchBy)?.getFilterValue() as string) ?? ''}
             onChange={(event) => {
-              table.getColumn('fullname')?.setFilterValue(event.target.value);
+              table.getColumn(searchBy)?.setFilterValue(event.target.value);
             }}
             className='max-w-sm'
           />
+          <SearchBy setSearchBy={setSearchBy} />
         </div>
 
         {/* Column visibility */}

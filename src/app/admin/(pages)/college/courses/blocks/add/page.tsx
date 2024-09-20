@@ -15,7 +15,6 @@ import Input from './components/Input';
 import { SelectInput } from './components/SelectInput';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 import { selectType } from '@/constant/course';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);
@@ -46,15 +45,12 @@ const Page = () => {
     data.courseCode = data.courseCode.toLowerCase();
     data.section = data.section.toLowerCase();
   
-    console.log('data', data);
     mutation.mutate(data, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            // return (window.location.reload());
             formCollege.reset();
             if(res.message) makeToastSucess(res.message)
             return;
@@ -62,9 +58,6 @@ const Page = () => {
             if (res.error) return makeToastError(res.error);
             return;
         }
-      },
-      onError: (error) => {
-        console.error(error.message);
       },
       onSettled: () => {
         setIsNotEditable(false)

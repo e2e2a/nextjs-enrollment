@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
@@ -11,8 +11,13 @@ import { SchoolYearValidator } from '@/lib/validators/AdminValidator';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useCreateSchoolYearMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-
-const AddForm = () => {
+interface IProps {
+  user: any;
+}
+const EditForm = ({ user }: IProps) => {
+  /**
+   * @todo create a mutation for editing the school year
+   */
   const mutation = useCreateSchoolYearMutation();
   const form = useForm<z.infer<typeof SchoolYearValidator>>({
     resolver: zodResolver(SchoolYearValidator),
@@ -22,9 +27,17 @@ const AddForm = () => {
     },
   });
 
+  useEffect(() => {
+    form.setValue('schoolYear', user.schoolYear);
+  }, [user]);
+
   const actionFormSubmit = (data: z.infer<typeof SchoolYearValidator>) => {
     data.schoolYear = data.schoolYear.toLowerCase();
-    mutation.mutate(data, {
+    const dataa = {
+      schoolYearId: user._id,
+      ...data,
+    };
+    mutation.mutate(dataa, {
       onSuccess: (res) => {
         switch (res.status) {
           case 200:
@@ -43,10 +56,10 @@ const AddForm = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size={'sm'} className={' focus-visible:ring-0 flex mb-2 bg-transparent bg-green-500 px-2 py-0 gap-x-1 justify-center text-neutral-50 font-medium'}>
-          <Icons.add className='h-4 w-4' />
-          <span className='hidden sm:flex'>Add New School Year</span>
-          <span className='flex sm:hidden'>Add New SY</span>
+        <Button size={'sm'} className={' focus-visible:ring-0 flex mb-2 bg-transparent text-black hover:bg-green-500 px-2 py-0 gap-x-1 justify-center hover:text-neutral-50 font-medium'}>
+          <Icons.squarePen className='h-4 w-4' />
+          <span className='hidden sm:flex'>Edit School Year</span>
+          <span className='flex sm:hidden'>Edit SY</span>
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -58,9 +71,9 @@ const AddForm = () => {
       >
         <DialogHeader>
           <DialogTitle className='flex flex-col space-y-1'>
-            <span>Add New School Year</span>
+            <span>Edit School Year</span>
           </DialogTitle>
-          <DialogDescription>Adding new school year to student.</DialogDescription>
+          <DialogDescription>Edit school year to student.</DialogDescription>
           <div className='flex flex-col text-sm'>
             <span>
               <span className='text-orange-400'>Format</span>: SY1999-2000
@@ -131,4 +144,4 @@ const AddForm = () => {
   );
 };
 
-export default AddForm;
+export default EditForm;

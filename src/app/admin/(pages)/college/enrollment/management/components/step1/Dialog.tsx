@@ -1,5 +1,4 @@
 'use client';
-import { Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
@@ -36,25 +35,25 @@ export function DialogStep1Button({ isPending, user }: IProps) {
     },
   });
   useEffect(() => {
-    if (syLoading || !syData || !syData.sy) return;
-    if (syError) console.log(syError.message);
+    if (syError || !syData) return;
     if (syData) {
-      setSy(syData.sy);
-      console.log('courses logs:', syData.sy);
+      if (syData.sy) {
+        setSy(syData.sy);
+      }
     }
-  }, [syData, syLoading, syError]);
+  }, [syData, syError]);
   useEffect(() => {
     const enabledItem = sy.find((item: any) => item.isEnable);
     if (enabledItem) {
       form.setValue('schoolYear', enabledItem.schoolYear);
       setSelectedValue(enabledItem.schoolYear);
     }
-  }, [sy,form]);
+  }, [sy, form]);
   useEffect(() => {
     if (!bData || !bData.blockTypes || bError) return;
 
     if (bData) {
-      const filteredBlocks = bData.blockTypes.filter((block) => block.courseId._id === user.courseId._id);
+      const filteredBlocks = bData.blockTypes.filter((block) => block.courseId._id === user.courseId._id && block.semester === user.studentSemester && block.year === user.studentYear);
       setBlocks(filteredBlocks);
       setLoader(false);
       return;
@@ -67,7 +66,7 @@ export function DialogStep1Button({ isPending, user }: IProps) {
       ...data,
     };
     mutation.mutate(dataa, {
-      onSuccess: (res:any) => {
+      onSuccess: (res: any) => {
         console.log(res);
         switch (res.status) {
           case 200:
@@ -171,7 +170,7 @@ export function DialogStep1Button({ isPending, user }: IProps) {
                       <Select
                         onValueChange={(value) => {
                           setSelectedValue(value); // Update the selected value
-                          
+
                           field.onChange(value); // Sync with form state
                         }}
                         value={selectedValue || field.value}

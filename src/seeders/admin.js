@@ -49,6 +49,7 @@ const createAdminUsers = async () => {
     const adminEmail = `admin${i}@gmail.com`;
     const admin = new User({
       email: adminEmail,
+      username: `admin${i}`,
       password: hashedPassword,
       role: 'ADMIN',
       emailVerified: '2000-09-19T16:00:00.000Z',

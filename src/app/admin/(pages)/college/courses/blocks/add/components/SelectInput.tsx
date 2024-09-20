@@ -26,18 +26,28 @@ export function SelectInput({ form, name, label, selectItems, placeholder }: IPr
                 </SelectTrigger>
                 <SelectContent className='bg-white border-gray-300'>
                   <SelectGroup>
-                    {selectItems &&
+                    {selectItems.length > 0 ? (
                       selectItems.map((item: any, index: any) => {
                         return item.name ? (
                           <SelectItem value={item.courseCode} key={index} className='capitalize'>
-                            {name === 'courseCode' ? `${item.courseCode + '-' + item.name}` : item.name}
+                            {name === 'courseCode' ? (
+                              <div className=''>
+                                <span className='uppercase'>{item.courseCode}</span>
+                                {'-' + item.name}
+                              </div>
+                            ) : (
+                              item.name
+                            )}
                           </SelectItem>
                         ) : (
                           <SelectItem value={item.title} key={index} className='capitalize'>
                             {item.title}
                           </SelectItem>
                         );
-                      })}
+                      })
+                    ) : (
+                      <div className=''>No Results.</div>
+                    )}
                   </SelectGroup>
                 </SelectContent>
               </Select>

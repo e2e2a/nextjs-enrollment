@@ -14,8 +14,6 @@ import TextareaField from './components/Textarea';
 import { useCreateCourseMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import CourseToast from '@/lib/toast/CourseToast';
-import { SelectInput } from './components/SelectInput';
-import { selectType } from '@/constant/course';
 
 const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);
@@ -69,16 +67,13 @@ const Page = () => {
         ...data,
         formData: formData,
       };
-      console.log(dataa);
 
       mutation.mutate(dataa, {
         onSuccess: (res) => {
-          console.log(res);
           switch (res.status) {
             case 200:
             case 201:
             case 203:
-              // return (window.location.reload());
               // CourseToast(data.courseCode, imagePreview!);
               if (res.message) makeToastSucess(res.message);
               return;
@@ -86,9 +81,6 @@ const Page = () => {
               if (res.error) return makeToastError(res.error);
               return;
           }
-        },
-        onError: (error) => {
-          console.error(error.message);
         },
         onSettled: () => {
           setIsUploading(false);

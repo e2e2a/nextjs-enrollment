@@ -1,17 +1,7 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import Link from 'next/link';
-import { DataTableDrawer } from '../Drawer';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-import { Icons } from '@/components/shared/Icons';
-import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
-import { useState } from 'react';
 import { DialogStep1Button } from './Dialog';
 import ActionsCell from './ActionsCell';
 import { IEnrollment } from '@/types';
@@ -19,6 +9,11 @@ import PSAFile from './PSAFile';
 import StudentPhoto from './StudentPhoto';
 
 export const columns: ColumnDef<IEnrollment>[] = [
+  {
+    accessorFn: (row, index) => index + 1,
+    accessorKey: '#',
+    header: '#',
+  },
   {
     accessorKey: 'fullname',
     header: ({ column }) => {
@@ -49,8 +44,8 @@ export const columns: ColumnDef<IEnrollment>[] = [
 
   {
     accessorFn: (row) => row.courseId.courseCode, // Use accessorFn for nested fields
-    id: 'course Code',
-    header: 'Course',
+    id: 'course code',
+    header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
@@ -128,7 +123,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
     header: 'PSA file',
     cell: ({ row }) => {
       const user = row.original;
-      
+
       return <PSAFile user={user} />;
     },
   },
@@ -138,7 +133,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
     header: 'Student Photo',
     cell: ({ row }) => {
       const user = row.original;
-      
+
       return <StudentPhoto user={user} />;
     },
   },
@@ -163,7 +158,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
       return <div className='font-medium'>{formatted}</div>;
     },
   },
- 
+
   {
     id: 'actions',
     header: 'Actions',
@@ -173,5 +168,4 @@ export const columns: ColumnDef<IEnrollment>[] = [
       return <ActionsCell user={user} />;
     },
   },
-  
 ];

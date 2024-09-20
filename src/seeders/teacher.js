@@ -50,6 +50,7 @@ const createTeacherUsers = async () => {
     const teacherEmail = `teach${i}@gmail.com`;
     const teacher = new User({
       email: teacherEmail,
+      username: `teach${i}`,
       password: hashedPassword,
       role: 'ADMIN',
       isVerified: true,

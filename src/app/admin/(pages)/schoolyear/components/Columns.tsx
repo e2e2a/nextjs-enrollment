@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ActionsCell from './ActionsCell';
 import { ISchoolYear } from '@/types';
@@ -19,7 +19,7 @@ export const columns: ColumnDef<ISchoolYear>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' capitalize'>
+        <div key={cell.id} className=' uppercase'>
           {user.schoolYear}
         </div>
       );
@@ -42,12 +42,12 @@ export const columns: ColumnDef<ISchoolYear>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.isEnable ? <span className="text-green-500 text-sm">True</span> : <span className="text-red text-sm">False</span>}
+          {user.isEnable ? <span className='text-green-500 text-sm'>True</span> : <span className='text-red text-sm'>False</span>}
         </div>
       );
     },
   },
-  
+
   {
     accessorKey: 'createdAt',
     header: 'CreatedAt',
@@ -57,7 +57,7 @@ export const columns: ColumnDef<ISchoolYear>[] = [
       return <div className='font-medium'>{formatted}</div>;
     },
   },
- 
+
   {
     id: 'actions',
     header: 'Actions',
@@ -67,5 +67,4 @@ export const columns: ColumnDef<ISchoolYear>[] = [
       return <ActionsCell user={user} />;
     },
   },
-  
 ];

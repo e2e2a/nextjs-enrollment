@@ -327,9 +327,7 @@ export const useCourseQueryByCategory = (category: any) => {
     retry: 0,
     enabled: !!category,
     refetchOnMount: false,
-    // refetchInterval: 5000,
     refetchOnWindowFocus: true,
-    // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
 
