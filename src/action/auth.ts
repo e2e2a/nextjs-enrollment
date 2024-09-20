@@ -25,11 +25,11 @@ export const signInAction = async (data: any): Promise<SignInResponse> => {
     const { email, password } = validatedFields.data;
 
     const existingUser = await getUserByEmail(email);
-    try {
-      const myLimit = await rateLimit(6, email);
-    } catch (error) {
-      return { error: 'Rate Limit exceeded.', limit: true, status: 429 };
-    }
+    // try {
+    //   const myLimit = await rateLimit(6, email);
+    // } catch (error) {
+    //   return { error: 'Rate Limit exceeded.', limit: true, status: 429 };
+    // }
     if (!existingUser || !existingUser.email || !existingUser.password) {
       return { error: 'Incorrect email or password.', status: 403 };
     }
