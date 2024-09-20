@@ -37,7 +37,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             if (!existAccount) {
               await createAccount(account, existingUser._id as string);
             }
-            await updateUserLogin(existingUser._id);
+            // await updateUserLogin(existingUser._id);
             return true;
             // return false;
           }
@@ -60,7 +60,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           if (!existingUser || !existingUser.emailVerified) {
             return false;
           }
-          await updateUserLogin(existingUser._id);
+          // await updateUserLogin(existingUser._id);
           return true;
         }
         return false;
