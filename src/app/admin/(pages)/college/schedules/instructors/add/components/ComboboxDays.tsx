@@ -1,10 +1,10 @@
 'use client';
 import * as React from 'react';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Button } from '@/components/ui/button';
-import { Check, ChevronDown, ChevronsUpDown } from 'lucide-react';
+import { Check, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface IProps {
@@ -19,27 +19,14 @@ export function ComboboxDays({ form, name, label, selectItems, placeholder }: IP
   const [open, setOpen] = React.useState(false);
   const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
 
-  // const handleSelect = (day: string) => {
-  //   setSelectedItems((prevSelected) => {
-  //     const updatedSelection = prevSelected.includes(day)
-  //       ? prevSelected.filter((d) => d !== day) // Remove if already selected
-  //       : [...prevSelected, day]; // Add if not selected
-
-  //     // Sort the selected days according to the standard day order
-  //     return updatedSelection.sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b));
-  //   });
-  // };
   React.useEffect(() => {
     form.setValue(name, selectedItems);
   }, [selectedItems, form, name]);
 
   const handleSelect = (day: string) => {
     setSelectedItems((prevSelected) => {
-      const updatedSelection = prevSelected.includes(day)
-        ? prevSelected.filter((d) => d !== day) // Remove if already selected
-        : [...prevSelected, day]; // Add if not selected
+      const updatedSelection = prevSelected.includes(day) ? prevSelected.filter((d) => d !== day) : [...prevSelected, day];
 
-      // Sort the selected days according to the standard day order
       return updatedSelection.sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b));
     });
   };
@@ -53,10 +40,8 @@ export function ComboboxDays({ form, name, label, selectItems, placeholder }: IP
           <FormControl>
             <div className='relative bg-slate-50 rounded-lg'>
               <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild className='w-full pt-10 pb-4 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
+                <PopoverTrigger  id={name} asChild className='w-full pt-10 pb-4 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
                   <Button variant='outline' role='combobox' aria-expanded={open} className='w-full font-normal justify-between' onClick={() => setOpen(!open)}>
-                    {/* Display the selected days or placeholder */}
-                    {/* {selectedItems.length > 0 ? selectedItems.map((value) => selectItems.find((item: any) => item.value === value)?.label).join(', ') : placeholder} */}
                     {field.value && field.value.length > 0 ? field.value.map((value: string) => selectItems.find((item: any) => item.value === value)?.label).join(', ') : placeholder}
                     <ChevronDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                   </Button>
@@ -68,14 +53,7 @@ export function ComboboxDays({ form, name, label, selectItems, placeholder }: IP
                       <CommandEmpty>No days found.</CommandEmpty>
                       <CommandGroup>
                         {selectItems.map((item: any) => (
-                          <CommandItem
-                            key={item.value}
-                            onSelect={() => handleSelect(item.value)}
-                            // onSelect={() => {
-                            //   handleSelect(item.value);
-                            //   field.onChange(selectedItems);
-                            // }}
-                          >
+                          <CommandItem key={item.value} onSelect={() => handleSelect(item.value)}>
                             <Check className={cn('mr-2 h-4 w-4', field.value.includes(item.value) ? 'opacity-100' : 'opacity-0')} />
                             {item.label}
                           </CommandItem>

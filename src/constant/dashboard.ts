@@ -126,7 +126,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: 'School & Policies',
-      href: '/school',
+      href: '/school/policy',
       icon: 'school',
     },
     {
@@ -148,7 +148,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: 'School & Policies',
-      href: '/',
+      href: '/school/policies',
       icon: 'school',
     },
     {
@@ -546,10 +546,24 @@ export const dashboardConfig: DashboardConfig = {
       title: 'User Roles',
       i: [
         {
-          title: `Admins Management`,
-          href: '/admin/subjects',
+          title: 'Role Admins',
+          i: [
+            {
+              title: 'Admins Management',
+              href: '/admin/users/admins',
+              icon: 'eye',
+            },
+            {
+              title: 'Add Admin',
+              href: '/admin/users/admins/add',
+              icon: 'add',
+            },
+          ],
           icon: 'userSearch',
         },
+        /**
+         * @todo create dean management
+         */
         {
           title: 'Deans Management',
           href: '/admin/subjects/add',

@@ -31,9 +31,6 @@ const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);
   const [loading, setLoading] = useState(true);
   const [rooms, setRooms] = useState([{}]);
-  // This roomId and teacherId is passed in the inputs
-  const [courseCategory, setCourseCategory] = useState('');
-  const [courseId, setCourseId] = useState('');
   const [teacherId, setTeacherId] = useState('');
   const [roomId, setRoomId] = useState('');
   const [showLink, setShowLink] = useState(false);
@@ -44,24 +41,25 @@ const Page = () => {
   const { data: sData, isLoading: sLoading, isError: sError } = useSubjectCollegeQuery();
   const { data: rData, isLoading: rLoading, error: rError } = useRoomQuery();
   useEffect(() => {
-    if (!tData || !tData.teachers || isError) return;
-    if (!sData || !sData.subjects || sError) return;
+    if (sError || isError || rError) return; //500
+  }, [sError, isError, rError]);
 
-    if (tData && sData) {
-      setLoading(false);
-      setTeachers(tData.teachers);
-      return;
-    }
-  }, [tData, sData, sError, sLoading, isLoading, isError]);
   useEffect(() => {
-    if (!rData || !rData.rooms || rError) return;
-
-    if (rData) {
-      const filteredRooms = rData.rooms.filter((room: any) => room.educationLevel === 'tertiary');
-      setRooms(filteredRooms);
+    if (!tData || !rData || !sData) return; //500
+    if (rData && tData && sData) {
+      if (rData.rooms) {
+        const filteredRooms = rData.rooms.filter((room: any) => room.educationLevel === 'tertiary');
+        setRooms(filteredRooms);
+      }
+      if (tData.teachers) {
+        setTeachers(tData.teachers);
+      }
+      if (sData.subjects) {
+      }
+      setLoading(false);
       return;
     }
-  }, [rData, rLoading, rError]);
+  }, [rData, tData, sData]);
 
   const mutation = useCreateTeacherScheduleCollegeMutation();
   const { data } = useSession();
@@ -89,36 +87,32 @@ const Page = () => {
       ...data,
       category: 'College',
     };
-    console.log('data', dataa);
-    mutation.mutate(dataa, {
-      onSuccess: (res) => {
-        console.log(res);
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            setShowLink(false);
-            setRoomLink('');
-            setInstructorLink('');
-            formCollege.reset();
-            makeToastSucess(res.message);
-            return;
-          default:
-            if (res.error) {
-              makeToastError(res.error);
-              setShowLink(true);
-            }
-            if (res.errorRoomLink) setRoomLink(res.errorRoomLink);
-            if (res.errorInsLink) setInstructorLink(res.errorInsLink);
+    console.log(data)
+    // mutation.mutate(dataa, {
+    //   onSuccess: (res) => {
+    //     switch (res.status) {
+    //       case 200:
+    //       case 201:
+    //       case 203:
+    //         setShowLink(false);
+    //         setRoomLink('');
+    //         setInstructorLink('');
+    //         formCollege.reset();
+    //         makeToastSucess(res.message);
+    //         return;
+    //       default:
+    //         if (res.error) {
+    //           makeToastError(res.error);
+    //           setShowLink(true);
+    //         }
+    //         if (res.errorRoomLink) setRoomLink(res.errorRoomLink);
+    //         if (res.errorInsLink) setInstructorLink(res.errorInsLink);
 
-            return;
-        }
-      },
-      onError: (error) => {
-        console.error(error.message);
-      },
-      onSettled: () => {},
-    });
+    //         return;
+    //     }
+    //   },
+    //   onSettled: () => {},
+    // });
   };
   return (
     <div className='border py-5 bg-white rounded-xl min-h-[87vh]'>

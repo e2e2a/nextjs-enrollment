@@ -379,7 +379,35 @@ export type getTeacherProfileResponse = {
   teacher?: ITeacherProfile;
   role?: string;
 } & IResponse;
-
+export interface IAdminProfile {
+  _id: string;
+  id: string;
+  userId: any;
+  firstname?: string;
+  middlename?: string;
+  lastname: string;
+  extensionName?: string;
+  emailFbAcc?: string;
+  contact?: string;
+  sex?: string;
+  civilStatus?: string;
+  birthday?: Date;
+  age?: Number;
+  imageUrl?: string;
+  isVerified: boolean;
+  lastLogin?: Date;
+  lastLogout?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export type getAllAdminProfileResponse = {
+  admins?: IAdminProfile[];
+  role?: string;
+} & IResponse;
+export type getAdminProfileResponse = {
+  admin?: IAdminProfile;
+  role?: string;
+} & IResponse;
 export interface IRoom {
   _id: string;
   id: string;

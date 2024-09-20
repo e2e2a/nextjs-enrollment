@@ -6,10 +6,6 @@ export interface ISchoolYear extends Document {
 }
 const schema = new Schema<ISchoolYear>(
   {
-    // sectionId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Section',
-    // },
     schoolYear: {
       type: String,
     },

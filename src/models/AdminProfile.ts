@@ -1,6 +1,6 @@
 import mongoose, { Schema, models, model } from 'mongoose';
 
-export interface ITeacherProfile extends Document {
+export interface IAdminProfile extends Document {
   userId: mongoose.Schema.Types.ObjectId;
   firstname?: string;
   middlename?: string;
@@ -15,7 +15,7 @@ export interface ITeacherProfile extends Document {
   imageUrl?: string;
   isVerified: boolean;
 }
-const schema = new Schema<ITeacherProfile>(
+const schema = new Schema<IAdminProfile>(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -39,5 +39,5 @@ const schema = new Schema<ITeacherProfile>(
   }
 );
 
-const TeacherProfile = models.TeacherProfile || model<ITeacherProfile>('TeacherProfile', schema);
-export default TeacherProfile;
+const AdminProfile = models.AdminProfile || model<IAdminProfile>('AdminProfile', schema);
+export default AdminProfile;

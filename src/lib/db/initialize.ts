@@ -15,8 +15,9 @@ import Curriculum from '@/models/Curriculum';
 import StudentCurriculum from '@/models/StudentCurriculum';
 import StudentSchedule from '@/models/StudentSchedule';
 import { UserIp } from '@/models/UserIp';
+import AdminProfile from '@/models/AdminProfile';
 
-type ModelName = 'Course' | 'User' | 'UserIp' | 'StudentProfile' | 'Account' | 'Enrollment' | 'BlockType' | 'Subject' | 'TeacherProfile' | 'TeacherSchedule' | 'Room' | 'SchoolYear' | 'Curriculum' | 'StudentCurriculum' | 'StudentSchedule';
+type ModelName = 'Course' | 'User' | 'UserIp' | 'StudentProfile' | 'Account' | 'Enrollment' | 'BlockType' | 'Subject' | 'TeacherProfile' | 'TeacherSchedule' | 'Room' | 'SchoolYear' | 'Curriculum' | 'StudentCurriculum' | 'StudentSchedule' | 'AdminProfile';
 
 const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   Course,
@@ -34,6 +35,7 @@ const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   Curriculum,
   StudentCurriculum,
   StudentSchedule,
+  AdminProfile,
 };
 
 const initializeModel = async (modelNames: ModelName[]) => {

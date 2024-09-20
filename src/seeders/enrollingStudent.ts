@@ -17,7 +17,7 @@ const createUsers = async () => {
     const student = new User({
       email: studentEmail,
       password: hashedPassword,
-      role: 'student',
+      role: 'STUDENT',
       isVerified: true,
     });
     await student.save();
@@ -68,5 +68,6 @@ const createUsers = async () => {
         $oid: '66e146ab3b8dbdf7923c11f4',
       },
     });
+    await studentEnrollment.save();
   }
 };

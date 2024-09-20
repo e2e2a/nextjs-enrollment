@@ -16,7 +16,7 @@ interface IProps {
   selectItems: any;
   placeholder: string;
   value: any;
-  setValue: React.Dispatch<React.SetStateAction<string>>,
+  setValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export function Combobox({ form, name, label, selectItems, placeholder, value, setValue }: IProps) {
@@ -30,10 +30,8 @@ export function Combobox({ form, name, label, selectItems, placeholder, value, s
           <FormControl>
             <div className='relative bg-slate-50 rounded-lg'>
               <Popover open={open} onOpenChange={setOpen}>
-                {/* <PopoverTrigger asChild className='w-full pt-14 pb-8 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'> */}
-                <PopoverTrigger asChild className='w-full pt-10 pb-4 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
+                <PopoverTrigger id={name} asChild className='w-full pt-10 pb-4 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
                   <Button variant='outline' role='combobox' aria-expanded={open} className='w-full capitalize justify-between font-normal'>
-                    {/* {value ? frameworks.find((framework) => framework.value === value)?.label : 'Select framework...'} */}
                     {value
                       ? (() => {
                           const selectedItem = selectItems.find((item: any) => item.value === value);

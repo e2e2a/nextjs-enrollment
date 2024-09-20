@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tansta
 
 import {
   checkTokenResponse,
+  getAllAdminProfileResponse,
   getAllCurriculumsResponse,
   getAllRoomResponse,
   getAllSchoolYearResponse,
@@ -43,7 +44,7 @@ import { verificationCodeProcess, verificationCodeResend } from '@/action/verifi
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
 import { NewPassword } from '@/action/profile/NewPassword';
 import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updateData';
-import { getStudentProfileBySessionId, getStudentProfileByUsernameAction } from '@/action/profile/getProfile';
+import { getAdminProfileBySessionId, getStudentProfileBySessionId, getStudentProfileByUsernameAction } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction, getSingleEnrollmentByUserIdIdAction } from '@/action/college/enrollment/user';
 import {
@@ -63,9 +64,18 @@ import {
 } from '@/action/college/enrollment/admin';
 import { createCollegeCourseBlockAction, getAllBlockTypeAction, getBlockTypeByIdAction } from '@/action/college/courses/blocks';
 import { createSubjectCollegeAction, getSubjectCategoryCollegeAction } from '@/action/college/subjects/admin';
-import { adminCreateUserWithRoleAction, getUserRoleStudentAction, getUserRoleTeachertAction } from '@/action/user';
+import { adminCreateUserWithRoleAction, getUserRoleAdminAction, getUserRoleStudentAction, getUserRoleTeachertAction } from '@/action/user';
 import { createRoomAction, getAllRoomAction } from '@/action/rooms';
-import { createTeacherScheduleAction, getAllTeacherProfileAction, getAllTeacherScheduleAction, getTeacherProfileByIdAction, getTeacherProfileByUserIdAction, getTeacherScheduleByIdAction, getTeacherScheduleByProfileIdAction, removeTeacherScheduleCollegeMutation } from '@/action/college/schedules/teachers';
+import {
+  createTeacherScheduleAction,
+  getAllTeacherProfileAction,
+  getAllTeacherScheduleAction,
+  getTeacherProfileByIdAction,
+  getTeacherProfileByUserIdAction,
+  getTeacherScheduleByIdAction,
+  getTeacherScheduleByProfileIdAction,
+  removeTeacherScheduleCollegeMutation,
+} from '@/action/college/schedules/teachers';
 import { createSchoolYearAction, getAllSchoolYearAction } from '@/action/schoolyear';
 import {
   createStudentCurriculumAction,
@@ -170,7 +180,15 @@ export const useUserRolesStudentQuery = () => {
     queryKey: ['Students'],
     queryFn: () => getUserRoleStudentAction(),
     retry: 0,
-    // refetchInterval: 100,
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useUserRolesAdminQuery = () => {
+  return useQuery<getAllAdminProfileResponse, Error>({
+    queryKey: ['Admins'],
+    queryFn: () => getUserRoleAdminAction(),
+    retry: 0,
     refetchOnWindowFocus: false,
   });
 };
@@ -180,7 +198,6 @@ export const useUserRolesTeacherQuery = () => {
     queryKey: ['Teachers'],
     queryFn: () => getUserRoleTeachertAction(),
     retry: 0,
-    // refetchInterval: 100,
     refetchOnWindowFocus: false,
   });
 };
@@ -191,9 +208,7 @@ export const useAdminCreateUserRoleMutation = () => {
     onSuccess: (data) => {
       if (data.role) {
         if (data.role === 'ADMIN') {
-          /**
-           * @todo invalidate user role ADMIN
-           */
+          queryClient.invalidateQueries({ queryKey: ['Admins'] });
         } else if (data.role === 'DEAN') {
           /**
            * @todo invalidate user role DEAN
@@ -214,6 +229,17 @@ export const useProfileQuery = (id: any) => {
   return useQuery<getSingleProfileResponse, Error>({
     queryKey: ['userProfile', id],
     queryFn: () => getStudentProfileBySessionId(id),
+    enabled: !!id,
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useProfileAdminQuery = (id: any) => {
+  return useQuery<getSingleProfileResponse, Error>({
+    queryKey: ['userAdminProfile', id],
+    queryFn: () => getAdminProfileBySessionId(id),
+    enabled: !!id,
     retry: 0,
     refetchOnWindowFocus: false,
   });

@@ -1,11 +1,10 @@
 'use client';
 import * as React from 'react';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import Image from 'next/image';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Check, ChevronDown, ChevronsUpDown } from 'lucide-react';
+import { Check, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -22,9 +21,7 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
   const getFullName = (item: any) => {
-    return item.extensionName
-      ? `${item.firstname} ${item.middlename} ${item.lastname} ${item.extensionName}`
-      : `${item.firstname} ${item.middlename} ${item.lastname}`;
+    return item.extensionName ? `${item.firstname} ${item.middlename} ${item.lastname} ${item.extensionName}` : `${item.firstname} ${item.middlename} ${item.lastname}`;
   };
   return (
     <FormField
@@ -35,10 +32,8 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
           <FormControl>
             <div className='relative bg-slate-50 rounded-lg'>
               <Popover open={open} onOpenChange={setOpen}>
-                {/* <PopoverTrigger asChild className='w-full pt-14 pb-8 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'> */}
-                <PopoverTrigger asChild className='w-full pt-10 pb-4 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
+                <PopoverTrigger id={name} asChild className='w-full pt-10 pb-4 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
                   <Button variant='outline' role='combobox' aria-expanded={open} className='w-full justify-between font-normal'>
-                    {/* {value ? frameworks.find((framework) => framework.value === value)?.label : 'Select framework...'} */}
                     {value
                       ? (() => {
                           const selectedItem = selectItems.find((item: any) => getFullName(item) === value);
@@ -58,38 +53,37 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
                       <CommandEmpty>No Teacher.</CommandEmpty>
                       <CommandGroup className='w-full'>
                         {selectItems.map((item: any, index: any) => {
-                          const fullName = item.extensionName
-                          ? `${item.firstname} ${item.middlename} ${item.lastname} ${item.extensionName}`
-                          : `${item.firstname} ${item.middlename} ${item.lastname}`;
-                        return (
-                          <CommandItem
-                            key={index}
-                            value={fullName}
-                            className='w-auto'
-                            onSelect={(currentValue) => {
-                              setValue(currentValue === value ? '' : currentValue);
-                              if (setTeacherId) {
-                                setTeacherId(item._id);
-                              }
-                              field.onChange(currentValue);
-                              setOpen(false);
-                            }}
-                          >
-                            <Check className={cn('mr-2 h-4 w-4', value === getFullName(item) ? 'opacity-100' : 'opacity-0')} />
-                            {/* {item.firstname} */}
-                            <div className='flex gap-2 items-center'>
-                              <div className=''>
-                                <Image className='h-9 w-9' src={item.imageUrl ? item.imageUrl : '/icons/profile-placeholder.svg'} alt={item.firstname} width={10} height={10} />
-                              </div>
-                              <div className='flex flex-col'>
-                                {item.extensionName ? `${item.firstname} ${item.middlename} ${item.lastname} ${item.extensionName}` : `${item.firstname} ${item.middlename} ${item.lastname}`}
+                          const fullName = item.extensionName ? `${item.firstname} ${item.middlename} ${item.lastname} ${item.extensionName}` : `${item.firstname} ${item.middlename} ${item.lastname}`;
+                          return (
+                            <CommandItem
+                              key={index}
+                              value={fullName}
+                              className='w-auto'
+                              onSelect={(currentValue) => {
+                                setValue(currentValue === value ? '' : currentValue);
+                                if (setTeacherId) {
+                                  setTeacherId(item._id);
+                                }
+                                field.onChange(currentValue);
+                                setOpen(false);
+                              }}
+                            >
+                              <Check className={cn('mr-2 h-4 w-4', value === getFullName(item) ? 'opacity-100' : 'opacity-0')} />
+                              {/* {item.firstname} */}
+                              <div className='flex gap-2 items-center'>
                                 <div className=''>
-                                  <span>Age: {item.age}</span>
+                                  <Image className='h-9 w-9' src={item.imageUrl ? item.imageUrl : '/icons/profile-placeholder.svg'} alt={item.firstname} width={10} height={10} />
+                                </div>
+                                <div className='flex flex-col'>
+                                  {item.extensionName ? `${item.firstname} ${item.middlename} ${item.lastname} ${item.extensionName}` : `${item.firstname} ${item.middlename} ${item.lastname}`}
+                                  <div className=''>
+                                    <span>Age: {item.age}</span>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </CommandItem>
-                        )})}
+                            </CommandItem>
+                          );
+                        })}
                       </CommandGroup>
                     </CommandList>
                   </Command>

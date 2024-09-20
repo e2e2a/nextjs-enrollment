@@ -1,10 +1,11 @@
 'use server';
 import dbConnect from '@/lib/db/db';
+import { getAllAdminProfile } from '@/services/adminProfile';
 import { createStudentProfile, deleteStudentProfileByUserId, getAllStudentProfile } from '@/services/studentProfile';
 import { createTeacherProfile, getAllTeacherProfile } from '@/services/teacherProfile';
 import { createTeacherSchedule } from '@/services/teacherSchedule';
 import { checkUserUsername, createUser, deleteUserByEmail, getUserByEmail, getUserByUsername } from '@/services/user';
-import { getAllStudentProfileResponse, getAllTeacherProfileResponse } from '@/types';
+import { getAllAdminProfileResponse, getAllStudentProfileResponse, getAllTeacherProfileResponse } from '@/types';
 
 export const getUserRoleStudentAction = async (): Promise<getAllStudentProfileResponse> => {
   try {
@@ -26,6 +27,16 @@ export const getUserRoleTeachertAction = async (): Promise<getAllTeacherProfileR
     console.log(teachers);
     return { teachers: JSON.parse(JSON.stringify(teachers)), status: 200 };
     // return studentProfile;
+  } catch (error) {
+    console.log('getStudentProfileBySessionId', error);
+    return { error: '', status: 500 };
+  }
+};
+export const getUserRoleAdminAction = async (): Promise<getAllAdminProfileResponse> => {
+  try {
+    await dbConnect();
+    const admins = await getAllAdminProfile();
+    return { admins: JSON.parse(JSON.stringify(admins)), status: 200 };
   } catch (error) {
     console.log('getStudentProfileBySessionId', error);
     return { error: '', status: 500 };

@@ -1,37 +1,48 @@
 "use server"
-import dbConnect from '@/lib/db/db';
-import SchoolYear from '@/models/SchoolYear';
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
+const { Schema, models, model } = mongoose;
 
+const schema = new Schema(
+  {
+    schoolYear: {
+      type: String,
+    },
+    isEnable: {
+      type: Boolean,
+    },
+  },
+  {
+    versionKey: false,
+    timestamps: true,
+  }
+);
+
+const SchoolYear = models.SchoolYear || model('SchoolYear', schema);
 const createSchoolYears = async () => {
   try {
-    await dbConnect(); // Connect to your MongoDB
+    const conn = await mongoose.connect('mongodb://localhost:27017/mydbaseeeesd');
 
     const schoolYears = [];
 
-    // Start year and end year
     let startYear = 1999;
     const endYear = 2024;
 
-    // Loop through each year and create the next school year
     while (startYear <= endYear) {
       const nextYear = startYear + 1;
       schoolYears.push({
         schoolYear: `sy${startYear}-${nextYear}`,
-        isEnable: false, // Default value
+        isEnable: false, 
       });
       startYear++;
     }
 
-    // Insert the school years into the SchoolYear collection
     await SchoolYear.insertMany(schoolYears);
     console.log('School year seeding complete');
 
-    mongoose.connection.close(); // Close the DB connection after seeding
+    mongoose.connection.close();
   } catch (error) {
     console.error('Error seeding school years:', error);
   }
 };
 
-// Execute the seeder
 createSchoolYears();

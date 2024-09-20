@@ -9,6 +9,7 @@ const LoaderPage = () => (
       width={48}
       height={48}
       className="animate-spin"
+      priority
     />
     <p className="mt-4 text-gray-700">Loading...</p>
   </div>
