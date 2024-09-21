@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -11,8 +11,10 @@ import PasswordTab from './PasswordTab';
 import EmailTab from './EmailTab';
 import BirthdayTab from './BirthdayTab';
 import LogoutButton from '../../LogoutButton';
-
-export function UserAvatarTabs() {
+interface IProps {
+  profile: any;
+}
+export function UserAvatarTabs({ profile }: IProps) {
   const { data } = useSession();
   const session = data?.user;
   const [activeTab, setActiveTab] = useState('');
@@ -37,11 +39,11 @@ export function UserAvatarTabs() {
             <div className='border rounded-md p-2 flex flex-col sm:gap-y-2'>
               <Link href={'/profile'} className='flex items-center w-full p-2 hover:bg-slate-300 hover:text-white rounded-md'>
                 <div className=''>
-                  <UserAvatar session={{ firstname: session?.firstname, imageUrl: session?.imageUrl, asd: 'asdas1' || null }} className='h-10 w-10' />
+                  <UserAvatar session={{ firstname: profile?.firstname, imageUrl: profile?.imageUrl, asd: 'asdas1' || null }} className='h-10 w-10' />
                 </div>
                 <div className='flex items-center justify-start gap-2 p-2'>
                   <div className='flex flex-col space-y-1 leading-none'>
-                    <p className={`text-[18px] font-medium capitalize`}>{session?.firstname && session?.lastname ? `${session?.firstname} ${session.lastname}` : `${session?.username}`}</p>
+                    <p className={`text-[18px] font-medium capitalize`}>{profile?.firstname && profile?.lastname ? `${profile?.firstname} ${profile.lastname}` : `${session?.username}`}</p>
                   </div>
                 </div>
               </Link>

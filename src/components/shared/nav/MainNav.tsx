@@ -32,7 +32,7 @@ export function MainNav({ session, items, profile }: MainNavProps) {
         </Link>
         
       </div>
-      {session?.profileVerified && items?.length ? (
+      {profile?.isVerified && items?.length ? (
         <nav className='hidden gap-1 md:flex'>
           {items?.map((item, index) => {
             const Icon = Icons[item.icon!];

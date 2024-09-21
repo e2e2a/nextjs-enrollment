@@ -78,24 +78,23 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             session.user.id = user._id;
             session.user.role = user.role;
             session.user.username = user.username;
-            let p;
-            if (user.role === 'STUDENT') {
-              p = await getStudentProfileByUserId(user._id);
-            } else if (user.role === 'TEACHER') {
-              p = await getTeacherProfileByUserId(user._id);
-            } else if (user.role === 'ADMIN') {
-              p = await getAdminProfileByUserId(user._id);
-            } else if (user.role === 'DEAN') {
-              /**
-               * @todo
-               * DEAN ROLE
-               */
-            }
-            const profile = JSON.parse(JSON.stringify(p));
-            session.user.profileVerified = profile.isVerified;
-            session.user.firstname = profile.firstname;
-            session.user.lastname = profile.lastname;
-            session.user.imageUrl = profile.imageUrl;
+            // if (user.role === 'STUDENT') {
+            //   p = await getStudentProfileByUserId(user._id);
+            // } else if (user.role === 'TEACHER') {
+            //   p = await getTeacherProfileByUserId(user._id);
+            // } else if (user.role === 'ADMIN') {
+            //   p = await getAdminProfileByUserId(user._id);
+            // } else if (user.role === 'DEAN') {
+            //   /**
+            //    * @todo
+            //    * DEAN ROLE
+            //    */
+            // }
+            // const profile = JSON.parse(JSON.stringify(p));
+            // session.user.profileVerified = profile.isVerified;
+            // session.user.firstname = profile.firstname;
+            // session.user.lastname = profile.lastname;
+            // session.user.imageUrl = profile.imageUrl;
             // session.user.birthday = new Date(user.birthday);
             // if (user.birthday) {
             // }
