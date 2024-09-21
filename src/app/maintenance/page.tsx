@@ -1,3 +1,4 @@
+"use client"
 import { Icons } from '@/components/shared/Icons';
 import Image from 'next/image';
 import React from 'react';
