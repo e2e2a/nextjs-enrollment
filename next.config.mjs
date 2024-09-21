@@ -9,12 +9,13 @@ const nextConfig = {
     if (isInMaintenanceMode) {
       return [
         {
-          source: '/images/:path*', // Allow access to all images
-          destination: '/images/:path*', // No redirection
+          source: '/images/:path*',
+          destination: '/images/:path*',
           permanent: false,
         },
+        // Redirect all other paths to the maintenance page
         {
-          source: '/:path*',
+          source: '/((?!maintenance).*)',
           destination: '/maintenance',
           permanent: false,
         },

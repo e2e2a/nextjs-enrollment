@@ -92,7 +92,6 @@
 
 // import mongoose from 'mongoose';
 
-
 // async function dbConnect() {
 //   const MONGODB_URI = process.env.MONGODB_URI || '';
 
@@ -153,18 +152,12 @@
 // }
 
 // export default dbConnect;
+// lib/dbConnect.js
 import mongoose from 'mongoose';
 import initializeModel from './initialize';
-const MONGODB_URI = process.env.MONGODB_URI!;
 
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable');
-}
+const MONGODB_URI = process.env.MONGODB_URI;
 
-/**
- * Global is used here to maintain a cached connection across hot reloads in development.
- * It prevents multiple MongoDB connections from being created in serverless environments.
- */
 let cached = global.mongoose;
 
 if (!cached) {
@@ -183,8 +176,9 @@ async function dbConnect() {
       useUnifiedTopology: true,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      initializeModel(); // Call model initialization once after the connection
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then(async (mongoose) => {
+      const modelsToInitialize = ['Course', 'User', 'UserIp', 'StudentProfile', 'Account', 'Enrollment', 'BlockType', 'Subject', 'TeacherProfile', 'TeacherSchedule', 'Room', 'SchoolYear', 'Curriculum', 'StudentCurriculum', 'StudentSchedule', 'AdminProfile'];
+      await initializeModel(modelsToInitialize);
       return mongoose;
     });
   }
