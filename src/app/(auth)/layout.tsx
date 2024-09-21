@@ -7,8 +7,15 @@ const Layout = async ({ children }: { children: ReactNode }) => {
   // const { data: sessionData } = useSession();
   const sessionData = await auth();
   if (sessionData) {
-    if (!sessionData.user.profileVerified) return redirect('/profile');
-    return redirect('/');
+    if (sessionData.user.role === 'ADMIN') {
+      window.location.href = '/admin';
+    } else if (sessionData.user.role === 'STUDENT') {
+      window.location.href = '/';
+    } else if (sessionData.user.role === 'TEACHER') {
+      window.location.href = '/instructor';
+    }
+    // return redirect('/');
+    return;
   }
   return <div className=' '>{children}</div>;
 };
