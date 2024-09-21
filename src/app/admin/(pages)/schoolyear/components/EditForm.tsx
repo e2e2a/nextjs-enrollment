@@ -29,7 +29,7 @@ const EditForm = ({ user }: IProps) => {
 
   useEffect(() => {
     form.setValue('schoolYear', user.schoolYear);
-  }, [user]);
+  }, [user, form]);
 
   const actionFormSubmit = (data: z.infer<typeof SchoolYearValidator>) => {
     data.schoolYear = data.schoolYear.toLowerCase();
