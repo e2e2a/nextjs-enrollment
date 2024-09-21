@@ -63,7 +63,7 @@ const SignInForm = () => {
   return (
     <CardWrapper header={'Sign In'} headerLabel='Welcome Back' backButtonHref='/sign-up' backButtonLabel="Don't have an account?" showSocial>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} method='POST' className='space-y-6'>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
           <div className='space-y-4'>
             {message && <FormMessageDisplay message={message} typeMessage={typeMessage} />}
             <FormField

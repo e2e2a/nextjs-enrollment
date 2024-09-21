@@ -105,6 +105,9 @@ const channel = new BroadcastChannel('my-channel');
 export const useSignInMutation = () => {
   return useMutation<SignInResponse, Error, z.infer<typeof SigninValidator>>({
     mutationFn: async (data) => signInAction(data),
+    onSuccess: () => {
+      // Invalidate the 'userProfile' query to trigger a refetch
+    },
   });
 };
 
