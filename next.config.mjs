@@ -14,7 +14,7 @@ const nextConfig = {
           permanent: false,
         },
         {
-          source: '/(?!maintenance|images).*', // Redirect everything except maintenance and images
+          source: '/:path*',
           destination: '/maintenance',
           permanent: false,
         },
