@@ -89,67 +89,109 @@
 // }
 
 // export default dbConnect;
-'use server';
-import mongoose from 'mongoose';
+
+// import mongoose from 'mongoose';
 import initializeModel from './initialize';
 
+// async function dbConnect() {
+//   const MONGODB_URI = process.env.MONGODB_URI || '';
+
+//   if (!MONGODB_URI) {
+//     throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+//   }
+
+//   // Check if the connection is cached
+//   if (global.mongoose && global.mongoose.conn) {
+//     return global.mongoose.conn;
+//   }
+
+//   // Initialize global connection cache
+//   if (!global.mongoose) {
+//     global.mongoose = { conn: null, promise: null, initialized: false };
+//   }
+
+//   // MongoDB connection options
+//   const opts = {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     bufferCommands: false, // Disable mongoose buffering for fast failure
+//     serverSelectionTimeoutMS: 5000, // Short timeout to fail fast if MongoDB is unreachable
+//   };
+
+//   // If no connection promise exists, create it
+//   if (!global.mongoose.promise) {
+//     global.mongoose.promise = mongoose
+//       .connect(MONGODB_URI, opts)
+//       .then(async (mongooseInstance) => {
+//         console.log('Connected to MongoDB');
+
+//         // Initialize models only once globally
+//         if (!global.mongoose.initialized) {
+//           const modelsToInitialize = ['Course', 'User', 'UserIp', 'StudentProfile', 'Account', 'Enrollment', 'BlockType', 'Subject', 'TeacherProfile', 'TeacherSchedule', 'Room', 'SchoolYear', 'Curriculum', 'StudentCurriculum', 'StudentSchedule', 'AdminProfile'];
+//           await initializeModel(modelsToInitialize);
+//           global.mongoose.initialized = true;
+//         }
+
+//         return mongooseInstance;
+//       })
+//       .catch((err) => {
+//         console.error('MongoDB connection error:', err);
+//         global.mongoose.promise = null; // Reset promise on failure
+//         throw err; // Propagate the error so it can be handled by the caller
+//       });
+//   }
+
+//   // Wait for the connection to resolve
+//   try {
+//     global.mongoose.conn = await global.mongoose.promise;
+//   } catch (e) {
+//     global.mongoose.promise = null; // Clear the promise if connection failed
+//     throw e; // Throw error to be caught by calling function
+//   }
+
+//   return global.mongoose.conn;
+// }
+
+// export default dbConnect;
+import mongoose from 'mongoose';
+
+const MONGODB_URI = process.env.MONGODB_URI!;
+
+if (!MONGODB_URI) {
+  throw new Error('Please define the MONGODB_URI environment variable');
+}
+
+/**
+ * Global is used here to maintain a cached connection across hot reloads in development.
+ * It prevents multiple MongoDB connections from being created in serverless environments.
+ */
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
 async function dbConnect() {
-  const MONGODB_URI = process.env.MONGODB_URI || '';
-
-  if (!MONGODB_URI) {
-    throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+  if (cached.conn) {
+    return cached.conn;
   }
 
-  // Check if the connection is cached
-  if (global.mongoose && global.mongoose.conn) {
-    return global.mongoose.conn;
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    };
+
+    cached.promise = await mongoose.connect(MONGODB_URI, opts).then(async (mongoose) => {
+      const modelsToInitialize = ['Course', 'User', 'UserIp', 'StudentProfile', 'Account', 'Enrollment', 'BlockType', 'Subject', 'TeacherProfile', 'TeacherSchedule', 'Room', 'SchoolYear', 'Curriculum', 'StudentCurriculum', 'StudentSchedule', 'AdminProfile'];
+      await initializeModel(modelsToInitialize);
+      return mongoose;
+    });
   }
 
-  // Initialize global connection cache
-  if (!global.mongoose) {
-    global.mongoose = { conn: null, promise: null, initialized: false };
-  }
-
-  // MongoDB connection options
-  const opts = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    bufferCommands: false, // Disable mongoose buffering for fast failure
-    serverSelectionTimeoutMS: 5000, // Short timeout to fail fast if MongoDB is unreachable
-  };
-
-  // If no connection promise exists, create it
-  if (!global.mongoose.promise) {
-    global.mongoose.promise = mongoose
-      .connect(MONGODB_URI, opts)
-      .then(async (mongooseInstance) => {
-        console.log('Connected to MongoDB');
-
-        // Initialize models only once globally
-        if (!global.mongoose.initialized) {
-          const modelsToInitialize = ['Course', 'User', 'UserIp', 'StudentProfile', 'Account', 'Enrollment', 'BlockType', 'Subject', 'TeacherProfile', 'TeacherSchedule', 'Room', 'SchoolYear', 'Curriculum', 'StudentCurriculum', 'StudentSchedule', 'AdminProfile'];
-          await initializeModel(modelsToInitialize);
-          global.mongoose.initialized = true;
-        }
-
-        return mongooseInstance;
-      })
-      .catch((err) => {
-        console.error('MongoDB connection error:', err);
-        global.mongoose.promise = null; // Reset promise on failure
-        throw err; // Propagate the error so it can be handled by the caller
-      });
-  }
-
-  // Wait for the connection to resolve
-  try {
-    global.mongoose.conn = await global.mongoose.promise;
-  } catch (e) {
-    global.mongoose.promise = null; // Clear the promise if connection failed
-    throw e; // Throw error to be caught by calling function
-  }
-
-  return global.mongoose.conn;
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
 
 export default dbConnect;

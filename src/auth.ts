@@ -10,7 +10,8 @@ import { createStudentProfile, createStudentProfileProvider, getStudentProfileBy
 import { createAccount } from './services/account';
 import { getTeacherProfileByUserId } from './services/teacherProfile';
 import { getAdminProfileByUserId } from './services/adminProfile';
-const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
+// const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
+const clientPromise = dbConnect().then(mongoose => mongoose.connection.getClient());
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {

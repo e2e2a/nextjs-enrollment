@@ -47,7 +47,7 @@ const initializeModel = async (modelNames: ModelName[]) => {
 
     // Force model initialization by executing a dummy query
     await model.findOne();
-    console.log(`${name} model initialized`);
+    // console.log(`${name} model initialized`);
   }
 };
 
