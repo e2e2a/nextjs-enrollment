@@ -91,7 +91,7 @@
 // export default dbConnect;
 
 // import mongoose from 'mongoose';
-import initializeModel from './initialize';
+
 
 // async function dbConnect() {
 //   const MONGODB_URI = process.env.MONGODB_URI || '';
@@ -154,7 +154,7 @@ import initializeModel from './initialize';
 
 // export default dbConnect;
 import mongoose from 'mongoose';
-
+import initializeModel from './initialize';
 const MONGODB_URI = process.env.MONGODB_URI!;
 
 if (!MONGODB_URI) {
@@ -183,9 +183,8 @@ async function dbConnect() {
       useUnifiedTopology: true,
     };
 
-    cached.promise = await mongoose.connect(MONGODB_URI, opts).then(async (mongoose) => {
-      const modelsToInitialize = ['Course', 'User', 'UserIp', 'StudentProfile', 'Account', 'Enrollment', 'BlockType', 'Subject', 'TeacherProfile', 'TeacherSchedule', 'Room', 'SchoolYear', 'Curriculum', 'StudentCurriculum', 'StudentSchedule', 'AdminProfile'];
-      await initializeModel(modelsToInitialize);
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      initializeModel(); // Call model initialization once after the connection
       return mongoose;
     });
   }
