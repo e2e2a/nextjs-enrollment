@@ -108,8 +108,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     //   return session;
     // },
     async session({ session, token }) {
-      await dbConnect();
-      console.log('token: ', token)
+      // await dbConnect();
       if (token && token.sub && session.user) {
         session.user.id = token.sub;
         session.user.role = token.role;
