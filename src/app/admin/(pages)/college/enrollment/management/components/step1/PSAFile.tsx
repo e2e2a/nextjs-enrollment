@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 const PSAFile = ({ user }: { user: any }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const isPdf = user.psaUrl.includes('.pdf');
+  // const isPdf = user.psaUrl.includes('.pdf');
   return (
     <div className='items-center justify-center '>
       <Button onClick={() => setIsOpen(true)} className='text-sm hover:underline text-blue-600'>
@@ -24,7 +24,7 @@ const PSAFile = ({ user }: { user: any }) => {
             <DialogDescription className='hidden'>asdasd</DialogDescription>
           </DialogHeader>
           <div className='overflow-y-auto max-h-[400px] '>
-            {isPdf ? <iframe src={user.psaUrl} width='100%' height='400px' className='border-0' title='PDF Preview' /> : <Image src={user.psaUrl} alt={user.profileId.firstname || 'Image'} width={600} priority height={600} className='object-contain' />}
+            {/* {isPdf ? <iframe src={user.psaUrl} width='100%' height='400px' className='border-0' title='PDF Preview' /> : <Image src={user.psaUrl} alt={user.profileId.firstname || 'Image'} width={600} priority height={600} className='object-contain' />} */}
           </div>
         </DialogContent>
       </Dialog>

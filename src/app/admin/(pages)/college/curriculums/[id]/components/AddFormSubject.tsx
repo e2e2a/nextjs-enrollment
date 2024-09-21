@@ -161,7 +161,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                         )}
                                       </div>
                                       <span className='w-[150px] '>{item.subjectCode}</span>
-                                      <span className='w-[150px] text-wrap'>{item.name}asdasdasd asdasd asdasdasdasdasdasd asdasd</span>
+                                      <span className='w-[150px] text-wrap'>{item.name}</span>
                                       <span className='w-[150px] flex justify-center'>EMPTY</span>
                                       <span className='w-[150px] flex justify-center'>{item.lec}</span>
                                       <span className='w-[150px] flex justify-center'>{item.lab}</span>

@@ -27,9 +27,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
   if (!sessionData) {
     return redirect('/sign-in');
   }
-  if (sessionData && !sessionData.user.profileVerified) {
-    return redirect('/profile');
-  }
+  // if (sessionData && !sessionData.user.profileVerified) {
+  //   return redirect('/profile');
+  // }
 
   return (
     <>

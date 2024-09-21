@@ -24,9 +24,11 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     if (b && data) {
-      const filteredSchedules = b?.teacherSchedules?.filter((schedule: any) => schedule.blockTypeId !== null || schedule.blockTypeId);
+      if(b.teacherSchedules){
+        const filteredSchedules = b?.teacherSchedules?.filter((schedule: any) => schedule.blockTypeId !== null || schedule.blockTypeId);
       setSchedules(filteredSchedules);
       setIsPageLoading(false);
+      }
     }
   }, [b, data]);
   return (

@@ -3,6 +3,24 @@ const nextConfig = {
   //   compiler: {
   //     removeConsole: true,
   //   },
+  async redirects() {
+    const isInMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === '1';
+
+    if (isInMaintenanceMode) {
+      return [
+        {
+          source: '/((?!maintenance).*)',
+          destination: '/maintenance',
+          permanent: false,
+        },
+      ];
+    }
+
+    return [];
+  },
+  publicRuntimeConfig: {
+    isInMaintenanceMode: true, // Your custom flag
+  },
   images: {
     remotePatterns: [
       {

@@ -1,4 +1,5 @@
 import {
+  Construction,
   LayoutDashboard,
   CalendarFold,
   Paperclip,
@@ -55,6 +56,7 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
+  construction: Construction,
   layoutDashboard: LayoutDashboard,
   calendarFold: CalendarFold,
   paperclip: Paperclip,
