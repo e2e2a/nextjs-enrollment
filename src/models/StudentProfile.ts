@@ -27,11 +27,31 @@ export interface IProfile extends Document {
   learnerOrTraineeOrStudentClassification?: string;
   studentYear?: string;
   studentSemester?: string;
+  studentStatus?: string;
   psaUrl: string;
   goodMoralUrl: string;
   reportCardUrl: string;
+
+
+  primarySchoolName: string;
+  primarySchoolYear: string;
+  secondarySchoolName: string;
+  secondarySchoolYear: string;
+  seniorHighSchoolName: string;
+  seniorHighSchoolYear: string;
+  seniorHighSchoolStrand: string;
+
+  FathersLastName: string;
+  FathersFirstName: string;
+  FathersMiddleName: string;
+  FathersContact: string;
+  MothersLastName: string;
+  MothersFirstName: string;
+  MothersMiddleName: string;
+  MothersContact: string;
+
+
   photoUrl: string;
-  studentStatus?: string;
   enrollStatus?: 'Pending' | 'Continue' | 'Completed';
   studentType?: 'Regular' | 'Non-Regular';
   scholarType: string;
@@ -112,6 +132,25 @@ const schema = new Schema<IProfile>(
     goodMoralUrl: { type: String },
     reportCardUrl: { type: String },
     photoUrl: { type: String },
+
+    primarySchoolName: { type: String },
+    primarySchoolYear: { type: String },
+    secondarySchoolName: { type: String },
+    secondarySchoolYear: { type: String },
+    seniorHighSchoolName: { type: String },
+    seniorHighSchoolYear: { type: String },
+    seniorHighSchoolStrand: { type: String },
+
+    FathersLastName: { type: String },
+    FathersFirstName: { type: String },
+    FathersMiddleName: { type: String },
+    FathersContact: { type: String },
+    MothersLastName: { type: String },
+    MothersFirstName: { type: String },
+    MothersMiddleName: { type: String },
+    MothersContact: { type: String },
+
+
     imageUrl: { type: String },
     isVerified: { type: Boolean, default: false },
     lastLogin: { type: Date },

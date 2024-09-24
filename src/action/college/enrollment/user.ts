@@ -52,6 +52,23 @@ export const createEnrollmentAction = async (data: any): Promise<getEnrollmentRe
       reportCardUrl: fileTOR.name,
       studentYear: data.studentYear,
       studentSemester: data.studentSemester,
+      // educational background
+      primarySchoolName: data.primarySchoolName,
+      primarySchoolYear: data.primarySchoolYear,
+      secondarySchoolName: data.secondarySchoolName,
+      secondarySchoolYear: data.secondarySchoolYear,
+      seniorHighSchoolName: data.seniorHighSchoolName,
+      seniorHighSchoolYear: data.seniorHighSchoolYear,
+      seniorHighSchoolStrand: data.seniorHighSchoolStrand,
+      // Parent's Information
+      FathersLastName: data.FathersLastName,
+      FathersFirstName: data.FathersFirstName,
+      FathersMiddleName: data.FathersMiddleName,
+      FathersContact: data.FathersContact,
+      MothersLastName: data.MothersLastName,
+      MothersFirstName: data.MothersFirstName,
+      MothersMiddleName: data.MothersMiddleName,
+      MothersContact: data.MothersContact,
     };
     const updatedProfile = await StudentProfile.findByIdAndUpdate(getProfile._id, dataToUpdateProfile);
     if (!updatedProfile) return { message: 'Something went wrong.', status: 500 };

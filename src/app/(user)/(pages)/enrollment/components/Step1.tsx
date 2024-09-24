@@ -24,22 +24,6 @@ type IProps = {
   enrollment: any;
 };
 const Step1 = ({ search, enrollment }: IProps) => {
-  const [photoPreview, setPhotoPreview] = useState<File | null>(null);
-  const [photoError, setPhotoError] = useState('');
-  const PhotoInputRef = useRef<HTMLInputElement>(null);
-
-  const [filePreview, setFilePreview] = useState<File | null>(null);
-  const [fileError, setFileError] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const [fileGoodMoralPreview, setFileGoodMoralPreview] = useState<File | null>(null);
-  const [fileGoodMoralError, setFileGoodMoralError] = useState('');
-  const fileGoodMoralInputRef = useRef<HTMLInputElement>(null);
-
-  const [fileTORPreview, setFileTORPreview] = useState<File | null>(null);
-  const [fileTORError, setTORError] = useState('');
-  const fileTORInputRef = useRef<HTMLInputElement>(null);
-
   const [isUploading, setIsUploading] = useState(false);
   const { data: s } = useSession();
   const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
@@ -50,159 +34,17 @@ const Step1 = ({ search, enrollment }: IProps) => {
     }
     if (res) console.log('me and you');
   }, [res, isCoursesLoading, isCoursesError, enrollment]);
-  const handleSelectedPhoto = (files: FileList | null) => {
-    if (files && files?.length > 0) {
-      if (files[0].size < 10000000) {
-        if (files[0].type === 'image/jpeg' || files[0].type === 'image/png') {
-          setPhotoError('');
-          const file = files[0];
-          setPhotoPreview(file);
-        } else {
-          makeToastError('Student Photo Only allowed JPEG and PNG files.');
-        }
-      } else {
-        makeToastError('File size too large');
-      }
-    }
-  };
-  const handleSelectedFile = (files: FileList | null) => {
-    if (files && files?.length > 0) {
-      if (files[0].size < 10000000) {
-        if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
-          setFileError('');
-          const file = files[0];
-          setFilePreview(file);
-        } else {
-          makeToastError('PSA file Only allowed JPEG, PNG and PDF files.');
-        }
-      } else {
-        makeToastError('File size too large');
-      }
-    }
-  };
-  const handleSelectedFileGoodMoral = (files: FileList | null) => {
-    if (files && files?.length > 0) {
-      if (files[0].size < 10000000) {
-        if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
-          setFileGoodMoralError('');
-          const file = files[0];
-          setFileGoodMoralPreview(file);
-        } else {
-          makeToastError('Good Moral Only allowed JPEG, PNG and PDF files.');
-        }
-      } else {
-        makeToastError('File size too large');
-      }
-    }
-  };
-  const handleSelectedFileTOR = (files: FileList | null) => {
-    if (files && files?.length > 0) {
-      if (files[0].size < 10000000) {
-        if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
-          setTORError('');
-          const file = files[0];
-          setFileTORPreview(file);
-        } else {
-          makeToastError('Form 138/137 Only allowed JPEG, PNG and PDF files.');
-        }
-      } else {
-        makeToastError('File size too large');
-      }
-    }
-  };
-  const handleClickPhoto = () => {
-    if (PhotoInputRef.current) {
-      PhotoInputRef.current.click();
-    }
-  };
-  const handleClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-  const handleClickFileGoodMoral = () => {
-    if (fileGoodMoralInputRef.current) {
-      fileGoodMoralInputRef.current.click();
-    }
-  };
-  const handleClickFileTOR = () => {
-    if (fileTORInputRef.current) {
-      fileTORInputRef.current.click();
-    }
-  };
-  const handleRemovePhoto = () => setPhotoPreview(null);
-  const handleRemoveFile = () => setFilePreview(null);
-  const handleRemoveFileGoodMoral = () => setFileGoodMoralPreview(null);
-  const handleRemoveFileTOR = () => setFileTORPreview(null);
-  const mutation = useEnrollmentStep1Mutation();
+
   const deleteMutation = useEnrollmentDeleteMutation();
-  const form = useForm<z.infer<typeof EnrollmentStep1>>({
-    resolver: zodResolver(EnrollmentStep1),
-    defaultValues: {
-      courseCode: search !== null ? search.toLowerCase() : '',
-      studentStatus: '',
-      studentYear: '',
-      studentSemester: '',
-    },
-  });
-  const onSubmit: SubmitHandler<z.infer<typeof EnrollmentStep1>> = async (data) => {
-    const formData = new FormData();
-    if (!filePreview) return setFileError('PSA Birth is required.');
-    formData.append('filePsa', filePreview!);
-    if (!photoPreview) return setPhotoError('Student Photo is required.');
-    formData.append('photo', photoPreview!);
-    if (!fileGoodMoralPreview) return setFileGoodMoralError('Good Moral is required.');
-    formData.append('fileGoodMoral', fileGoodMoralPreview!);
-    if (!fileTORPreview) return setTORError('Report Card is required.');
-    formData.append('fileTOR', fileTORPreview!);
-
-    
-    data.courseCode = data.courseCode.toLowerCase();
-    data.studentYear = data.studentYear.toLowerCase();
-    data.studentSemester = data.studentSemester.toLowerCase();
-    const dataa = {
-      ...data,
-      userId: s?.user.id,
-      formData: formData,
-    };
-    console.log(dataa);
-
-    mutation.mutate(dataa, {
-      onSuccess: (res) => {
-        console.log(res);
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            console.log(res);
-            // setMessage(res?.message);
-            // return (window.location.href = '/');
-            // return (window.location.reload());
-            makeToastSucess(`You are enrolling to this course ${data.courseCode.toUpperCase()}`);
-            return;
-          default:
-            // setIsPending(false);
-            // setMessage(res.error);
-            // setTypeMessage('error');
-            return;
-        }
-      },
-      // onSettled: () => {
-      //   setIsPending(false);
-      // },
-    });
-  };
 
   const handleDeleteEnrollment = (EId: any) => {
     deleteMutation.mutate(EId, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            console.log(res);
-            if (res.error) return window.location.reload();
+            // if (res.error) return window.location.reload();
             // setMessage(res?.message);
             // return (window.location.reload());
             return;
@@ -216,8 +58,7 @@ const Step1 = ({ search, enrollment }: IProps) => {
   };
   return (
     <TabsContent value='1' className='p-5 focus-visible:ring-0 border-0'>
-      {enrollment && enrollment?.onProcess ? (
-        <Card className={`${enrollment?.onProcess ? 'min-h-[35vh] shadow-none drop-shadow-none items-center justify-center flex border-0' : ''}`}>
+        <Card className={`min-h-[35vh] shadow-none drop-shadow-none items-center justify-center flex border-0`}>
           <CardHeader className='space-y-3 hidden'>
             <CardTitle className=' hidden'>Waiting for Approval!</CardTitle>
             <CardDescription className='text-center hidden'></CardDescription>
@@ -269,57 +110,6 @@ const Step1 = ({ search, enrollment }: IProps) => {
             </div>
           </CardContent>
         </Card>
-      ) : (
-          <Card className={`${enrollment?.onProcess ? 'min-h-[35vh] shadow-none drop-shadow-none items-center justify-center flex border-0' : ''}`}>
-            <CardHeader className='space-y-3'>
-              <CardTitle className='text-center lg:text-left font-poppins'>Step 1</CardTitle>
-              <CardDescription>Make changes to your account here. Click save when you&apos;re done.</CardDescription>
-            </CardHeader>
-            <Form {...form}>
-              <form action='' method='post' onSubmit={form.handleSubmit(onSubmit)}>
-                <CardContent className='w-full space-y-2'>
-                  <div className='flex flex-col gap-4 w-full'>
-                    <div className='grid sm:grid-cols-2 gap-4 w-full'>
-                      <SelectInput label='Course name' form={form} name={'courseCode'} selectItems={res?.courses!} placeholder='Select course' />
-                      <SelectInput label='Student Status' form={form} name={'studentStatus'} selectItems={selectType.studentStatus} placeholder='Select semester' />
-                      <SelectInput label='Student year' form={form} name={'studentYear'} selectItems={studentYearData} placeholder='Select year' />
-                      <SelectInput label='Student semester' form={form} name={'studentSemester'} selectItems={studentSemesterData} placeholder='Select semester' />
-                    </div>
-                    <div className='grid grid-cols-1 xs:grid-cols-2 w-full gap-5'>
-                      <FileBirth handleSelectedFile={handleSelectedFile} handleRemoveFile={handleRemoveFile} handleClick={handleClick} fileInputRef={fileInputRef} filePreview={filePreview} fileError={fileError} isUploading={isUploading} />
-                      <Photo handleSelectedPhoto={handleSelectedPhoto} handleRemovePhoto={handleRemovePhoto} handleClickPhoto={handleClickPhoto} PhotoInputRef={PhotoInputRef} photoPreview={photoPreview} photoError={photoError} isUploading={isUploading} />
-                      <FileGoodMoral
-                        handleSelectedFileGoodMoral={handleSelectedFileGoodMoral}
-                        handleRemoveFileGoodMoral={handleRemoveFileGoodMoral}
-                        handleClickFileGoodMoral={handleClickFileGoodMoral}
-                        fileGoodMoralInputRef={fileGoodMoralInputRef}
-                        fileGoodMoralPreview={fileGoodMoralPreview}
-                        fileGoodMoralError={fileGoodMoralError}
-                        isUploading={isUploading}
-                      />
-                      <FileTOR
-                        handleSelectedFileTOR={handleSelectedFileTOR}
-                        handleRemoveFileTOR={handleRemoveFileTOR}
-                        handleClickFileTOR={handleClickFileTOR}
-                        fileTORInputRef={fileTORInputRef}
-                        fileTORPreview={fileTORPreview}
-                        fileTORError={fileTORError}
-                        isUploading={isUploading}
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <div className='flex w-full justify-center md:justify-end items-center mt-4'>
-                    <Button type='submit' variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-bold'>
-                      Proceed
-                    </Button>
-                  </div>
-                </CardFooter>
-              </form>
-            </Form>
-          </Card>
-      )}
     </TabsContent>
   );
 };

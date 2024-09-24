@@ -57,7 +57,10 @@ export const StudentProfileValidator = z
     province: z.string().min(1, { message: 'Province is required...' }),
     region: z.string().min(1, { message: 'Region is required...' }),
     emailFbAcc: z.string().optional(),
-    contact: z.string().min(6, { message: 'contact is required...' }),
+    contact: z
+      .string()
+      .min(11, { message: 'Contact number is required...' })
+      .regex(/^(\+63|0)9\d{9}$/, { message: 'It should be either +639XXXXXXXXX or 09XXXXXXXXX.' }),
     nationality: z.string().min(1, { message: 'Nationality is required...' }),
     sex: z.string().min(1, { message: 'Sex is required...' }),
     civilStatus: z.string().min(1, { message: 'Civil Status is required...' }),
@@ -86,15 +89,69 @@ export const StudentProfileValidator = z
     };
   });
 
+/**
+ * @todo change "EnrollmentStep1" to "EnrollmentStep0"
+ */
+export const EnrollmentStep1 = z
+  .object({
+    courseCode: z.string().min(1, { message: 'Course is required...' }),
+    studentStatus: z.string().min(1, { message: 'Student Status is required...' }),
+    studentYear: z.string().min(1, { message: 'Student Year is required...' }),
+    studentSemester: z.string().min(1, { message: 'Student Semester is required...' }),
+    schoolYear: z.string().min(1, { message: 'School Year is required...' }),
+    primarySchoolName: z.string().min(5, { message: 'School Name is required...' }).max(30, { message: 'School Name length too long.' }),
+    primarySchoolYear: z.string().min(4, { message: 'School Year is required...' }).max(20, { message: 'School Year length too long.' }),
+    secondarySchoolName: z.string().min(5, { message: 'School Name is required...' }).max(30, { message: 'School Name length too long.' }),
+    secondarySchoolYear: z.string().min(4, { message: 'School Year is required...' }).max(20, { message: 'School Year length too long.' }),
+    seniorHighSchoolName: z.string().min(5, { message: 'School Name is required...' }).max(30, { message: 'School Name length too long.' }),
+    seniorHighSchoolYear: z.string().min(4, { message: 'School Year is required...' }).max(20, { message: 'School Year length too long.' }),
+    seniorHighSchoolStrand: z.string().min(3, { message: 'School Strand is required...' }).max(20, { message: 'School Strand length too long.' }),
+    FathersLastName: z.string().min(2, { message: `Father's Last Name is required...` }).max(20, { message: `Father's Last Name length too long.` }),
+    FathersFirstName: z.string().min(2, { message: `Father's First Name is required...` }).max(20, { message: `Father's First Name length too long.` }),
+    FathersMiddleName: z.string(),
+    FathersContact: z.string().optional(),
+    MothersLastName: z.string().min(2, { message: `Mother's Last Name is required...` }).max(20, { message: `Mother's Last Name length too long.` }),
+    MothersFirstName: z.string().min(2, { message: `Mother's First Name is required...` }).max(20, { message: `Mother's First Name length too long.` }),
+    MothersMiddleName: z.string(),
+    MothersContact: z.string().optional(),
+  })
+  .superRefine((value, ctx) => {
+    if (value.FathersFirstName.toLowerCase() !== 'n/a' && value.FathersLastName.toLowerCase() !== 'n/a') {
+      if (!value.FathersContact) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'Fathers Contact must be in the format +639XXXXXXXXX or 09XXXXXXXXX.',
+          path: ['FathersContact'],
+        });
+      }
+      const isValid = /^(\+63|0)9\d{9}$/.test(value.FathersContact || '');
+      if (!isValid) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'FathersContact must be in the format +639XXXXXXXXX or 09XXXXXXXXX.',
+          path: ['FathersContact'],
+        });
+      }
+    }
+    if (value.MothersFirstName.toLowerCase() !== 'n/a' || value.MothersLastName.toLowerCase() !== 'n/a') {
+      if (!value.MothersContact) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'Mothers Contact must be in the format +639XXXXXXXXX or 09XXXXXXXXX.',
+          path: ['MothersContact'],
+        });
+      }
+      const isValid = /^(\+63|0)9\d{9}$/.test(value.MothersContact || '');
 
-
-
-export const EnrollmentStep1 = z.object({
-  courseCode: z.string().min(1, { message: 'Course is required...' }),
-  studentStatus: z.string().min(1, { message: 'Student Status is required...' }),
-  studentYear: z.string().min(1, { message: 'Student Year is required...' }),
-  studentSemester: z.string().min(1, { message: 'Student Semester is required...' }),
-});
+      if (!isValid) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'FathersContact must be in the format +639XXXXXXXXX or 09XXXXXXXXX.',
+          path: ['MothersContact'],
+        });
+      }
+    }
+  });
 
 export const EnrollmentApprovedStep2 = z.object({
   studentType: z.string().min(1, { message: 'course is required...' }),

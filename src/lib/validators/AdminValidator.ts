@@ -214,7 +214,6 @@ export const RoomCollegeValidator = z.object({
 
 export const EnrollmentBlockTypeValidator = z.object({
   blockType: z.string().min(1, { message: 'Block Type is required...' }),
-  schoolYear: z.string().min(1, { message: 'School Year is required...' }),
 });
 
 export const SchoolYearValidator = z.object({

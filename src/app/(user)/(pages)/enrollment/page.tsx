@@ -5,7 +5,7 @@ import EnrollmentForms from './components/Forms';
 import ErrorPage from './components/ErrorPage';
 import { getEnrollmentByUserId } from '@/services/enrollment';
 import { useSession } from 'next-auth/react';
-import { useCourseQuery, useEnrollmentQuery } from '@/lib/queries';
+import { useCourseQuery, useEnrollmentQuery, useProfileQuery } from '@/lib/queries';
 import Loader from '@/components/shared/Loader';
 
 const Page = () => {
@@ -26,26 +26,31 @@ const Page = () => {
       const courseTitles = res?.courses?.map((course) => course.courseCode.toLowerCase());
       setAllowedCourses(courseTitles);
     }
-  }, [res, isCoursesLoading, isCoursesError]);
+  }, [res, isCoursesError]);
 
   // Allowed course codes
   const { data: d } = useSession();
   const session = d!.user;
-  const { data: resE, isLoading: isResELoading, error: isResError } = useEnrollmentQuery(session.id);
+  const { data: resP, isLoading: PLoading, error: PError } = useProfileQuery(session.id);
+  const { data: resE, isLoading: ELoading, error: EError } = useEnrollmentQuery(session.id);
   useEffect(() => {
-    if (isResError || !resE) {
+    if (EError || !resE) {
       setEn(null);
       return;
     }
-    if (resE) {
+    if (PError || !resP) {
+      setEn(null);
+      return;
+    }
+    if (resE && resP) {
       if (resE.enrollment) {
         setEn(resE.enrollment);
         const courseTitles = res?.courses?.map((course) => course.courseCode.toLowerCase());
         setAllowedCourses(courseTitles);
       }
-      setIsPageLoading(false);
+      if (resP.profile) return setIsPageLoading(false);
     }
-  }, [resE, isResELoading, isResError, res]);
+  }, [resE, EError, resP, PError,res]);
   useEffect(() => {
     const validateSearchParam = () => {
       if (search === null) {
@@ -68,7 +73,7 @@ const Page = () => {
           <Loader />
         </div>
       ) : (
-        resE && <div className=' bg-neutral-50 shadow-lg drop-shadow-none filter-none min-h-[86vh] py-5 rounded-xl'>{isError ? <ErrorPage /> : <EnrollmentForms search={search} enrollment={resE.enrollment} />}</div>
+        resE && <div className='bg-white shadow-lg drop-shadow-none filter-none min-h-[86vh] py-5 rounded-xl'>{isError ? <ErrorPage /> : <EnrollmentForms search={search} enrollment={resE.enrollment} profile={resP?.profile} />}</div>
       )}
     </>
   );

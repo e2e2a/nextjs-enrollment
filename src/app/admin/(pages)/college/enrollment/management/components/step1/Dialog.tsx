@@ -12,6 +12,7 @@ import { useApprovedEnrollmentStep1Mutation, useBlockCourseQuery, useSchoolYearQ
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { EnrollmentBlockTypeValidator } from '@/lib/validators/AdminValidator';
+import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 
 type IProps = {
   isPending: boolean;
@@ -20,10 +21,7 @@ type IProps = {
 export function DialogStep1Button({ isPending, user }: IProps) {
   const [loader, setLoader] = useState<boolean>(false);
   const [blocks, setBlocks] = useState<any>([]);
-  const [sy, setSy] = useState<any>([]);
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
-  const { data: syData, isLoading: syLoading, error: syError } = useSchoolYearQuery();
   const { data: bData, isLoading: bLoading, isError: bError } = useBlockCourseQuery();
   const mutation = useApprovedEnrollmentStep1Mutation();
 
@@ -31,31 +29,18 @@ export function DialogStep1Button({ isPending, user }: IProps) {
     resolver: zodResolver(EnrollmentBlockTypeValidator),
     defaultValues: {
       blockType: '',
-      schoolYear: '',
     },
   });
+
   useEffect(() => {
-    if (syError || !syData) return;
-    if (syData) {
-      if (syData.sy) {
-        setSy(syData.sy);
-      }
-    }
-  }, [syData, syError]);
-  useEffect(() => {
-    const enabledItem = sy.find((item: any) => item.isEnable);
-    if (enabledItem) {
-      form.setValue('schoolYear', enabledItem.schoolYear);
-      setSelectedValue(enabledItem.schoolYear);
-    }
-  }, [sy, form]);
-  useEffect(() => {
-    if (!bData || !bData.blockTypes || bError) return;
+    if (!bData || bError) return;
 
     if (bData) {
-      const filteredBlocks = bData.blockTypes.filter((block) => block.courseId._id === user.courseId._id && block.semester === user.studentSemester && block.year === user.studentYear);
-      setBlocks(filteredBlocks);
-      setLoader(false);
+      if (bData.blockTypes) {
+        const filteredBlocks = bData.blockTypes.filter((block) => block.courseId._id === user.courseId._id && block.semester === user.studentSemester && block.year === user.studentYear);
+        setBlocks(filteredBlocks);
+        setLoader(false);
+      }
       return;
     }
   }, [bData, bError, bLoading, user]);
@@ -67,21 +52,16 @@ export function DialogStep1Button({ isPending, user }: IProps) {
     };
     mutation.mutate(dataa, {
       onSuccess: (res: any) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            // setTypeMessage('success');
-            // setMessage(res?.message);
+            makeToastSucess(res.message);
             // return (window.location.href = '/');
-            console.log(res);
             return;
           default:
-            //create maketoast
             // setIsPending(false);
-            // setMessage(res.error);
-            // setTypeMessage('error');
+            makeToastError(res.error);
             return;
         }
       },
@@ -139,12 +119,15 @@ export function DialogStep1Button({ isPending, user }: IProps) {
                         </SelectTrigger>
                         <SelectContent className='bg-white border-gray-300 focus-visible:ring-0'>
                           <SelectGroup className='focus-visible:ring-0'>
-                            {blocks.length > 0 &&
+                            {blocks.length > 0 ? (
                               blocks.map((item: any, index: any) => (
                                 <SelectItem value={item._id} key={index} className='capitalize'>
                                   Block {item.section}
                                 </SelectItem>
-                              ))}
+                              ))
+                            ) : (
+                              <div className='text-xs text-red'>No Blocks for the student associated with year,semester and course.</div>
+                            )}
                           </SelectGroup>
                         </SelectContent>
                       </Select>
@@ -153,48 +136,6 @@ export function DialogStep1Button({ isPending, user }: IProps) {
                         className='pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'
                       >
                         {'Block type'}
-                      </label>
-                    </div>
-                  </FormControl>
-                  <FormMessage className='text-red pl-2' />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name={'schoolYear'}
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className='relative bg-slate-50 rounded-lg'>
-                      <Select
-                        onValueChange={(value) => {
-                          setSelectedValue(value); // Update the selected value
-
-                          field.onChange(value); // Sync with form state
-                        }}
-                        value={selectedValue || field.value}
-                      >
-                        <SelectTrigger id={'schoolYear'} className='w-full pt-10 pb-4 uppercase focus-visible:ring-0 text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
-                          <SelectValue placeholder={'Select student type'} />
-                        </SelectTrigger>
-                        <SelectContent className='bg-white border-gray-300 focus-visible:ring-0'>
-                          <SelectGroup className='focus-visible:ring-0'>
-                            {sy.length > 0 &&
-                              sy.map((item: any, index: any) => (
-                                // if this item.isEnable is true then must be selected and how
-                                <SelectItem value={item.schoolYear} key={index} className='capitalize'>
-                                  {item.schoolYear}
-                                </SelectItem>
-                              ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                      <label
-                        htmlFor={'schoolYear'}
-                        className='pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'
-                      >
-                        {'School Year'}
                       </label>
                     </div>
                   </FormControl>

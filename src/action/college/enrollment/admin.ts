@@ -35,14 +35,13 @@ export const getEnrollmentByStepAction = async (userId: any): Promise<getEnrollm
 export const approvedEnrollmentStep1Action = async (data: any) => {
   try {
     await dbConnect();
-    console.log(data);
     const checkE = await getEnrollmentById(data.EId);
     if (!checkE) return { error: 'Id is not valid', status: 403 };
     const checkBlock = await getBlockTypeById(data.blockType);
     if (!checkBlock) return { error: 'Block Type is not valid', status: 403 };
-    const checkSY = await getSchoolYearByYear(data.schoolYear);
-    if (!checkSY) return { error: 'SchoolYear is not valid', status: 403 };
-    console.log('check:', checkSY);
+    // const checkSY = await getSchoolYearByYear(data.schoolYear);
+    // if (!checkSY) return { error: 'SchoolYear is not valid', status: 403 };
+    // console.log('check:', checkSY);
     await updateEnrollmentById(data.EId, { step: 2, blockTypeId: data.blockType, schoolYear: data.schoolYear });
     // const pdf = await sendEmailWithPDF(checkE);
     return { message: 'Student has been completed step 1.', status: 201 };

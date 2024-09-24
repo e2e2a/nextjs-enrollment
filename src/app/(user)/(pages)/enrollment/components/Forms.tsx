@@ -5,32 +5,39 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useEffect, useState } from 'react';
-import Step1 from './Step1';
 import { useSession } from 'next-auth/react';
+import Step0 from './Step0';
 import Step2 from './Step2';
+import Step1 from './Step1';
 type IProps = {
   search: any;
   enrollment: any;
+  profile: any;
 };
-const EnrollmentForms = ({ search, enrollment }: IProps) => {
+const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
   // if (!enrollment) return;
   const [value, setValue] = useState('');
   useEffect(() => {
-    if (!enrollment) return setValue('1');
+    if (!enrollment) return setValue('0');
     if (enrollment && enrollment.step) return setValue(enrollment.step as string);
   }, [value, enrollment]);
   return (
     <div className=''>
-      <div className='flex flex-col gap-y-4 justify-center items-center'>
-        <div className='text-center font-semibold tracking-wider font-poppins pointer-events-none select-none'>Enrollment Progress</div>
-        <div className='w-full flex flex-row gap-6 bg-transparent justify-center pointer-events-none select-none'>
-          <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '1' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>1</div>
-          <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '2' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>2</div>
-          <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '3' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>3</div>
-          {/* <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == 4 ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>4</div> */}
+      {enrollment && (
+        <div className='flex flex-col gap-y-4 justify-center items-center mb-5'>
+          <div className='text-center font-semibold tracking-wider pointer-events-none select-none'>Enrollment Progress</div>
+          <div className='w-full flex flex-row gap-6 bg-transparent justify-center pointer-events-none select-none'>
+            <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '1' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>1</div>
+            <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '2' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>2</div>
+            <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '3' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>3</div>
+            <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '4' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>4</div>
+            {/* <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == 4 ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>4</div> */}
+          </div>
         </div>
-      </div>
-      <Tabs value={`${value}`} className='w-full gap-4 mt-5'>
+      )}
+
+      <Tabs value={`${value}`} className='w-full gap-4 '>
+        <Step0 search={search} enrollment={enrollment} />
         <Step1 search={search} enrollment={enrollment} />
         <Step2 enrollment={enrollment} />
 
