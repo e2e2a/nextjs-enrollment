@@ -11,7 +11,8 @@ import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import dbConnect from '@/lib/db/db';
 import { createStudentProfile, deleteStudentProfileByUserId } from '@/services/studentProfile';
-
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { fireAuth } from '@/firebase';
 /**
  * Performs sign-in.
  * @param data Any data structure.
@@ -21,9 +22,10 @@ export const signInAction = async (data: any): Promise<SignInResponse> => {
     await dbConnect();
     const validatedFields = SigninValidator.safeParse(data);
     if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
-
+    
     const { email, password } = validatedFields.data;
-
+    const userCredential = await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe');
+    console.log('userCredential: ', userCredential)
     const existingUser = await getUserByEmail(email);
     // try {
     //   const myLimit = await rateLimit(6, email);
@@ -46,6 +48,7 @@ export const signInAction = async (data: any): Promise<SignInResponse> => {
     //   const verificationToken = await generateVerificationToken(existingUser._id, tokenType);
     //   return { token: verificationToken.token, status: 203 };
     // }
+    // if(existingUser.role === 'ADMIN') {}
     try {
       await signIn('credentials', {
         email,

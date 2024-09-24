@@ -9,12 +9,6 @@ const nextConfig = {
     if (isInMaintenanceMode) {
       return [
         {
-          source: '/images/:path*',
-          destination: '/images/:path*',
-          permanent: false,
-        },
-        // Redirect all other paths to the maintenance page
-        {
           source: '/((?!maintenance).*)',
           destination: '/maintenance',
           permanent: false,
@@ -23,9 +17,6 @@ const nextConfig = {
     }
 
     return [];
-  },
-  publicRuntimeConfig: {
-    isInMaintenanceMode: true, // Your custom flag
   },
   images: {
     remotePatterns: [

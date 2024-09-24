@@ -257,6 +257,8 @@ export type IEnrollment = {
   onProcess: Boolean;
   step?: any;
   psaUrl?: string;
+  goodMoralUrl?: string;
+  reportCardUrl?: string;
   photoUrl?: string;
   pdfUrl?: string;
   schoolYear: string;

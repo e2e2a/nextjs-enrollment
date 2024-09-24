@@ -21,6 +21,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
   const [studentSemester, setStudentSemester] = useState('');
   const [pageLoader, setPageLoader] = useState(true);
   const [schedules, setSchedules] = useState<any>([]);
+  console.log(b);
   useEffect(() => {
     if (!student) return;
     if (student) {
@@ -37,10 +38,10 @@ const AddStudentSched = ({ student, b }: IProps) => {
       return;
     }
 
-    const filteredSchedules = b.filter((schedule) => schedule.courseId.courseCode === studentCourse);
+    const filteredSchedules = b.filter((schedule) => schedule.courseId !== undefined && schedule.courseId !== undefined && schedule.courseId.courseCode === studentCourse);
 
     setSchedules(filteredSchedules);
-  }, [b,studentCourse]);
+  }, [b, studentCourse]);
 
   const [isEnabled, setIsEnabled] = React.useState(false);
   const [selectedItems, setSelectedItems] = React.useState<{ teacherScheduleId: string }[]>([]);

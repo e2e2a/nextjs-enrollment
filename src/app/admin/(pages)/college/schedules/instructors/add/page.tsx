@@ -77,7 +77,6 @@ const Page = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof TeacherScheduleCollegeValidator>> = async (data) => {
-    //we need to revised the room to roomId and teacher to teacherId
     setShowLink(false);
     setRoomLink('');
     setInstructorLink('');
@@ -87,32 +86,31 @@ const Page = () => {
       ...data,
       category: 'College',
     };
-    console.log(data)
-    // mutation.mutate(dataa, {
-    //   onSuccess: (res) => {
-    //     switch (res.status) {
-    //       case 200:
-    //       case 201:
-    //       case 203:
-    //         setShowLink(false);
-    //         setRoomLink('');
-    //         setInstructorLink('');
-    //         formCollege.reset();
-    //         makeToastSucess(res.message);
-    //         return;
-    //       default:
-    //         if (res.error) {
-    //           makeToastError(res.error);
-    //           setShowLink(true);
-    //         }
-    //         if (res.errorRoomLink) setRoomLink(res.errorRoomLink);
-    //         if (res.errorInsLink) setInstructorLink(res.errorInsLink);
+    mutation.mutate(dataa, {
+      onSuccess: (res) => {
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            setShowLink(false);
+            setRoomLink('');
+            setInstructorLink('');
+            formCollege.reset();
+            makeToastSucess(res.message);
+            return;
+          default:
+            if (res.error) {
+              makeToastError(res.error);
+              setShowLink(true);
+            }
+            if (res.errorRoomLink) setRoomLink(res.errorRoomLink);
+            if (res.errorInsLink) setInstructorLink(res.errorInsLink);
 
-    //         return;
-    //     }
-    //   },
-    //   onSettled: () => {},
-    // });
+            return;
+        }
+      },
+      onSettled: () => {},
+    });
   };
   return (
     <div className='border py-5 bg-white rounded-xl min-h-[87vh]'>

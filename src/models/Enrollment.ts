@@ -9,9 +9,7 @@ export interface IEnrollment extends Document {
   studentSemester?: string;
   onProcess: Boolean;
   step: Number;
-  psaUrl: string;
-  photoUrl: string;
-  pdfUrl: string;
+  
   schoolYear: string;
   enrollStatus?: 'Pending' | 'Approved' | 'Rejected' | 'Enrolled';
   isStudentProfile: string;
@@ -39,10 +37,6 @@ const schema = new Schema<IEnrollment>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'BlockType',
     },
-    // sectionId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Section',
-    // },
     studentYear: {
       type: String,
     },
@@ -63,16 +57,8 @@ const schema = new Schema<IEnrollment>(
     // },
     onProcess: { type: Boolean, default: false },
     step: { type: Number, default: 1 },
-    psaUrl: { type: String },
-    photoUrl: {
-      type: String,
-    },
-    pdfUrl: {
-      type: String,
-    },
-    schoolYear: {
-      type: String,
-    },
+    
+    schoolYear: { type: String },
     enrollStatus: {
       type: String,
       default: 'Pending',
@@ -111,7 +97,7 @@ const schema = new Schema<IEnrollment>(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'StudentProfile',
         },
-        grade: {type: String}
+        grade: { type: String },
       },
     ],
   },

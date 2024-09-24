@@ -26,6 +26,7 @@ const Page = () => {
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
   const isAllowed = useMemo(() => ['1', '2', '3', '4', '5'], []);
   // Validate the step parameter whenever the search parameter changes
+
   useEffect(() => {
     if (search === null || !isAllowed.includes(search)) {
       setIsError(true);
@@ -55,29 +56,32 @@ const Page = () => {
           <Loader />
         </div>
       ) : (
-        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
-          {
-            isError ? (
-              <div className=''>404</div>
-            ) : search === '1' ? (
-              <DataTable1 columns={columns} data={data?.enrollment as IEnrollment[]} />
-            ) : search === '2' ? (
-              <DataTable2 columns={columns2} data={data?.enrollment as IEnrollment[]} />
-            ) : search === '3' ? (
-              <DataTable3 columns={columns3} data={data?.enrollment as IEnrollment[]} />
-            ) : search === '4' ? (
-              <DataTable4 columns={columns4} data={data?.enrollment as IEnrollment[]} />
-            ) : search === '5' ? (
-              <DataTable5 columns={columns5} data={enrolledStudents as IEnrollment[]} />
-            ) : null
+        data &&
+        data.enrollment && (
+          <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
+            {
+              isError ? (
+                <div className=''>404</div>
+              ) : search === '1' ? (
+                <DataTable1 columns={columns} data={data?.enrollment as IEnrollment[]} />
+              ) : search === '2' ? (
+                <DataTable2 columns={columns2} data={data?.enrollment as IEnrollment[]} />
+              ) : search === '3' ? (
+                <DataTable3 columns={columns3} data={data?.enrollment as IEnrollment[]} />
+              ) : search === '4' ? (
+                <DataTable4 columns={columns4} data={data?.enrollment as IEnrollment[]} />
+              ) : search === '5' ? (
+                <DataTable5 columns={columns5} data={enrolledStudents as IEnrollment[]} />
+              ) : null
 
-            // : search === '4'
-            //else if === 2
-            //else if === 3
-            //else if === 4
-          }
-          {/* <DataTableDrawer /> */}
-        </div>
+              // : search === '4'
+              //else if === 2
+              //else if === 3
+              //else if === 4
+            }
+            {/* <DataTableDrawer /> */}
+          </div>
+        )
       )}
     </>
   );

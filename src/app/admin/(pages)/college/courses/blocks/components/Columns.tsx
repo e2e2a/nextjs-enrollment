@@ -30,28 +30,28 @@ export const columns: ColumnDef<IBlockType>[] = [
     },
   },
   {
-    accessorKey: 'name',
+    accessorKey: 'Block Type',
     header: ({ column }) => {
       return (
         <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Name
+          Block Type
           <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       );
     },
     cell: ({ cell, row }) => {
       const user = row.original;
-      return <div key={cell.id}>{user.section}</div>;
+      return <div key={cell.id} className='uppercase'>block {user.section}</div>;
     },
     accessorFn: (row) => `${row.section}`,
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user.section}`.toLowerCase();
+      const fullName = `block ${user.section}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
   {
-    accessorFn: (row) => row.courseId.courseCode, // Use accessorFn for nested fields
+    accessorFn: (row) => row.courseId.courseCode,
     id: 'Course Code',
     header: 'Course Code',
     cell: ({ cell, row }) => {

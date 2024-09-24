@@ -71,13 +71,13 @@ export const deleteStudentProfileByUserId = async (userId: string) => {
 
 export const updateStudentProfileById = async (id: string, { data }: any) => {
   try {
-    console.log('data in service', data)
     const updatedProfile = await StudentProfile.findByIdAndUpdate(id, { ...data, isVerified: true }, { new: true });
     return JSON.parse(JSON.stringify(updatedProfile));
   } catch (error) {
     return null;
   }
 };
+
 export const updateStudentProfileByUserId = async (userId: string, { data }: any) => {
   try {
     console.log('data in service', data)

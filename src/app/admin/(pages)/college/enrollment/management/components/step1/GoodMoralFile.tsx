@@ -7,13 +7,14 @@ import { fireAuth, storage } from '@/firebase';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
-const PSAFile = ({ user }: { user: any }) => {
+const GoodMoralFile = ({ user }: { user: any }) => {
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  console.log(user.profileId._id)
   useEffect(() => {
     const fetchFileUrl = async () => {
       try {
-        const filePath = `enrollment/psa/${user.profileId._id}/${user.profileId.psaUrl}`;
+        const filePath = `enrollment/goodMoral/${user.profileId._id}/${user.profileId.goodMoralUrl}`;
         // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
         const fileRef = ref(storage, filePath);
 
@@ -38,7 +39,7 @@ const PSAFile = ({ user }: { user: any }) => {
             <DialogContent className='max-w-xl bg-white w-full py-10 '>
               <DialogHeader>
                 <DialogTitle className='flex flex-col space-y-1'>
-                  <span>Birth Certificate</span>
+                  <span>PSA file</span>
                   <span className='font-medium sm:text-lg text-xs'>
                     Student:{' '}
                     <span className=' capitalize sm:text-lg text-xs'>
@@ -55,16 +56,16 @@ const PSAFile = ({ user }: { user: any }) => {
                   ) : (
                     <Image src={fileUrl} alt={user.profileId.firstname || 'nothing to say'} width={600} priority height={600} className='object-contain' />
                   )
-                ) : <div className='items-center justify-center text-red'>No Birth Certertificate</div>}
+                ) : <div className='items-center justify-center text-red'>No Good Moral File</div>}
               </div>
             </DialogContent>
           </Dialog>
         </div>
       ) : (
-        <div className='items-center justify-center text-red'>No Birth Certertificate file</div>
+        <div className='items-center justify-center text-red'>No Good Moral File</div>
       )}
     </>
   );
 };
 
-export default PSAFile;
+export default GoodMoralFile;

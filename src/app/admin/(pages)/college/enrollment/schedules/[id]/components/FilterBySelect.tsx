@@ -15,9 +15,9 @@ const FilterBySelect = ({ studentBlockType, setStudentBlockType, studentSemester
     <div className='flex flex-col'>
       <span>Filter:</span>
       <div className='flex md:flex-row flex-col gap-5'>
-        <div className='relative bg-slate-50 rounded-lg'>
+        {/* <div className='relative bg-slate-50 rounded-lg'> */}
           {/* <Select onValueChange={field.onChange} value={field.value}> */}
-          <Select
+          {/* <Select
             onValueChange={(value) => {
               setStudentBlockType(value);
             }}
@@ -49,7 +49,7 @@ const FilterBySelect = ({ studentBlockType, setStudentBlockType, studentSemester
           >
             Select Block Type
           </label>
-        </div>
+        </div> */}
         <div className='relative bg-slate-50 rounded-lg'>
           <Select
             onValueChange={(value) => {

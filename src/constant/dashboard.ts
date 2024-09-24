@@ -343,22 +343,6 @@ export const dashboardConfig: DashboardConfig = {
           title: 'College',
           i: [
             {
-              title: 'Courses',
-              i: [
-                {
-                  title: 'Courses Management',
-                  href: '/admin/college/courses',
-                  icon: 'eye',
-                },
-                {
-                  title: 'Add Course',
-                  href: '/admin/college/courses/add',
-                  icon: 'add',
-                },
-              ],
-              icon: 'packageSearch',
-            },
-            {
               title: 'Blocks',
               i: [
                 {
@@ -375,17 +359,33 @@ export const dashboardConfig: DashboardConfig = {
               icon: 'packageSearch',
             },
             {
-              title: 'Subjects',
+              title: 'Courses',
               i: [
                 {
-                  title: 'Subjects Management',
-                  href: '/admin/college/subjects',
+                  title: 'Courses Management',
+                  href: '/admin/college/courses',
                   icon: 'eye',
                 },
                 {
-                  title: 'Add Subject',
-                  href: '/admin/college/subjects/add',
+                  title: 'Add Course',
+                  href: '/admin/college/courses/add',
                   icon: 'add',
+                },
+              ],
+              icon: 'packageSearch',
+            },
+            {
+              title: 'Curriculums',
+              i: [
+                {
+                  title: 'Curriculum Management',
+                  href: '/admin/college/curriculums',
+                  icon: 'eye',
+                },
+                {
+                  title: 'Student Curriculum Mng.',
+                  href: '/admin/college/curriculums/students',
+                  icon: 'eye',
                 },
               ],
               icon: 'packageSearch',
@@ -401,6 +401,22 @@ export const dashboardConfig: DashboardConfig = {
                 {
                   title: 'Add Instructor Schedule',
                   href: '/admin/college/schedules/instructors/add',
+                  icon: 'add',
+                },
+              ],
+              icon: 'packageSearch',
+            },
+            {
+              title: 'Subjects',
+              i: [
+                {
+                  title: 'Subjects Management',
+                  href: '/admin/college/subjects',
+                  icon: 'eye',
+                },
+                {
+                  title: 'Add Subject',
+                  href: '/admin/college/subjects/add',
                   icon: 'add',
                 },
               ],
@@ -450,6 +466,11 @@ export const dashboardConfig: DashboardConfig = {
                 {
                   title: 'Enrollment Process',
                   i: [
+                    // {
+                    //   title: 'New/Transferee Students',
+                    //   href: '/admin/college/schedules/instructors/add',
+                    //   icon: 'eye',
+                    // },
                     {
                       title: 'Step 1 Management',
                       href: '/admin/college/enrollment/management?step=1',
@@ -468,6 +489,11 @@ export const dashboardConfig: DashboardConfig = {
                     {
                       title: 'Step 4 Management',
                       href: '/admin/college/enrollment/management?step=4',
+                      icon: 'eye',
+                    },
+                    {
+                      title: 'Step 5 Management',
+                      href: '/admin/college/enrollment/management?step=5',
                       icon: 'eye',
                     },
                   ],
@@ -516,22 +542,6 @@ export const dashboardConfig: DashboardConfig = {
                   title: 'Add Room',
                   href: '/admin/college/rooms/add',
                   icon: 'add',
-                },
-              ],
-              icon: 'packageSearch',
-            },
-            {
-              title: 'Curriculums',
-              i: [
-                {
-                  title: 'Curriculum Management',
-                  href: '/admin/college/curriculums',
-                  icon: 'eye',
-                },
-                {
-                  title: 'Student Curriculum Mng.',
-                  href: '/admin/college/curriculums/students',
-                  icon: 'eye',
                 },
               ],
               icon: 'packageSearch',

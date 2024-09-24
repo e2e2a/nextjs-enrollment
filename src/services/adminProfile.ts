@@ -1,5 +1,7 @@
 'use server';
+import mongoose from 'mongoose'
 import AdminProfile from '@/models/AdminProfile';
+const User = mongoose.models.User;
 
 export const createAdminProfile = async (data: any) => {
   try {
@@ -15,8 +17,8 @@ export const createAdminProfile = async (data: any) => {
 
 export const getAllAdminProfile = async () => {
   try {
-    const TProfile = await AdminProfile.find().populate('userId').exec();
-    return TProfile;
+    const AProfile = await AdminProfile.find().populate('userId').exec();
+    return AProfile;
   } catch (error) {
     return null;
   }
@@ -24,8 +26,8 @@ export const getAllAdminProfile = async () => {
 
 export const getAdminProfileById = async (id: any) => {
   try {
-    const TProfile = await AdminProfile.findById(id).populate('userId').exec();
-    return TProfile;
+    const AProfile = await AdminProfile.findById(id).populate('userId').exec();
+    return AProfile;
   } catch (error) {
     return null;
   }
@@ -33,8 +35,8 @@ export const getAdminProfileById = async (id: any) => {
 
 export const getAdminProfileByUserId = async (userId: any) => {
   try {
-    const TProfile = await AdminProfile.findOne({ userId }).populate('userId').exec();
-    return TProfile;
+    const AProfile = await AdminProfile.findOne({ userId }).populate('userId').exec();
+    return AProfile;
   } catch (error) {
     return null;
   }

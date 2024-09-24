@@ -26,7 +26,12 @@ export interface IProfile extends Document {
   educationAttainment?: string;
   learnerOrTraineeOrStudentClassification?: string;
   studentYear?: string;
-  semester?: string;
+  studentSemester?: string;
+  psaUrl: string;
+  goodMoralUrl: string;
+  reportCardUrl: string;
+  photoUrl: string;
+  studentStatus?: string;
   enrollStatus?: 'Pending' | 'Continue' | 'Completed';
   studentType?: 'Regular' | 'Non-Regular';
   scholarType: string;
@@ -72,14 +77,16 @@ const schema = new Schema<IProfile>(
     birthPlaceRegion: { type: String },
     educationAttainment: { type: String },
     learnerOrTraineeOrStudentClassification: { type: String },
-    // takenNcaeOrYp4sc: {
-    //   type: String,
-    // },
     studentYear: {
       type: String,
     },
-    semester: {
+    studentSemester: {
       type: String,
+    },
+    studentStatus: {
+      type: String,
+      default: 'New Student',
+      enum: ['New Student', 'Continue', 'Completed'],
     },
     // isEnrolled: {
     //   type: Boolean,
@@ -101,6 +108,10 @@ const schema = new Schema<IProfile>(
     //   type: Number,
     //   default: 0,
     // },
+    psaUrl: { type: String },
+    goodMoralUrl: { type: String },
+    reportCardUrl: { type: String },
+    photoUrl: { type: String },
     imageUrl: { type: String },
     isVerified: { type: Boolean, default: false },
     lastLogin: { type: Date },
@@ -111,13 +122,6 @@ const schema = new Schema<IProfile>(
     timestamps: true,
   }
 );
-// let StudentProfile: mongoose.Model<IProfile>;
 
-// try {
-//   StudentProfile = mongoose.model<IProfile>('StudentProfile');
-// } catch (error) {
-//   StudentProfile = mongoose.model<IProfile>('StudentProfile', schema);
-// }
 const StudentProfile = models.StudentProfile || model<IProfile>('StudentProfile', schema);
 export default StudentProfile;
-// export const StudentProfiles = models.StudentProfiles || model('StudentProfiles', schema);

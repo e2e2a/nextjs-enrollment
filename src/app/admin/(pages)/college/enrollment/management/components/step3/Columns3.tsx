@@ -45,7 +45,7 @@ export const columns3: ColumnDef<IEnrollment>[] = [
       return `${lastname}, ${firstname} ${middlename}`;
     },
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.profileId.lastname}, ${row.original.profileId.firstname}`.toLowerCase();
+      const fullName = `${row.original.profileId.lastname}, ${row.original.profileId.firstname} ${row.original.profileId.middlename}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },

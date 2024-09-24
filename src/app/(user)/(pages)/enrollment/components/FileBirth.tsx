@@ -17,7 +17,7 @@ const FileBirth = ({ handleSelectedFile,handleRemoveFile, handleClick, fileInput
 
   return (
     <div className='w-full items-center justify-center'>
-      <span className='text-sm px-2'>PSA Birth Certificate</span>
+      <span className='text-xs sm:text-sm px-2'>PSA Birth Certificate</span>
       {filePreview ? (
         <span className='cursor-pointer pl-1 hover:underline text-blue-600 gap-0 md:gap-2 rounded-md flex items-center'>
           <div className='bg-slate-100 pl-1 rounded-full'>
