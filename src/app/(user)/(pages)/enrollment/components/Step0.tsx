@@ -25,7 +25,7 @@ type IProps = {
   search: any;
   enrollment: any;
 };
-const Step0 = ({ search, enrollment }: IProps) => {
+const Step0 = ({ search }: IProps) => {
   const [photoPreview, setPhotoPreview] = useState<File | null>(null);
   const [photoError, setPhotoError] = useState('');
   const PhotoInputRef = useRef<HTMLInputElement>(null);
@@ -46,12 +46,11 @@ const Step0 = ({ search, enrollment }: IProps) => {
   const { data: s } = useSession();
   const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
   useEffect(() => {
-    if (!enrollment) return;
     if (isCoursesError || !res || !res.courses) {
       return;
     }
     if (res) console.log('me and you');
-  }, [res, isCoursesLoading, isCoursesError, enrollment]);
+  }, [res, isCoursesLoading, isCoursesError]);
   const handleSelectedPhoto = (files: FileList | null) => {
     if (files && files?.length > 0) {
       if (files[0].size < 10000000) {

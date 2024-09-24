@@ -8,10 +8,9 @@ type IProps = {
   enrollment: any;
 };
 const Step2 = ({ enrollment }: IProps) => {
-  if (!enrollment) return;
   return (
     <TabsContent value='2' className='p-5 focus-visible:ring-0 border-0'>
-      <Card className={`${enrollment?.onProcess ? 'min-h-[35vh] shadow-none drop-shadow-none items-center justify-center flex border-0' : ''}`}>
+      <Card className={`min-h-[35vh] shadow-none drop-shadow-none items-center justify-center flex border-0`}>
         <CardHeader className='space-y-3 hidden'>
           <CardTitle className=' hidden'>Waiting for Approval!</CardTitle>
           <CardDescription className='text-center hidden'></CardDescription>

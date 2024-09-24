@@ -52,6 +52,7 @@ export const createEnrollmentAction = async (data: any): Promise<getEnrollmentRe
       reportCardUrl: fileTOR.name,
       studentYear: data.studentYear,
       studentSemester: data.studentSemester,
+      enrollStatus: 'Pending',
       // educational background
       primarySchoolName: data.primarySchoolName,
       primarySchoolYear: data.primarySchoolYear,

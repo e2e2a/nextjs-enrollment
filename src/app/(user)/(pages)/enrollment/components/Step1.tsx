@@ -24,11 +24,11 @@ type IProps = {
   enrollment: any;
 };
 const Step1 = ({ search, enrollment }: IProps) => {
+  const [isPageLoading, setIsPageLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
   const { data: s } = useSession();
   const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
   useEffect(() => {
-    if (!enrollment) return;
     if (isCoursesError || !res || !res.courses) {
       return;
     }
@@ -82,7 +82,7 @@ const Step1 = ({ search, enrollment }: IProps) => {
                 we will notify you via email and on this website. If you have any questions or need further assistance, please do not hesitate to contact us +639123456789
               </span>
             </div>
-            <div className='flex flex-col w-full space-y-3'>
+            {/* <div className='flex flex-col w-full space-y-3'>
               <span className='text-left sm:text-center w-full px-5 sm:px-10 mt-5 sm:mt-10 text-sm text-muted-foreground'>
                 <span className=' relative sm:hidden'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>If you are undecided with your course you can cancel it anytime.
               </span>
@@ -107,7 +107,7 @@ const Step1 = ({ search, enrollment }: IProps) => {
                   </AlertDialogContent>
                 </AlertDialog>
               </div>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
     </TabsContent>

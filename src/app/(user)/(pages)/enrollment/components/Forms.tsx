@@ -37,9 +37,14 @@ const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
       )}
 
       <Tabs value={`${value}`} className='w-full gap-4 '>
-        <Step0 search={search} enrollment={enrollment} />
-        <Step1 search={search} enrollment={enrollment} />
-        <Step2 enrollment={enrollment} />
+        {profile.enrollStatus === 'Pending' ? (
+          <Step0 search={search} enrollment={enrollment} />
+        ) : (
+          <>
+            <Step1 search={search} enrollment={enrollment} />
+            <Step2 enrollment={enrollment} />
+          </>
+        )}
 
         <TabsContent value='3'>
           <Card>

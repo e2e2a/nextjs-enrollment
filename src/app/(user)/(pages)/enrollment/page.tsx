@@ -43,14 +43,23 @@ const Page = () => {
       return;
     }
     if (resE && resP) {
-      if (resE.enrollment) {
-        setEn(resE.enrollment);
-        const courseTitles = res?.courses?.map((course) => course.courseCode.toLowerCase());
-        setAllowedCourses(courseTitles);
+      if (resP.profile) {
+        if (resP.profile.enrollStatus === 'Pending') {
+          if (resE.enrollment) {
+            setEn(resE.enrollment);
+            const courseTitles = res?.courses?.map((course) => course.courseCode.toLowerCase());
+            setAllowedCourses(courseTitles);
+            setIsPageLoading(false);
+            return;
+          }
+        } else {
+          setIsPageLoading(false);
+          return;
+        }
+        return;
       }
-      if (resP.profile) return setIsPageLoading(false);
     }
-  }, [resE, EError, resP, PError,res]);
+  }, [resE, EError, resP, PError, res]);
   useEffect(() => {
     const validateSearchParam = () => {
       if (search === null) {
