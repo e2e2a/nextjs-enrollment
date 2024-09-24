@@ -10,7 +10,6 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 const GoodMoralFile = ({ user }: { user: any }) => {
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  console.log(user.profileId._id)
   useEffect(() => {
     const fetchFileUrl = async () => {
       try {
@@ -30,7 +29,7 @@ const GoodMoralFile = ({ user }: { user: any }) => {
     <>
       {user ? (
         <div className='items-center justify-center '>
-          <Button onClick={() => setIsOpen(true)} className='text-sm hover:underline text-blue-600'>
+          <Button type='button' onClick={() => setIsOpen(true)} className='text-sm hover:underline text-blue-600'>
             Open
           </Button>
 
@@ -43,7 +42,7 @@ const GoodMoralFile = ({ user }: { user: any }) => {
                   <span className='font-medium sm:text-lg text-xs'>
                     Student:{' '}
                     <span className=' capitalize sm:text-lg text-xs'>
-                      {user.profileId.firstname} {user.profileId.middlename[0] + '.'} {user.profileId.lastname} {user.profileId.extenstionName ? user.profileId.extenstionName : ''}
+                      {user.profileId.firstname} {user.profileId.middlename[0] + '.'} {user.profileId.lastname} {user.profileId.extensionName ? user.profileId.extensionName : ''}
                     </span>
                   </span>
                 </DialogTitle>

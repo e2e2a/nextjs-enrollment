@@ -37,7 +37,7 @@ const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
       )}
 
       <Tabs value={`${value}`} className='w-full gap-4 '>
-        {profile.enrollStatus === 'Pending' ? (
+        {!profile.enrollStatus || profile.enrollStatus !== 'Pending' ? (
           <Step0 search={search} enrollment={enrollment} />
         ) : (
           <>
