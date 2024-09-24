@@ -25,7 +25,7 @@ export function MainNav({ session, items, profile }: MainNavProps) {
       <div className='flex gap-0 md:gap-10'>
         <Link href='/' className='flex items-center space-x-2 md:flex ml-1.5 md:ml-0'>
           {/* <Icons.logo className='h-8 w-8' /> */}
-          <Image src={'/images/logo1.png'} alt='nothing to say' width={40} height={40} priority className='rounded-full w-auto' />
+          <Image src={'/images/logo1.png'} alt='nothing to say' width={35} height={35} priority className='rounded-full lg:h-11 lg:w-11 w-auto' />
           <span className='hidden font-bold sm:inline-block font-poppins'>
             {/* {siteConfig.name} */}
             DCIT</span>

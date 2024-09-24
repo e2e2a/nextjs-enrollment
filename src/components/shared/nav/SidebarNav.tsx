@@ -1,6 +1,5 @@
 'use client';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { SidebarNavItem } from '@/types';
 import { Icons } from '../Icons';
@@ -9,9 +8,6 @@ import { Button } from '@/components/ui/button';
 import NavbarFooter from './NavbarFooter';
 import { UserAvatar } from './UserAvatar/UserAvatar';
 import { useSession } from 'next-auth/react';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { useState } from 'react';
-import { ChevronsUpDown } from 'lucide-react';
 import CollapsibleItem from './CollapsibleItem';
 
 interface DashboardNavProps {
@@ -20,8 +16,6 @@ interface DashboardNavProps {
 }
 
 export function SidebarNav({ items, profile }: DashboardNavProps) {
-  const path = usePathname();
-  const [isOpen, setIsOpen] = useState(false)
   const { data } = useSession();
   const session = data?.user;
   if (!items?.length) {
