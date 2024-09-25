@@ -13,5 +13,5 @@ export function middleware(request: NextRequest) {
   console.timeEnd('Login Middleware');
 }
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+  matcher: ['/sign-in', '/sign-up','/((?!api|_next/static|_next/image|.*\\.png$).*)'],
 };
