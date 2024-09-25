@@ -124,7 +124,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return session;
     },
     async jwt({ token, user }) {
-      // await dbConnect();
+      await dbConnect();
 
       // If the user signs in, cache data in the token
       if (user) {

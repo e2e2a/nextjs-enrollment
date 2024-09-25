@@ -9,7 +9,7 @@ const LogoutButton = () => {
   const { data } = useSession();
   // console.log('mylogoutsession',data?.user.id)
   const handleSubmit = async () => {
-    await updateUserLogout(data?.user.id!);
+    // await updateUserLogout(data?.user.id!);
     await signOut({ callbackUrl: '/sign-in' });
   };
   return (
