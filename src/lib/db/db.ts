@@ -179,7 +179,7 @@ async function dbConnect() {
       // console.log('Attempting to connect to MongoDB');
       await initializeModel(modelsToInitialize);
       return mongoose;
-    });
+    }).catch(err => {console.log('err', err);});
   }
 
   cached.conn = await cached.promise;
