@@ -389,6 +389,7 @@ export const useEnrollmentStep1Mutation = () => {
   return useMutation<getEnrollmentResponse, Error, any>({
     mutationFn: async (data) => createEnrollmentAction(data),
     onSuccess: () => {
+      queryClient.refetchQueries({ queryKey: ['userProfile'] });
       queryClient.refetchQueries({ queryKey: ['Enrollment'] });
     },
     onError: (error) => {

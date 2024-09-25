@@ -391,76 +391,6 @@ export const dashboardConfig: DashboardConfig = {
               icon: 'packageSearch',
             },
             {
-              title: 'Instructors',
-              i: [
-                {
-                  title: 'Instructor Management',
-                  href: '/admin/college/schedules/instructors',
-                  icon: 'eye',
-                },
-                {
-                  title: 'Add Instructor Schedule',
-                  href: '/admin/college/schedules/instructors/add',
-                  icon: 'add',
-                },
-              ],
-              icon: 'packageSearch',
-            },
-            {
-              title: 'Subjects',
-              i: [
-                {
-                  title: 'Subjects Management',
-                  href: '/admin/college/subjects',
-                  icon: 'eye',
-                },
-                {
-                  title: 'Add Subject',
-                  href: '/admin/college/subjects/add',
-                  icon: 'add',
-                },
-              ],
-              icon: 'packageSearch',
-            },
-            // {
-            //   title: 'Schedules',
-            //   i: [
-            //     {
-            //       title: `Instructor's Schedules`,
-            //       i: [
-            //         {
-            //           title: 'Instructor Schedules',
-            //           href: '/admin/college/schedules/instructors',
-            //           icon: 'eye',
-            //         },
-            //         {
-            //           title: 'Add Instructor Schedule',
-            //           href: '/admin/college/schedules/instructors/add',
-            //           icon: 'add',
-            //         },
-            //       ],
-            //       icon: 'packageSearch',
-            //     },
-            //     {
-            //       title: `Block's Schedules`,
-            //       i: [
-            //         {
-            //           title: `Schedules Management`,
-            //           href: '/admin/college/schedules/blocks',
-            //           icon: 'eye',
-            //         },
-            //         {
-            //           title: 'Add Block Schedule',
-            //           href: '/admin/college/schedules/blocks/add',
-            //           icon: 'add',
-            //         },
-            //       ],
-            //       icon: 'packageSearch',
-            //     },
-            //   ],
-            //   icon: 'packageSearch',
-            // },
-            {
               title: 'Enrollment',
               i: [
                 {
@@ -531,6 +461,77 @@ export const dashboardConfig: DashboardConfig = {
               icon: 'packageSearch',
             },
             {
+              title: 'Instructors',
+              i: [
+                {
+                  title: 'Instructor Management',
+                  href: '/admin/college/schedules/instructors',
+                  icon: 'eye',
+                },
+                {
+                  title: 'Add Instructor Schedule',
+                  href: '/admin/college/schedules/instructors/add',
+                  icon: 'add',
+                },
+              ],
+              icon: 'packageSearch',
+            },
+            {
+              title: 'Subjects',
+              i: [
+                {
+                  title: 'Subjects Management',
+                  href: '/admin/college/subjects',
+                  icon: 'eye',
+                },
+                {
+                  title: 'Add Subject',
+                  href: '/admin/college/subjects/add',
+                  icon: 'add',
+                },
+              ],
+              icon: 'packageSearch',
+            },
+            // {
+            //   title: 'Schedules',
+            //   i: [
+            //     {
+            //       title: `Instructor's Schedules`,
+            //       i: [
+            //         {
+            //           title: 'Instructor Schedules',
+            //           href: '/admin/college/schedules/instructors',
+            //           icon: 'eye',
+            //         },
+            //         {
+            //           title: 'Add Instructor Schedule',
+            //           href: '/admin/college/schedules/instructors/add',
+            //           icon: 'add',
+            //         },
+            //       ],
+            //       icon: 'packageSearch',
+            //     },
+            //     {
+            //       title: `Block's Schedules`,
+            //       i: [
+            //         {
+            //           title: `Schedules Management`,
+            //           href: '/admin/college/schedules/blocks',
+            //           icon: 'eye',
+            //         },
+            //         {
+            //           title: 'Add Block Schedule',
+            //           href: '/admin/college/schedules/blocks/add',
+            //           icon: 'add',
+            //         },
+            //       ],
+            //       icon: 'packageSearch',
+            //     },
+            //   ],
+            //   icon: 'packageSearch',
+            // },
+
+            {
               title: 'Rooms',
               i: [
                 {
@@ -553,7 +554,7 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'packageSearch',
     },
     {
-      title: 'User Roles',
+      title: 'Accounts',
       i: [
         {
           title: 'Role Admins',

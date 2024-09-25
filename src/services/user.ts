@@ -97,7 +97,6 @@ export const updateUserEmailVerifiedById = async (id: string) => {
 };
 
 export const updateUserPasswordById = async (data: any) => {
-  await dbConnect();
   const { id, password } = data;
   const existingUser = await getUserById(id);
   if (!existingUser) {

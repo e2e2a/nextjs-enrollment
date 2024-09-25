@@ -4,12 +4,12 @@ import { getUserByEmail, getUserById, updateUserLogin } from './services/user';
 import { User } from './models/User';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import dbConnect from './lib/db/db';
-import { MongoClient } from 'mongodb';
+// import { MongoClient } from 'mongodb';
 import Account from './models/Account';
 import { createStudentProfile, createStudentProfileProvider, getStudentProfileByUserId } from './services/studentProfile';
 import { createAccount } from './services/account';
-import { getTeacherProfileByUserId } from './services/teacherProfile';
-import { getAdminProfileByUserId } from './services/adminProfile';
+// import { getTeacherProfileByUserId } from './services/teacherProfile';
+// import { getAdminProfileByUserId } from './services/adminProfile';
 // const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
 const clientPromise = dbConnect().then(mongoose => mongoose.connection.getClient());
 
@@ -20,7 +20,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   events: {
     async linkAccount({ user, profile }) {
-      await dbConnect();
+      // await dbConnect();
       await User.findByIdAndUpdate(user.id, {
         emailVerified: new Date(),
         lastLogin: new Date(),
@@ -30,7 +30,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   callbacks: {
     async signIn({ user, account, profile }) {
       try {
-        await dbConnect();
+        // await dbConnect();
         if (account?.provider === 'google') {
           const existingUser = await getUserByEmail(user.email!);
           if (existingUser) {
@@ -124,7 +124,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return session;
     },
     async jwt({ token, user }) {
-      await dbConnect();
+      // await dbConnect();
 
       // If the user signs in, cache data in the token
       if (user) {

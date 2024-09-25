@@ -20,7 +20,6 @@ const ProfilePage = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [profile, setProfile] = useState({});
   const [activeTab, setActiveTab] = useState('profile');
   const handleClose = () => {
     setIsOpen(false);
@@ -31,18 +30,14 @@ const ProfilePage = () => {
   const session = data?.user;
   const { data: res, isLoading, error } = useProfileQuery(data?.user.id as string);
 
-  // const profile = res?.profile;
   useEffect(() => {
-    if (isLoading) {
-      setLoading(true);
+    if (error || !res) {
       return;
     }
-    if (error || !res || !res.profile) {
-      return;
+    if (res && res.profile) {
+      return setLoading(false);
     }
-    setProfile(res.profile);
-    setLoading(false);
-  }, [isLoading, error, res, profile]);
+  }, [error, res]);
   return (
     <>
       {loading ? (
@@ -51,7 +46,7 @@ const ProfilePage = () => {
         <div className='flex justify-center flex-col items-center'>
           <Tabs defaultValue='profile' onValueChange={handleTabChange} className='w-full'>
             <div className='w-full justify-center items-center flex border-b-2 flex-col bg-gradient-to-t from-white from-20% via-blue-200 via-70% to-sky-300'>
-              <ProfileDialog session={session} profile={profile} />
+              <ProfileDialog session={session} profile={res?.profile} />
               <TabsList className='flex w-full grid-cols-2 bg-transparent '>
                 <TabsTrigger value='profile' className={` font-bold ${activeTab === 'profile' ? ' text-blue-400 underline' : null}`} onClick={() => handleTabChange('profile')}>
                   Profile
@@ -65,11 +60,13 @@ const ProfilePage = () => {
               </TabsList>
             </div>
             <div className='w-full flex flex-col justify-center items-center bg-slate-100 '>
-              {isOpen && !session!.profileVerified && (
-                <div className='flex justify-center items-center mt-5'>
-                  <Note handleClose={handleClose} />
-                </div>
-              )}
+              {res?.profile.isVerified
+                ? null
+                : isOpen && (
+                    <div className='flex justify-center items-center mt-5'>
+                      <Note handleClose={handleClose} />
+                    </div>
+                  )}
               <TabsContent value='profile' className={`w-full bg-neutral-50  my-10 max-w-[69rem] rounded-lg`}>
                 <ProfileTab session={session} profile={res?.profile} />
               </TabsContent>

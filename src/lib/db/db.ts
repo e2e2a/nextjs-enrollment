@@ -156,7 +156,7 @@ import mongoose from 'mongoose';
 import initializeModel from './initialize';
 
 const MONGODB_URI = process.env.MONGODB_URI;
-
+const modelsToInitialize = ['Course', 'User', 'UserIp', 'StudentProfile', 'Account', 'Enrollment', 'BlockType', 'Subject', 'TeacherProfile', 'TeacherSchedule', 'Room', 'SchoolYear', 'Curriculum', 'StudentCurriculum', 'StudentSchedule', 'AdminProfile'];
 let cached = global.mongoose;
 
 if (!cached) {
@@ -176,7 +176,7 @@ async function dbConnect() {
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then(async (mongoose) => {
-      const modelsToInitialize = ['Course', 'User', 'UserIp', 'StudentProfile', 'Account', 'Enrollment', 'BlockType', 'Subject', 'TeacherProfile', 'TeacherSchedule', 'Room', 'SchoolYear', 'Curriculum', 'StudentCurriculum', 'StudentSchedule', 'AdminProfile'];
+      // console.log('Attempting to connect to MongoDB');
       await initializeModel(modelsToInitialize);
       return mongoose;
     });

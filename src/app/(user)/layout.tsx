@@ -8,7 +8,6 @@ import { useProfileQuery } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import React, { ReactNode, useEffect, useState } from 'react';
-import Nav from './components/Nav';
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const { data: sessionData } = useSession();
@@ -16,11 +15,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
   if (!sessionData) {
     return redirect('/sign-in');
   }
-  // if (sessionData && !res?.profile.isVerified) {
-  //   return redirect('/profile');
-  // }
+//   if (sessionData && !sessionData.user.profileVerified) {
+//     return redirect('/profile');
+//   }
 
-  return <Nav session={sessionData}>{children}</Nav>;
+  return <div>{children}</div>;
 };
 
 export default Layout;

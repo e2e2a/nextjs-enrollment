@@ -13,7 +13,6 @@ const Page = () => {
   const [isError, setIsError] = useState(false);
   const searchParams = useSearchParams();
   const search = searchParams.get('courses');
-  const router = useRouter();
   const [allowedCourses, setAllowedCourses] = useState<any>([]);
   const [en, setEn] = useState<any>(null);
   const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();

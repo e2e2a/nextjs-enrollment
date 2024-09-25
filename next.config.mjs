@@ -18,6 +18,7 @@ const nextConfig = {
 
     return [];
   },
+  pageExtensions: ['ts', 'tsx'],
   images: {
     remotePatterns: [
       {

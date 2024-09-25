@@ -79,7 +79,7 @@ const ActionsCell2 = ({ user }: IProps) => {
       <Popover>
         <PopoverTrigger className='' asChild>
           <div className='flex justify-center items-center w-full'>
-            <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-blue-500 px-2 py-0 text-neutral-50 font-medium'}>
+            <Button type='button' role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-blue-500 px-2 py-0 text-neutral-50 font-medium'}>
               Options
               <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
             </Button>
@@ -89,7 +89,7 @@ const ActionsCell2 = ({ user }: IProps) => {
           <Command>
             <CommandList>
               <CommandGroup className=''>
-                <Link href={`/profile/${user.userId.username}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
+                <Link href={`/admin/users/students/${user.userId._id}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
                   <div className='flex justify-center items-center text-sm font-medium gap-x-1'>
                     <Icons.eye className='h-4 w-4' />
                     View student profile

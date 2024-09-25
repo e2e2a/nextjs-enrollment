@@ -56,7 +56,6 @@ export function BirthdayInput({ name, isNotEditable, form, label, classNameInput
                         setDate(undefined);
                         field.onChange(undefined); // Reset the field value
                       } else {
-                        console.log('nice');
                         setDate(parsedDate);
                         field.onChange(parsedDate);
                         const formattedDate = format(parsedDate, 'MM/dd/yyyy');

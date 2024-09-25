@@ -22,6 +22,7 @@ const UserRootLayout = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     }, 500);
   }, [isLoading, res, error]);
+  
   return (
     <>
       {loading ? (

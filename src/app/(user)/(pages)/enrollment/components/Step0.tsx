@@ -49,11 +49,11 @@ const Step0 = ({ search }: IProps) => {
     if (isCoursesError || !res || !res.courses) {
       return;
     }
-    if (res) console.log('me and you');
+    if (res) console.log('me ♥ you');
   }, [res, isCoursesLoading, isCoursesError]);
   const handleSelectedPhoto = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 10000000) {
+      if (files[0].size < 5000000) {
         if (files[0].type === 'image/jpeg' || files[0].type === 'image/png') {
           setPhotoError('');
           const file = files[0];
@@ -68,7 +68,7 @@ const Step0 = ({ search }: IProps) => {
   };
   const handleSelectedFile = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 10000000) {
+      if (files[0].size < 5000000) {
         if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
           setFileError('');
           const file = files[0];
@@ -83,7 +83,7 @@ const Step0 = ({ search }: IProps) => {
   };
   const handleSelectedFileGoodMoral = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 10000000) {
+      if (files[0].size < 5000000) {
         if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
           setFileGoodMoralError('');
           const file = files[0];
@@ -98,7 +98,7 @@ const Step0 = ({ search }: IProps) => {
   };
   const handleSelectedFileTOR = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 10000000) {
+      if (files[0].size < 5000000) {
         if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
           setTORError('');
           const file = files[0];
@@ -143,7 +143,7 @@ const Step0 = ({ search }: IProps) => {
       courseCode: search !== null ? search.toLowerCase() : '',
       studentStatus: '',
       studentYear: '',
-      studentSemester: '',
+      studentSemester: '1st Semester',
       schoolYear: 'SY2024-2025',
 
       primarySchoolName: '',
@@ -259,7 +259,8 @@ const Step0 = ({ search }: IProps) => {
                   <SelectInput label='Course name' form={form} name={'courseCode'} selectItems={res?.courses!} placeholder='Select course' />
                   <SelectInput label='Student Status' form={form} name={'studentStatus'} selectItems={selectType.studentStatus} placeholder='Select semester' />
                   <SelectInput label='Select year' form={form} name={'studentYear'} selectItems={studentYearData} placeholder='Select year' />
-                  <SelectInput label='Select semester' form={form} name={'studentSemester'} selectItems={studentSemesterData} placeholder='Select semester' />
+                  {/* <SelectInput label='Select semester' form={form} name={'studentSemester'} selectItems={studentSemesterData} placeholder='Select semester' /> */}
+                  <Input label={`Select semester`} type='text' form={form} name={'studentSemester'} disabled={true} />
                   <Input label={`School Year`} type='text' form={form} name={'schoolYear'} disabled={true} />
                 </div>
                 <div className='grid grid-cols-1 xs:grid-cols-2 w-full gap-5'>

@@ -19,7 +19,6 @@ type Iprops = {
   profile: any;
 };
 const ProfileTab = ({ profile }: Iprops) => {
-  console.log('Profile', profile);
   const mutation = useStudentProfileMutation();
   const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile.isVerified);
   const [defaultValues, setDefaultValues] = useState({
@@ -77,7 +76,7 @@ const ProfileTab = ({ profile }: Iprops) => {
         sex: profile?.sex || '',
         civilStatus: profile?.civilStatus || '',
         employmentStatus: profile?.employmentStatus || '',
-        birthday: new Date(profile.birthday) || new Date(), // Handle date conversion profile?.birthday ? new Date(profile.birthday) :
+        birthday: new Date(profile.birthday) || new Date(Date.now()), // Handle date conversion profile?.birthday ? new Date(profile.birthday) :
         birthPlaceCity: profile?.birthPlaceCity || '',
         birthPlaceProvince: profile?.birthPlaceProvince || '',
         birthPlaceRegion: profile?.birthPlaceRegion || '',

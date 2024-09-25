@@ -46,6 +46,7 @@ export const createEnrollmentAction = async (data: any): Promise<getEnrollmentRe
 
     // const [fileUrl, photoUrl] = await Promise.all([getDownloadURL(fileSnapshot.ref), getDownloadURL(photoSnapshot.ref)]);
     const dataToUpdateProfile = {
+      courseId: data.courseId,
       psaUrl: filePsa.name,
       photoUrl: photo.name,
       goodMoralUrl: fileGoodMoral.name,
