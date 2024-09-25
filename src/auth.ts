@@ -15,7 +15,7 @@ const clientPromise = dbConnect().then(mongoose => mongoose.connection.getClient
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
-    signIn: 'sign-in',
+    signIn: '/sign-in',
     error: 'auth',
   },
   events: {
