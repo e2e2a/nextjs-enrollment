@@ -19,6 +19,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     error: 'auth',
   },
   events: {
+    async signOut() {
+      // add here
+    },
     async linkAccount({ user, profile }) {
       // await dbConnect();
       await User.findByIdAndUpdate(user.id, {
@@ -145,6 +148,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       return token;
     },
+    
     // async jwt({ token, user }) {
     //   await dbConnect();
     //   // @ts-ignore
