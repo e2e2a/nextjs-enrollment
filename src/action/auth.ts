@@ -19,13 +19,13 @@ import { fireAuth } from '@/firebase';
  */
 export const signInAction = async (data: any): Promise<SignInResponse> => {
   try {
-    await dbConnect();
+    // await dbConnect();
     const validatedFields = SigninValidator.safeParse(data);
     if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
     
     const { email, password } = validatedFields.data;
-    const userCredential = await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe');
-    console.log('userCredential: ', userCredential)
+    // const userCredential = await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe');
+    // console.log('userCredential: ', userCredential)
     const existingUser = await getUserByEmail(email);
     // try {
     //   const myLimit = await rateLimit(6, email);
