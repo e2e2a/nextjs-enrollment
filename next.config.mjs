@@ -18,7 +18,7 @@ const nextConfig = {
 
     return [];
   },
-  pageExtensions: ['ts', 'tsx'],
+  // pageExtensions: ['ts', 'tsx'],
   images: {
     remotePatterns: [
       {
