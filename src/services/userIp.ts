@@ -11,16 +11,21 @@ export const getActiveIpByUserId = async (userId: string) => {
 };
 
 export const createActiveIp = async (userId: any, ip: string) => {
-  await UserIp.create({
-    userId: userId,
-    ips: [{ address: ip }],
-  });
-  return true;
+  try {
+    await UserIp.create({
+      userId: userId,
+      ips: [{ address: ip }],
+    });
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 };
 
 export const updateActiveIp = async (userId: string, ip: string) => {
   const existingActiveIp = await getActiveIpByUserId(userId);
-
+  console.log('exit activeIp', existingActiveIp);
   if (existingActiveIp) {
     const activeIp = await UserIp.findOne({ userId: userId, 'ips.address': ip });
     if (activeIp) {
@@ -35,11 +40,10 @@ export const updateActiveIp = async (userId: string, ip: string) => {
       console.log(`Updated IP for userId ${userId} to ${ip}`);
       return true;
     }
-    // else {
-    //   await createActiveIp(userId, ip);
-    // }
     console.log(`Updated IP for userId ${userId} to ${ip}`);
     return true;
+  } else {
+    await createActiveIp(userId, ip);
   }
 
   return false;

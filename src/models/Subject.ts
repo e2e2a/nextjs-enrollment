@@ -2,6 +2,7 @@ import mongoose, { Schema, models, model } from 'mongoose';
 
 export interface ISubject extends Document {
   fixedRateAmount: string;
+  preReq: string;
   category: string;
   subjectCode: string;
   name: string;
@@ -13,6 +14,9 @@ const schema = new Schema<ISubject>(
   {
     //example cases is that this subject has a price
     fixedRateAmount: {
+      type: String,
+    },
+    preReq: {
       type: String,
     },
     category: {

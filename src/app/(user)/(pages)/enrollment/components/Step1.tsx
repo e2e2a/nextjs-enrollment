@@ -7,6 +7,7 @@ import { useCourseQuery, useEnrollmentDeleteMutation, useEnrollmentStep1Mutation
 import { useSession } from 'next-auth/react';
 import { Icons } from '@/components/shared/Icons';
 import LoaderPage from '@/components/shared/LoaderPage';
+import Link from 'next/link';
 
 type IProps = {
   search: any;
@@ -77,12 +78,40 @@ const Step1 = ({ search, enrollment }: IProps) => {
                   </a>
                   .
                 </span>
-                <div className='text-sm text-left mt-4 px-5 sm:px-10 w-full'>
-                  For further information, please visit our support team at{' '}
+              </div>
+              <div className='flex flex-col w-full '>
+                <span className='text-left sm:text-center w-full px-5 sm:px-10 mt-5 sm:mt-10 text-sm text-muted-foreground'>
+                  <span className=' relative sm:hidden'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  This action cannot be cancelled while its being on process, this will only be undone by the administrator. For further information, please visit our support team at{' '}
                   <a href='/support' className='text-blue-600 underline'>
                     this link
                   </a>
-                  , or check out our FAQ section for common inquiries.
+                  , or check out our FAQ section for common inquiries, if you want to stop enrolling please contact us{' '}
+                  <Link href={''} className='hover:underline hover:text-blue-600 text-blue-500'>
+                    jay.abandog@gmail.com{' '}
+                  </Link>
+                  or visit our office for assistance.
+                </span>
+                <div className=' w-full  justify-center items-center flex'>
+                  {/* <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant={'outline'} size={'sm'} className='select-none focus-visible:ring-0 text-[15px] bg-red text-white tracking-normal font-medium font-poppins'>
+                    Cancel Enrollment
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className='bg-white'>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>This action cannot be undone. This will permanently delete your account and remove your data from our servers.</AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className='hover:bg-slate-100 focus-visible:ring-0 '>Cancel</AlertDialogCancel>
+                    <AlertDialogAction type='submit' className='border rounded-lg hover:bg-slate-100 focus-visible:ring-0 ' onClick={() => handleDeleteEnrollment(enrollment._id)}>
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog> */}
                 </div>
               </div>
               {/* <div className='flex flex-col w-full space-y-3'>

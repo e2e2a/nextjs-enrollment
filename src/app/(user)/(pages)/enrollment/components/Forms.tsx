@@ -17,6 +17,7 @@ type IProps = {
 const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
   // if (!enrollment) return;
   const [value, setValue] = useState('');
+  console.log(profile);
   useEffect(() => {
     if (!enrollment) return setValue('0');
     if (enrollment && enrollment.step) return setValue(enrollment.step as string);
@@ -37,15 +38,15 @@ const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
       )}
 
       <Tabs value={`${value}`} className='w-full gap-4 '>
-        {!profile.enrollStatus || profile.enrollStatus !== 'Pending' ? (
-          <Step0 search={search} enrollment={enrollment} />
-        ) : (
+        {!enrollment && profile.studentStatus === 'New Student' && profile.enrollStatus !== 'Approved' && <Step0 search={search} enrollment={enrollment} />}
+        {!enrollment && profile.studentStatus === 'Continue' && profile.enrollStatus !== 'Approved' && <Step0 search={search} enrollment={enrollment} />}
+        {enrollment && profile.enrollStatus === 'Pending' && (
           <>
             <Step1 search={search} enrollment={enrollment} />
             <Step2 enrollment={enrollment} />
           </>
         )}
-
+        
         <TabsContent value='3'>
           <Card>
             <CardHeader>

@@ -10,7 +10,7 @@ export const checkingIp = async (user: any) => {
     if (!ip) return { errorIp: 'User has no IP address' };
     const existingActiveIp = await UserIp.findOne({ userId: user._id });
     if (!existingActiveIp) {
-      await createActiveIp(user._id, ip);
+      // await createActiveIp(user._id, ip);
       return { error: 'User has different ip. ' };
     } else {
       const currentIpArray = existingActiveIp.ips.map((obj: any) => obj.address);

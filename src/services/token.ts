@@ -15,7 +15,6 @@ export const getVerificationTokenByToken = async (token: string) => {
 export const getVerificationTokenByUserId = async (userId: string) => {
   try {
     const verificationToken = await Token.findOne({ userId }).populate('userId').exec();
-    console.log(verificationToken);
     return JSON.parse(JSON.stringify(verificationToken));
   } catch (error) {
     return null;

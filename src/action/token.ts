@@ -22,24 +22,21 @@ export const checkToken = async (token: string): Promise<checkTokenResponse> => 
     if (!decodedToken) {
       return { error: 'Invalid token', status: 400 };
     }
-    console.log(decodedToken.userId)
     const existingToken = await getVerificationTokenByUserId(decodedToken.userId);
-    console.log('existingToken',existingToken)
     if (!existingToken) {
       return { error: 'Token not found', status: 404 };
     }
+    
     const existingUser = await getUserById(decodedToken.userId);
 
     switch (existingToken.tokenType) {
       case 'Activation':
       case 'Recovery':
-        console.log(existingToken.tokenType);
         if (!existingUser || !existingUser.emailVerified) {
           return { error: 'User email is not verified. Redirecting to recovery page...', status: 400 };
         }
         break;
       case 'Verify':
-        console.log('Verify');
         if (!existingUser) {
           return { error: 'User not found.', status: 404 };
         }

@@ -9,14 +9,15 @@ export interface IEnrollment extends Document {
   studentSemester?: string;
   onProcess: Boolean;
   step: Number;
-  
+
   schoolYear: string;
-  enrollStatus?: 'Pending' | 'Approved' | 'Rejected' | 'Enrolled';
+  enrollStatus?: string;
   isStudentProfile: string;
-  studentStatus?: 'New Student' | 'Continued' | 'Completed';
+  studentStatus?: string;
   studentType?: 'Regular' | 'Non-Regular';
   scholarType: 'TWSP' | 'STEP' | 'PESFA' | 'UAQTEA' | 'None';
   studentSubjects: Number;
+  enrollmentStatus: string
 }
 
 const schema = new Schema<IEnrollment>(
@@ -57,17 +58,27 @@ const schema = new Schema<IEnrollment>(
     // },
     onProcess: { type: Boolean, default: false },
     step: { type: Number, default: 1 },
-    
+
     schoolYear: { type: String },
     enrollStatus: {
       type: String,
       default: 'Pending',
-      enum: ['Pending', 'Approved', 'Rejected', 'Enrolled'],
+      enum: ['Pending', 'Approved', 'Rejected', 'Enrolled', 'Failed', 'Completed'],
     },
+    /**
+     * added some new features
+     * this wont be use on how we render or display about the form in continuing students
+     * @todo
+     */
+    enrollmentStatus: {
+      type: String,
+      enum: ['Success', 'Failed'],
+    },
+
     studentStatus: {
       type: String,
       default: 'New Student',
-      enum: ['New Student', 'Continue', 'Completed'],
+      enum: ['New Student', 'Continue', 'Transferee'],
     },
     // onAccepted: { type: String, default: 'Accepted', enum: ['Accepted', 'Decline'] },
 

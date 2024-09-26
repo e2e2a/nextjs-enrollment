@@ -155,7 +155,6 @@ export const undoEnrollmentToStep1 = async (data: any) => {
     if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
     if (checkE.step === 2) {
       data.step = (checkE.step as number) - 1;
-      data.schoolYear = '';
       const updated = await updateEnrollmentById(data.EId, { ...data, $unset: { blockTypeId: 1 } });
     }
     return { message: 'Student has been undo to step 1.', status: 201 };

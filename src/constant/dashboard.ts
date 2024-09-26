@@ -396,11 +396,6 @@ export const dashboardConfig: DashboardConfig = {
                 {
                   title: 'Enrollment Process',
                   i: [
-                    // {
-                    //   title: 'New/Transferee Students',
-                    //   href: '/admin/college/schedules/instructors/add',
-                    //   icon: 'eye',
-                    // },
                     {
                       title: 'Step 1 Management',
                       href: '/admin/college/enrollment/management?step=1',
