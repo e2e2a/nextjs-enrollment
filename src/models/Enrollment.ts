@@ -100,6 +100,10 @@ const schema = new Schema<IEnrollment>(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'TeacherSchedule',
         },
+        status: {
+          type: String,
+          enum: ['Pending', 'Approved', 'Suggested', 'Declined'],
+        },
         // studentScheduleId: {
         //   type: mongoose.Schema.Types.ObjectId,
         //   ref: 'StudentSchedule',

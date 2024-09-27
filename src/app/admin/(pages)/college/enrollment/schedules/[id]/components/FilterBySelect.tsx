@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 interface IProps {
@@ -15,9 +15,9 @@ const FilterBySelect = ({ studentBlockType, setStudentBlockType, studentSemester
     <div className='flex flex-col'>
       <span>Filter:</span>
       <div className='flex md:flex-row flex-col gap-5'>
-        {/* <div className='relative bg-slate-50 rounded-lg'> */}
+        <div className='relative bg-slate-50 rounded-lg'>
           {/* <Select onValueChange={field.onChange} value={field.value}> */}
-          {/* <Select
+          <Select
             onValueChange={(value) => {
               setStudentBlockType(value);
             }}
@@ -30,9 +30,9 @@ const FilterBySelect = ({ studentBlockType, setStudentBlockType, studentSemester
               <SelectGroup>
                 {schedules &&
                   schedules.map((item: any, index: any) => {
-                    return item.blockTypeId.section ? (
-                      <SelectItem value={item.blockTypeId.section} key={index} className='capitalize'>
-                        Block {item.blockTypeId.section}
+                    return item.section ? (
+                      <SelectItem value={item.section} key={index} className='capitalize'>
+                        Block {item.section}
                       </SelectItem>
                     ) : (
                       <SelectItem value={item.title} key={index} className='capitalize'>
@@ -49,7 +49,7 @@ const FilterBySelect = ({ studentBlockType, setStudentBlockType, studentSemester
           >
             Select Block Type
           </label>
-        </div> */}
+        </div>
         <div className='relative bg-slate-50 rounded-lg'>
           <Select
             onValueChange={(value) => {

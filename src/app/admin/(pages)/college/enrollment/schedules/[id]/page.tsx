@@ -11,8 +11,8 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [schedules, setSchedules] = useState<any>([]);
   const { data, isLoading, error: isEnError } = useEnrollmentQueryById(params.id);
-  // const { data: b, isLoading: bLoading, error: bError } = useBlockCourseQuery();
-  const { data: b, isLoading: bLoading, error: bError } = useTeacherScheduleCollegeQuery();
+  const { data: b, isLoading: bLoading, error: bError } = useBlockCourseQuery();
+  // const { data: b, isLoading: bLoading, error: bError } = useTeacherScheduleCollegeQuery();
   useEffect(() => {
     if (isLoading || !data) return;
     if (isEnError) console.log(isEnError.message);
@@ -24,10 +24,11 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     if (b && data) {
-      if(b.teacherSchedules){
-        const filteredSchedules = b?.teacherSchedules?.filter((schedule: any) => schedule.blockTypeId !== null || schedule.blockTypeId);
-      setSchedules(filteredSchedules);
-      setIsPageLoading(false);
+      if (data.enrollment && b.blockTypes) {
+        const filteredSchedules = b?.blockTypes?.filter((block: any) => block.courseId._id === data?.enrollment?.courseId._id);
+        // const filteredSchedules = b?.teacherSchedules?.filter((schedule: any) => schedule.blockTypeId !== null || schedule.blockTypeId);
+        setSchedules(filteredSchedules);
+        setIsPageLoading(false);
       }
     }
   }, [b, data]);

@@ -17,7 +17,6 @@ const Page = () => {
   const [en, setEn] = useState<any>(null);
   const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
   useEffect(() => {
-    // if (isCoursesError || !res || !res.courses) {
     if (isCoursesError || !res) {
       return setIsError(true);
     }
@@ -26,8 +25,6 @@ const Page = () => {
       setAllowedCourses(courseTitles);
     }
   }, [res, isCoursesError]);
-
-  // Allowed course codes
   const { data: d } = useSession();
   const session = d!.user;
   const { data: resP, isLoading: PLoading, error: PError } = useProfileQuery(session.id);
@@ -43,11 +40,14 @@ const Page = () => {
     }
     if (resE && resP) {
       if (resP.profile) {
-        if (resP.profile.enrollStatus === 'Pending') {
+        if (resP.profile.enrollStatus && resP.profile.enrollStatus === 'Pending') {
           if (resE.enrollment) {
             setEn(resE.enrollment);
             const courseTitles = res?.courses?.map((course) => course.courseCode.toLowerCase());
             setAllowedCourses(courseTitles);
+            setIsPageLoading(false);
+            return;
+          } else {
             setIsPageLoading(false);
             return;
           }
@@ -55,7 +55,6 @@ const Page = () => {
           setIsPageLoading(false);
           return;
         }
-        return;
       }
     }
   }, [resE, EError, resP, PError, res]);

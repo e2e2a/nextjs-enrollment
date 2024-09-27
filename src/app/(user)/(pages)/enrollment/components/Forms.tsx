@@ -17,7 +17,6 @@ type IProps = {
 const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
   // if (!enrollment) return;
   const [value, setValue] = useState('');
-  console.log(profile);
   useEffect(() => {
     if (!enrollment) return setValue('0');
     if (enrollment && enrollment.step) return setValue(enrollment.step as string);

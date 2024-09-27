@@ -21,7 +21,6 @@ const AddStudentSched = ({ student, b }: IProps) => {
   const [studentSemester, setStudentSemester] = useState('');
   const [pageLoader, setPageLoader] = useState(true);
   const [schedules, setSchedules] = useState<any>([]);
-  console.log(b);
   useEffect(() => {
     if (!student) return;
     if (student) {
@@ -38,10 +37,11 @@ const AddStudentSched = ({ student, b }: IProps) => {
       return;
     }
 
-    const filteredSchedules = b.filter((schedule) => schedule.courseId !== undefined && schedule.courseId !== undefined && schedule.courseId.courseCode === studentCourse);
+    // const filteredSchedules = b.filter((schedule) => schedule.courseId !== undefined && schedule.courseId !== null && schedule.courseId.courseCode === studentCourse);
+    const filteredSchedules = b.filter((schedule) => schedule.courseId !== undefined && schedule.courseId !== null && schedule.year === studentYear && schedule.semester === studentSemester);
 
     setSchedules(filteredSchedules);
-  }, [b, studentCourse]);
+  }, [b, studentCourse, studentYear, studentSemester, studentBlockType]);
 
   const [isEnabled, setIsEnabled] = React.useState(false);
   const [selectedItems, setSelectedItems] = React.useState<{ teacherScheduleId: string }[]>([]);
@@ -96,7 +96,6 @@ const AddStudentSched = ({ student, b }: IProps) => {
       onSettled: () => {},
     });
   };
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -174,69 +173,74 @@ const AddStudentSched = ({ student, b }: IProps) => {
                   <div className='overflow-x-auto w-full '>
                     <div className=' bg-white border border-gray-300'>
                       {schedules.length > 0 &&
-                        schedules.map((s: any, index: any) => {
-                          // Extract and process values
-                          const section = (s.blockTypeId.section ?? '').toLowerCase();
-                          const studentType = (studentBlockType ?? '').toLowerCase();
-                          const blockYear = (s.blockTypeId.year ?? '').toLowerCase();
+                        schedules.map((b: any, index: any) => {
+                          const blockYear = (b.year ?? '').toLowerCase();
                           const year = (studentYear ?? '').toLowerCase();
-                          const blockSemester = (s.blockTypeId.semester ?? '').toLowerCase();
+                          const blockSemester = (b.semester ?? '').toLowerCase();
                           const semester = (studentSemester ?? '').toLowerCase();
-                          if (section === studentType && blockYear === year && blockSemester === semester) {
-                            return (
-                              <CommandItem className='border w-full block' key={s._id} value={s.subjectId.name}>
-                                <div className='flex w-full'>
-                                  <div className='min-w-[80px] justify-center flex items-center'>
-                                    {isSelected(s._id) ? (
-                                      <Button
-                                        disabled={isEnabled}
-                                        onClick={() => handleSelect(s._id)}
-                                        type='button'
-                                        size={'sm'}
-                                        className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
-                                      >
-                                        <Icons.trash className='h-4 w-4' />
-                                      </Button>
-                                    ) : (
-                                      <Button
-                                        onClick={() => {
-                                          handleSelect(s._id);
-                                        }}
-                                        type='button'
-                                        size={'sm'}
-                                        className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-green-500 px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
-                                      >
-                                        <Icons.add className='h-4 w-4' />
-                                        <span className='sm:flex hidden text-xs sm:text-sm'>Add</span>
-                                      </Button>
-                                    )}
-                                  </div>
-                                  <div className='flex flex-col text-xs sm:text-sm'>
-                                    <span className=' font-semibold'>
-                                      Instructor: {s.profileId.firstname} {s.profileId.middlename} {s.profileId.lastname}
-                                    </span>
-                                    <span className=' font-semibold'>
-                                      Course Code: <span className='uppercase'>{s.courseId.courseCode}</span>
-                                    </span>
-                                    <span className=' font-semibold'>
-                                      Subject Code: <span className='uppercase'>{s.subjectId.subjectCode}</span>
-                                    </span>
-                                    <span className=' text-wrap font-medium'>Title: {s.subjectId.name}</span>
-                                    <span className=''>Pre Req.: EMPTY</span>
-                                    <span className=''>Days: {s.days.join(', ')}</span>
-                                    <span className=''>Lec: {s.subjectId.lec}</span>
-                                    <span className=''>Lab: {s.subjectId.lab}</span>
-                                    <span className=''>Unit: {s.subjectId.unit}</span>
-                                    <span className=''>
-                                      Room: <span className='uppercase'>{s.roomId.roomName}</span>
-                                    </span>
-                                    <span className=''>
-                                      Block: <span className='uppercase'>Block {s.blockTypeId.section}</span>
-                                    </span>
-                                  </div>
+                          if (blockYear === year && blockSemester === semester) {
+                            const section = (b.section ?? '').toLowerCase();
+                            const studentType = (studentBlockType ?? '').toLowerCase();
+                            if (section === studentType) {
+                              return (
+                                <div className='' key={b._id}>
+                                  {b.blockSubjects.map((s: any, index: any) => (
+                                    <CommandItem className='border w-full block' key={s._id} value={s.subjectId.name}>
+                                      <div className='flex w-full'>
+                                        <div className='min-w-[80px] justify-center flex items-center'>
+                                          {isSelected(s.teacherScheduleId._id) ? (
+                                            <Button
+                                              disabled={isEnabled}
+                                              onClick={() => handleSelect(s.teacherScheduleId._id)}
+                                              type='button'
+                                              size={'sm'}
+                                              className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
+                                            >
+                                              <Icons.trash className='h-4 w-4' />
+                                            </Button>
+                                          ) : (
+                                            <Button
+                                              onClick={() => {
+                                                handleSelect(s.teacherScheduleId._id);
+                                              }}
+                                              type='button'
+                                              size={'sm'}
+                                              className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-green-500 px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
+                                            >
+                                              <Icons.add className='h-4 w-4' />
+                                              <span className='sm:flex hidden text-xs sm:text-sm'>Add</span>
+                                            </Button>
+                                          )}
+                                        </div>
+                                        <div className='flex flex-col text-xs sm:text-sm'>
+                                          <span className=' font-semibold'>
+                                            Instructor: {s.teacherScheduleId.profileId.firstname} {s.teacherScheduleId.profileId.middlename} {s.teacherScheduleId.profileId.lastname}
+                                          </span>
+                                          <span className=' font-semibold'>
+                                            Course Code: <span className='uppercase'>{s.teacherScheduleId.courseId.courseCode}</span>
+                                          </span>
+                                          <span className=' font-semibold'>
+                                            Subject Code: <span className='uppercase'>{s.teacherScheduleId.subjectId.subjectCode}</span>
+                                          </span>
+                                          <span className=' text-wrap font-medium'>Title: {s.teacherScheduleId.subjectId.name}</span>
+                                          <span className=''>Pre Req.: EMPTY</span>
+                                          <span className=''>Days: {s.teacherScheduleId.days.join(', ')}</span>
+                                          <span className=''>Lec: {s.teacherScheduleId.subjectId.lec}</span>
+                                          <span className=''>Lab: {s.teacherScheduleId.subjectId.lab}</span>
+                                          <span className=''>Unit: {s.teacherScheduleId.subjectId.unit}</span>
+                                          <span className=''>
+                                            Room: <span className='uppercase'>{s.teacherScheduleId.roomId.roomName}</span>
+                                          </span>
+                                          <span className=''>
+                                            Block: <span className='uppercase'>Block {s.teacherScheduleId.blockTypeId.section}</span>
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </CommandItem>
+                                  ))}
                                 </div>
-                              </CommandItem>
-                            );
+                              );
+                            }
                           }
                         })}
                     </div>

@@ -175,4 +175,18 @@ export const columns: ColumnDef<any>[] = [
       );
     },
   },
+  //show this col if row.profileId.enrollStatus !== 'Enrolled
+  {
+    accessorFn: (row) => {return false},
+    id: 'status',
+    header: 'Status',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=''>
+          {user.profileId.enrollStatus !== 'Enrolled' ? user.status : null}
+        </div>
+      );
+    },
+  },
 ];

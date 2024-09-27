@@ -17,6 +17,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
       return;
     }
   }, [data]);
+  console.log('data', data)
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});

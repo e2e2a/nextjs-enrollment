@@ -6,6 +6,7 @@ import Providers from '@/lib/query-provider';
 import { auth } from '@/auth';
 import MessageListener from '@/lib/MessageListener';
 import { LoadingProvider } from '@/components/shared/nav/logout/LoadingContext';
+import Warning from '@/components/shared/Warning';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,14 +17,15 @@ export const metadata: Metadata = {
     icon: '/favicon-32x32.png',
   },
 };
-
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  
   const sessionData = await auth();
   console.log('sessionData', sessionData);
   return (
     <html lang='en' className='' suppressHydrationWarning>
       {/* <body className={`custom-scrollbar-body ${inter.className}`} > */}
       <body className={inter.className}>
+        <Warning />
         <LoadingProvider>
           <Providers sessionData={sessionData}>
             {/* <MessageListener> */}
