@@ -25,7 +25,7 @@ export const getAllRoom = async () => {
 };
 export const getRoomById = async (id: any) => {
   try {
-    const r = await Room.findById(id);
+    const r = await Room.findById(id).exec();
     return r;
   } catch (error) {
     console.log(error);

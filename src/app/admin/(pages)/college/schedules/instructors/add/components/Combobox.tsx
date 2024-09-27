@@ -36,9 +36,12 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
                   <Button variant='outline' role='combobox' aria-expanded={open} className='w-full justify-between font-normal'>
                     {value
                       ? (() => {
-                          const selectedItem = selectItems.find((item: any) => getFullName(item) === value);
+                          const selectedItem = selectItems.find((item: any) => getFullName(item) === field.value);
                           if (selectedItem) {
-                            return `${selectedItem.firstname} ${selectedItem.middlename} ${selectedItem.lastname}`;
+                            const fullName = selectedItem.extensionName
+                              ? `${selectedItem.firstname} ${selectedItem.middlename} ${selectedItem.lastname} ${selectedItem.extensionName}`
+                              : `${selectedItem.firstname} ${selectedItem.middlename} ${selectedItem.lastname}`;
+                            return `${fullName}`;
                           }
                           return placeholder;
                         })()
@@ -68,8 +71,7 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
                                 setOpen(false);
                               }}
                             >
-                              <Check className={cn('mr-2 h-4 w-4', value === getFullName(item) ? 'opacity-100' : 'opacity-0')} />
-                              {/* {item.firstname} */}
+                              <Check className={cn('mr-2 h-4 w-4', field.value === getFullName(item) ? 'opacity-100' : 'opacity-0')} />
                               <div className='flex gap-2 items-center'>
                                 <div className=''>
                                   <Image className='h-9 w-9' src={item.imageUrl ? item.imageUrl : '/icons/profile-placeholder.svg'} alt={item.firstname} width={10} height={10} />

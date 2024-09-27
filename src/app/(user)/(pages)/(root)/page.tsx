@@ -34,7 +34,7 @@ const Home = () => {
                 </span>
               </h1>
               <p className='text-sm sm:text-[15px] font-normal text-muted-foreground'>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We're excited to have you join us. We look forward to your growth, learning, and the contributions you'll make to our vibrant school community.
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We&apos;re excited to have you join us. We look forward to your growth, learning, and the contributions you&apos;ll make to our vibrant school community.
               </p>
             </div>
           </div>

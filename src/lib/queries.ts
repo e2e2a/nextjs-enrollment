@@ -14,6 +14,7 @@ import {
   getCourseResponse,
   getCurriculumsResponse,
   getEnrollmentResponse,
+  getRoomResponse,
   getSingleBlockCourseResponse,
   getSingleEnrollmentResponse,
   getSingleProfileResponse,
@@ -66,7 +67,7 @@ import {
 import { createCollegeCourseBlockAction, getAllBlockTypeAction, getBlockTypeByIdAction } from '@/action/college/courses/blocks';
 import { createSubjectCollegeAction, getSubjectCategoryCollegeAction } from '@/action/college/subjects/admin';
 import { adminCreateUserWithRoleAction, getUserRoleAdminAction, getUserRoleStudentAction, getUserRoleTeachertAction } from '@/action/user';
-import { createRoomAction, getAllRoomAction } from '@/action/rooms';
+import { createRoomAction, getAllRoomAction, getRoomByIdAction } from '@/action/rooms';
 import {
   createTeacherScheduleAction,
   getAllTeacherProfileAction,
@@ -653,6 +654,18 @@ export const useRoomQuery = () => {
     refetchOnWindowFocus: true,
   });
 };
+
+export const useRoomQueryById = (id: string) => {
+  return useQuery<getRoomResponse, Error>({
+    queryKey: ['RoomById', id],
+    enabled: !!id,
+    queryFn: () => getRoomByIdAction(id),
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
+
 export const useCreateRoomMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({

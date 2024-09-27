@@ -28,7 +28,7 @@ const daysOfWeek = [
   { label: 'Sunday', value: 'Su' },
 ];
 const Page = () => {
-  const [isNotEditable, setIsNotEditable] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [loading, setLoading] = useState(true);
   const [rooms, setRooms] = useState([{}]);
   const [teacherId, setTeacherId] = useState('');
@@ -77,6 +77,7 @@ const Page = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof TeacherScheduleCollegeValidator>> = async (data) => {
+    setIsDisabled(true);
     setShowLink(false);
     setRoomLink('');
     setInstructorLink('');
@@ -99,6 +100,7 @@ const Page = () => {
             makeToastSucess(res.message);
             return;
           default:
+            console.log(res);
             if (res.error) {
               makeToastError(res.error);
               setShowLink(true);
@@ -109,7 +111,9 @@ const Page = () => {
             return;
         }
       },
-      onSettled: () => {},
+      onSettled: () => {
+        setIsDisabled(false);
+      },
     });
   };
   return (
@@ -123,16 +127,18 @@ const Page = () => {
               <CardTitle className='text-left text-lg xs:text-2xl sm:text-3xl font-poppins'>Register a New Instructor Schedule!</CardTitle>
               <CardDescription className='text-xs sm:text-sm hidden'></CardDescription>
               <div className='text-xs sm:text-sm'>
-                To register a new teacher schedule, start by selecting the course from the list provided. This list is populated with courses created and managed by the administrator. Next, specify the academic year and semester for the block to ensure it is
-                correctly aligned with the course schedule. Providing this information will help synchronize the block with the appropriate course and academic period.
-                <div className='flex flex-col mt-2'>
+                <p className='text-sm sm:text-[15px] font-normal text-muted-foreground'>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To register a new instructor, please fill out the necessary details, including personal information, qualifications, and assigned courses. This form ensures accurate scheduling and smooth onboarding of
+                  instructors into the system.
+                </p>
+                {/* <div className='flex flex-col mt-2'>
                   <span className='text-orange-300 font-medium'>Note:</span>
                   <span>• Newly Registered teacher must have been registered in blocks/sections schedule to display this in student. </span>
                   <div className='pl-3 flex flex-col'>
                     <span className='font-medium'>Features to consider:</span>
                     <span className=''>- Adding/Droping Subjects with schedule</span>
                   </div>
-                </div>
+                </div> */}
               </div>
             </CardHeader>
             {showLink && (
@@ -141,12 +147,12 @@ const Page = () => {
                   <div className='flex flex-col py-5 w-full sm:flex-row gap-5 items-center'>
                     <span className='text-red'>Schedule Conflict</span>
                     {instructorLink && (
-                      <Link href={instructorLink} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
+                      <Link href={`/admin/college/schedules/instructors/${instructorLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
                         See Professor Schedule
                       </Link>
                     )}
                     {roomLink && (
-                      <Link href={roomLink} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
+                      <Link href={`/admin/college/rooms/schedules/${roomLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
                         See Room Schedule
                       </Link>
                     )}
@@ -166,10 +172,6 @@ const Page = () => {
                     <Input name={'endTime'} type={'time'} form={formCollege} label={'End Time:'} classNameInput={''} />
                   </div>
                 </CardContent>
-                {/* this link is helpful. sending an id to view the teacher schedules if its conflict */}
-                {/* <Link href='http://localhost:3000' target='_blank' rel='noopener noreferrer'>
-                  Open Example in New Tab
-                </Link> */}
                 <CardFooter>
                   <div className='flex w-full justify-center md:justify-end items-center mt-4'>
                     <Button type='submit' variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-bold'>

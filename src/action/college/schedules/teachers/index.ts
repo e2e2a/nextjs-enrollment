@@ -16,14 +16,11 @@ export const createTeacherScheduleAction = async (data: any) => {
     const room = await getRoomById(data.roomId);
     if (!room) return { error: 'There is no Room found.', status: 404 };
     const teacherSchedules = await getAllTeacherScheduleByProfileId(teacher._id);
-    console.log('teacherSchedules', teacherSchedules);
     const [newStartHours, newStartMinutes] = data.startTime.split(':').map(Number);
     const [newEndHours, newEndMinutes] = data.endTime.split(':').map(Number);
 
     if (teacherSchedules && teacherSchedules.length > 0) {
-      //checking conflict in teacher schedule
       for (const schedule of teacherSchedules) {
-        console.log('my new schedules: ' + schedule);
         const existingDays = schedule.days; // Existing schedule days
         const [existingStartHours, existingStartMinutes] = schedule.startTime.split(':').map(Number);
         const [existingEndHours, existingEndMinutes] = schedule.endTime.split(':').map(Number);
@@ -36,7 +33,7 @@ export const createTeacherScheduleAction = async (data: any) => {
           if (isTimeOverlap) {
             // we need to pass the teacherSchedule._id to the frontend and use to see the schedule of the teacher
             // return { error: 'Teacher Schedule conflict. Please adjust the times or days.', errorInsLink: `/${teacherSchedule._id}`, status: 409 };
-            return { error: 'Instructor Schedule conflict. Please adjust the times or days.', errorInsLink: `/`, status: 409 };
+            return { error: 'Instructor Schedule conflict. Please adjust the times or days.', errorInsLink: `${teacher._id}`, status: 409 };
           }
         }
       }
@@ -44,7 +41,6 @@ export const createTeacherScheduleAction = async (data: any) => {
       console.log('getRooms', getRooms);
       let existingSchedules: { days: string[]; startTime: string; endTime: string }[] = [];
 
-      // Collect all existing schedules for the room
       if (getRooms && getRooms.length > 0) {
         for (const teacherSchedule of getRooms) {
           existingSchedules.push({
@@ -55,27 +51,25 @@ export const createTeacherScheduleAction = async (data: any) => {
         }
       }
 
-      // Check for conflicts with collected schedules
-      for (const existingSchedule of existingSchedules) {
-        const existingDays = existingSchedule.days;
-        const [existingStartHours, existingStartMinutes] = existingSchedule.startTime.split(':').map(Number);
-        const [existingEndHours, existingEndMinutes] = existingSchedule.endTime.split(':').map(Number);
-
-        // Check if the days overlap
-        const isDayOverlap = data.days.some((day: string) => existingDays.includes(day));
-
-        if (isDayOverlap) {
-          // Check if the time ranges overlap
-          const isTimeOverlap =
-            (newStartHours < existingEndHours || (newStartHours === existingEndHours && newStartMinutes < existingEndMinutes)) && (newEndHours > existingStartHours || (newEndHours === existingStartHours && newEndMinutes > existingStartMinutes));
-
-          if (isTimeOverlap) {
-            // If there's an overlap, return a conflict response
-            return {
-              error: 'Room Schedule conflict. Please adjust the times or days.',
-              status: 409,
-              errorRoomLink: `/${data.roomId}`,
-            };
+      if(existingSchedules.length > 0) {
+        for (const existingSchedule of existingSchedules) {
+          const existingDays = existingSchedule.days;
+          const [existingStartHours, existingStartMinutes] = existingSchedule.startTime.split(':').map(Number);
+          const [existingEndHours, existingEndMinutes] = existingSchedule.endTime.split(':').map(Number);
+  
+          const isDayOverlap = data.days.some((day: string) => existingDays.includes(day));
+  
+          if (isDayOverlap) {
+            const isTimeOverlap =
+              (newStartHours < existingEndHours || (newStartHours === existingEndHours && newStartMinutes < existingEndMinutes)) && (newEndHours > existingStartHours || (newEndHours === existingStartHours && newEndMinutes > existingStartMinutes));
+  
+            if (isTimeOverlap) {
+              return {
+                error: 'Room Schedule conflict. Please adjust the times or days.',
+                status: 409,
+                errorRoomLink: `/${data.roomId}`,
+              };
+            }
           }
         }
       }

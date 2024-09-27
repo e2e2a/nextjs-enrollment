@@ -428,6 +428,9 @@ export interface IRoom {
 export type getAllRoomResponse = {
   rooms?: IRoom[];
 } & IResponse;
+export type getRoomResponse = {
+  room?: IRoom;
+} & IResponse;
 export type ISchoolYear = {
   id?: any;
   _id: any;
