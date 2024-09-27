@@ -7,7 +7,7 @@ import { getEnrollmentByProfileId } from '@/services/enrollment';
 import { createStudentCurriculum, getAllStudentCurriculum, getStudentCurriculumById, getStudentCurriculumByStudentId } from '@/services/studentCurriculum';
 import { getStudentProfileById } from '@/services/studentProfile';
 import { getSubjectCategoryCollege } from '@/services/subject';
-import { getAllCurriculumsResponse, getAllStudentCurriculumsResponse, getCurriculumsResponse } from '@/types';
+import { getAllCurriculumsResponse, getAllStudentCurriculumsResponse, getCurriculumsResponse, getStudentCurriculumsResponse } from '@/types';
 
 export const getAllCurriculumAction = async (): Promise<getAllCurriculumsResponse> => {
   try {
@@ -135,7 +135,7 @@ export const getAllStudentCurriculumAction = async (): Promise<getAllStudentCurr
   }
 };
 
-export const getStudentCurriculumByStudentIdAction = async (id: any): Promise<getCurriculumsResponse> => {
+export const getStudentCurriculumByStudentIdAction = async (id: any): Promise<getStudentCurriculumsResponse> => {
   try {
     await dbConnect();
     const p = await getStudentCurriculumByStudentId(id);

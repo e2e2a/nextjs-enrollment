@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
@@ -10,18 +10,17 @@ import { z } from 'zod';
 import { CurriculumSubjectValidator } from '@/lib/validators/AdminValidator';
 import { useUpdateCurriculumLayerSubjectMutation } from '@/lib/queries';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import Input from './Input';
-import { cn } from '@/lib/utils';
-import { Check } from 'lucide-react';
+
 interface IProps {
   curriculum: any;
   s: any;
 }
 
 const AddFormSubject = ({ curriculum, s }: IProps) => {
-  const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
+  const [selectedItems, setSelectedItems] = React.useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId._id) || []);
+  const [initialStateSelect, setInitialStateSelect] = React.useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId._id) || []);
+  const hasChanges = selectedItems.length !== initialStateSelect.length || selectedItems.some((item) => !initialStateSelect.includes(item)) || initialStateSelect.some((item) => !selectedItems.includes(item));
   const mutation = useUpdateCurriculumLayerSubjectMutation();
   const form = useForm<z.infer<typeof CurriculumSubjectValidator>>({
     resolver: zodResolver(CurriculumSubjectValidator),
@@ -32,8 +31,8 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
   const handleSelect = (subjectId: string) => {
     setSelectedItems((prevSelected) => {
       const updatedSelection = prevSelected.includes(subjectId)
-        ? prevSelected.filter((d) => d !== subjectId) // Remove if already selected
-        : [...prevSelected, subjectId]; // Add if not selected
+        ? prevSelected.filter((d) => d !== subjectId) 
+        : [...prevSelected, subjectId]; 
       // Sort the selected days according to the standard day order
       return updatedSelection.sort((a, b) => subjectId.indexOf(a) - subjectId.indexOf(b));
     });
@@ -50,9 +49,8 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
   const actionFormSubmit = (data: z.infer<typeof CurriculumSubjectValidator>) => {
     const dataa = {
       ...data,
-      CId: curriculum._id
+      CId: curriculum._id,
     };
-    console.log(dataa)
     mutation.mutate(dataa, {
       onSuccess: (res: any) => {
         console.log(res);
@@ -91,8 +89,8 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
           <DialogDescription>Please fill the year, semester, SY and List Order to follow.</DialogDescription>
         </DialogHeader>
         <div className=''>
-          {selectedItems.length > 0 && (
-            <div className='flex justify-between'>
+          <div className='flex justify-between'>
+            {selectedItems.length > 0 && (
               <span className=''>
                 Add list:
                 <div className='flex flex-col'>
@@ -101,17 +99,21 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                     return selectedItem ? (
                       <span key={selectedItem._id} className='text-green-500 flex items-center gap-3'>
                         • {selectedItem.name}
-                        <span className='text-red cursor-pointer' onClick={() => handleRemove(selectedItem._id)}><Icons.trash className='h-3 w-3' /></span>
+                        <span className='text-red cursor-pointer' onClick={() => handleRemove(selectedItem._id)}>
+                          <Icons.trash className='h-3 w-3' />
+                        </span>
                       </span>
                     ) : null;
                   })}
                 </div>
               </span>
+            )}
+            {hasChanges && (
               <Button type='submit' className='bg-blue-600 text-neutral-50' size={'sm'} onClick={form.handleSubmit(actionFormSubmit)} variant='secondary'>
                 Save
               </Button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         <div className='overflow-auto w-full bg-slate-50 rounded-lg'>
           <Form {...form}>
@@ -127,7 +129,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                         <CommandList className='w-full'>
                           <CommandEmpty>No Descriptive Title found.</CommandEmpty>
                           <CommandGroup className='w-full'>
-                            <div className='overflow-x-auto w-full '>
+                            <div className='overflow-x-auto w-full hidden lg:flex'>
                               <div className=' bg-white border border-gray-300'>
                                 <div className='flex items-center text-xs bg-gray-200'>
                                   <span className='w-[150px]  flex justify-center'>Actions</span>
@@ -162,7 +164,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                       </div>
                                       <span className='w-[150px] '>{item.subjectCode}</span>
                                       <span className='w-[150px] text-wrap'>{item.name}</span>
-                                      <span className='w-[150px] flex justify-center'>EMPTY</span>
+                                      <span className='w-[150px] flex justify-center'>{item.preReq}</span>
                                       <span className='w-[150px] flex justify-center'>{item.lec}</span>
                                       <span className='w-[150px] flex justify-center'>{item.lab}</span>
                                       <span className='w-[150px] flex justify-center'>{item.unit}</span>
@@ -170,6 +172,40 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                   </CommandItem>
                                 ))}
                               </div>
+                            </div>
+                            <div className='flex flex-col gap-y-6 lg:hidden'>
+                              {s.map((item: any, index: any) => (
+                                <CommandItem className='border w-full block' key={item._id} value={item.name}>
+                                  <div className='flex flex-col w-full '>
+                                    <div className='flex items-center justify-end bg-gray-200 border border-neutral-50'>
+                                      {selectedItems.includes(item._id) ? (
+                                        <Button onClick={() => handleSelect(item._id)} type='button' size={'sm'} className={'focus-visible:ring-0 flex bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}>
+                                          <Icons.trash className='h-4 w-4' />
+                                          <span className='sm:flex hidden text-xs sm:text-sm'>Remove</span>
+                                        </Button>
+                                      ) : (
+                                        <Button
+                                          onClick={() => {
+                                            handleSelect(item._id);
+                                          }}
+                                          type='button'
+                                          size={'sm'}
+                                          className={'focus-visible:ring-0 flex bg-transparent bg-green-500 px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
+                                        >
+                                          <Icons.add className='h-4 w-4' />
+                                          <span className='sm:flex hidden text-xs sm:text-sm'>Add</span>
+                                        </Button>
+                                      )}
+                                    </div>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Subject Code: {item.subjectCode}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {item.name}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3 uppercase'>Pre Req.: {item.preReq}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lec: {item.lec}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lab: {item.lab}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Unit: {item.unit}</span>
+                                  </div>
+                                </CommandItem>
+                              ))}
                             </div>
                           </CommandGroup>
                         </CommandList>

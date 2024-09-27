@@ -1,5 +1,4 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import React from 'react';
 import AddFormSubject from './AddFormSubject';
 
@@ -29,7 +28,7 @@ const CurriculumTable = ({ data, s }: IProps) => {
               <table className='min-w-full bg-white border'>
                 <thead>
                   <tr className='bg-gray-200 text-black'>
-                    <th className='px-4 py-2 border'>Course Code</th>
+                    <th className='px-4 py-2 border'>Subject Code</th>
                     <th className='px-4 py-2 border'>Descriptive Name</th>
                     <th className='px-4 py-2 border'>Pre. Req.</th>
                     <th className='px-4 py-2 border'>Lec Unit/s</th>
@@ -43,7 +42,7 @@ const CurriculumTable = ({ data, s }: IProps) => {
                       <tr key={idx}>
                         <td className='px-4 py-2 border text-center'>{subject.subjectId.subjectCode}</td>
                         <td className='px-4 py-2 border text-center'>{subject.subjectId.name}</td>
-                        <td className='px-4 py-2 border text-center'>EMPTY</td>
+                        <td className='px-4 py-2 border text-center'>{subject.subjectId.preReq}</td>
                         <td className='px-4 py-2 border text-center'>{subject.subjectId.lec}</td>
                         <td className='px-4 py-2 border text-center'>{subject.subjectId.lab}</td>
                         <td className='px-4 py-2 border text-center'>{subject.subjectId.unit}</td>

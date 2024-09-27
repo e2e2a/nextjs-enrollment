@@ -23,15 +23,9 @@ interface IProps {
 const AddFormSubject = ({ curriculum, s }: IProps) => {
   const [subjects, setSubjects] = React.useState<any>({});
   // const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
-  const [selectedItems, setSelectedItems] = React.useState<string[]>(
-    curriculum?.subjectsFormat?.map((s: any) => s.subjectId._id) || []
-  );
-  const [initialStateSelect, setInitialStateSelect] = React.useState<string[]>(
-    curriculum?.subjectsFormat?.map((s: any) => s.subjectId._id) || []
-  );
-  const hasChanges = selectedItems.length !== initialStateSelect.length || 
-                      selectedItems.some(item => !initialStateSelect.includes(item)) ||
-                      initialStateSelect.some(item => !selectedItems.includes(item));
+  const [selectedItems, setSelectedItems] = React.useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId._id) || []);
+  const [initialStateSelect, setInitialStateSelect] = React.useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId._id) || []);
+  const hasChanges = selectedItems.length !== initialStateSelect.length || selectedItems.some((item) => !initialStateSelect.includes(item)) || initialStateSelect.some((item) => !selectedItems.includes(item));
   const mutation = useUpdateStudentCurriculumLayerSubjectMutation();
   const form = useForm<z.infer<typeof CurriculumSubjectValidator>>({
     resolver: zodResolver(CurriculumSubjectValidator),
@@ -90,8 +84,8 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size={'sm'} className={'focus-visible:ring-0 flex mb-2 bg-transparent bg-blue-500 px-2 py-0 gap-x-1 justify-center text-neutral-50 font-medium'}>
-          <Icons.add className='h-4 w-4' />
+        <Button size={'sm'} className={'w-full group focus-visible:ring-0 flex my-1 text-black bg-transparent hover:bg-blue-600 px-2 py-0 gap-x-1 justify-start items-center hover:text-neutral-50 font-medium'}>
+          <Icons.squarePen className='h-4 w-4' />
           <span className='flex'>Edit Subjects</span>
         </Button>
       </DialogTrigger>
@@ -149,7 +143,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                         <CommandList className='w-full'>
                           <CommandEmpty>No Descriptive Title found.</CommandEmpty>
                           <CommandGroup className='w-full'>
-                            <div className='overflow-x-auto w-full '>
+                            <div className='overflow-x-auto w-full hidden lg:flex'>
                               <div className=' bg-white border border-gray-300'>
                                 <div className='flex items-center text-xs bg-gray-200'>
                                   <span className='w-[150px]  flex justify-center'>Actions</span>
@@ -188,7 +182,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                         )}
                                       </div>
                                       <span className='w-[150px] '>{item.subjectId.subjectCode}</span>
-                                      <span className='w-[150px] text-wrap'>{item.subjectId.name}asdasdasd asdasd asdasdasdasdasdasd asdasd</span>
+                                      <span className='w-[150px] text-wrap'>{item.subjectId.name}</span>
                                       <span className='w-[150px] flex justify-center'>EMPTY</span>
                                       <span className='w-[150px] flex justify-center'>{item.subjectId.lec}</span>
                                       <span className='w-[150px] flex justify-center'>{item.subjectId.lab}</span>
@@ -197,6 +191,40 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                   </CommandItem>
                                 ))}
                               </div>
+                            </div>
+                            <div className='flex flex-col gap-y-6 lg:hidden'>
+                              {subjects.map((item: any, index: any) => (
+                                <CommandItem className='border w-full block' key={item.subjectId._id} value={item.subjectId.name}>
+                                  <div className='flex flex-col w-full '>
+                                    <div className='flex items-center justify-end bg-gray-200 border border-neutral-50'>
+                                      {selectedItems.includes(item.subjectId._id) ? (
+                                        <Button onClick={() => handleSelect(item.subjectId._id)} type='button' size={'sm'} className={'focus-visible:ring-0 flex bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}>
+                                          <Icons.trash className='h-4 w-4' />
+                                          <span className='sm:flex hidden text-xs sm:text-sm'>Remove</span>
+                                        </Button>
+                                      ) : (
+                                        <Button
+                                          onClick={() => {
+                                            handleSelect(item.subjectId._id);
+                                          }}
+                                          type='button'
+                                          size={'sm'}
+                                          className={'focus-visible:ring-0 flex bg-transparent bg-green-500 px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
+                                        >
+                                          <Icons.add className='h-4 w-4' />
+                                          <span className='sm:flex hidden text-xs sm:text-sm'>Add</span>
+                                        </Button>
+                                      )}
+                                    </div>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Subject Code: {item.subjectId.subjectCode}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {item.subjectId.name}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3 uppercase'>Pre Req.: {item.subjectId.preReq}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lec: {item.subjectId.lec}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lab: {item.subjectId.lab}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Unit: {item.subjectId.unit}</span>
+                                  </div>
+                                </CommandItem>
+                              ))}
                             </div>
                           </CommandGroup>
                         </CommandList>

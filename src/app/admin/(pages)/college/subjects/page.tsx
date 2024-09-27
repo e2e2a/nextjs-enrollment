@@ -4,18 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import { useSubjectCollegeQuery } from '@/lib/queries';
-
-interface ISubject {
-  id: string;
-  category: string;
-  subjectCode: string;
-  name: string;
-  lec?: string;
-  lab?: string;
-  unit?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { ISubject } from '@/types';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
@@ -41,7 +30,18 @@ const Page = () => {
           <Loader />
         </div>
       ) : (
-        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>{isError ? <div className=''>404</div> : <DataTable columns={columns} data={subjects as ISubject[]} />}</div>
+        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
+          {isError ? (
+            <div className=''>404</div>
+          ) : (
+            <div className=''>
+              <div className='flex items-center py-4 text-black w-full justify-center'>
+                <h1 className='sm:text-3xl text-xl font-bold '>Subjects Management</h1>
+              </div>
+              <DataTable columns={columns} data={subjects as ISubject[]} />
+            </div>
+          )}
+        </div>
       )}
     </>
   );

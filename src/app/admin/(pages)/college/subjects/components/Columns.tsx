@@ -13,19 +13,23 @@ import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
 import { useState } from 'react';
 import ActionsCell from './ActionsCell';
 import Image from 'next/image';
+import { ISubject } from '@/types';
 
-interface ISubject {
-    id: string;
-    category: string;
-    subjectCode: string;
-    name: string;
-    lec?: string;
-    lab?: string;
-    unit?: string;
-    createdAt: Date;
-    updatedAt: Date;
-  }
+
 export const columns: ColumnDef<ISubject>[] = [
+  {
+    accessorFn: (row) => row.fixedRateAmount, // Use accessorFn for nested fields
+    id: 'rate amount.',
+    header: 'Rate Amount.',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.fixedRateAmount}
+        </div>
+      );
+    },
+  },
   {
     accessorFn: (row) => row.subjectCode,
     accessorKey: 'subjectCode',
@@ -68,6 +72,19 @@ export const columns: ColumnDef<ISubject>[] = [
     },
   },
 
+  {
+    accessorFn: (row) => row.preReq, // Use accessorFn for nested fields
+    id: 'pre req.',
+    header: 'Pre Req.',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.preReq}
+        </div>
+      );
+    },
+  },
   {
     accessorFn: (row) => row.lec, // Use accessorFn for nested fields
     id: 'lec',

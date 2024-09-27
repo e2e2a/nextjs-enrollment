@@ -17,6 +17,7 @@ import {
   getSingleBlockCourseResponse,
   getSingleEnrollmentResponse,
   getSingleProfileResponse,
+  getStudentCurriculumsResponse,
   getSubjectCategoryCollegeResponse,
   getTeacherProfileResponse,
   getTeacherScheduleResponse,
@@ -842,7 +843,7 @@ export const useStudentCurriculumQuery = () => {
 };
 
 export const useStudentCurriculumQueryByStudentId = (id: any) => {
-  return useQuery<getCurriculumsResponse, Error>({
+  return useQuery<getStudentCurriculumsResponse, Error>({
     queryKey: ['StudentCurriculumById', id],
     queryFn: () => getStudentCurriculumByStudentIdAction(id),
     retry: 0,

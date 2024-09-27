@@ -7,47 +7,35 @@ import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/shared/Icons';
 import AddForm from './components/AddForm';
 import CurriculumTable from './components/CurriculumTable';
+import ViewLackingSubjects from './components/ViewLackingSubjects';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isPageError, setIsPageError] = useState(false);
-  
+
   const { data, isLoading, error: isEnError } = useStudentCurriculumQueryByStudentId(params.id);
-  const { data:syData, isLoading:syLoading, error: syError } = useSchoolYearQuery();
+  const { data: syData, isLoading: syLoading, error: syError } = useSchoolYearQuery();
   const { data: sData, isLoading: sLoading, error: sError } = useCurriculumQueryByCourseId(data?.curriculum?.courseId._id);
   const mutation = useCreateStudentCurriculumMutation();
   useEffect(() => {
     if (params.id.length === 24) {
-      if (isLoading || !data) return;
-      if (isEnError) return;
-      if (data) {
+      if (isEnError || !data) return;
+      if (syError || !syData) return;
+      if (sError || !sData) return;
+      if (data && syData && sData) {
         setIsPageLoading(false);
       }
     } else {
       setIsPageError(true);
     }
-  }, [data, isLoading, isEnError,params]);
-  useEffect(() => {
-      if (syLoading || !syData) return;
-      if (syError) return;
-      if (syData) {
-        setIsPageLoading(false);
-      }
-  }, [syData, syLoading, syError]);
-  useEffect(() => {
-    if (sLoading || !sData) return;
-    if (sError) console.log(sError);
-    if (sData) {
-      console.log('meow');
-    }
-  }, [sData, sLoading, sError]);
+  }, [data, isEnError, syData, syError, sData, sError, params]);
+
   const actionFormSubmit = () => {
     const data = {
       studentId: params.id,
     };
     mutation.mutate(data, {
       onSuccess: (res: any) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
@@ -93,13 +81,15 @@ const Page = ({ params }: { params: { id: string } }) => {
         </div>
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
-          <div className='flex items-center py-4 text-black w-full text-center'>
+          <div className='flex flex-col items-center py-4 text-black w-full text-center'>
+            <h1 className='sm:text-2xl text-xl font-bold w-full uppercase text-center'>
+              {data?.curriculum?.studentId.lastname}, {data?.curriculum?.studentId.firstname} {data?.curriculum?.studentId.extensionName && data?.curriculum?.studentId.extensionName + '.'} {data?.curriculum?.studentId.middlename}{' '}
+            </h1>
             <h1 className='sm:text-3xl text-xl font-bold w-full uppercase text-center'>{data?.curriculum?.courseId?.name}</h1>
           </div>
-          <div className=' w-full flex items-center justify-center'>
-            {/* <Button type='button' size={'sm'} className='bg-green-500 text-white flex gap-1 px-2'>
-              <Icons.add className='w-4 h-4' /> Add New
-            </Button> */}
+          <div className=' w-full flex items-center justify-center'></div>
+          <div className=' w-full flex gap-2 flex-col  sm:flex-row items-center justify-center'>
+            {data?.curriculum?.curriculum.length > 0 && <ViewLackingSubjects c={data?.curriculum} syData={syData?.sy} sData={sData?.curriculum?.curriculum} />}
             <AddForm c={data?.curriculum} syData={syData?.sy} />
           </div>
           <div className=''>

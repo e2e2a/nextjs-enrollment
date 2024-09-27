@@ -295,9 +295,13 @@ export type getBlockCourseResponse = {
 export type getSingleBlockCourseResponse = {
   blockType?: IBlockType;
 } & IResponse;
-interface ISubject {
-  id: string;
+
+export interface ISubject {
+  id?: any;
+  _id: any;
   category: string;
+  fixedRateAmount: string;
+  preReq: string;
   subjectCode: string;
   name: string;
   lec?: string;
@@ -463,7 +467,9 @@ export type IStudentCurriculum = {
 export type getAllStudentCurriculumsResponse = {
   curriculums?: IStudentCurriculum[];
 } & IResponse;
-
+export type getStudentCurriculumsResponse = {
+  curriculum?: IStudentCurriculum;
+} & IResponse;
 export type ITeacherSchedule = {
   id?: any;
   _id: any;

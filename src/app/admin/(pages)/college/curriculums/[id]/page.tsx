@@ -15,24 +15,16 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data:sData, isLoading: sLoading, error: sError } = useSubjectCollegeQuery();
   useEffect(() => {
     if (params.id.length === 24) {
-      if (isLoading || !data) return;
+      if (isEnError || !data) return;
+      if (sError || !sData) return;
       if (isEnError) console.log(isEnError);
-      if (data) {
+      if (data && sData) {
         setIsPageLoading(false);
       }
     } else {
       setIsPageError(true);
     }
-  }, [data, isLoading, isEnError,params]);
-  useEffect(() => {
-      if (sLoading || !sData) return;
-      if (sError) console.log(sError);
-      if (sData) {
-        console.log('meow')
-      }
-    
-  }, [sData, sLoading, sError]);
-
+  }, [data, isEnError, sData, sError, params]);
 
   return (
     <>

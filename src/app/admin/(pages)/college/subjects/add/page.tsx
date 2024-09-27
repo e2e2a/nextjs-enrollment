@@ -21,7 +21,9 @@ const Page = () => {
   const formCollege = useForm<z.infer<typeof SubjectCollegeValidator>>({
     resolver: zodResolver(SubjectCollegeValidator),
     defaultValues: {
-      category: "College",
+      category: 'College',
+      fixedRateAmount: '0.00',
+      preReq: '',
       subjectCode: '',
       name: '',
       lec: '',
@@ -31,28 +33,23 @@ const Page = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof SubjectCollegeValidator>> = async (data) => {
-    setIsNotEditable(true)
+    setIsNotEditable(true);
     data.subjectCode = data.subjectCode.toLowerCase();
-  
-    console.log('data', data);
+
     mutation.mutate(data, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
             // return (window.location.reload());
             formCollege.reset();
-            makeToastSucess(res.message)
+            makeToastSucess(res.message);
             return;
           default:
             if (res.error) return makeToastError(res.error);
             return;
         }
-      },
-      onError: (error) => {
-        console.error(error.message);
       },
       onSettled: () => {
         setIsNotEditable(false);
@@ -74,6 +71,8 @@ const Page = () => {
             <CardContent className='w-full '>
               <div className='flex flex-col gap-4'>
                 {/* <SelectInput name={'category'} selectItems={selectType.courseType} form={form} label={'Select Category:'} placeholder={'Select course'} setCategorySelected={setCategorySelected} /> */}
+                <Input name={'fixedRateAmount'} type={'text'} form={formCollege} label={'Rate Amount:'} classNameInput={'capitalize'} />
+                <Input name={'preReq'} type={'text'} form={formCollege} label={'Pre. Req.:'} classNameInput={'capitalize'} />
                 <Input name={'subjectCode'} type={'text'} form={formCollege} label={'Subject Code:'} classNameInput={'capitalize'} />
                 <Input name={'name'} type={'text'} form={formCollege} label={'Descriptive Title:'} classNameInput={'capitalize'} />
                 <Input name={'lec'} type={'text'} form={formCollege} label={'Lec:'} classNameInput={'capitalize'} />

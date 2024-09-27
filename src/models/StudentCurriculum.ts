@@ -38,7 +38,7 @@ const schema = new Schema<IStudentCurriculum>(
               type: Number,
             },
             grade: {
-              type: Number,
+              type: String,
             },
             subjectId: {
               type: mongoose.Schema.Types.ObjectId,
