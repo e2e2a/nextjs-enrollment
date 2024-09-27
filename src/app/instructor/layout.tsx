@@ -4,17 +4,18 @@ import Nav from './components/Nav';
 import { auth } from '@/auth';
 
 const Layout = async ({ children }: { children: ReactNode }) => {
-  
   const sessionData = await auth();
+
   if (!sessionData) {
     return redirect('/sign-in');
   }
-  if (sessionData.user.role !== 'TEACHER') {
-    return redirect('/sign-in');
-  }
-
-  if (sessionData && !sessionData.user.profileVerified) {
-    return redirect('/profile');
+  // if (sessionData && !sessionData.user.profileVerified) {
+  //   return redirect('/instructor/profile');
+  // }
+  if (sessionData.user.role === 'STUDENT') {
+    return redirect('/');
+  } else if (sessionData.user.role === 'ADMIN') {
+    return redirect('/admin');
   }
 
   return (

@@ -8,7 +8,7 @@ const Home = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data: s } = useSession();
   const { data: pData, isLoading, error } = useProfileAdminQuery(s?.user.id as string);
-  
+
   useEffect(() => {
     if (error || !pData) {
       return;
@@ -35,7 +35,7 @@ const Home = () => {
                 </span>
               </h1>
               <p className='text-sm sm:text-[15px] font-normal text-muted-foreground'>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Welcome to our team! We&apos;re excited to have you on board as an instructor and look forward to the knowledge and inspiration you&apos;ll share with our students and staff.
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are honored to have your leadership guiding our institution. Your vision and dedication will inspire our staff and students as we strive for excellence together.
               </p>
             </div>
           </div>

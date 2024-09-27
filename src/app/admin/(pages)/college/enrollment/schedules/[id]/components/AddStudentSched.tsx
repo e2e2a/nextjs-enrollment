@@ -187,6 +187,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                   {b.blockSubjects.map((s: any, index: any) => (
                                     <CommandItem className='border w-full block' key={s._id} value={s.subjectId.name}>
                                       <div className='flex w-full'>
+                                        {/* @todo create a design for mobile */}
                                         <div className='min-w-[80px] justify-center flex items-center'>
                                           {isSelected(s.teacherScheduleId._id) ? (
                                             <Button
