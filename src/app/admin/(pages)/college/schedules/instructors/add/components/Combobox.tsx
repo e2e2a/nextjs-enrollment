@@ -48,9 +48,9 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
                 </PopoverTrigger>
                 <PopoverContent align='start' className=' p-0 bg-white w-full flex border-gray-300 '>
                   <Command className='w-full'>
-                    <CommandInput placeholder='Search Teacher...' />
+                    <CommandInput placeholder='Search Instructor...' />
                     <CommandList className='w-full'>
-                      <CommandEmpty>No Teacher.</CommandEmpty>
+                      <CommandEmpty>No Instructors found.</CommandEmpty>
                       <CommandGroup className='w-full'>
                         {selectItems.map((item: any, index: any) => {
                           const fullName = item.extensionName ? `${item.firstname} ${item.middlename} ${item.lastname} ${item.extensionName}` : `${item.firstname} ${item.middlename} ${item.lastname}`;

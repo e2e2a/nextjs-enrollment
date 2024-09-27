@@ -44,9 +44,9 @@ export function ComboboxRoom({ form, name, label, selectItems, placeholder, setR
                 </PopoverTrigger>
                 <PopoverContent align='start' className=' p-0 bg-white w-full flex border-gray-300 '>
                   <Command className='w-full'>
-                    <CommandInput placeholder='Search Teacher...' />
+                    <CommandInput placeholder='Search Room name...' />
                     <CommandList className='w-full'>
-                      <CommandEmpty>No Result Room.</CommandEmpty>
+                      <CommandEmpty>No Rooms found.</CommandEmpty>
                       <CommandGroup className='w-full'>
                         {selectItems.length > 0 ? (
                           selectItems.map(

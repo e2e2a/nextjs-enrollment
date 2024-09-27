@@ -46,7 +46,7 @@ export function ComboboxSubjects({ form, name, label, selectItems, placeholder, 
                   <Command className='w-full'>
                     <CommandInput placeholder='Search Descriptive Title...' />
                     <CommandList className='w-full'>
-                      <CommandEmpty>No Result Subject.</CommandEmpty>
+                      <CommandEmpty>No Subjects found.</CommandEmpty>
                       <CommandGroup className='w-full'>
                         {selectItems.length > 0 ? (
                           selectItems.map((item: any, index: any) => (
