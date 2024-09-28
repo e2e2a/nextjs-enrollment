@@ -41,25 +41,27 @@ const Page = () => {
   const { data: sData, isLoading: sLoading, isError: sError } = useSubjectCollegeQuery();
   const { data: rData, isLoading: rLoading, error: rError } = useRoomQuery();
   useEffect(() => {
-    if (!tData || !tData.teachers || isError) return;
-    if (!sData || !sData.subjects || sError) return;
-    
+    if (!tData || isError) return;
+    if (!sData || sError) return;
+
     if (tData && sData) {
-      setLoading(false);
-      setTeachers(tData.teachers);
+      if (tData.teachers) {
+        setTeachers(tData.teachers);
+        setLoading(false);
+      }
       return;
     }
-  }, [tData, sData, sError, sLoading, isLoading, isError]);
+  }, [tData, sData, sError, isError]);
   useEffect(() => {
     if (!rData || !rData.rooms || rError) return;
-    
+
     if (rData) {
       const filteredRooms = rData.rooms.filter((room: any) => room.educationLevel === 'tertiary');
       setRooms(filteredRooms);
       return;
     }
   }, [rData, rLoading, rError]);
-  
+
   const mutation = useCreateTeacherScheduleCollegeMutation();
   const { data } = useSession();
   const session = data?.user;
@@ -82,7 +84,6 @@ const Page = () => {
       ...data,
       category: 'College',
     };
-    console.log('data', dataa);
     mutation.mutate(dataa, {
       onSuccess: (res) => {
         console.log(res);
@@ -129,7 +130,7 @@ const Page = () => {
                 </div>
               </div>
             </CardHeader>
-            
+
             <Form {...formCollege}>
               <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
                 <CardContent className='w-full '>

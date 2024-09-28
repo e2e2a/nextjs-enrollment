@@ -16,6 +16,8 @@ export const createTeacherScheduleAction = async (data: any) => {
     const room = await getRoomById(data.roomId);
     if (!room) return { error: 'There is no Room found.', status: 404 };
     const teacherSchedules = await getAllTeacherScheduleByProfileId(teacher._id);
+
+    if(data.days.length === 0) return { error: 'Please fill the required Days field.', status: 403 };
     const [newStartHours, newStartMinutes] = data.startTime.split(':').map(Number);
     const [newEndHours, newEndMinutes] = data.endTime.split(':').map(Number);
 

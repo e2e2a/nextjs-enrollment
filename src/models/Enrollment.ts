@@ -17,7 +17,7 @@ export interface IEnrollment extends Document {
   studentType?: 'Regular' | 'Non-Regular';
   scholarType: 'TWSP' | 'STEP' | 'PESFA' | 'UAQTEA' | 'None';
   studentSubjects: Number;
-  enrollmentStatus: string
+  enrollmentStatus: string;
 }
 
 const schema = new Schema<IEnrollment>(
@@ -111,23 +111,8 @@ const schema = new Schema<IEnrollment>(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'StudentProfile',
         },
+        // i prefere grade is only 1
         grade: { type: String },
-        /**
-         * @todo
-         * add this and remove grade
-         */
-
-        //this is for first semester
-        // midterm: { type: String },
-        // final: { type: String },
-
-        //this is for second semester
-        // semifinal: { type: String },
-        // final: { type: String },
-
-        //this is for overall
-        // overAllGrade: { type: String },
-        
       },
     ],
   },

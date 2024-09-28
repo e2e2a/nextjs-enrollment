@@ -1,33 +1,8 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import Link from 'next/link';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-import { Icons } from '@/components/shared/Icons';
-import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
-import { useState } from 'react';
 import ActionsCell from './ActionsCell';
-import Image from 'next/image';
 
 export const columns: ColumnDef<any>[] = [
-  // {
-  //   accessorFn: (row) => row.teacherScheduleId.blockTypeId.section, // Use accessorFn for nested fields
-  //   id: 'block type',
-  //   header: 'Block Type',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className=' uppercase'>
-  //         {user.teacherScheduleId.blockTypeId && user.teacherScheduleId.blockTypeId.section ? `Block ${user.teacherScheduleId.blockTypeId.section}` : 'No assign block type'}
-  //       </div>
-  //     );
-  //   },
-  // },
   {
     accessorFn: (row) => '#',
     id: '#',
@@ -37,6 +12,58 @@ export const columns: ColumnDef<any>[] = [
       return (
         <div key={cell.id} className=' uppercase'>
           {row.index + 1}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.courseId.courseCode,
+    id: 'course code',
+    header: 'Course Code',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.courseId.courseCode}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.blockTypeId.section,
+    id: 'block assign',
+    header: 'Block Assign',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.blockTypeId.section ? <span className=''>block {user.blockTypeId.section}</span> : <div className='text-red'>Not Assign</div>}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.blockTypeId.year,
+    id: 'year',
+    header: 'Year',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.blockTypeId.year}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.blockTypeId.semester,
+    id: 'semester',
+    header: 'Semester',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.blockTypeId.semester}
         </div>
       );
     },

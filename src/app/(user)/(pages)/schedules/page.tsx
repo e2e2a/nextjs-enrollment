@@ -12,20 +12,16 @@ const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data, isLoading, error: isEnError } = useEnrollmentQueryByUserId(session?.user.id);
   const { data: b, isLoading: bLoading, error: bError } = useTeacherScheduleCollegeQuery();
-  useEffect(() => {
-    if (isLoading || !data) return;
-    if (isEnError) setIsError(true);
-  }, [data, isLoading, isEnError]);
-  useEffect(() => {
-    if (bLoading || !b) return;
-    if (bError) setIsError(true);
-  }, [b, bLoading, bError]);
 
   useEffect(() => {
+    if (bError || !b) return;
+    if (isEnError || !data) return;
+
     if (b && data) {
       setIsPageLoading(false);
     }
-  }, [b, data]);
+  }, [b, bError, data, isEnError]);
+
   return (
     <>
       {isPageLoading ? (
@@ -42,23 +38,23 @@ const Page = () => {
         data?.enrollment && (
           <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
             <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
-                <div>
-                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Student Subjects</h1>
-                </div>
-                <div className=''>
-                  <h1 className='text-sm sm:text-lg font-bold capitalize'>{data.enrollment.courseId.name}</h1>
-                </div>
-                <div className=''>
-                  <h1 className='text-sm font-bold'>
-                    {data.enrollment.studentYear} - {data.enrollment.studentSemester}
-                  </h1>
-                </div>
-                <div className=''>
-                  <h1 className='text-xs font-bold'>
-                    Enrollment Status: <span className='text-blue-500'>{data.enrollment.enrollStatus}</span>
-                  </h1>
-                </div>
+              <div>
+                <h1 className='text-lg sm:text-2xl font-bold uppercase'>Student Schedules</h1>
               </div>
+              <div className=''>
+                <h1 className='text-sm sm:text-lg font-bold capitalize'>{data.enrollment.courseId.name}</h1>
+              </div>
+              <div className=''>
+                <h1 className='text-sm font-bold'>
+                  {data.enrollment.studentYear} - {data.enrollment.studentSemester}
+                </h1>
+              </div>
+              <div className=''>
+                <h1 className='text-xs font-bold'>
+                  Enrollment Status: <span className='text-blue-500'>{data.enrollment.enrollStatus}</span>
+                </h1>
+              </div>
+            </div>
             <DataTable columns={columns} data={data?.enrollment.studentSubjects} />
           </div>
         )

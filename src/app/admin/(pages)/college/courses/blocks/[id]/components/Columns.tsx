@@ -18,37 +18,9 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorKey: 'Fullname',
-    header: ({ column }) => {
-      return (
-        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Instructor
-          <ArrowUpDown className='ml-2 h-4 w-4' />
-        </Button>
-      );
-    },
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className='capitalize'>
-          {user.teacherScheduleId.profileId.firstname} {user.teacherScheduleId.profileId.middlename} {user.teacherScheduleId.profileId.lastname} {user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName : ''}
-        </div>
-      );
-    },
-    accessorFn: (row) =>
-      `${row.teacherScheduleId.profileId.firstname} ${row.teacherScheduleId.profileId.middlename} ${row.teacherScheduleId.profileId.lastname} ${row.teacherScheduleId.profileId.extensionName ? row.teacherScheduleId.profileId.extensionName : ''}`,
-    filterFn: (row, columnId, filterValue) => {
-      const user = row.original;
-      const fullName = `${user.teacherScheduleId.profileId.firstname} ${user.teacherScheduleId.profileId.middlename} ${user.teacherScheduleId.profileId.lastname} ${
-        user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName : ''
-      }`.toLowerCase();
-      return fullName.includes(filterValue.toLowerCase());
-    },
-  },
-  {
     accessorFn: (row) => row.teacherScheduleId.subjectId.subjectCode,
-    id: 'subject code',
-    header: 'Subject Code',
+    id: 'code',
+    header: 'Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
@@ -59,16 +31,28 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.name,
-    id: 'Descriptive Title',
-    header: 'Descriptive Title',
+    accessorKey: 'Descriptive Title',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Descriptive Title
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
+        <div key={cell.id} className='capitalize'>
           {user.teacherScheduleId.subjectId.name}
         </div>
       );
+    },
+    accessorFn: (row) => `${row.teacherScheduleId.subjectId.name}`,
+    filterFn: (row, columnId, filterValue) => {
+      const user = row.original;
+      const descriptiveTitle = `${user.teacherScheduleId.subjectId.name}`.toLowerCase();
+      return descriptiveTitle.includes(filterValue.toLowerCase());
     },
   },
   {
@@ -80,6 +64,45 @@ export const columns: ColumnDef<any>[] = [
       return (
         <div key={cell.id} className=' uppercase'>
           {user.teacherScheduleId.subjectId.preReq}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.teacherScheduleId.subjectId.lec,
+    id: 'lec',
+    header: 'Lec',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.teacherScheduleId.subjectId.lec}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.teacherScheduleId.subjectId.lab,
+    id: 'lab',
+    header: 'Lab',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.teacherScheduleId.subjectId.lab}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.teacherScheduleId.subjectId.unit,
+    id: 'unit',
+    header: 'Unit',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.teacherScheduleId.subjectId.unit}
         </div>
       );
     },
@@ -123,7 +146,48 @@ export const columns: ColumnDef<any>[] = [
       );
     },
   },
+  {
+    accessorFn: (row) => row.teacherScheduleId.roomId.roomName,
+    id: 'room name',
+    header: 'Room Name',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user.teacherScheduleId.roomId.roomName}
+        </div>
+      );
+    },
+  },
 
+  {
+    accessorKey: 'Fullname',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Instructor
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='capitalize'>
+          {user.teacherScheduleId.profileId.firstname}, {user.teacherScheduleId.profileId.middlename} {user.teacherScheduleId.profileId.lastname} {user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName : ''}
+        </div>
+      );
+    },
+    accessorFn: (row) =>
+      `${row.teacherScheduleId.profileId.firstname} ${row.teacherScheduleId.profileId.middlename} ${row.teacherScheduleId.profileId.lastname} ${row.teacherScheduleId.profileId.extensionName ? row.teacherScheduleId.profileId.extensionName : ''}`,
+    filterFn: (row, columnId, filterValue) => {
+      const user = row.original;
+      const fullName = `${user.teacherScheduleId.profileId.firstname} ${user.teacherScheduleId.profileId.middlename} ${user.teacherScheduleId.profileId.lastname} ${
+        user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName : ''
+      }`.toLowerCase();
+      return fullName.includes(filterValue.toLowerCase());
+    },
+  },
   {
     id: 'actions',
     header: 'Actions',

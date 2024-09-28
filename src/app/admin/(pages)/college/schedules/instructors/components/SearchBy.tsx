@@ -1,13 +1,15 @@
+"use client"
 import React from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Icons } from '@/components/shared/Icons';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface IProps {
   setSearchBy: React.Dispatch<React.SetStateAction<string>>;
 }
+
 const SearchBy = ({ setSearchBy }: IProps) => {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('name');

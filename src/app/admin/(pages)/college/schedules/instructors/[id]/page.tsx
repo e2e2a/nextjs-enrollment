@@ -13,28 +13,16 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleCollegeQueryByProfileId(data?.teacher?._id);
   const { data: s, isLoading: sLoading, error: sError } = useSubjectCollegeQuery();
   const { data: r, isLoading: rLoading, error: rError } = useRoomQuery();
+
   useEffect(() => {
-    if (isLoading || !data) return;
-    if (isEnError) console.log(isEnError.message);
-    // if (data) console.log('courses logs:', data);
-  }, [data, isLoading, isEnError]);
-  useEffect(() => {
-    if (tsLoading || !ts) return;
-    if (tsError) console.log(tsError.message);
-  }, [ts, tsLoading, tsError]);
-  useEffect(() => {
-    if (sLoading || !s) return;
-    if (sError) console.log(sError.message);
-  }, [s, sLoading, sError]);
-  useEffect(() => {
-    if (rLoading || !r) return;
-    if (rError) console.log(rError.message);
-  }, [r, rLoading, rError]);
-  useEffect(() => {
-    if (ts && data && s) {
+    if (tsError || !ts) return;
+    if (isEnError || !data) return;
+    if (sError || !s) return;
+    if (rError || !r) return;
+    if (ts && data && s && r) {
       setIsPageLoading(false);
     }
-  }, [ts, data, s]);
+  }, [ts, tsError, data, isEnError, s, sError, r, rError]);
 
   return (
     <>
@@ -59,10 +47,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                 </div>
               </div>
               <div className='w-full flex justify-end items-center'>
-                {/* <AddInstructorSched blockType={data} s={s?.teacherSchedules} /> */}
                 <AddInstructorSched teacher={data.teacher} s={s?.subjects} r={r?.rooms} />
               </div>
-              {/* <DataTable columns={columns} data={data?.blockType.blockSubjects} /> */}
               <DataTable columns={columns} data={ts?.teacherSchedules} />
             </>
           ) : (

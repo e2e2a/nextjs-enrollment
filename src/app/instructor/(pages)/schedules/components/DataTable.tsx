@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import SearchBy from './SearchBy';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -12,7 +13,7 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  // console.log(data)
+  const [searchBy, setSearchBy] = useState('Descriptive Title');
   useEffect(() => {
     if (!data) {
       return;
@@ -43,16 +44,17 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     <div>
       {/* Filters */}
       <div className='flex items-center justify-between w-full '>
-        {/* <div className='flex items-center  py-4 text-black'>
+        <div className='flex items-center  py-4 text-black'>
           <Input
-            placeholder='Search by Descriptive Title...'
-            value={(table.getColumn('Descriptive Title')?.getFilterValue() as string) ?? ''}
+            placeholder={`${searchBy === 'Descriptive Title' ? 'Search by Descriptive Title...' : 'Search by Course Code...'}`}
+            value={(table.getColumn(searchBy)?.getFilterValue() as string) ?? ''}
             onChange={(event) => {
-              table.getColumn('Descriptive Title')?.setFilterValue(event.target.value);
+              table.getColumn(searchBy)?.setFilterValue(event.target.value);
             }}
             className='max-w-sm'
           />
-        </div> */}
+          <SearchBy setSearchBy={setSearchBy} />
+        </div>
 
         {/* Column visibility */}
         <DropdownMenu>

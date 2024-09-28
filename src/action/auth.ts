@@ -102,7 +102,6 @@ export const signUpAction = async (data: any): Promise<SignUpResponse> => {
  * @returns string
  */
 const checkingConflict = async (email: string, username: string) => {
-  await dbConnect();
   const existingUser = await getUserByEmail(email);
   try {
     if (existingUser) {
@@ -143,7 +142,7 @@ const checkingConflict = async (email: string, username: string) => {
  */
 const creatingUser = async (email: string, username: string, password: string) => {
   try {
-    await dbConnect();
+    // await dbConnect();
     const user = await createUser({ email, username }, password);
     console.log('my user: ', user);
     await createStudentProfile({ userId: user._id });

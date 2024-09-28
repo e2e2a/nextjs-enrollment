@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ColumnDef, flexRender, SortingState, VisibilityState, ColumnFiltersState, getCoreRowModel, getSortedRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -13,7 +13,7 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  const [searchBy, setSearchBy] = useState('Fullname');
+  const [searchBy, setSearchBy] = useState('Descriptive Title');
   useEffect(() => {
     if (!data) {
       return;
@@ -53,7 +53,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             }}
             className='max-w-sm'
           />
-          <SearchBy setSearchBy={setSearchBy}/>
+          <SearchBy setSearchBy={setSearchBy} />
         </div>
 
         {/* Column visibility */}

@@ -43,6 +43,32 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row.blockTypeId.year,
+    id: 'year',
+    header: 'Year',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.blockTypeId.year}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.blockTypeId.semester,
+    id: 'semester',
+    header: 'Semester',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.blockTypeId.semester}
+        </div>
+      );
+    },
+  },
+  {
     accessorFn: (row) => row.subjectId.subjectCode,
     id: 'subject code',
     header: 'Subject Code',
@@ -57,13 +83,52 @@ export const columns: ColumnDef<any>[] = [
   },
   {
     accessorFn: (row) => row.subjectId.name,
-    id: 'subject title',
-    header: 'Subject Title',
+    id: 'Descriptive Title',
+    header: 'Descriptive Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
           {user.subjectId.name}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.subjectId.lec,
+    id: 'lec',
+    header: 'Lec',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.subjectId.lec}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.subjectId.lab,
+    id: 'lab',
+    header: 'Lab',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.subjectId.lab}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.subjectId.unit,
+    id: 'unit',
+    header: 'Unit',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.subjectId.unit}
         </div>
       );
     },
@@ -108,11 +173,23 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row.roomId.roomName,
+    id: 'room name',
+    header: 'Room Name',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.roomId.roomName}
+        </div>
+      );
+    },
+  },
+  {
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
       const user = row.original;
-
       return <ActionsCell user={user} />;
     },
   },

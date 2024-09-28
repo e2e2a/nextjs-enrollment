@@ -29,7 +29,21 @@ const Page = () => {
           <Loader />
         </div>
       ) : (
-        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>{isError ? <div className=''>404</div> : data && data.teachers && <DataTable columns={columns} data={data?.teachers as ITeacherProfile[]} />}</div>
+        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
+          {isError ? (
+            <div className=''>404</div>
+          ) : (
+            data &&
+            data.teachers && (
+              <div className=''>
+                <div className='flex items-center py-4 text-black w-full justify-center'>
+                  <h1 className='sm:text-3xl text-xl font-bold '>Intructors Management</h1>
+                </div>
+                <DataTable columns={columns} data={data?.teachers as ITeacherProfile[]} />
+              </div>
+            )
+          )}
+        </div>
       )}
     </>
   );

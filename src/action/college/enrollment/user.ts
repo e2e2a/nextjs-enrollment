@@ -39,7 +39,7 @@ export const createEnrollmentAction = async (data: any): Promise<getEnrollmentRe
 
     const [fileSnapshot, photoSnapshot] = await Promise.all([
       uploadBytes(storageRefFilePsa, filePsa, { contentType: filePsa.type }),
-      uploadBytes(storageRefFileGoodMoral, fileGoodMoral, { contentType: filePsa.type }),
+      uploadBytes(storageRefFileGoodMoral, fileGoodMoral, { contentType: fileGoodMoral.type }),
       uploadBytes(storageRefFileTOR, fileTOR, { contentType: fileTOR.type }),
       uploadBytes(storageRefPhoto, photo, { contentType: photo.type }),
     ]);
