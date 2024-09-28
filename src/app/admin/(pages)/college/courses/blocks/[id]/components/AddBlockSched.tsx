@@ -68,9 +68,9 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size={'sm'} className={'focus-visible:ring-0 flex mb-2 bg-transparent bg-blue-500 px-2 py-0 gap-x-1 justify-center text-neutral-50 font-medium'}>
-          <Icons.squarePen className='h-4 w-4' />
-          <span className='flex'>Edit Schedule</span>
+        <Button size={'sm'} className={'focus-visible:ring-0 flex mb-2 bg-transparent bg-green-500 px-2 py-0 gap-x-1 justify-center text-neutral-50 font-medium'}>
+          <Icons.add className='h-4 w-4' />
+          <span className='flex'>Add Schedule</span>
         </Button>
       </DialogTrigger>
       <DialogContent

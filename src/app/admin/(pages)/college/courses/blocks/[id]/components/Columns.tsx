@@ -72,6 +72,19 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row.teacherScheduleId.subjectId.preReq,
+    id: 'pre req.',
+    header: 'Pre Req.',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.teacherScheduleId.subjectId.preReq}
+        </div>
+      );
+    },
+  },
+  {
     accessorFn: (row) => row.teacherScheduleId.days,
     id: 'days',
     header: 'Days',

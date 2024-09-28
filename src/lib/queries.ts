@@ -128,6 +128,7 @@ export const useTokenCheckQuery = (token: string) => {
   return useQuery<checkTokenResponse, Error>({
     queryKey: ['TokenCheck', token],
     queryFn: async () => checkToken(token),
+    enabled: !!token,
     retry: 0,
     refetchOnWindowFocus: false,
     // retryDelay: (attemptIndex) => attemptIndex * 1000,
@@ -206,6 +207,7 @@ export const useUserRolesTeacherQuery = () => {
     refetchOnWindowFocus: false,
   });
 };
+
 export const useAdminCreateUserRoleMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
@@ -319,9 +321,7 @@ export const useCourseQuery = () => {
     queryFn: () => getAllCourses(),
     retry: 0,
     refetchOnMount: false,
-    // refetchInterval: 5000,
     refetchOnWindowFocus: true,
-    // retryDelay: (attemptIndex) => attemptIndex * 1000,
   });
 };
 

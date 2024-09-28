@@ -10,6 +10,7 @@ import nodemailer from 'nodemailer';
 import { createPDF } from '../../createPdf';
 import { getBlockTypeById } from '@/services/blockType';
 import { getSchoolYearByYear } from '@/services/schoolYear';
+import StudentProfile from '@/models/StudentProfile';
 // import { verificationTemplate } from './emailTemplate/verificationTemplate';
 export const getAllEnrollmentAction = async (): Promise<getEnrollmentResponse> => {
   try {
@@ -95,6 +96,8 @@ export const approvedEnrollmentStep5Action = async (data: any) => {
     const checkE = await getEnrollmentById(data.EId);
     if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
     await updateEnrollmentById(data.EId, { enrollStatus: 'Enrolled' });
+    // @ts-ignore
+    const updatedProfile = await StudentProfile.findByIdAndUpdate(checkE.profileId._id, {enrollStatus: 'Enrolled'})
     return { message: 'Student has been completed all steps.', status: 201 };
   } catch (error) {
     console.log('server e :', error);

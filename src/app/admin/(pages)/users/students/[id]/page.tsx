@@ -69,12 +69,12 @@ const ProfilePage = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='w-full flex flex-col justify-center items-center bg-slate-100 '>
                     <TabsContent value='profile' className={`w-full bg-white my-3 max-w-[69rem] rounded-lg`}>
-                      {res.profile.enrollStatus === 'Pending' || res.profile.enrollStatus === 'Approved' ? (
+                      {res.profile.enrollStatus === 'Pending' || res.profile.enrollStatus === 'Enrolled' ? (
                         /**
                          * @todo
                          * now we can specify here what the student is enrolling and what to display by there enrolling category data
                          */
-                         res.profile.courseId && res.profile.courseId.category.toLowerCase() === 'college' ? (
+                        res.profile.courseId && res.profile.courseId.category.toLowerCase() === 'college' ? (
                           <ProfileTabEnrollCollege profile={res?.profile} />
                         ) : (
                           <ProfileTab profile={res?.profile} />

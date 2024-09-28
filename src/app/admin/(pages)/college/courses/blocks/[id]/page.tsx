@@ -41,7 +41,8 @@ const Page = ({ params }: { params: { id: string } }) => {
             <>
               <div className='flex items-center py-4 text-black w-full text-center flex-col'>
                 <div>
-                  <h1 className='sm:text-lg text-xl font-bold uppercase'>Block Scheduling</h1>
+                  <h1 className='sm:text-2xl text-lg font-bold uppercase'>Block Scheduling</h1>
+                  <h1 className='sm:text-2xl text-lg font-bold uppercase'>{data.blockType.courseId.name}</h1>
                   <h1 className='text-lg font-bold uppercase'>Block {data.blockType.section}</h1>
                 </div>
                 <div className=''>

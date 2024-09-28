@@ -2,6 +2,7 @@ import mongoose, { Schema, models, model } from 'mongoose';
 
 export interface IProfile extends Document {
   userId: mongoose.Schema.Types.ObjectId;
+  courseId: mongoose.Schema.Types.ObjectId;
   firstname?: string;
   middlename?: string;
   lastname: string;
@@ -66,10 +67,10 @@ const schema = new Schema<IProfile>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-    // courseId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Course',
-    // },
+    courseId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course',
+    },
     // sectionId: {
     //   type: mongoose.Schema.Types.ObjectId,
     //   ref: 'Section',
@@ -97,12 +98,8 @@ const schema = new Schema<IProfile>(
     birthPlaceRegion: { type: String },
     educationAttainment: { type: String },
     learnerOrTraineeOrStudentClassification: { type: String },
-    studentYear: {
-      type: String,
-    },
-    studentSemester: {
-      type: String,
-    },
+    studentYear: { type: String, },
+    studentSemester: { type: String, },
     studentStatus: {
       type: String,
       default: 'New Student',
@@ -122,7 +119,7 @@ const schema = new Schema<IProfile>(
     // },
     enrollStatus: {
       type: String,
-      enum: ['Pending', 'Continue', 'Completed'],
+      enum: ['Pending', 'Enrolled', 'Completed'],
     },
     // printLimit: {
     //   type: Number,

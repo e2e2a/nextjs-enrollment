@@ -186,7 +186,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                 <div className='' key={b._id}>
                                   {b.blockSubjects.length > 0 ? (
                                     b.blockSubjects.map((s: any, index: any) => (
-                                      <CommandItem className='border w-full block' key={s._id} value={s.subjectId.name}>
+                                      <CommandItem className='border w-full block' key={s._id} value={s.teacherScheduleId.subjectId.name}>
                                         <div className='flex w-full'>
                                           {/* @todo create a design for mobile */}
                                           <div className='min-w-[80px] justify-center flex items-center'>

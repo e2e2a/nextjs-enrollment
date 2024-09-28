@@ -28,7 +28,7 @@ const FilterBySelect = ({ studentBlockType, setStudentBlockType, studentSemester
             </SelectTrigger>
             <SelectContent className='bg-white border-gray-300'>
               <SelectGroup>
-                {schedules &&
+                {schedules.length > 0 ?
                   schedules.map((item: any, index: any) => {
                     return item.section ? (
                       <SelectItem value={item.section} key={index} className='capitalize'>
@@ -39,7 +39,7 @@ const FilterBySelect = ({ studentBlockType, setStudentBlockType, studentSemester
                         {item.title}
                       </SelectItem>
                     );
-                  })}
+                  }): <div className="text-xs text-center w-full">No Blocks Found.</div> }
               </SelectGroup>
             </SelectContent>
           </Select>

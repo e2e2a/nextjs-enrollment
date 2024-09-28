@@ -63,7 +63,7 @@ const schema = new Schema<IEnrollment>(
     enrollStatus: {
       type: String,
       default: 'Pending',
-      enum: ['Pending', 'Approved', 'Rejected', 'Enrolled', 'Failed', 'Completed'],
+      enum: ['Pending', 'Rejected', 'Enrolled', 'Failed', 'Completed'],
     },
     /**
      * added some new features
@@ -95,7 +95,6 @@ const schema = new Schema<IEnrollment>(
     },
     studentSubjects: [
       {
-        //remember this is not like this instead this will be a reference to the teacherSchedule
         teacherScheduleId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'TeacherSchedule',
@@ -113,6 +112,22 @@ const schema = new Schema<IEnrollment>(
           ref: 'StudentProfile',
         },
         grade: { type: String },
+        /**
+         * @todo
+         * add this and remove grade
+         */
+
+        //this is for first semester
+        // midterm: { type: String },
+        // final: { type: String },
+
+        //this is for second semester
+        // semifinal: { type: String },
+        // final: { type: String },
+
+        //this is for overall
+        // overAllGrade: { type: String },
+        
       },
     ],
   },
