@@ -6,14 +6,13 @@ const Layout = async ({ children }: { children: ReactNode }) => {
   const sessionData = await auth();
   if (sessionData) {
     if (sessionData.user.role === 'ADMIN') {
-      redirect('/admin');
-      // window.location.href = '/admin';
+      return redirect('/admin');
     } else if (sessionData.user.role === 'STUDENT') {
-      redirect('/');
-      // window.location.href = '/';
+      return redirect('/');
     } else if (sessionData.user.role === 'TEACHER') {
-      redirect('/instructor');
-      // window.location.href = '/instructor';
+      return redirect('/instructor');
+    } else if (sessionData.user.role === 'DEAN') {
+      return redirect('/dean');
     }
     // return redirect('/');
     return;

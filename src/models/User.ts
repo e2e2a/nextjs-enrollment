@@ -5,7 +5,7 @@ export interface IUser extends Document {
   password?: string;
   username: string;
   emailVerified: Date;
-  role: 'STUDENT' | 'ADMIN';
+  role: 'STUDENT' | 'TEACHER' | 'ADMIN' | 'DEAN';
   lastLogin?: Date;
   lastLogout?: Date;
 }
@@ -16,22 +16,11 @@ const userSchema = new Schema<IUser>(
     username: { type: String },
     password: { type: String },
     emailVerified: { type: Date },
-    role: { type: String, enum: ['STUDENT', 'TEACHER', 'ADMIN'], default: 'STUDENT' },
+    role: { type: String, enum: ['STUDENT', 'TEACHER', 'ADMIN', 'DEAN'], default: 'STUDENT' },
     lastLogin: { type: Date },
     lastLogout: { type: Date },
   },
   { timestamps: true }
 );
 
-// Check if the model is already defined to prevent OverwriteModelError
-
-// let User: mongoose.Model<IUser>;
-
-// try {
-//   User = mongoose.model<IUser>('User');
-// } catch (error) {
-//   User = mongoose.model<IUser>('User', userSchema);
-// }
-
-// export default User;
 export const User = mongoose.models.User || mongoose.model('User', userSchema);

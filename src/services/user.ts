@@ -2,7 +2,6 @@
 import { hashPassword } from '@/lib/hash/bcrypt';
 import { User } from '@/models/User';
 import { deleteStudentProfileByUserId } from './studentProfile';
-import dbConnect from '@/lib/db/db';
 
 export const createUser = async (data: any, password: string) => {
   try {
@@ -13,6 +12,7 @@ export const createUser = async (data: any, password: string) => {
     });
     return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
+    console.log('error creating user', error)
     return null;
   }
 };

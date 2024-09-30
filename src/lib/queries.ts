@@ -4,6 +4,7 @@ import {
   checkTokenResponse,
   getAllAdminProfileResponse,
   getAllCurriculumsResponse,
+  getAllDeanProfileResponse,
   getAllRoomResponse,
   getAllSchoolYearResponse,
   getAllStudentCurriculumsResponse,
@@ -45,8 +46,8 @@ import { checkResetPasswordToken, checkToken } from '@/action/token';
 import { verificationCodeProcess, verificationCodeResend } from '@/action/verification';
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
 import { NewPassword } from '@/action/profile/NewPassword';
-import { updateAdminProfile, updateStudentPhoto, updateStudentProfile, updateTeacherProfile } from '@/action/profile/updateData';
-import { getAdminProfileBySessionId, getStudentProfileBySessionId, getStudentProfileByUsernameAction, getTeacherProfileBySessionId } from '@/action/profile/getProfile';
+import { updateAdminProfile, updateDeanProfile, updateStudentPhoto, updateStudentProfile, updateTeacherProfile } from '@/action/profile/updateData';
+import { getAdminProfileBySessionId, getDeanProfileBySessionId, getStudentProfileBySessionId, getStudentProfileByUsernameAction, getTeacherProfileBySessionId } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction, getSingleEnrollmentByUserIdIdAction } from '@/action/college/enrollment/user';
 import {
@@ -66,7 +67,7 @@ import {
 } from '@/action/college/enrollment/admin';
 import { createCollegeCourseBlockAction, getAllBlockTypeAction, getBlockTypeByIdAction } from '@/action/college/courses/blocks';
 import { createSubjectCollegeAction, getSubjectCategoryCollegeAction } from '@/action/college/subjects/admin';
-import { adminCreateUserWithRoleAction, getUserRoleAdminAction, getUserRoleStudentAction, getUserRoleTeachertAction } from '@/action/user';
+import { adminCreateUserWithRoleAction, getUserRoleAdminAction, getUserRoleDeanAction, getUserRoleStudentAction, getUserRoleTeachertAction } from '@/action/user';
 import { createRoomAction, getAllRoomAction, getRoomByIdAction } from '@/action/rooms';
 import {
   createTeacherScheduleAction,
@@ -200,6 +201,15 @@ export const useUserRolesAdminQuery = () => {
   });
 };
 
+export const useUserRolesDeansQuery = () => {
+  return useQuery<getAllDeanProfileResponse, Error>({
+    queryKey: ['Deans'],
+    queryFn: () => getUserRoleDeanAction(),
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
+};
+
 export const useUserRolesTeacherQuery = () => {
   return useQuery<getAllTeacherProfileResponse, Error>({
     queryKey: ['Teachers'],
@@ -254,6 +264,16 @@ export const useTeacherProfileQuery = (id: any) => {
   });
 };
 
+export const useDeanProfileQuery = (id: any) => {
+  return useQuery<getSingleProfileResponse, Error>({
+    queryKey: ['userDeanProfile', id],
+    queryFn: () => getDeanProfileBySessionId(id),
+    enabled: !!id,
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
+};
+
 export const useProfileAdminQuery = (id: any) => {
   return useQuery<getSingleProfileResponse, Error>({
     queryKey: ['userAdminProfile', id],
@@ -289,10 +309,7 @@ export const useUpdateProfilePhoto = () => {
       } else if (data.role === 'ADMIN') {
         queryClient.invalidateQueries({ queryKey: ['userAdminProfile'] });
       } else if (data.role === 'DEAN') {
-        /**
-         * @todo dean photo
-         * 1. create a dean schema models
-         */
+        queryClient.invalidateQueries({ queryKey: ['userDeanProfile'] });
       }
     },
   });
@@ -317,6 +334,17 @@ export const useTeacherProfileMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['userTeacherProfile'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherProfile'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherProfileById'] });
+    },
+  });
+};
+
+export const useDeanProfileMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => updateDeanProfile(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['Deans'] });
+      queryClient.invalidateQueries({ queryKey: ['userDeanProfile'] });
     },
   });
 };

@@ -1,9 +1,11 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { AdminProfileBySessionIdValidator } from '@/lib/validators/AdminValidator';
+import { DeanProfileValidatorBySession } from '@/lib/validators/DeanValidator';
 import { TeacherProfileValidator } from '@/lib/validators/TeacherValidator';
 import { StudentProfileValidator } from '@/lib/validators/Validator';
 import { updateAdminProfileById } from '@/services/adminProfile';
+import { updateDeanProfileById } from '@/services/deanProfile';
 import { updateStudentProfileById, updateStudentProfileByUserId } from '@/services/studentProfile';
 import { updateTeacherProfileById } from '@/services/teacherProfile';
 
@@ -35,6 +37,22 @@ export const updateTeacherProfile = async (data: any) => {
     return { error: 'Internal Server Error', status: 500 };
   }
 };
+
+export const updateDeanProfile = async (data: any) => {
+  try {
+    await dbConnect();
+    const { profileId } = data;
+    const profileParse = DeanProfileValidatorBySession.safeParse(data);
+    const { ...dateToUpdate } = profileParse.data;
+    const profile = await updateDeanProfileById(profileId, dateToUpdate);
+    if (!profile) return { error: 'Something went wrong. ', status: 500 };
+    return { message: 'Profile has been update. ', status: 201 };
+  } catch (error) {
+    console.log(error);
+    return { error: 'Internal Server Error', status: 500 };
+  }
+};
+
 export const updateAdminProfile = async (data: any) => {
   try {
     await dbConnect();

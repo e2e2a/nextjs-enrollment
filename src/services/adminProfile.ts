@@ -20,7 +20,7 @@ export const getAllAdminProfile = async () => {
     const AProfile = await AdminProfile.find().populate('userId').exec();
     return AProfile;
   } catch (error) {
-    return null;
+    return [];
   }
 };
 

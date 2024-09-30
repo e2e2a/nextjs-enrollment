@@ -46,11 +46,13 @@ const SignInForm = () => {
                 window.location.href = '/';
               } else if (res.role === 'TEACHER') {
                 window.location.href = '/instructor';
+              } else if (res.role === 'DEAN') {
+                window.location.href = '/dean';
               }
               return;
             }
             return (window.location.href = `/verification?token=${res.token}`);
-            // return
+          // return
           default:
             setIsPending(false);
             setMessage(res.error);

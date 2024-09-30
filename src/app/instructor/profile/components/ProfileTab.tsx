@@ -56,7 +56,7 @@ const ProfileTab = ({ profile }: Iprops) => {
         contact: profile?.contact || '',
         sex: profile?.sex || '',
         civilStatus: profile?.civilStatus || '',
-        birthday: new Date(profile.birthday) || new Date(Date.now()),
+        birthday: profile.birthday ? new Date(profile.birthday) : new Date(Date.now()),
       };
       setDefaultValues(profileDefaultValues);
       form.reset(profileDefaultValues);

@@ -6,7 +6,7 @@ export type ExtendedUser = DefaultSession['user'] & {
   username: string;
   imageUrl: string;
   birthday: Date;
-  role: 'ADMIN' | 'STUDENT' | 'TEACHER';
+  role: 'ADMIN' | 'STUDENT' | 'TEACHER' | 'DEAN';
   profileVerified: boolean;
 };
 

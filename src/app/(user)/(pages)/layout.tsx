@@ -15,6 +15,9 @@ const Layout = async ({ children }: { children: ReactNode }) => {
   if (sessionData && sessionData.user.role === 'TEACHER') {
     return redirect('/instructor');
   }
+  if (sessionData && sessionData.user.role === 'DEAN') {
+    return redirect('/dean');
+  }
   // if (sessionData && sessionData.user.role === 'DEAN') {
   //   return redirect('/instructor');
   // }

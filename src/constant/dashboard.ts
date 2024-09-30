@@ -567,12 +567,20 @@ export const dashboardConfig: DashboardConfig = {
           ],
           icon: 'userSearch',
         },
-        /**
-         * @todo create dean management
-         */
         {
-          title: 'Deans Management',
-          href: '/admin/subjects/add',
+          title: 'Role Deans',
+          i: [
+            {
+              title: 'Deans Management',
+              href: '/admin/users/deans',
+              icon: 'eye',
+            },
+            {
+              title: 'Add Dean',
+              href: '/admin/users/deans/add',
+              icon: 'add',
+            },
+          ],
           icon: 'userSearch',
         },
         {

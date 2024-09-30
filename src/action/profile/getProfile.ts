@@ -2,6 +2,7 @@
 import dbConnect from '@/lib/db/db';
 import { encryptData } from '@/lib/encryption';
 import { getAdminProfileByUserId } from '@/services/adminProfile';
+import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { getTeacherProfileByUserId } from '@/services/teacherProfile';
 import { getUserByUsername } from '@/services/user';
@@ -27,6 +28,17 @@ export const getTeacherProfileBySessionId = async (userId: any): Promise<getSing
     return { profile: JSON.parse(JSON.stringify(teacherProfile)), status: 200 };
   } catch (error) {
     console.log('getStudentProfileBySessionId', error);
+    return { profile: null, status: 500 };
+  }
+};
+
+export const getDeanProfileBySessionId = async (userId: any): Promise<getSingleProfileResponse> => {
+  try {
+    await dbConnect();
+    const deanProfile = await getDeanProfileByUserId(userId);
+    return { profile: JSON.parse(JSON.stringify(deanProfile)), status: 200 };
+  } catch (error) {
+    console.log('getDeanProfileByUserId', error);
     return { profile: null, status: 500 };
   }
 };
