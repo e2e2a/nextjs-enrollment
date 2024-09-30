@@ -61,7 +61,7 @@ const Nav = ({ session, children }: IProps) => {
         <div className='flex flex-col'>
           <header className='sticky top-0 z-40 border-b bg-background'>
             <MainNav items={dashboardConfig.mainNavAdmin} session={session?.user} profile={profile} />
-            <MobileNav items={dashboardConfig.mainNavAdmin} session={session?.user} />
+            <MobileNav items={dashboardConfig.mainNavAdmin} profile={profile} />
           </header>
           <div className='flex-1 flex flex-row bg-slate-100 '>
             <div className={`${hideSidebar ? 'hidden' : 'lg:flex'} w-[290px] xl:w-[330px] hidden  `}>

@@ -13,6 +13,8 @@ import { BirthdayInput } from './BirthdayInput';
 import { SelectInput } from './selectInput';
 import { profileSelectItems } from '@/constant/profile/selectItems';
 import { useStudentProfileMutation } from '@/lib/queries';
+import Image from 'next/image';
+import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 type FormData = z.infer<typeof StudentProfileValidator>;
 type Iprops = {
   session?: any;
@@ -20,6 +22,7 @@ type Iprops = {
 };
 const ProfileTab = ({ profile }: Iprops) => {
   const mutation = useStudentProfileMutation();
+  const [isPending, setIsPending] = useState<boolean>(false);
   const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile.isVerified);
   const [defaultValues, setDefaultValues] = useState({
     firstname: '',
@@ -47,7 +50,6 @@ const ProfileTab = ({ profile }: Iprops) => {
   });
 
   const handleEditable = async () => {
-    // setIsNotEditable(prev => !prev);
     setIsNotEditable(!isNotEditable);
     form.reset();
   };
@@ -90,44 +92,34 @@ const ProfileTab = ({ profile }: Iprops) => {
   }, [form, profile]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
+    setIsPending(true);
     data.firstname = data.firstname.toLowerCase();
     data.lastname = data.lastname.toLowerCase();
     data.middlename = data.middlename.toLowerCase();
     data.middlename = data.middlename.toLowerCase();
-    try {
-      // console.log('Form Submitted: ', data);
-      const profileData = {
-        profileId: profile?._id!,
-        ...data,
-      };
-      mutation.mutate(profileData, {
-        onSuccess: (res) => {
-          console.log(res);
-          window.location.reload();
-          // switch (res.status) {
-          //   case 200:
-          //   case 201:
-          //   case 203:
-          //     if (!res.token) {
-          //       setTypeMessage('success');
-          //       setMessage(res?.message);
-          //       return (window.location.href = '/');
-          //     }
-          //     return (window.location.href = `/verification?token=${res.token}`);
-          //   default:
-          //     setMessage(res.error);
-          //     setTypeMessage('error');
-          //     return;
-          // }
-        },
+    const profileData = {
+      profileId: profile?._id!,
+      ...data,
+    };
+    mutation.mutate(profileData, {
+      onSuccess: (res) => {
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            setIsNotEditable(true);
+            makeToastSucess('Profile has been updated.');
+            return;
+          default:
+            makeToastError('Update profile failed.');
+            return;
+        }
+      },
 
-        onSettled: () => {
-          // setIsPending(false);
-        },
-      });
-    } catch (error) {
-      console.error('Submit Error: ', error);
-    }
+      onSettled: () => {
+        setIsPending(false);
+      },
+    });
   };
   return (
     <Form {...form}>
@@ -146,7 +138,7 @@ const ProfileTab = ({ profile }: Iprops) => {
                   </div>
                 )}
               </div>
-              <CardDescription className='text-sm font-normal w-full text-center'>Change your password here. After saving, you&apos;ll be logged out.</CardDescription>
+              <CardDescription className='text-sm font-normal w-full text-center'>Update your profile information here. Ensure all your details are accurate to have the best experience on our platform.</CardDescription>
             </CardTitle>
           </CardHeader>
           {/* note if its not editable its pb-0 @button */}
@@ -213,7 +205,7 @@ const ProfileTab = ({ profile }: Iprops) => {
                       placeholder='Select employment status'
                     />
                   </div>
-                  {isNotEditable && (
+                  {/* {isNotEditable && (
                     <div className='mb-5 mt-7 lg:mb-0'>
                       <h1 className={`${isNotEditable ? 'flex flex-row text-lg font-bold border-b lg:text-left text-center' : 'hidden'}`}>Course/Qualification:</h1>
                       <div className={`space-y-3 mt-2 mb-3`}>
@@ -223,15 +215,15 @@ const ProfileTab = ({ profile }: Iprops) => {
                         </div>
                       </div>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
           </CardContent>
           {!isNotEditable && (
             <CardFooter className='w-full flex justify-center items-center '>
-              <Button type='submit' className=' bg-blue-500 hover:bg-blue-400 text-white font-medium tracking-wide' onClick={form.handleSubmit(onSubmit)}>
-                Submit
+              <Button type='submit' disabled={isPending} className=' bg-blue-500 hover:bg-blue-400 text-white font-medium tracking-wide' onClick={form.handleSubmit(onSubmit)}>
+                {isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Submit'}
               </Button>
             </CardFooter>
           )}

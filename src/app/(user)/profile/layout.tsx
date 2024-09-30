@@ -22,7 +22,7 @@ const UserRootLayout = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     }, 500);
   }, [isLoading, res, error]);
-  
+
   return (
     <>
       {loading ? (
@@ -30,8 +30,12 @@ const UserRootLayout = ({ children }: { children: ReactNode }) => {
       ) : (
         <div className='flex flex-col'>
           <header className='sticky top-0 z-40 border-b bg-background'>
-            <MainNav items={dashboardConfig.mainNav} session={data?.user} profile={profile} />
-            <MobileNav items={dashboardConfig.mainNav} session={data?.user} />
+            {profile.isVerified && (
+              <>
+                <MainNav items={dashboardConfig.mainNav} session={data?.user} profile={profile} />
+                <MobileNav items={dashboardConfig.mainNav} profile={profile} />
+              </>
+            )}
           </header>
           {/* <header className='relative top-15 z-40 border-b bg-background md:hidden w-auto'>
         <MobileNav items={dashboardConfig.mainNav} session={session?.user} />

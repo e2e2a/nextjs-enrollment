@@ -31,7 +31,7 @@ const Nav = ({ children }: { children: ReactNode }) => {
     {!loading && <div className='flex flex-col '>
         <header className='sticky top-0 z-40 border-b bg-background'>
           <MainNav items={dashboardConfig.mainNavInstructor} session={sessionData?.user} profile={profile} />
-          <MobileNav items={dashboardConfig.mainNavInstructor} session={sessionData?.user} />
+          <MobileNav items={dashboardConfig.mainNavInstructor} profile={profile} />
         </header>
         {/* <div className={` flex-1 flex flex-row bg-slate-100 ${loading ? '' : ''} `}> */}
         <div className='flex-1 flex flex-row bg-slate-100 '>

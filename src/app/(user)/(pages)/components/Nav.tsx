@@ -15,9 +15,6 @@ interface IProps {
 const Nav = ({ session, children }: IProps) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const router = useRouter();
-  /**
-   * @todo change profile query by user roles
-   */
   const { data: res, isLoading, error } = useProfileQuery(session?.user.id as string);
 
   useEffect(() => {
@@ -39,9 +36,8 @@ const Nav = ({ session, children }: IProps) => {
         <div className='flex flex-col '>
           <header className='sticky top-0 z-40 border-b bg-background'>
             <MainNav items={dashboardConfig.mainNav} session={session?.user} profile={res?.profile} />
-            <MobileNav items={dashboardConfig.mainNav} session={session?.user} />
+            <MobileNav items={dashboardConfig.mainNav} profile={res?.profile} />
           </header>
-          {/* <div className={` flex-1 flex flex-row bg-slate-100 ${loading ? '' : ''} `}> */}
           <div className='flex-1 flex flex-row bg-slate-100 '>
             <div className=' w-[290px] xl:w-[330px] hidden lg:flex'>
               <SidebarNav items={dashboardConfig.sidebarNav} profile={res?.profile} />

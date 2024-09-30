@@ -11,18 +11,19 @@ import Input from './Input';
 import { BirthdayInput } from './BirthdayInput';
 import { SelectInput } from './selectInput';
 import { profileSelectItems } from '@/constant/profile/selectItems';
-import { useTeacherProfileMutation } from '@/lib/queries';
+import { useAdminProfileMutation, useTeacherProfileMutation } from '@/lib/queries';
 import { TeacherProfileValidator } from '@/lib/validators/TeacherValidator';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { AdminProfileBySessionIdValidator } from '@/lib/validators/AdminValidator';
 import Image from 'next/image';
 
-type FormData = z.infer<typeof TeacherProfileValidator>;
+type FormData = z.infer<typeof AdminProfileBySessionIdValidator>;
 type Iprops = {
   session?: any;
   profile: any;
 };
 const ProfileTab = ({ profile }: Iprops) => {
-  const mutation = useTeacherProfileMutation();
+  const mutation = useAdminProfileMutation();
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile.isVerified);
   const [defaultValues, setDefaultValues] = useState({
@@ -41,8 +42,8 @@ const ProfileTab = ({ profile }: Iprops) => {
     form.reset();
   };
 
-  const form = useForm<z.infer<typeof TeacherProfileValidator>>({
-    resolver: zodResolver(TeacherProfileValidator),
+  const form = useForm<z.infer<typeof AdminProfileBySessionIdValidator>>({
+    resolver: zodResolver(AdminProfileBySessionIdValidator),
     defaultValues,
   });
 
@@ -81,6 +82,7 @@ const ProfileTab = ({ profile }: Iprops) => {
           case 201:
           case 203:
             makeToastSucess(res.message);
+            setIsNotEditable(true);
             return;
           default:
             makeToastError(res.error);

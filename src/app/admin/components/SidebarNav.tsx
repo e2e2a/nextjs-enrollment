@@ -30,7 +30,7 @@ export function SidebarNav({ items, profile }: DashboardNavProps) {
     <aside className='px-[5px] xl:w-[330px] border-r bg-neutral-50 fixed top-14 left-0 flex-col overflow-auto h-[calc(100vh-3.5rem)] custom-scrollbar'>
       <nav className='flex-col w-full flex justify-between items-start p-0 xl:w-[310px]'>
         <div className='flex-col w-full flex gap-y-1 items-start p-0'>
-          <Link href={'/profile'} className='flex items-center gap-[2px] w-full px-2 py-[5.5px] mt-4 hover:bg-slate-300 hover:bg-opacity-70 rounded-md'>
+          <Link href={'/admin/profile'} className='flex items-center gap-[2px] w-full px-2 py-[5.5px] mt-4 hover:bg-slate-300 hover:bg-opacity-70 rounded-md'>
             <div className='border shadow-sm drop-shadow-sm border-gray-200 rounded-full'>
               <UserAvatar session={{ firstname: profile?.firstname, imageUrl: profile?.imageUrl, asd: 'asdas1' || null }} className='h-[32px] w-[32px]' />
             </div>

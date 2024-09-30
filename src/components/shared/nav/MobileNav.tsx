@@ -9,14 +9,14 @@ import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 interface MobileNavProps {
   items: MainNavItem[];
-  session: any;
+  profile: any;
 }
 
-export function MobileNav({ items, session }: MobileNavProps) {
+export function MobileNav({ items, profile }: MobileNavProps) {
   const segment = usePathname();
   return (
     <div className=' flex h-14 w-full items-center justify-between bg-white md:hidden'>
-      {session?.profileVerified && items?.length ? (
+      {profile?.isVerified && items?.length ? (
         <nav className='w-full gap-1 flex '>
           {items?.map((item, index) => {
             const Icon = Icons[item.icon!];

@@ -45,7 +45,7 @@ import { checkResetPasswordToken, checkToken } from '@/action/token';
 import { verificationCodeProcess, verificationCodeResend } from '@/action/verification';
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
 import { NewPassword } from '@/action/profile/NewPassword';
-import { updateStudentPhoto, updateStudentProfile, updateTeacherProfile } from '@/action/profile/updateData';
+import { updateAdminProfile, updateStudentPhoto, updateStudentProfile, updateTeacherProfile } from '@/action/profile/updateData';
 import { getAdminProfileBySessionId, getStudentProfileBySessionId, getStudentProfileByUsernameAction, getTeacherProfileBySessionId } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction, getSingleEnrollmentByUserIdIdAction } from '@/action/college/enrollment/user';
@@ -217,6 +217,7 @@ export const useAdminCreateUserRoleMutation = () => {
       if (data.role) {
         if (data.role === 'ADMIN') {
           queryClient.invalidateQueries({ queryKey: ['Admins'] });
+          queryClient.invalidateQueries({ queryKey: ['userAdminProfile'] });
         } else if (data.role === 'DEAN') {
           /**
            * @todo invalidate user role DEAN
@@ -316,6 +317,16 @@ export const useTeacherProfileMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['userTeacherProfile'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherProfile'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherProfileById'] });
+    },
+  });
+};
+
+export const useAdminProfileMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => updateAdminProfile(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['userAdminProfile'] });
     },
   });
 };
