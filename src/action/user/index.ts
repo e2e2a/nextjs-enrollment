@@ -1,7 +1,7 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { createAdminProfile, getAllAdminProfile } from '@/services/adminProfile';
-import { getCourseByCourseCode } from '@/services/course';
+import { getCourseByCourseCode, getCoursesById } from '@/services/course';
 import { createDeanProfile, getAllDeanProfile } from '@/services/deanProfile';
 import { createStudentProfile, deleteStudentProfileByUserId, getAllStudentProfile } from '@/services/studentProfile';
 import { createTeacherProfile, getAllTeacherProfile } from '@/services/teacherProfile';
@@ -56,17 +56,18 @@ export const getUserRoleDeanAction = async (): Promise<getAllDeanProfileResponse
   }
 };
 
-export const adminCreateUserWithRoleAction = async (data: any): Promise<getAllStudentProfileResponse> => {
+export const adminCreateUserWithRoleAction = async (data: any) => {
   try {
     await dbConnect();
-    const { email, password, username, role, courseCode, createProfile, ...remainDatas } = data;
+    const { email, password, username, role, courseId, createProfile, ...remainDatas } = data;
 
     const checkConflict = await checkingConflict(email, username);
     if (!checkConflict.success) return { error: checkConflict?.error, status: checkConflict?.status };
     let course;
-    if (courseCode) {
-      course = await getCourseByCourseCode(courseCode);
+    if (courseId) {
+      course = await getCoursesById(courseId);
       if (!course) return { error: 'No course found.', status: 404 };
+      console.log('mycoursekljasd', course)
     }
     const createdU = await createUser({ email, username, role, emailVerified: new Date(Date.now()) }, password);
     if (!createdU) return { error: 'Error Creating User', status: 404 };

@@ -2,6 +2,7 @@ import mongoose, { Schema, models, model } from 'mongoose';
 
 export interface IDeanProfile extends Document {
   userId: mongoose.Schema.Types.ObjectId;
+  category: string;
   courseId?: mongoose.Schema.Types.ObjectId;
   firstname?: string;
   middlename?: string;
@@ -26,6 +27,7 @@ const schema = new Schema<IDeanProfile>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Course',
     },
+    category: { type: String },
     firstname: { type: String },
     middlename: { type: String },
     lastname: { type: String },

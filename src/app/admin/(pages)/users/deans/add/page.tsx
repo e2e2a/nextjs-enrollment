@@ -17,18 +17,21 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { DeanProfileValidator, DeanValidator } from '@/lib/validators/DeanValidator';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { selectType } from '@/constant/deansCategory';
 
 const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
+  const [deanCategory, setDeanCategory] = useState('');
   const mutation = useAdminCreateUserRoleMutation();
-  const { data: cData, isLoading, error } = useCourseQueryByCategory('College');
+  const { data: cData, isLoading, error, isError } = useCourseQueryByCategory('College');
   const { data } = useSession();
   const [showProfile, setShowProfile] = useState('No');
   const [typeValidate, setTypeValidate] = useState<any>(DeanValidator);
   const [defaultValues, setDefaultValues] = useState<any>({
     email: '',
-    courseCode: '',
+    category: '',
+    courseId: '',
     username: '',
     firstname: '',
     middlename: '',
@@ -42,6 +45,7 @@ const Page = () => {
     CPassword: '',
   });
   const session = data?.user;
+  
   useEffect(() => {
     if (error || !cData) return;
 
@@ -54,7 +58,8 @@ const Page = () => {
       setTypeValidate(DeanProfileValidator);
       setDefaultValues({
         email: '',
-        courseCode: '',
+        category: '',
+        courseId: '',
         username: '',
         firstname: '',
         middlename: '',
@@ -71,7 +76,8 @@ const Page = () => {
       setTypeValidate(DeanValidator);
       setDefaultValues({
         email: '',
-        courseCode: '',
+        category: '',
+        courseId: '',
         username: '',
         password: '',
         CPassword: '',
@@ -83,7 +89,10 @@ const Page = () => {
     resolver: zodResolver(typeValidate),
     defaultValues: defaultValues,
   });
-
+  const valueCategory = formCollege.watch('category');
+  useEffect(() => {
+    setDeanCategory(valueCategory);
+  }, [valueCategory]);
   const onSubmit: SubmitHandler<z.infer<typeof typeValidate>> = async (data) => {
     setIsNotEditable(true);
     if (showProfile === 'Yes') {
@@ -108,7 +117,7 @@ const Page = () => {
             setTypeValidate(DeanValidator);
             setDefaultValues({
               email: '',
-              courseCode: '',
+              courseId: '',
               username: '',
               password: '',
               CPassword: '',
@@ -146,7 +155,16 @@ const Page = () => {
                 <CardContent className='w-full '>
                   <div className='flex flex-col gap-4'>
                     <Input name={'email'} type={'email'} form={formCollege} label={'Email:'} classNameInput={''} />
-                    <SelectInput name={'courseCode'} form={formCollege} label={'Deans Division:'} selectItems={cData?.courses} placeholder='Select Deans Division' />
+                    <SelectInput name={'category'} form={formCollege} label={'Educational Category:'} selectItems={selectType.deansCategory} placeholder='Select Educational Category' />
+                    {deanCategory === 'College' ? (
+                      <SelectInput name={'courseId'} form={formCollege} label={'Deans Division:'} selectItems={cData?.courses} placeholder='Select Deans Division' />
+                    ) : deanCategory === 'Senior High School' ? (
+                      // <SelectInput name={'courseId'} form={formCollege} label={'Deans Division:'} selectItems={cData?.courses} placeholder='Select Deans Division' />
+                      <div className=''>Senior High School</div>
+                    ) : deanCategory === 'Tesda' ? (
+                      // <SelectInput name={'courseId'} form={formCollege} label={'Deans Division:'} selectItems={cData?.courses} placeholder='Select Deans Division' />
+                      <div className=''>Tesda</div>
+                    ) : null}
                     <Input name={'username'} type={'text'} form={formCollege} label={'Username:'} classNameInput={''} />
                     <Input name={'password'} type={'password'} form={formCollege} label={'Password:'} classNameInput={'capitalize'} />
                     <Input name={'CPassword'} type={'password'} form={formCollege} label={'Confirm Password:'} classNameInput={'capitalize'} />

@@ -29,7 +29,7 @@ export function SelectInput({ form, name, label, selectItems, placeholder }: IPr
                     {selectItems &&
                       selectItems.map((item: any, index: any) => {
                         return item.name ? (
-                          <SelectItem value={item.courseCode} key={index} className='capitalize'>
+                          <SelectItem value={item._id} key={index} className='capitalize'>
                             {name === 'courseCode' ? `${item.courseCode + '-' + item.name}` : item.name}
                           </SelectItem>
                         ) : (
@@ -42,7 +42,6 @@ export function SelectInput({ form, name, label, selectItems, placeholder }: IPr
                 </SelectContent>
               </Select>
               <label
-                htmlFor={name}
                 className={`pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5`}
               >
                 {label}

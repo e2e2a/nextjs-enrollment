@@ -66,3 +66,13 @@ export const getCoursesByCategory = async (category: string) => {
     return [];
   }
 };
+
+export const getCoursesById = async (id: string) => {
+  try {
+    const course = await Course.findById(id).exec();
+    return course;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};

@@ -13,7 +13,8 @@ const nameRegex = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+[-'s]?[a-zA-ZñÑáéíóú
 export const DeanValidator = z
   .object({
     email: z.string().email({ message: 'Email is Required...' }),
-    courseCode: z.string().min(1, { message: 'Course is Required...' }),
+    category: z.string().min(1, { message: 'Course is Required...' }),
+    courseId: z.string().min(1, { message: 'Category is Required...' }),
     username: z.string().min(1, { message: 'Username must atleast 1 characters.' }),
     password: z.string().min(6, { message: 'Password must atleast 6 characters.' }),
     CPassword: z.string(),
@@ -25,7 +26,8 @@ export const DeanValidator = z
 export const DeanProfileValidator = z
   .object({
     email: z.string().email({ message: 'Email is Required...' }),
-    courseCode: z.string().min(1, { message: 'Course is Required...' }),
+    category: z.string().min(1, { message: 'Course is Required...' }),
+    courseId: z.string().min(1, { message: 'Category is Required...' }),
     username: z.string().min(1, { message: 'Middlename must atleast 2 characters...' }),
     firstname: z
       .string()
@@ -64,7 +66,7 @@ export const DeanProfileValidator = z
     };
   });
 
-  export const DeanProfileValidatorBySession = z
+export const DeanProfileValidatorBySession = z
   .object({
     firstname: z
       .string()
