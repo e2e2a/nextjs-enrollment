@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
-import React, { ReactNode, useEffect, useState } from 'react';
-import Nav from './components/Nav';
+import React, { ReactNode } from 'react';
 import { auth } from '@/auth';
 
 const Layout = async ({ children }: { children: ReactNode }) => {
@@ -9,20 +8,9 @@ const Layout = async ({ children }: { children: ReactNode }) => {
   if (!sessionData) {
     return redirect('/sign-in');
   }
-  // if (sessionData && !sessionData.user.profileVerified) {
-  //   return redirect('/instructor/profile');
-  // }
-  if (sessionData.user.role === 'STUDENT') {
-    return redirect('/');
-  } else if (sessionData.user.role === 'ADMIN') {
-    return redirect('/admin');
-  }
 
-  return (
-    <>
-      <Nav>{children}</Nav>
-    </>
-  );
+
+  return <div>{children}</div>;
 };
 
 export default Layout;

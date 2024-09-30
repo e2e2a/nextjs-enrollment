@@ -1,7 +1,4 @@
 'use client';
-import { Icons } from '@/components/shared/Icons';
-import { UserAvatar } from '@/components/shared/nav/UserAvatar/UserAvatar';
-import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import Note from '../components/Note';
@@ -11,13 +8,11 @@ import PasswordTab from '../components/PasswordTab';
 import ProfileTab from '../components/ProfileTab';
 import ProfileDialog from '../components/ProfileDialog';
 import { useProfileQuery, useProfileQueryByUsername } from '@/lib/queries';
-import LoaderPage from '@/components/shared/LoaderPage';
-import { useParams, usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Loader from '@/components/shared/Loader';
 import ErrorPage from '../components/ErrorPage';
 
 const ProfilePage = () => {
-  console.log('heelllooo')
   const { data } = useSession();
   const [isError, setIsError] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
@@ -32,14 +27,8 @@ const ProfilePage = () => {
     setActiveTab(newTab);
   };
   const session = data?.user;
-  /**
-   * query the profile by the usepath
-   * remove session condition
-   * all logic will be in profile data
-   */
   const { data: res, isLoading, error } = useProfileQueryByUsername(params.name as string);
 
-  // const profile = res?.profile;
   useEffect(() => {
     if (isLoading) {
       return;
@@ -49,7 +38,6 @@ const ProfilePage = () => {
       setLoading(false);
       return;
     }
-    console.log('asdasdasdres', res)
     if (session?.role !== 'ADMIN') {
       if (res?.profile === 'HIDE') {
         setIsError(true);
@@ -57,9 +45,9 @@ const ProfilePage = () => {
         return;
       }
     }
-    if(res){
-    setProfile(res.profile);
-  }
+    if (res) {
+      setProfile(res.profile);
+    }
     setLoading(false);
   }, [isLoading, error, res, profile, session]);
   return (
@@ -90,7 +78,7 @@ const ProfilePage = () => {
                 <div className='w-full flex flex-col justify-center items-center bg-slate-100 '>
                   {isOpen && !session!.profileVerified && (
                     <div className='flex justify-center items-center mt-5'>
-                      <Note handleClose={handleClose} />
+                      <Note handleClose={handleClose} profile={profile} />
                     </div>
                   )}
                   <TabsContent value='profile' className={`w-full bg-white my-10 max-w-[69rem] rounded-lg`}>

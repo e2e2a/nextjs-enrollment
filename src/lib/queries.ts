@@ -45,8 +45,8 @@ import { checkResetPasswordToken, checkToken } from '@/action/token';
 import { verificationCodeProcess, verificationCodeResend } from '@/action/verification';
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
 import { NewPassword } from '@/action/profile/NewPassword';
-import { updateStudentPhoto, updateStudentProfile } from '@/action/profile/updateData';
-import { getAdminProfileBySessionId, getStudentProfileBySessionId, getStudentProfileByUsernameAction } from '@/action/profile/getProfile';
+import { updateStudentPhoto, updateStudentProfile, updateTeacherProfile } from '@/action/profile/updateData';
+import { getAdminProfileBySessionId, getStudentProfileBySessionId, getStudentProfileByUsernameAction, getTeacherProfileBySessionId } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction, getSingleEnrollmentByUserIdIdAction } from '@/action/college/enrollment/user';
 import {
@@ -93,6 +93,7 @@ import {
 } from '@/action/college/curriculums';
 import { removeCourseBlockScheduleAction, updateCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
 import { removeStudentScheduleAction, updateStudentEnrollmentScheduleAction } from '@/action/college/schedules/students';
+import { TeacherProfileValidator } from './validators/AdminValidator';
 const channel = new BroadcastChannel('my-channel');
 // import { supabase } from './supabaseClient';
 
@@ -242,6 +243,16 @@ export const useProfileQuery = (id: any) => {
   });
 };
 
+export const useTeacherProfileQuery = (id: any) => {
+  return useQuery<getSingleProfileResponse, Error>({
+    queryKey: ['userTeacherProfile', id],
+    queryFn: () => getTeacherProfileBySessionId(id),
+    enabled: !!id,
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
+};
+
 export const useProfileAdminQuery = (id: any) => {
   return useQuery<getSingleProfileResponse, Error>({
     queryKey: ['userAdminProfile', id],
@@ -254,7 +265,8 @@ export const useProfileAdminQuery = (id: any) => {
 
 export const useProfileQueryByUsername = (username: string) => {
   return useQuery<getSingleProfileResponse, Error>({
-    queryKey: ['userProfile'],
+    queryKey: ['userProfileByUsername', username],
+    enabled: !!username,
     queryFn: () => getStudentProfileByUsernameAction(username),
     retry: 0,
     refetchOnWindowFocus: false,
@@ -263,18 +275,48 @@ export const useProfileQueryByUsername = (username: string) => {
 
 export const useUpdateProfilePhoto = () => {
   const queryClient = useQueryClient();
-  return useMutation<updateStudentProfileResponse, Error, any>({
+  return useMutation<any, Error, any>({
     mutationFn: async (data) => updateStudentPhoto(data),
-    onSuccess: () => {
-      // Invalidate the 'userProfile' query to trigger a refetch
-      queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+    onSuccess: (data) => {
+      if (data.role === 'STUDENT') {
+        queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+      } else if (data.role === 'TEACHER') {
+        queryClient.invalidateQueries({ queryKey: ['Teachers'] });
+        queryClient.invalidateQueries({ queryKey: ['userTeacherProfile'] });
+        queryClient.invalidateQueries({ queryKey: ['TeacherProfile'] });
+        queryClient.invalidateQueries({ queryKey: ['TeacherProfileById'] });
+      } else if (data.role === 'ADMIN') {
+        queryClient.invalidateQueries({ queryKey: ['userAdminProfile'] });
+      } else if (data.role === 'DEAN') {
+        /**
+         * @todo dean photo
+         * 1. create a dean schema models
+         */
+      }
     },
   });
 };
 
 export const useStudentProfileMutation = () => {
+  const queryClient = useQueryClient();
   return useMutation<updateStudentProfileResponse, Error, z.infer<typeof StudentProfileValidator>>({
     mutationFn: async (data) => updateStudentProfile(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+    },
+  });
+};
+
+export const useTeacherProfileMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => updateTeacherProfile(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['Teachers'] });
+      queryClient.invalidateQueries({ queryKey: ['userTeacherProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['TeacherProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['TeacherProfileById'] });
+    },
   });
 };
 

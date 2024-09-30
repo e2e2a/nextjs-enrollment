@@ -99,7 +99,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: 'Documentation',
-      href: '/',
+      href: '/documentation',
       icon: 'page',
     },
     // {
@@ -153,7 +153,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: 'Documentation',
-      href: '/',
+      href: '/documentation',
       icon: 'page',
     },
     // {

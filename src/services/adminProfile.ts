@@ -41,3 +41,13 @@ export const getAdminProfileByUserId = async (userId: any) => {
     return null;
   }
 };
+
+export const updateAdminProfileById = async (id: string, data: any) => {
+  try {
+    const updatedProfile = await AdminProfile.findByIdAndUpdate(id, { ...data, isVerified: true }, { new: true });
+    return updatedProfile;
+  } catch (error) {
+    console.log(error)
+    return null;
+  }
+};

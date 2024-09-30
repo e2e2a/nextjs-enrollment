@@ -27,6 +27,7 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
     if (files && files[0].size < 10000000) {
       const file = files[0];
       setImageFile(file);
+      // Preview the image
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -40,6 +41,11 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
   };
 
   const handleUploadFile = () => {
+    /**
+     * first import this function "updateUserImageById"
+     * create a tanstack mutation
+     * proceed saving imageFile and then use the function to save the imageFile in the user
+     */
     if (imageFile) {
       setIsUploading(true);
       const name = imageFile.name;
@@ -91,7 +97,6 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
             setDownloadURL(url);
             // setDialogOpen(false);
             // setIsUploading(false);
-            console.log('downloadUrl', downloadURL);
           });
         }
       );

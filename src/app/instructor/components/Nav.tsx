@@ -1,12 +1,12 @@
 "use client"
 import React, { ReactNode, useEffect, useState } from 'react'
-import { MainNav } from '@/components/shared/nav/MainNav';
-import { MobileNav } from '@/components/shared/nav/MobileNav';
-import { SidebarNav } from '@/components/shared/nav/SidebarNav';
 import { dashboardConfig } from '@/constant/dashboard';
 import { useSession } from 'next-auth/react';
 import { useProfileQuery } from '@/lib/queries';
 import Loader from '@/components/shared/Loader';
+import { SidebarNav } from './SidebarNav';
+import { MainNav } from '@/components/shared/nav/MainNav';
+import { MobileNav } from '@/components/shared/nav/MobileNav';
 const Nav = ({ children }: { children: ReactNode }) => {
     const { data: sessionData } = useSession();
     const [profile, setProfile] = useState({});

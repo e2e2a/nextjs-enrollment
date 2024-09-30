@@ -2,23 +2,24 @@
 /**
  * @todo encrypt before passing data to client
  */
-// const crypto = require('crypto');
+import crypto from 'crypto';
+export const encryptData = (data: any, secret: any) => {
+  const key = crypto.createHash('sha256').update(secret).digest(); // Hash to get a fixed-length key
+  const iv = crypto.randomBytes(16); // Initialization vector
+  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+  let encrypted = cipher.update(data, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  return iv.toString('hex') + ':' + encrypted; // Store the IV with the encrypted data
+};
 
-// const encryptData = (data) => {
-//   const cipher = crypto.createCipher('aes-256-cbc', process.env.ENCRYPTION_KEY);
-//   let encrypted = cipher.update(JSON.stringify(data), 'utf8', 'hex');
-//   encrypted += cipher.final('hex');
-//   return encrypted;
-// };
-
-// // Send encrypted data in the response
-// const encryptedResponse = encryptData(data);
-// res.json({ data: encryptedResponse });
-
-// // On the client-side, decrypt it when needed
-// const decryptData = (encryptedData) => {
-//   const decipher = crypto.createDecipher('aes-256-cbc', process.env.ENCRYPTION_KEY);
-//   let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
-//   decrypted += decipher.final('utf8');
-//   return JSON.parse(decrypted);
-// };
+export const decryptData = (data: any, secret: any) => {
+    const [ivHex, encryptedText] = data.split(':'); // Split to get IV and encrypted text
+    const iv = Buffer.from(ivHex, 'hex');
+    const key = crypto.createHash('sha256').update(secret).digest();
+    
+    const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
+    let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    
+    return decrypted; // Returns the decrypted string
+};

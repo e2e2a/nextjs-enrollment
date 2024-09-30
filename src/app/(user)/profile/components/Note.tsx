@@ -5,9 +5,10 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Icons } from '@/components/shared/Icons';
 import Link from 'next/link';
 interface IProps {
+  profile: any;
   handleClose: () => void;
 }
-const Note = ({ handleClose }: IProps) => {
+const Note = ({ profile, handleClose }: IProps) => {
   return (
     // <div className='flex drop-shadow-md shadow-md shadow-orange-200 my-3 flex-col relative max-w-[69rem] w-full border border-gray-40 rounded-b-xl pt-16 pb-12 px-11 bg-white rounded-lg space-y-4'>
     <div className='flex drop-shadow-none shadow-md shadow-orange-200 my-3 flex-col relative max-w-[69rem] w-full border border-gray-40 rounded-xl pt-5 pb-12 px-11 bg-white space-y-4'>
@@ -15,7 +16,7 @@ const Note = ({ handleClose }: IProps) => {
         <Icons.close className='h-4 w-4 cursor-pointer' onClick={handleClose} />
       </div>
       <div className='flex justify-start items-center'>
-        <h2 className='text-xl font-bold tracking-wide'>Welcome e2e2a</h2>
+        <h2 className='text-xl font-bold tracking-wide'>Welcome {profile.username}</h2>
       </div>
       <div className='flex-col'>
         <p className='text-muted-foreground text-justify text-sm sm:text-[15px]'>

@@ -39,3 +39,13 @@ export const getTeacherProfileByUserId = async (userId: any) => {
     return null;
   }
 };
+
+export const updateTeacherProfileById = async (id: string, data: any) => {
+  try {
+    const updatedProfile = await TeacherProfile.findByIdAndUpdate(id, { ...data, isVerified: true }, { new: true });
+    return updatedProfile;
+  } catch (error) {
+    console.log(error)
+    return null;
+  }
+};
