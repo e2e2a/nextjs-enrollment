@@ -10,9 +10,10 @@ import SearchBy from './SearchBy';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData;
+  enrollmentSetup: any;
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, enrollmentSetup }: DataTableProps<TData, TValue>) {
   const [searchBy, setSearchBy] = useState('Fullname');
   useEffect(() => {
     if (!data) {
@@ -53,7 +54,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             }}
             className='max-w-sm'
           />
-          <SearchBy setSearchBy={setSearchBy}/>
+          <SearchBy setSearchBy={setSearchBy} />
         </div>
 
         {/* Column visibility */}
@@ -85,6 +86,14 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
+                  if (!enrollmentSetup.addOrDropSubjects) {
+                    if (header.id === 'requesting') return;
+                    if (header.id === 'requestStatusInDean') return;
+                    if (header.id === 'requestStatusInRegistrar') return;
+                    if (header.id === 'options') return;
+                  } else {
+                    if (header.id === 'actions') return;
+                  }
                   return (
                     <TableHead key={header.id} className='text-center'>
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -98,9 +107,17 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow className='whitespace-pre' key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    if (!enrollmentSetup.addOrDropSubjects) {
+                      if (cell.column.id === 'requesting') return;
+                      if (cell.column.id === 'requestStatusInDean') return;
+                      if (cell.column.id === 'requestStatusInRegistrar') return;
+                      if (cell.column.id === 'options') return;
+                    } else {
+                      if (cell.column.id === 'actions') return;
+                    }
+                    return <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>;
+                  })}
                 </TableRow>
               ))
             ) : (

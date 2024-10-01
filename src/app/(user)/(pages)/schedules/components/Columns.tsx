@@ -2,6 +2,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
+import ActionsCell from './ActionsCell';
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -177,7 +178,6 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.grade,
     id: 'grade',
     header: 'Grade',
     cell: ({ cell, row }) => {
@@ -203,18 +203,90 @@ export const columns: ColumnDef<any>[] = [
   //     );
   //   },
   // },
-
+  {
+    id: 'status',
+    header: 'Status',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user.status === 'Approved' ? (
+            <span className='text-green-500 text-xs'>{user.status}</span>
+          ) : user.status === 'Pending' ? (
+            <span className='text-blue-500 text-xs'>{user.status}</span>
+          ) : user.status === 'Suggested' ? (
+            <span className='text-orange-500 text-xs'>{user.status}</span>
+          ) : user.status === 'Declined' ? (
+            <span className='text-red text-xs'>{user.status}</span>
+          ) : null}
+        </div>
+      );
+    },
+  },
   /**
    * @todo
    * uncomment this action and do some request drop subject
    */
-  // {
-  //   id: 'actions',
-  //   header: 'Actions',
-  //   cell: ({ row }) => {
-  //     const user = row.original;
-
-  //     return <ActionsCell user={user} />;
-  //   },
-  // },
+  {
+    id: 'request',
+    header: 'Request',
+    cell: ({ row }) => {
+      const user = row.original;
+      return <ActionsCell user={user} />;
+    },
+  },
+  {
+    id: 'requestStatusInDean',
+    header: 'Approved By Dean',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user.requestStatusInDean === 'Approved' ? (
+            <span className='text-green-500 text-xs'>{user.requestStatusInDean}</span>
+          ) : user.requestStatusInDean === 'Pending' ? (
+            <span className='text-blue-500 text-xs'>{user.requestStatusInDean}</span>
+          ) : user.requestStatusInDean === 'Declined' ? (
+            <span className='text-red text-xs'>{user.requestStatusInDean}</span>
+          ) : null}
+        </div>
+      );
+    },
+  },
+  {
+    id: 'requestStatusInRegistrar',
+    header: 'Approved By Registrar',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user.requestStatusInRegistrar === 'Approved' ? (
+            <span className='text-green-500 text-xs'>{user.requestStatusInRegistrar}</span>
+          ) : user.requestStatusInRegistrar === 'Pending' ? (
+            <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
+          ) : user.requestStatusInRegistrar === 'Declined' ? (
+            <span className='text-red text-xs'>{user.requestStatusInRegistrar}</span>
+          ) : null}
+        </div>
+      );
+    },
+  },
+  {
+    id: 'request status',
+    header: 'Request Status',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user.requestStatusInRegistrar === 'Approved' ? (
+            <span className='text-green-500 text-xs'>{user.requestStatusInRegistrar}</span>
+          ) : user.requestStatusInRegistrar === 'Pending' ? (
+            <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
+          ) : user.requestStatusInRegistrar === 'Declined' ? (
+            <span className='text-red text-xs'>{user.requestStatusInRegistrar}</span>
+          ) : null}
+        </div>
+      );
+    },
+  },
 ];

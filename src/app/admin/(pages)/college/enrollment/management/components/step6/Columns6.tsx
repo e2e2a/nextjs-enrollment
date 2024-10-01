@@ -7,10 +7,8 @@ import ActionsCell from './ActionsCell';
 import { IEnrollment } from '@/types';
 import StudentPhoto from '../step1/StudentPhoto';
 import PSAFile from '../step1/PSAFile';
-import ReportCardFile from '../step1/ReportCardFile';
-import GoodMoralFile from '../step1/GoodMoralFile';
 
-export const columns4: ColumnDef<IEnrollment>[] = [
+export const columns6: ColumnDef<IEnrollment>[] = [
   {
     accessorFn: (row) => '#',
     id: '#',
@@ -47,7 +45,7 @@ export const columns4: ColumnDef<IEnrollment>[] = [
       return `${lastname}, ${firstname} ${middlename}`;
     },
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.profileId.lastname}, ${row.original.profileId.firstname} ${row.original.profileId.middlename}`.toLowerCase();
+      const fullName = `${row.original.profileId.lastname}, ${row.original.profileId.firstname}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
@@ -89,7 +87,7 @@ export const columns4: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.profileId.psaUrl,
+    accessorFn: (row) => row.psaUrl,
     accessorKey: 'psa file',
     header: 'PSA file',
     cell: ({ row }) => {
@@ -99,27 +97,7 @@ export const columns4: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.profileId.goodMoralUrl,
-    accessorKey: 'good moral',
-    header: 'Good Moral',
-    cell: ({ row }) => {
-      const user = row.original;
-
-      return <GoodMoralFile user={user} />;
-    },
-  },
-  {
-    accessorFn: (row) => row.profileId.reportCardUrl,
-    accessorKey: 'Report Card',
-    header: 'Report Card',
-    cell: ({ row }) => {
-      const user = row.original;
-
-      return <ReportCardFile user={user} />;
-    },
-  },
-  {
-    accessorFn: (row) => row.profileId.photoUrl,
+    accessorFn: (row) => row.photoUrl,
     accessorKey: 'student photo',
     header: 'Student Photo',
     cell: ({ row }) => {
@@ -163,34 +141,6 @@ export const columns4: ColumnDef<IEnrollment>[] = [
       return (
         <div key={cell.id} className=' '>
           {user.studentSubjects.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green'>{user.studentSubjects.length}</span>}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.studentSubjects.request,
-    accessorKey: 'request add',
-    header: 'Request Add',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      const requestAdd = user.studentSubjects.filter((s: any) => s.request === 'Add');
-      return (
-        <div key={cell.id} className=' '>
-          {requestAdd.length}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.studentSubjects.request,
-    accessorKey: 'request drop',
-    header: 'Request Drop',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      const requestDrop = user.studentSubjects.filter((s: any) => s.request === 'Drop');
-      return (
-        <div key={cell.id} className=' '>
-          {requestDrop.length}
         </div>
       );
     },

@@ -20,7 +20,7 @@ export const updateStudentEnrollmentScheduleAction = async (data: any) => {
       for (const existStudentSched of enrollment.studentSubjects) {
         if (existStudentSched.teacherScheduleId._id.toString() === item.teacherScheduleId) {
           return { error: 'Some Teacher Schedule already exist in the student schedules.', status: 409 };
-        } 
+        }
       }
     }
     /**
@@ -45,7 +45,7 @@ const updateStudentSched = async (blockTypeId: any, data: any) => {
       await Enrollment.findByIdAndUpdate(
         blockTypeId,
         // @ts-ignore
-        { $addToSet: { studentSubjects: { teacherScheduleId: item.teacherScheduleId, profileId: enrollment.profileId._id, status: 'Approved' } } }, // Add teacherScheduleId to blockSubjects
+        { $addToSet: { studentSubjects: { teacherScheduleId: item.teacherScheduleId, profileId: enrollment.profileId._id, status: 'Pending', requestStatusInRegistrar: 'Pending', requestStatusInDean: 'Pending' } } }, // Add teacherScheduleId to blockSubjects
         { new: true }
       );
     }

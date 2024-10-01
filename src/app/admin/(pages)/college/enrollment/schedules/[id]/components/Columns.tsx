@@ -30,34 +30,7 @@ export const columns: ColumnDef<any>[] = [
       );
     },
   },
-  {
-    accessorKey: 'Fullname',
-    header: ({ column }) => {
-      return (
-        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Instructor
-          <ArrowUpDown className='ml-2 h-4 w-4' />
-        </Button>
-      );
-    },
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className='capitalize'>
-          {user.teacherScheduleId.profileId.firstname} {user.teacherScheduleId.profileId.middlename} {user.teacherScheduleId.profileId.lastname} {user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName : ''}
-        </div>
-      );
-    },
-    accessorFn: (row) =>
-      `${row.teacherScheduleId.profileId.firstname} ${row.teacherScheduleId.profileId.middlename} ${row.teacherScheduleId.profileId.lastname} ${row.teacherScheduleId.profileId.extensionName ? row.teacherScheduleId.profileId.extensionName : ''}`,
-    filterFn: (row, columnId, filterValue) => {
-      const user = row.original;
-      const fullName = `${user.teacherScheduleId.profileId.firstname} ${user.teacherScheduleId.profileId.middlename} ${user.teacherScheduleId.profileId.lastname} ${
-        user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName : ''
-      }`.toLowerCase();
-      return fullName.includes(filterValue.toLowerCase());
-    },
-  },
+
   {
     accessorFn: (row) => row.teacherScheduleId.subjectId.subjectCode,
     id: 'subject code',
@@ -94,45 +67,6 @@ export const columns: ColumnDef<any>[] = [
       return (
         <div key={cell.id} className='uppercase'>
           {user.teacherScheduleId.days.join(', ')}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.teacherScheduleId.startTime,
-    id: 'start time',
-    header: 'Start Time',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.startTime}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.teacherScheduleId.endTime,
-    id: 'end time',
-    header: 'End Time',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.endTime}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.teacherScheduleId.roomId.roomName,
-    id: 'room',
-    header: 'Room',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.roomId.roomName}
         </div>
       );
     },
@@ -177,11 +111,135 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row.teacherScheduleId.startTime,
+    id: 'start time',
+    header: 'Start Time',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user.teacherScheduleId.startTime}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.teacherScheduleId.endTime,
+    id: 'end time',
+    header: 'End Time',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user.teacherScheduleId.endTime}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.teacherScheduleId.roomId.roomName,
+    id: 'room',
+    header: 'Room',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user.teacherScheduleId.roomId.roomName}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'Fullname',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Instructor
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='capitalize'>
+          {user.teacherScheduleId.profileId.firstname} {user.teacherScheduleId.profileId.middlename} {user.teacherScheduleId.profileId.lastname} {user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName : ''}
+        </div>
+      );
+    },
+    accessorFn: (row) =>
+      `${row.teacherScheduleId.profileId.firstname} ${row.teacherScheduleId.profileId.middlename} ${row.teacherScheduleId.profileId.lastname} ${row.teacherScheduleId.profileId.extensionName ? row.teacherScheduleId.profileId.extensionName : ''}`,
+    filterFn: (row, columnId, filterValue) => {
+      const user = row.original;
+      const fullName = `${user.teacherScheduleId.profileId.firstname} ${user.teacherScheduleId.profileId.middlename} ${user.teacherScheduleId.profileId.lastname} ${
+        user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName : ''
+      }`.toLowerCase();
+      return fullName.includes(filterValue.toLowerCase());
+    },
+  },
+  {
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
       const user = row.original;
-
+      return <ActionsCell user={user} />;
+    },
+  },
+  {
+    accessorFn: (row) => row.teacherScheduleId.roomId.roomName,
+    id: 'requesting',
+    header: 'Requesting',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {!user.request && <div className="text-gray-500 text-xs">N/A</div> }
+          {user.request && user.request === 'Add' ? <div className='text-green-500 text-xs'>Add</div> : user.request === 'Drop' ? <div className='text-green-500 text-xs'>Add</div> : null}
+        </div>
+      );
+    },
+  },
+  {
+    id: 'requestStatusInDean',
+    header: 'Approved By Dean',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user.requestStatusInDean === 'Approved' ? (
+            <span className='text-green-500 text-xs'>{user.requestStatusInDean}</span>
+          ) : user.requestStatusInDean === 'Pending' ? (
+            <span className='text-blue-500 text-xs'>{user.requestStatusInDean}</span>
+          ) : user.requestStatusInDean === 'Declined' ? (
+            <span className='text-red text-xs'>{user.requestStatusInDean}</span>
+          ) : null}
+        </div>
+      );
+    },
+  },
+  {
+    id: 'requestStatusInRegistrar',
+    header: 'Approved By Registrar',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user.requestStatusInRegistrar === 'Approved' ? (
+            <span className='text-green-500 text-xs'>{user.requestStatusInRegistrar}</span>
+          ) : user.requestStatusInRegistrar === 'Pending' ? (
+            <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
+          ) : user.requestStatusInRegistrar === 'Declined' ? (
+            <span className='text-red text-xs'>{user.requestStatusInRegistrar}</span>
+          ) : null}
+        </div>
+      );
+    },
+  },
+  {
+    id: 'options',
+    header: 'Options',
+    cell: ({ row }) => {
+      const user = row.original;
       return <ActionsCell user={user} />;
     },
   },

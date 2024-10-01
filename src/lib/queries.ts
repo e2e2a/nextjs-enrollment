@@ -95,9 +95,31 @@ import {
 import { removeCourseBlockScheduleAction, updateCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
 import { removeStudentScheduleAction, updateStudentEnrollmentScheduleAction } from '@/action/college/schedules/students';
 import { TeacherProfileValidator } from './validators/AdminValidator';
+import { getEnrollmentSetup, updateEnrollmentSetup } from '@/action/enrollmentSetup';
 const channel = new BroadcastChannel('my-channel');
 // import { supabase } from './supabaseClient';
+/**
+ * 
+ * @returns EnrollmentSetup
+ */
 
+export const useEnrollmentSetupQuery = () => {
+  return useQuery<any, Error>({
+    queryKey: ['EnrollmentSetup'],
+    queryFn: () => getEnrollmentSetup(),
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
+};
+export const useUpdateEnrollmentSetupMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => updateEnrollmentSetup(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['EnrollmentSetup'] });
+    },
+  });
+};
 // ============================================================
 // AUTH QUERIES
 // ============================================================
@@ -263,6 +285,7 @@ export const useTeacherProfileQuery = (id: any) => {
     refetchOnWindowFocus: false,
   });
 };
+
 
 export const useDeanProfileQuery = (id: any) => {
   return useQuery<getSingleProfileResponse, Error>({

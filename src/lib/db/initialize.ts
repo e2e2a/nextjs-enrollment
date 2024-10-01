@@ -16,8 +16,28 @@ import StudentCurriculum from '@/models/StudentCurriculum';
 import StudentSchedule from '@/models/StudentSchedule';
 import { UserIp } from '@/models/UserIp';
 import AdminProfile from '@/models/AdminProfile';
+import DeanProfile from '@/models/DeanProfile';
+import EnrollmentSetup from '@/models/EnrollmentSetup';
 
-type ModelName = 'Course' | 'User' | 'UserIp' | 'StudentProfile' | 'Account' | 'Enrollment' | 'BlockType' | 'Subject' | 'TeacherProfile' | 'TeacherSchedule' | 'Room' | 'SchoolYear' | 'Curriculum' | 'StudentCurriculum' | 'StudentSchedule' | 'AdminProfile';
+type ModelName =
+  | 'Course'
+  | 'User'
+  | 'UserIp'
+  | 'StudentProfile'
+  | 'Account'
+  | 'Enrollment'
+  | 'BlockType'
+  | 'Subject'
+  | 'TeacherProfile'
+  | 'TeacherSchedule'
+  | 'Room'
+  | 'SchoolYear'
+  | 'Curriculum'
+  | 'StudentCurriculum'
+  | 'StudentSchedule'
+  | 'AdminProfile'
+  | 'DeanProfile'
+  | 'EnrollmentSetup';
 
 const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   Course,
@@ -36,6 +56,8 @@ const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   StudentCurriculum,
   StudentSchedule,
   AdminProfile,
+  DeanProfile,
+  EnrollmentSetup
 };
 let isInitialized = false;
 const initializeModel = async (modelNames: ModelName[]) => {
@@ -45,7 +67,6 @@ const initializeModel = async (modelNames: ModelName[]) => {
     if (!model) {
       throw new Error(`Unknown model: ${name}`);
     }
-
 
     // Force model initialization by executing a dummy query
     await model.countDocuments(); // Use countDocuments instead

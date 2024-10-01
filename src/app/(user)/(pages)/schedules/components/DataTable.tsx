@@ -6,19 +6,26 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import SearchBy from './SearchBy';
+import StudentSched from './StudentSched';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData;
+  enrollment: any;
+  enrollmentSetup: any;
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, enrollment, enrollmentSetup }: DataTableProps<TData, TValue>) {
   const [searchBy, setSearchBy] = useState('Descriptive Title');
+  const [enrollmentStudentStatus, setEnrollmentStudentStatus] = useState('');
   useEffect(() => {
     if (!data) {
       return;
     }
-  }, [data]);
+    if (enrollment) {
+      setEnrollmentStudentStatus(enrollment.enrollStatus);
+    }
+  }, [data, enrollment]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -54,26 +61,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           />
           <SearchBy setSearchBy={setSearchBy} />
         </div>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant='outline' className='ml-auto'>
-              Columns
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end' className='bg-neutral-50'>
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem key={column.id} className='capitalize' checked={column.getIsVisible()} onCheckedChange={(value) => column.toggleVisibility(!!value)}>
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {enrollmentSetup.addOrDropSubjects && <StudentSched data={enrollment} />}
       </div>
 
       {/* Table */}
@@ -83,6 +71,22 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
+                  if (enrollmentStudentStatus) {
+                    if (enrollmentStudentStatus === 'Pending') {
+                      if (header.id === 'grade') return;
+                    }
+                    if (enrollmentStudentStatus === 'Enrolled') {
+                      if (header.id === 'status') return;
+                    }
+                    if (enrollmentStudentStatus === 'Pending' || enrollmentStudentStatus === 'Enrolled') {
+                      if (!enrollmentSetup.addOrDropSubjects) {
+                        if (header.id === 'request') return;
+                        if (header.id === 'requestStatusInDean') return;
+                        if (header.id === 'requestStatusInRegistrar') return;
+                        if (header.id === 'request status') return;
+                      }
+                    }
+                  }
                   return (
                     <TableHead key={header.id} className='text-center'>
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -94,13 +98,31 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           </TableHeader>
           <TableBody className='text-center '>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow className='whitespace-pre' key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                  ))}
-                </TableRow>
-              ))
+              table.getRowModel().rows.map((row) => {
+                return (
+                  <TableRow className='whitespace-pre' key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                    {row.getVisibleCells().map((cell) => {
+                      if (enrollmentStudentStatus) {
+                        if (enrollmentStudentStatus === 'Pending') {
+                          if (cell.column.id === 'grade') return;
+                        }
+                        if (enrollmentStudentStatus === 'Enrolled') {
+                          if (cell.column.id === 'status') return;
+                        }
+                        if (enrollmentStudentStatus === 'Pending' || enrollmentStudentStatus === 'Enrolled') {
+                          if (!enrollmentSetup.addOrDropSubjects) {
+                            if (cell.column.id === 'request') return;
+                            if (cell.column.id === 'requestStatusInDean') return;
+                            if (cell.column.id === 'requestStatusInRegistrar') return;
+                            if (cell.column.id === 'request status') return;
+                          }
+                        }
+                      }
+                      return <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>;
+                    })}
+                  </TableRow>
+                );
+              })
             ) : (
               <TableRow className='whitespace-pre'>
                 <TableCell colSpan={columns.length} className='h-24 text-center'>

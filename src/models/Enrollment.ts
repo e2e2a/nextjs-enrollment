@@ -101,17 +101,29 @@ const schema = new Schema<IEnrollment>(
         },
         status: {
           type: String,
-          enum: ['Pending', 'Approved', 'Suggested', 'Declined'],
+          enum: ['Approved', 'Suggested', 'Declined', 'Pending'],
         },
-        // studentScheduleId: {
-        //   type: mongoose.Schema.Types.ObjectId,
-        //   ref: 'StudentSchedule',
-        // },
+        request: {
+          type: String,
+          enum: ['Add', 'Drop'],
+        },
+
+        requestStatusInDean: {
+          type: String,
+          enum: ['Pending', 'Approved', 'Declined'],
+        },
+        requestStatusInRegistrar: {
+          type: String,
+          enum: ['Pending', 'Approved', 'Declined'],
+        },
+        requestStatus: {
+          type: String,
+          enum: ['Approved', 'Declined'],
+        },
         profileId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'StudentProfile',
         },
-        // i prefere grade is only 1
         grade: { type: String },
       },
     ],

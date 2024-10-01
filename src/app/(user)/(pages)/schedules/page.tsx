@@ -1,10 +1,10 @@
 'use client';
-import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useTeacherScheduleCollegeQuery, useEnrollmentQueryByUserId } from '@/lib/queries';
+import { useTeacherScheduleCollegeQuery, useEnrollmentQueryByUserId, useEnrollmentSetupQuery } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
+import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = () => {
   const { data: session } = useSession();
@@ -12,21 +12,23 @@ const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data, isLoading, error: isEnError } = useEnrollmentQueryByUserId(session?.user.id);
   const { data: b, isLoading: bLoading, error: bError } = useTeacherScheduleCollegeQuery();
+  const { data: ESetup, isLoading: ESetupLoading, error: ESetupError } = useEnrollmentSetupQuery();
 
   useEffect(() => {
     if (bError || !b) return;
     if (isEnError || !data) return;
+    if (ESetupError || !ESetup) return;
 
     if (b && data) {
       setIsPageLoading(false);
     }
-  }, [b, bError, data, isEnError]);
+  }, [b, bError, data, isEnError, ESetup, ESetupError]);
 
   return (
     <>
       {isPageLoading ? (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>
-          <Loader />
+          <LoaderPage />
         </div>
       ) : isError ? (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
@@ -55,7 +57,7 @@ const Page = () => {
                 </h1>
               </div>
             </div>
-            <DataTable columns={columns} data={data?.enrollment.studentSubjects} />
+            <DataTable columns={columns} data={data?.enrollment.studentSubjects} enrollmentSetup={ESetup.enrollmentSetup} enrollment={data.enrollment}/>
           </div>
         )
       )}
