@@ -164,6 +164,7 @@ export const createStudentCurriculumAction = async (data: any) => {
     //   return { error: 'Curriculum not found.', status: 500 };
     // }
     // console.log(curriculum)
+    // @ts-ignore
     data.courseId = studentE.courseId._id
     const studentCurriculum = await createStudentCurriculum(data);
     if (!studentCurriculum) {

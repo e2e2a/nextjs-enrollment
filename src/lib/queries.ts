@@ -49,7 +49,7 @@ import { NewPassword } from '@/action/profile/NewPassword';
 import { updateAdminProfile, updateDeanProfile, updateStudentPhoto, updateStudentProfile, updateTeacherProfile } from '@/action/profile/updateData';
 import { getAdminProfileBySessionId, getDeanProfileBySessionId, getStudentProfileBySessionId, getStudentProfileByUsernameAction, getTeacherProfileBySessionId } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
-import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction, getSingleEnrollmentByUserIdIdAction } from '@/action/college/enrollment/user';
+import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction, getSingleEnrollmentByUserIdIdAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
 import {
   approvedEnrollmentStep1Action,
   approvedEnrollmentStep2Action,
@@ -490,6 +490,30 @@ export const useEnrollmentQueryByUserId = (data: any) => {
   });
 };
 
+export const useDropSubjectMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => updateDropSubjectAction(data),
+    onSuccess: () => {
+      queryClient.refetchQueries({ queryKey: ['CollegeEnrollment'] });
+      queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
+      queryClient.refetchQueries({ queryKey: ['EnrollmentById'] });
+      queryClient.refetchQueries({ queryKey: ['EnrollmentByUserId'] });
+    },
+  });
+};
+export const useAddSubjectMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => updateAddSubjectAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
+      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
+      queryClient.invalidateQueries({ queryKey: ['BlockType'] });
+    },
+  });
+};
 export const useEnrollmentStep1Mutation = () => {
   const queryClient = useQueryClient();
   return useMutation<getEnrollmentResponse, Error, any>({
@@ -497,9 +521,6 @@ export const useEnrollmentStep1Mutation = () => {
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: ['userProfile'] });
       queryClient.refetchQueries({ queryKey: ['Enrollment'] });
-    },
-    onError: (error) => {
-      console.error('Error during mutation:', error);
     },
   });
 };

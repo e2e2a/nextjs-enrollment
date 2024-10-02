@@ -194,7 +194,7 @@ export const columns: ColumnDef<any>[] = [
       return (
         <div key={cell.id} className='uppercase'>
           {!user.request && <div className="text-gray-500 text-xs">N/A</div> }
-          {user.request && user.request === 'Add' ? <div className='text-green-500 text-xs'>Add</div> : user.request === 'Drop' ? <div className='text-green-500 text-xs'>Add</div> : null}
+          {user.request && user.request === 'add' ? <div className='text-green-500 text-xs'>Add</div> : user.request === 'drop' ? <div className='text-red text-xs'>Drop</div> : null}
         </div>
       );
     },

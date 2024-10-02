@@ -105,7 +105,7 @@ const schema = new Schema<IEnrollment>(
         },
         request: {
           type: String,
-          enum: ['Add', 'Drop'],
+          enum: ['add', 'drop', 'suggested'],
         },
 
         requestStatusInDean: {
@@ -118,7 +118,7 @@ const schema = new Schema<IEnrollment>(
         },
         requestStatus: {
           type: String,
-          enum: ['Approved', 'Declined'],
+          enum: ['Approved', 'Pending', 'Declined'],
         },
         profileId: {
           type: mongoose.Schema.Types.ObjectId,

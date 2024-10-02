@@ -1,12 +1,14 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { getCourseByCourseCode } from '@/services/course';
-import { createEnrollment, deleteEnrollmentById, getEnrollmentById, getEnrollmentByUserId, updateEnrollmentById } from '@/services/enrollment';
-import { getStudentProfileByUserId, updateStudentProfileById } from '@/services/studentProfile';
+import { createEnrollment, deleteEnrollmentById, getEnrollmentById, getEnrollmentByProfileId, getEnrollmentByUserId, updateEnrollmentById } from '@/services/enrollment';
+import { getStudentProfileById, getStudentProfileByUserId, updateStudentProfileById } from '@/services/studentProfile';
 import { getEnrollmentResponse, getSingleEnrollmentResponse, IResponse } from '@/types';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll, uploadBytes } from 'firebase/storage';
 import { storage } from '@/firebase';
 import StudentProfile from '@/models/StudentProfile';
+import Enrollment from '@/models/Enrollment';
+import TeacherSchedule from '@/models/TeacherSchedule';
 
 export const createEnrollmentAction = async (data: any): Promise<getEnrollmentResponse> => {
   try {
@@ -129,6 +131,81 @@ export const getSingleEnrollmentByUserIdIdAction = async (userId: any): Promise<
     return { enrollment: JSON.parse(JSON.stringify(enrollment)), status: 200 };
   } catch (error) {
     console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+
+export const updateDropSubjectAction = async (data: any) => {
+  try {
+    await dbConnect();
+    const profile = await getStudentProfileById(data.profileId);
+    if (!profile) return { error: 'No profile found.', status: 403 };
+    const enrollment = await getEnrollmentByProfileId(profile._id);
+    if (!enrollment) return { error: 'No enrollment found.', status: 403 };
+    // @ts-ignore
+    const enrollmentToUpdate = await enrollment.studentSubjects.find((sched: any) => sched._id.toString() === data.studentSubjectId);
+    if (!enrollmentToUpdate) {
+      return { error: 'No student subject found.', status: 403 };
+    }
+    enrollmentToUpdate.request = data.request;
+    enrollmentToUpdate.requestStatusInDean = 'Pending';
+    enrollmentToUpdate.requestStatusInRegistrar = 'Pending';
+    enrollmentToUpdate.requestStatus = 'Pending';
+    await enrollment.save();
+    return { message: `${data.request} subject has been updated.`, status: 201 };
+  } catch (error) {
+    console.log('server e:', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+
+export const updateAddSubjectAction = async (data: any) => {
+  try {
+    await dbConnect();
+    const enrollment = await getEnrollmentById(data.enrollmentId);
+    if (!enrollment) return { error: 'Enrollment ID is not valid.', status: 404 };
+    for (const item of data.selectedItems) {
+      // Find the Teacher Schedule
+      const teacherSchedule = await TeacherSchedule.findById(item.teacherScheduleId).populate('blockTypeId');
+      if (!teacherSchedule) {
+        return { error: `Teacher Schedule ID ${item.teacherScheduleId} is not valid.`, status: 404 };
+      }
+      // @ts-ignore
+      for (const existStudentSched of enrollment.studentSubjects) {
+        if (existStudentSched.teacherScheduleId._id.toString() === item.teacherScheduleId) {
+          return { error: 'Some Teacher Schedule already exist in the student schedules.', status: 409 };
+        } 
+      }
+    }
+    /**
+     * @todo
+     * 1. check conflict time
+     */
+    const updatedSched = await updateStudentSched(enrollment._id, data);
+    if (!updatedSched) return { error: 'Something wrong with updating.', status: 404 };
+    return { message: 'Subject created successfully.', status: 201 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+
+const updateStudentSched = async (blockTypeId: any, data: any) => {
+  try {
+    await dbConnect();
+    const enrollment = await getEnrollmentById(data.enrollmentId);
+    if (!enrollment) return { error: 'Enrollment ID is not valid.', status: 404 };
+    for (const item of data.selectedItems) {
+      await Enrollment.findByIdAndUpdate(
+        blockTypeId,
+        // @ts-ignore
+        { $addToSet: { studentSubjects: { teacherScheduleId: item.teacherScheduleId, profileId: enrollment.profileId._id, status: 'Pending', request: 'add', requestStatusInDean: 'Pending', requestStatusInRegistrar: 'Pending', requestStatus: 'Pending'} } }, // Add teacherScheduleId to blockSubjects
+        { new: true }
+      );
+    }
+    return { message: 'Block subjects updated successfully.', status: 200 };
+  } catch (error) {
+    console.error('Error updating block subjects:', error);
     return { error: 'Something went wrong', status: 500 };
   }
 };

@@ -93,7 +93,7 @@ export const getEnrollmentByProfileId = async (profileId: string) => {
       })
       .exec();
     // console.log('i am exec...', enrollment);
-    return JSON.parse(JSON.stringify(enrollment));
+    return enrollment;
   } catch (error) {
     console.log(error);
     return null;

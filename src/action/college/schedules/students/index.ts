@@ -67,7 +67,7 @@ export const removeStudentScheduleAction = async (data: any) => {
     if (!teacherSchedule) {
       return { error: `Teacher Schedule ID is not valid.`, status: 404 };
     }
-
+    // @ts-ignore
     await Enrollment.findByIdAndUpdate(enrollment._id, { $pull: { studentSubjects: { teacherScheduleId: teacherSchedule._id, profileId: enrollment.profileId._id } } }, { new: true });
   } catch (error) {
     console.error('Error removing block subjects:', error);

@@ -182,64 +182,67 @@ const AddStudentSched = ({ student, b }: IProps) => {
                             const section = (b.section ?? '').toLowerCase();
                             const studentType = (studentBlockType ?? '').toLowerCase();
                             if (section === studentType) {
+                              const enrolledTeacherScheduleIds = new Set(student.studentSubjects.map((sched: any) => sched.teacherScheduleId._id));
                               return (
                                 <div className='' key={b._id}>
                                   {b.blockSubjects.length > 0 ? (
-                                    b.blockSubjects.map((s: any, index: any) => (
-                                      <CommandItem className='border w-full block' key={s._id} value={s.teacherScheduleId.subjectId.name}>
-                                        <div className='flex w-full'>
-                                          {/* @todo create a design for mobile */}
-                                          <div className='min-w-[80px] justify-center flex items-center'>
-                                            {isSelected(s.teacherScheduleId._id) ? (
-                                              <Button
-                                                disabled={isEnabled}
-                                                onClick={() => handleSelect(s.teacherScheduleId._id)}
-                                                type='button'
-                                                size={'sm'}
-                                                className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
-                                              >
-                                                <Icons.trash className='h-4 w-4' />
-                                              </Button>
-                                            ) : (
-                                              <Button
-                                                onClick={() => {
-                                                  handleSelect(s.teacherScheduleId._id);
-                                                }}
-                                                type='button'
-                                                size={'sm'}
-                                                className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-green-500 px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
-                                              >
-                                                <Icons.add className='h-4 w-4' />
-                                                <span className='sm:flex hidden text-xs sm:text-sm'>Add</span>
-                                              </Button>
-                                            )}
+                                    b.blockSubjects
+                                      .filter((s: any) => !enrolledTeacherScheduleIds.has(s.teacherScheduleId._id))
+                                      .map((s: any, index: any) => (
+                                        <CommandItem className='border w-full block' key={s._id} value={s.teacherScheduleId.subjectId.name}>
+                                          <div className='flex w-full'>
+                                            {/* @todo create a design for mobile */}
+                                            <div className='min-w-[80px] justify-center flex items-center'>
+                                              {isSelected(s.teacherScheduleId._id) ? (
+                                                <Button
+                                                  disabled={isEnabled}
+                                                  onClick={() => handleSelect(s.teacherScheduleId._id)}
+                                                  type='button'
+                                                  size={'sm'}
+                                                  className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
+                                                >
+                                                  <Icons.trash className='h-4 w-4' />
+                                                </Button>
+                                              ) : (
+                                                <Button
+                                                  onClick={() => {
+                                                    handleSelect(s.teacherScheduleId._id);
+                                                  }}
+                                                  type='button'
+                                                  size={'sm'}
+                                                  className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-green-500 px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
+                                                >
+                                                  <Icons.add className='h-4 w-4' />
+                                                  <span className='sm:flex hidden text-xs sm:text-sm'>Add</span>
+                                                </Button>
+                                              )}
+                                            </div>
+                                            <div className='flex flex-col text-xs sm:text-sm'>
+                                              <span className=' font-semibold'>
+                                                Instructor: {s.teacherScheduleId.profileId.firstname} {s.teacherScheduleId.profileId.middlename} {s.teacherScheduleId.profileId.lastname}
+                                              </span>
+                                              <span className=' font-semibold'>
+                                                Course Code: <span className='uppercase'>{s.teacherScheduleId.courseId.courseCode}</span>
+                                              </span>
+                                              <span className=' font-semibold'>
+                                                Subject Code: <span className='uppercase'>{s.teacherScheduleId.subjectId.subjectCode}</span>
+                                              </span>
+                                              <span className=' text-wrap font-medium'>Title: {s.teacherScheduleId.subjectId.name}</span>
+                                              <span className=''>Pre Req.: EMPTY</span>
+                                              <span className=''>Days: {s.teacherScheduleId.days.join(', ')}</span>
+                                              <span className=''>Lec: {s.teacherScheduleId.subjectId.lec}</span>
+                                              <span className=''>Lab: {s.teacherScheduleId.subjectId.lab}</span>
+                                              <span className=''>Unit: {s.teacherScheduleId.subjectId.unit}</span>
+                                              <span className=''>
+                                                Room: <span className='uppercase'>{s.teacherScheduleId.roomId.roomName}</span>
+                                              </span>
+                                              <span className=''>
+                                                Block: <span className='uppercase'>Block {s.teacherScheduleId.blockTypeId.section}</span>
+                                              </span>
+                                            </div>
                                           </div>
-                                          <div className='flex flex-col text-xs sm:text-sm'>
-                                            <span className=' font-semibold'>
-                                              Instructor: {s.teacherScheduleId.profileId.firstname} {s.teacherScheduleId.profileId.middlename} {s.teacherScheduleId.profileId.lastname}
-                                            </span>
-                                            <span className=' font-semibold'>
-                                              Course Code: <span className='uppercase'>{s.teacherScheduleId.courseId.courseCode}</span>
-                                            </span>
-                                            <span className=' font-semibold'>
-                                              Subject Code: <span className='uppercase'>{s.teacherScheduleId.subjectId.subjectCode}</span>
-                                            </span>
-                                            <span className=' text-wrap font-medium'>Title: {s.teacherScheduleId.subjectId.name}</span>
-                                            <span className=''>Pre Req.: EMPTY</span>
-                                            <span className=''>Days: {s.teacherScheduleId.days.join(', ')}</span>
-                                            <span className=''>Lec: {s.teacherScheduleId.subjectId.lec}</span>
-                                            <span className=''>Lab: {s.teacherScheduleId.subjectId.lab}</span>
-                                            <span className=''>Unit: {s.teacherScheduleId.subjectId.unit}</span>
-                                            <span className=''>
-                                              Room: <span className='uppercase'>{s.teacherScheduleId.roomId.roomName}</span>
-                                            </span>
-                                            <span className=''>
-                                              Block: <span className='uppercase'>Block {s.teacherScheduleId.blockTypeId.section}</span>
-                                            </span>
-                                          </div>
-                                        </div>
-                                      </CommandItem>
-                                    ))
+                                        </CommandItem>
+                                      ))
                                   ) : (
                                     <CommandItem className='border-0 w-full block' key={'mykey123'} value={'valueqwe123'}>
                                       <div className='w-full text-center'>No Subjects Available in this blocks. </div>
