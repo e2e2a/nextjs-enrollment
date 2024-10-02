@@ -22,6 +22,7 @@ export const getAllBlockType = async () => {
           { path: 'profileId' }, // Populate profileId inside teacherScheduleId
           { path: 'subjectId' }, // Populate profileId inside teacherScheduleId
           { path: 'blockTypeId' }, // Populate profileId inside teacherScheduleId
+          { path: 'courseId' },
         ],
       })
       .exec();

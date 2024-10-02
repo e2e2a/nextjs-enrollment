@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
-import { useUpdateStudentEnrollmentScheduleMutation } from '@/lib/queries';
+import { useUpdateStudentEnrollmentScheduleMutation, useUpdateStudentEnrollmentScheduleSuggestedSubjectMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { z } from 'zod';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
@@ -79,6 +79,36 @@ const AddStudentSched = ({ student, b }: IProps) => {
       enrollmentId: student._id,
     };
     mutation.mutate(dataa, {
+      onSuccess: (res) => {
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            makeToastSucess(res.message);
+            return;
+          default:
+            if (res.error) {
+              makeToastError(res.error);
+            }
+            return;
+        }
+      },
+      onSettled: () => {},
+    });
+  };
+  /**
+   * @todo suggest mutation
+   */
+  const suggestMutation = useUpdateStudentEnrollmentScheduleSuggestedSubjectMutation();
+  const actionFormSubmitSuggestSubject = (teacherScheduleId: any) => {
+    //we need to revised the room to roomId and teacher to teacherId
+    // data.roomId = roomId;
+    const dataa = {
+      category: 'College',
+      teacherScheduleId: teacherScheduleId,
+      enrollmentId: student._id,
+    };
+    suggestMutation.mutate(dataa, {
       onSuccess: (res) => {
         switch (res.status) {
           case 200:
@@ -182,47 +212,25 @@ const AddStudentSched = ({ student, b }: IProps) => {
                             const section = (b.section ?? '').toLowerCase();
                             const studentType = (studentBlockType ?? '').toLowerCase();
                             if (section === studentType) {
-                              const enrolledTeacherScheduleIds = new Set(student.studentSubjects.map((sched: any) => sched.teacherScheduleId._id));
+                              const enrolledTeacherScheduleIds = new Set(
+                                student.studentSubjects
+                                  .filter((sched: any) => sched.status !== 'suggested')
+                                  .map((sched: any) => sched.teacherScheduleId._id)
+                              );
                               return (
                                 <div className='' key={b._id}>
                                   {b.blockSubjects.length > 0 ? (
                                     b.blockSubjects
                                       .filter((s: any) => !enrolledTeacherScheduleIds.has(s.teacherScheduleId._id))
                                       .map((s: any, index: any) => (
-                                        <CommandItem className='border w-full block' key={s._id} value={s.teacherScheduleId.subjectId.name}>
-                                          <div className='flex w-full'>
-                                            {/* @todo create a design for mobile */}
-                                            <div className='min-w-[80px] justify-center flex items-center'>
-                                              {isSelected(s.teacherScheduleId._id) ? (
-                                                <Button
-                                                  disabled={isEnabled}
-                                                  onClick={() => handleSelect(s.teacherScheduleId._id)}
-                                                  type='button'
-                                                  size={'sm'}
-                                                  className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
-                                                >
-                                                  <Icons.trash className='h-4 w-4' />
-                                                </Button>
-                                              ) : (
-                                                <Button
-                                                  onClick={() => {
-                                                    handleSelect(s.teacherScheduleId._id);
-                                                  }}
-                                                  type='button'
-                                                  size={'sm'}
-                                                  className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-green-500 px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
-                                                >
-                                                  <Icons.add className='h-4 w-4' />
-                                                  <span className='sm:flex hidden text-xs sm:text-sm'>Add</span>
-                                                </Button>
-                                              )}
-                                            </div>
-                                            <div className='flex flex-col text-xs sm:text-sm'>
-                                              <span className=' font-semibold'>
+                                        <CommandItem className='border w-full block mb-3 bg-gray-300' key={s._id} value={s.teacherScheduleId.subjectId.name}>
+                                          <div className='grid sm:grid-cols-2 grid-cols-1 w-full'>
+                                            <div className='flex flex-col text-xs sm:text-sm order-2 sm:order-1'>
+                                              <span className=' font-semibold border-1 sm:border-0'>
                                                 Instructor: {s.teacherScheduleId.profileId.firstname} {s.teacherScheduleId.profileId.middlename} {s.teacherScheduleId.profileId.lastname}
                                               </span>
                                               <span className=' font-semibold'>
-                                                Course Code: <span className='uppercase'>{s.teacherScheduleId.courseId.courseCode}</span>
+                                                Department: <span className='uppercase'>{s.teacherScheduleId.courseId.name}</span>
                                               </span>
                                               <span className=' font-semibold'>
                                                 Subject Code: <span className='uppercase'>{s.teacherScheduleId.subjectId.subjectCode}</span>
@@ -239,6 +247,44 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                               <span className=''>
                                                 Block: <span className='uppercase'>Block {s.teacherScheduleId.blockTypeId.section}</span>
                                               </span>
+                                            </div>
+                                            <div className='justify-end sm:items-center flex items-end order-1 '>
+                                              {isSelected(s.teacherScheduleId._id) ? (
+                                                <Button
+                                                  disabled={isEnabled}
+                                                  onClick={() => handleSelect(s.teacherScheduleId._id)}
+                                                  type='button'
+                                                  size={'sm'}
+                                                  className={'focus-visible:ring-0 flex bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
+                                                >
+                                                  <Icons.trash className='h-4 w-4' />
+                                                </Button>
+                                              ) : (
+                                                <div className='flex flex-row'>
+                                                  <Button
+                                                    onClick={() => {
+                                                      handleSelect(s.teacherScheduleId._id);
+                                                    }}
+                                                    type='button'
+                                                    size={'sm'}
+                                                    className={'focus-visible:ring-0 flex bg-transparent bg-green-500 rounded-tr-none rounded-br-none px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
+                                                  >
+                                                    <Icons.add className='h-4 w-4' />
+                                                    <span className='sm:flex text-xs sm:text-sm'>Add</span>
+                                                  </Button>
+                                                  <Button
+                                                    onClick={() => {
+                                                      actionFormSubmitSuggestSubject(s.teacherScheduleId._id);
+                                                    }}
+                                                    type='button'
+                                                    size={'sm'}
+                                                    className={'focus-visible:ring-0 flex bg-transparent rounded-tl-none rounded-bl-none bg-orange-500 px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
+                                                  >
+                                                    <Icons.star className='h-4 w-4 fill-white mr-1' />
+                                                    <span className='sm:flex text-xs sm:text-sm'>Suggest</span>
+                                                  </Button>
+                                                </div>
+                                              )}
                                             </div>
                                           </div>
                                         </CommandItem>

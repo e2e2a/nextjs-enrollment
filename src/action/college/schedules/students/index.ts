@@ -20,7 +20,7 @@ export const updateStudentEnrollmentScheduleAction = async (data: any) => {
       for (const existStudentSched of enrollment.studentSubjects) {
         if (existStudentSched.teacherScheduleId._id.toString() === item.teacherScheduleId) {
           return { error: 'Some Teacher Schedule already exist in the student schedules.', status: 409 };
-        } 
+        }
       }
     }
     /**
@@ -29,7 +29,7 @@ export const updateStudentEnrollmentScheduleAction = async (data: any) => {
      */
     const updatedSched = await updateStudentSched(enrollment._id, data);
     if (!updatedSched) return { error: 'Something wrong with updating.', status: 404 };
-    return { message: 'Subject created successfully.', status: 201 };
+    return { message: 'Subject has been added to student.', status: 201 };
   } catch (error) {
     console.log('server e :', error);
     return { error: 'Something went wrong', status: 500 };
@@ -49,6 +49,46 @@ const updateStudentSched = async (blockTypeId: any, data: any) => {
         { new: true }
       );
     }
+    return { message: 'Block subjects updated successfully.', status: 200 };
+  } catch (error) {
+    console.error('Error updating block subjects:', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+
+export const updateStudentEnrollmentScheduleSuggestedSubjectAction = async (data: any) => {
+  try {
+    await dbConnect();
+    const enrollment = await getEnrollmentById(data.enrollmentId);
+    if (!enrollment) return { error: 'Enrollment ID is not valid.', status: 404 };
+    const teacherSchedule = await TeacherSchedule.findById(data.teacherScheduleId).populate('blockTypeId');
+    if (!teacherSchedule) {
+      return { error: `Teacher Schedule ID is not valid.`, status: 404 };
+    }
+    /**
+     * @todo
+     * 1. check conflict time
+     */
+    const updatedSched = await updateStudentSchedSuggestedSubject(enrollment._id, data);
+    if (!updatedSched) return { error: 'Something wrong with updating.', status: 404 };
+    return { message: 'Subject has been suggested to student.', status: 201 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+
+const updateStudentSchedSuggestedSubject = async (enrolmentId: any, data: any) => {
+  try {
+    await dbConnect();
+    const enrollment = await getEnrollmentById(data.enrollmentId);
+    if (!enrollment) return { error: 'Enrollment ID is not valid.', status: 404 };
+    await Enrollment.findByIdAndUpdate(
+      enrolmentId,
+      // @ts-ignore
+      { $addToSet: { studentSubjects: { teacherScheduleId: data.teacherScheduleId, profileId: enrollment.profileId._id, status: 'suggested', request: 'suggested' } } }, // Add teacherScheduleId to blockSubjects
+      { new: true }
+    );
     return { message: 'Block subjects updated successfully.', status: 200 };
   } catch (error) {
     console.error('Error updating block subjects:', error);

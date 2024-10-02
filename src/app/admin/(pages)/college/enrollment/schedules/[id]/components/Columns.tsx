@@ -3,6 +3,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import ActionsCell from './ActionsCell';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
+import OptionsCell from './OptionsCell';
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -192,9 +193,9 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='uppercase'>
-          {!user.request && <div className="text-gray-500 text-xs">N/A</div> }
-          {user.request && user.request === 'add' ? <div className='text-green-500 text-xs'>Add</div> : user.request === 'drop' ? <div className='text-red text-xs'>Drop</div> : null}
+        <div key={cell.id} className='uppercase '>
+          {!user.request && <div className='text-gray-500 text-xs'>N/A</div>}
+          {user.request && user.request === 'add' ? <div className='text-green-500 text-xs font-bold'>Add</div> : user.request === 'drop' ? <div className='text-red text-xs font-bold'>Drop</div> :user.request === 'suggested' ? <div className='text-orange-300 text-xs font-bold'>Suggested</div> : null}
         </div>
       );
     },
@@ -206,13 +207,14 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
+          
           {user.requestStatusInDean === 'Approved' ? (
             <span className='text-green-500 text-xs'>{user.requestStatusInDean}</span>
           ) : user.requestStatusInDean === 'Pending' ? (
             <span className='text-blue-500 text-xs'>{user.requestStatusInDean}</span>
           ) : user.requestStatusInDean === 'Declined' ? (
             <span className='text-red text-xs'>{user.requestStatusInDean}</span>
-          ) : null}
+          ) : <span className='text-gray-400 text-xs'>N/A</span>}
         </div>
       );
     },
@@ -230,7 +232,7 @@ export const columns: ColumnDef<any>[] = [
             <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
           ) : user.requestStatusInRegistrar === 'Declined' ? (
             <span className='text-red text-xs'>{user.requestStatusInRegistrar}</span>
-          ) : null}
+          ) : <span className='text-gray-400 text-xs'>N/A</span>}
         </div>
       );
     },
@@ -240,7 +242,7 @@ export const columns: ColumnDef<any>[] = [
     header: 'Options',
     cell: ({ row }) => {
       const user = row.original;
-      return <ActionsCell user={user} />;
+      return <OptionsCell user={user} />;
     },
   },
 ];

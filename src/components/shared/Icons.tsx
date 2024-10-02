@@ -1,4 +1,5 @@
 import {
+  Star,
   Download,
   Construction,
   LayoutDashboard,
@@ -57,6 +58,7 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
+  star: Star,
   download: Download,
   construction: Construction,
   layoutDashboard: LayoutDashboard,

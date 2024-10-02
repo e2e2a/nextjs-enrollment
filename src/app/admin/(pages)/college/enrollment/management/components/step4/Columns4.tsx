@@ -162,7 +162,7 @@ export const columns4: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' '>
-          {user.studentSubjects.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green'>{user.studentSubjects.length}</span>}
+          {user.studentSubjects.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green-500'>{user.studentSubjects.length}</span>}
         </div>
       );
     },
@@ -173,9 +173,9 @@ export const columns4: ColumnDef<IEnrollment>[] = [
     header: 'Request Add',
     cell: ({ cell, row }) => {
       const user = row.original;
-      const requestAdd = user.studentSubjects.filter((s: any) => s.request === 'Add');
+      const requestAdd = user.studentSubjects.filter((s: any) => s.request === 'add');
       return (
-        <div key={cell.id} className=' '>
+        <div key={cell.id} className=' text-green-500'>
           {requestAdd.length}
         </div>
       );
@@ -187,9 +187,9 @@ export const columns4: ColumnDef<IEnrollment>[] = [
     header: 'Request Drop',
     cell: ({ cell, row }) => {
       const user = row.original;
-      const requestDrop = user.studentSubjects.filter((s: any) => s.request === 'Drop');
+      const requestDrop = user.studentSubjects.filter((s: any) => s.request === 'drop');
       return (
-        <div key={cell.id} className=' '>
+        <div key={cell.id} className='text-red '>
           {requestDrop.length}
         </div>
       );

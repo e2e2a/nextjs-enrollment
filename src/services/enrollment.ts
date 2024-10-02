@@ -52,6 +52,7 @@ export const getEnrollmentByUserId = async (userId: string) => {
       .populate('userId')
       .populate('courseId')
       .populate('profileId')
+      .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
         populate: [{ path: 'profileId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],

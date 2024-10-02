@@ -42,32 +42,47 @@ const Page = ({ params }: { params: { id: string } }) => {
           ) : data && data.enrollment ? (
             <>
               <div className='flex items-center py-4 text-black w-full text-center flex-col'>
-                <div>
+                <div className='mb-3'>
                   <h1 className='text-lg sm:text-2xl font-bold uppercase'>Student Subjects</h1>
                 </div>
-                <div className=''>
-                  <h1 className='text-sm sm:text-lg font-bold capitalize'>{data.enrollment.courseId.name}</h1>
-                </div>
-                <div className=''>
-                  <h1 className='text-sm sm:text-lg font-bold capitalize'>
-                    {data.enrollment.profileId.firstname} {data.enrollment.profileId.middlename} {data.enrollment.profileId.lastname} {data.enrollment.profileId.extensionName ? data.enrollment.profileId.extensionName : ''}
-                  </h1>
-                </div>
-                <div className=''>
-                  <h1 className='text-sm font-bold'>
-                    {data.enrollment.studentYear} - {data.enrollment.studentSemester}
-                  </h1>
-                </div>
-                <div className=''>
-                  <h1 className='text-xs font-bold'>
-                    Enrollment Status: <span className='text-blue-500'>{data.enrollment.enrollStatus}</span>
-                  </h1>
+                <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
+                  <div className='justify-between items-center flex w-full'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Fullname:{' '}
+                      <span className='font-normal'>
+                        {data.enrollment.profileId.firstname} {data.enrollment.profileId.middlename} {data.enrollment.profileId.lastname} {data.enrollment.profileId.extensionName ? data.enrollment.profileId.extensionName : ''}
+                      </span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Department: <span className='font-normal'>{data.enrollment.courseId.name}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start '>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Year:{' '}
+                      <span className='font-normal'>
+                        {data.enrollment.studentYear} - {data.enrollment.studentSemester}
+                      </span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Block: <span className='font-normal'>{data.enrollment.blockTypeId.section}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Enrollment Status: <span className='font-normal text-blue-500'>{data.enrollment.enrollStatus}</span>
+                    </span>
+                  </div>
                 </div>
               </div>
               <div className='w-full flex justify-end items-center'>
                 <AddStudentSched student={data.enrollment} b={schedules} />
               </div>
-              <DataTable columns={columns} data={data?.enrollment.studentSubjects} enrollmentSetup={ESetup.enrollmentSetup}/>
+              <DataTable columns={columns} data={data?.enrollment.studentSubjects} enrollmentSetup={ESetup.enrollmentSetup} />
             </>
           ) : (
             <div className=''>404</div>
