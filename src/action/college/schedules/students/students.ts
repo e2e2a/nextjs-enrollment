@@ -74,3 +74,35 @@ export const removeStudentScheduleAction = async (data: any) => {
     return { error: 'Something went wrong', status: 500 };
   }
 };
+
+export const updateStudentEnrollmentScheduleBySuggestedSubjectAction = async (data: any) => {
+  try {
+    await dbConnect();
+    const enrollment = await getEnrollmentByProfileId(data.profileId);
+    if (!enrollment) return { error: 'Enrollment ID is not valid.', status: 404 };
+    // Find the Teacher Schedule
+    const teacherSchedule = await TeacherSchedule.findById(data.teacherScheduleId).populate('blockTypeId');
+    if (!teacherSchedule) {
+      return { error: `Teacher Schedule ID is not valid.`, status: 404 };
+    }
+    // @ts-ignore
+    for (const toUpdateSched of enrollment.studentSubjects) {
+      if (toUpdateSched.teacherScheduleId._id.toString() === data.teacherScheduleId) {
+        toUpdateSched.status = 'Pending';
+        toUpdateSched.request = 'add';
+        toUpdateSched.requestStatusInDean = 'Pending';
+        toUpdateSched.requestStatusInRegistrar = 'Pending';
+        toUpdateSched.requestStatus = 'Pending';
+        await enrollment.save();
+        return { error: 'Subject has been added.', status: 409 };
+      }
+    }
+   
+    const updatedSched = await updateStudentSched(enrollment._id, data);
+    if (!updatedSched) return { error: 'Something wrong with updating.', status: 404 };
+    return { message: 'Subject created successfully.', status: 201 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};

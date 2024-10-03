@@ -2,17 +2,18 @@
 import React, { useEffect, useState } from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { useDropSubjectMutation, useUpdateEnrollmentSetupMutation } from '@/lib/queries';
+import { useDropSubjectMutation, useUpdateEnrollmentSetupMutation, useUpdateStudentEnrollmentScheduleBySuggestedSubjectMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
+import TeacherSchedule from '@/models/TeacherSchedule';
 
 interface IProps {
   user: any;
 }
 const ActionsCell = ({ user }: IProps) => {
   const [isUploading, setIsUploading] = useState(false);
-  const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [errorInSUbjectInput, setErrorInSUbjectInput] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [errorInTypeInput, setErrorInTypeInput] = useState(false);
@@ -42,6 +43,7 @@ const ActionsCell = ({ user }: IProps) => {
   const mutation = useDropSubjectMutation();
 
   const actionFormEnable = () => {
+    setIsUploading(true);
     if (inputValue !== user.teacherScheduleId.subjectId.name) {
       setErrorInSUbjectInput(true);
       return;
@@ -56,13 +58,13 @@ const ActionsCell = ({ user }: IProps) => {
       request: 'drop',
     };
 
-    setIsUploading(true);
     mutation.mutate(data, {
       onSuccess: (res: any) => {
         switch (res.status) {
           case 200:
           case 201:
           case 203:
+            setIsOpen(false);
             makeToastSucess(res.message);
             return;
           default:
@@ -71,7 +73,35 @@ const ActionsCell = ({ user }: IProps) => {
         }
       },
       onSettled: () => {
-        setIsOpen(false);
+        setIsUploading(false);
+      },
+    });
+  };
+  const acceptSuggestMutation = useUpdateStudentEnrollmentScheduleBySuggestedSubjectMutation();
+  const actionFormAcceptSuggest = () => {
+    setIsUploading(true);
+    const dataa = {
+      category: 'College',
+      teacherScheduleId: user.teacherScheduleId._id,
+      profileId: user.profileId._id,
+    };
+    acceptSuggestMutation.mutate(dataa, {
+      onSuccess: (res) => {
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            setIsOpen(false);
+            makeToastSucess(res.message);
+            return;
+          default:
+            if (res.error) {
+              makeToastError(res.error);
+            }
+            return;
+        }
+      },
+      onSettled: () => {
         setIsUploading(false);
       },
     });
@@ -136,21 +166,21 @@ const ActionsCell = ({ user }: IProps) => {
               <span className=' text-white text-[15px] font-medium'>{isUploading ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'ADD'}</span>
             </Button>
           </AlertDialogTrigger>
-            <AlertDialogContent className='bg-white text-black'>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Add Subject</AlertDialogTitle>
-                <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;This action will add the suggested subject from your enrollment. Please be aware that this may add directly to your academic progress.</AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction type='button' className='hidden'>
-                  abzxc
-                </AlertDialogAction>
-                <Button disabled={isUploading} onClick={actionFormEnable} className='bg-dark-4 text-white'>
-                  <span className=' text-white text-[15px] font-medium'>{isUploading ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Continue'}</span>
-                </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
+          <AlertDialogContent className='bg-white text-black'>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Add Subject</AlertDialogTitle>
+              <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;This action will add the suggested subject from your enrollment. Please be aware that this may add directly to your academic progress.</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction type='button' className='hidden'>
+                abzxc
+              </AlertDialogAction>
+              <Button disabled={isUploading} onClick={actionFormAcceptSuggest} className='bg-dark-4 text-white'>
+                <span className=' text-white text-[15px] font-medium'>{isUploading ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Continue'}</span>
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
         </AlertDialog>
       )}
     </>

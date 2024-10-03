@@ -96,6 +96,7 @@ import { removeCourseBlockScheduleAction, updateCourseBlockScheduleAction } from
 import { removeStudentScheduleAction, updateStudentEnrollmentScheduleAction, updateStudentEnrollmentScheduleSuggestedSubjectAction } from '@/action/college/schedules/students';
 import { TeacherProfileValidator } from './validators/AdminValidator';
 import { getEnrollmentSetup, updateEnrollmentSetup } from '@/action/enrollmentSetup';
+import { updateStudentEnrollmentScheduleBySuggestedSubjectAction } from '@/action/college/schedules/students/students';
 const channel = new BroadcastChannel('my-channel');
 // import { supabase } from './supabaseClient';
 /**
@@ -577,6 +578,17 @@ export const useUpdateStudentEnrollmentScheduleMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+    },
+  });
+};
+export const useUpdateStudentEnrollmentScheduleBySuggestedSubjectMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => updateStudentEnrollmentScheduleBySuggestedSubjectAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
+      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
     },
   });
 };

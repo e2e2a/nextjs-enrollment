@@ -91,7 +91,6 @@ const AddStudentSched = ({ student, b }: IProps) => {
       onSettled: () => {},
     });
   };
-  console.log('students', student)
   return (
     <Dialog>
       <DialogTrigger asChild>
