@@ -127,7 +127,7 @@ const ActionsCell = ({ user }: IProps) => {
                 </div>
               </div>
               <div className='grid grid-cols-1 gap-y-1'>
-                <div className='text-[14px]'>
+                <div className='text-[14px] text-muted-foreground'>
                   Enter the subject name <span className='font-bold'>{user.teacherScheduleId.subjectId.name}</span> to conitinue
                 </div>
                 <div className=''>
@@ -136,7 +136,7 @@ const ActionsCell = ({ user }: IProps) => {
                 </div>
               </div>
               <div className='grid grid-cols-1 gap-y-1'>
-                <div className='text-[14px]'>
+                <div className='text-[14px] text-muted-foreground'>
                   To verify, type <span className='font-bold'>drop</span> below:
                 </div>
                 <div className=''>

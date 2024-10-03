@@ -1,4 +1,5 @@
 import mongoose, { Schema, models, model } from 'mongoose';
+import { boolean } from 'zod';
 
 export interface IProfile extends Document {
   userId: mongoose.Schema.Types.ObjectId;
@@ -33,7 +34,6 @@ export interface IProfile extends Document {
   goodMoralUrl: string;
   reportCardUrl: string;
 
-
   primarySchoolName: string;
   primarySchoolYear: string;
   secondarySchoolName: string;
@@ -51,13 +51,15 @@ export interface IProfile extends Document {
   MothersMiddleName: string;
   MothersContact: string;
 
-
   photoUrl: string;
   enrollStatus?: 'Pending' | 'Continue' | 'Completed';
   studentType?: 'Regular' | 'Non-Regular';
   scholarType: string;
   imageUrl?: string;
   isVerified: boolean;
+
+  payment: boolean;
+  
   lastLogin?: Date;
   lastLogout?: Date;
 }
@@ -98,8 +100,8 @@ const schema = new Schema<IProfile>(
     birthPlaceRegion: { type: String },
     educationAttainment: { type: String },
     learnerOrTraineeOrStudentClassification: { type: String },
-    studentYear: { type: String, },
-    studentSemester: { type: String, },
+    studentYear: { type: String },
+    studentSemester: { type: String },
     studentStatus: {
       type: String,
       default: 'New Student',
@@ -147,9 +149,10 @@ const schema = new Schema<IProfile>(
     MothersMiddleName: { type: String },
     MothersContact: { type: String },
 
-
     imageUrl: { type: String },
     isVerified: { type: Boolean, default: false },
+
+    payment: { type: Boolean },
     lastLogin: { type: Date },
     lastLogout: { type: Date },
   },

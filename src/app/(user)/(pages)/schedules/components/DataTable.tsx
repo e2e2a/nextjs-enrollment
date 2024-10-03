@@ -86,7 +86,14 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
                         if (header.id === 'requestStatusInRegistrar') return;
                         // if (header.id === 'request status') return;
                       } else {
-                        if (header.id === 'status') return;
+                        if (enrollment.step !== 4) {
+                          console.log('asdasdasdasd')
+                          if (header.id === 'request') return;
+                          if (header.id === 'requestStatusInDean') return;
+                          if (header.id === 'requestStatusInRegistrar') return;
+                        } else {
+                          if (header.id === 'status') return;
+                        }
                       }
                     }
                   }
@@ -105,6 +112,7 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
                 return (
                   <TableRow className='whitespace-pre' key={row.id} data-state={row.getIsSelected() && 'selected'}>
                     {row.getVisibleCells().map((cell) => {
+                      console.log('enrollment.step == 4', enrollment.step == 4);
                       if (enrollmentStudentStatus) {
                         if (enrollmentStudentStatus === 'Pending') {
                           if (cell.column.id === 'grade') return;
@@ -119,7 +127,13 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
                             if (cell.column.id === 'requestStatusInRegistrar') return;
                             // if (cell.column.id === 'request status') return;
                           } else {
-                            if (cell.column.id === 'status') return;
+                            if (enrollment.step !== 4) {
+                              if (cell.column.id === 'request') return;
+                              if (cell.column.id === 'requestStatusInDean') return;
+                              if (cell.column.id === 'requestStatusInRegistrar') return;
+                            } else {
+                              if (cell.column.id === 'status') return;
+                            }
                           }
                         }
                       }

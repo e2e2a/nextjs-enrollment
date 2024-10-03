@@ -9,6 +9,9 @@ import { useSession } from 'next-auth/react';
 import Step0 from './Step0';
 import Step2 from './Step2';
 import Step1 from './Step1';
+import Step3 from './Step3';
+import Step4 from './Step4';
+import Step5 from './Step5';
 type IProps = {
   search: any;
   enrollment: any;
@@ -31,6 +34,8 @@ const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
             <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '2' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>2</div>
             <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '3' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>3</div>
             <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '4' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>4</div>
+            <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '5' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>5</div>
+            <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == '6' ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>6</div>
             {/* <div className={`border  rounded-full text-[15px] w-6 h-6 text-center ${value == 4 ? 'border-blue-500 scale-[2] duration-500 transition-transform' : 'border-black'}`}>4</div> */}
           </div>
         </div>
@@ -43,45 +48,13 @@ const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
           <>
             <Step1 search={search} enrollment={enrollment} />
             <Step2 enrollment={enrollment} />
+            <Step3 enrollment={enrollment} />
+            <Step4 enrollment={enrollment} />
+            <Step5 enrollment={enrollment} />
           </>
         )}
         
-        <TabsContent value='3'>
-          <Card>
-            <CardHeader>
-              <CardTitle>Account</CardTitle>
-              <CardDescription>Make changes to your account here. Click save when you&apos;re done.</CardDescription>
-            </CardHeader>
-            <CardContent className='w-full space-y-2'>3</CardContent>
-            <CardFooter>
-              <Button>Save changes</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-        <TabsContent value='4'>
-          <Card>
-            <CardHeader>
-              <CardTitle>Account</CardTitle>
-              <CardDescription>Make changes to your account here. Click save when you&apos;re done.</CardDescription>
-            </CardHeader>
-            <CardContent className='w-full space-y-2'>4</CardContent>
-            <CardFooter>
-              <Button>Save changes</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-        <TabsContent value='5'>
-          <Card>
-            <CardHeader>
-              <CardTitle>Account</CardTitle>
-              <CardDescription>Make changes to your account here. Click save when you&apos;re done.</CardDescription>
-            </CardHeader>
-            <CardContent className='w-full space-y-2'>5</CardContent>
-            <CardFooter>
-              <Button>Save changes</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
+       
       </Tabs>
     </div>
   );
