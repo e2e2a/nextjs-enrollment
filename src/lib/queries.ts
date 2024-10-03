@@ -93,7 +93,7 @@ import {
   updateStudentCurriculumSubjectByIdAction,
 } from '@/action/college/curriculums';
 import { removeCourseBlockScheduleAction, updateCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
-import { removeStudentScheduleAction, updateStudentEnrollmentScheduleAction, updateStudentEnrollmentScheduleSuggestedSubjectAction } from '@/action/college/schedules/students';
+import { removeStudentScheduleAction, updateStudentEnrollmentScheduleAction, updateStudentEnrollmentScheduleRequestStatusAction, updateStudentEnrollmentScheduleSuggestedSubjectAction } from '@/action/college/schedules/students';
 import { TeacherProfileValidator } from './validators/AdminValidator';
 import { getEnrollmentSetup, updateEnrollmentSetup } from '@/action/enrollmentSetup';
 import { updateStudentEnrollmentScheduleBySuggestedSubjectAction } from '@/action/college/schedules/students/students';
@@ -592,13 +592,24 @@ export const useUpdateStudentEnrollmentScheduleBySuggestedSubjectMutation = () =
     },
   });
 };
-/**
- * @todo suggest mutation
- */
+
 export const useUpdateStudentEnrollmentScheduleSuggestedSubjectMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateStudentEnrollmentScheduleSuggestedSubjectAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
+      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
+      queryClient.invalidateQueries({ queryKey: ['BlockType'] });
+    },
+  });
+};
+
+export const useUpdateStudentEnrollmentScheduleRequestStatusMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => updateStudentEnrollmentScheduleRequestStatusAction(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });

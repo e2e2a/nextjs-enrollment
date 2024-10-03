@@ -94,7 +94,7 @@ export const updateStudentEnrollmentScheduleBySuggestedSubjectAction = async (da
         toUpdateSched.requestStatusInRegistrar = 'Pending';
         toUpdateSched.requestStatus = 'Pending';
         await enrollment.save();
-        return { error: 'Subject has been added.', status: 409 };
+        return { message: 'Subject has been added.', status: 409 };
       }
     }
    

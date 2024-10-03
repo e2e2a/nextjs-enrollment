@@ -209,14 +209,16 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='uppercase'>
-          {user.status.toLowerCase() === 'approved' ? (
+        <div key={cell.id} className='uppercase font-bold'>
+          {user.status?.toLowerCase() === 'approved' ? (
             <span className='text-green-500 text-xs'>{user.status}</span>
-          ) : user.status.toLowerCase() === 'pending' ? (
+          ) : user.status?.toLowerCase() === 'pending' ? (
             <span className='text-blue-500 text-xs'>{user.status}</span>
-          ) : user.status.toLowerCase() === 'suggested' ? (
+          ) : user.status?.toLowerCase() === 'suggested' ? (
             <span className='text-orange-500 text-xs'>{user.status}</span>
-          ) : user.status.toLowerCase() === 'declined' ? (
+          ) : user.status?.toLowerCase() === 'dropped' ? (
+            <span className='text-red text-xs'>{user.status}</span>
+          ) : user.status?.toLowerCase() === 'declined' ? (
             <span className='text-red text-xs'>{user.status}</span>
           ) : null}
         </div>
@@ -227,6 +229,26 @@ export const columns: ColumnDef<any>[] = [
    * @todo
    * uncomment this action and do some request drop subject
    */
+  {
+    accessorFn: (row) => row.request,
+    id: 'requesting',
+    header: 'Requesting',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase '>
+          {!user.request && <div className='text-gray-500 text-xs'>N/A</div>}
+          {user.request && user.request === 'add' ? (
+            <div className='text-green-500 text-xs font-bold'>Add</div>
+          ) : user.request === 'drop' ? (
+            <div className='text-red text-xs font-bold'>Drop</div>
+          ) : user.request === 'suggested' ? (
+            <div className='text-orange-300 text-xs font-bold'>Suggested</div>
+          ) : null}
+        </div>
+      );
+    },
+  },
   {
     id: 'request',
     header: 'Request',
@@ -282,15 +304,17 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase font-bold'>
-          {user.requestStatus.toLowerCase() === 'approved' ? (
+          {user.requestStatus?.toLowerCase() === 'approved' ? (
             <span className='text-green-500 text-xs'>{user.requestStatus}</span>
-          ) : user.requestStatus.toLowerCase() === 'pending' ? (
+          ) : user.requestStatus?.toLowerCase() === 'pending' ? (
             <span className='text-blue-500 text-xs'>{user.requestStatus}</span>
-          ) : user.requestStatus.toLowerCase() === 'declined' ? (
+          ) : user.requestStatus?.toLowerCase() === 'declined' ? (
             <span className='text-red text-xs'>{user.requestStatus}</span>
-          ) : user.requestStatus.toLowerCase() === 'suggested' ? (
+          ) : user.requestStatus?.toLowerCase() === 'suggested' ? (
             <span className='text-orange-500 text-xs'>{user.requestStatus}</span>
-          ) : null}
+          ) : (
+            <span className='text-gray-400 font-normal text-xs'>N/A</span>
+          )}
         </div>
       );
     },

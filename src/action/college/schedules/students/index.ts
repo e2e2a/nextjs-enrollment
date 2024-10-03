@@ -121,3 +121,78 @@ export const removeStudentScheduleAction = async (data: any) => {
     return { error: 'Something went wrong', status: 500 };
   }
 };
+
+export const updateStudentEnrollmentScheduleRequestStatusAction = async (data: any) => {
+  try {
+    await dbConnect();
+    console.log('requesting updateStudentEnrollmentSchedule', data);
+    const enrollment = await getEnrollmentByProfileId(data.profileId);
+    if (!enrollment) return { error: 'Enrollment ID is not valid.', status: 404 };
+    const teacherSchedule = await TeacherSchedule.findById(data.teacherScheduleId).populate('blockTypeId');
+    if (!teacherSchedule) {
+      return { error: `Teacher Schedule ID is not valid.`, status: 404 };
+    }
+    // @ts-ignore
+    for (const existStudentSched of enrollment.studentSubjects) {
+      if (existStudentSched.teacherScheduleId._id.toString() === data.teacherScheduleId) {
+        if (data.type === 'Approved') {
+          if (data.as === 'dean') {
+            existStudentSched.requestStatusInDean = 'Approved';
+            if (existStudentSched.requestStatusInRegistrar === 'Approved') {
+              existStudentSched.requestStatus = 'Approved';
+              if (existStudentSched.request === 'add') {
+                existStudentSched.status = 'Approved';
+              } else if (existStudentSched.request === 'drop') {
+                existStudentSched.status = 'Dropped';
+              }
+            }
+          } else if (data.as === 'registrar') {
+            existStudentSched.requestStatusInRegistrar = 'Approved';
+            if (existStudentSched.requestStatusInDean === 'Approved') {
+              existStudentSched.requestStatus = 'Approved';
+              if (existStudentSched.request === 'add') {
+                existStudentSched.status = 'Approved';
+              } else if (existStudentSched.request === 'drop') {
+                existStudentSched.status = 'Dropped';
+              }
+            }
+          } else {
+            return { error: 'Forbidden request.', status: 403 };
+          }
+        } else if (data.type === 'Declined') {
+          if (data.as === 'dean') {
+            existStudentSched.requestStatusInDean = 'Declined';
+            existStudentSched.requestStatus = 'Declined';
+            if (existStudentSched.request === 'add') {
+              existStudentSched.status = 'Declined';
+            } else if (existStudentSched.request === 'drop') {
+              existStudentSched.status = 'Dropped';
+            }
+          } else if (data.as === 'registrar') {
+            if (existStudentSched.request === 'add') {
+              existStudentSched.status = 'Declined';
+            } else if (existStudentSched.request === 'drop') {
+              existStudentSched.status = 'Dropped';
+            }
+            existStudentSched.requestStatusInRegistrar = 'Declined';
+            existStudentSched.requestStatusInDean = 'Declined';
+            existStudentSched.requestStatus = 'Declined';
+          } else {
+            return { error: 'Forbidden request.', status: 403 };
+          }
+        } else {
+          return { error: 'Forbidden request.', status: 403 };
+        }
+        await enrollment.save();
+        return { message: `Subject of student has been ${data.type}`, status: 409 };
+      }
+    }
+
+    // const updatedSched = await updateStudentSchedSuggestedSubject(enrollment._id, data);
+    // if (!updatedSched) return { error: 'Something wrong with updating.', status: 404 };
+    return { message: 'Subject has been suggested to student.', status: 201 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};

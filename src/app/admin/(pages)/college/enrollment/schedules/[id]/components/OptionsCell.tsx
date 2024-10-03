@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
-import { useRemoveStudentScheduleMutation } from '@/lib/queries';
+import { useRemoveStudentScheduleMutation, useUpdateStudentEnrollmentScheduleRequestStatusMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import Image from 'next/image';
 // import { DialogStep1Button } from './Dialog';
@@ -33,7 +33,7 @@ const OptionsCell = ({ user }: IProps) => {
           case 201:
           case 203:
             // return (window.location.href = '/');
-            makeToastSucess(res.message);
+            makeToastSucess(message);
             return;
           default:
             makeToastError(res.error);
@@ -43,6 +43,36 @@ const OptionsCell = ({ user }: IProps) => {
       onSettled: () => {
         setIsPending(false);
       },
+    });
+  };
+  const approvalMutation = useUpdateStudentEnrollmentScheduleRequestStatusMutation();
+  const actionFormSubmitApproval = (type: string, as: string) => {
+    setIsOpen(false)
+    let data;
+    data = {
+      category: 'College',
+      teacherScheduleId: user.teacherScheduleId._id,
+      profileId: user.profileId._id,
+      type: type,
+      as: as,
+    };
+    
+    approvalMutation.mutate(data, {
+      onSuccess: (res) => {
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            makeToastSucess(res.message);
+            return;
+          default:
+            if (res.error) {
+              makeToastError(res.error);
+            }
+            return;
+        }
+      },
+      onSettled: () => {},
     });
   };
   return (
@@ -71,19 +101,51 @@ const OptionsCell = ({ user }: IProps) => {
                 </Button> */}
                 {user.request && user.request !== 'suggested' && (
                   <>
-                    <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-green-500 px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
+                    <Button
+                      disabled={isPending}
+                      type='button'
+                      onClick={() => {
+                        actionFormSubmitApproval('Approved', 'dean');
+                      }}
+                      size={'sm'}
+                      className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-green-500 px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}
+                    >
                       <Icons.check className='h-4 w-4' />
                       Approved as Dean
                     </Button>
-                    <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-green-500 px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
+                    <Button
+                      disabled={isPending}
+                      type='button'
+                      onClick={() => {
+                        actionFormSubmitApproval('Approved', 'registrar');
+                      }}
+                      size={'sm'}
+                      className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-green-500 px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}
+                    >
                       <Icons.check className='h-4 w-4' />
                       Approved as Registrar
                     </Button>
-                    <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
+                    <Button
+                      disabled={isPending}
+                      type='button'
+                      onClick={() => {
+                        actionFormSubmitApproval('Declined', 'dean');
+                      }}
+                      size={'sm'}
+                      className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}
+                    >
                       <Icons.check className='h-4 w-4' />
                       Declined as Dean
                     </Button>
-                    <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
+                    <Button
+                      disabled={isPending}
+                      type='button'
+                      onClick={() => {
+                        actionFormSubmitApproval('Declined', 'registrar');
+                      }}
+                      size={'sm'}
+                      className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}
+                    >
                       <Icons.check className='h-4 w-4' />
                       Declined as Registrar
                     </Button>

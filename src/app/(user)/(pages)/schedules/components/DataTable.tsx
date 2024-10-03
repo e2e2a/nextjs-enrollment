@@ -84,7 +84,7 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
                         if (header.id === 'request') return;
                         if (header.id === 'requestStatusInDean') return;
                         if (header.id === 'requestStatusInRegistrar') return;
-                        if (header.id === 'request status') return;
+                        // if (header.id === 'request status') return;
                       } else {
                         if (header.id === 'status') return;
                       }
@@ -117,7 +117,7 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
                             if (cell.column.id === 'request') return;
                             if (cell.column.id === 'requestStatusInDean') return;
                             if (cell.column.id === 'requestStatusInRegistrar') return;
-                            if (cell.column.id === 'request status') return;
+                            // if (cell.column.id === 'request status') return;
                           } else {
                             if (cell.column.id === 'status') return;
                           }

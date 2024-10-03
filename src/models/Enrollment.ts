@@ -101,7 +101,7 @@ const schema = new Schema<IEnrollment>(
         },
         status: {
           type: String,
-          enum: ['Approved', 'Suggested', 'Declined', 'Pending'],
+          enum: ['Approved', 'Suggested', 'Declined', 'Pending', 'Dropped'],
         },
         request: {
           type: String,
