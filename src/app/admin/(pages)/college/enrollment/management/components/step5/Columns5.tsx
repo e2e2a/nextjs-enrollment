@@ -146,6 +146,19 @@ export const columns5: ColumnDef<IEnrollment>[] = [
     },
   },
   {
+    accessorFn: (row) => row.profileId.payment,
+    accessorKey: 'payment status',
+    header: 'Payment Status',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.profileId.payment ? <span className='text-green-500'>TRUE</span> : <span className='text-red'>FALSE</span>}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: 'createdAt',
     header: 'CreatedAt',
     cell: ({ row }) => {

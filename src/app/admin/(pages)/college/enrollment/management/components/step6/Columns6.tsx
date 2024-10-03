@@ -166,7 +166,19 @@ export const columns6: ColumnDef<IEnrollment>[] = [
       return <div className='font-medium'>{formatted}</div>;
     },
   },
-
+  {
+    accessorFn: (row) => row.profileId.payment,
+    accessorKey: 'payment status',
+    header: 'Payment Status',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.profileId.payment ? <span className='text-green-500'>TRUE</span> : <span className='text-red'>FALSE</span>}
+        </div>
+      );
+    },
+  },
   {
     id: 'actions',
     header: 'Actions',

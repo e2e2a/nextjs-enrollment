@@ -106,7 +106,7 @@ const Page = () => {
             ) : search === '6' ? (
               <div className=''>
                 <div className='flex items-center py-4 text-black w-full justify-center'>
-                  <h1 className='sm:text-3xl text-xl font-bold '>Step5: Payment Method</h1>
+                  <h1 className='sm:text-3xl text-xl font-bold '>Step6: Finalizing student Enrollment</h1>
                 </div>
                 <DataTable6 columns={columns6} data={enrolledStudents as IEnrollment[]} />
               </div>

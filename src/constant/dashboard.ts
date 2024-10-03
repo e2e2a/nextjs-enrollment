@@ -423,7 +423,7 @@ export const dashboardConfig: DashboardConfig = {
                     },
                     {
                       title: 'Step 6 Management',
-                      href: '/admin/college/enrollment/management?step=7',
+                      href: '/admin/college/enrollment/management?step=6',
                       icon: 'eye',
                     },
                   ],
