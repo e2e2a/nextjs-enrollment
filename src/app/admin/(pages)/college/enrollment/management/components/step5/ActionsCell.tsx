@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
-import { useApprovedEnrollmentStep4Mutation, useUndoEnrollmentToStep3Mutation } from '@/lib/queries';
+import { useApprovedEnrollmentStep5Mutation, useUndoEnrollmentToStep4Mutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 
 type IProps = {
@@ -15,8 +15,12 @@ type IProps = {
 };
 const ActionsCell3 = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
-  const mutation = useApprovedEnrollmentStep4Mutation();
-  const undoMutation = useUndoEnrollmentToStep3Mutation();
+  /**
+   * @todo
+   * 1. update the payment in the student profile
+   */
+  const mutation = useApprovedEnrollmentStep5Mutation();
+  const undoMutation = useUndoEnrollmentToStep4Mutation();
   const actionFormUndo = () => {
     setIsPending(true);
     const data = {

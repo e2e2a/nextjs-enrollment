@@ -58,10 +58,13 @@ const Step1 = ({ search, enrollment }: IProps) => {
             </CardHeader>
             <CardContent className='flex w-full justify-center flex-col rounded-lg shadow-sm bg-white items-center border focus-visible:ring-0 space-y-5 px-0 mt-7'>
               <div className='w-full flex flex-col items-center justify-center h-full'>
-                <div className='w-full flex justify-center items-center md:my-4'>
-                  <Icons.hourglass className='md:h-14 md:w-14 h-10 w-10 my-3 stroke-green-400 animate-spin' style={{ animationDuration: '6s' }} />
+                <div className=' mt-3'>
+                  <h1 className='text-center text-xl sm:text-3xl font-semibold text-black uppercase'>waiting Confirmation</h1>
                 </div>
-                <h1 className='text-center text-xl sm:text-3xl font-bold font-poppins text-green-400 px-4'>Awaiting Confirmation!</h1>
+                <div className='w-full flex justify-center items-center md:my-4'>
+                  <Icons.hourglass className='md:h-14 md:w-14 h-10 w-10 my-3 stroke-green-400 fill-gray-100 animate-spin' style={{ animationDuration: '6s' }} />
+                </div>
+                {/* <h1 className='text-center text-xl sm:text-3xl font-bold font-poppins text-green-400 px-4'>Awaiting Confirmation!</h1> */}
                 <span className='text-sm text-left sm:mt-10 mt-5 w-full px-5 sm:px-10'>
                   Dear{' '}
                   <span className='font-semibold capitalize'>

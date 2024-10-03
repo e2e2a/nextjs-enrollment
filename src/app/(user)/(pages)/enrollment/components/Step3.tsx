@@ -33,15 +33,17 @@ const Step3 = ({ enrollment }: IProps) => {
             </CardHeader>
             <CardContent className='flex w-full justify-center flex-col items-center border-[0.5px] rounded-lg shadow-sm bg-white focus-visible:ring-0 space-y-5 px-0 mx-0'>
               <div className='w-full flex flex-col items-center justify-center h-full'>
+                <div className=' mt-3'>
+                  <h1 className='text-center text-xl sm:text-3xl font-semibold text-black uppercase'>We&apos;re Setting Up Your Schedule</h1>
+                </div>
                 <div className='w-full flex justify-center items-center md:my-4'>
                   <Icons.hourglass className='md:h-14 md:w-14 h-10 w-10 my-3 stroke-green-400 animate-spin' style={{ animationDuration: '6s' }} />
                 </div>
-                <h1 className='text-center text-xl sm:text-3xl font-bold font-poppins text-green-400'>We’re Setting Up Your Schedule!</h1>
                 <span className='text-sm text-left sm:mt-10 mt-5 w-full px-5 sm:px-10'>
                   Dear{' '}
                   <span className='font-semibold capitalize'>
                     <span className='capitalize'>{enrollment.profileId.firstname} </span>
-                    <span className='capitalize'>{enrollment.profileId.lastname}</span>
+                    <span className='capitalize'>{enrollment.profileId.lastname}</span> 
                   </span>
                   ,
                 </span>
@@ -57,7 +59,7 @@ const Step3 = ({ enrollment }: IProps) => {
               <div className='my-10'>
                 <div className='flex w-full items-center justify-center'>
                   <Link href='/schedules' className='bg-blue-600 text-neutral-50 hover:bg-blue-700 flex px-2 items-center py-2 text-xs sm:text-sm rounded-md'>
-                    <Icons.eye className='h-5 w-5' />
+                    <Icons.eye className='h-5 w-5 mr-1' />
                     View Your Schedules
                   </Link>
                 </div>
