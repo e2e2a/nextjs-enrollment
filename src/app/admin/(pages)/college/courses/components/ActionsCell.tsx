@@ -10,10 +10,11 @@ type IProps = {
   user: any;
 };
 const ActionsCell = ({ user }: IProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState<boolean>(false);
   return (
     <div className=''>
-      <Popover>
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger className='' asChild>
           <div className='flex justify-center items-center w-full'>
             <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-blue-500 px-2 py-0 text-neutral-50 font-medium'}>

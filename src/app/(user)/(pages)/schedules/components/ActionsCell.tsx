@@ -129,17 +129,16 @@ const ActionsCell = ({ user }: IProps) => {
       )}
       {user.request && user.request === 'drop' && <span className='uppercase text-red'>DROP</span>}
       {user.request && user.request === 'add' && <span className='uppercase text-green-500'>add</span>}
-      {user.request && user.request === 'suggested' && (
+      {user.request && user.requestStatus.toLowerCase() === 'suggested' && (
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
           <AlertDialogTrigger asChild>
-            <Button type='button' disabled={isUploading} variant='outline' size={'sm'} className='sm:text-sm text-xs bg-red text-white'>
-              <span className=' text-white text-[15px] font-medium'>{isUploading ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Drop'}</span>
+            <Button type='button' disabled={isUploading} variant='outline' size={'sm'} className='sm:text-sm text-xs bg-green-500 text-white'>
+              <span className=' text-white text-[15px] font-medium'>{isUploading ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'ADD'}</span>
             </Button>
           </AlertDialogTrigger>
-          <form action='' className='p-0 m-0' method='post'>
             <AlertDialogContent className='bg-white text-black'>
               <AlertDialogHeader>
-                <AlertDialogTitle>Drop Subject</AlertDialogTitle>
+                <AlertDialogTitle>Add Subject</AlertDialogTitle>
                 <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;This action will add the suggested subject from your enrollment. Please be aware that this may add directly to your academic progress.</AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -152,7 +151,6 @@ const ActionsCell = ({ user }: IProps) => {
                 </Button>
               </AlertDialogFooter>
             </AlertDialogContent>
-          </form>
         </AlertDialog>
       )}
     </>

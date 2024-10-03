@@ -17,8 +17,9 @@ import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 type IProps = {
   isPending: boolean;
   user: any;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
-export function DialogStep1Button({ isPending, user }: IProps) {
+export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
   const [loader, setLoader] = useState<boolean>(false);
   const [blocks, setBlocks] = useState<any>([]);
 
@@ -46,6 +47,7 @@ export function DialogStep1Button({ isPending, user }: IProps) {
   }, [bData, bError, bLoading, user]);
   const actionFormSubmit = (data: z.infer<typeof EnrollmentBlockTypeValidator>) => {
     // setIsPending(true);
+    setIsOpen(false)
     const dataa = {
       EId: user._id,
       ...data,

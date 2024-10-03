@@ -11,10 +11,11 @@ type IProps = {
   user: any;
 };
 const ActionsCell = ({ user }: IProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState<boolean>(false);
   return (
     <div className=''>
-      <Popover>
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger className='' asChild>
           <div className='flex justify-center items-center w-full'>
             <Button role='combobox' type='button' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-blue-500 px-2 py-0 text-neutral-50 font-medium'}>
@@ -37,7 +38,7 @@ const ActionsCell = ({ user }: IProps) => {
                       <Icons.check className='h-4 w-4' />
                       Confirm Enrollee
                     </Button> */}
-                <DialogStep1Button isPending={isPending} user={user} />
+                <DialogStep1Button isPending={isPending} user={user} setIsOpen={setIsOpen} />
                 <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
                   <Icons.close className='h-4 w-4' />
                   Reject Enrollee

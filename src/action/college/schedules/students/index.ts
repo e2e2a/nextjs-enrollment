@@ -65,6 +65,12 @@ export const updateStudentEnrollmentScheduleSuggestedSubjectAction = async (data
     if (!teacherSchedule) {
       return { error: `Teacher Schedule ID is not valid.`, status: 404 };
     }
+    // @ts-ignore
+    for (const existStudentSched of enrollment.studentSubjects) {
+      if (existStudentSched.teacherScheduleId._id.toString() === data.teacherScheduleId) {
+        return { error: 'This subject is already been suggested in the student.', status: 409 };
+      }
+    }
     /**
      * @todo
      * 1. check conflict time
@@ -83,10 +89,11 @@ const updateStudentSchedSuggestedSubject = async (enrolmentId: any, data: any) =
     await dbConnect();
     const enrollment = await getEnrollmentById(data.enrollmentId);
     if (!enrollment) return { error: 'Enrollment ID is not valid.', status: 404 };
+
     await Enrollment.findByIdAndUpdate(
       enrolmentId,
       // @ts-ignore
-      { $addToSet: { studentSubjects: { teacherScheduleId: data.teacherScheduleId, profileId: enrollment.profileId._id, status: 'suggested', request: 'suggested' } } }, // Add teacherScheduleId to blockSubjects
+      { $addToSet: { studentSubjects: { teacherScheduleId: data.teacherScheduleId, profileId: enrollment.profileId._id, status: 'Suggested', request: 'suggested', requestStatus: 'Suggested' } } }, // Add teacherScheduleId to blockSubjects
       { new: true }
     );
     return { message: 'Block subjects updated successfully.', status: 200 };

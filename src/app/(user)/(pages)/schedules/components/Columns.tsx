@@ -210,13 +210,13 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.status === 'Approved' ? (
+          {user.status.toLowerCase() === 'approved' ? (
             <span className='text-green-500 text-xs'>{user.status}</span>
-          ) : user.status === 'Pending' ? (
+          ) : user.status.toLowerCase() === 'pending' ? (
             <span className='text-blue-500 text-xs'>{user.status}</span>
-          ) : user.status === 'Suggested' ? (
+          ) : user.status.toLowerCase() === 'suggested' ? (
             <span className='text-orange-500 text-xs'>{user.status}</span>
-          ) : user.status === 'Declined' ? (
+          ) : user.status.toLowerCase() === 'declined' ? (
             <span className='text-red text-xs'>{user.status}</span>
           ) : null}
         </div>
@@ -248,7 +248,9 @@ export const columns: ColumnDef<any>[] = [
             <span className='text-blue-500 text-xs'>{user.requestStatusInDean}</span>
           ) : user.requestStatusInDean === 'Declined' ? (
             <span className='text-red text-xs'>{user.requestStatusInDean}</span>
-          ) : null}
+          ) : (
+            <span className='text-gray-400 font-normal text-xs'>N/A</span>
+          )}
         </div>
       );
     },
@@ -266,7 +268,9 @@ export const columns: ColumnDef<any>[] = [
             <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
           ) : user.requestStatusInRegistrar === 'Declined' ? (
             <span className='text-red text-xs'>{user.requestStatusInRegistrar}</span>
-          ) : null}
+          ) : (
+            <span className='text-gray-400 font-normal text-xs'>N/A</span>
+          )}
         </div>
       );
     },
@@ -277,13 +281,15 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='uppercase'>
-          {user.requestStatusInRegistrar === 'Approved' ? (
-            <span className='text-green-500 text-xs'>{user.requestStatusInRegistrar}</span>
-          ) : user.requestStatusInRegistrar === 'Pending' ? (
-            <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
-          ) : user.requestStatusInRegistrar === 'Declined' ? (
-            <span className='text-red text-xs'>{user.requestStatusInRegistrar}</span>
+        <div key={cell.id} className='uppercase font-bold'>
+          {user.requestStatus.toLowerCase() === 'approved' ? (
+            <span className='text-green-500 text-xs'>{user.requestStatus}</span>
+          ) : user.requestStatus.toLowerCase() === 'pending' ? (
+            <span className='text-blue-500 text-xs'>{user.requestStatus}</span>
+          ) : user.requestStatus.toLowerCase() === 'declined' ? (
+            <span className='text-red text-xs'>{user.requestStatus}</span>
+          ) : user.requestStatus.toLowerCase() === 'suggested' ? (
+            <span className='text-orange-500 text-xs'>{user.requestStatus}</span>
           ) : null}
         </div>
       );

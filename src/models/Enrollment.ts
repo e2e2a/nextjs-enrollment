@@ -118,7 +118,7 @@ const schema = new Schema<IEnrollment>(
         },
         requestStatus: {
           type: String,
-          enum: ['Approved', 'Pending', 'Declined'],
+          enum: ['Approved', 'Pending', 'Suggested', 'Declined'],
         },
         profileId: {
           type: mongoose.Schema.Types.ObjectId,
