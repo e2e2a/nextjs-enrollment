@@ -9,6 +9,7 @@ import LoaderPage from '@/components/shared/LoaderPage';
 const Page = () => {
   const { data: session } = useSession();
   const [isError, setIsError] = useState(false);
+  const [schedule, setSchedule] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data, isLoading, error: isEnError } = useEnrollmentQueryByUserId(session?.user.id);
   const { data: b, isLoading: bLoading, error: bError } = useTeacherScheduleCollegeQuery();
@@ -19,7 +20,18 @@ const Page = () => {
     if (isEnError || !data) return;
     if (ESetupError || !ESetup) return;
 
-    if (b && data) {
+    if (b && data && ESetup) {
+      const filteredSchedules = data.enrollment?.studentSubjects?.filter((ss: any) => ss.status === 'Approved');
+      if (ESetup.enrollmentSetup.addOrDropSubjects) {
+        setSchedule(data.enrollment?.studentSubjects);
+      } else {
+        if (data.enrollment?.enrollStatus === 'Enrolled') {
+          setSchedule(filteredSchedules);
+        } else {
+          setSchedule(data.enrollment?.studentSubjects);
+        }
+      }
+
       setIsPageLoading(false);
     }
   }, [b, bError, data, isEnError, ESetup, ESetupError]);
@@ -84,7 +96,7 @@ const Page = () => {
                 </div>
               </div>
             </div>
-            <DataTable columns={columns} data={data?.enrollment.studentSubjects} enrollmentSetup={ESetup.enrollmentSetup} enrollment={data.enrollment} />
+            <DataTable columns={columns} data={schedule} enrollmentSetup={ESetup.enrollmentSetup} enrollment={data.enrollment} />
           </div>
         )
       )}
