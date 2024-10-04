@@ -430,33 +430,44 @@ export const dashboardConfig: DashboardConfig = {
                   icon: 'packageSearch',
                 },
                 {
-                  title: `Student's Enrollment`,
+                  title: 'Enrolled Students',
                   i: [
                     {
-                      title: 'Enrolled Students',
-                      i: [
-                        {
-                          title: 'View Enrolled Students',
-                          href: '/admin/college/enrollment/enrolled',
-                          icon: 'eye',
-                        },
-                      ],
-                      icon: 'packageSearch',
-                    },
-                    {
-                      title: `Student's Schedule`,
-                      i: [
-                        {
-                          title: 'View Enrolled Students',
-                          href: '/admin/college/schedules/instructors',
-                          icon: 'eye',
-                        },
-                      ],
-                      icon: 'packageSearch',
+                      title: 'View Enrolled Students',
+                      href: '/admin/college/enrollment/enrolled',
+                      icon: 'eye',
                     },
                   ],
                   icon: 'packageSearch',
                 },
+                // {
+                //   title: `Student's Enrollment`,
+                //   i: [
+                //     {
+                //       title: 'Enrolled Students',
+                //       i: [
+                //         {
+                //           title: 'View Enrolled Students',
+                //           href: '/admin/college/enrollment/enrolled',
+                //           icon: 'eye',
+                //         },
+                //       ],
+                //       icon: 'packageSearch',
+                //     },
+                //     {
+                //       title: `Student's Schedule`,
+                //       i: [
+                //         {
+                //           title: 'View Enrolled Students',
+                //           href: '/admin/college/schedules/instructors',
+                //           icon: 'eye',
+                //         },
+                //       ],
+                //       icon: 'packageSearch',
+                //     },
+                //   ],
+                //   icon: 'packageSearch',
+                // },
               ],
               icon: 'packageSearch',
             },

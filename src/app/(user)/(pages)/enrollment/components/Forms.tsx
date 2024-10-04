@@ -12,6 +12,8 @@ import Step1 from './Step1';
 import Step3 from './Step3';
 import Step4 from './Step4';
 import Step5 from './Step5';
+import Step6 from './Step6';
+import Congrats from './Congrats';
 type IProps = {
   search: any;
   enrollment: any;
@@ -26,7 +28,7 @@ const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
   }, [value, enrollment]);
   return (
     <div className=''>
-      {enrollment && (
+      {enrollment && profile.enrollStatus === 'Pending' && (
         <div className='flex flex-col gap-y-4 justify-center items-center mb-5'>
           <div className='text-center font-semibold tracking-wider pointer-events-none select-none'>Enrollment Progress</div>
           <div className='w-full flex flex-row gap-6 bg-transparent justify-center pointer-events-none select-none'>
@@ -51,7 +53,11 @@ const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
             <Step3 enrollment={enrollment} />
             <Step4 enrollment={enrollment} />
             <Step5 enrollment={enrollment} />
+            <Step6 enrollment={enrollment} />
           </>
+        )}
+        {enrollment && profile.enrollStatus === 'Enrolled' && (
+            <Congrats enrollment={enrollment} />
         )}
         
        

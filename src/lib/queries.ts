@@ -56,6 +56,7 @@ import {
   approvedEnrollmentStep3Action,
   approvedEnrollmentStep4Action,
   approvedEnrollmentStep5Action,
+  approvedEnrollmentStep6Action,
   getAllEnrollmentAction,
   getAllEnrollmentByTeacherScheduleIdAction,
   getEnrollmentByIdAction,
@@ -690,6 +691,19 @@ export const useApprovedEnrollmentStep5Mutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => approvedEnrollmentStep5Action(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
+      queryClient.invalidateQueries({ queryKey: ['CollegeEnrollment'] });
+      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+    },
+  });
+};
+
+//step6 approved
+export const useApprovedEnrollmentStep6Mutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => approvedEnrollmentStep6Action(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
       queryClient.invalidateQueries({ queryKey: ['CollegeEnrollment'] });

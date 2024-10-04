@@ -77,6 +77,8 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
                     }
                     if (enrollmentStudentStatus === 'Enrolled') {
                       if (header.id === 'status') return;
+                      if (header.id === 'requesting') return;
+                      if (header.id === 'request status') return;
                     }
 
                     if (enrollmentStudentStatus === 'Pending' || enrollmentStudentStatus === 'Enrolled') {
@@ -87,7 +89,6 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
                         // if (header.id === 'request status') return;
                       } else {
                         if (enrollment.step !== 4) {
-                          console.log('asdasdasdasd')
                           if (header.id === 'request') return;
                           if (header.id === 'requestStatusInDean') return;
                           if (header.id === 'requestStatusInRegistrar') return;
@@ -119,6 +120,8 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
                         }
                         if (enrollmentStudentStatus === 'Enrolled') {
                           if (cell.column.id === 'status') return;
+                          if (cell.column.id === 'requesting') return;
+                          if (cell.column.id === 'request status') return;
                         }
                         if (enrollmentStudentStatus === 'Pending' || enrollmentStudentStatus === 'Enrolled') {
                           if (!enrollmentSetup.addOrDropSubjects) {

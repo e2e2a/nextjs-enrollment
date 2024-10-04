@@ -52,7 +52,7 @@ export interface IProfile extends Document {
   MothersContact: string;
 
   photoUrl: string;
-  enrollStatus?: 'Pending' | 'Continue' | 'Completed';
+  enrollStatus?: 'Pending' | 'Completed' | 'Enrolled';
   studentType?: 'Regular' | 'Non-Regular';
   scholarType: string;
   imageUrl?: string;
@@ -105,7 +105,7 @@ const schema = new Schema<IProfile>(
     studentStatus: {
       type: String,
       default: 'New Student',
-      enum: ['New Student', 'Continue', 'Completed'],
+      enum: ['New Student', 'Continue', 'Transferee'],
     },
     // isEnrolled: {
     //   type: Boolean,

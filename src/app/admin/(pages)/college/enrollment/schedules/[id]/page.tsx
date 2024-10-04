@@ -74,7 +74,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='flex w-full justify-start'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Enrollment Status: <span className='font-normal text-blue-500'>{data.enrollment.enrollStatus}</span>
+                      Enrollment Status:{' '}
+                      {data.enrollment.enrollStatus === 'Pending' ? (
+                        <span className='font-normal text-blue-500'>{data.enrollment.enrollStatus}</span>
+                      ) : data.enrollment.enrollStatus === 'Enrolled' ? (
+                        <span className='font-normal text-green-500'>{data.enrollment.enrollStatus}</span>
+                      ) : (
+                        <span>{data.enrollment.enrollStatus}</span>
+                      )}
                     </span>
                   </div>
                 </div>
@@ -82,7 +89,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               <div className='w-full flex justify-end items-center'>
                 <AddStudentSched student={data.enrollment} b={schedules} />
               </div>
-              <DataTable columns={columns} data={data?.enrollment.studentSubjects} enrollmentSetup={ESetup.enrollmentSetup} />
+              <DataTable columns={columns} data={data?.enrollment.studentSubjects} enrollmentSetup={ESetup.enrollmentSetup} enrollment={data.enrollment} />
             </>
           ) : (
             <div className=''>404</div>

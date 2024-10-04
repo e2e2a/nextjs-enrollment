@@ -104,20 +104,26 @@ export const approvedEnrollmentStep5Action = async (data: any) => {
     return { error: 'Something went wrong', status: 500 };
   }
 };
-// export const approvedEnrollmentStep5Action = async (data: any) => {
-//   try {
-//     await dbConnect();
-//     const checkE = await getEnrollmentById(data.EId);
-//     if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
-//     await updateEnrollmentById(data.EId, { enrollStatus: 'Enrolled' });
-//     // @ts-ignore
-//     const updatedProfile = await StudentProfile.findByIdAndUpdate(checkE.profileId._id, {enrollStatus: 'Enrolled'})
-//     return { message: 'Student has been completed all steps.', status: 201 };
-//   } catch (error) {
-//     console.log('server e :', error);
-//     return { error: 'Something went wrong', status: 500 };
-//   }
-// };
+
+/**
+ * 
+ * @todo        
+ * @returns 
+ */
+export const approvedEnrollmentStep6Action = async (data: any) => {
+  try {
+    await dbConnect();
+    const checkE = await getEnrollmentById(data.EId);
+    if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
+    await updateEnrollmentById(data.EId, { enrollStatus: 'Enrolled' });
+    // @ts-ignore
+    const updatedProfile = await StudentProfile.findByIdAndUpdate(checkE.profileId._id, {enrollStatus: 'Enrolled'})
+    return { message: 'Student has been completed all steps.', status: 201 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
 
 const sendEmailWithPDF = async (checkE: any) => {
   try {

@@ -6,11 +6,12 @@ import { Icons } from '@/components/shared/Icons';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import LoaderPage from '@/components/shared/LoaderPage';
+import Image from 'next/image';
 
 type IProps = {
   enrollment: any;
 };
-const Step6 = ({ enrollment }: IProps) => {
+const Congrats = ({ enrollment }: IProps) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
   const { data: s } = useSession();
@@ -33,11 +34,20 @@ const Step6 = ({ enrollment }: IProps) => {
             </CardHeader>
             <CardContent className='flex w-full justify-center flex-col items-center border-[0.5px] rounded-lg shadow-sm bg-white focus-visible:ring-0 space-y-5 px-0 mx-0'>
               <div className='w-full flex flex-col items-center justify-center h-full'>
-                <div className=' mt-3'>
-                  <h1 className='text-center text-xl sm:text-3xl font-semibold text-black'>FINALIZED STUDENT ENROLLMENT</h1>
-                </div>
-                <div className='w-full flex justify-center items-center md:mt-4 md:mb-0'>
-                  <Icons.hourglass className='md:h-14 fill-gray-100 md:w-14 h-10 w-10 my-3 stroke-green-400 animate-spin' style={{ animationDuration: '6s' }} />
+                {/* <div className=' mt-3'>
+                  <h1 className='text-center text-xl sm:text-3xl font-semibold text-black'>asdasd</h1>
+                </div> */}
+                <div className='w-full flex justify-start items-center md:mt-4 md:mb-0 px-5 sm:px-10'>
+                  <div className='flex gap-x-2 xs:flex-row flex-col'>
+                    <div className='w-full sm:w-auto flex justify-center'>
+                      <Image src='/images/logo1.png' alt='nothing to say' width={100} height={100} className='h-36 w-36' priority />
+                    </div>
+                    <div className='flex flex-col sm:mt-6'>
+                      <div className='uppercase font-semibold sm:text-xl xs:text-lg text-sm'>Dipolog City Institute of Technology, INC.</div>
+                      <div className='uppercase font-semibold sm:text-xl xs:text-lg text-sm'>National Highway, Minaog, Dipolog City, Zamboanga del Norte</div>
+                    </div>
+                  </div>
+                  {/* <Icons.hourglass className='md:h-14 fill-gray-100 md:w-14 h-10 w-10 my-3 stroke-green-400 animate-spin' style={{ animationDuration: '6s' }} /> */}
                 </div>
                 {/* <h1 className='text-center text-xl sm:text-3xl font-bold font-poppins text-green-400'>Student Payment!</h1> */}
                 <span className='text-sm text-left sm:mt-10 mt-5 w-full px-5 sm:px-10'>
@@ -48,14 +58,7 @@ const Step6 = ({ enrollment }: IProps) => {
                   </span>
                   ,
                 </span>
-                <span className='text-sm text-left mt-4 px-5 sm:px-10 w-full'>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is from the administrator of DCIT. Your enrollment is in the final stage. The administrator will now review and finalize your enrollment, making it officially confirmed. Once this step is completed,
-                  you will be fully enrolled. If you have any questions or need further assistance, please read our docs; documentation is available at{' '}
-                  <a href='/documentation' className='text-blue-600 underline'>
-                    this link
-                  </a>
-                  .
-                </span>
+                <span className='text-sm text-left mt-4 px-5 sm:px-10 w-full'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thank you for your patience throughout the enrollment process. We are pleased to confirm that you are now <span className="text-green-500">officially enrolled</span> . You can view your official study load <Link href={'/schedules'} className='text-blue-500 hover:underline'>here</Link>.</span>
               </div>
               {/* <div className='my-10'>
                 <div className='flex w-full items-center justify-center'>
@@ -87,4 +90,4 @@ const Step6 = ({ enrollment }: IProps) => {
   );
 };
 
-export default Step6;
+export default Congrats;

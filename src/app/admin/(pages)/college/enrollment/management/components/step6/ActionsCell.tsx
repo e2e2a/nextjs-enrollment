@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
-import { useApprovedEnrollmentStep5Mutation, useUndoEnrollmentToStep4Mutation } from '@/lib/queries';
+import { useApprovedEnrollmentStep6Mutation, useUndoEnrollmentToStep4Mutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 
 type IProps = {
@@ -16,33 +16,33 @@ type IProps = {
 
 const ActionsCell3 = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
-  const mutation = useApprovedEnrollmentStep5Mutation();
-  const undoMutation = useUndoEnrollmentToStep4Mutation();
-  const actionFormUndo = () => {
-    setIsPending(true);
-    const data = {
-      EId: user._id,
-      step: user.step,
-      blockType: user.blockType,
-    };
-    undoMutation.mutate(data, {
-      onSuccess: (res) => {
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            makeToastSucess(res.message);
-            return;
-          default:
-            makeToastError(res.error);
-            return;
-        }
-      },
-      onSettled: () => {
-        setIsPending(false);
-      },
-    });
-  };
+  const mutation = useApprovedEnrollmentStep6Mutation();
+  // const undoMutation = useUndoEnrollmentToStep5Mutation();
+  // const actionFormUndo = () => {
+  //   setIsPending(true);
+  //   const data = {
+  //     EId: user._id,
+  //     step: user.step,
+  //     blockType: user.blockType,
+  //   };
+  //   undoMutation.mutate(data, {
+  //     onSuccess: (res) => {
+  //       switch (res.status) {
+  //         case 200:
+  //         case 201:
+  //         case 203:
+  //           makeToastSucess(res.message);
+  //           return;
+  //         default:
+  //           makeToastError(res.error);
+  //           return;
+  //       }
+  //     },
+  //     onSettled: () => {
+  //       setIsPending(false);
+  //     },
+  //   });
+  // };
   const actionFormSubmit = () => {
     setIsPending(true);
     const dataa = {
@@ -111,7 +111,7 @@ const ActionsCell3 = ({ user }: IProps) => {
                   <Icons.check className='h-4 w-4' />
                   Complete Student Enrollment
                 </Button>
-                <Button
+                {/* <Button
                   disabled={isPending}
                   type='button'
                   size={'sm'}
@@ -120,7 +120,7 @@ const ActionsCell3 = ({ user }: IProps) => {
                 >
                   <Icons.rotateCcw className='h-4 w-4' />
                   Undo last Step
-                </Button>
+                </Button> */}
                 {/* <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
                   <Icons.close className='h-4 w-4' />
                   Reject Enrollee

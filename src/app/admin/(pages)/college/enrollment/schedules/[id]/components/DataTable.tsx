@@ -11,9 +11,10 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData;
   enrollmentSetup: any;
+  enrollment: any;
 }
 
-export function DataTable<TData, TValue>({ columns, data, enrollmentSetup }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, enrollmentSetup, enrollment }: DataTableProps<TData, TValue>) {
   const [searchBy, setSearchBy] = useState('Fullname');
   useEffect(() => {
     if (!data) {
@@ -40,7 +41,6 @@ export function DataTable<TData, TValue>({ columns, data, enrollmentSetup }: Dat
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
-
   return (
     <div>
       {/* Filters */}
@@ -86,13 +86,14 @@ export function DataTable<TData, TValue>({ columns, data, enrollmentSetup }: Dat
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
-                  if (!enrollmentSetup.addOrDropSubjects) {
+                  if (enrollment.step >= 4) {
+                    // if (header.id === 'requesting') return;
+                    if (header.id === 'actions') return;
+                  } else {
                     if (header.id === 'requesting') return;
                     if (header.id === 'requestStatusInDean') return;
                     if (header.id === 'requestStatusInRegistrar') return;
                     if (header.id === 'options') return;
-                  } else {
-                    if (header.id === 'actions') return;
                   }
                   return (
                     <TableHead key={header.id} className='text-center'>
@@ -108,13 +109,14 @@ export function DataTable<TData, TValue>({ columns, data, enrollmentSetup }: Dat
               table.getRowModel().rows.map((row) => (
                 <TableRow className='whitespace-pre' key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => {
-                    if (!enrollmentSetup.addOrDropSubjects) {
+                    if (enrollment.step >= 4) {
+                      // if (cell.column.id === 'requesting') return;
+                      if (cell.column.id === 'actions') return;
+                    } else {
                       if (cell.column.id === 'requesting') return;
                       if (cell.column.id === 'requestStatusInDean') return;
                       if (cell.column.id === 'requestStatusInRegistrar') return;
                       if (cell.column.id === 'options') return;
-                    } else {
-                      if (cell.column.id === 'actions') return;
                     }
                     return <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>;
                   })}
