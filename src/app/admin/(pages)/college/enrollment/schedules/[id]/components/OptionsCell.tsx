@@ -47,7 +47,7 @@ const OptionsCell = ({ user }: IProps) => {
   };
   const approvalMutation = useUpdateStudentEnrollmentScheduleRequestStatusMutation();
   const actionFormSubmitApproval = (type: string, as: string) => {
-    setIsOpen(false)
+    setIsOpen(false);
     let data;
     data = {
       category: 'College',
@@ -56,7 +56,7 @@ const OptionsCell = ({ user }: IProps) => {
       type: type,
       as: as,
     };
-    
+
     approvalMutation.mutate(data, {
       onSuccess: (res) => {
         switch (res.status) {
@@ -99,6 +99,7 @@ const OptionsCell = ({ user }: IProps) => {
                     Approved as Dean
                   </Link>
                 </Button> */}
+
                 {user.request && user.request !== 'suggested' && (
                   <>
                     <Button
@@ -134,7 +135,7 @@ const OptionsCell = ({ user }: IProps) => {
                       size={'sm'}
                       className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}
                     >
-                      <Icons.check className='h-4 w-4' />
+                      <Icons.close className='h-4 w-4' />
                       Declined as Dean
                     </Button>
                     <Button
@@ -146,12 +147,12 @@ const OptionsCell = ({ user }: IProps) => {
                       size={'sm'}
                       className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}
                     >
-                      <Icons.check className='h-4 w-4' />
+                      <Icons.close className='h-4 w-4' />
                       Declined as Registrar
                     </Button>
                   </>
                 )}
-                {user.request && user.request === 'drop' && (
+                {/* {user.request && user.request === 'drop' && (
                   <Button
                     disabled={isPending}
                     type='button'
@@ -162,7 +163,7 @@ const OptionsCell = ({ user }: IProps) => {
                     <Icons.close className='h-4 w-4' />
                     <span className=' text-[15px] font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Remove Subject'}</span>
                   </Button>
-                )}
+                )} */}
                 {user.request && user.request === 'suggested' && (
                   <Button
                     disabled={isPending}
@@ -173,6 +174,18 @@ const OptionsCell = ({ user }: IProps) => {
                   >
                     <Icons.close className='h-4 w-4' />
                     <span className=' text-[15px] font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Cancel Suggest'}</span>
+                  </Button>
+                )}
+                {(!user?.request || user.request !== 'Suggested') && (
+                  <Button
+                    disabled={isPending}
+                    type='button'
+                    onClick={() => actionFormSubmit('Subject has been removed.')}
+                    size={'sm'}
+                    className={'w-full focus-visible:ring-0 mb-1 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}
+                  >
+                    <Icons.trash className='h-4 w-4' />
+                    <span className=' text-[15px] font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Remove Subject'}</span>
                   </Button>
                 )}
                 {/* <DataTableDrawer user={user} /> */}
