@@ -1,11 +1,11 @@
 'use client';
-import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useAllEnrollmentByTeacherScheduleIdQuery, useTeacherProfileQueryByUserId, useTeacherScheduleCollegeQueryById } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import AddGrades from './components/AddGrades';
+import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -40,7 +40,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     <>
       {isPageLoading ? (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>
-          <Loader />
+          <LoaderPage />
         </div>
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>

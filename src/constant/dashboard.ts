@@ -162,6 +162,65 @@ export const dashboardConfig: DashboardConfig = {
     //   icon: 'settings',
     // },
   ],
+  mainNavDean: [
+    {
+      title: 'Home',
+      href: '/dean',
+      icon: 'home',
+    },
+    {
+      title: 'Schedules',
+      href: '/instructor/schedules',
+      icon: 'hourglass',
+    },
+    {
+      title: 'Grades Report',
+      href: '/dean/report/grade',
+      icon: 'filePenLine',
+    },
+    {
+      title: 'School & Policies',
+      href: '/school/policy',
+      icon: 'school',
+    },
+    {
+      title: 'Documentation',
+      href: '',
+      icon: 'page',
+    },
+  ],
+  sidebarDean: [
+    {
+      title: 'Schedules',
+      href: '/instructor/schedules',
+      icon: 'hourglass',
+    },
+    {
+      title: 'Records',
+      href: '/',
+      icon: 'fileStack',
+    },
+    {
+      title: 'Grades Report',
+      href: '/dean/report/grade',
+      icon: 'filePenLine',
+    },
+    {
+      title: 'School & Policies',
+      href: '/school/policies',
+      icon: 'school',
+    },
+    {
+      title: 'Documentation',
+      href: '/documentation',
+      icon: 'page',
+    },
+    // {
+    //   title: 'Settings',
+    //   href: '/dashboard/settings',
+    //   icon: 'settings',
+    // },
+  ],
   mainNavAdmin: [
     {
       title: 'Home',
@@ -435,6 +494,17 @@ export const dashboardConfig: DashboardConfig = {
                     {
                       title: 'View Enrolled Students',
                       href: '/admin/college/enrollment/enrolled',
+                      icon: 'eye',
+                    },
+                  ],
+                  icon: 'packageSearch',
+                },
+                {
+                  title: 'Reported Grades',
+                  i: [
+                    {
+                      title: 'All Grades Report',
+                      href: '/admin/college/enrollment/report/grade',
                       icon: 'eye',
                     },
                   ],

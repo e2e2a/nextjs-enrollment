@@ -139,6 +139,14 @@ export type SidebarNavItemInstructor = {
   external?: boolean;
   icon?: keyof typeof Icons;
 };
+export type SidebarNavItemDean = {
+  title: string;
+  disabled?: boolean;
+  i?: SidebarNavItem[];
+  href?: string;
+  external?: boolean;
+  icon?: keyof typeof Icons;
+};
 
 export type SiteConfig = {
   name: string;
@@ -163,8 +171,11 @@ export type MarketingConfig = {
 export type DashboardConfig = {
   mainNav: MainNavItem[];
   mainNavInstructor: MainNavItem[];
+  mainNavDean: MainNavItem[];
   sidebarNav: SidebarNavItem[];
   sidebarInstructor: SidebarNavItemInstructor[];
+  sidebarDean: SidebarNavItemDean[];
+  
   mainNavAdmin: MainNavItem[];
   sidebarAdmin: SidebarNavItemAdmin[];
 };

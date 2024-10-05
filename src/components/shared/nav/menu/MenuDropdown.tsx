@@ -27,9 +27,9 @@ export function MenuDropdown({ session }: IProps) {
             ) : session.role === 'STUDENT' ? (
               <Content items={dashboardConfig.sidebarNav} />
             ) : session.role === 'INSTRUCTOR' ? (
-              <Content items={dashboardConfig.sidebarNav} />
+              <Content items={dashboardConfig.sidebarInstructor} />
             ) : session.role === 'DEAN' ? (
-              <Content items={dashboardConfig.sidebarNav} />
+              <Content items={dashboardConfig.sidebarDean} />
             ) : null}
           </DropdownMenuContent>
         </DropdownMenu>

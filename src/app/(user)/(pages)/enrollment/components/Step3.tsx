@@ -60,7 +60,7 @@ const Step3 = ({ enrollment }: IProps) => {
                 <div className='flex w-full items-center justify-center'>
                   <Link href='/schedules' className='bg-blue-600 text-neutral-50 hover:bg-blue-700 flex px-2 items-center py-2 text-xs sm:text-sm rounded-md'>
                     <Icons.eye className='h-5 w-5 mr-1' />
-                    View Your Schedules
+                    View Your Unofficial Study Loads
                   </Link>
                 </div>
               </div>

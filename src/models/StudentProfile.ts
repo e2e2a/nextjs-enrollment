@@ -1,5 +1,4 @@
 import mongoose, { Schema, models, model } from 'mongoose';
-import { boolean } from 'zod';
 
 export interface IProfile extends Document {
   userId: mongoose.Schema.Types.ObjectId;

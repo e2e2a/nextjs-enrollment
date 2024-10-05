@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import initializeModel from './initialize';
 
 const MONGODB_URI = process.env.MONGODB_URI;
-const modelsToInitialize = ['Course', 'User', 'UserIp', 'StudentProfile', 'Account', 'Enrollment', 'BlockType', 'Subject', 'TeacherProfile', 'TeacherSchedule', 'Room', 'SchoolYear', 'Curriculum', 'StudentCurriculum', 'StudentSchedule', 'AdminProfile', 'DeanProfile', 'EnrollmentSetup'];
+const modelsToInitialize = ['Course', 'User', 'UserIp', 'StudentProfile', 'Account', 'Enrollment', 'BlockType', 'Subject', 'TeacherProfile', 'TeacherSchedule', 'Room', 'SchoolYear', 'Curriculum', 'StudentCurriculum', 'StudentSchedule', 'AdminProfile', 'DeanProfile', 'EnrollmentSetup', 'ReportGrade'];
 let cached = global.mongoose;
 
 if (!cached) {
