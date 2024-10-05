@@ -9,6 +9,7 @@ import AddGrades from './components/AddGrades';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
+  const [teacherStudents, setTeacherStudents] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data: session } = useSession();
   const { data, isLoading, error: isEnError } = useTeacherProfileQueryByUserId(session?.user?.id!);
@@ -22,18 +23,19 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (ts && data && s) {
       if (ts.teacherSchedule) {
         const mytesting = s.enrollment.map((ss: any) => {
-          return ss.studentSubjects.filter((sss: any) => {
-            // return console.log('sss2', sss.teacherScheduleId._id);
-            return sss.teacherScheduleId._id === ts?.teacherSchedule?._id;
-          });
-        });
-
-        mytesting.map((ss: any) => {console.log('mystes', ss)})
+          return ss.studentSubjects.filter((sss: any) =>  sss.teacherScheduleId._id === ts?.teacherSchedule?._id && sss.status === 'Approved'
+          )
+        }).flat();
+        /**
+         * can still be .flat(Infinity)
+         */
+        // }).flat(Infinity);
+        setTeacherStudents(mytesting)
+        // mytesting.map((ss: any) => {console.log('mystes', ss)})
         setIsPageLoading(false);
       }
     }
   }, [ts, tsError, data, isEnError, s, sError]);
-
   return (
     <>
       {isPageLoading ? (
@@ -63,10 +65,10 @@ const Page = ({ params }: { params: { id: string } }) => {
               </div>
               <div className='w-full flex justify-start items-center'>
                 <div className='flex flex-col'>
-                  <AddGrades data={s?.enrollment} teacher={ts?.teacherSchedule} />
+                  <AddGrades data={teacherStudents} teacher={ts?.teacherSchedule} />
                 </div>
               </div>
-              <DataTable columns={columns} data={s?.enrollment} />
+              <DataTable columns={columns} data={teacherStudents} />
             </>
           ) : (
             <div className=''>404</div>

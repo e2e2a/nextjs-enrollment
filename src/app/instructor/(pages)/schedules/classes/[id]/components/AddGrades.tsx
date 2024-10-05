@@ -16,25 +16,25 @@ interface IProps {
 const AddGrades = ({ teacher, data }: IProps) => {
   const [students, setStudent] = useState<any>([]);
 
-  useEffect(() => {
-    if (!Array.isArray(data) || data.length === 0) {
-      setStudent([]);
-      return;
-    }
-    const filteredSchedules = data
-      .map((schedule) => {
-        // Filter studentSubjects to include only those matching the teacher._id
-        const filteredSubjects = schedule.studentSubjects.filter((subject: any) => subject.teacherScheduleId._id === teacher._id);
+  // useEffect(() => {
+  //   if (!Array.isArray(data) || data.length === 0) {
+  //     setStudent([]);
+  //     return;
+  //   }
+  //   const filteredSchedules = data
+  //     .map((schedule) => {
+  //       // Filter studentSubjects to include only those matching the teacher._id
+  //       const filteredSubjects = schedule.studentSubjects.filter((subject: any) => subject.teacherScheduleId._id === teacher._id);
 
-        setStudent(filteredSubjects);
-        // Return the schedule with only the filtered studentSubjects
-        return {
-          studentSubjects: filteredSubjects,
-        };
-      })
-      .filter((schedule) => schedule.studentSubjects.length > 0); // Remove schedules with no matching subjects
-  }, [data, teacher]);
-  console.log('students', students);
+  //       setStudent(filteredSubjects);
+  //       // Return the schedule with only the filtered studentSubjects
+  //       return {
+  //         studentSubjects: filteredSubjects,
+  //       };
+  //     })
+  //     .filter((schedule) => schedule.studentSubjects.length > 0); // Remove schedules with no matching subjects
+  // }, [data, teacher]);
+  // console.log('students', students);
   const [isEnabled, setIsEnabled] = React.useState(false);
   const [selectedItems, setSelectedItems] = React.useState<{ teacherScheduleId: string }[]>([]);
 
@@ -45,7 +45,7 @@ const AddGrades = ({ teacher, data }: IProps) => {
       <DialogTrigger asChild>
         <Button size={'sm'} className={'focus-visible:ring-0 flex mb-2 bg-transparent bg-green-500 px-2 py-0 gap-x-1 justify-center text-neutral-50 font-medium'}>
           <Icons.add className='h-4 w-4' />
-          <span className='flex'>Add Grades</span>
+          <span className='flex'>Add Report Grades</span>
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -90,7 +90,7 @@ const AddGrades = ({ teacher, data }: IProps) => {
                 </tr>
               </thead>
               <tbody className='bg-white divide-y divide-gray-200'>
-                {students.map((s: any, index: any) => (
+                {data.map((s: any, index: any) => (
                   <tr key={index}>
                     <td className='px-6 py-4 whitespace-nowrap'>{index + 1}</td>
                     <td className='px-6 py-4 whitespace-nowrap'>
