@@ -19,12 +19,9 @@ const ActionsCell = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isAlertApprovedOpen, setIsAlertApprovedOpen] = useState<boolean>(false);
   const [isAlertDeclinedOpen, setIsAlertDeclinedOpen] = useState<boolean>(false);
-  /**
-   * @todo
-   */
+  
   const mutation = useChangeStatusGradeReportMutation();
   const handleSubmit = (status: any) => {
-    // e.preventDefault();
     setIsPending(true);
     const dataa = {
       // category: 'College',
@@ -124,7 +121,6 @@ const ActionsCell = ({ user }: IProps) => {
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
-
                 {/* <DataTableDrawer user={user} />*/}
               </CommandGroup>
             </CommandList>

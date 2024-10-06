@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import { useAllTeacherReportGradeQuery } from '@/lib/queries';
-import { IRoom } from '@/types';
 import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = () => {
@@ -17,9 +16,7 @@ const Page = () => {
     if (isEnError || !data) return;
     if (data) {
       if (data.reportedGrades) {
-        console.log('data.reportedGrades', data.reportedGrades);
         const filteredRG = data?.reportedGrades.filter((rg: any) => rg.statusInDean === 'Approved');
-        console.log('filteredRG', filteredRG)
         setTeacherRG(filteredRG);
         setIsPageLoading(false);
       }

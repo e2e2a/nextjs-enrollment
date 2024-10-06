@@ -40,7 +40,6 @@ export const createTeacherScheduleAction = async (data: any) => {
         }
       }
       const getRooms = await getAllTeacherScheduleByScheduleRoomId(data.roomId);
-      console.log('getRooms', getRooms);
       let existingSchedules: { days: string[]; startTime: string; endTime: string }[] = [];
 
       if (getRooms && getRooms.length > 0) {

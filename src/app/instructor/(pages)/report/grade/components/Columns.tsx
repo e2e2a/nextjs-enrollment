@@ -43,6 +43,7 @@ export const columns: ColumnDef<any>[] = [
       return fullName.includes(filterValue.toLowerCase());
     },
   },
+
   {
     accessorFn: (row) => row.teacherScheduleId.courseId.courseCode,
     id: 'course code',
@@ -132,7 +133,6 @@ export const columns: ColumnDef<any>[] = [
           {user.statusInDean && user.statusInDean === 'Pending' && <span className='text-blue-500'>{user.statusInDean}</span>}
           {user.statusInDean && user.statusInDean === 'Approved' && <span className='text-green-500'>{user.statusInDean}</span>}
           {user.statusInDean && user.statusInDean === 'Declined' && <span className='text-red'>{user.statusInDean}</span>}
-          {/* {user.statusInDean} */}
         </div>
       );
     },
@@ -180,25 +180,4 @@ export const columns: ColumnDef<any>[] = [
       return <ActionsCell user={user} />;
     },
   },
-  // {
-  //   id: 'actions',
-  //   header: 'Actions',
-  //   cell: ({ row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div className=''>
-  //         <div className='flex justify-center items-center w-full gap-1'>
-  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-green-500 px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
-  //             Make an appointment
-  //             <Icons.check className='h-4 w-4' />
-  //           </Button>
-  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-red px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
-  //             Reject
-  //             <Icons.close className='h-4 w-4' />
-  //           </Button>
-  //         </div>
-  //       </div>
-  //     );
-  //   },
-  // },
 ];

@@ -125,6 +125,11 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'hourglass',
     },
     {
+      title: 'Grades Report',
+      href: '/instructor/report/grade',
+      icon: 'filePenLine',
+    },
+    {
       title: 'School & Policies',
       href: '/school/policy',
       icon: 'school',
@@ -140,6 +145,11 @@ export const dashboardConfig: DashboardConfig = {
       title: 'Schedules',
       href: '/instructor/schedules',
       icon: 'hourglass',
+    },
+    {
+      title: 'Grades Report',
+      href: '/instructor/report/grade',
+      icon: 'filePenLine',
     },
     {
       title: 'Records',

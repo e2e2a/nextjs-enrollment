@@ -10,7 +10,6 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   //   const [rooms, setRooms] = useState({});
-  // Query data based on the validated step parameter
   const { data, isLoading, error: isEnError } = useTeacherReportGradeQueryById(params.id);
 
   useEffect(() => {

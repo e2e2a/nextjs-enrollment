@@ -16,13 +16,6 @@ const Page = () => {
   const { data: pData, isLoading: pload, error } = useDeanProfileQuery(s?.user.id as string);
 
   useEffect(() => {
-    if (pData) {
-      if (pData.profile) {
-        setIsPageLoading(false);
-      }
-    }
-  }, [pData, error]);
-  useEffect(() => {
     if (isEnError || !data) return;
     if (error || !pData) return;
 

@@ -99,6 +99,7 @@ import { TeacherProfileValidator } from './validators/AdminValidator';
 import { getEnrollmentSetup, updateEnrollmentSetup } from '@/action/enrollmentSetup';
 import { updateStudentEnrollmentScheduleBySuggestedSubjectAction } from '@/action/college/schedules/students/students';
 import { createTeacherReportGradeAction, getAllTeacherReportGradeAction, getTeacherReportGradeByIdAction, updateTeacherReportGradeStatusByIdAction } from '@/action/college/schedules/teachers/reportGrade/teacher';
+import { evaluateApprovedGradeReportAction } from '@/action/college/schedules/teachers/reportGrade/admin';
 const channel = new BroadcastChannel('my-channel');
 // import { supabase } from './supabaseClient';
 /**
@@ -415,6 +416,7 @@ export const useCreateGradeReportMutation = () => {
     },
   });
 };
+
 /**
  * Dean changing Status of grade report
  * @returns
@@ -423,6 +425,21 @@ export const useChangeStatusGradeReportMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateTeacherReportGradeStatusByIdAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['TeacherReportGrade'] });
+      queryClient.invalidateQueries({ queryKey: ['TeacherReportGradeById'] });
+    },
+  });
+};
+
+/**
+ * Admin Evaluate of grade report
+ * @returns
+ */
+export const useEvaluateApprovedGradeReportMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => evaluateApprovedGradeReportAction(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['TeacherReportGrade'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherReportGradeById'] });

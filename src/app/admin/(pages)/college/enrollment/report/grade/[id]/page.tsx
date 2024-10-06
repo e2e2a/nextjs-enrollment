@@ -4,6 +4,7 @@ import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import { useTeacherReportGradeQueryById } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
+import EvaluationButton from './components/EvaluationButton';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -16,8 +17,6 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (data) {
       if (data.reportedGrades) {
         console.log(data.reportedGrades);
-        // const filteredRooms = data?.rooms.filter((room: IRoom) => room.educationLevel === 'tertiary');
-        // setRooms(filteredRooms);
         setIsPageLoading(false);
       }
     }
@@ -35,8 +34,54 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className=''>404</div>
           ) : (
             <div className=''>
-              <div className='flex items-center py-4 text-black w-full justify-center'>
-                <h1 className='sm:text-3xl text-xl font-bold '>Grades Report Management</h1>
+              <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
+                <div className='mb-3'>
+                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Grade Reported Management</h1>
+                </div>
+                <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
+                  <div className='justify-between items-start flex w-full'>
+                    <span className='text-sm sm:text-[17px] text-start font-bold capitalize'>
+                      Instructor:{' '}
+                      <span className='font-normal'>
+                        {data?.reportedGrades.teacherId.firstname} {data?.reportedGrades.teacherId.middlename} {data?.reportedGrades.teacherId.lastname} {data?.reportedGrades.teacherId.extensionName ? data?.reportedGrades.teacherId.extensionName + '.' : ''}
+                      </span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start text-start sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Department: <span className='font-normal'>{data.reportedGrades.teacherScheduleId.courseId.name}</span>
+                    </span>
+                  </div>
+                  <div className='justify-between items-center flex w-full'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Descriptive Title: <span className='font-normal'>{data.reportedGrades.teacherScheduleId.subjectId.name}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Time:{' '}
+                      <span className='font-normal'>
+                        {data.reportedGrades.teacherScheduleId.startTime} - {data.reportedGrades.teacherScheduleId.endTime}
+                      </span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start '>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Year:{' '}
+                      <span className='font-normal'>
+                        {data.reportedGrades.teacherScheduleId.blockTypeId.year} - {data.reportedGrades.teacherScheduleId.blockTypeId.semester}
+                      </span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Block: <span className='font-normal'>{data.reportedGrades.teacherScheduleId.blockTypeId.section}</span>
+                    </span>
+                  </div>
+                </div>
+                <div className={`w-full`}>
+                  <EvaluationButton user={data.reportedGrades} />
+                </div>
               </div>
               <DataTable columns={columns} data={data.reportedGrades.reportedGrade as any[]} />
             </div>

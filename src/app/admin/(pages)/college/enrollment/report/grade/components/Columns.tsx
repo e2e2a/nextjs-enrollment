@@ -1,19 +1,8 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import Link from 'next/link';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-import { Icons } from '@/components/shared/Icons';
-import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
-import { useState } from 'react';
 import ActionsCell from './ActionsCell';
-import Image from 'next/image';
-import { IRoom } from '@/types';
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -58,6 +47,19 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row.teacherScheduleId.blockTypeId.section,
+    id: 'block',
+    header: 'Block',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.teacherScheduleId.blockTypeId.section && 'BLOCK' + ' ' + user.teacherScheduleId.blockTypeId.section}
+        </div>
+      );
+    },
+  },
+  {
     accessorFn: (row) => row.teacherScheduleId.subjectId.subjectCode,
     id: 'subject code',
     header: 'Subject Code',
@@ -84,6 +86,32 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row.teacherScheduleId.blockTypeId.year,
+    id: 'year',
+    header: 'Year',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.teacherScheduleId.blockTypeId.year}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.teacherScheduleId.blockTypeId.semester,
+    id: 'semester',
+    header: 'Semester',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.teacherScheduleId.blockTypeId.semester}
+        </div>
+      );
+    },
+  },
+  {
     accessorFn: (row) => row.statusInDean,
     id: 'Approved By Dean',
     header: 'Approved By Dean',
@@ -91,10 +119,9 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.statusInDean && user.statusInDean === 'Pending' && <span className="text-blue-500">{user.statusInDean}</span>}
-          {user.statusInDean && user.statusInDean === 'Approved' && <span className="text-green-500">{user.statusInDean}</span>}
-          {user.statusInDean && user.statusInDean === 'Declined' && <span className="text-red">{user.statusInDean}</span>}
-          {/* {user.statusInDean} */}
+          {user.statusInDean && user.statusInDean === 'Pending' && <span className='text-blue-500'>{user.statusInDean}</span>}
+          {user.statusInDean && user.statusInDean === 'Approved' && <span className='text-green-500'>{user.statusInDean}</span>}
+          {user.statusInDean && user.statusInDean === 'Declined' && <span className='text-red'>{user.statusInDean}</span>}
         </div>
       );
     },
@@ -107,37 +134,11 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase font-bold'>
-          {user.evaluated ? <span className="text-green-500">True</span> :<span className="text-blue-500">False</span>}
+          {user.evaluated ? <span className='text-green-500'>True</span> : <span className='text-blue-500'>False</span>}
         </div>
       );
     },
   },
-  // {
-  //   accessorFn: (row) => row.floorLocation, // Use accessorFn for nested fields
-  //   id: 'floorLocation',
-  //   header: 'floorLocation',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className=' uppercase'>
-  //         {user.floorLocation ? user.floorLocation : 'N/A'}
-  //       </div>
-  //     );
-  //   },
-  // },
-  // {
-  //   accessorFn: (row) => row.isRoomAvailable, // Use accessorFn for nested fields
-  //   id: 'isRoomAvailable',
-  //   header: 'isRoomAvailable',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className=' uppercase'>
-  //         {user.isRoomAvailable ? 'TRUE' : 'FALSE'}
-  //       </div>
-  //     );
-  //   },
-  // },
   {
     accessorKey: 'createdAt',
     header: 'CreatedAt',
@@ -168,25 +169,4 @@ export const columns: ColumnDef<any>[] = [
       return <ActionsCell user={user} />;
     },
   },
-  // {
-  //   id: 'actions',
-  //   header: 'Actions',
-  //   cell: ({ row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div className=''>
-  //         <div className='flex justify-center items-center w-full gap-1'>
-  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-green-500 px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
-  //             Make an appointment
-  //             <Icons.check className='h-4 w-4' />
-  //           </Button>
-  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-red px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
-  //             Reject
-  //             <Icons.close className='h-4 w-4' />
-  //           </Button>
-  //         </div>
-  //       </div>
-  //     );
-  //   },
-  // },
 ];

@@ -55,11 +55,16 @@ export const getTeacherReportGradeById = async (id: any) => {
     return null;
   }
 };
+
 export const updateTeacherReportGradeStatusById = async (id: any, data: any) => {
   try {
-    const newReportGrade = await ReportGrade.findByIdAndUpdate(id, {
-      ...data,
-    });
+    const newReportGrade = await ReportGrade.findByIdAndUpdate(
+      id,
+      {
+        ...data,
+      },
+      { new: true }
+    );
     return newReportGrade;
   } catch (error) {
     console.log(error);
