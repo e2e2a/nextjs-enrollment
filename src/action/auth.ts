@@ -48,7 +48,6 @@ export const signInAction = async (data: any): Promise<SignInResponse> => {
     //   const verificationToken = await generateVerificationToken(existingUser._id, tokenType);
     //   return { token: verificationToken.token, status: 203 };
     // }
-    // if(existingUser.role === 'ADMIN') {}
     try {
       await signIn('credentials', {
         email,

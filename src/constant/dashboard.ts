@@ -178,10 +178,15 @@ export const dashboardConfig: DashboardConfig = {
       href: '/dean',
       icon: 'home',
     },
+    // {
+    //   title: 'Schedules',
+    //   href: '/dean/schedules',
+    //   icon: 'hourglass',
+    // },
     {
-      title: 'Schedules',
-      href: '/instructor/schedules',
-      icon: 'hourglass',
+      title: 'Blocks',
+      href: '/dean/blocks',
+      icon: 'packageSearch',
     },
     {
       title: 'Grades Report',
@@ -201,9 +206,9 @@ export const dashboardConfig: DashboardConfig = {
   ],
   sidebarDean: [
     {
-      title: 'Schedules',
-      href: '/instructor/schedules',
-      icon: 'hourglass',
+      title: 'Blocks',
+      href: '/dean/blocks',
+      icon: 'packageSearch',
     },
     {
       title: 'Records',

@@ -93,6 +93,7 @@ export const removeCourseBlockScheduleAction = async (data: any) => {
     await TeacherSchedule.findByIdAndUpdate(teacherSchedule._id, { blockTypeId: null, courseId: null }, { new: true });
 
     await BlockType.findByIdAndUpdate(data.blockTypeId, { $pull: { blockSubjects: { teacherScheduleId: teacherSchedule._id } } }, { new: true });
+    return { message: `Schedule has been removed.`, status: 201 };
   } catch (error) {
     console.error('Error removing block subjects:', error);
     return { error: 'Something went wrong', status: 500 };

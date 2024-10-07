@@ -5,8 +5,8 @@ export const makeToastSucess = (text: string) => {
     toast.success(text, {
         style: {
             borderRadius: "4px",
-            background: "#333",
-            color: "#fff",
+            background: "#fff",
+            color: "#333",
         },
         // position: "top-right",
     })
@@ -16,8 +16,8 @@ export const makeToastError = (text: string) => {
     toast.error(text, {
         style: {
             borderRadius: "4px",
-            background: "#333",
-            color: "#fff",
+            background: "#fff",
+            color: "#333",
         },
         // position: "top-right",
     })
