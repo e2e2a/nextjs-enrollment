@@ -211,6 +211,59 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'packageSearch',
     },
     {
+      title: 'Enrollment',
+      i: [
+        {
+          title: 'Enrollment Process',
+          i: [
+            {
+              title: 'Step 1 Management',
+              href: '/dean/enrollment/management?step=1',
+              icon: 'eye',
+            },
+            {
+              title: 'Step 2 Management',
+              href: '/dean/enrollment/management?step=2',
+              icon: 'eye',
+            },
+            {
+              title: 'Step 3 Management',
+              href: '/dean/enrollment/management?step=3',
+              icon: 'eye',
+            },
+            {
+              title: 'Step 4 Management',
+              href: '/dean/enrollment/management?step=4',
+              icon: 'eye',
+            },
+            {
+              title: 'Step 5 Management',
+              href: '/dean/enrollment/management?step=5',
+              icon: 'eye',
+            },
+            {
+              title: 'Step 6 Management',
+              href: '/dean/enrollment/management?step=6',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Enrolled Students',
+          i: [
+            {
+              title: 'View Enrolled Students',
+              href: '/dean/enrollment/enrolled',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
       title: 'Records',
       href: '/',
       icon: 'fileStack',

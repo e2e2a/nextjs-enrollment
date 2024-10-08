@@ -2,14 +2,15 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { DataTableDrawer } from '../Drawer';
 import ActionsCell from './ActionsCell';
 import { IEnrollment } from '@/types';
-import PSAFile from '../../management/components/step1/PSAFile';
-import StudentPhoto from '../../management/components/step1/StudentPhoto';
-import ReportCardFile from '../../management/components/step1/ReportCardFile';
-import GoodMoralFile from '../../management/components/step1/GoodMoralFile';
+import StudentPhoto from '../step1/StudentPhoto';
+import PSAFile from '../step1/PSAFile';
+import ReportCardFile from '../step1/ReportCardFile';
+import GoodMoralFile from '../step1/GoodMoralFile';
 
-export const columns: ColumnDef<IEnrollment>[] = [
+export const columns3: ColumnDef<IEnrollment>[] = [
   {
     accessorFn: (row) => '#',
     id: '#',
@@ -46,7 +47,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
       return `${lastname}, ${firstname} ${middlename}`;
     },
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.profileId.lastname}, ${row.original.profileId.firstname}`.toLowerCase();
+      const fullName = `${row.original.profileId.lastname}, ${row.original.profileId.firstname} ${row.original.profileId.middlename}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
@@ -162,19 +163,6 @@ export const columns: ColumnDef<IEnrollment>[] = [
       return (
         <div key={cell.id} className=' '>
           {user.studentSubjects.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green'>{user.studentSubjects.length}</span>}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.enrollStatus,
-    accessorKey: 'enrollment status',
-    header: 'Enrollment Status',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' capitalize'>
-          {user.enrollStatus?.toLowerCase() === 'enrolled' ? <span className='text-green-500'>{user.enrollStatus}</span> : <span className='text-gren-500'>{user.enrollStatus}</span>}
         </div>
       );
     },

@@ -2,14 +2,16 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { DataTableDrawer } from '../Drawer';
+import { DialogStep1Button } from './Dialog';
 import ActionsCell from './ActionsCell';
 import { IEnrollment } from '@/types';
-import PSAFile from '../../management/components/step1/PSAFile';
-import StudentPhoto from '../../management/components/step1/StudentPhoto';
-import ReportCardFile from '../../management/components/step1/ReportCardFile';
-import GoodMoralFile from '../../management/components/step1/GoodMoralFile';
+import StudentPhoto from '../step1/StudentPhoto';
+import PSAFile from '../step1/PSAFile';
+import ReportCardFile from '../step1/ReportCardFile';
+import GoodMoralFile from '../step1/GoodMoralFile';
 
-export const columns: ColumnDef<IEnrollment>[] = [
+export const columns2: ColumnDef<IEnrollment>[] = [
   {
     accessorFn: (row) => '#',
     id: '#',
@@ -149,32 +151,6 @@ export const columns: ColumnDef<IEnrollment>[] = [
       return (
         <div key={cell.id} className=' uppercase'>
           {user.schoolYear}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.studentSubjects.length,
-    accessorKey: 'Subjects Count',
-    header: 'Subjects Count',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' '>
-          {user.studentSubjects.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green'>{user.studentSubjects.length}</span>}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.enrollStatus,
-    accessorKey: 'enrollment status',
-    header: 'Enrollment Status',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' capitalize'>
-          {user.enrollStatus?.toLowerCase() === 'enrolled' ? <span className='text-green-500'>{user.enrollStatus}</span> : <span className='text-gren-500'>{user.enrollStatus}</span>}
         </div>
       );
     },

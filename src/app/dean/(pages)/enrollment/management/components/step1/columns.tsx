@@ -1,27 +1,20 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { DialogStep1Button } from './Dialog';
 import ActionsCell from './ActionsCell';
 import { IEnrollment } from '@/types';
-import PSAFile from '../../management/components/step1/PSAFile';
-import StudentPhoto from '../../management/components/step1/StudentPhoto';
-import ReportCardFile from '../../management/components/step1/ReportCardFile';
-import GoodMoralFile from '../../management/components/step1/GoodMoralFile';
+import PSAFile from './PSAFile';
+import StudentPhoto from './StudentPhoto';
+import GoodMoralFile from './GoodMoralFile';
+import ReportCardFile from './ReportCardFile';
 
 export const columns: ColumnDef<IEnrollment>[] = [
   {
-    accessorFn: (row) => '#',
-    id: '#',
+    accessorFn: (row, index) => index + 1,
+    accessorKey: '#',
     header: '#',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {row.index + 1}
-        </div>
-      );
-    },
   },
   {
     accessorKey: 'fullname',
@@ -53,8 +46,8 @@ export const columns: ColumnDef<IEnrollment>[] = [
 
   {
     accessorFn: (row) => row.courseId.courseCode, // Use accessorFn for nested fields
-    id: 'course Code',
-    header: 'Course',
+    id: 'course code',
+    header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
@@ -78,15 +71,54 @@ export const columns: ColumnDef<IEnrollment>[] = [
     accessorFn: (row) => row.studentStatus,
     accessorKey: 'student status',
     header: 'Student Status',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' capitalize'>
-          {user.studentStatus}
-        </div>
-      );
-    },
   },
+  //   {
+  //     accessorKey: 'emailVerified',
+  //     // header: 'Email Verified',
+  //     header: ({ column }) => (
+  //       <EmailVerifiedFilter
+  //         onChange={(emailVerified: string | null) => {
+  //           // Your custom logic to filter based on role
+  //           column.setFilterValue(emailVerified);
+  //         }}
+  //       />
+  //     ),
+  //     cell: ({ row }) => {
+  //       const emailVerified: string | null = row.getValue('emailVerified');
+  //       const formatted = emailVerified ? new Date(emailVerified).toLocaleDateString() : 'Not Verified';
+  //       return <div className='font-medium'>{formatted}</div>;
+  //     },
+  //     filterFn: (row, columnId, filterValue) => {
+  //       // Custom filter function for role column
+  //       // if (filterValue === null) return true;
+  //       switch (filterValue) {
+  //         case 'Not Verified':
+  //           return row.original.emailVerified === null;
+  //         case 'Verified':
+  //           return row.original.emailVerified !== null;
+  //         default:
+  //           return true; // Default to showing all rows if no filter value is provided
+  //       }
+  //       // return row.original.emailVerified !== null;
+  //     },
+  //   },
+  //   {
+  //     accessorKey: 'role',
+  //     // header: 'Role'
+  //     header: ({ column }) => (
+  //       <RoleFilter
+  //         onChange={(role: string | null) => {
+  //           // Your custom logic to filter based on role
+  //           column.setFilterValue(role);
+  //         }}
+  //       />
+  //     ),
+  //     filterFn: (row, columnId, filterValue) => {
+  //       // Custom filter function for role column
+  //       if (filterValue === null) return true;
+  //       return row.original.role === filterValue;
+  //     },
+  //   },
   {
     accessorFn: (row) => row.profileId.psaUrl,
     accessorKey: 'psa file',
@@ -125,58 +157,6 @@ export const columns: ColumnDef<IEnrollment>[] = [
       const user = row.original;
 
       return <StudentPhoto user={user} />;
-    },
-  },
-  {
-    accessorFn: (row) => row.blockTypeId.section,
-    accessorKey: 'block type',
-    header: 'Block Type',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {user.blockTypeId.section && `block ${user.blockTypeId.section}`}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.schoolYear,
-    accessorKey: 'school year',
-    header: 'School Year',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {user.schoolYear}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.studentSubjects.length,
-    accessorKey: 'Subjects Count',
-    header: 'Subjects Count',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' '>
-          {user.studentSubjects.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green'>{user.studentSubjects.length}</span>}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.enrollStatus,
-    accessorKey: 'enrollment status',
-    header: 'Enrollment Status',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' capitalize'>
-          {user.enrollStatus?.toLowerCase() === 'enrolled' ? <span className='text-green-500'>{user.enrollStatus}</span> : <span className='text-gren-500'>{user.enrollStatus}</span>}
-        </div>
-      );
     },
   },
   {

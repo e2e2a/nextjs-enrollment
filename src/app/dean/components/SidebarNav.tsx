@@ -5,9 +5,9 @@ import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
 import { Icons } from '@/components/shared/Icons';
 import { UserAvatar } from '@/components/shared/nav/UserAvatar/UserAvatar';
-import CollapsibleItem from '@/components/shared/nav/CollapsibleItem';
 import LogoutButton from '@/components/shared/nav/LogoutButton';
 import NavbarFooter from '@/components/shared/nav/NavbarFooter';
+import CollapsibleItem from './CollapsibleItem';
 
 interface DashboardNavProps {
   items: SidebarNavItem[];

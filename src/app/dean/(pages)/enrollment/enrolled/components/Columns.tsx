@@ -6,8 +6,6 @@ import ActionsCell from './ActionsCell';
 import { IEnrollment } from '@/types';
 import PSAFile from '../../management/components/step1/PSAFile';
 import StudentPhoto from '../../management/components/step1/StudentPhoto';
-import ReportCardFile from '../../management/components/step1/ReportCardFile';
-import GoodMoralFile from '../../management/components/step1/GoodMoralFile';
 
 export const columns: ColumnDef<IEnrollment>[] = [
   {
@@ -88,7 +86,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.profileId.psaUrl,
+    accessorFn: (row) => row.psaUrl,
     accessorKey: 'psa file',
     header: 'PSA file',
     cell: ({ row }) => {
@@ -98,27 +96,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.profileId.goodMoralUrl,
-    accessorKey: 'good moral',
-    header: 'Good Moral',
-    cell: ({ row }) => {
-      const user = row.original;
-
-      return <GoodMoralFile user={user} />;
-    },
-  },
-  {
-    accessorFn: (row) => row.profileId.reportCardUrl,
-    accessorKey: 'Report Card',
-    header: 'Report Card',
-    cell: ({ row }) => {
-      const user = row.original;
-
-      return <ReportCardFile user={user} />;
-    },
-  },
-  {
-    accessorFn: (row) => row.profileId.photoUrl,
+    accessorFn: (row) => row.photoUrl,
     accessorKey: 'student photo',
     header: 'Student Photo',
     cell: ({ row }) => {

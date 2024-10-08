@@ -31,7 +31,18 @@ const Page = () => {
           <Loader />
         </div>
       ) : (
-        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>{isError ? <div className=''>404</div> : <DataTable columns={columns} data={enrolledStudents as IEnrollment[]} />}</div>
+        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
+          {isError ? (
+            <div className=''>404</div>
+          ) : (
+            <div className=''>
+              <div className='mb-3 text-center w-full'>
+                <h1 className='text-lg sm:text-2xl font-bold uppercase'>Enrolled Student Management</h1>
+              </div>
+              <DataTable columns={columns} data={enrolledStudents as IEnrollment[]} />
+            </div>
+          )}
+        </div>
       )}
     </>
   );
