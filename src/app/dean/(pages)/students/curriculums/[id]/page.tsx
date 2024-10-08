@@ -8,7 +8,6 @@ import { Icons } from '@/components/shared/Icons';
 import AddForm from './components/AddForm';
 import CurriculumTable from './components/CurriculumTable';
 import ViewLackingSubjects from './components/ViewLackingSubjects';
-import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -26,10 +25,13 @@ const Page = ({ params }: { params: { id: string } }) => {
       if (data && syData && sData) {
         setIsPageLoading(false);
       }
+      console.log('asd');
+      setIsPageLoading(false);
     } else {
       setIsPageError(true);
     }
   }, [data, isEnError, syData, syError, sData, sError, params]);
+  console.log('data', data);
 
   const actionFormSubmit = () => {
     const data = {
@@ -41,10 +43,9 @@ const Page = ({ params }: { params: { id: string } }) => {
           case 200:
           case 201:
           case 203:
-            makeToastSucess('Student Curriculum has been created.');
+            // return (window.location.href = '/');
             return;
           default:
-            makeToastError('Something went wrong.');
             return;
         }
       },
@@ -77,10 +78,10 @@ const Page = ({ params }: { params: { id: string } }) => {
             </Button>
           </div>
         </div>
-      ) : isPageLoading ? (
-        <Loader />
       ) : isPageError ? (
         <ErrorPage />
+      ) : isPageLoading ? (
+        <Loader />
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           <div className='flex flex-col items-center py-4 text-black w-full text-center'>

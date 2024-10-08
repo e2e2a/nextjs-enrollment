@@ -29,7 +29,7 @@ export const createStudentProfile = async (data: any) => {
 
 export const getAllStudentProfile = async () => {
   try {
-    const studentProfile = await StudentProfile.find().populate('userId').exec();
+    const studentProfile = await StudentProfile.find().populate('userId').populate('courseId').exec();
     // console.log(studentProfile);
     return studentProfile;
   } catch (error) {
@@ -40,7 +40,7 @@ export const getAllStudentProfile = async () => {
 
 export const getStudentProfileById = async (id: any) => {
   try {
-    const studentProfile = await StudentProfile.findById(id).populate('userId').exec();
+    const studentProfile = await StudentProfile.findById(id).populate('userId').populate('courseId').exec();
     // console.log(studentProfile);
     return JSON.parse(JSON.stringify(studentProfile));
   } catch (error) {
@@ -51,7 +51,7 @@ export const getStudentProfileById = async (id: any) => {
 
 export const getStudentProfileByUserId = async (userId: any) => {
   try {
-    const studentProfile = await StudentProfile.findOne({ userId }).populate('userId').exec();
+    const studentProfile = await StudentProfile.findOne({ userId }).populate('userId').populate('courseId').exec();
     // console.log(studentProfile);
     // return JSON.parse(JSON.stringify(studentProfile));
     return studentProfile;

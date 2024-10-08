@@ -23,7 +23,7 @@ const ActionsCell = ({ user }: IProps) => {
             </Button>
           </div>
         </PopoverTrigger>
-        <PopoverContent align='center' className='w-[225px] bg-neutral-50 px-1 py-0'>
+        <PopoverContent align='center' className='w-[215px] bg-neutral-50 px-1 py-0'>
           <Command>
             <CommandList>
               <CommandGroup className=''>

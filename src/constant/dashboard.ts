@@ -250,6 +250,17 @@ export const dashboardConfig: DashboardConfig = {
           icon: 'packageSearch',
         },
         {
+          title: 'Enrolling Students',
+          i: [
+            {
+              title: 'View Enrolling Students',
+              href: '/dean/enrollment/enrolling',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
           title: 'Enrolled Students',
           i: [
             {
