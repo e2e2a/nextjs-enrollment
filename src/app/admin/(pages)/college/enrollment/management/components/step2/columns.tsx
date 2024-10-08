@@ -137,7 +137,7 @@ export const columns2: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.blockTypeId.section && `block ${user.blockTypeId.section}`}
+          {user?.blockTypeId?.section && `block ${user.blockTypeId.section}`}
         </div>
       );
     },

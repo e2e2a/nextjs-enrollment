@@ -11,7 +11,6 @@ export const createSubjectCollegeAction = async (data: any) => {
     // if(checkSCC) return { error: 'Something went wrong.', status: 500 };
     const createdSubject = await createSubjectCollege(data);
     if (!createdSubject) return { error: 'Something went wrong.', status: 500 };
-    console.log('data in ser:', data);
     return { message: 'Subject created successfully.', status: 201 };
   } catch (error) {
     console.log('server e :', error);

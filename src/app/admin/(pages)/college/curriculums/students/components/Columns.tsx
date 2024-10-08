@@ -7,6 +7,40 @@ import { IStudentCurriculum } from '@/types';
 
 export const columns: ColumnDef<IStudentCurriculum>[] = [
   {
+    accessorKey: 'name',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Name
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return <div key={cell.id}>{user.studentId.lastname && user.studentId.firstname ? user.studentId.lastname + ',' + ' ' + user.studentId.firstname + ' ' + user.studentId.middlename : 'Unknown'}</div>;
+    },
+    accessorFn: (row) => `${row.studentId.lastname}, ${row.studentId.firstname} ${row.studentId.middlename}`,
+    filterFn: (row, columnId, filterValue) => {
+      const user = row.original;
+      const fullName = `${row.original.studentId.lastname}, ${row.original.studentId.firstname} ${row.original.studentId.middlename}`.toLowerCase();
+      return fullName.includes(filterValue.toLowerCase());
+    },
+  },
+  // {
+  //   accessorFn: (row) => row.sex,
+  //   id: 'sex',
+  //   header: 'Sex',
+  //   cell: ({ cell, row }) => {
+  //     const user = row.original;
+  //     return (
+  //       <div key={cell.id} className=' uppercase'>
+  //         {user.sex}
+  //       </div>
+  //     );
+  //   },
+  // },
+  {
     accessorKey: 'Course Name',
     header: ({ column }) => {
       return (
@@ -60,5 +94,4 @@ export const columns: ColumnDef<IStudentCurriculum>[] = [
       return <ActionsCell user={user} />;
     },
   },
-  
 ];

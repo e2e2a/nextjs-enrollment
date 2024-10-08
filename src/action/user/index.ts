@@ -26,7 +26,6 @@ export const getUserRoleTeachertAction = async (): Promise<getAllTeacherProfileR
   try {
     await dbConnect();
     const teachers = await getAllTeacherProfile();
-    console.log(teachers);
     return { teachers: JSON.parse(JSON.stringify(teachers)), status: 200 };
     // return studentProfile;
   } catch (error) {

@@ -50,7 +50,7 @@ const Page = () => {
 
     if (data && ESetup && pData) {
       if (data.enrollment && ESetup.enrollmentSetup && pData.profile) {
-        const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus !== 'Enrolled');
+        const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus !== 'Enrolled' && pData.profile.courseId._id === enrollment.courseId._id);
         setEnrolledStudents(filteredEnrollment);
         setIsPageLoading(false);
         return;
@@ -82,7 +82,7 @@ const Page = () => {
                     </span>
                   </div>
                 </div>
-                <DataTable1 columns={columns} data={data?.enrollment as IEnrollment[]} />
+                <DataTable1 columns={columns} data={enrolledStudents as IEnrollment[]} />
               </div>
             ) : search === '2' ? (
               <div className=''>
@@ -96,7 +96,7 @@ const Page = () => {
                     </span>
                   </div>
                 </div>
-                <DataTable2 columns={columns2} data={data?.enrollment as IEnrollment[]} />
+                <DataTable2 columns={columns2} data={enrolledStudents as IEnrollment[]} />
               </div>
             ) : search === '3' ? (
               <div className=''>
@@ -110,7 +110,7 @@ const Page = () => {
                     </span>
                   </div>
                 </div>
-                <DataTable3 columns={columns3} data={data?.enrollment as IEnrollment[]} />
+                <DataTable3 columns={columns3} data={enrolledStudents as IEnrollment[]} />
               </div>
             ) : search === '4' ? (
               <div className=''>
@@ -125,7 +125,7 @@ const Page = () => {
                     </span>
                   </div>
                 </div>
-                <DataTable4 columns={columns4} data={data?.enrollment as IEnrollment[]} />
+                <DataTable4 columns={columns4} data={enrolledStudents as IEnrollment[]} />
               </div>
             ) : search === '5' ? (
               <div className=''>
