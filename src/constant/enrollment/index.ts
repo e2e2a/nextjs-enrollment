@@ -17,8 +17,12 @@ export const selectType = {
       value: 'regular',
     },
     {
-      name: 'Non-Regular',
-      value: 'non-regular',
+      name: 'Irregular',
+      value: 'irregular',
+    },
+    {
+      name: 'Advanced',
+      value: 'advanced',
     },
   ],
   scholarType: [

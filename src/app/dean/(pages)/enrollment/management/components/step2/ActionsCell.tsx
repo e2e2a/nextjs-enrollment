@@ -16,7 +16,7 @@ const ActionsCell2 = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const undoMutation = useUndoEnrollmentToStep1Mutation();
   const mutation = useApprovedEnrollmentStep2Mutation();
-  
+  const [isOpen, setIsOpen] = useState(false);
   const actionFormUndo = () => {
     const data = {
       EId: user._id,
@@ -110,10 +110,11 @@ const ActionsCell2 = ({ user }: IProps) => {
                   </Button>
                 ) : null} */}
                 {/* <DialogStep1Button isPending={isPending} user={user} /> */}
-                <Button size={'sm'} type='submit' onClick={actionFormSubmit} className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}>
+                {/* <Button size={'sm'} type='submit' onClick={actionFormSubmit} className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}>
                   <Icons.check className='h-4 w-4' />
                   Complete Current Step
-                </Button>
+                </Button> */}
+                <DialogStep1Button isPending={isPending} user={user} setIsOpen={setIsOpen} />
                 <Button disabled={isPending} type='button' size={'sm'} onClick={actionFormUndo} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-yellow-400 px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
                   <Icons.rotateCcw className='h-4 w-4' />
                   Undo last Step

@@ -129,6 +129,19 @@ export const columns5: ColumnDef<IEnrollment>[] = [
     },
   },
   {
+    accessorFn: (row) => row.profileId.studentType,
+    accessorKey: 'student type',
+    header: 'Student Type',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user?.profileId.studentType}
+        </div>
+      );
+    },
+  },
+  {
     accessorFn: (row) => row.blockTypeId.section,
     accessorKey: 'block type',
     header: 'Block Type',
@@ -136,7 +149,7 @@ export const columns5: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.blockTypeId?.section && `block ${user.blockTypeId.section}`}
+          {user?.blockTypeId?.section ? `block ${user.blockTypeId.section}` : 'N/A'}
         </div>
       );
     },

@@ -11,6 +11,7 @@ import { createPDF } from '../../createPdf';
 import { getBlockTypeById } from '@/services/blockType';
 import { getSchoolYearByYear } from '@/services/schoolYear';
 import StudentProfile from '@/models/StudentProfile';
+import { updateStudentProfileById } from '@/services/studentProfile';
 // import { verificationTemplate } from './emailTemplate/verificationTemplate';
 export const getAllEnrollmentAction = async (): Promise<getEnrollmentResponse> => {
   try {
@@ -33,19 +34,58 @@ export const getEnrollmentByStepAction = async (userId: any): Promise<getEnrollm
   }
 };
 
+// export const approvedEnrollmentStep1Action = async (data: any) => {
+//   try {
+//     await dbConnect();
+//     const checkE = await getEnrollmentById(data.EId);
+//     if (!checkE) return { error: 'Id is not valid', status: 403 };
+//     if (data.studentType === 'regular') {
+//       const checkBlock = await getBlockTypeById(data.blockType);
+//       if (!checkBlock) return { error: 'Block Type is not valid', status: 403 };
+//     }
+//     data.step = 2;
+//     if(data.blockType === ''){
+//       data.blockType = null
+//     }
+
+//     // const checkSY = await getSchoolYearByYear(data.schoolYear);
+//     // if (!checkSY) return { error: 'SchoolYear is not valid', status: 403 };
+
+//     // @ts-ignore
+//     const updateP = await StudentProfile.findByIdAndUpdate(checkE.profileId._id, { studentType: data.studentType })
+//     if(!updateP){
+//       return { error: 'There must be a problem in updating student profile.', status: 500 };
+//     }
+//     await updateEnrollmentById(data.EId, { step: 2, blockTypeId: data.blockType, schoolYear: data.schoolYear });
+//     // const pdf = await sendEmailWithPDF(checkE);
+//     return { message: 'Student has been completed step 1.', status: 201 };
+//   } catch (error) {
+//     console.log('server e :', error);
+//     return { error: 'Something went wrong', status: 500 };
+//   }
+// };
+
+// export const approvedEnrollmentStep2Action = async (data: any) => {
+//   try {
+//     await dbConnect();
+//     const checkE = await getEnrollmentById(data.EId);
+//     if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
+//     await updateEnrollmentById(data.EId, { step: 3 });
+//     // await sendEmailWithPDF(checkE);
+//     return { message: 'Student has been completed step 2.', status: 201 };
+//   } catch (error) {
+//     console.log('server e :', error);
+//     return { error: 'Something went wrong', status: 500 };
+//   }
+// };
 export const approvedEnrollmentStep1Action = async (data: any) => {
   try {
     await dbConnect();
     const checkE = await getEnrollmentById(data.EId);
-    if (!checkE) return { error: 'Id is not valid', status: 403 };
-    const checkBlock = await getBlockTypeById(data.blockType);
-    if (!checkBlock) return { error: 'Block Type is not valid', status: 403 };
-    // const checkSY = await getSchoolYearByYear(data.schoolYear);
-    // if (!checkSY) return { error: 'SchoolYear is not valid', status: 403 };
-    // console.log('check:', checkSY);
-    await updateEnrollmentById(data.EId, { step: 2, blockTypeId: data.blockType, schoolYear: data.schoolYear });
-    // const pdf = await sendEmailWithPDF(checkE);
-    return { message: 'Student has been completed step 1.', status: 201 };
+    if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
+    await updateEnrollmentById(data.EId, { step: 2 });
+    // await sendEmailWithPDF(checkE);
+    return { message: 'Student has been completed step 2.', status: 201 };
   } catch (error) {
     console.log('server e :', error);
     return { error: 'Something went wrong', status: 500 };
@@ -56,15 +96,33 @@ export const approvedEnrollmentStep2Action = async (data: any) => {
   try {
     await dbConnect();
     const checkE = await getEnrollmentById(data.EId);
-    if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
-    await updateEnrollmentById(data.EId, { step: 3 });
-    // await sendEmailWithPDF(checkE);
+    if (!checkE) return { error: 'Id is not valid', status: 403 };
+    if (data.studentType === 'regular') {
+      const checkBlock = await getBlockTypeById(data.blockType);
+      if (!checkBlock) return { error: 'Block Type is not valid', status: 403 };
+    }
+    data.step = 3;
+    if(data.blockType === ''){
+      data.blockType = null
+    }
+
+    // const checkSY = await getSchoolYearByYear(data.schoolYear);
+    // if (!checkSY) return { error: 'SchoolYear is not valid', status: 403 };
+
+    // @ts-ignore
+    const updateP = await StudentProfile.findByIdAndUpdate(checkE.profileId._id, { studentType: data.studentType })
+    if(!updateP){
+      return { error: 'There must be a problem in updating student profile.', status: 500 };
+    }
+    await updateEnrollmentById(data.EId, { step: 3, blockTypeId: data.blockType, schoolYear: data.schoolYear });
+    // const pdf = await sendEmailWithPDF(checkE);
     return { message: 'Student has been completed step 2.', status: 201 };
   } catch (error) {
     console.log('server e :', error);
     return { error: 'Something went wrong', status: 500 };
   }
 };
+
 
 export const approvedEnrollmentStep3Action = async (data: any) => {
   try {
@@ -78,6 +136,7 @@ export const approvedEnrollmentStep3Action = async (data: any) => {
     return { error: 'Something went wrong', status: 500 };
   }
 };
+
 export const approvedEnrollmentStep4Action = async (data: any) => {
   try {
     await dbConnect();
@@ -90,6 +149,7 @@ export const approvedEnrollmentStep4Action = async (data: any) => {
     return { error: 'Something went wrong', status: 500 };
   }
 };
+
 export const approvedEnrollmentStep5Action = async (data: any) => {
   try {
     await dbConnect();
@@ -105,11 +165,6 @@ export const approvedEnrollmentStep5Action = async (data: any) => {
   }
 };
 
-/**
- * 
- * @todo        
- * @returns 
- */
 export const approvedEnrollmentStep6Action = async (data: any) => {
   try {
     await dbConnect();
@@ -117,7 +172,7 @@ export const approvedEnrollmentStep6Action = async (data: any) => {
     if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
     await updateEnrollmentById(data.EId, { enrollStatus: 'Enrolled' });
     // @ts-ignore
-    const updatedProfile = await StudentProfile.findByIdAndUpdate(checkE.profileId._id, {enrollStatus: 'Enrolled'})
+    const updatedProfile = await StudentProfile.findByIdAndUpdate(checkE.profileId._id, { enrollStatus: 'Enrolled' });
     return { message: 'Student has been completed all steps.', status: 201 };
   } catch (error) {
     console.log('server e :', error);

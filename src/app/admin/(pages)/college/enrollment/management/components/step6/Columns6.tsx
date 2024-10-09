@@ -136,7 +136,20 @@ export const columns6: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.blockTypeId?.section && `block ${user.blockTypeId.section}`}
+          {user?.blockTypeId?.section ? `block ${user.blockTypeId.section}` : 'N/A'}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.profileId.studentType,
+    accessorKey: 'student type',
+    header: 'Student Type',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user?.profileId.studentType}
         </div>
       );
     },

@@ -19,9 +19,12 @@ type IProps = {
   user: any;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
 export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(false);
   const [blocks, setBlocks] = useState<any>([]);
+  const [blockDisable, setBlockDisable] = useState<boolean>(false);
 
   const { data: bData, isLoading: bLoading, isError: bError } = useBlockCourseQuery();
   const mutation = useApprovedEnrollmentStep1Mutation();
@@ -29,6 +32,7 @@ export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
   const form = useForm<z.infer<typeof EnrollmentBlockTypeValidator>>({
     resolver: zodResolver(EnrollmentBlockTypeValidator),
     defaultValues: {
+      studentType: '',
       blockType: '',
     },
   });
@@ -47,7 +51,7 @@ export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
   }, [bData, bError, bLoading, user]);
   const actionFormSubmit = (data: z.infer<typeof EnrollmentBlockTypeValidator>) => {
     // setIsPending(true);
-    setIsOpen(false)
+    setIsOpen(false);
     const dataa = {
       EId: user._id,
       ...data,
@@ -59,7 +63,6 @@ export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
           case 201:
           case 203:
             makeToastSucess(res.message);
-            // return (window.location.href = '/');
             return;
           default:
             // setIsPending(false);
@@ -67,11 +70,27 @@ export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
             return;
         }
       },
-      onSettled: () => {},
+      onSettled: () => {
+        setIsDialogOpen(false);
+      },
     });
   };
+  useEffect(() => {
+    const subscription = form.watch((e) => {
+      if (e.studentType !== 'regular') {
+        if (form.getValues('blockType') !== '') {
+          form.setValue('blockType', ''); // Reset blockType only if necessary
+        }
+        setBlockDisable(true);
+      } else {
+        setBlockDisable(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [form, blockDisable]);
   return (
-    <Dialog>
+    <Dialog onOpenChange={setIsDialogOpen} open={isDialogOpen}>
       <DialogTrigger asChild>
         <Button size={'sm'} className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}>
           <Icons.check className='h-4 w-4' />
@@ -110,14 +129,44 @@ export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
             )}
             <FormField
               control={form.control}
-              name={'blockType'}
+              name={'studentType'}
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <div className='relative bg-slate-50 rounded-lg'>
                       <Select onValueChange={field.onChange} value={field.value}>
-                        <SelectTrigger id={'blockType'} className='w-full pt-10 pb-4 capitalize focus-visible:ring-0 text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
+                        <SelectTrigger id={'studentType'} className='w-full pt-10 pb-4 capitalize focus-visible:ring-0 text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
                           <SelectValue placeholder={'Select student type'} />
+                        </SelectTrigger>
+                        <SelectContent className='bg-white border-gray-300 focus-visible:ring-0'>
+                          <SelectGroup className='focus-visible:ring-0'>
+                            {selectType.studentType.map((item: any, index: any) => (
+                              <SelectItem value={item.value} key={index} className='capitalize '>
+                                {item.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <label className='pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'>
+                        {'Student Type'}
+                      </label>
+                    </div>
+                  </FormControl>
+                  <FormMessage className='text-red pl-2' />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={'blockType'}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <div className='relative bg-slate-50 rounded-lg'>
+                      <Select onValueChange={field.onChange} value={field.value} disabled={blockDisable}>
+                        <SelectTrigger id={'blockType'} className='w-full pt-10 pb-4 capitalize focus-visible:ring-0 text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
+                          <SelectValue placeholder={'Select block type'} />
                         </SelectTrigger>
                         <SelectContent className='bg-white border-gray-300 focus-visible:ring-0'>
                           <SelectGroup className='focus-visible:ring-0'>
@@ -133,10 +182,7 @@ export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
                           </SelectGroup>
                         </SelectContent>
                       </Select>
-                      <label
-                        htmlFor={'blockType'}
-                        className='pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'
-                      >
+                      <label className='pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'>
                         {'Block type'}
                       </label>
                     </div>

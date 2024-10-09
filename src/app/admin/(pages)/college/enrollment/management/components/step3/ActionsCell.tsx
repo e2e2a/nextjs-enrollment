@@ -82,7 +82,7 @@ const ActionsCell3 = ({ user }: IProps) => {
             <CommandList>
               {/* <CommandEmpty>No language found.</CommandEmpty> */}
               <CommandGroup className=''>
-                <Link href={`/profile/${user.userId.username}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
+                <Link href={`/admin/users/students/${user.userId._id}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
                   <div className='flex justify-center items-center text-sm font-medium gap-x-1'>
                     <Icons.eye className='h-4 w-4' />
                     View student profile

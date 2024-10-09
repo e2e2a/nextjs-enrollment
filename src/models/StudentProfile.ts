@@ -52,15 +52,12 @@ export interface IProfile extends Document {
 
   photoUrl: string;
   enrollStatus?: 'Pending' | 'Completed' | 'Enrolled';
-  studentType?: 'Regular' | 'Non-Regular';
+  studentType?: string;
   scholarType: string;
   imageUrl?: string;
   isVerified: boolean;
 
   payment: boolean;
-  
-  lastLogin?: Date;
-  lastLogout?: Date;
 }
 const schema = new Schema<IProfile>(
   {
@@ -148,12 +145,11 @@ const schema = new Schema<IProfile>(
     MothersMiddleName: { type: String },
     MothersContact: { type: String },
 
+    studentType: { type: String },
     imageUrl: { type: String },
     isVerified: { type: Boolean, default: false },
 
     payment: { type: Boolean },
-    lastLogin: { type: Date },
-    lastLogout: { type: Date },
   },
   {
     versionKey: false,

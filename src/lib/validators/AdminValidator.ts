@@ -14,7 +14,6 @@ const calculateAge = (birthDate: Date): number => {
 };
 const nameRegex = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+[-'s]?[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/;
 
-
 /**
  * Separate Profile validators incase if users may have different profiles
  * @return validate data
@@ -212,9 +211,25 @@ export const RoomCollegeValidator = z.object({
   floorLocation: z.string().optional(),
 });
 
-export const EnrollmentBlockTypeValidator = z.object({
-  blockType: z.string().min(1, { message: 'Block Type is required...' }),
-});
+export const EnrollmentBlockTypeValidator = z
+  .object({
+    studentType: z.string().min(1, { message: 'Student Type is required...' }),
+    blockType: z.string(),
+  })
+  .refine(
+    (data) => {
+      // If the student type is not 'regular', blockType must be present
+      if (data.studentType === 'regular') {
+        return data.blockType && data.blockType.trim() !== '';
+      }
+      // If student type is 'regular', we don't care about blockType
+      return true;
+    },
+    {
+      message: 'Block Type is required for regular students.',
+      path: ['blockType'],
+    }
+  );
 
 export const SchoolYearValidator = z.object({
   schoolYear: z
@@ -248,7 +263,6 @@ export const StudentCurriculumValidator = z.object({
     .regex(/^(1[0-5]|[1-9])$/, { message: 'Order must only contain numbers 1-15.' })
     .refine((val) => Number(val) >= 1 && Number(val) <= 15, { message: 'Order must be between 1 and 15.' }),
 });
-
 
 export const StudentProfileInAdminValidator = z
   .object({
@@ -315,7 +329,7 @@ export const StudentProfileInAdminValidator = z
     };
   });
 
-  export const AdminProfileBySessionIdValidator = z
+export const AdminProfileBySessionIdValidator = z
   .object({
     firstname: z
       .string()
