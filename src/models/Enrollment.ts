@@ -14,7 +14,7 @@ export interface IEnrollment extends Document {
   enrollStatus?: string;
   isStudentProfile: string;
   studentStatus?: string;
-  studentType?: 'Regular' | 'Non-Regular';
+  studentType?: string;
   scholarType: 'TWSP' | 'STEP' | 'PESFA' | 'UAQTEA' | 'None';
   studentSubjects: Number;
   enrollmentStatus: string;
@@ -87,7 +87,7 @@ const schema = new Schema<IEnrollment>(
     },
     studentType: {
       type: String,
-      enum: ['Regular', 'Non-Regular'],
+      // enum: ['Regular', 'Non-Regular'],
     },
     scholarType: {
       type: String,

@@ -25,7 +25,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
     if (!student) return;
     if (student) {
       setStudentCourse(student.courseId.courseCode);
-      setStudentBlockType(student.blockTypeId.section);
+      setStudentBlockType(student?.blockTypeId?.section);
       setStudentYear(student.studentYear);
       setStudentSemester(student.studentSemester);
       setPageLoader(false);
@@ -69,7 +69,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
   };
   const [roomId, setRoomId] = useState('');
   const mutation = useUpdateStudentEnrollmentScheduleMutation();
-  
+
   const actionFormSubmit = () => {
     //we need to revised the room to roomId and teacher to teacherId
     // data.roomId = roomId;
@@ -96,7 +96,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
       onSettled: () => {},
     });
   };
- 
+
   const suggestMutation = useUpdateStudentEnrollmentScheduleSuggestedSubjectMutation();
   const actionFormSubmitSuggestSubject = (teacherScheduleId: any) => {
     //we need to revised the room to roomId and teacher to teacherId
@@ -146,7 +146,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
             <span className='text-sm font-bold uppercase'>
               {student.profileId.firstname} {student.profileId.middlename} {student.profileId.lastname} {student.profileId.extensionName ? student.profileId.extensionName : ''}
             </span>
-            <span className='text-sm font-bold capitalize'>Block: {student.blockTypeId.section}</span>
+            <span className='text-sm font-bold capitalize'>Block: {student?.blockTypeId?.section ? student.blockTypeId.section : 'N/A'}</span>
           </DialogTitle>
           <DialogDescription>Select subjects to add in the table.</DialogDescription>
         </DialogHeader>
@@ -210,11 +210,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                             const section = (b.section ?? '').toLowerCase();
                             const studentType = (studentBlockType ?? '').toLowerCase();
                             if (section === studentType) {
-                              const enrolledTeacherScheduleIds = new Set(
-                                student.studentSubjects
-                                  .filter((sched: any) => sched.status !== 'suggested')
-                                  .map((sched: any) => sched.teacherScheduleId._id)
-                              );
+                              const enrolledTeacherScheduleIds = new Set(student.studentSubjects.filter((sched: any) => sched.status !== 'suggested').map((sched: any) => sched.teacherScheduleId._id));
                               return (
                                 <div className='' key={b._id}>
                                   {b.blockSubjects.length > 0 ? (
