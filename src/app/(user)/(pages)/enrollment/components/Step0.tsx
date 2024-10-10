@@ -243,7 +243,7 @@ const Step0 = ({ search }: IProps) => {
               <div className=''>
                 <Image src={'/images/logo1.png'} className='w-auto rounded-full' priority width={65} height={65} alt='nothing to say' />
               </div>
-              <div className='text-center lg:text-left font-poppins'>Online Enrollment Form</div>
+              <div className='text-center lg:text-left font-poppins tracking-tight'>Online Enrollment Form</div>
             </div>
           </CardTitle>
           <CardDescription>

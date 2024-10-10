@@ -361,3 +361,8 @@ export const AdminProfileBySessionIdValidator = z
       age: calculateAge(data.birthday),
     };
   });
+
+  export const EnrollmentSetupOpenEnrollmentCollegeValidator = z.object({
+    schoolYear: z.string().min(1, { message: 'Room Name is required...' }),
+    semester: z.string().min(1, { message: 'Room Type is required...' }),
+  });

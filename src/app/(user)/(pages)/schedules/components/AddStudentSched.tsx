@@ -25,7 +25,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
     if (!student) return;
     if (student) {
       setStudentCourse(student.courseId.courseCode);
-      setStudentBlockType(student.blockTypeId.section);
+      setStudentBlockType(student?.blockTypeId?.section);
       setStudentYear(student.studentYear);
       setStudentSemester(student.studentSemester);
       setPageLoader(false);
@@ -113,7 +113,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
             <span className='text-sm font-bold uppercase'>
               {student.profileId.firstname} {student.profileId.middlename} {student.profileId.lastname} {student.profileId.extensionName ? student.profileId.extensionName : ''}
             </span>
-            <span className='text-sm font-bold capitalize'>Block: {student.blockTypeId.section}</span>
+            <span className='text-sm font-bold capitalize'>Block: {student?.blockTypeId?.section ? student?.blockTypeId?.section : 'N/A'}</span>
           </DialogTitle>
           <DialogDescription>Select subjects to add in the table.</DialogDescription>
         </DialogHeader>
