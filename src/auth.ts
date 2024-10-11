@@ -11,7 +11,7 @@ import { createAccount } from './services/account';
 // import { getTeacherProfileByUserId } from './services/teacherProfile';
 // import { getAdminProfileByUserId } from './services/adminProfile';
 // const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
-const clientPromise = dbConnect().then(mongoose => mongoose.connection.getClient());
+const clientPromise = dbConnect().then((mongoose) => mongoose.connection.getClient());
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -141,14 +141,18 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       // If no user, but token exists
       if (!user && token.email) {
         const existingUser = await getUserByEmail(token.email);
-        token.sub = existingUser._id;
-        token.role = existingUser.role;
-        token.username = existingUser.username;
+        if (existingUser) {
+          token.sub = existingUser._id;
+          token.role = existingUser.role;
+          token.username = existingUser.username;
+        } else {
+          return null;
+        }
       }
 
       return token;
     },
-    
+
     // async jwt({ token, user }) {
     //   await dbConnect();
     //   // @ts-ignore

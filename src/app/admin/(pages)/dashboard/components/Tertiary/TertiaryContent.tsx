@@ -76,6 +76,7 @@ const TertiaryContent = () => {
     },
   ];
   const { data: esData, isLoading: esLoading, isError: esError } = useEnrollmentSetupQuery();
+  
   useEffect(() => {
     if (!esData || esError) return;
 
@@ -87,7 +88,7 @@ const TertiaryContent = () => {
       return;
     }
   }, [esData, esError]);
-  console.log('dataeasd', esData?.enrollmentSetup?.enrollmentTertiary.open);
+
   return (
     <>
       {isPageLoading ? (

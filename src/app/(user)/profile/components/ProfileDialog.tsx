@@ -140,7 +140,7 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
             <div className='mt-4'>
               <div className='w-full flex flex-col items-center justify-center'>
                 <div className={`flex flex-col h-[168px] w-[168px] relative select-none ${imagePreview ? 'border shadow-md drop-shadow-md border-gray-200 rounded-full' : ''}`}>
-                  <UserAvatar session={{ firstname: session?.firstname, imageUrl: imagePreview ? imagePreview : '', asd: '' || null }} className='' />
+                  <UserAvatar session={{ firstname: session?.firstname, imageUrl: imagePreview ? imagePreview : '' }} className='' />
                 </div>
                 <input type='file' ref={fileInputRef} style={{ display: 'none' }} accept='image/png' onChange={(e) => handleSelectedFile(e.target.files)} />
 
