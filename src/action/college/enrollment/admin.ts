@@ -17,7 +17,7 @@ export const getAllEnrollmentAction = async (category: string): Promise<getEnrol
   try {
     await dbConnect();
     const enrollments = await getAllEnrollment(category);
-    
+
     return { enrollment: JSON.parse(JSON.stringify(enrollments)), status: 200 };
   } catch (error) {
     console.log('server e :', error);
@@ -103,16 +103,16 @@ export const approvedEnrollmentStep2Action = async (data: any) => {
       if (!checkBlock) return { error: 'Block Type is not valid', status: 403 };
     }
     data.step = 3;
-    if(data.blockType === ''){
-      data.blockType = null
+    if (data.blockType === '') {
+      data.blockType = null;
     }
 
     // const checkSY = await getSchoolYearByYear(data.schoolYear);
     // if (!checkSY) return { error: 'SchoolYear is not valid', status: 403 };
 
     // @ts-ignore
-    const updateP = await StudentProfile.findByIdAndUpdate(checkE.profileId._id, { studentType: data.studentType })
-    if(!updateP){
+    const updateP = await StudentProfile.findByIdAndUpdate(checkE.profileId._id, { studentType: data.studentType });
+    if (!updateP) {
       return { error: 'There must be a problem in updating student profile.', status: 500 };
     }
     await updateEnrollmentById(data.EId, { step: 3, blockTypeId: data.blockType, schoolYear: data.schoolYear });
@@ -123,7 +123,6 @@ export const approvedEnrollmentStep2Action = async (data: any) => {
     return { error: 'Something went wrong', status: 500 };
   }
 };
-
 
 export const approvedEnrollmentStep3Action = async (data: any) => {
   try {
@@ -309,6 +308,20 @@ export const getAllEnrollmentByTeacherScheduleIdAction = async (id: string): Pro
     await dbConnect();
     const enrollments = await getAllEnrollmentByTeacherScheduleId(id);
     return { enrollment: JSON.parse(JSON.stringify(enrollments)), status: 200 };
+  } catch (error) {
+    console.log('server e :', error);
+    return { error: 'Something went wrong', status: 500 };
+  }
+};
+
+export const CollegeEndSemesterAction = async (data: any) => {
+  try {
+    await dbConnect();
+    const enrollments = await getAllEnrollment(data.category);
+    const filterEnrolledEnrollments = enrollments.filter((en) => en.enrollStatus === 'Enrolled')
+    console.log('enrollments', enrollments.length)
+    console.log('filterEnrolledEnrollments', filterEnrolledEnrollments.length)
+    return { message: 'asd', status: 200 };
   } catch (error) {
     console.log('server e :', error);
     return { error: 'Something went wrong', status: 500 };

@@ -57,6 +57,7 @@ import {
   approvedEnrollmentStep4Action,
   approvedEnrollmentStep5Action,
   approvedEnrollmentStep6Action,
+  CollegeEndSemesterAction,
   getAllEnrollmentAction,
   getAllEnrollmentByTeacherScheduleIdAction,
   getEnrollmentByIdAction,
@@ -119,6 +120,19 @@ export const useUpdateEnrollmentSetupMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateEnrollmentSetup(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['EnrollmentSetup'] });
+    },
+  });
+};
+/**
+ * College End Semester
+ * @returns 
+ */
+export const useCollegeEndSemesterMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => CollegeEndSemesterAction(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentSetup'] });
     },

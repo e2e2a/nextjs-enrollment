@@ -1,15 +1,36 @@
-"use client"
+'use client';
 import React, { useState } from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { useCollegeEndSemesterMutation } from '@/lib/queries';
 const TertiaryDialogEndSemester = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const mutation = useCollegeEndSemesterMutation();
 
-  
   const actionFormDisable = () => {
-    console.log('disable');
+    const data = {
+      category: 'College'
+    };
+    mutation.mutate(data, {
+      onSuccess: (res: any) => {
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            makeToastSucess('Enrollment in college has been closed');
+            return;
+          default:
+            makeToastError(res.error);
+            return;
+        }
+      },
+      onSettled: () => {
+        setIsUploading(false);
+      },
+    });
   };
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
@@ -21,12 +42,12 @@ const TertiaryDialogEndSemester = () => {
       <form action='' className='p-0 m-0' method='post'>
         <AlertDialogContent className='bg-white text-black'>
           <AlertDialogHeader>
-            <AlertDialogTitle>Drop Subject</AlertDialogTitle>
+            <AlertDialogTitle>End Semester</AlertDialogTitle>
             <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;This action will drop the selected subject from your enrollment. Please be aware that this may impact your academic progress.</AlertDialogDescription>
           </AlertDialogHeader>
           <div className='bg-[#ffd6d6] py-2 rounded-sm'>
             <div className='text-red px-3 text-sm'>
-              <span className='font-bold '>WARNING:</span> <span className='text-sm font-light'> Once submitted, this action cannot be reversed without contacting the registrar.</span>
+              <span className='font-bold '>WARNING:</span> <span className='text-sm font-light'> Please review before submitted.</span>
             </div>
           </div>
 
