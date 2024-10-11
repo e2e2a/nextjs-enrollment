@@ -13,10 +13,11 @@ import { getSchoolYearByYear } from '@/services/schoolYear';
 import StudentProfile from '@/models/StudentProfile';
 import { updateStudentProfileById } from '@/services/studentProfile';
 // import { verificationTemplate } from './emailTemplate/verificationTemplate';
-export const getAllEnrollmentAction = async (): Promise<getEnrollmentResponse> => {
+export const getAllEnrollmentAction = async (category: string): Promise<getEnrollmentResponse> => {
   try {
     await dbConnect();
-    const enrollments = await getAllEnrollment();
+    const enrollments = await getAllEnrollment(category);
+    
     return { enrollment: JSON.parse(JSON.stringify(enrollments)), status: 200 };
   } catch (error) {
     console.log('server e :', error);
@@ -27,7 +28,7 @@ export const getEnrollmentByStepAction = async (userId: any): Promise<getEnrollm
   try {
     await dbConnect();
     const enrollments = await getEnrollmentByStep(userId);
-    return { enrollment: enrollments, status: 200 };
+    return { enrollment: JSON.parse(JSON.stringify(enrollments)), status: 200 };
   } catch (error) {
     console.log('server e :', error);
     return { error: 'Something went wrong', status: 500 };

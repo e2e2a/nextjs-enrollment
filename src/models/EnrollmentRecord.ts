@@ -32,23 +32,6 @@ const schema = new Schema<IEnrollmentRecord>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'StudentProfile',
     },
-    student: {
-      firstname: {
-        type: String,
-      },
-      middleName: {
-        type: String,
-      },
-      lastname: {
-        type: String,
-      },
-      extensionName: {
-        type: String,
-      },
-      sex: {
-        type: String,
-      },
-    },
     courseId: { type: String },
     blockTypeId: { type: String },
 
@@ -59,7 +42,6 @@ const schema = new Schema<IEnrollmentRecord>(
       type: String,
     },
 
-    onProcess: { type: Boolean, default: false },
     step: { type: Number, default: 1 },
 
     schoolYear: { type: String },
@@ -68,11 +50,7 @@ const schema = new Schema<IEnrollmentRecord>(
       default: 'Pending',
       enum: ['Pending', 'Rejected', 'Enrolled', 'Failed', 'Completed'],
     },
-    /**
-     * added some new features
-     * this wont be use on how we render or display about the form in continuing students
-     * @todo
-     */
+    
     enrollmentStatus: {
       type: String,
       enum: ['Success', 'Failed'],
@@ -134,10 +112,6 @@ const schema = new Schema<IEnrollmentRecord>(
             type: String,
           },
         },
-        // teacherScheduleId: {
-        //   type: mongoose.Schema.Types.ObjectId,
-        //   ref: 'TeacherSchedule',
-        // },
         status: {
           type: String,
           enum: ['Approved', 'Suggested', 'Declined', 'Pending', 'Dropped'],
@@ -146,7 +120,6 @@ const schema = new Schema<IEnrollmentRecord>(
           type: String,
           enum: ['add', 'drop', 'suggested'],
         },
-
         requestStatusInDean: {
           type: String,
           enum: ['Pending', 'Approved', 'Declined'],
@@ -159,28 +132,10 @@ const schema = new Schema<IEnrollmentRecord>(
           type: String,
           enum: ['Approved', 'Pending', 'Suggested', 'Declined'],
         },
-        //change profileId to this
-        student: {
-          firstname: {
-            type: String,
-          },
-          middleName: {
-            type: String,
-          },
-          lastname: {
-            type: String,
-          },
-          extensionName: {
-            type: String,
-          },
-          sex: {
-            type: String,
-          },
+        profileId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'StudentProfile',
         },
-        // profileId: {
-        //   type: mongoose.Schema.Types.ObjectId,
-        //   ref: 'StudentProfile',
-        // },
         grade: { type: String },
       },
     ],

@@ -14,7 +14,7 @@ const Page = () => {
 
   const { data: s } = useSession();
   const { data: pData, isLoading: pload, error: pError } = useDeanProfileQuery(s?.user.id as string);
-  const { data, isLoading, error: isEnError } = useAllEnrollmentQuery();
+  const { data, isLoading, error: isEnError } = useAllEnrollmentQuery(pData?.profile?.courseId?.category);
 
   useEffect(() => {
     if (isEnError || !data) return;

@@ -604,22 +604,23 @@ export const useEnrollmentDeleteMutation = () => {
  * Admin Enrollment
  * @returns Queries and mutations
  */
-export const useAllEnrollmentQuery = () => {
+export const useAllEnrollmentQuery = (category: string) => {
   return useQuery<getEnrollmentResponse, Error>({
-    queryKey: ['CollegeEnrollment'],
-    queryFn: () => getAllEnrollmentAction(),
+    queryKey: ['CollegeEnrollment', category],
+    queryFn: () => getAllEnrollmentAction(category),
+    enabled: !!category,
     retry: 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
 };
 
-export const useEnrollmentQueryByStep = (step: any) => {
+export const useEnrollmentQueryByStep = (data: any) => {
   return useQuery<getEnrollmentResponse, Error>({
-    queryKey: ['EnrollmentByStep', step],
-    queryFn: () => getEnrollmentByStepAction(step),
+    queryKey: ['EnrollmentByStep', data],
+    queryFn: () => getEnrollmentByStepAction(data),
     retry: 0,
-    enabled: !!step,
+    enabled: !!data,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
   });

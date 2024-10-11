@@ -308,7 +308,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: 'Dashboard',
-      href: '/courses',
+      href: '/admin/dashboard',
       icon: 'layoutDashboard',
     },
     // {
@@ -365,7 +365,11 @@ export const dashboardConfig: DashboardConfig = {
     //   ],
     //   icon: 'bookOpenText',
     // },
-
+    {
+      title: 'Dashboard',
+      href: '/admin/dashboard',
+      icon: 'layoutDashboard',
+    },
     {
       title: 'Secondary Education',
       i: [

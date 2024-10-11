@@ -10,19 +10,18 @@ const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
-  // Query data based on the validated step parameter
-  const { data, isLoading, error: isEnError } = useAllEnrollmentQuery();
+  const { data, isLoading, error: isEnError } = useAllEnrollmentQuery('College');
 
   useEffect(() => {
-    if (isLoading || !data || !data.enrollment) return;
-    if (isEnError) console.log(isEnError.message);
-    if (data) console.log('courses logs:', data.enrollment);
-    if (data.enrollment) {
-      const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled');
-      setEnrolledStudents(filteredEnrollment);
-      setIsPageLoading(false);
+    if (isEnError || !data) return;
+    if (data) {
+      if (data.enrollment) {
+        const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled');
+        setEnrolledStudents(filteredEnrollment);
+        setIsPageLoading(false);
+      }
     }
-  }, [data, isLoading, isEnError]);
+  }, [data, isEnError]);
 
   return (
     <>

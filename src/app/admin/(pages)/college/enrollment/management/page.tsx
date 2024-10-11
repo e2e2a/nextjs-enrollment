@@ -26,6 +26,7 @@ const Page = () => {
   const search = searchParams.get('step');
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
+  const [toFilterData, setToFilterData] = useState<any>([]);
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
   const isAllowed = useMemo(() => ['1', '2', '3', '4', '5', '6'], []);
   // Validate the step parameter whenever the search parameter changes
@@ -34,12 +35,16 @@ const Page = () => {
     if (search === null || !isAllowed.includes(search)) {
       setIsError(true);
     } else {
+      setToFilterData({
+        category: 'College',
+        step: search,
+      });
       setIsError(false);
     }
   }, [search, isAllowed]);
 
   // Query data based on the validated step parameter
-  const { data, isLoading, error: isEnError } = useEnrollmentQueryByStep(search);
+  const { data, isLoading, error: isEnError } = useEnrollmentQueryByStep(toFilterData);
   const { data: ESetup, isLoading: ESetupLoading, error: ESetupError } = useEnrollmentSetupQuery();
   useEffect(() => {
     if (isEnError || !data) return;

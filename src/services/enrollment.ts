@@ -69,6 +69,7 @@ export const getEnrollmentByUserId = async (userId: string) => {
     return null;
   }
 };
+
 export const getEnrollmentByProfileId = async (profileId: string) => {
   try {
     const enrollment = await Enrollment.findOne({ profileId })
@@ -101,23 +102,20 @@ export const getEnrollmentByProfileId = async (profileId: string) => {
   }
 };
 
-export const getEnrollmentByStep = async (step: number) => {
+export const getEnrollmentByStep = async (data: any) => {
   try {
-    const enrollment = await Enrollment.find({ step })
-      .populate('userId') // Populate the `userId` reference
-      .populate('courseId') // Populate the `courseId` reference
-      .populate('profileId')
-      .populate('blockTypeId')
-      .exec();
-    // console.log('i am exec...', enrollment);
-    return JSON.parse(JSON.stringify(enrollment));
+    const enrollment = await Enrollment.find({ step: data.step }).populate('userId').populate('courseId').populate('profileId').populate('blockTypeId').exec();
+    // @ts-ignore
+    const filteredEnrollment = enrollment.filter((en) => en.courseId.category === data.category);
+
+    return filteredEnrollment;
   } catch (error) {
     console.log(error);
-    return null;
+    return [];
   }
 };
 
-export const getAllEnrollment = async () => {
+export const getAllEnrollment = async (category: string) => {
   try {
     const enrollment = await Enrollment.find()
       .populate('userId')
@@ -133,10 +131,12 @@ export const getAllEnrollment = async () => {
         populate: [{ path: 'userId' }],
       })
       .exec();
-    return enrollment;
+    //@ts-ignore
+    const filteredEnrollment = enrollment.filter((en) => en.courseId.category === category);
+    return filteredEnrollment;
   } catch (error) {
     console.log(error);
-    return null;
+    return [];
   }
 };
 
@@ -149,7 +149,7 @@ export const getAllEnrollmentByTeacherScheduleId = async (teacherScheduleId: any
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
-        populate: [{ path: 'profileId' },{ path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
+        populate: [{ path: 'profileId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
       })
       .populate({
         path: 'studentSubjects.profileId',
