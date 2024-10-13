@@ -101,6 +101,7 @@ import { getEnrollmentSetup, updateEnrollmentSetup } from '@/action/enrollmentSe
 import { updateStudentEnrollmentScheduleBySuggestedSubjectAction } from '@/action/college/schedules/students/students';
 import { createTeacherReportGradeAction, getAllTeacherReportGradeAction, getTeacherReportGradeByIdAction, updateTeacherReportGradeStatusByIdAction } from '@/action/college/schedules/teachers/reportGrade/teacher';
 import { evaluateApprovedGradeReportAction } from '@/action/college/schedules/teachers/reportGrade/admin';
+import { getStudentEnrollmentRecordByIdAction, getStudentEnrollmentRecordByProfileIdAction, getTeacherScheduleRecordByIdAction, getTeacherScheduleRecordByProfileIdAction } from '@/action/college/records/admin';
 const channel = new BroadcastChannel('my-channel');
 // import { supabase } from './supabaseClient';
 /**
@@ -127,7 +128,7 @@ export const useUpdateEnrollmentSetupMutation = () => {
 };
 /**
  * College End Semester
- * @returns 
+ * @returns
  */
 export const useCollegeEndSemesterMutation = () => {
   const queryClient = useQueryClient();
@@ -1153,6 +1154,57 @@ export const useUpdateStudentCurriculumLayerSubjectMutation = () => {
     },
   });
 };
+
+/**
+ * Teacher Schedule Record
+ * @returns
+ *
+ */
+export const useTeacherScheduleRecordByProfileIdQuery = (profileId: any) => {
+  return useQuery<any, Error>({
+    queryKey: ['TeacherScheduleRecordByProfileId', profileId],
+    queryFn: () => getTeacherScheduleRecordByProfileIdAction(profileId),
+    enabled: !!profileId,
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
+export const useTeacherScheduleRecordByIdQuery = (profileId: any) => {
+  return useQuery<any, Error>({
+    queryKey: ['TeacherScheduleRecordById', profileId],
+    queryFn: () => getTeacherScheduleRecordByIdAction(profileId),
+    enabled: !!profileId,
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
+/**
+ * queries for students records
+ * @returns
+ */
+export const useStudentEnrollmentRecordByProfileIdQuery = (profileId: any) => {
+  return useQuery<any, Error>({
+    queryKey: ['StudentEnrollmentRecordByProfileId', profileId],
+    queryFn: () => getStudentEnrollmentRecordByProfileIdAction(profileId),
+    enabled: !!profileId,
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
+export const useStudentEnrollmentRecordByIdQuery = (profileId: any) => {
+  return useQuery<any, Error>({
+    queryKey: ['StudentEnrollmentRecordById', profileId],
+    queryFn: () => getStudentEnrollmentRecordByIdAction(profileId),
+    enabled: !!profileId,
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
+
 // ============================================================
 // POST QUERIES
 // ============================================================

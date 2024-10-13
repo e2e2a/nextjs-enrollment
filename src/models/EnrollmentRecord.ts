@@ -1,11 +1,10 @@
 import mongoose, { Schema, models, model } from 'mongoose';
 
 export interface IEnrollmentRecord extends Document {
-  userId: mongoose.Schema.Types.ObjectId;
   profileId: mongoose.Schema.Types.ObjectId;
 
-  courseId: string;
-  blockTypeId: string;
+  course: string;
+  blockType: string;
   student: any;
   studentYear?: string;
   studentSemester?: string;
@@ -24,16 +23,22 @@ export interface IEnrollmentRecord extends Document {
 
 const schema = new Schema<IEnrollmentRecord>(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
     profileId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'StudentProfile',
     },
-    courseId: { type: String },
-    blockTypeId: { type: String },
+    course: { type: String },
+    blockType: {
+      year: {
+        type: String,
+      },
+      semester: {
+        type: String,
+      },
+      section: {
+        type: String,
+      },
+    },
 
     studentYear: {
       type: String,
@@ -99,7 +104,7 @@ const schema = new Schema<IEnrollmentRecord>(
           firstname: {
             type: String,
           },
-          middleName: {
+          middlename: {
             type: String,
           },
           lastname: {
@@ -109,6 +114,32 @@ const schema = new Schema<IEnrollmentRecord>(
             type: String,
           },
           sex: {
+            type: String,
+          },
+        },
+        blockType:{
+          year: {
+            type: String,
+          },
+          semester: {
+            type: String,
+          },
+          section: {
+            type: String,
+          },
+        },
+        days: {
+          type: [String],
+          default: [],
+        },
+        startTime: {
+          type: String,
+        },
+        endTime: {
+          type: String,
+        },
+        room: {
+          roomName: {
             type: String,
           },
         },

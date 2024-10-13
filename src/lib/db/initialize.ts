@@ -19,6 +19,8 @@ import AdminProfile from '@/models/AdminProfile';
 import DeanProfile from '@/models/DeanProfile';
 import EnrollmentSetup from '@/models/EnrollmentSetup';
 import ReportGrade from '@/models/ReportGrade';
+import EnrollmentRecord from '@/models/EnrollmentRecord';
+import TeacherScheduleRecord from '@/models/TeacherScheduleRecord';
 
 type ModelName =
   | 'Course'
@@ -39,7 +41,9 @@ type ModelName =
   | 'AdminProfile'
   | 'DeanProfile'
   | 'EnrollmentSetup'
-  | 'ReportGrade';
+  | 'ReportGrade'
+  | 'EnrollmentRecord'
+  | 'TeacherScheduleRecord';
 
 const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   Course,
@@ -60,7 +64,9 @@ const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   AdminProfile,
   DeanProfile,
   EnrollmentSetup,
-  ReportGrade
+  ReportGrade,
+  EnrollmentRecord,
+  TeacherScheduleRecord,
 };
 let isInitialized = false;
 const initializeModel = async (modelNames: ModelName[]) => {

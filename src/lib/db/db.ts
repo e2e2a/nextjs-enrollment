@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import initializeModel from './initialize';
 
 const MONGODB_URI = process.env.MONGODB_URI;
-const modelsToInitialize = ['Course', 'User', 'UserIp', 'StudentProfile', 'Account', 'Enrollment', 'BlockType', 'Subject', 'TeacherProfile', 'TeacherSchedule', 'Room', 'SchoolYear', 'Curriculum', 'StudentCurriculum', 'StudentSchedule', 'AdminProfile', 'DeanProfile', 'EnrollmentSetup', 'ReportGrade'];
+const modelsToInitialize = ['Course', 'User', 'UserIp', 'StudentProfile', 'Account', 'Enrollment', 'BlockType', 'Subject', 'TeacherProfile', 'TeacherSchedule', 'Room', 'SchoolYear', 'Curriculum', 'StudentCurriculum', 'StudentSchedule', 'AdminProfile', 'DeanProfile', 'EnrollmentSetup', 'ReportGrade', 'EnrollmentRecord', 'TeacherScheduleRecord'];
 let cached = global.mongoose;
 
 if (!cached) {
@@ -12,7 +12,7 @@ if (!cached) {
 }
 
 async function dbConnect() {
-  const start = Date.now();
+  // const start = Date.now();
   if (cached.conn) {
     return cached.conn;
   }
@@ -27,10 +27,13 @@ async function dbConnect() {
     cached.promise = mongoose.connect(MONGODB_URI, opts).then(async (mongoose) => {
       await initializeModel(modelsToInitialize);
       const dbStats = await mongoose.connection.db.command({ ping: 1 });
-      console.log('Ping result:', dbStats);  // Log the ping result
-      
-      const end = Date.now();
-      console.log(`Ping took ${end - start} ms`);
+      /**
+       * @test
+       * @return ping
+       */
+      // console.log('Ping result:', dbStats);  // Log the ping result
+      // const end = Date.now();
+      // console.log(`Ping took ${end - start} ms`);
       return mongoose;
     }).catch(err => {console.log('err', err);});
   }

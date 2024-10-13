@@ -28,7 +28,7 @@ export function SidebarNav({ items, profile }: DashboardNavProps) {
         <div className='flex-col w-full flex gap-y-1 items-start p-0'>
           <Link href={'/profile'} className='flex items-center gap-[2px] w-full px-2 py-[5.5px] mt-4 hover:bg-slate-300 hover:bg-opacity-70 rounded-md'>
             <div className='border shadow-sm drop-shadow-sm border-gray-200 rounded-full'>
-              <UserAvatar session={{ firstname: profile?.firstname, imageUrl: profile?.imageUrl, asd: 'asdas1' || null }} className='h-[32px] w-[32px]' />
+              <UserAvatar session={{ firstname: profile?.firstname, imageUrl: profile?.imageUrl }} className='h-[32px] w-[32px]' />
             </div>
             <div className='flex items-center p-2'>
               <div className='flex flex-col leading-none'>
@@ -43,7 +43,7 @@ export function SidebarNav({ items, profile }: DashboardNavProps) {
                 <Link key={index} href={item.disabled ? '/' : item.href} className='flex w-full select-none'>
                   <Button type='button' className='group select-none border-0 w-full hover:bg-slate-300 px-5 py-6 flex space-x-2 items-center gap-x-1 justify-start pl-3'>
                     <Icon className='h-7 w-7 group-hover:stroke-blue-500' />
-                    <span className='text-sm font-semibold tracking-tight'>{item.title}</span>
+                    <span className='text-sm font-medium tracking-tight'>{item.title}</span>
                   </Button>
                 </Link>
               ): (

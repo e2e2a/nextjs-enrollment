@@ -56,7 +56,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <h1 className='text-[12px] xs:text-sm sm:text-lg font-semibold uppercase'>
                     {ts?.teacherSchedule?.blockTypeId?.year} - {ts?.teacherSchedule?.blockTypeId?.semester}
                   </h1>
-                  <span className='text-[12px] xs:text-sm sm:text-lg font-semibold uppercase'>BLOCK {ts?.teacherSchedule?.blockTypeId.section} | </span>
+                  <span className='text-[12px] xs:text-sm sm:text-lg font-semibold uppercase'>BLOCK {ts?.teacherSchedule?.blockTypeId?.section} | </span>
                   <span className='text-[12px] xs:text-sm sm:text-lg font-semibold'>
                     {ts?.teacherSchedule?.startTime} - {ts?.teacherSchedule?.endTime} |
                   </span>

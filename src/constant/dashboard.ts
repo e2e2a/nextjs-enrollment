@@ -23,6 +23,7 @@ export const dashboardConfig: DashboardConfig = {
     //   icon: 'fileBadge',
     //   // disabled: true,
     // },
+    
     {
       title: 'Schedules',
       href: '/schedules',
@@ -89,7 +90,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: 'Records',
-      href: '/',
+      href: '/record',
       icon: 'fileStack',
     },
     {
@@ -130,6 +131,11 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'filePenLine',
     },
     {
+      title: 'Records',
+      href: '/instructor/record',
+      icon: 'fileStack',
+    },
+    {
       title: 'School & Policies',
       href: '/school/policy',
       icon: 'school',
@@ -153,7 +159,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: 'Records',
-      href: '/',
+      href: '/instructor/record',
       icon: 'fileStack',
     },
     {
