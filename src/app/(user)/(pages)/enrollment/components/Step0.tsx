@@ -165,7 +165,6 @@ const Step0 = ({ search }: IProps) => {
     },
   });
   const onSubmit: SubmitHandler<z.infer<typeof EnrollmentStep1>> = async (data) => {
-    console.log(data);
     const formData = new FormData();
     if (!filePreview) return setFileError('PSA Birth is required.');
     formData.append('filePsa', filePreview!);
@@ -189,7 +188,6 @@ const Step0 = ({ search }: IProps) => {
 
     mutation.mutate(dataa, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:

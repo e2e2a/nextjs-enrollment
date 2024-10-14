@@ -1,6 +1,15 @@
 'use server';
 import TeacherScheduleRecord from '@/models/TeacherScheduleRecord';
 
+export const getAllTeacherScheduleRecordByCollege = async (category: any) => {
+  try {
+    const TProfile = await TeacherScheduleRecord.find({ category }).populate('profileId').exec();
+    return TProfile;
+  } catch (error) {
+    console.log('error in service:', error);
+    return null;
+  }
+};
 export const getTeacherScheduleRecordByProfileId = async (profileId: any) => {
   try {
     const TProfile = await TeacherScheduleRecord.find({ profileId }).populate('profileId').exec();

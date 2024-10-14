@@ -1,6 +1,7 @@
 import mongoose, { Schema, models, model } from 'mongoose';
 
 export interface IEnrollment extends Document {
+  category: string;
   userId: mongoose.Schema.Types.ObjectId;
   profileId: mongoose.Schema.Types.ObjectId;
   courseId: mongoose.Schema.Types.ObjectId;
@@ -22,6 +23,9 @@ export interface IEnrollment extends Document {
 
 const schema = new Schema<IEnrollment>(
   {
+    category: {
+      type: String,
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

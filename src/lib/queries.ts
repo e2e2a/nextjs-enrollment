@@ -101,7 +101,14 @@ import { getEnrollmentSetup, updateEnrollmentSetup } from '@/action/enrollmentSe
 import { updateStudentEnrollmentScheduleBySuggestedSubjectAction } from '@/action/college/schedules/students/students';
 import { createTeacherReportGradeAction, getAllTeacherReportGradeAction, getTeacherReportGradeByIdAction, updateTeacherReportGradeStatusByIdAction } from '@/action/college/schedules/teachers/reportGrade/teacher';
 import { evaluateApprovedGradeReportAction } from '@/action/college/schedules/teachers/reportGrade/admin';
-import { getStudentEnrollmentRecordByIdAction, getStudentEnrollmentRecordByProfileIdAction, getTeacherScheduleRecordByIdAction, getTeacherScheduleRecordByProfileIdAction } from '@/action/college/records/admin';
+import {
+  getAllStudentEnrollmentRecordCollegeAction,
+  getAllTeacherScheduleRecordByCollegeAction,
+  getStudentEnrollmentRecordByIdAction,
+  getStudentEnrollmentRecordByProfileIdAction,
+  getTeacherScheduleRecordByIdAction,
+  getTeacherScheduleRecordByProfileIdAction,
+} from '@/action/college/records/admin';
 const channel = new BroadcastChannel('my-channel');
 // import { supabase } from './supabaseClient';
 /**
@@ -135,6 +142,9 @@ export const useCollegeEndSemesterMutation = () => {
   return useMutation<any, Error, any>({
     mutationFn: async (data) => CollegeEndSemesterAction(data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
+      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentSetup'] });
     },
   });
@@ -1204,7 +1214,31 @@ export const useStudentEnrollmentRecordByIdQuery = (profileId: any) => {
     refetchOnWindowFocus: true,
   });
 };
+/**
+ * queries for all enrollment records and schedules record for instructors
+ * @returns
+ */
+export const useAllStudentEnrollmentRecordCollegeQuery = (category: string) => {
+  return useQuery<any, Error>({
+    queryKey: ['StudentEnrollmentRecordCollege', category],
+    queryFn: () => getAllStudentEnrollmentRecordCollegeAction(category),
+    enabled: !!category,
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
 
+export const useTeacherScheduleRecordCollegeQuery = (category: string) => {
+  return useQuery<any, Error>({
+    queryKey: ['TeacherScheduleRecordCollege', category],
+    queryFn: () => getAllTeacherScheduleRecordByCollegeAction(category),
+    enabled: !!category,
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+  });
+};
 // ============================================================
 // POST QUERIES
 // ============================================================

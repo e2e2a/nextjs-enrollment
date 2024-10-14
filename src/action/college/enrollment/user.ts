@@ -30,6 +30,7 @@ export const createEnrollmentAction = async (data: any): Promise<getEnrollmentRe
     data.profileId = getProfile._id;
     data.courseId = course._id;
     data.onProcess = true;
+    data.category = 'College';
 
     const cc = await createEnrollment(data);
     if (!cc) return { message: 'Something went wrong.', status: 500 };

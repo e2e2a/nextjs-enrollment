@@ -119,6 +119,19 @@ export const columns: ColumnDef<IEnrollment>[] = [
     },
   },
   {
+    accessorFn: (row) => row.profileId.studentType,
+    accessorKey: 'student type',
+    header: 'Student Type',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user?.profileId?.studentType}
+        </div>
+      );
+    },
+  },
+  {
     accessorFn: (row) => row.schoolYear,
     accessorKey: 'school year',
     header: 'School Year',

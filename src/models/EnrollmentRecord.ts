@@ -1,6 +1,7 @@
 import mongoose, { Schema, models, model } from 'mongoose';
 
 export interface IEnrollmentRecord extends Document {
+  category: string;
   profileId: mongoose.Schema.Types.ObjectId;
 
   course: string;
@@ -23,6 +24,7 @@ export interface IEnrollmentRecord extends Document {
 
 const schema = new Schema<IEnrollmentRecord>(
   {
+    category: { type: String },
     profileId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'StudentProfile',
@@ -40,16 +42,12 @@ const schema = new Schema<IEnrollmentRecord>(
       },
     },
 
-    studentYear: {
-      type: String,
-    },
-    studentSemester: {
-      type: String,
-    },
-
+    studentType:{ type: String },
+    studentYear: { type: String },
+    studentSemester: { type: String },
     step: { type: Number, default: 1 },
-
     schoolYear: { type: String },
+
     enrollStatus: {
       type: String,
       default: 'Pending',
@@ -67,7 +65,7 @@ const schema = new Schema<IEnrollmentRecord>(
       enum: ['New Student', 'Continue', 'Transferee'],
     },
 
-    studentType: { type: String },
+    
     scholarType: {
       type: String,
       enum: ['TWSP', 'STEP', 'PESFA', 'UAQTEA', 'None'],

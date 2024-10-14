@@ -599,6 +599,22 @@ export const dashboardConfig: DashboardConfig = {
                   ],
                   icon: 'packageSearch',
                 },
+                {
+                  title: 'Recent Records',
+                  i: [
+                    {
+                      title: 'Enrollment Records',
+                      href: '/admin/college/enrollment/record/enrollment',
+                      icon: 'eye',
+                    },
+                    {
+                      title: 'Instructor Sched. Records',
+                      href: '/admin/college/enrollment/record/schedule',
+                      icon: 'eye',
+                    },
+                  ],
+                  icon: 'packageSearch',
+                },
                 // {
                 //   title: `Student's Enrollment`,
                 //   i: [
@@ -793,22 +809,22 @@ export const dashboardConfig: DashboardConfig = {
       ],
       icon: 'usersRound',
     },
-    {
-      title: 'School Year',
-      i: [
-        {
-          title: 'School Year Management',
-          href: '/admin/schoolyear',
-          icon: 'eye',
-        },
-      ],
-      icon: 'calendarFold',
-    },
-    {
-      title: 'Records',
-      href: '/',
-      icon: 'fileStack',
-    },
+    // {
+    //   title: 'School Year',
+    //   i: [
+    //     {
+    //       title: 'School Year Management',
+    //       href: '/admin/schoolyear',
+    //       icon: 'eye',
+    //     },
+    //   ],
+    //   icon: 'calendarFold',
+    // },
+    // {
+    //   title: 'Records',
+    //   href: '/',
+    //   icon: 'fileStack',
+    // },
     {
       title: 'School & Policies',
       href: '/',

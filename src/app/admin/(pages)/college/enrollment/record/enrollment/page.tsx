@@ -2,22 +2,22 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useAllEnrollmentQuery } from '@/lib/queries';
-import { IEnrollment } from '@/types';
+import { useAllStudentEnrollmentRecordCollegeQuery, useProfileQuery, useStudentEnrollmentRecordByProfileIdQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useSession } from 'next-auth/react';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
-  const { data, isLoading, error: isEnError } = useAllEnrollmentQuery('College');
+  const { data: s } = useSession();
+  
+  const { data, isLoading, error: isEnError } = useAllStudentEnrollmentRecordCollegeQuery('College');
 
   useEffect(() => {
     if (isEnError || !data) return;
+
     if (data) {
-      if (data.enrollment) {
-        const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled');
-        setEnrolledStudents(filteredEnrollment);
+      if (data.enrollmentRecords) {
         setIsPageLoading(false);
       }
     }
@@ -35,10 +35,10 @@ const Page = () => {
             <div className=''>404</div>
           ) : (
             <div className=''>
-              <div className='mb-3 text-center w-full'>
-                <h1 className='text-lg sm:text-2xl font-bold uppercase'>Enrolled Student Management</h1>
+              <div className='flex items-center py-4 text-black w-full justify-center'>
+                <h1 className='sm:text-3xl text-xl font-semibold tracking-tight '>Enrollments Record</h1>
               </div>
-              <DataTable columns={columns} data={enrolledStudents as IEnrollment[]} />
+              <DataTable columns={columns} data={data.enrollmentRecords as any[]} />
             </div>
           )}
         </div>

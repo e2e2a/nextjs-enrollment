@@ -16,6 +16,12 @@ import EnrollmentRecord from '@/models/EnrollmentRecord';
 import { getAllTeacherSchedule } from '@/services/teacherSchedule';
 import TeacherScheduleRecord from '@/models/TeacherScheduleRecord';
 import { getEnrollmentSetupByName, updateEnrollmentSetupByName } from '@/services/EnrollmentSetup';
+import StudentCurriculum from '@/models/StudentCurriculum';
+import { createStudentCurriculum } from '@/services/studentCurriculum';
+import ReportGrade from '@/models/ReportGrade';
+import { setProgress } from './helpers/progress';
+import Enrollment from '@/models/Enrollment';
+import TeacherSchedule from '@/models/TeacherSchedule';
 // import { verificationTemplate } from './emailTemplate/verificationTemplate';
 export const getAllEnrollmentAction = async (category: string): Promise<getEnrollmentResponse> => {
   try {
@@ -320,13 +326,16 @@ export const getAllEnrollmentByTeacherScheduleIdAction = async (id: string): Pro
 
 export const CollegeEndSemesterAction = async (data: any) => {
   try {
+    setProgress(0);
     await dbConnect();
+    setProgress(10);
     const eSetup = await getEnrollmentSetupByName('GODOY');
     const teacherSchedule = await getAllTeacherSchedule();
     const filteredSchedule = teacherSchedule.filter((ts) => ts.category === 'College');
     const enrollments = await getAllEnrollment(data.category);
-
     const filterEnrolledEnrollments = enrollments.filter((en) => en.enrollStatus === 'Enrolled');
+    setProgress(15);
+
     let teacherSchededRecord = [];
     for (const sched of filteredSchedule) {
       if (sched.blockTypeId || !sched.blockTypeId === undefined || !sched.blockTypeId === null) {
@@ -380,10 +389,11 @@ export const CollegeEndSemesterAction = async (data: any) => {
         teacherSchededRecord.push(processedScheduleRecord);
       }
     }
-
+    setProgress(35);
     let enrollmentRecords = [];
     for (const enrollment of filterEnrolledEnrollments) {
       const processedRecord = {
+        category: 'College',
         // @ts-ignore
         profileId: enrollment.profileId._id,
         // @ts-ignore
@@ -397,7 +407,9 @@ export const CollegeEndSemesterAction = async (data: any) => {
           // @ts-ignore
           section: enrollment.blockTypeId?.section,
         },
-        studentyear: enrollment.studentYear,
+        // @ts-ignore
+        studentType: enrollment.profileId.studentType,
+        studentYear: enrollment.studentYear,
         studentSemester: enrollment.studentSemester,
         schoolYear: enrollment.schoolYear,
         enrollStatus: enrollment.enrollStatus,
@@ -412,6 +424,7 @@ export const CollegeEndSemesterAction = async (data: any) => {
         const processedSubjectRecord = {
           // @ts-ignore
           subject: {
+            id: ss.teacherScheduleId?.subjectId?._id,
             fixedRateAmount: ss.teacherScheduleId?.subjectId?.fixedRateAmount,
             preReq: ss.teacherScheduleId.subjectId.preReq,
             category: ss.teacherScheduleId.subjectId.category,
@@ -428,7 +441,7 @@ export const CollegeEndSemesterAction = async (data: any) => {
             extensionName: ss.teacherScheduleId.profileId.extensionName,
             sex: ss.teacherScheduleId.profileId.sex,
           },
-          blockType:{
+          blockType: {
             year: ss.teacherScheduleId.blockTypeId.year,
             semester: ss.teacherScheduleId.blockTypeId.semester,
             section: ss.teacherScheduleId.blockTypeId.section,
@@ -436,7 +449,7 @@ export const CollegeEndSemesterAction = async (data: any) => {
           days: ss.teacherScheduleId.days,
           startTime: ss.teacherScheduleId.startTime,
           endTime: ss.teacherScheduleId.endTime,
-          room:{
+          room: {
             roomName: ss.teacherScheduleId.roomId.roomName,
           },
           status: ss.status,
@@ -452,23 +465,90 @@ export const CollegeEndSemesterAction = async (data: any) => {
         studentSubjects.push(processedSubjectRecord);
       }
       processedRecord.studentSubjects = studentSubjects;
+
+      let studentCurriculum;
+      //@ts-ignore
+      const b = await StudentCurriculum.findOne({ studentId: enrollment.profileId._id, courseId: enrollment.courseId._id });
+      if (b) {
+        studentCurriculum = b;
+      } else if (!b) {
+        //@ts-ignore
+        studentCurriculum = await createStudentCurriculum({ studentId: enrollment.profileId._id, courseId: enrollment.courseId._id });
+      }
+      const curriculumExists = studentCurriculum.curriculum.some((c: any) => c.year === enrollment.studentYear && c.semester === enrollment.studentSemester);
+      if (curriculumExists) {
+        for (const curriculum of studentCurriculum.curriculum) {
+          let updateSubjects = [];
+
+          if (curriculum.year === enrollment.studentYear && curriculum.semester === enrollment.studentSemester) {
+            for (const studentS of studentSubjects) {
+              if (studentS.status === 'Approved') {
+                let subjectFound = false;
+                for (const subject of curriculum.subjectsFormat) {
+                  if (studentS.subject.id.toString() === subject.subjectId._id.toString()) {
+                    subject.grade = studentS.grade;
+                    subjectFound = true;
+                    break;
+                  }
+                }
+                if (!subjectFound) {
+                  updateSubjects.push({
+                    subjectId: studentS.subject.id,
+                    grade: studentS.grade ? studentS.grade : 'INC',
+                  });
+                }
+              }
+            }
+            if (updateSubjects.length > 0) {
+              await StudentCurriculum.updateOne({ 'curriculum._id': curriculum._id }, { $push: { 'curriculum.$.subjectsFormat': { $each: updateSubjects } } });
+            }
+          }
+        }
+      } else {
+        let newSubjects = [];
+        for (const studentS of studentSubjects) {
+          console.log('studentSubjects', studentS)
+          if (studentS.status === 'Approved') {
+            newSubjects.push({
+              subjectId: studentS.subject.id,
+              grade: studentS.grade ? studentS.grade : 'INC',
+            });
+          }
+        }
+        const newC = {
+          schoolYear: enrollment.schoolYear,
+          year: enrollment.studentYear,
+          semester: enrollment.studentSemester,
+          subjectsFormat: newSubjects,
+        };
+        await studentCurriculum.curriculum.push(newC);
+      }
+      await studentCurriculum.save();
       enrollmentRecords.push(processedRecord);
     }
-
-    // // Use insertMany for bulk insertion
+    setProgress(70);
+    // Use insertMany for bulk insertion
     await TeacherScheduleRecord.insertMany(teacherSchededRecord);
+    setProgress(75);
     await EnrollmentRecord.insertMany(enrollmentRecords);
-    /**
-     * @todo
-     * 1. delete enrollments and teacherSchedules in bulk
-     */
+    setProgress(80);
+    await Enrollment.deleteMany({ category: 'College' });
+    setProgress(85);
+    await ReportGrade.deleteMany({ category: 'College' });
+    setProgress(90);
+
+    if (data.deleteInstructor) {
+      await TeacherSchedule.deleteMany({ category: 'College' });
+    }
+    await StudentProfile.updateMany({ enrollStatus: 'Enrolled' }, { $set: { studentStatus: 'Continue', enrollStatus: '' } }, { new: true });
+    setProgress(95);
     const enrollmentTertiary = {
       open: false,
       schoolYear: '',
       semester: '',
     };
     await updateEnrollmentSetupByName('GODOY', { enrollmentTertiary });
-
+    setProgress(100);
     return { message: 'asd', status: 200 };
   } catch (error) {
     console.log('server e :', error);

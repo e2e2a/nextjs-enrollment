@@ -150,7 +150,6 @@ export const getStudentCurriculumByStudentIdAction = async (id: any): Promise<ge
 export const createStudentCurriculumAction = async (data: any) => {
   try {
     await dbConnect();
-    console.log(data)
     const studentP = await getStudentProfileById(data.studentId)
     if (!studentP) {
       return { error: 'Invalid Student Id.', status: 500 };
@@ -220,7 +219,6 @@ export const updateStudentCurriculumByIdAction = async (data: any) => {
 
 export const updateStudentCurriculumSubjectByIdAction = async (data: any) => {
   try {
-    console.log('data in e:', data);
     await dbConnect();
     const { CId, subjects } = data;
     //get all subjects
@@ -255,7 +253,6 @@ export const updateStudentCurriculumSubjectByIdAction = async (data: any) => {
     const existingSubjects = curriculumEntry ? curriculumEntry.subjectsFormat : [];
     
     const existingSubjectIds = existingSubjects.map((sf: any) => sf.subjectId.toString());
-console.log('existingSubjectIds: ', existingSubjectIds);
     // Determine which subjects need to be removed
     const subjectsToRemove = existingSubjects
       .filter((sf: any) => !subjects.includes(sf.subjectId.toString()))
@@ -268,7 +265,6 @@ console.log('existingSubjectIds: ', existingSubjectIds);
         order: existingSubjects.length + index + 1, // Assign new order
         subjectId: subjectId, // Use the subject ID directly
       }));
-      console.log('subjects to add', subjectsToAdd)
 
     // Perform the updates in separate operations to avoid conflicts
     // 1. Remove subjects not in the new list
