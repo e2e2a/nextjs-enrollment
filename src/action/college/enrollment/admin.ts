@@ -401,6 +401,8 @@ export const CollegeEndSemesterAction = async (data: any) => {
         // @ts-ignore
         course: enrollment.courseId.name,
         // @ts-ignore
+        courseCode: enrollment.courseId.courseCode,
+        // @ts-ignore
         blockType: {
           // @ts-ignore
           year: enrollment.blockTypeId?.year,

@@ -5,6 +5,7 @@ export interface IEnrollmentRecord extends Document {
   profileId: mongoose.Schema.Types.ObjectId;
 
   course: string;
+  courseCode: string;
   blockType: string;
   student: any;
   studentYear?: string;
@@ -30,6 +31,7 @@ const schema = new Schema<IEnrollmentRecord>(
       ref: 'StudentProfile',
     },
     course: { type: String },
+    courseCode: { type: String },
     blockType: {
       year: {
         type: String,

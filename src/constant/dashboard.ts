@@ -277,13 +277,24 @@ export const dashboardConfig: DashboardConfig = {
           ],
           icon: 'packageSearch',
         },
+        {
+          title: 'Recent Records',
+          i: [
+            {
+              title: 'Enrollment Records',
+              href: '/dean/enrollment/record/enrollment',
+              icon: 'eye',
+            },
+            // {
+            //   title: 'Instructor Sched. Records',
+            //   href: '/dean/enrollment/record/schedule',
+            //   icon: 'eye',
+            // },
+          ],
+          icon: 'packageSearch',
+        },
       ],
       icon: 'packageSearch',
-    },
-    {
-      title: 'Records',
-      href: '/',
-      icon: 'fileStack',
     },
     {
       title: 'Grades Report',
