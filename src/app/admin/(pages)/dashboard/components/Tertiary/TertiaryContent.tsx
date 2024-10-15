@@ -12,8 +12,12 @@ import TertiaryDialogEndSemester from './TertiaryDialogEndSemester';
 const TertiaryContent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
   const [enrollingStudents, setEnrollingStudents] = useState<any>([]);
+  const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
+  const [enrolledFirstYear, setEnrolledFirstYear] = useState<any>([]);
+  const [enrolledSecondYear, setEnrolledSecondYear] = useState<any>([]);
+  const [enrolledThirdYear, setEnrolledThirdYear] = useState<any>([]);
+  const [enrolledFourthYear, setEnrolledFourthYear] = useState<any>([]);
   const dataEnrolled = [
     { name: 'Jan', total: 0 },
     { name: 'Feb', total: 0 },
@@ -41,6 +45,14 @@ const TertiaryContent = () => {
         setEnrolledStudents(filteredEnrolled);
         const filteredEnrolling = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Pending');
         setEnrollingStudents(filteredEnrolling);
+        const filteredEnrolledFirstYear = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled' && enrollment.studentYear === '1st year');
+        setEnrolledFirstYear(filteredEnrolledFirstYear);
+        const filteredEnrolledSecondYear = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled' && enrollment.studentYear === '2nd year');
+        setEnrolledSecondYear(filteredEnrolledSecondYear);
+        const filteredEnrolledThirdYear = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled' && enrollment.studentYear === '3rd year');
+        setEnrolledThirdYear(filteredEnrolledThirdYear);
+        const filteredEnrolledFourthYear = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled' && enrollment.studentYear === '4th year');
+        setEnrolledFourthYear(filteredEnrolledFourthYear);
         // setBlocks(esData.blockTypes);
         setIsPageLoading(false);
       }
@@ -102,6 +114,7 @@ const TertiaryContent = () => {
               </CardContent>
             </Card>
           </div>
+          
           <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-7'></div>
           <Card className='col-span-4'>
             <CardHeader>
@@ -117,6 +130,56 @@ const TertiaryContent = () => {
               </ResponsiveContainer>
             </CardContent>
           </Card>
+          <div className='grid gap-4 md:grid-cols-2'>
+            <Card>
+              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+                <CardTitle className='text-sm font-medium'>Enrolling Student</CardTitle>
+                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
+                  <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
+                </svg>
+              </CardHeader>
+              <CardContent>
+                <p className='text-xs text-muted-foreground'>1st year</p>
+                <div className='text-2xl font-bold'>{enrolledFirstYear.length}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+                <CardTitle className='text-sm font-medium'>Enrolled Student</CardTitle>
+                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
+                  <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
+                </svg>
+              </CardHeader>
+              <CardContent>
+                <p className='text-xs text-muted-foreground'>2nd year</p>
+                <div className='text-2xl font-bold'>{enrolledSecondYear.length}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+                <CardTitle className='text-sm font-medium'>Enrolled Student</CardTitle>
+                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
+                  <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
+                </svg>
+              </CardHeader>
+              <CardContent>
+                <p className='text-xs text-muted-foreground'>3rd year</p>
+                <div className='text-2xl font-bold'>{enrolledThirdYear.length}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+                <CardTitle className='text-sm font-medium'>Enrolled Student</CardTitle>
+                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
+                  <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
+                </svg>
+              </CardHeader>
+              <CardContent>
+                <p className='text-xs text-muted-foreground'>4th year</p>
+                <div className='text-2xl font-bold'>{enrolledFourthYear.length}</div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
       )}
     </>
