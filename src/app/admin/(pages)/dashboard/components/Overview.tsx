@@ -1,65 +1,37 @@
 'use client';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
-const myinfo = [
-  {
-    user: 1,
-  },
-  {
-    user: 2,
-  },
-];
-const data = [
-  {
-    name: 'Jan',
-    total: 2 + 1000,
-  },
-  {
-    name: 'Feb',
-    total: myinfo.length ,
-  },
-  {
-    name: 'Mar',
-    total:  1000,
-  },
-  {
-    name: 'Apr',
-    total:  1000,
-  },
-  {
-    name: 'May',
-    total:  0,
-  },
-  {
-    name: 'Jun',
-    total: 0,
-  },
-  {
-    name: 'Jul',
-    total:  0,
-  },
-  {
-    name: 'Aug',
-    total:  0,
-  },
-  {
-    name: 'Sep',
-    total:  0,
-  },
-  {
-    name: 'Oct',
-    total:  0,
-  },
-  {
-    name: 'Nov',
-    total:  0,
-  },
-  {
-    name: 'Dec',
-    total:  0,
-  },
-];
 
-export function Overview() {
+interface IProps {
+  users: any
+}
+export function Overview({users}: IProps) {
+  console.log(users);
+  const data = [
+    { name: 'Jan', total: 0 },
+    { name: 'Feb', total: 0 },
+    { name: 'Mar', total: 0 },
+    { name: 'Apr', total: 0 },
+    { name: 'May', total: 0 },
+    { name: 'Jun', total: 0 },
+    { name: 'Jul', total: 0 },
+    { name: 'Aug', total: 0 },
+    { name: 'Sep', total: 0 },
+    { name: 'Oct', total: 0 },
+    { name: 'Nov', total: 0 },
+    { name: 'Dec', total: 0 },
+  ];
+  if (users && users.length > 0) {
+    const currentYear = new Date().getFullYear();
+    users.forEach((user: any) => {
+      const userDate = new Date(user.createdAt);
+      const monthIndex = userDate.getMonth(); // Get month index (0-11)
+
+      // Check if the year matches the current year
+      if (userDate.getFullYear() === currentYear) {
+        data[monthIndex].total += 1; // Increment the total for that month
+      }
+    });
+  }
   return (
     <ResponsiveContainer width='100%' height={350}>
       <BarChart data={data}>

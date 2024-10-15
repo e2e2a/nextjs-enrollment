@@ -6,9 +6,20 @@ import { createDeanProfile, getAllDeanProfile } from '@/services/deanProfile';
 import { createStudentProfile, deleteStudentProfileByUserId, getAllStudentProfile } from '@/services/studentProfile';
 import { createTeacherProfile, getAllTeacherProfile } from '@/services/teacherProfile';
 import { createTeacherSchedule } from '@/services/teacherSchedule';
-import { checkUserUsername, createUser, deleteUserByEmail, getUserByEmail, getUserByUsername } from '@/services/user';
+import { createUser, deleteUserByEmail, getAllUsers, getUserByEmail, getUserByUsername } from '@/services/user';
 import { getAllAdminProfileResponse, getAllDeanProfileResponse, getAllStudentProfileResponse, getAllTeacherProfileResponse } from '@/types';
 
+export const getAllUsersAction = async (): Promise<any> => {
+  try {
+    await dbConnect();
+    const users = await getAllUsers();
+    return { users: JSON.parse(JSON.stringify(users)), status: 200 };
+    // return studentProfile;
+  } catch (error) {
+    console.log('getStudentProfileBySessionId', error);
+    return { error: '', status: 500 };
+  }
+};
 export const getUserRoleStudentAction = async (): Promise<getAllStudentProfileResponse> => {
   try {
     await dbConnect();
@@ -66,7 +77,7 @@ export const adminCreateUserWithRoleAction = async (data: any) => {
     if (courseId) {
       course = await getCoursesById(courseId);
       if (!course) return { error: 'No course found.', status: 404 };
-      console.log('mycoursekljasd', course)
+      console.log('mycoursekljasd', course);
     }
     const createdU = await createUser({ email, username, role, emailVerified: new Date(Date.now()) }, password);
     if (!createdU) return { error: 'Error Creating User', status: 404 };

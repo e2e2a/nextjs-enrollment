@@ -55,13 +55,13 @@ const TertiaryDialogEndSemester = () => {
             <AlertDialogContent className='bg-white text-black'>
               <AlertDialogHeader>
                 <AlertDialogTitle>End Semester</AlertDialogTitle>
-                <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;This action will drop the selected subject from your enrollment. Please be aware that this may impact your academic progress.</AlertDialogDescription>
+                <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;This action will ended the semester. Please be aware that Students who have not received a grade will automatically be assigned an 'INC' (Incomplete).</AlertDialogDescription>
               </AlertDialogHeader>
               <div className='bg-[#ffd6d6] py-2 rounded-sm'>
                 <div className='text-red px-3 text-sm'>
                   <div className='font-bold flex gap-1 items-center'>
                     <Icons.warning className='h-4 w-4 font-bold mb-1' />
-                    <span className='text-sm font-medium'>Please review before submitted. </span>
+                    <span className='text-sm font-medium'>Review before submitted. </span>
                   </div>
                 </div>
               </div>

@@ -8,25 +8,12 @@ import { useAllEnrollmentQuery, useEnrollmentSetupQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 import TertiaryAlertDialog from './TertiaryAlertDialog';
 import TertiaryDialogEndSemester from './TertiaryDialogEndSemester';
-const user = {
-  name: 'John Doe',
-  email: 'johndoe@example.com',
-  phone: '1234567890',
-  address: '123 Main St',
-};
+
 const TertiaryContent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
   const [enrollingStudents, setEnrollingStudents] = useState<any>([]);
-  const myinfo = [
-    {
-      user: 1,
-    },
-    {
-      user: 2,
-    },
-  ];
   const dataEnrolled = [
     { name: 'Jan', total: 0 },
     { name: 'Feb', total: 0 },
@@ -72,6 +59,11 @@ const TertiaryContent = () => {
       }
     });
   }
+  /**
+   * @todo
+   * enrolledStudents
+   * filtered by year
+   */
   return (
     <>
       {isPageLoading ? (
@@ -79,7 +71,7 @@ const TertiaryContent = () => {
       ) : (
         <TabsContent value='tertiary' className='space-y-4'>
           <div className='grid gap-4 grid-cols-1 md:grid-cols-2'>
-            <div className=''>{!esData?.enrollmentSetup?.enrollmentTertiary || !esData?.enrollmentSetup?.enrollmentTertiary?.open ? <TertiaryDialog isPending={false} user={user} setIsOpen={setIsOpen} /> : <TertiaryAlertDialog />}</div>
+            <div className=''>{!esData?.enrollmentSetup?.enrollmentTertiary || !esData?.enrollmentSetup?.enrollmentTertiary?.open ? <TertiaryDialog isPending={false} setIsOpen={setIsOpen} /> : <TertiaryAlertDialog />}</div>
             {!esData?.enrollmentSetup?.enrollmentTertiary?.open && esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear && esData?.enrollmentSetup?.enrollmentTertiary?.semester && (
               <div className='w-full flex justify-start md:justify-end'>
                 <TertiaryDialogEndSemester />
@@ -113,7 +105,7 @@ const TertiaryContent = () => {
           <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-7'></div>
           <Card className='col-span-4'>
             <CardHeader>
-              <CardTitle>Overview</CardTitle>
+              <CardTitle>Enrolled Students</CardTitle>
             </CardHeader>
             <CardContent className='pl-2'>
               <ResponsiveContainer width='100%' height={350}>

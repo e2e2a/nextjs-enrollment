@@ -69,7 +69,7 @@ import {
 } from '@/action/college/enrollment/admin';
 import { createCollegeCourseBlockAction, getAllBlockTypeAction, getBlockTypeByIdAction } from '@/action/college/courses/blocks';
 import { createSubjectCollegeAction, getSubjectCategoryCollegeAction } from '@/action/college/subjects/admin';
-import { adminCreateUserWithRoleAction, getUserRoleAdminAction, getUserRoleDeanAction, getUserRoleStudentAction, getUserRoleTeachertAction } from '@/action/user';
+import { adminCreateUserWithRoleAction, getAllUsersAction, getUserRoleAdminAction, getUserRoleDeanAction, getUserRoleStudentAction, getUserRoleTeachertAction } from '@/action/user';
 import { createRoomAction, getAllRoomAction, getRoomByIdAction } from '@/action/rooms';
 import {
   createTeacherScheduleAction,
@@ -231,6 +231,15 @@ export const useNewPasswordMutation = () => {
 export const useUserNewPasswordMutation = () => {
   return useMutation<resetPasswordResponse, Error, z.infer<typeof NewPasswordValidator>>({
     mutationFn: async (data) => NewPassword(data),
+  });
+};
+
+export const useAllUsersQuery = () => {
+  return useQuery<any, Error>({
+    queryKey: ['AllUsers'],
+    queryFn: () => getAllUsersAction(),
+    retry: 0,
+    refetchOnWindowFocus: false,
   });
 };
 

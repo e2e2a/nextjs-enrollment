@@ -16,10 +16,9 @@ import { useUpdateEnrollmentSetupMutation } from '@/lib/queries';
 
 type IProps = {
   isPending: boolean;
-  user: any;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
-export function TertiaryDialog({ isPending, user, setIsOpen }: IProps) {
+export function TertiaryDialog({ isPending, setIsOpen }: IProps) {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   // const [isPending, setIsPending] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(false);

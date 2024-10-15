@@ -138,3 +138,13 @@ export const updateUserImageById = async (id: string, data: any) => {
     return null;
   }
 };
+
+export const getAllUsers = async () => {
+  try {
+    const user = await User.find().exec();
+    return user;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
