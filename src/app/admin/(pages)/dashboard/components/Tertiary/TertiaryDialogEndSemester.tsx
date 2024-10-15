@@ -55,7 +55,7 @@ const TertiaryDialogEndSemester = () => {
             <AlertDialogContent className='bg-white text-black'>
               <AlertDialogHeader>
                 <AlertDialogTitle>End Semester</AlertDialogTitle>
-                <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;This action will ended the semester. Please be aware that Students who have not received a grade will automatically be assigned an 'INC' (Incomplete).</AlertDialogDescription>
+                <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;This action will ended the semester. Please be aware that Students who have not received a grade will automatically be assigned an &apos;INC&apos; (Incomplete).</AlertDialogDescription>
               </AlertDialogHeader>
               <div className='bg-[#ffd6d6] py-2 rounded-sm'>
                 <div className='text-red px-3 text-sm'>
