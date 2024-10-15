@@ -362,7 +362,9 @@ export const CollegeEndSemesterAction = async (data: any) => {
           },
           days: sched.days,
           startTime: sched.startTime,
-          room: sched.roomId.roomName,
+          room: {
+            roomName: sched.roomId.roomName,
+          },
           endTime: sched.endTime,
           studentsInClass: <any>[],
         };
@@ -507,7 +509,7 @@ export const CollegeEndSemesterAction = async (data: any) => {
       } else {
         let newSubjects = [];
         for (const studentS of studentSubjects) {
-          console.log('studentSubjects', studentS)
+          console.log('studentSubjects', studentS);
           if (studentS.status === 'Approved') {
             newSubjects.push({
               subjectId: studentS.subject.id,

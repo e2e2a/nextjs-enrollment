@@ -135,14 +135,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.room.roomName,
-    id: 'semester',
-    header: 'Semester',
+    accessorFn: (row) => row.room?.roomName,
+    id: 'room',
+    header: 'Room',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.room.roomName}
+          {user?.room?.roomName}
         </div>
       );
     },

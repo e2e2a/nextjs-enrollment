@@ -15,9 +15,9 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (isEnError || !data) return;
     if (data) {
       if (data.teacherScheduleRecord) {
-        // console.log(data.teacherScheduleRecord);
-        // const filteredRooms = data?.rooms.filter((room: IRoom) => room.educationLevel === 'tertiary');
-        // setRooms(filteredRooms);
+        setIsPageLoading(false);
+      } else if (data.error) {
+        setIsError(true);
         setIsPageLoading(false);
       }
     }

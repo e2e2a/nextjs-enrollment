@@ -22,9 +22,10 @@ const LogoutButton = () => {
           case 200:
           case 201:
           case 203:
-            setTimeout(() => {
-              signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL, redirect: true });
-            }, 100);
+            // setTimeout(() => {
+            //   signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL, redirect: true });
+            // }, 100);
+            signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL, redirect: true });
             // setIsOpen(false);
             return;
           default:
