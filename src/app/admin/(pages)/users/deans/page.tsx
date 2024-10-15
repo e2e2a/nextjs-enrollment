@@ -24,7 +24,7 @@ export default function Page() {
         <LoaderPage />
       ) : (
         <div className='w-full rounded-md flex flex-col gap-4 items-center px-6 py-8 justify-center bg-white'>
-          <h1 className='mb-6 text-3xl font-bold'>All User Deans</h1>
+          <h1 className='mb-6 text-3xl font-bold'>Deans Management</h1>
           <DataTable columns={columns} data={data?.deans as IDeanProfile[]} />
         </div>
       )}

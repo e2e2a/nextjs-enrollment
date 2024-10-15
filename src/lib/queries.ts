@@ -41,7 +41,7 @@ import {
 import { fetchAllUsers } from './api';
 import { EnrollmentApprovedStep2, NewPasswordValidator, SigninValidator, SignupValidator, StudentProfileValidator } from './validators/Validator';
 import { z } from 'zod';
-import { signInAction, signUpAction } from '@/action/auth';
+import { signInAction, signOutAction, signUpAction } from '@/action/auth';
 import { checkResetPasswordToken, checkToken } from '@/action/token';
 import { verificationCodeProcess, verificationCodeResend } from '@/action/verification';
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
@@ -158,10 +158,11 @@ export const useCollegeEndSemesterMutation = () => {
 //   },
 // });
 export const useSignInMutation = () => {
+  const queryClient = useQueryClient();
   return useMutation<SignInResponse, Error, z.infer<typeof SigninValidator>>({
     mutationFn: async (data) => signInAction(data),
     onSuccess: () => {
-      // Invalidate the 'userProfile' query to trigger a refetch
+      queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
     },
   });
 };
@@ -171,8 +172,17 @@ export const useSignUpMutation = () => {
   return useMutation<SignUpResponse, Error, z.infer<typeof SignupValidator>>({
     mutationFn: async (data) => signUpAction(data),
     onSuccess: () => {
-      // Invalidate the 'userProfile' query to trigger a refetch
       queryClient.invalidateQueries({ queryKey: ['Students'] });
+    },
+  });
+};
+
+export const useSignOutMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, any>({
+    mutationFn: async (data) => signOutAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
     },
   });
 };

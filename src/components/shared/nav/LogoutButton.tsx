@@ -2,15 +2,39 @@
 import React, { useState } from 'react';
 import { Button } from '../../ui/button';
 import { Icons } from '../Icons';
-import { signOut } from 'next-auth/react';
-import { updateUserLogout } from '@/services/user';
+import { signOut, useSession } from 'next-auth/react';
 import { useLoading } from './logout/LoadingContext';
+import { useSignOutMutation } from '@/lib/queries';
+import { makeToastError } from '@/lib/toast/makeToast';
 
 const LogoutButton = () => {
+  const { data } = useSession();
   const { setLoading } = useLoading();
+  const mutation = useSignOutMutation();
   const handleClick = () => {
     setLoading(true);
-    signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL, redirect: true });
+    const dataa = {
+      userId: data?.user.id,
+    };
+    mutation.mutate(dataa, {
+      onSuccess: (res: any) => {
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            setTimeout(() => {
+              signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL, redirect: true });
+            }, 100);
+            // setIsOpen(false);
+            return;
+          default:
+            setLoading(false);
+            makeToastError(res.error);
+            return;
+        }
+      },
+      onSettled: () => {},
+    });
     // setLoading(false);
   };
   return (
