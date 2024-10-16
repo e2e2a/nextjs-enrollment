@@ -630,6 +630,7 @@ export const useEnrollmentStep1Mutation = () => {
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: ['userProfile'] });
       queryClient.refetchQueries({ queryKey: ['Enrollment'] });
+      queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
     },
   });
 };

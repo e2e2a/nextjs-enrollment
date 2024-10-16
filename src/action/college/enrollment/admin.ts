@@ -11,7 +11,7 @@ import { createPDF } from '../../createPdf';
 import { getBlockTypeById } from '@/services/blockType';
 import { getSchoolYearByYear } from '@/services/schoolYear';
 import StudentProfile from '@/models/StudentProfile';
-import { updateStudentProfileById } from '@/services/studentProfile';
+import { getAllStudentProfile, updateStudentProfileById } from '@/services/studentProfile';
 import EnrollmentRecord from '@/models/EnrollmentRecord';
 import { getAllTeacherSchedule } from '@/services/teacherSchedule';
 import TeacherScheduleRecord from '@/models/TeacherScheduleRecord';
@@ -22,6 +22,7 @@ import ReportGrade from '@/models/ReportGrade';
 import { setProgress } from './helpers/progress';
 import Enrollment from '@/models/Enrollment';
 import TeacherSchedule from '@/models/TeacherSchedule';
+import Course from '@/models/Course';
 // import { verificationTemplate } from './emailTemplate/verificationTemplate';
 export const getAllEnrollmentAction = async (category: string): Promise<getEnrollmentResponse> => {
   try {
@@ -531,6 +532,17 @@ export const CollegeEndSemesterAction = async (data: any) => {
       enrollmentRecords.push(processedRecord);
     }
     setProgress(70);
+
+    /**
+     * @new added
+     */
+    const courses = await Course.find({ category: 'College' }).select('_id');
+    const courseIds = courses.map((course) => course._id);
+    /**
+     * @new added
+     */
+    await StudentProfile.updateMany({ courseId: { $in: courseIds }, studentStatus: 'Continue', enrollStatus: { $in: ['', 'Pending'] } }, { $set: { studentStatus: 'Returning', enrollStatus: '' } }, { new: true });
+    await StudentProfile.updateMany({ courseId: { $in: courseIds }, studentStatus: 'New Student', enrollStatus: 'Pending' }, { $set: { enrollStatus: '' } }, { new: true });
     // Use insertMany for bulk insertion
     await TeacherScheduleRecord.insertMany(teacherSchededRecord);
     setProgress(75);
@@ -544,7 +556,10 @@ export const CollegeEndSemesterAction = async (data: any) => {
     if (data.deleteInstructor) {
       await TeacherSchedule.deleteMany({ category: 'College' });
     }
-    await StudentProfile.updateMany({ enrollStatus: 'Enrolled' }, { $set: { studentStatus: 'Continue', enrollStatus: '' } }, { new: true });
+    /**
+     * @new added
+     */
+    await StudentProfile.updateMany({ courseId: { $in: courseIds }, enrollStatus: 'Enrolled' }, { $set: { studentStatus: 'Continue', enrollStatus: '' } }, { new: true });
     setProgress(95);
     const enrollmentTertiary = {
       open: false,

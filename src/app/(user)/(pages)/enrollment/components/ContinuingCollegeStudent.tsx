@@ -3,36 +3,39 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TabsContent } from '@/components/ui/tabs';
 import React, { useEffect, useState } from 'react';
-import { SelectInput } from './SelectInput';
 import { Form } from '@/components/ui/form';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EnrollmentStep1 } from '@/lib/validators/Validator';
-import { useEnrollmentStep1Mutation, useProfileQuery } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
-import { selectType, studentYearData } from '@/constant/enrollment';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import Image from 'next/image';
 import Input from './Input';
+import { EnrollmentContinuingFormValidator } from '@/lib/validators/StudentValidator';
+import { useEnrollmentContinuingStep0Mutation } from '@/lib/queries/student';
 type IProps = {
   profile: any;
   enrollmentSetup: any;
 };
 const ContinuingCollegeStudent = ({ profile, enrollmentSetup }: IProps) => {
   const { data: s } = useSession();
-  const mutation = useEnrollmentStep1Mutation();
-  const [studentYear, setStudentYear] = useState('');
+  const mutation = useEnrollmentContinuingStep0Mutation();
 
-  const form = useForm<z.infer<typeof EnrollmentStep1>>({
-    resolver: zodResolver(EnrollmentStep1),
+  const form = useForm<z.infer<typeof EnrollmentContinuingFormValidator>>({
+    resolver: zodResolver(EnrollmentContinuingFormValidator),
     defaultValues: {
       studentStatus: '',
       studentYear: '',
       studentSemester: '',
       schoolYear: '',
-      FathersLastName: '',
-      FathersFirstName: '',
+
+      numberStreet: '',
+      barangay: '',
+      district: '',
+      cityMunicipality: '',
+      province: '',
+      contact: '',
+      civilStatus: '',
     },
   });
 
@@ -62,8 +65,7 @@ const ContinuingCollegeStudent = ({ profile, enrollmentSetup }: IProps) => {
     }
   }, [profile, form, enrollmentSetup]);
 
-  const onSubmit: SubmitHandler<z.infer<typeof EnrollmentStep1>> = async (data) => {
-    data.courseCode = data.courseCode.toLowerCase();
+  const onSubmit: SubmitHandler<z.infer<typeof EnrollmentContinuingFormValidator>> = async (data) => {
     data.studentYear = data.studentYear.toLowerCase();
     data.studentSemester = data.studentSemester.toLowerCase();
     data.schoolYear = data.schoolYear.toLowerCase();
@@ -80,7 +82,7 @@ const ContinuingCollegeStudent = ({ profile, enrollmentSetup }: IProps) => {
           case 201:
           case 203:
             // setMessage(res?.message);
-            makeToastSucess(`You are enrolling to this course ${data.courseCode.toUpperCase()}`);
+            makeToastSucess(`Enrollment has been processed.`);
             return;
           default:
             // setIsPending(false);
@@ -128,15 +130,15 @@ const ContinuingCollegeStudent = ({ profile, enrollmentSetup }: IProps) => {
                   <h1 className='font-semibold text-[14px] sm:text-[16px] uppercase'>Update Your Personal Information</h1>
                   <div className='grid sm:grid-cols-2 gap-4 w-full'>
                     <div className='flex flex-col gap-2'>
-                      <Input label={`barangay:`} type='text' form={form} name={'FathersLastName'} />
-                      <Input label={`district:`} type='text' form={form} name={'FathersFirstName'} />
-                      <Input label={`cityMunicipality:`} type='text' form={form} name={'FathersFirstName'} />
-                      <Input label={`province:`} type='text' form={form} name={'FathersFirstName'} />
+                      <Input label={`Number, Street:`} type='text' form={form} name={'numberStreet'} />
+                      <Input label={`Barangay:`} type='text' form={form} name={'barangay'} />
+                      <Input label={`District:`} type='text' form={form} name={'district'} />
+                      <Input label={`City/Municipality:`} type='text' form={form} name={'cityMunicipality'} />
                     </div>
                     <div className='flex flex-col gap-2'>
-                      <Input label={`region:`} type='text' form={form} name={'FathersFirstName'} />
-                      <Input label={`Phone Number:`} type='text' form={form} name={'FathersLastName'} />
-                      <Input label={`Civil Status:`} type='text' form={form} name={'FathersFirstName'} />
+                      <Input label={`Province:`} type='text' form={form} name={'province'} />
+                      <Input label={`Contact No:`} type='text' form={form} name={'contact'} />
+                      <Input label={`Civil Status:`} type='text' form={form} name={'civilStatus'} />
                     </div>
                   </div>
                 </div>

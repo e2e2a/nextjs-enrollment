@@ -9,6 +9,7 @@ import { storage } from '@/firebase';
 import StudentProfile from '@/models/StudentProfile';
 import Enrollment from '@/models/Enrollment';
 import TeacherSchedule from '@/models/TeacherSchedule';
+import { getStudentEnrollmentRecordByProfileId } from '@/services/enrollmentRecord';
 
 export const createEnrollmentAction = async (data: any): Promise<getEnrollmentResponse> => {
   try {
@@ -49,7 +50,7 @@ export const createEnrollmentAction = async (data: any): Promise<getEnrollmentRe
 
     // const [fileUrl, photoUrl] = await Promise.all([getDownloadURL(fileSnapshot.ref), getDownloadURL(photoSnapshot.ref)]);
     const dataToUpdateProfile = {
-      courseId: data.courseId,
+      courseId: course._id,
       psaUrl: filePsa.name,
       photoUrl: photo.name,
       goodMoralUrl: fileGoodMoral.name,
@@ -82,6 +83,60 @@ export const createEnrollmentAction = async (data: any): Promise<getEnrollmentRe
      * create a message notification
      * pop it up
      */
+    return { message: 'hello world success', status: 201 };
+  } catch (error) {
+    console.log(error);
+    return { error: 'hello world error', status: 500 };
+  }
+};
+
+export const createEnrollmentContinuingAction = async (data: any): Promise<getEnrollmentResponse> => {
+  try {
+    await dbConnect();
+    const checkEnrollment = await getEnrollmentByUserId(data.userId);
+    if (checkEnrollment) return { error: 'You are already Enrolled/Enrolling.', status: 409 };
+    const getProfile = await getStudentProfileByUserId(data.userId);
+    if (!getProfile) return { error: 'You are enrolling without a profile.', status: 403 };
+
+    data.profileId = getProfile._id;
+    data.courseId = getProfile.courseId._id;
+    data.onProcess = true;
+    data.category = 'College';
+    console.log('getProfile', getProfile);
+
+    const cc = await createEnrollment(data);
+    if (!cc) return { message: 'Something went wrong.', status: 500 };
+    /**
+     * @todo check if  studentStatus: returning then get all the records and do the logic compare year and semester
+     */
+    if (data.studentStatus === 'Returning') {
+      const record = await getStudentEnrollmentRecordByProfileId(getProfile._id);
+      if (!record) return { error: 'No record found', status: 403 };
+      if (getProfile.studentSemester === data.studentSemester) {
+        return { message: 'Returning student: needs to wait for the next available enrollment period', status: 403 };
+      }
+      // else{
+      /**
+       * @todo if possible we can create here a check year from semester
+       */
+      // }
+    }
+    const dataToUpdateProfile = {
+      studentYear: data.studentYear,
+      studentSemester: data.studentSemester,
+      enrollStatus: 'Pending',
+
+      numberStreet: data.numberStreet,
+      barangay: data.barangay,
+      district: data.district,
+      cityMunicipality: data.cityMunicipality,
+      province: data.province,
+      contact: data.contact,
+      civilStatus: data.civilStatus,
+    };
+    const updatedProfile = await StudentProfile.findByIdAndUpdate(getProfile._id, dataToUpdateProfile);
+    if (!updatedProfile) return { message: 'Something went wrong.', status: 500 };
+
     return { message: 'hello world success', status: 201 };
   } catch (error) {
     console.log(error);
@@ -175,7 +230,7 @@ export const updateAddSubjectAction = async (data: any) => {
       for (const existStudentSched of enrollment.studentSubjects) {
         if (existStudentSched.teacherScheduleId._id.toString() === item.teacherScheduleId) {
           return { error: 'Some Teacher Schedule already exist in the student schedules.', status: 409 };
-        } 
+        }
       }
     }
     /**
@@ -200,7 +255,7 @@ const updateStudentSched = async (blockTypeId: any, data: any) => {
       await Enrollment.findByIdAndUpdate(
         blockTypeId,
         // @ts-ignore
-        { $addToSet: { studentSubjects: { teacherScheduleId: item.teacherScheduleId, profileId: enrollment.profileId._id, status: 'Pending', request: 'add', requestStatusInDean: 'Pending', requestStatusInRegistrar: 'Pending', requestStatus: 'Pending'} } }, // Add teacherScheduleId to blockSubjects
+        { $addToSet: { studentSubjects: { teacherScheduleId: item.teacherScheduleId, profileId: enrollment.profileId._id, status: 'Pending', request: 'add', requestStatusInDean: 'Pending', requestStatusInRegistrar: 'Pending', requestStatus: 'Pending' } } }, // Add teacherScheduleId to blockSubjects
         { new: true }
       );
     }

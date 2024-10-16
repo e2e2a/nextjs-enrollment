@@ -82,7 +82,7 @@ const schema = new Schema<IEnrollment>(
     studentStatus: {
       type: String,
       default: 'New Student',
-      enum: ['New Student', 'Continue', 'Transferee'],
+      enum: ['New Student', 'Continue', 'Transferee', 'Returning'],
     },
     // onAccepted: { type: String, default: 'Accepted', enum: ['Accepted', 'Decline'] },
 

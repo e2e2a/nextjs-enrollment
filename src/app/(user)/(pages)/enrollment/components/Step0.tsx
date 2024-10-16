@@ -187,30 +187,29 @@ const Step0 = ({ search, enrollmentSetup }: IProps) => {
       userId: s?.user.id,
       formData: formData,
     };
-    console.log('dataa', dataa);
-    // mutation.mutate(dataa, {
-    //   onSuccess: (res) => {
-    //     switch (res.status) {
-    //       case 200:
-    //       case 201:
-    //       case 203:
-    //         console.log(res);
-    //         // setMessage(res?.message);
-    //         // return (window.location.href = '/');
-    //         // return (window.location.reload());
-    //         makeToastSucess(`You are enrolling to this course ${data.courseCode.toUpperCase()}`);
-    //         return;
-    //       default:
-    //         // setIsPending(false);
-    //         // setMessage(res.error);
-    //         // setTypeMessage('error');
-    //         return;
-    //     }
-    //   },
-    //   // onSettled: () => {
-    //   //   setIsPending(false);
-    //   // },
-    // });
+    mutation.mutate(dataa, {
+      onSuccess: (res) => {
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            console.log(res);
+            // setMessage(res?.message);
+            // return (window.location.href = '/');
+            // return (window.location.reload());
+            makeToastSucess(`You are enrolling to this course ${data.courseCode.toUpperCase()}`);
+            return;
+          default:
+            // setIsPending(false);
+            // setMessage(res.error);
+            // setTypeMessage('error');
+            return;
+        }
+      },
+      // onSettled: () => {
+      //   setIsPending(false);
+      // },
+    });
   };
 
   const handleDeleteEnrollment = (EId: any) => {
