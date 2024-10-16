@@ -23,7 +23,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       // add here
     },
     async linkAccount({ user, profile }) {
-      // await dbConnect();
+      await dbConnect();
       await User.findByIdAndUpdate(user.id, {
         emailVerified: new Date(),
         lastLogin: new Date(),
