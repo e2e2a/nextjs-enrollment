@@ -11,9 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { EnrollmentStep1 } from '@/lib/validators/Validator';
 import { useCourseQuery, useEnrollmentDeleteMutation, useEnrollmentStep1Mutation } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Icons } from '@/components/shared/Icons';
-import { selectType, studentSemesterData, studentYearData } from '@/constant/enrollment';
+import { selectType, studentYearData } from '@/constant/enrollment';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import FileBirth from './FileBirth';
 import Photo from './Photo';
@@ -23,9 +21,9 @@ import Image from 'next/image';
 import Input from './Input';
 type IProps = {
   search: any;
-  enrollment: any;
+  enrollmentSetup: any;
 };
-const Step0 = ({ search }: IProps) => {
+const Step0 = ({ search, enrollmentSetup }: IProps) => {
   const [photoPreview, setPhotoPreview] = useState<File | null>(null);
   const [photoError, setPhotoError] = useState('');
   const PhotoInputRef = useRef<HTMLInputElement>(null);
@@ -45,6 +43,7 @@ const Step0 = ({ search }: IProps) => {
   const [isUploading, setIsUploading] = useState(false);
   const { data: s } = useSession();
   const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
+  
   useEffect(() => {
     if (isCoursesError || !res || !res.courses) {
       return;
@@ -143,8 +142,8 @@ const Step0 = ({ search }: IProps) => {
       courseCode: search !== null ? search.toLowerCase() : '',
       studentStatus: '',
       studentYear: '',
-      studentSemester: '1st Semester',
-      schoolYear: 'SY2024-2025',
+      studentSemester: '',
+      schoolYear: '',
 
       primarySchoolName: '',
       primarySchoolYear: '',
@@ -164,6 +163,10 @@ const Step0 = ({ search }: IProps) => {
       MothersContact: '',
     },
   });
+  useEffect(() => {
+    form.setValue('studentSemester', enrollmentSetup.enrollmentTertiary.semester);
+    form.setValue('schoolYear', enrollmentSetup.enrollmentTertiary.schoolYear);
+  }, [form, enrollmentSetup]);
   const onSubmit: SubmitHandler<z.infer<typeof EnrollmentStep1>> = async (data) => {
     const formData = new FormData();
     if (!filePreview) return setFileError('PSA Birth is required.');
@@ -184,31 +187,30 @@ const Step0 = ({ search }: IProps) => {
       userId: s?.user.id,
       formData: formData,
     };
-    console.log(dataa);
-
-    mutation.mutate(dataa, {
-      onSuccess: (res) => {
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            console.log(res);
-            // setMessage(res?.message);
-            // return (window.location.href = '/');
-            // return (window.location.reload());
-            makeToastSucess(`You are enrolling to this course ${data.courseCode.toUpperCase()}`);
-            return;
-          default:
-            // setIsPending(false);
-            // setMessage(res.error);
-            // setTypeMessage('error');
-            return;
-        }
-      },
-      // onSettled: () => {
-      //   setIsPending(false);
-      // },
-    });
+    console.log('dataa', dataa);
+    // mutation.mutate(dataa, {
+    //   onSuccess: (res) => {
+    //     switch (res.status) {
+    //       case 200:
+    //       case 201:
+    //       case 203:
+    //         console.log(res);
+    //         // setMessage(res?.message);
+    //         // return (window.location.href = '/');
+    //         // return (window.location.reload());
+    //         makeToastSucess(`You are enrolling to this course ${data.courseCode.toUpperCase()}`);
+    //         return;
+    //       default:
+    //         // setIsPending(false);
+    //         // setMessage(res.error);
+    //         // setTypeMessage('error');
+    //         return;
+    //     }
+    //   },
+    //   // onSettled: () => {
+    //   //   setIsPending(false);
+    //   // },
+    // });
   };
 
   const handleDeleteEnrollment = (EId: any) => {
@@ -239,7 +241,7 @@ const Step0 = ({ search }: IProps) => {
           <CardTitle className=''>
             <div className='flex flex-col justify-center gap-y-1 items-center'>
               <div className=''>
-                <Image src={'/images/logo1.png'} className='w-auto rounded-full' priority width={65} height={65} alt='nothing to say' />
+                <Image src={'/images/logo1.png'} className='w-auto rounded-full' priority width={75} height={75} alt='nothing to say' />
               </div>
               <div className='text-center lg:text-left font-poppins tracking-tight'>Online Enrollment Form</div>
             </div>

@@ -14,13 +14,13 @@ import Congrats from './Congrats';
 import { useEnrollmentSetupQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 import Open from './EnrollmentsStatus/Open';
+import ContinuingCollegeStudent from './ContinuingCollegeStudent';
 type IProps = {
   search: any;
   enrollment: any;
   profile: any;
 };
 const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
-  // if (!enrollment) return;
   const [value, setValue] = useState('');
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data: esData, isLoading: esLoading, isError: esError } = useEnrollmentSetupQuery();
@@ -35,7 +35,7 @@ const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
       return;
     }
   }, [esData, esError]);
-  console.log('dataeasd', esData?.enrollmentSetup?.enrollmentTertiary.open);
+
   useEffect(() => {
     if (!enrollment) return setValue('0');
     if (enrollment && enrollment.step) return setValue(enrollment.step as string);
@@ -63,8 +63,8 @@ const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
 
           <Tabs value={`${value}`} className='w-full gap-4 '>
             {!enrollment && !esData?.enrollmentSetup?.enrollmentTertiary.open && <Open es={esData?.enrollmentSetup?.enrollmentTertiary}/>}
-            {esData?.enrollmentSetup?.enrollmentTertiary.open && (!enrollment && profile.studentStatus === 'New Student' && profile.enrollStatus !== 'Enrolled') && <Step0 search={search} enrollment={enrollment} /> }
-            {(!enrollment && profile.studentStatus === 'Continue' && profile.enrollStatus !== 'Enrolled') && <Step0 search={search} enrollment={enrollment} />}
+            {esData?.enrollmentSetup?.enrollmentTertiary.open && (!enrollment && profile.studentStatus === 'New Student' && profile.enrollStatus !== 'Enrolled') && <Step0 search={search} enrollmentSetup={esData.enrollmentSetup} /> }
+            {esData?.enrollmentSetup?.enrollmentTertiary.open && (!enrollment && profile.studentStatus === 'Continue' && profile.enrollStatus !== 'Enrolled') && <ContinuingCollegeStudent profile={profile} enrollmentSetup={esData.enrollmentSetup} />}
             {enrollment && profile.enrollStatus === 'Pending' && (
               <>
                 <Step1 search={search} enrollment={enrollment} />

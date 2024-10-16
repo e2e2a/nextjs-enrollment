@@ -5,7 +5,6 @@ interface IProps {
   users: any
 }
 export function Overview({users}: IProps) {
-  console.log(users);
   const data = [
     { name: 'Jan', total: 0 },
     { name: 'Feb', total: 0 },

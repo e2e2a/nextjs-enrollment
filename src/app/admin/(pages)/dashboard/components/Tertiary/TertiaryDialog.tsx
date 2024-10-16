@@ -15,10 +15,11 @@ import { SelectInput } from '../SelectInputs';
 import { useUpdateEnrollmentSetupMutation } from '@/lib/queries';
 
 type IProps = {
+  enrollmentSetup: any;
   isPending: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
-export function TertiaryDialog({ isPending, setIsOpen }: IProps) {
+export function TertiaryDialog({ enrollmentSetup, isPending, setIsOpen }: IProps) {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   // const [isPending, setIsPending] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(false);
@@ -39,14 +40,37 @@ export function TertiaryDialog({ isPending, setIsOpen }: IProps) {
     const dataa = {
       enrollmentTertiary: { open: true, semester: data.semester, schoolYear: data.schoolYear },
     };
-    console.log(dataa)
     mutation.mutate(dataa, {
       onSuccess: (res: any) => {
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            makeToastSucess(res.message);
+            makeToastSucess('Enrollment has been Opened.');
+            return;
+          default:
+            // setIsPending(false);
+            makeToastError(res.error);
+            return;
+        }
+      },
+      onSettled: () => {
+        setIsDialogOpen(false);
+      },
+    });
+  };
+  const actionFormOpenSubmit = () => {
+    setIsOpen(false);
+    const dataa = {
+      enrollmentTertiary: { open: true },
+    };
+    mutation.mutate(dataa, {
+      onSuccess: (res: any) => {
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            makeToastSucess('Enrollment is Re-Opened.');
             return;
           default:
             // setIsPending(false);
@@ -61,85 +85,123 @@ export function TertiaryDialog({ isPending, setIsOpen }: IProps) {
   };
 
   return (
-    <Dialog onOpenChange={setIsDialogOpen} open={isDialogOpen}>
-      <DialogTrigger asChild>
-        <Button size={'sm'} className={'w-auto focus-visible:ring-0 flex mb-2 bg-transparent bg-green-500 px-2 py-0 gap-x-1 justify-start text-neutral-50 font-medium tracking-tight'}>
-          <Icons.graduationCap className='h-6 w-6' />
-          Open/Start Enrollment
-        </Button>
-      </DialogTrigger>
-      <DialogContent
-        className='sm:max-w-md w-full bg-white focus-visible:ring-0 '
-        onOpenAutoFocus={(e) => e.preventDefault()}
-        onInteractOutside={(e) => {
-          e.preventDefault();
-        }}
-      >
-        <DialogHeader>
-          <DialogTitle className='flex flex-col space-y-1'>
-            <span>Complete Current Step</span>{' '}
-          </DialogTitle>
-          <DialogDescription>To confirm the enrollee, please fill in the required input indicating the type of block assigned to them.</DialogDescription>
-        </DialogHeader>
-
-        <Form {...form}>
-          <form action='' method='post' className='gap-4 flex flex-col'>
-            {loader && (
-              <div className=' absolute inset-0 flex justify-center top-0 items-center bg-transparent z-50 select-none'>
-                <div className='flex flex-col items-center'>
-                  <Image src='/icons/loader.svg' alt='loader' width={48} height={48} priority className='animate-spin' />
-                  <p className='mt-4 text-gray-700'>Loading...</p>
-                </div>
-              </div>
-            )}
-            <div className='flex flex-col text-sm'>
-              <span>
-                <span className='text-orange-400'>Format</span>: SY1999-2000
-              </span>
-            </div>
-            <FormField
-              control={form.control}
-              name={'schoolYear'}
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className='relative bg-slate-50 rounded-lg'>
-                      <input
-                        type={'text'}
-                        id={'schoolYear'}
-                        className={` uppercase block rounded-xl px-5 pb-2 pt-7 w-full text-sm bg-slate-50 border border-gray-200 appearance-nonefocus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom`}
-                        onDragStart={(e) => e.preventDefault()}
-                        placeholder=''
-                        maxLength={11}
-                        {...field}
-                      />
-
-                      <label
-                        htmlFor={'schoolYear'}
-                        className='pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'
-                      >
-                        {'School year'}
-                      </label>
-                    </div>
-                  </FormControl>
-                  <FormMessage className='text-red pl-2' />
-                </FormItem>
-              )}
-            />
-            <SelectInput name={'semester'} selectItems={studentSemesterData} form={form} label={'Select Semester:'} placeholder={'Select Semester'} />
-          </form>
-        </Form>
-        <DialogFooter className='justify-end flex flex-row'>
-          <Button type='submit' onClick={form.handleSubmit(actionFormSubmit)} variant='secondary'>
-            Submit
-          </Button>
-          <DialogClose asChild>
-            <Button type='button' variant='secondary'>
-              Close
+    <>
+      {(enrollmentSetup.enrollmentTertiary.schoolYear && enrollmentSetup.enrollmentTertiary.semester) ? (
+        <Dialog onOpenChange={setIsDialogOpen} open={isDialogOpen}>
+          <DialogTrigger asChild>
+            <Button size={'sm'} className={'w-auto focus-visible:ring-0 flex mb-2 bg-transparent bg-green-500 px-2 py-0 gap-x-1 justify-start text-neutral-50 font-medium tracking-tight'}>
+              <Icons.graduationCap className='h-6 w-6' />
+              Open/Start Enrollment
             </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </DialogTrigger>
+          <DialogContent
+            className='sm:max-w-md w-full bg-white focus-visible:ring-0 '
+            onOpenAutoFocus={(e) => e.preventDefault()}
+            onInteractOutside={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <DialogHeader>
+              <DialogTitle className='flex flex-col space-y-1'>
+                <span>Complete Current Step</span>{' '}
+              </DialogTitle>
+              <DialogDescription>The semester and school year have already been configured. Are you sure you want to reopen college enrollment?</DialogDescription>
+            </DialogHeader>
+
+            <DialogFooter className='justify-end flex flex-row'>
+              <Button type='submit' onClick={() => actionFormOpenSubmit()} variant='secondary'>
+                Submit
+              </Button>
+              <DialogClose asChild>
+                <Button type='button' variant='secondary'>
+                  Close
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <Dialog onOpenChange={setIsDialogOpen} open={isDialogOpen}>
+          <DialogTrigger asChild>
+            <Button size={'sm'} className={'w-auto focus-visible:ring-0 flex mb-2 bg-transparent bg-green-500 px-2 py-0 gap-x-1 justify-start text-neutral-50 font-medium tracking-tight'}>
+              <Icons.graduationCap className='h-6 w-6' />
+              Open/Start Enrollment
+            </Button>
+          </DialogTrigger>
+          <DialogContent
+            className='sm:max-w-md w-full bg-white focus-visible:ring-0 '
+            onOpenAutoFocus={(e) => e.preventDefault()}
+            onInteractOutside={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <DialogHeader>
+              <DialogTitle className='flex flex-col space-y-1'>
+                <span>Complete Current Step</span>{' '}
+              </DialogTitle>
+              <DialogDescription>To confirm the enrollee, please fill in the required input indicating the type of block assigned to them.</DialogDescription>
+            </DialogHeader>
+
+            <Form {...form}>
+              <form action='' method='post' className='gap-4 flex flex-col'>
+                {loader && (
+                  <div className=' absolute inset-0 flex justify-center top-0 items-center bg-transparent z-50 select-none'>
+                    <div className='flex flex-col items-center'>
+                      <Image src='/icons/loader.svg' alt='loader' width={48} height={48} priority className='animate-spin' />
+                      <p className='mt-4 text-gray-700'>Loading...</p>
+                    </div>
+                  </div>
+                )}
+                <div className='flex flex-col text-sm'>
+                  <span>
+                    <span className='text-orange-400'>Format</span>: SY1999-2000
+                  </span>
+                </div>
+                <FormField
+                  control={form.control}
+                  name={'schoolYear'}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className='relative bg-slate-50 rounded-lg'>
+                          <input
+                            type={'text'}
+                            id={'schoolYear'}
+                            className={` uppercase block rounded-xl px-5 pb-2 pt-7 w-full text-sm bg-slate-50 border border-gray-200 appearance-nonefocus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom`}
+                            onDragStart={(e) => e.preventDefault()}
+                            placeholder=''
+                            maxLength={11}
+                            {...field}
+                          />
+
+                          <label
+                            htmlFor={'schoolYear'}
+                            className='pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'
+                          >
+                            {'School year'}
+                          </label>
+                        </div>
+                      </FormControl>
+                      <FormMessage className='text-red pl-2' />
+                    </FormItem>
+                  )}
+                />
+                <SelectInput name={'semester'} selectItems={studentSemesterData} form={form} label={'Select Semester:'} placeholder={'Select Semester'} />
+              </form>
+            </Form>
+            <DialogFooter className='justify-end flex flex-row'>
+              <Button type='submit' onClick={form.handleSubmit(actionFormSubmit)} variant='secondary'>
+                Submit
+              </Button>
+              <DialogClose asChild>
+                <Button type='button' variant='secondary'>
+                  Close
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
   );
 }

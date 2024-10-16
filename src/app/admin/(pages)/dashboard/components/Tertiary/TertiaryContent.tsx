@@ -83,7 +83,7 @@ const TertiaryContent = () => {
       ) : (
         <TabsContent value='tertiary' className='space-y-4'>
           <div className='grid gap-4 grid-cols-1 md:grid-cols-2'>
-            <div className=''>{!esData?.enrollmentSetup?.enrollmentTertiary || !esData?.enrollmentSetup?.enrollmentTertiary?.open ? <TertiaryDialog isPending={false} setIsOpen={setIsOpen} /> : <TertiaryAlertDialog />}</div>
+            <div className=''>{!esData?.enrollmentSetup?.enrollmentTertiary || !esData?.enrollmentSetup?.enrollmentTertiary?.open ? <TertiaryDialog isPending={false} setIsOpen={setIsOpen} enrollmentSetup={esData.enrollmentSetup} /> : <TertiaryAlertDialog />}</div>
             {!esData?.enrollmentSetup?.enrollmentTertiary?.open && esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear && esData?.enrollmentSetup?.enrollmentTertiary?.semester && (
               <div className='w-full flex justify-start md:justify-end'>
                 <TertiaryDialogEndSemester />
