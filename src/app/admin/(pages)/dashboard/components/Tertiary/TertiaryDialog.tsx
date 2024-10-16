@@ -139,7 +139,7 @@ export function TertiaryDialog({ enrollmentSetup, isPending, setIsOpen }: IProps
               <DialogTitle className='flex flex-col space-y-1'>
                 <span>Complete Current Step</span>{' '}
               </DialogTitle>
-              <DialogDescription>To confirm the enrollee, please fill in the required input indicating the type of block assigned to them.</DialogDescription>
+              <DialogDescription>To open the college enrollment, please ensure that all required fields are completed. Please be aware that this enrollment semester and school year will be reflected in the student enrollment information.</DialogDescription>
             </DialogHeader>
 
             <Form {...form}>
