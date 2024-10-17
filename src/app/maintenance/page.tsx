@@ -1,10 +1,18 @@
 'use client';
 import { Icons } from '@/components/shared/Icons';
 import Image from 'next/image';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
 
 // src/pages/maintenance.tsx
 export default function MaintenancePage() {
+  const router = useRouter();
+  useEffect(() => {
+    console.log(process.env.NEXT_PUBLIC_MAINTENANCE_MODE)
+    if (process.env.NEXT_PUBLIC_MAINTENANCE_MODE !== '1') {
+      router.push('/sign-in');
+    }
+  }, [router]);
   return (
     <div className='flex items-center justify-center h-screen bg-gray-100'>
       <div className='text-center'>

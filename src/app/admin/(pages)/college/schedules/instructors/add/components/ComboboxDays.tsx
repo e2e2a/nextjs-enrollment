@@ -13,11 +13,13 @@ interface IProps {
   label: string;
   selectItems: any;
   placeholder: string;
+  selectedItems: any[];
+  setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>;
 }
 const dayOrder = ['M', 'T', 'W', 'Th', 'F', 'Sa', 'Su']; // Standard day order
-export function ComboboxDays({ form, name, label, selectItems, placeholder }: IProps) {
+export function ComboboxDays({ form, name, label, selectItems, placeholder, selectedItems, setSelectedItems}: IProps) {
   const [open, setOpen] = React.useState(false);
-  const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
+  
 
   React.useEffect(() => {
     form.setValue(name, selectedItems);

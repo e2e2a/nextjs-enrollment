@@ -37,6 +37,7 @@ const Page = () => {
   const [instructorLink, setInstructorLink] = useState('');
   const [roomLink, setRoomLink] = useState('');
   const [teachers, setTeachers] = useState<any[]>([]);
+  const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
   const { data: tData, isLoading, isError } = useUserRolesTeacherQuery();
   const { data: sData, isLoading: sLoading, isError: sError } = useSubjectCollegeQuery();
   const { data: rData, isLoading: rLoading, error: rError } = useRoomQuery();
@@ -96,11 +97,11 @@ const Page = () => {
             setShowLink(false);
             setRoomLink('');
             setInstructorLink('');
+            setSelectedItems([])
             formCollege.reset();
             makeToastSucess(res.message);
             return;
           default:
-            console.log(res);
             if (res.error) {
               makeToastError(res.error);
               setShowLink(true);
@@ -167,7 +168,7 @@ const Page = () => {
                     <Combobox name={'teacherId'} selectItems={teachers} form={formCollege} label={'Select Instructor:'} placeholder={'Select Instructor'} setTeacherId={setTeacherId} />
                     <ComboboxSubjects name={'subjectId'} selectItems={sData!.subjects} form={formCollege} label={'Select Subject:'} placeholder={'Select Subject'} />
                     <ComboboxRoom name={'roomId'} selectItems={rooms} form={formCollege} label={'Select Room:'} placeholder={'Select Room'} setRoomId={setRoomId} />
-                    <ComboboxDays name={'days'} selectItems={daysOfWeek} form={formCollege} label={'Select Day/s:'} placeholder={'Select Day/s'} />
+                    <ComboboxDays name={'days'} selectItems={daysOfWeek} form={formCollege} label={'Select Day/s:'} placeholder={'Select Day/s'} selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
                     <Input name={'startTime'} type={'time'} form={formCollege} label={'Start Time:'} classNameInput={''} />
                     <Input name={'endTime'} type={'time'} form={formCollege} label={'End Time:'} classNameInput={''} />
                   </div>

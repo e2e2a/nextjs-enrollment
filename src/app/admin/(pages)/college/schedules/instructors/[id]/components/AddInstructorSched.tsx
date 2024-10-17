@@ -15,6 +15,7 @@ import { TeacherScheduleCollegeValidator } from '@/lib/validators/AdminValidator
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 interface IProps {
   teacher: any;
   r: any;
@@ -34,6 +35,7 @@ const AddInstructorSched = ({ teacher, r, s }: IProps) => {
   const [showLink, setShowLink] = useState(false);
   const [instructorLink, setInstructorLink] = useState('');
   const [roomLink, setRoomLink] = useState('');
+  const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
   const mutation = useCreateTeacherScheduleCollegeMutation();
   const formCollege = useForm<z.infer<typeof TeacherScheduleCollegeValidator>>({
     resolver: zodResolver(TeacherScheduleCollegeValidator),
@@ -56,20 +58,19 @@ const AddInstructorSched = ({ teacher, r, s }: IProps) => {
       ...data,
       category: 'College',
     };
-    console.log('data', dataa);
     data.roomId = roomId;
     mutation.mutate(dataa, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
             setShowLink(false);
-    setRoomLink('');
-    setInstructorLink('');
+            setRoomLink('');
+            setInstructorLink('');
+            setSelectedItems([]);
             formCollege.reset();
-            makeToastSucess(res.message)
+            makeToastSucess(res.message);
             return;
           default:
             if (res.error) {
@@ -81,9 +82,6 @@ const AddInstructorSched = ({ teacher, r, s }: IProps) => {
 
             return;
         }
-      },
-      onError: (error) => {
-        console.error(error.message);
       },
       onSettled: () => {},
     });
@@ -114,13 +112,32 @@ const AddInstructorSched = ({ teacher, r, s }: IProps) => {
           <DialogDescription>Please fill the all the required fields.</DialogDescription>
         </DialogHeader>
         <div className='overflow-auto w-full bg-slate-50 rounded-lg'>
+          {showLink && (
+            <div className='px-3 mb-5'>
+              <div className='border px-2 rounded-lg shadow-sm drop-shadow-sm bg-white'>
+                <div className='flex flex-col py-5 w-full sm:flex-row gap-5 items-center'>
+                  <span className='text-red'>Schedule Conflict</span>
+                  {instructorLink && (
+                    <Link href={`/admin/college/schedules/instructors/${instructorLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
+                      See Professor Schedule
+                    </Link>
+                  )}
+                  {roomLink && (
+                    <Link href={`/admin/college/rooms/schedules/${roomLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
+                      See Room Schedule
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
           <Form {...formCollege}>
             <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
               <CardContent className='w-full '>
                 <div className='flex flex-col gap-4'>
                   <ComboboxSubjects name={'subjectId'} selectItems={s} form={formCollege} label={'Select Subject:'} placeholder={'Select Subject'} />
                   <ComboboxRoom name={'roomId'} selectItems={r} form={formCollege} label={'Select Room:'} placeholder={'Select Room'} setRoomId={setRoomId} />
-                  <ComboboxDays name={'days'} selectItems={daysOfWeek} form={formCollege} label={'Select Day/s:'} placeholder={'Select Day/s'} />
+                  <ComboboxDays name={'days'} selectItems={daysOfWeek} form={formCollege} label={'Select Day/s:'} placeholder={'Select Day/s'} selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
                   <Input name={'startTime'} type={'time'} form={formCollege} label={'Start Time:'} classNameInput={''} />
                   <Input name={'endTime'} type={'time'} form={formCollege} label={'End Time:'} classNameInput={''} />
                 </div>

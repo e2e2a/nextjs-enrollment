@@ -35,8 +35,8 @@ const Page = () => {
     // data.section = data.section.toLowerCase();
     const dataa = {
       ...data,
-      educationLevel: 'tertiary'
-    }
+      educationLevel: 'tertiary',
+    };
     console.log('data', dataa);
     mutation.mutate(dataa, {
       onSuccess: (res) => {
@@ -45,17 +45,14 @@ const Page = () => {
           case 200:
           case 201:
           case 203:
-            setValue('')
+            setValue('');
             formCollege.reset();
-            makeToastSucess(res.message)
+            makeToastSucess('New Room has been added.');
             return;
           default:
             if (res.error) return makeToastError(res.error);
             return;
         }
-      },
-      onError: (error) => {
-        console.error(error.message);
       },
       onSettled: () => {},
     });
@@ -64,12 +61,12 @@ const Page = () => {
     <div className='border-0 bg-white rounded-xl min-h-[87vh]'>
       <Card className='border-0 py-5 bg-transparent'>
         <CardHeader className='space-y-3'>
-          <CardTitle className='text-left text-lg xs:text-2xl sm:text-3xl font-poppins'>Register a New Room in College!</CardTitle>
+          <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Add a New Room</CardTitle>
           <CardDescription className='text-xs sm:text-sm hidden'></CardDescription>
           <div className='text-xs sm:text-sm'>
             <div className=''>
-              To register a new Room, This list is populated with teacher&apos;s schedule created and managed by the administrator. Providing this information will help synchronize and ensure smooth management.
-              <div className='flex flex-col mt-2'>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To register a new Room, This list is populated with teacher&apos;s schedule created and managed by the administrator. Providing this information will help synchronize and ensure smooth management.
+              {/* <div className='flex flex-col mt-2'>
                 <span className='text-orange-400 font-medium'>Note:</span>
                 <span>• Newly Registered room must have been registered in teacher&apos;s schedule to display this in student schedule and adding schedule in blocks/sections. </span>
                 <div className='pl-3 flex flex-col '>
@@ -77,7 +74,7 @@ const Page = () => {
                   <span className=''>- Scheduling with rooms</span>
                   <span className=''>- Printing rooms with schedule</span>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </CardHeader>
@@ -86,14 +83,14 @@ const Page = () => {
             <CardContent className='w-full'>
               <div className='flex flex-col gap-4'>
                 <Input name={'roomName'} type={'text'} form={formCollege} label={'Room Name:'} classNameInput={'uppercase'} />
-                <Combobox name={'roomType'} selectItems={roomType} form={formCollege} label={'Select Room Type:'} placeholder={'Select Room Type'} value={value} setValue={setValue}/>
+                <Combobox name={'roomType'} selectItems={roomType} form={formCollege} label={'Select Room Type:'} placeholder={'Select Room Type'} value={value} setValue={setValue} />
                 <Input name={'floorLocation'} type={'text'} form={formCollege} label={'Floor Location: Optional*'} classNameInput={''} />
               </div>
             </CardContent>
             <CardFooter className=''>
               <div className='flex w-full justify-center md:justify-end items-center mt-4'>
-                <Button type='submit' variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-bold'>
-                  Register now!
+                <Button type='submit' variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-semibold tracking-wide'>
+                  Submit
                 </Button>
               </div>
             </CardFooter>

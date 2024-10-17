@@ -37,7 +37,7 @@ const Page = () => {
             data.teachers && (
               <div className=''>
                 <div className='flex items-center py-4 text-black w-full justify-center'>
-                  <h1 className='sm:text-3xl text-xl font-bold '>Intructors Management</h1>
+                  <h1 className='sm:text-3xl text-xl font-bold '>Instructors Management</h1>
                 </div>
                 <DataTable columns={columns} data={data?.teachers as ITeacherProfile[]} />
               </div>

@@ -183,6 +183,15 @@ export const approvedEnrollmentStep6Action = async (data: any) => {
     if (!checkE) return { error: 'There must be a problem in the enrollment of user.', status: 500 };
     await updateEnrollmentById(data.EId, { enrollStatus: 'Enrolled' });
     // @ts-ignore
+    const b = await StudentCurriculum.findOne({ studentId: checkE.profileId._id, courseId: checkE.courseId._id });
+    if (!b) {
+      //@ts-ignore
+      const createSC = await createStudentCurriculum({ studentId: enrollment.profileId._id, courseId: enrollment.courseId._id });
+      if (!createSC) {
+        return { error: 'There must be a problem in the creating Curriculum.', status: 500 };
+      }
+    }
+    // @ts-ignore
     const updatedProfile = await StudentProfile.findByIdAndUpdate(checkE.profileId._id, { enrollStatus: 'Enrolled' });
     return { message: 'Student has been completed all steps.', status: 201 };
   } catch (error) {

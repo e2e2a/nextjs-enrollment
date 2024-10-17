@@ -27,7 +27,7 @@ export function MainNav({ session, items, profile }: MainNavProps) {
           <Image src={'/images/logo1.png'} alt='nothing to say' width={35} height={35} priority className='rounded-full lg:h-11 lg:w-11 w-auto' />
           <span className='hidden font-bold sm:inline-block font-poppins'>
             {/* {siteConfig.name} */}
-            DCIT
+            DCIT, INC.
           </span>
         </Link>
       </div>

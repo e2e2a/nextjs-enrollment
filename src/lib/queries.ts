@@ -111,6 +111,11 @@ import {
 } from '@/action/college/records/admin';
 // const channel = new BroadcastChannel('my-channel');
 import { supabase } from './supabaseClient';
+const myChannel = supabase.channel('global-channel', {
+  config: {
+    broadcast: { ack: true },
+  },
+});
 /**
  *
  * @returns EnrollmentSetup
@@ -128,8 +133,13 @@ export const useUpdateEnrollmentSetupMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateEnrollmentSetup(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentSetup'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'EnrollmentSetup' }] },
+      });
     },
   });
 };
@@ -141,22 +151,23 @@ export const useCollegeEndSemesterMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => CollegeEndSemesterAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentSetup'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'Enrollment' }, { querKey: 'EnrollmentById' }, { querKey: 'EnrollmentByUserId' }, { querKey: 'EnrollmentSetup' }] },
+      });
     },
   });
 };
 // ============================================================
 // AUTH QUERIES
 // ============================================================
-const myChannel = supabase.channel('global-channel', {
-  config: {
-    broadcast: { ack: true },
-  },
-});
+
 export const useSignInMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<SignInResponse, Error, z.infer<typeof SigninValidator>>({

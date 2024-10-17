@@ -661,7 +661,7 @@ export const dashboardConfig: DashboardConfig = {
               title: 'Instructors',
               i: [
                 {
-                  title: 'Instructor Management',
+                  title: 'Instructors Management',
                   href: '/admin/college/schedules/instructors',
                   icon: 'eye',
                 },

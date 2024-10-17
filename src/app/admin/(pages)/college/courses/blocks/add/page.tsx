@@ -52,7 +52,7 @@ const Page = () => {
           case 201:
           case 203:
             formCollege.reset();
-            if(res.message) makeToastSucess(res.message)
+            if(res.message) makeToastSucess(`New Block has been added ${data.courseCode.toUpperCase()}`)
             return;
           default:
             if (res.error) return makeToastError(res.error);
@@ -68,9 +68,9 @@ const Page = () => {
     <div className='border py-5 bg-white rounded-xl'>
       <Card className='border-0 bg-transparent'>
         <CardHeader className='space-y-3'>
-          <CardTitle className='text-left text-lg xs:text-2xl sm:text-3xl font-poppins'>Register a New Block in Course!</CardTitle>
+          <CardTitle className='text-lg xs:text-2xl sm:text-3xl text-center w-full uppercase'>Add a New Block in Course</CardTitle>
           <CardDescription className='text-xs sm:text-sm'>
-            To register a new block, start by selecting the course from the list provided. This list is populated with courses created and managed by the administrator. Next, specify the academic year and semester for the block to ensure it is correctly
+            &nbps;&nbps;&nbps;&nbps;To register a new block, start by selecting the course from the list provided. This list is populated with courses created and managed by the administrator. Next, specify the academic year and semester for the block to ensure it is correctly
             aligned with the course schedule. Providing this information will help synchronize the block with the appropriate course and academic period.
           </CardDescription>
         </CardHeader>
@@ -88,8 +88,8 @@ const Page = () => {
             </CardContent>
             <CardFooter>
               <div className='flex w-full justify-center md:justify-end items-center mt-4'>
-                <Button type='submit' disabled={isNotEditable} variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-bold'>
-                  Register now!
+                <Button type='submit' disabled={isNotEditable} variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-semibold tracking-wide'>
+                  Submit
                 </Button>
               </div>
             </CardFooter>

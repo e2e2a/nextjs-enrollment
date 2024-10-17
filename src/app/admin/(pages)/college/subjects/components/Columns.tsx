@@ -38,7 +38,7 @@ export const columns: ColumnDef<ISubject>[] = [
       const user = row.original;
       console.log(user);
       return (
-        <div key={cell.id} className='flex justify-center items-center'>
+        <div key={cell.id} className='flex justify-center items-center uppercase'>
             {user.subjectCode}
         </div>
       );

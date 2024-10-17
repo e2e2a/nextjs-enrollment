@@ -27,7 +27,7 @@ const MessageListener = ({ children }: { children: React.ReactNode }) => {
       messages.map((item: any) => {
         if (item?.queryKey) {
           // Invalidate queries based on the queryKey from each message
-          queryClient.invalidateQueries({ queryKey: [item.queryKey] });
+          queryClient.invalidateQueries({ queryKey: [item.querKey] });
         }
       });
     });
