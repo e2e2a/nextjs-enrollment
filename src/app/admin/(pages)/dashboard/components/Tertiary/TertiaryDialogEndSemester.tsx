@@ -27,8 +27,8 @@ const TertiaryDialogEndSemester = () => {
           case 200:
           case 201:
           case 203:
-            makeToastSucess('Enrollment has been Ended.');
             setIsOpen(false);
+            makeToastSucess('Enrollment has been Ended.');
             return;
           default:
             makeToastError(res.error);
