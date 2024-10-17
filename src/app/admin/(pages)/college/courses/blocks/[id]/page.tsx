@@ -12,22 +12,17 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [teachersSchedules, setTeachersSchedules] = useState<any>([]);
   const { data, isLoading, error: isEnError } = useBlockCourseQueryById(params.id);
   const { data: s, isLoading: sLoading, error: sError } = useTeacherScheduleCollegeQuery();
+  
+  useEffect(() => {
+    if (isEnError || !data) return;
+    if (sError || !s) return;
 
-  useEffect(() => {
-    if (isLoading || !data) return;
-    if (isEnError) console.log(isEnError.message);
-  }, [data, isLoading, isEnError]);
-  useEffect(() => {
-    if (sLoading || !s) return;
-    if (sError) console.log(sError.message);
-  }, [s, sLoading, sError]);
-  useEffect(() => {
     if (s && data) {
       const filteredSchedules = s?.teacherSchedules?.filter((schedule: any) => schedule.blockTypeId === null || !schedule.blockTypeId);
       setTeachersSchedules(filteredSchedules);
       setIsPageLoading(false);
     }
-  }, [s, data]);
+  }, [s, sError, data, isEnError]);
 
   return (
     <>

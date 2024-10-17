@@ -23,6 +23,7 @@ import { setProgress } from './helpers/progress';
 import Enrollment from '@/models/Enrollment';
 import TeacherSchedule from '@/models/TeacherSchedule';
 import Course from '@/models/Course';
+import BlockType from '@/models/BlockType';
 // import { verificationTemplate } from './emailTemplate/verificationTemplate';
 export const getAllEnrollmentAction = async (category: string): Promise<getEnrollmentResponse> => {
   try {
@@ -563,6 +564,7 @@ export const CollegeEndSemesterAction = async (data: any) => {
     setProgress(90);
 
     if (data.deleteInstructor) {
+      await BlockType.updateMany({ category: 'College' }, { $set: { blockSubjects: [] } }, { new: true });
       await TeacherSchedule.deleteMany({ category: 'College' });
     }
     /**

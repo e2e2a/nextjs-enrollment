@@ -12,8 +12,7 @@ interface IProps {
 }
 
 const AddBlockSched = ({ blockType, s }: IProps) => {
-  console.log(blockType);
-
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   // const [selectedItems, setSelectedItems] = React.useState<any[]>([{selectedItems: {teacherScheduleId: [], subjectId: []}}]);
   const [isEnabled, setIsEnabled] = React.useState(false);
   const [selectedItems, setSelectedItems] = React.useState<{ teacherScheduleId: string }[]>([]);
@@ -42,16 +41,15 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
       blockTypeId: blockType.blockType._id,
     };
 
-    console.log(data);
     mutation.mutate(data, {
       onSuccess: (res: any) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
+            setIsOpen(false)
             setSelectedItems([]);
-            makeToastSucess(res.message);
+            makeToastSucess('New Schedule has been added to blocks.');
             return;
           default:
             return;
@@ -66,7 +64,7 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
     return selectedItems.some((item) => item.teacherScheduleId === teacherScheduleId);
   };
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button size={'sm'} className={'focus-visible:ring-0 flex mb-2 bg-transparent bg-green-500 px-2 py-0 gap-x-1 justify-center text-neutral-50 font-medium'}>
           <Icons.add className='h-4 w-4' />
@@ -105,10 +103,19 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                             <span>
                               Instructor: {selectedItem.profileId.firstname} {selectedItem.profileId.middlename} {selectedItem.profileId.lastname}
                             </span>
-                            <span>Title: {selectedItem.subjectId.name}</span>
-                            <span>Code: {selectedItem.subjectId.subjectCode}</span>
+                            <span>Subject Code: {selectedItem.subjectId.subjectCode}</span>
+                            <span>Descriptive Title: {selectedItem.subjectId.name}</span>
+                            <span className=''>
+                              Time:{' '}
+                              <span className='uppercase'>
+                                {selectedItem.startTime} - {selectedItem.endTime}
+                              </span>
+                            </span>
+                            <span className=''>
+                              Room: <span className='uppercase'>{selectedItem.roomId.roomName}</span>
+                            </span>
                           </div>
-                          <span className='text-red cursor-pointer py-1 mr-5' onClick={() => handleSelect(s._id)}>
+                          <span className='text-red cursor-pointer py-1 mr-5' onClick={() => handleSelect(selectedItem._id)}>
                             <Icons.trash className='h-3 w-3' />
                           </span>
                         </div>
@@ -137,7 +144,13 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                         <div className='flex w-full'>
                           <div className='min-w-[80px] justify-center flex items-center'>
                             {isSelected(s._id) ? (
-                              <Button disabled={isEnabled} onClick={() => handleSelect(s._id)} type='button' size={'sm'} className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}>
+                              <Button
+                                disabled={isEnabled}
+                                onClick={() => handleSelect(s._id)}
+                                type='button'
+                                size={'sm'}
+                                className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
+                              >
                                 <Icons.trash className='h-4 w-4' />
                               </Button>
                             ) : (
@@ -161,12 +174,18 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                             <span className=' font-semibold'>
                               Code: <span className='uppercase'>{s.subjectId.subjectCode}</span>
                             </span>
-                            <span className=' text-wrap font-medium'>Title: {s.subjectId.name}</span>
-                            <span className=''>Pre Req.: EMPTY</span>
+                            <span className=' text-wrap font-medium'>Descriptive Title: {s.subjectId.name}</span>
+                            <span className=''>Pre Req.: {s.subjectId.preReq}</span>
                             <span className=''>Days: {s.days.join(', ')}</span>
                             <span className=''>Lec: {s.subjectId.lec}</span>
                             <span className=''>Lab: {s.subjectId.lab}</span>
                             <span className=''>Unit: {s.subjectId.unit}</span>
+                            <span className=''>
+                              Time:{' '}
+                              <span className='uppercase'>
+                                {s.startTime} - {s.endTime}
+                              </span>
+                            </span>
                             <span className=''>
                               Room: <span className='uppercase'>{s.roomId.roomName}</span>
                             </span>
