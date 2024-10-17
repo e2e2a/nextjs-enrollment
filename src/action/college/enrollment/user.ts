@@ -102,7 +102,6 @@ export const createEnrollmentContinuingAction = async (data: any): Promise<getEn
     data.courseId = getProfile.courseId._id;
     data.onProcess = true;
     data.category = 'College';
-    console.log('getProfile', getProfile);
 
     const cc = await createEnrollment(data);
     if (!cc) return { message: 'Something went wrong.', status: 500 };
@@ -115,11 +114,6 @@ export const createEnrollmentContinuingAction = async (data: any): Promise<getEn
       if (getProfile.studentSemester === data.studentSemester) {
         return { message: 'Returning student: needs to wait for the next available enrollment period', status: 403 };
       }
-      // else{
-      /**
-       * @todo if possible we can create here a check year from semester
-       */
-      // }
     }
     const dataToUpdateProfile = {
       studentYear: data.studentYear,

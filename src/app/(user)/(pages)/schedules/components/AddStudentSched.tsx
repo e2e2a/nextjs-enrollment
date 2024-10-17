@@ -118,7 +118,8 @@ const AddStudentSched = ({ student, b }: IProps) => {
           <DialogDescription>Select subjects to add in the table.</DialogDescription>
         </DialogHeader>
 
-        <FilterBySelect studentBlockType={studentBlockType} setStudentBlockType={setStudentBlockType} studentSemester={studentSemester} setStudentSemester={setStudentSemester} studentYear={studentYear} setStudentYear={setStudentYear} schedules={schedules} />
+        {/* <FilterBySelect studentBlockType={studentBlockType} setStudentBlockType={setStudentBlockType} studentSemester={studentSemester} setStudentSemester={setStudentSemester} studentYear={studentYear} setStudentYear={setStudentYear} schedules={schedules} /> */}
+        <FilterBySelect studentBlockType={studentBlockType} setStudentBlockType={setStudentBlockType} studentYear={studentYear} setStudentYear={setStudentYear} schedules={schedules} />
 
         <div className='overflow-auto w-full bg-slate-50 rounded-lg'>
           <div className=''>
