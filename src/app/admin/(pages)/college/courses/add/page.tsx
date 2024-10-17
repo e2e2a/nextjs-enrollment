@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -40,17 +40,21 @@ const Page = () => {
         setPhotoError('');
         const file = files[0];
         setImageFile(file);
-        // Preview the image
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImagePreview(reader.result as string);
-        };
-        reader.readAsDataURL(file);
       } else {
         makeToastError('File size too large');
       }
     }
   };
+  useEffect(() => {
+    // Preview the image
+    if (imageFile) {
+      const reader = new FileReader();
+      reader.readAsDataURL(imageFile);
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+    }
+  }, [imageFile]);
   const handleClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -60,7 +64,7 @@ const Page = () => {
     if (imageFile) {
       setIsUploading(true);
       const formData = new FormData();
-      formData.append('file', imageFile!);
+      formData.append('file', imageFile);
       data.courseCode = data.courseCode.toLowerCase();
       data.name = data.name.toLowerCase();
       const dataa = {

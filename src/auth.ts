@@ -126,27 +126,49 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       await dbConnect();
+      if (account && account.provider === 'credentials') {
+        // If the user signs in, cache data in the token
+        if (user) {
+          // @ts-ignore
+          const userData = await getUserById(user._id);
+          token.sub = userData._id;
+          token.role = userData.role;
+          token.username = userData.username;
+        }
 
-      // If the user signs in, cache data in the token
-      if (user) {
-        // @ts-ignore
-        const userData = await getUserById(user._id);
-        token.sub = userData._id;
-        token.role = userData.role;
-        token.username = userData.username;
-      }
+        // If no user, but token exists
+        if (!user && token.email) {
+          const existingUser = await getUserByEmail(token.email);
+          if (existingUser) {
+            token.sub = existingUser._id;
+            token.role = existingUser.role;
+            token.username = existingUser.username;
+          } else {
+            return null;
+          }
+        }
+      } else if (account && account.provider === 'google') {
+        // If the user signs in, cache data in the token
+        if (user) {
+          // @ts-ignore
+          const userData = await getUserById(user.id);
+          token.sub = userData._id;
+          token.role = userData.role;
+          token.username = userData.username;
+        }
 
-      // If no user, but token exists
-      if (!user && token.email) {
-        const existingUser = await getUserByEmail(token.email);
-        if (existingUser) {
-          token.sub = existingUser._id;
-          token.role = existingUser.role;
-          token.username = existingUser.username;
-        } else {
-          return null;
+        // If no user, but token exists
+        if (!user && token.email) {
+          const existingUser = await getUserByEmail(token.email);
+          if (existingUser) {
+            token.sub = existingUser._id;
+            token.role = existingUser.role;
+            token.username = existingUser.username;
+          } else {
+            return null;
+          }
         }
       }
 

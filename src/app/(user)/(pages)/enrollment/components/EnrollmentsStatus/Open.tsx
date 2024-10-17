@@ -8,7 +8,6 @@ type IProps = {
   es: any;
 };
 const Open = ({ es }: IProps) => {
-  console.log('es', es);
   const [value, setValue] = useState('');
   return (
     <div className='px-5 mt-[10%]'>

@@ -5,6 +5,11 @@ import { columns } from './components/Columns';
 import { useTeacherScheduleCollegeQuery, useEnrollmentQueryByUserId, useEnrollmentSetupQuery } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Icons } from '@/components/shared/Icons';
 
 const Page = () => {
   const { data: session } = useSession();
@@ -47,13 +52,52 @@ const Page = () => {
           <div className=''>404</div>
         </div>
       ) : data && data.error ? (
-        <span className=''>No enrollment form</span>
+        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
+          <Card className={`min-h-[35vh] shadow-none drop-shadow-none items-center justify-center flex border-0`}>
+            <CardHeader className='space-y-3 hidden'>
+              <CardTitle className=''>
+                <div className='flex flex-col justify-center gap-y-1 items-center'>
+                  <div className=''>
+                    <Image src={'/images/logo1.png'} className='w-auto rounded-full' priority width={65} height={65} alt='nothing to say' />
+                  </div>
+                  <div className='text-center lg:text-left font-poppins'>No Enrollment Found</div>
+                </div>
+              </CardTitle>
+              <CardDescription>
+                To proceed with your enrollment, please ensure all required fields are completed. Accurate and complete information is essential for successful registration. Double-check your details before submitting to avoid any delays in processing your
+                enrollment. If you have trouble filling out any fields, please check out our documentation or contact us at <span className='text-blue-500 cursor-pointer'>+639123456789</span> for further information.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className='flex w-full justify-center py-5 flex-col rounded-lg shadow-sm bg-white items-center border focus-visible:ring-0 space-y-5 px-0 mt-7'>
+              <div className='flex flex-col justify-center gap-y-1 items-center'>
+                <div className=''>
+                  <Image src={'/images/logo1.png'} className='w-auto rounded-full' priority width={100} height={100} alt='nothing to say' />
+                </div>
+                <div className='text-center text-xl sm:text-2xl font-semibold tracking-tight'>No Enrollment has been Found.</div>
+              </div>
+              <span className='text-left sm:text-center w-full px-5 text-[16px]'>Explore our available courses and find the perfect fit for your academic journey. Click the link below to view detailed course offerings.</span>
+              <Link href={''} className='hover:underline hover:text-blue-600 text-blue-500 space-y-2'>
+                <Button size={'sm'} type='button' className='w-auto flex gap-2'>
+                  {' '}
+                  View Available Course in Categories 👉{' '}
+                </Button>
+              </Link>
+              {/* <span className='text-left sm:text-center w-full px-5 sm:px-10 mt-5 sm:mt-10 text-sm text-muted-foreground'>
+                In the meantime, feel free to prepare any documents you may need and stay tuned for updates. If you have any questions, don’t hesitate to reach out to us at <span className='text-blue-500 cursor-pointer'>+639123456789</span> or{' '}
+                <Link href={''} className='hover:underline hover:text-blue-600 text-blue-500'>
+                  jay.abandog@gmail.com
+                </Link>
+                .
+              </span> */}
+            </CardContent>
+          </Card>
+        </div>
       ) : (
         data?.enrollment && (
           <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
             <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
               <div className='mb-3'>
-                <h1 className='text-lg sm:text-2xl font-bold uppercase'>Student Schedules</h1>
+                <h1 className='text-lg sm:text-2xl font-bold uppercase'>Student&apos; Schedules</h1>
               </div>
               <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
                 <div className='justify-between items-center flex w-full'>
