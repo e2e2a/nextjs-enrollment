@@ -49,27 +49,67 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
             <div className=''>404</div>
           ) : data && data.teacher ? (
             <>
-              <div className='flex items-center py-4 text-black w-full text-center flex-col'>
-                <div>
-                  <h1 className='xs:text-lg sm:text-xl font-bold uppercase'>Instructor Students</h1>
-                  <h1 className='xs:text-lg sm:text-xl text-sm font-bold uppercase'>{ts?.teacherSchedule?.courseId?.name}</h1>
-                  <h1 className='text-[12px] xs:text-sm sm:text-lg font-semibold uppercase'>SUBJECT: {ts?.teacherSchedule?.subjectId?.name}</h1>
-                  <h1 className='text-[12px] xs:text-sm sm:text-lg font-semibold uppercase'>
-                    {ts?.teacherSchedule?.blockTypeId?.year} - {ts?.teacherSchedule?.blockTypeId?.semester}
-                  </h1>
-                  <span className='text-[12px] xs:text-sm sm:text-lg font-semibold uppercase'>BLOCK {ts?.teacherSchedule?.blockTypeId?.section} | </span>
-                  <span className='text-[12px] xs:text-sm sm:text-lg font-semibold'>
-                    {ts?.teacherSchedule?.startTime} - {ts?.teacherSchedule?.endTime} |
-                  </span>
-                  <span className='text-[12px] xs:text-sm sm:text-lg font-semibold'> {ts?.teacherSchedule?.roomId.roomName}</span>
+              <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
+                <div className='mb-3'>
+                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Instructor&apos;s Students</h1>
+                </div>
+                <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
+                  <div className='justify-between items-center flex w-full'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Fullname:{' '}
+                      <span className='font-normal'>
+                        {ts?.teacherSchedule?.profileId.firstname} {ts?.teacherSchedule?.profileId.middlename} {ts?.teacherSchedule?.profileId.lastname} {ts?.teacherSchedule?.profileId.extensionName ? ts?.teacherSchedule?.profileId.extensionName : ''}
+                      </span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Department: <span className='font-normal'>{ts?.teacherSchedule?.courseId?.name}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start '>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      SUBJECT: <span className='font-normal'>{ts?.teacherSchedule?.subjectId?.name}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Block: <span className='font-normal'>{ts?.teacherSchedule?.blockTypeId?.section ? ts?.teacherSchedule.blockTypeId.section : 'N/A'}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Year:{' '}
+                      <span className='font-normal'>
+                        {ts?.teacherSchedule?.blockTypeId?.year} - {ts?.teacherSchedule?.blockTypeId?.semester}
+                      </span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start  sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Time:{' '}
+                      <span className='font-normal'>
+                        {ts?.teacherSchedule?.startTime} - {ts?.teacherSchedule?.endTime}
+                      </span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Room: <span className='font-normal'>{ts?.teacherSchedule?.roomId.roomName}</span>
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className='w-full flex justify-start items-center'>
-                <div className='flex flex-col'>
-                  <AddGrades data={teacherStudents} teacher={ts?.teacherSchedule} />
-                </div>
-              </div>
-              <DataTable columns={columns} data={teacherStudents} />
+              {ts?.teacherSchedule?.courseId && (
+                <>
+                  <div className='w-full flex justify-start items-center'>
+                    <div className='flex flex-col'>
+                      <AddGrades data={teacherStudents} teacher={ts?.teacherSchedule} />
+                    </div>
+                  </div>
+                  <DataTable columns={columns} data={teacherStudents} />
+                </>
+              )}
             </>
           ) : (
             <div className=''>404</div>
