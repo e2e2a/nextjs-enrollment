@@ -28,10 +28,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Warning />
         <LoadingProvider>
           <Providers sessionData={sessionData}>
-            {/* <MessageListener> */}
+            <MessageListener>
             {children}
             <Toaster position='top-center' reverseOrder={false} />
-            {/* </MessageListener> */}
+            </MessageListener>
           </Providers>
         </LoadingProvider>
       </body>
