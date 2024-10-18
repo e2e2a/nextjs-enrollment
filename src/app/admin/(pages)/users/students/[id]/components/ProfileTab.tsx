@@ -141,25 +141,23 @@ const ProfileTab = ({ profile }: Iprops) => {
       profileId: profile?._id!,
       ...data,
     };
-    console.log('Form Submitted: ', profileData);
-    // mutation.mutate(profileData, {
-    //   onSuccess: (res) => {
-    //     console.log(res);
-    //     switch (res.status) {
-    //       case 200:
-    //       case 201:
-    //       case 203:
-    //         makeToastSucess(res?.message);
-    //         return;
-    //       default:
-    //         makeToastError(res.error);
-    //         return;
-    //     }
-    //   },
-    //   onSettled: () => {
-    //     setIsPending(false);
-    //   },
-    // });
+    mutation.mutate(profileData, {
+      onSuccess: (res) => {
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            makeToastSucess('Profile has been updated.');
+            return;
+          default:
+            makeToastError('Something went wrong.');
+            return;
+        }
+      },
+      onSettled: () => {
+        // setIsPending(false);
+      },
+    });
   };
 
   return (
@@ -180,7 +178,7 @@ const ProfileTab = ({ profile }: Iprops) => {
                 <div className='w-full pl-11'>
                   <h1 className='text-3xl font-bold leading-[140%] tracking-wide text-center'>Student Profile</h1>
                   <h1 className='text-lg font-bold tracking-wide text-center capitalize'>
-                    {profile.lastname && profile.lastname + ','} {profile.firstname} {profile.middlename} {profile.middlename && profile.extensionName + '.'}
+                    {profile.firstname && profile.firstname} {profile.middlename} {profile.lastname} {profile.extensionName && profile.extensionName + '.'}
                   </h1>
                 </div>
               </div>
