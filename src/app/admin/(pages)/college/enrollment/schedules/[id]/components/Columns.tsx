@@ -238,6 +238,19 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row.grade,
+    id: 'grade',
+    header: 'Grade',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user.grade}
+        </div>
+      );
+    },
+  },
+  {
     id: 'options',
     header: 'Options',
     cell: ({ row }) => {
