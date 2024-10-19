@@ -25,7 +25,7 @@ const MessageListener = ({ children }: { children: React.ReactNode }) => {
       console.log('Received message:', payload);
       const messages = payload?.payload?.message;
       messages.map((item: any) => {
-        if (item?.queryKey) {
+        if (item?.querKey) {
           // Invalidate queries based on the queryKey from each message
           queryClient.invalidateQueries({ queryKey: [item.querKey] });
         }
