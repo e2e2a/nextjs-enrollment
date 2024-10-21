@@ -11,7 +11,7 @@ type IProps = {
   onChange: (role: string | null) => void;
 };
 
-const YearFilter = ({ onChange }: IProps) => {
+const StudentStatusFilter = ({ onChange }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = React.useState('');
   const [isPending, setIsPending] = useState<boolean>(false);
@@ -22,7 +22,7 @@ const YearFilter = ({ onChange }: IProps) => {
         <PopoverTrigger className='' asChild>
           <div className='flex justify-center items-center w-full'>
             <Button role='combobox' type='button' size={'sm'} className={'w-auto focus-visible:ring-0 flex px-2 py-0 text-black font-normal'}>
-              Student Year
+              Student Status
               <ArrowUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
             </Button>
           </div>
@@ -41,10 +41,10 @@ const YearFilter = ({ onChange }: IProps) => {
                   }}
                 >
                   <Check className={cn('mr-2 h-4 w-4', value === '' ? 'opacity-100' : 'opacity-0')} />
-                  All Year
+                  All Student Status
                 </CommandItem>
                 <CommandItem
-                  value={'1st year'}
+                  value={'New Student'}
                   className='w-auto'
                   onSelect={(currentValue) => {
                     setIsOpen(!isOpen);
@@ -52,11 +52,11 @@ const YearFilter = ({ onChange }: IProps) => {
                     setValue(currentValue);
                   }}
                 >
-                  <Check className={cn('mr-2 h-4 w-4', value === '1st year' ? 'opacity-100' : 'opacity-0')} />
-                  1st Year
+                  <Check className={cn('mr-2 h-4 w-4', value === 'New Student' ? 'opacity-100' : 'opacity-0')} />
+                  New Student
                 </CommandItem>
                 <CommandItem
-                  value={'2nd year'}
+                  value={'Continue'}
                   className='w-auto'
                   onSelect={(currentValue) => {
                     setIsOpen(!isOpen);
@@ -64,11 +64,11 @@ const YearFilter = ({ onChange }: IProps) => {
                     setValue(currentValue);
                   }}
                 >
-                  <Check className={cn('mr-2 h-4 w-4', value === '2nd year' ? 'opacity-100' : 'opacity-0')} />
-                  2nd Year
+                  <Check className={cn('mr-2 h-4 w-4', value === 'Continue' ? 'opacity-100' : 'opacity-0')} />
+                  Continue
                 </CommandItem>
                 <CommandItem
-                  value={'3rd year'}
+                  value={'Transferee'}
                   className='w-auto'
                   onSelect={(currentValue) => {
                     setIsOpen(!isOpen);
@@ -76,11 +76,11 @@ const YearFilter = ({ onChange }: IProps) => {
                     setValue(currentValue);
                   }}
                 >
-                  <Check className={cn('mr-2 h-4 w-4', value === '3rd year' ? 'opacity-100' : 'opacity-0')} />
-                  3rd Year
+                  <Check className={cn('mr-2 h-4 w-4', value === 'Transferee' ? 'opacity-100' : 'opacity-0')} />
+                  Transferee
                 </CommandItem>
                 <CommandItem
-                  value={'4th year'}
+                  value={'Returning'}
                   className='w-auto'
                   onSelect={(currentValue) => {
                     setIsOpen(!isOpen);
@@ -88,20 +88,8 @@ const YearFilter = ({ onChange }: IProps) => {
                     setValue(currentValue);
                   }}
                 >
-                  <Check className={cn('mr-2 h-4 w-4', value === '4th year' ? 'opacity-100' : 'opacity-0')} />
-                  4th Year
-                </CommandItem>
-                <CommandItem
-                  value={'5th year'}
-                  className='w-auto'
-                  onSelect={(currentValue) => {
-                    setIsOpen(!isOpen);
-                    onChange(currentValue);
-                    setValue(currentValue);
-                  }}
-                >
-                  <Check className={cn('mr-2 h-4 w-4', value === '5th year' ? 'opacity-100' : 'opacity-0')} />
-                  5th Year
+                  <Check className={cn('mr-2 h-4 w-4', value === 'Returning' ? 'opacity-100' : 'opacity-0')} />
+                  Returning
                 </CommandItem>
               </CommandGroup>
             </CommandList>
@@ -112,4 +100,4 @@ const YearFilter = ({ onChange }: IProps) => {
   );
 };
 
-export default YearFilter;
+export default StudentStatusFilter;

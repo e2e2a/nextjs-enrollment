@@ -9,6 +9,9 @@ import PSAFile from './PSAFile';
 import StudentPhoto from './StudentPhoto';
 import GoodMoralFile from './GoodMoralFile';
 import ReportCardFile from './ReportCardFile';
+import YearFilter from '../filters/YearFilter';
+import SemesterFilter from '../filters/SemesterFilter';
+import StudentStatusFilter from '../filters/StudentStatusFilter';
 
 export const columns: ColumnDef<IEnrollment>[] = [
   {
@@ -60,65 +63,44 @@ export const columns: ColumnDef<IEnrollment>[] = [
   {
     accessorFn: (row) => row.studentYear,
     accessorKey: 'student year',
-    header: 'Student Year',
+    header: ({ column }) => (
+      <YearFilter
+        onChange={(role: string | null) => {
+          column.setFilterValue(role);
+        }}
+      />
+    ),
   },
   {
     accessorFn: (row) => row.studentSemester,
     accessorKey: 'student semester',
-    header: 'Student Semester',
+    header: ({ column }) => (
+      <SemesterFilter
+        onChange={(role: string | null) => {
+          column.setFilterValue(role);
+        }}
+      />
+    ),
   },
   {
     accessorFn: (row) => row.studentStatus,
     accessorKey: 'student status',
-    header: 'Student Status',
+    header: ({ column }) => (
+      <StudentStatusFilter
+        onChange={(role: string | null) => {
+          column.setFilterValue(role);
+        }}
+      />
+    ),
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' capitalize'>
+          {user.studentStatus}
+        </div>
+      );
+    },
   },
-  //   {
-  //     accessorKey: 'emailVerified',
-  //     // header: 'Email Verified',
-  //     header: ({ column }) => (
-  //       <EmailVerifiedFilter
-  //         onChange={(emailVerified: string | null) => {
-  //           // Your custom logic to filter based on role
-  //           column.setFilterValue(emailVerified);
-  //         }}
-  //       />
-  //     ),
-  //     cell: ({ row }) => {
-  //       const emailVerified: string | null = row.getValue('emailVerified');
-  //       const formatted = emailVerified ? new Date(emailVerified).toLocaleDateString() : 'Not Verified';
-  //       return <div className='font-medium'>{formatted}</div>;
-  //     },
-  //     filterFn: (row, columnId, filterValue) => {
-  //       // Custom filter function for role column
-  //       // if (filterValue === null) return true;
-  //       switch (filterValue) {
-  //         case 'Not Verified':
-  //           return row.original.emailVerified === null;
-  //         case 'Verified':
-  //           return row.original.emailVerified !== null;
-  //         default:
-  //           return true; // Default to showing all rows if no filter value is provided
-  //       }
-  //       // return row.original.emailVerified !== null;
-  //     },
-  //   },
-  //   {
-  //     accessorKey: 'role',
-  //     // header: 'Role'
-  //     header: ({ column }) => (
-  //       <RoleFilter
-  //         onChange={(role: string | null) => {
-  //           // Your custom logic to filter based on role
-  //           column.setFilterValue(role);
-  //         }}
-  //       />
-  //     ),
-  //     filterFn: (row, columnId, filterValue) => {
-  //       // Custom filter function for role column
-  //       if (filterValue === null) return true;
-  //       return row.original.role === filterValue;
-  //     },
-  //   },
   {
     accessorFn: (row) => row.profileId.psaUrl,
     accessorKey: 'psa file',

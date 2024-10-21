@@ -10,6 +10,9 @@ import StudentPhoto from '../step1/StudentPhoto';
 import PSAFile from '../step1/PSAFile';
 import ReportCardFile from '../step1/ReportCardFile';
 import GoodMoralFile from '../step1/GoodMoralFile';
+import SemesterFilter from '../filters/SemesterFilter';
+import StudentStatusFilter from '../filters/StudentStatusFilter';
+import YearFilter from '../filters/YearFilter';
 
 export const columns2: ColumnDef<IEnrollment>[] = [
   {
@@ -55,8 +58,8 @@ export const columns2: ColumnDef<IEnrollment>[] = [
 
   {
     accessorFn: (row) => row.courseId.courseCode, // Use accessorFn for nested fields
-    id: 'course Code',
-    header: 'Course',
+    id: 'course code',
+    header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
@@ -69,17 +72,35 @@ export const columns2: ColumnDef<IEnrollment>[] = [
   {
     accessorFn: (row) => row.studentYear,
     accessorKey: 'student year',
-    header: 'Student Year',
+    header: ({ column }) => (
+      <YearFilter
+        onChange={(role: string | null) => {
+          column.setFilterValue(role);
+        }}
+      />
+    ),
   },
   {
     accessorFn: (row) => row.studentSemester,
     accessorKey: 'student semester',
-    header: 'Student Semester',
+    header: ({ column }) => (
+      <SemesterFilter
+        onChange={(role: string | null) => {
+          column.setFilterValue(role);
+        }}
+      />
+    ),
   },
   {
     accessorFn: (row) => row.studentStatus,
     accessorKey: 'student status',
-    header: 'Student Status',
+    header: ({ column }) => (
+      <StudentStatusFilter
+        onChange={(role: string | null) => {
+          column.setFilterValue(role);
+        }}
+      />
+    ),
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
