@@ -9,6 +9,7 @@ import { useAllUsersQuery, useUserRolesAdminQuery, useUserRolesDeansQuery, useUs
 const MainOverview = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [totalAccounts, setTotalAccounts] = useState<number>(0);
+  const [totalActive, setTotalActive] = useState<number>(0);
   const { data: AllU, error: AllUError } = useAllUsersQuery();
   const { data: rsData, error: rsError } = useUserRolesStudentQuery();
   const { data: rtData, error: rtError } = useUserRolesTeacherQuery();
@@ -25,6 +26,8 @@ const MainOverview = () => {
       if (rsData.students && rtData.teachers && rdData.deans && raData.admins) {
         const total = rsData.students.length + rtData.teachers.length + rdData.deans.length + raData.admins.length;
         setTotalAccounts(total);
+        const totalActive = AllU.users.filter((u:any) => u.active === true);
+        setTotalActive(totalActive.length)
         setIsPageLoading(false);
       }
       return;
@@ -56,7 +59,7 @@ const MainOverview = () => {
                 </svg>
               </CardHeader>
               <CardContent>
-                <div className='text-2xl font-bold'>+573</div>
+                <div className='text-2xl font-bold'>{totalActive}</div>
               </CardContent>
             </Card>
           </div>
