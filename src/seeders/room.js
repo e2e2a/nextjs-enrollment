@@ -65,11 +65,11 @@ const Room = models.Room || model('Room', schema);
 
 const createRooms = async () => {
   try {
-    const conn = await mongoose.connect('mongodb+srv://marzvelasco73019:F3AcEj0UXbkwn1lX@school.zcndgqd.mongodb.net/godoy?retryWrites=true&w=majority&appName=school');
+    const conn = await mongoose.connect('mongodb+srv://reymond:mypassword123@Cluster0.pwuwd.mongodb.net/dcit?retryWrites=true&w=majority');
 
     const rooms = [];
 
-    for (let i = 1; i <= 100; i++) {
+    for (let i = 200; i <= 10200; i++) {
       rooms.push({
         roomName: `room ${i}`,
         educationLevel: 'tertiary',

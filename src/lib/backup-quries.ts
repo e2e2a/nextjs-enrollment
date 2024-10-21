@@ -109,8 +109,13 @@ import {
   getTeacherScheduleRecordByIdAction,
   getTeacherScheduleRecordByProfileIdAction,
 } from '@/action/college/records/admin';
-const channel = new BroadcastChannel('my-channel');
-// import { supabase } from './supabaseClient';
+// const channel = new BroadcastChannel('my-channel');
+import { supabase } from './supabaseClient';
+const myChannel = supabase.channel('global-channel', {
+  config: {
+    broadcast: { ack: true },
+  },
+});
 /**
  *
  * @returns EnrollmentSetup
@@ -128,8 +133,13 @@ export const useUpdateEnrollmentSetupMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateEnrollmentSetup(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentSetup'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'EnrollmentSetup' }] },
+      });
     },
   });
 };
@@ -141,22 +151,23 @@ export const useCollegeEndSemesterMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => CollegeEndSemesterAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentSetup'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'Enrollment' }, { querKey: 'EnrollmentById' }, { querKey: 'EnrollmentByUserId' }, { querKey: 'EnrollmentSetup' }] },
+      });
     },
   });
 };
 // ============================================================
 // AUTH QUERIES
 // ============================================================
-// const myChannel = supabase.channel('global-channel', {
-//   config: {
-//     broadcast: { ack: true },
-//   },
-// });
+
 export const useSignInMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<SignInResponse, Error, z.infer<typeof SigninValidator>>({
@@ -293,21 +304,44 @@ export const useAdminCreateUserRoleMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => adminCreateUserWithRoleAction(data),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data.role) {
         if (data.role === 'ADMIN') {
+          queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
           queryClient.invalidateQueries({ queryKey: ['Admins'] });
           queryClient.invalidateQueries({ queryKey: ['userAdminProfile'] });
+          const serverResponse = await myChannel.send({
+            type: 'broadcast',
+            event: 'message',
+            payload: { message: [{ querKey: 'AllUsers' }, { querKey: 'Admins' }, { querKey: 'userAdminProfile' }] },
+          });
         } else if (data.role === 'DEAN') {
-          /**
-           * @todo invalidate user role DEAN
-           */
+          queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
+          queryClient.invalidateQueries({ queryKey: ['Deans'] });
+          queryClient.invalidateQueries({ queryKey: ['userDeanProfile'] });
+          const serverResponse = await myChannel.send({
+            type: 'broadcast',
+            event: 'message',
+            payload: { message: [{ querKey: 'AllUsers' }, { querKey: 'userDeanProfile' }, { querKey: 'Deans' }] },
+          });
         } else if (data.role === 'TEACHER') {
+          queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
           queryClient.invalidateQueries({ queryKey: ['Teachers'] });
           queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
           queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
+          const serverResponse = await myChannel.send({
+            type: 'broadcast',
+            event: 'message',
+            payload: { message: [{ querKey: 'AllUsers' }, { querKey: 'Teachers' }, { querKey: 'TeacherSchedule' }, { querKey: 'TeacherScheduleByProfileId' }] },
+          });
         } else if (data.role === 'STUDENT') {
+          queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
           queryClient.invalidateQueries({ queryKey: ['Students'] });
+          const serverResponse = await myChannel.send({
+            type: 'broadcast',
+            event: 'message',
+            payload: { message: [{ querKey: 'AllUsers' }, { querKey: 'Students' }] },
+          });
         }
       }
     },
@@ -368,18 +402,43 @@ export const useUpdateProfilePhoto = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateStudentPhoto(data),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data.role === 'STUDENT') {
+        queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
         queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+        const serverResponse = await myChannel.send({
+          type: 'broadcast',
+          event: 'message',
+          payload: { message: [{ querKey: 'AllUsers' }, { querKey: 'userProfile' }] },
+        });
       } else if (data.role === 'TEACHER') {
+        queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
         queryClient.invalidateQueries({ queryKey: ['Teachers'] });
         queryClient.invalidateQueries({ queryKey: ['userTeacherProfile'] });
         queryClient.invalidateQueries({ queryKey: ['TeacherProfile'] });
         queryClient.invalidateQueries({ queryKey: ['TeacherProfileById'] });
+        const serverResponse = await myChannel.send({
+          type: 'broadcast',
+          event: 'message',
+          payload: { message: [{ querKey: 'AllUsers' }, { querKey: 'TeacherProfileById' }, { querKey: 'TeacherProfile' }, { querKey: 'userTeacherProfile' }, { querKey: 'Teachers' }] },
+        });
       } else if (data.role === 'ADMIN') {
+        queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
         queryClient.invalidateQueries({ queryKey: ['userAdminProfile'] });
+        const serverResponse = await myChannel.send({
+          type: 'broadcast',
+          event: 'message',
+          payload: { message: [{ querKey: 'AllUsers' }, { querKey: 'userAdminProfile' }] },
+        });
       } else if (data.role === 'DEAN') {
+        queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
+        queryClient.invalidateQueries({ queryKey: ['Deans'] });
         queryClient.invalidateQueries({ queryKey: ['userDeanProfile'] });
+        const serverResponse = await myChannel.send({
+          type: 'broadcast',
+          event: 'message',
+          payload: { message: [{ querKey: 'AllUsers' }, { querKey: 'userDeanProfile' }, { querKey: 'Deans' }] },
+        });
       }
     },
   });
@@ -389,8 +448,13 @@ export const useStudentProfileMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<updateStudentProfileResponse, Error, z.infer<typeof StudentProfileValidator>>({
     mutationFn: async (data) => updateStudentProfile(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'userProfile' }] },
+      });
     },
   });
 };
@@ -399,11 +463,16 @@ export const useTeacherProfileMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateTeacherProfile(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['Teachers'] });
       queryClient.invalidateQueries({ queryKey: ['userTeacherProfile'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherProfile'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherProfileById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'TeacherProfileById' }, { querKey: 'TeacherProfile' }, { querKey: 'userTeacherProfile' }, { querKey: 'Teachers' }] },
+      });
     },
   });
 };
@@ -412,9 +481,14 @@ export const useDeanProfileMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateDeanProfile(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['Deans'] });
       queryClient.invalidateQueries({ queryKey: ['userDeanProfile'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'userDeanProfile' }, { querKey: 'Deans' }] },
+      });
     },
   });
 };
@@ -423,8 +497,13 @@ export const useAdminProfileMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateAdminProfile(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['userAdminProfile'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'userAdminProfile' }] },
+      });
     },
   });
 };
@@ -454,9 +533,14 @@ export const useCreateGradeReportMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createTeacherReportGradeAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['TeacherReportGrade'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherReportGradeById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'TeacherReportGrade' }, { querKey: 'TeacherReportGradeById' }] },
+      });
     },
   });
 };
@@ -469,9 +553,14 @@ export const useChangeStatusGradeReportMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateTeacherReportGradeStatusByIdAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['TeacherReportGrade'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherReportGradeById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'TeacherReportGrade' }, { querKey: 'TeacherReportGradeById' }] },
+      });
     },
   });
 };
@@ -484,9 +573,14 @@ export const useEvaluateApprovedGradeReportMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => evaluateApprovedGradeReportAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['TeacherReportGrade'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherReportGradeById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'TeacherReportGradeById' }, { querKey: 'TeacherReportGrade' }] },
+      });
     },
   });
 };
@@ -553,10 +647,15 @@ export const useCreateCourseMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<testResponseaa, Error, any>({
     mutationFn: async (data) => createCourseAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       // Invalidate the 'userProfile' query to trigger a refetch
       queryClient.invalidateQueries({ queryKey: ['Curriculum'] });
       queryClient.invalidateQueries({ queryKey: ['Course'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'Curriculum' }, { querKey: 'Course' }] },
+      });
     },
   });
 };
@@ -603,11 +702,16 @@ export const useDropSubjectMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateDropSubjectAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.refetchQueries({ queryKey: ['CollegeEnrollment'] });
       queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
       queryClient.refetchQueries({ queryKey: ['EnrollmentById'] });
       queryClient.refetchQueries({ queryKey: ['EnrollmentByUserId'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ queryKey: 'EnrollmentByUserId' }, { querKey: 'EnrollmentById' }, { querKey: 'EnrollmentByStep' }, { querKey: 'CollegeEnrollment' }] },
+      });
     },
   });
 };
@@ -615,11 +719,16 @@ export const useAddSubjectMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateAddSubjectAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ queryKey: 'BlockType' }, { querKey: 'EnrollmentByUserId' }, { querKey: 'EnrollmentById' }, { querKey: 'Enrollment' }] },
+      });
     },
   });
 };
@@ -627,10 +736,15 @@ export const useEnrollmentStep1Mutation = () => {
   const queryClient = useQueryClient();
   return useMutation<getEnrollmentResponse, Error, any>({
     mutationFn: async (data) => createEnrollmentAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.refetchQueries({ queryKey: ['userProfile'] });
       queryClient.refetchQueries({ queryKey: ['Enrollment'] });
       queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ queryKey: 'userProfile' }, { querKey: 'Enrollment' }, { querKey: 'EnrollmentByStep' }] },
+      });
     },
   });
 };
@@ -686,9 +800,14 @@ export const useUpdateStudentEnrollmentScheduleMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateStudentEnrollmentScheduleAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ queryKey: 'EnrollmentById' }, { querKey: 'Enrollment' }] },
+      });
     },
   });
 };
@@ -696,10 +815,15 @@ export const useUpdateStudentEnrollmentScheduleBySuggestedSubjectMutation = () =
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateStudentEnrollmentScheduleBySuggestedSubjectAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ queryKey: 'BlockTEnrollmentByIdype' }, { querKey: 'EnrollmentByUserId' }, { querKey: 'Enrollment' }] },
+      });
     },
   });
 };
@@ -708,11 +832,16 @@ export const useUpdateStudentEnrollmentScheduleSuggestedSubjectMutation = () => 
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateStudentEnrollmentScheduleSuggestedSubjectAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ queryKey: 'BlockType' }, { querKey: 'EnrollmentByUserId' }, { querKey: 'EnrollmentById' }, { querKey: 'Enrollment' }] },
+      });
     },
   });
 };
@@ -721,11 +850,16 @@ export const useUpdateStudentEnrollmentScheduleRequestStatusMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateStudentEnrollmentScheduleRequestStatusAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ queryKey: 'BlockType' }, { querKey: 'EnrollmentByUserId' }, { querKey: 'EnrollmentById' }, { querKey: 'Enrollment' }] },
+      });
     },
   });
 };
@@ -734,9 +868,14 @@ export const useRemoveStudentScheduleMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => removeStudentScheduleAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ queryKey: 'EnrollmentByStep' }, { querKey: 'Enrollment' }, { querKey: 'EnrollmentById' }] },
+      });
     },
   });
 };
@@ -748,14 +887,14 @@ export const useApprovedEnrollmentStep1Mutation = () => {
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-      // const serverResponse = await myChannel.send({
-      //   type: 'broadcast',
-      //   event: 'message',
-      //   payload: { message: [{queryKey: 'EnrollmentByStep'}, {querKey: 'Enrollment'}] },
-      // });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ queryKey: 'EnrollmentByStep' }, { querKey: 'Enrollment' }, { querKey: 'EnrollmentById' }] },
+      });
       // console.log('Server response:', serverResponse);
       // Send a message to the channel
-      channel.postMessage({ type: 'data-updated', queryKey: 'exampleQueryKey' });
+      // channel.postMessage({ type: 'data-updated', queryKey: 'exampleQueryKey' });
     },
   });
 };
@@ -765,9 +904,14 @@ export const useApprovedEnrollmentStep2Mutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => approvedEnrollmentStep2Action(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'EnrollmentByStep' }, { querKey: 'EnrollmentById' }] },
+      });
     },
   });
 };
@@ -777,9 +921,14 @@ export const useApprovedEnrollmentStep3Mutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => approvedEnrollmentStep3Action(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'EnrollmentByStep' }, { querKey: 'EnrollmentById' }] },
+      });
     },
   });
 };
@@ -789,9 +938,14 @@ export const useApprovedEnrollmentStep4Mutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => approvedEnrollmentStep4Action(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'EnrollmentByStep' }, { querKey: 'EnrollmentById' }] },
+      });
     },
   });
 };
@@ -801,10 +955,15 @@ export const useApprovedEnrollmentStep5Mutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => approvedEnrollmentStep5Action(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
       queryClient.invalidateQueries({ queryKey: ['CollegeEnrollment'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'EnrollmentByStep' }, { querKey: 'CollegeEnrollment' }, { querKey: 'EnrollmentById' }] },
+      });
     },
   });
 };
@@ -814,10 +973,15 @@ export const useApprovedEnrollmentStep6Mutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => approvedEnrollmentStep6Action(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
       queryClient.invalidateQueries({ queryKey: ['CollegeEnrollment'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'EnrollmentByStep' }, { querKey: 'CollegeEnrollment' }, { querKey: 'EnrollmentById' }] },
+      });
     },
   });
 };
@@ -827,9 +991,14 @@ export const useUndoEnrollmentToStep1Mutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => undoEnrollmentToStep1(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'EnrollmentByStep' }, { querKey: 'EnrollmentById' }] },
+      });
     },
   });
 };
@@ -839,9 +1008,14 @@ export const useUndoEnrollmentToStep2Mutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => undoEnrollmentToStep2(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'EnrollmentByStep' }, { querKey: 'EnrollmentById' }] },
+      });
     },
   });
 };
@@ -851,9 +1025,14 @@ export const useUndoEnrollmentToStep3Mutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => undoEnrollmentToStep3(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'EnrollmentByStep' }, { querKey: 'EnrollmentById' }] },
+      });
     },
   });
 };
@@ -863,9 +1042,14 @@ export const useUndoEnrollmentToStep4Mutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => undoEnrollmentToStep4(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'EnrollmentByStep' }, { querKey: 'EnrollmentById' }] },
+      });
     },
   });
 };
@@ -897,9 +1081,14 @@ export const useCreateCourseBlockMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createCollegeCourseBlockAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
       queryClient.invalidateQueries({ queryKey: ['BlockTypeById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'BlockType' }, { querKey: 'BlockTypeById' }] },
+      });
     },
   });
 };
@@ -907,11 +1096,16 @@ export const useUpdateCourseBlockScheduleMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateCourseBlockScheduleAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
       queryClient.invalidateQueries({ queryKey: ['BlockTypeById'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'BlockType' }, { querKey: 'BlockTypeById' }, { querKey: 'TeacherSchedule' }, { querKey: 'TeacherScheduleByProfileId' }] },
+      });
     },
   });
 };
@@ -919,11 +1113,16 @@ export const useRemoveCourseBlockScheduleMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => removeCourseBlockScheduleAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
       queryClient.invalidateQueries({ queryKey: ['BlockTypeById'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'BlockType' }, { querKey: 'BlockTypeById' }, { querKey: 'TeacherSchedule' }, { querKey: 'TeacherScheduleByProfileId' }] },
+      });
     },
   });
 };
@@ -956,8 +1155,13 @@ export const useCreateRoomMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createRoomAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['Rooms'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'Rooms' }] },
+      });
     },
   });
 };
@@ -979,8 +1183,13 @@ export const useCreateSubjectCollegeMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createSubjectCollegeAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['SubjectCollege'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'SubjectCollege' }] },
+      });
     },
   });
 };
@@ -1027,9 +1236,14 @@ export const useCreateTeacherScheduleCollegeMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createTeacherScheduleAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'TeacherSchedule' }, { querKey: 'TeacherScheduleByProfileId' }] },
+      });
     },
   });
 };
@@ -1037,9 +1251,14 @@ export const useRemoveTeacherScheduleCollegeMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => removeTeacherScheduleCollegeMutation(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'TeacherSchedule' }, { querKey: 'TeacherScheduleByProfileId' }] },
+      });
     },
   });
 };
@@ -1062,8 +1281,13 @@ export const useCreateSchoolYearMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createSchoolYearAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['SchoolYear'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'SchoolYear' }] },
+      });
     },
   });
 };
@@ -1107,10 +1331,15 @@ export const useUpdateCurriculumLayerMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateCurriculumByIdAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['Curriculum'] });
       queryClient.invalidateQueries({ queryKey: ['CurriculumById'] });
       queryClient.invalidateQueries({ queryKey: ['CurriculumByCourse'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'Curriculum' }, { querKey: 'CurriculumById' }, { querKey: 'CurriculumByCourse' }] },
+      });
     },
   });
 };
@@ -1119,10 +1348,15 @@ export const useUpdateCurriculumLayerSubjectMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateCurriculumSubjectByIdAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['Curriculum'] });
       queryClient.invalidateQueries({ queryKey: ['CurriculumById'] });
       queryClient.invalidateQueries({ queryKey: ['CurriculumByCourse'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'Curriculum' }, { querKey: 'CurriculumById' }, { querKey: 'CurriculumByCourse' }] },
+      });
     },
   });
 };
@@ -1156,9 +1390,14 @@ export const useCreateStudentCurriculumMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createStudentCurriculumAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['StudentCurriculum'] });
       queryClient.invalidateQueries({ queryKey: ['StudentCurriculumById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'StudentCurriculum' }, { querKey: 'StudentCurriculumById' }] },
+      });
     },
   });
 };
@@ -1167,9 +1406,14 @@ export const useUpdateStudentCurriculumLayerMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateStudentCurriculumByIdAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['StudentCurriculum'] });
       queryClient.invalidateQueries({ queryKey: ['StudentCurriculumById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'StudentCurriculum' }, { querKey: 'StudentCurriculumById' }] },
+      });
     },
   });
 };
@@ -1178,9 +1422,14 @@ export const useUpdateStudentCurriculumLayerSubjectMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateStudentCurriculumSubjectByIdAction(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['StudentCurriculum'] });
       queryClient.invalidateQueries({ queryKey: ['StudentCurriculumById'] });
+      const serverResponse = await myChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: { message: [{ querKey: 'StudentCurriculum' }, { querKey: 'StudentCurriculumById' }] },
+      });
     },
   });
 };

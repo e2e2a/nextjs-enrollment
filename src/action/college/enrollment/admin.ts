@@ -543,14 +543,9 @@ export const CollegeEndSemesterAction = async (data: any) => {
     }
     setProgress(70);
 
-    /**
-     * @new added
-     */
     const courses = await Course.find({ category: 'College' }).select('_id');
     const courseIds = courses.map((course) => course._id);
-    /**
-     * @new added
-     */
+
     await StudentProfile.updateMany({ courseId: { $in: courseIds }, studentStatus: 'Continue', enrollStatus: { $in: ['', 'Pending'] } }, { $set: { studentStatus: 'Returning', enrollStatus: '' } }, { new: true });
     await StudentProfile.updateMany({ courseId: { $in: courseIds }, studentStatus: 'New Student', enrollStatus: 'Pending' }, { $set: { enrollStatus: '' } }, { new: true });
     // Use insertMany for bulk insertion
@@ -560,16 +555,25 @@ export const CollegeEndSemesterAction = async (data: any) => {
     setProgress(80);
     await Enrollment.deleteMany({ category: 'College' });
     setProgress(85);
+    /**
+     * @todo
+     * @note this "ReportGrade" model is not be directly deleted
+     * 1. we are going to update this model
+     * 2. dataToUpdate = { boolean: representing it is active or not,schoolYear: currentSchoolYear of grade reported}
+     * 3. do it in bulk
+     * 4. compute all execution time in this field
+     */
     await ReportGrade.deleteMany({ category: 'College' });
     setProgress(90);
 
     if (data.deleteInstructor) {
+      /**
+       * @todo this blockType model is the same as we do at line 566
+       */
       await BlockType.updateMany({ category: 'College' }, { $set: { blockSubjects: [] } }, { new: true });
       await TeacherSchedule.deleteMany({ category: 'College' });
     }
-    /**
-     * @new added
-     */
+  
     await StudentProfile.updateMany({ courseId: { $in: courseIds }, enrollStatus: 'Enrolled' }, { $set: { studentStatus: 'Continue', enrollStatus: '' } }, { new: true });
     setProgress(95);
     const enrollmentTertiary = {
