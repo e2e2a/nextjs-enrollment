@@ -1,12 +1,15 @@
 'use server';
 import dbConnect from '@/lib/db/db';
+import { getEnrollmentSetupByName } from '@/services/EnrollmentSetup';
 import { createTeacherReportGrade, getAllTeacherReportGrade, getTeacherReportGradeById, updateTeacherReportGradeStatusById } from '@/services/reportGrade';
 
 export const createTeacherReportGradeAction = async (data: any) => {
   try {
     await dbConnect();
+    const ESetup = await getEnrollmentSetupByName('GODOY')
     data.statusInDean = 'Pending';
     data.evaluated = false;
+    data.schoolYear = ESetup.enrollmentTertiary.schoolYear;
     const createdReportGrade = await createTeacherReportGrade(data);
     if (!createdReportGrade) return { error: 'Something went wrong.', status: 500 };
     return { message: 'Grade has been Report.', status: 201 };

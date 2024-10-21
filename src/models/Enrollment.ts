@@ -71,12 +71,12 @@ const schema = new Schema<IEnrollment>(
     },
     /**
      * added some new features
-     * this wont be use on how we render or display about the form in continuing students
+     * this "enrollmentStatus" will help me to not deleted it when its rejected and reverse it when needed.
      * @todo
      */
     enrollmentStatus: {
       type: String,
-      enum: ['Success', 'Failed'],
+      enum: ['Pending', 'Enrolled', 'Rejected'],
     },
 
     studentStatus: {

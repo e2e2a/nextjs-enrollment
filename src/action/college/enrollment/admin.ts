@@ -555,14 +555,7 @@ export const CollegeEndSemesterAction = async (data: any) => {
     setProgress(80);
     await Enrollment.deleteMany({ category: 'College' });
     setProgress(85);
-    /**
-     * @todo
-     * @note this "ReportGrade" model is not be directly deleted
-     * 1. we are going to update this model
-     * 2. dataToUpdate = { boolean: representing it is active or not,schoolYear: currentSchoolYear of grade reported}
-     * 3. do it in bulk
-     * 4. compute all execution time in this field
-     */
+    
     await ReportGrade.deleteMany({ category: 'College' });
     setProgress(90);
 
