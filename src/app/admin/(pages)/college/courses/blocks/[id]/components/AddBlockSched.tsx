@@ -6,6 +6,7 @@ import { Icons } from '@/components/shared/Icons';
 import { useUpdateCourseBlockScheduleMutation } from '@/lib/queries';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+
 interface IProps {
   blockType: any;
   s: any;
@@ -13,7 +14,6 @@ interface IProps {
 
 const AddBlockSched = ({ blockType, s }: IProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  // const [selectedItems, setSelectedItems] = React.useState<any[]>([{selectedItems: {teacherScheduleId: [], subjectId: []}}]);
   const [isEnabled, setIsEnabled] = React.useState(false);
   const [selectedItems, setSelectedItems] = React.useState<{ teacherScheduleId: string }[]>([]);
   const mutation = useUpdateCourseBlockScheduleMutation();
@@ -21,10 +21,8 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
     setSelectedItems((prevSelectedItems) => {
       const itemIndex = prevSelectedItems.findIndex((item) => item.teacherScheduleId === teacherScheduleId);
       if (itemIndex > -1) {
-        // Item is already selected, so remove it
         return prevSelectedItems.filter((item) => item.teacherScheduleId !== teacherScheduleId);
       } else {
-        // Item is not selected, so add it
         return [...prevSelectedItems, { teacherScheduleId }];
       }
     });
@@ -47,7 +45,7 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
           case 200:
           case 201:
           case 203:
-            setIsOpen(false)
+            setIsOpen(false);
             setSelectedItems([]);
             makeToastSucess('New Schedule has been added to blocks.');
             return;
@@ -99,7 +97,6 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                             <div className=''>
                               <span className='border rounded-full border-gray-600 px-1.5'>{index + 1}</span>
                             </div>{' '}
-                            {/* Numbering starts from 1 */}
                             <span>
                               Instructor: {selectedItem.profileId.firstname} {selectedItem.profileId.middlename} {selectedItem.profileId.lastname}
                             </span>
@@ -140,41 +137,16 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                 <div className='overflow-x-auto w-full '>
                   <div className=' bg-white border border-gray-300'>
                     {s.map((s: any, index: any) => (
-                      <CommandItem className='border w-full block' key={s._id} value={s.subjectId.name}>
-                        <div className='flex w-full'>
-                          <div className='min-w-[80px] justify-center flex items-center'>
-                            {isSelected(s._id) ? (
-                              <Button
-                                disabled={isEnabled}
-                                onClick={() => handleSelect(s._id)}
-                                type='button'
-                                size={'sm'}
-                                className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
-                              >
-                                <Icons.trash className='h-4 w-4' />
-                              </Button>
-                            ) : (
-                              <Button
-                                onClick={() => {
-                                  handleSelect(s._id);
-                                }}
-                                type='button'
-                                size={'sm'}
-                                className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-green-500 px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
-                              >
-                                <Icons.add className='h-4 w-4' />
-                                <span className='sm:flex hidden text-xs sm:text-sm'>Add</span>
-                              </Button>
-                            )}
-                          </div>
-                          <div className='flex flex-col text-sm'>
+                      <CommandItem className='border w-full block mb-3 bg-gray-300' key={s._id} value={s.subjectId.name}>
+                        <div className='grid sm:grid-cols-2 grid-cols-1 w-full'>
+                          <div className='flex flex-col text-xs sm:text-sm order-2 sm:order-1'>
                             <span className=' font-semibold'>
                               Instructor: {s.profileId.firstname} {s.profileId.middlename} {s.profileId.lastname}
                             </span>
                             <span className=' font-semibold'>
-                              Code: <span className='uppercase'>{s.subjectId.subjectCode}</span>
+                              Subject Code: <span className='uppercase'>{s.subjectId.subjectCode}</span>
                             </span>
-                            <span className=' text-wrap font-medium'>Descriptive Title: {s.subjectId.name}</span>
+                            <span className=' text-wrap font-semibold'>Descriptive Title: {s.subjectId.name}</span>
                             <span className=''>Pre Req.: {s.subjectId.preReq}</span>
                             <span className=''>Days: {s.days.join(', ')}</span>
                             <span className=''>Lec: {s.subjectId.lec}</span>
@@ -189,6 +161,26 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                             <span className=''>
                               Room: <span className='uppercase'>{s.roomId.roomName}</span>
                             </span>
+                          </div>
+                          <div className='justify-end sm:items-center flex items-end order-1 '>
+                            {isSelected(s._id) ? (
+                              <Button disabled={isEnabled} onClick={() => handleSelect(s._id)} type='button' size={'sm'} className={'focus-visible:ring-0 flex bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}>
+                                <Icons.trash className='h-4 w-4' />
+                                <span className='sm:flex text-xs sm:text-sm'>Remove</span>
+                              </Button>
+                            ) : (
+                              <Button
+                                onClick={() => {
+                                  handleSelect(s._id);
+                                }}
+                                type='button'
+                                size={'sm'}
+                                className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-green-500 px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
+                              >
+                                <Icons.add className='h-4 w-4' />
+                                <span className='sm:flex text-xs sm:text-sm'>Add</span>
+                              </Button>
+                            )}
                           </div>
                         </div>
                       </CommandItem>

@@ -225,7 +225,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                           <div className='grid sm:grid-cols-2 grid-cols-1 w-full'>
                                             <div className='flex flex-col text-xs sm:text-sm order-2 sm:order-1'>
                                               <span className=' font-semibold border-1 sm:border-0'>
-                                                Instructor: {s.teacherScheduleId.profileId.firstname} {s.teacherScheduleId.profileId.middlename} {s.teacherScheduleId.profileId.lastname}
+                                                Instructor: {s.teacherScheduleId.profileId.firstname} {s.teacherScheduleId.profileId.middlename} {s.teacherScheduleId.profileId.lastname} {s.teacherScheduleId.profileId?.extensionName ? s.teacherScheduleId.profileId.extensionName : ''}
                                               </span>
                                               <span className=' font-semibold'>
                                                 Department: <span className='uppercase'>{s.teacherScheduleId.courseId.name}</span>
