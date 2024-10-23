@@ -9,6 +9,7 @@ import { ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll } from
 import { storage } from '@/firebase';
 import Image from 'next/image';
 import { useUpdateProfilePhoto } from '@/lib/queries';
+import Username from './Username';
 type Iprops = {
   session: any;
   profile: any;
@@ -32,8 +33,6 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
         setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
-
-      console.log(file);
     } else {
       makeToastError('File size too large');
     }
@@ -76,22 +75,20 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
                   case 200:
                   case 201:
                   case 203:
-                    makeToastSucess('Photo has been uploaded.')
-                    return ;
+                    setDialogOpen(false);
+                    makeToastSucess('Photo has been uploaded.');
+                    return;
                   default:
-                    makeToastError('Photo upload failed.')
+                    makeToastError('Photo upload failed.');
                     return;
                 }
               },
               onSettled: () => {
-                setDialogOpen(false);
                 setIsUploading(false);
               },
             });
             setDownloadURL(url);
-            // setDialogOpen(false);
             // setIsUploading(false);
-            console.log('downloadUrl', downloadURL);
           });
         }
       );
@@ -112,7 +109,7 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
           // modal={true}
           open={dialogOpen}
           onOpenChange={(e) => {
-            setDialogOpen(undefined);
+            setDialogOpen(e);
             setImagePreview(null);
           }}
         >
@@ -144,7 +141,6 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
                 </div>
                 <input type='file' ref={fileInputRef} style={{ display: 'none' }} accept='image/png' onChange={(e) => handleSelectedFile(e.target.files)} />
 
-                {/* Span that triggers the file input */}
                 <Button onClick={handleClick} disabled={isUploading}>
                   <span className='cursor-pointer p-2 text-blue-600 gap-0 md:gap-2 rounded-md flex items-center'>
                     <div className='bg-slate-100 rounded-full'>
@@ -171,7 +167,7 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
                 {profile.firstname} {profile.lastname}
               </h1>
             ) : null}
-            <p className='small-regular md:body-medium text-light-3 text-center'>@{profile.userId.username}</p>
+            <Username profile={profile} />
           </div>
         </div>
         {/* <div className='flex justify-center'>

@@ -12,7 +12,7 @@ export const createUser = async (data: any, password: string) => {
     });
     return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
-    console.log('error creating user', error)
+    console.log('error creating user', error);
     return null;
   }
 };
@@ -55,6 +55,7 @@ export const getUserById: any = async (id: string) => {
     const user = await User.findById(id);
     return JSON.parse(JSON.stringify(user));
   } catch (error) {
+    console.log('user service error:', error);
     return null;
   }
 };
@@ -143,6 +144,16 @@ export const getAllUsers = async () => {
   try {
     const user = await User.find().exec();
     return user;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const updateUserById = async (id: string, data: any) => {
+  try {
+    const user = await User.findByIdAndUpdate(id, data, { new: true });
+    return data;
   } catch (error) {
     console.log(error);
     return null;

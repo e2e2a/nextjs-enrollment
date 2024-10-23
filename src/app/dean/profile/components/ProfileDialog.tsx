@@ -9,6 +9,7 @@ import { ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll } from
 import { storage } from '@/firebase';
 import Image from 'next/image';
 import { useUpdateProfilePhoto } from '@/lib/queries';
+import Username from './Username';
 type Iprops = {
   session: any;
   profile: any;
@@ -33,19 +34,12 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
         setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
-
-      console.log(file);
     } else {
       makeToastError('File size too large');
     }
   };
 
   const handleUploadFile = () => {
-    /**
-     * first import this function "updateUserImageById"
-     * create a tanstack mutation
-     * proceed saving imageFile and then use the function to save the imageFile in the user
-     */
     if (imageFile) {
       setIsUploading(true);
       const name = imageFile.name;
@@ -82,20 +76,20 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
                   case 200:
                   case 201:
                   case 203:
-                    makeToastSucess('Photo has been uploaded.')
-                    return ;
+                    setDialogOpen(false);
+                    makeToastSucess('Photo has been uploaded.');
+                    return;
                   default:
-                    makeToastError('Photo upload failed.')
+                    makeToastError('Photo upload failed.');
                     return;
                 }
               },
               onSettled: () => {
-                setDialogOpen(false);
                 setIsUploading(false);
               },
             });
             setDownloadURL(url);
-            // setDialogOpen(false);
+            //
             // setIsUploading(false);
           });
         }
@@ -117,7 +111,7 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
           // modal={true}
           open={dialogOpen}
           onOpenChange={(e) => {
-            setDialogOpen(undefined);
+            setDialogOpen(e);
             setImagePreview(null);
           }}
         >
@@ -176,16 +170,9 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
                 {profile.firstname} {profile.lastname}
               </h1>
             ) : null}
-            <p className='small-regular md:body-medium text-light-3 text-center'>@{profile.userId.username}</p>
+            <Username profile={profile} />
           </div>
         </div>
-        {/* <div className='flex justify-center'>
-          <div className={``}>
-            <Button type='button' className='shad-button_primary px-8'>
-              Enroll now!
-            </Button>
-          </div>
-        </div> */}
       </div>
     </div>
   );
