@@ -25,10 +25,10 @@ const Username = ({ profile }: IProps) => {
   });
 
   form.watch('username');
-  
+
   useEffect(() => {
     form.setValue('username', `${profile.userId.username}`);
-  }, [profile]);
+  }, [form, profile]);
 
   const onChange = () => {
     setShowUsernameInput(!showInputUsername);
