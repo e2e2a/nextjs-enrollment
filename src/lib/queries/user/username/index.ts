@@ -28,7 +28,7 @@ export const useNewUsernameMutation = () => {
           return { error: 'Forbidden.', status: 403 };
       }
       queryClient.invalidateQueries({ queryKey: ['ProfileBySessionId'] });
-      queryClient.invalidateQueries({ queryKey: ['ProfileByParamsUserId', data.id] });
+      queryClient.invalidateQueries({ queryKey: ['ProfileByParamsUserIdInAdmin', data.id] });
     },
   });
 };

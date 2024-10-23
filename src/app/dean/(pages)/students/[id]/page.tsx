@@ -1,19 +1,16 @@
 'use client';
-import { Icons } from '@/components/shared/Icons';
-import { UserAvatar } from '@/components/shared/nav/UserAvatar/UserAvatar';
-import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import EmailTab from './components/EmailTab';
 import PasswordTab from './components/PasswordTab';
 import ProfileTab from './components/ProfileTab';
-import { useProfileQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useParams, usePathname } from 'next/navigation';
 import Loader from '@/components/shared/Loader';
 import ErrorPage from './components/ErrorPage';
 import ProfileTabEnrollCollege from './components/ProfileTabEnrollCollege';
+import { useProfileQueryByParamsUserIdInDean } from '@/lib/queries/profile/dean';
 
 const ProfilePage = ({ params }: { params: { id: string } }) => {
   const { data } = useSession();
@@ -28,13 +25,16 @@ const ProfilePage = ({ params }: { params: { id: string } }) => {
     setActiveTab(newTab);
   };
   const session = data?.user;
-  const { data: res, isLoading, error } = useProfileQuery(params.id as string);
+  const { data: res, isLoading, error } = useProfileQueryByParamsUserIdInDean(params.id as string);
 
   useEffect(() => {
     if (error || !res) return;
 
     if (res) {
       if (res.profile) {
+        setLoading(false);
+      }else {
+        //set error here
         setLoading(false);
       }
     }
