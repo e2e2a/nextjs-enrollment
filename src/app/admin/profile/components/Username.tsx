@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { useAdminNewUsernameMutation } from '@/lib/queries/admin/profile';
+import { useNewUsernameMutation } from '@/lib/queries/profile/username';
 
 type IProps = {
   profile: any;
@@ -16,7 +16,7 @@ type IProps = {
 
 const Username = ({ profile }: IProps) => {
   const [showInputUsername, setShowUsernameInput] = useState(false);
-  const mutation = useAdminNewUsernameMutation();
+  const mutation = useNewUsernameMutation();
   const form = useForm<z.infer<typeof UsernameValidator>>({
     resolver: zodResolver(UsernameValidator),
     defaultValues: {
