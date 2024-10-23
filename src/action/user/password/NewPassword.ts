@@ -16,7 +16,7 @@ export const NewPassword = async (data: any) => {
 
     const { currentPassword, password } = validatedFields.data;
     const existingUser = await getUserByEmail(email);
-    //
+    
     if (!existingUser || !existingUser.email || !existingUser.emailVerified) {
       return { error: 'Email does not exist!', status: 404 };
     }

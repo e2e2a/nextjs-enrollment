@@ -163,7 +163,7 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
         <div className='flex flex-col flex-1 md:mt-2'>
           <div className='flex flex-col w-full'>
             {profile?.firstname && profile?.lastname ? (
-              <h1 className='text-center h3-bold md:h1-semibold w-full'>
+              <h1 className='text-center h3-bold md:h1-semibold w-full capitalize'>
                 {profile.firstname} {profile.lastname}
               </h1>
             ) : null}

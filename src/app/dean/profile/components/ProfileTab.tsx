@@ -99,21 +99,23 @@ const ProfileTab = ({ profile }: Iprops) => {
           <CardHeader>
             <CardTitle className='pt-3 pb-5 pl-0'>
               <div className='flex '>
-                <div className='w-full pl-11'>
-                  <h1 className='text-3xl font-bold leading-[140%] tracking-wide text-center'>Profile</h1>
+                <div className='flex justify-center w-full'>
+                  <h1 className='text-3xl font-semibold tracking-wide text-center'>Profile</h1>
                 </div>
-                {profile.isVerified && (
-                  <div className='bg-slate-200 hover:bg-slate-300 relative right-2 rounded-xl py-1.5 px-2 cursor-pointer flex items-center gap-1' title='Edit' onClick={handleEditable}>
-                    <Icons.squarePen className='h-5 w-5 fill-white stroke-blue-600 relative' />
-                    <span className='hidden sm:flex tracking-normal text-sm'>Edit</span>
-                  </div>
-                )}
               </div>
               <CardDescription className='text-sm font-normal w-full text-center'>Update your profile information here. Ensure all your details are accurate to have the best experience on our platform.</CardDescription>
             </CardTitle>
           </CardHeader>
           {/* note if its not editable its pb-0 @button */}
           <CardContent className=''>
+            {profile.isVerified && (
+              <div className='w-full flex justify-end mb-2'>
+                <div className='bg-slate-200 hover:bg-slate-300 relative right-2 rounded-xl py-1.5 px-2 cursor-pointer flex items-center gap-1' title='Edit' onClick={handleEditable}>
+                  <Icons.squarePen className='h-5 w-5 fill-white stroke-blue-600 relative' />
+                  <span className='hidden sm:flex tracking-normal text-sm'>Edit</span>
+                </div>
+              </div>
+            )}
             <div className={`grid sm:grid-cols-2 grid-cols-1 lg:gap-8 ${isNotEditable ? 'justify-around ' : 'px-0 lg:px-11'}`}>
               {/* <h1 className='text-lg font-bold border-b text-center lg:text-left'>Manpower Profile</h1> */}
               <Input isNotEditable={isNotEditable} name={'firstname'} type={'text'} form={form} label={'Firstname:'} classNameInput={'capitalize'} />
@@ -134,7 +136,7 @@ const ProfileTab = ({ profile }: Iprops) => {
           {!isNotEditable && (
             <CardFooter className='w-full flex justify-center items-center '>
               <Button type='submit' disabled={isPending} className=' bg-blue-500 hover:bg-blue-400 text-white font-medium tracking-wide' onClick={form.handleSubmit(onSubmit)}>
-                {isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Submit'}
+                {isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Save'}
               </Button>
             </CardFooter>
           )}

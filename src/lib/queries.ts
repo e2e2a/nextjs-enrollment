@@ -45,9 +45,8 @@ import { signInAction, signOutAction, signUpAction } from '@/action/auth';
 import { checkResetPasswordToken, checkToken } from '@/action/token';
 import { verificationCodeProcess, verificationCodeResend } from '@/action/verification';
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
-import { NewPassword } from '@/action/profile/NewPassword';
+import { NewPassword } from '@/action/user/password/NewPassword';
 import { updateAdminProfile, updateDeanProfile, updateStudentPhoto, updateStudentProfile, updateTeacherProfile } from '@/action/profile/updateData';
-import { getAdminProfileBySessionId, getDeanProfileBySessionId, getStudentProfileBySessionId, getStudentProfileByUsernameAction, getTeacherProfileBySessionId } from '@/action/profile/getProfile';
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction, getSingleEnrollmentByUserIdIdAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
 import {

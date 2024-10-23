@@ -72,10 +72,10 @@ const ProfilePage = () => {
               <TabsContent value='profile' className={`w-full bg-neutral-50  my-10 max-w-[69rem] rounded-lg`}>
                 <ProfileTab session={session} profile={profile} />
               </TabsContent>
-              <TabsContent value='email' className='w-full mb-3 max-w-[69rem]'>
+              <TabsContent value='email' className={`w-full bg-neutral-50  my-10 max-w-[69rem] rounded-lg`}>
                 <EmailTab />
               </TabsContent>
-              <TabsContent value='password' className='w-full mb-3 max-w-[69rem]'>
+              <TabsContent value='password' className={`w-full bg-neutral-50  my-10 max-w-[69rem] rounded-lg`}>
                 <PasswordTab />
               </TabsContent>
             </div>

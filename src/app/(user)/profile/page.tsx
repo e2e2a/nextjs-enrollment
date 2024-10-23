@@ -1,7 +1,4 @@
 'use client';
-import { Icons } from '@/components/shared/Icons';
-import { UserAvatar } from '@/components/shared/nav/UserAvatar/UserAvatar';
-import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import Note from './components/Note';
@@ -21,12 +18,15 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
+  
   const handleClose = () => {
     setIsOpen(false);
   };
+
   const handleTabChange = (newTab: string) => {
     setActiveTab(newTab);
   };
+
   const session = data?.user;
   const { data: res, isLoading, error } = useProfileQueryBySessionId();
 
@@ -38,6 +38,7 @@ const ProfilePage = () => {
       return setLoading(false);
     }
   }, [error, res]);
+
   return (
     <>
       {loading ? (
@@ -70,10 +71,10 @@ const ProfilePage = () => {
               <TabsContent value='profile' className={`w-full bg-neutral-50  my-10 max-w-[69rem] rounded-lg`}>
                 <ProfileTab session={session} profile={res?.profile} />
               </TabsContent>
-              <TabsContent value='email' className='w-full mb-3 max-w-[69rem]'>
+              <TabsContent value='email' className={`w-full bg-neutral-50  my-10 max-w-[69rem] rounded-lg`}>
                 <EmailTab />
               </TabsContent>
-              <TabsContent value='password' className='w-full mb-3 max-w-[69rem]'>
+              <TabsContent value='password' className={`w-full bg-neutral-50  my-10 max-w-[69rem] rounded-lg`}>
                 <PasswordTab />
               </TabsContent>
             </div>
