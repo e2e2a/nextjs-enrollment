@@ -314,55 +314,55 @@ export const useAdminCreateUserRoleMutation = () => {
   });
 };
 
-export const useProfileQuery = (id: any) => {
-  return useQuery<getSingleProfileResponse, Error>({
-    queryKey: ['userProfile', id],
-    queryFn: () => getStudentProfileBySessionId(id),
-    enabled: !!id,
-    retry: 0,
-    refetchOnWindowFocus: false,
-  });
-};
+// export const useProfileQuery = (id: any) => {
+//   return useQuery<getSingleProfileResponse, Error>({
+//     queryKey: ['userProfile', id],
+//     queryFn: () => getStudentProfileBySessionId(id),
+//     enabled: !!id,
+//     retry: 0,
+//     refetchOnWindowFocus: false,
+//   });
+// };
 
-export const useTeacherProfileQuery = (id: any) => {
-  return useQuery<getSingleProfileResponse, Error>({
-    queryKey: ['userTeacherProfile', id],
-    queryFn: () => getTeacherProfileBySessionId(id),
-    enabled: !!id,
-    retry: 0,
-    refetchOnWindowFocus: false,
-  });
-};
+// export const useTeacherProfileQuery = (id: any) => {
+//   return useQuery<getSingleProfileResponse, Error>({
+//     queryKey: ['userTeacherProfile', id],
+//     queryFn: () => getTeacherProfileBySessionId(id),
+//     enabled: !!id,
+//     retry: 0,
+//     refetchOnWindowFocus: false,
+//   });
+// };
 
-export const useDeanProfileQuery = (id: any) => {
-  return useQuery<getSingleProfileResponse, Error>({
-    queryKey: ['userDeanProfile', id],
-    queryFn: () => getDeanProfileBySessionId(id),
-    enabled: !!id,
-    retry: 0,
-    refetchOnWindowFocus: false,
-  });
-};
+// export const useDeanProfileQuery = (id: any) => {
+//   return useQuery<getSingleProfileResponse, Error>({
+//     queryKey: ['userDeanProfile', id],
+//     queryFn: () => getDeanProfileBySessionId(id),
+//     enabled: !!id,
+//     retry: 0,
+//     refetchOnWindowFocus: false,
+//   });
+// };
 
-export const useProfileAdminQuery = (id: any) => {
-  return useQuery<getSingleProfileResponse, Error>({
-    queryKey: ['userAdminProfile', id],
-    queryFn: () => getAdminProfileBySessionId(id),
-    enabled: !!id,
-    retry: 0,
-    refetchOnWindowFocus: false,
-  });
-};
+// export const useProfileAdminQuery = (id: any) => {
+//   return useQuery<getSingleProfileResponse, Error>({
+//     queryKey: ['userAdminProfile', id],
+//     queryFn: () => getAdminProfileBySessionId(id),
+//     enabled: !!id,
+//     retry: 0,
+//     refetchOnWindowFocus: false,
+//   });
+// };
 
-export const useProfileQueryByUsername = (username: string) => {
-  return useQuery<getSingleProfileResponse, Error>({
-    queryKey: ['userProfileByUsername', username],
-    enabled: !!username,
-    queryFn: () => getStudentProfileByUsernameAction(username),
-    retry: 0,
-    refetchOnWindowFocus: false,
-  });
-};
+// export const useProfileQueryByUsername = (username: string) => {
+//   return useQuery<getSingleProfileResponse, Error>({
+//     queryKey: ['userProfileByUsername', username],
+//     enabled: !!username,
+//     queryFn: () => getStudentProfileByUsernameAction(username),
+//     retry: 0,
+//     refetchOnWindowFocus: false,
+//   });
+// };
 
 export const useUpdateProfilePhoto = () => {
   const queryClient = useQueryClient();

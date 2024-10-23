@@ -3,16 +3,16 @@ import { dashboardConfig } from '@/constant/dashboard';
 import { ReactNode, useEffect, useState } from 'react';
 import { MainNav } from '@/components/shared/nav/MainNav';
 import { MobileNav } from '@/components/shared/nav/MobileNav';
-import { useProfileAdminQuery } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import Loader from '@/components/shared/Loader';
 import { decryptData } from '@/lib/encryption';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 
 const UserRootLayout = ({ children }: { children: ReactNode }) => {
   const { data } = useSession();
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const { data: res, isLoading, error } = useProfileAdminQuery(data?.user.id as string);
+  const { data: res, isLoading, error } = useProfileQueryBySessionId();
   useEffect(() => {
     if (error || !res) {
       return;

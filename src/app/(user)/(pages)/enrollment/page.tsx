@@ -5,8 +5,9 @@ import EnrollmentForms from './components/Forms';
 import ErrorPage from './components/ErrorPage';
 import { getEnrollmentByUserId } from '@/services/enrollment';
 import { useSession } from 'next-auth/react';
-import { useCourseQuery, useEnrollmentQuery, useProfileQuery } from '@/lib/queries';
+import { useCourseQuery, useEnrollmentQuery } from '@/lib/queries';
 import Loader from '@/components/shared/Loader';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 
 const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -27,7 +28,7 @@ const Page = () => {
   }, [res, isCoursesError]);
   const { data: d } = useSession();
   const session = d!.user;
-  const { data: resP, isLoading: PLoading, error: PError } = useProfileQuery(session.id);
+  const { data: resP, isLoading: PLoading, error: PError } = useProfileQueryBySessionId();
   const { data: resE, isLoading: ELoading, error: EError } = useEnrollmentQuery(session.id);
   useEffect(() => {
     if (EError || !resE) {

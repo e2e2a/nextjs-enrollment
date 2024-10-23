@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useAllTeacherReportGradeQuery, useTeacherProfileQuery } from '@/lib/queries';
+import { useAllTeacherReportGradeQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useSession } from 'next-auth/react';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
@@ -12,7 +13,7 @@ const Page = () => {
   const [teacherRG, setTeacherRG] = useState([]);
   const { data: s } = useSession();
   const { data, isLoading, error: isEnError } = useAllTeacherReportGradeQuery();
-  const { data: pData, isLoading: pload, error } = useTeacherProfileQuery(s?.user.id as string);
+  const { data: pData, isLoading: pload, error } = useProfileQueryBySessionId();
 
   useEffect(() => {
     if (isEnError || !data) return;

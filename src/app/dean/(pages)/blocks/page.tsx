@@ -2,13 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useBlockCourseQuery, useDeanProfileQuery } from '@/lib/queries';
+import { useBlockCourseQuery } from '@/lib/queries';
 import { IBlockType } from '@/types';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/shared/Icons';
 import Link from 'next/link';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
@@ -16,7 +17,7 @@ const Page = () => {
   const [blocks, setBlocks] = useState<any>([]);
   const { data, isLoading, error } = useBlockCourseQuery();
   const { data: s } = useSession();
-  const { data: pData, isLoading: pload, error: pError } = useDeanProfileQuery(s?.user.id as string);
+  const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
 
   useEffect(() => {
     if (error || !data) return;

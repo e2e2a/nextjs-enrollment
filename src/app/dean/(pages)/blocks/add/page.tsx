@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { CourseBlockCollegeValidator } from '@/lib/validators/Validator';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
-import { useCreateCourseBlockMutation, useDeanProfileQuery } from '@/lib/queries';
+import { useCreateCourseBlockMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import TextareaField from './components/Textarea';
 import Input from './components/Input';
@@ -16,13 +16,14 @@ import { SelectInput } from './components/SelectInput';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 import { selectType } from '@/constant/course';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 
 const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState<boolean>(false);
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
   const [course, setCourse] = useState<any[]>([]);
   const { data: s } = useSession();
-  const { data: pData, isLoading: pload, error: pError } = useDeanProfileQuery(s?.user.id as string);
+  const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
 
   useEffect(() => {
     if (!pData || pError) return;

@@ -3,15 +3,16 @@ import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useTeacherProfileQueryByUserId, useTeacherScheduleCollegeQueryByProfileId } from '@/lib/queries';
+import { useTeacherScheduleCollegeQueryByProfileId } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const { data: session } = useSession();
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error: isEnError } = useTeacherProfileQueryByUserId(session?.user?.id!);
-  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleCollegeQueryByProfileId(data?.teacher?._id);
+  const { data, isLoading, error: isEnError } = useProfileQueryBySessionId();
+  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleCollegeQueryByProfileId(data?.profile?._id);
   useEffect(() => {
     if (isLoading || !data) return;
     if (isEnError) return setIsError(true);
@@ -37,7 +38,7 @@ const Page = () => {
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {isError ? (
             <div className=''>404</div>
-          ) : data && data.teacher ? (
+          ) : data && data.profile ? (
             <>
               <div className='flex items-center py-4 text-black w-full text-center flex-col'>
                 <div>
@@ -45,7 +46,7 @@ const Page = () => {
                 </div>
                 <div className=''>
                   <h1 className='sm:text-sm text-lg font-bold capitalize'>
-                    {data.teacher.firstname}, {data.teacher.middlename} {data.teacher.lastname} {data.teacher.extensionName ? data.teacher.extensionName : ''}
+                    {data.profile.firstname}, {data.profile.middlename} {data.profile.lastname} {data.profile.extensionName ? data.profile.extensionName : ''}
                   </h1>
                 </div>
               </div>

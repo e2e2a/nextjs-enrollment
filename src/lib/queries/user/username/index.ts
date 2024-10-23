@@ -1,4 +1,4 @@
-import { newUsernameAction } from '@/action/profile/username';
+import { newUsernameAction } from '@/action/user/username';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
@@ -17,15 +17,18 @@ export const useNewUsernameMutation = () => {
     onSuccess: (data) => {
       switch (data.role) {
         case 'STUDENT':
-
+          break
+        case 'TEACHER':
+          break
         case 'DEAN':
-
+          break
         case 'ADMIN':
-          queryClient.invalidateQueries({ queryKey: ['userAdminProfile'] });
-
+          break
         default:
           return { error: 'Forbidden.', status: 403 };
       }
+      queryClient.invalidateQueries({ queryKey: ['ProfileBySessionId'] });
+      queryClient.invalidateQueries({ queryKey: ['ProfileByParamsUserId', data.id] });
     },
   });
 };

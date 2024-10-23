@@ -1,18 +1,19 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useAllEnrollmentByTeacherScheduleIdQuery, useTeacherProfileQueryByUserId, useTeacherScheduleCollegeQueryById } from '@/lib/queries';
+import { useAllEnrollmentByTeacherScheduleIdQuery, useTeacherScheduleCollegeQueryById } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import AddGrades from './components/AddGrades';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [teacherStudents, setTeacherStudents] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data: session } = useSession();
-  const { data, isLoading, error: isEnError } = useTeacherProfileQueryByUserId(session?.user?.id!);
+  const { data, isLoading, error: isEnError } = useProfileQueryBySessionId();
   const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleCollegeQueryById(params.id);
   const { data: s, isLoading: sLoading, error: sError } = useAllEnrollmentByTeacherScheduleIdQuery(ts?.teacherSchedule?._id);
   useEffect(() => {
@@ -47,7 +48,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {isError ? (
             <div className=''>404</div>
-          ) : data && data.teacher ? (
+          ) : data && data.profile ? (
             <>
               <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
                 <div className='mb-3'>

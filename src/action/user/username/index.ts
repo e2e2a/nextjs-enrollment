@@ -14,7 +14,6 @@ export const newUsernameAction = async (data: any): Promise<any> => {
   return tryCatch(async () => {
     await dbConnect();
     const session = await checkAuth();
-    console.log(session);
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
 
     const validatedFields = UsernameValidator.safeParse(data);
@@ -23,7 +22,7 @@ export const newUsernameAction = async (data: any): Promise<any> => {
     const { username } = validatedFields.data;
     const checked = await checkUsername(session.user, username, validatedFields.data);
     if (checked && checked.error) return { error: checked.error, status: 500 };
-    return { message: 'Username has been updated.', role: session.user.role, status: 200 };
+    return { message: 'Username has been updated.', role: session.user.role, id: session.user.id, status: 200 };
   });
 };
 
@@ -31,7 +30,7 @@ export const newUsernameAction = async (data: any): Promise<any> => {
  *
  * checking username
  * if username is not changed @return error
- * else if username is changed will save
+ * else if username is changed check if its not exist then saved
  * @returns change username action
  */
 const checkUsername = async (user: any, username: string, data: any) => {

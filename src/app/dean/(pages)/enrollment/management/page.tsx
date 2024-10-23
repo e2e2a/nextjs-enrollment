@@ -1,6 +1,6 @@
 'use client';
 import Loader from '@/components/shared/Loader';
-import { useDeanProfileQuery, useEnrollmentQueryByStep, useEnrollmentSetupQuery } from '@/lib/queries';
+import { useEnrollmentQueryByStep, useEnrollmentSetupQuery } from '@/lib/queries';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import { columns } from './components/step1/columns';
@@ -20,6 +20,7 @@ import EnableADW from './components/step4/EnableADW';
 import { DataTable6 } from './components/step6/DataTable6';
 import { columns6 } from './components/step6/Columns6';
 import { useSession } from 'next-auth/react';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 
 const Page = () => {
   const pathname = usePathname();
@@ -32,7 +33,7 @@ const Page = () => {
   const isAllowed = useMemo(() => ['1', '2', '3', '4', '5', '6'], []);
   // Validate the step parameter whenever the search parameter changes
   const { data: s } = useSession();
-  const { data: pData, isLoading: pload, error: pError } = useDeanProfileQuery(s?.user.id as string);
+  const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
   useEffect(() => {
     if (search === null || !isAllowed.includes(search)) {
       setIsError(true);

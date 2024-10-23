@@ -1,13 +1,13 @@
 'use client';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useTeacherProfileQuery } from '@/lib/queries';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
 const Home = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data: s } = useSession();
-  const { data: pData, isLoading, error } = useTeacherProfileQuery(s?.user.id as string);
+  const { data: pData, isLoading, error } = useProfileQueryBySessionId();
 
   useEffect(() => {
     if (error || !pData) {

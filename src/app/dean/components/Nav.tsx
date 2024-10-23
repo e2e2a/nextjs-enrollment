@@ -2,18 +2,18 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { dashboardConfig } from '@/constant/dashboard';
 import { useSession } from 'next-auth/react';
-import { useDeanProfileQuery, useProfileQuery } from '@/lib/queries';
 import Loader from '@/components/shared/Loader';
 import { SidebarNav } from './SidebarNav';
 import { MainNav } from '@/components/shared/nav/MainNav';
 import { MobileNav } from '@/components/shared/nav/MobileNav';
 import { useRouter } from 'next/navigation';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 const Nav = ({ children }: { children: ReactNode }) => {
   const { data: sessionData } = useSession();
   const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const { data: res, isLoading, error } = useDeanProfileQuery(sessionData?.user.id as string);
+  const { data: res, isLoading, error } = useProfileQueryBySessionId();
   useEffect(() => {
     if (error || !res) {
       return;

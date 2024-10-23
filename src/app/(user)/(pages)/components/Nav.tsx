@@ -6,8 +6,9 @@ import { MainNav } from '@/components/shared/nav/MainNav';
 import { MobileNav } from '@/components/shared/nav/MobileNav';
 import { SidebarNav } from '@/components/shared/nav/SidebarNav';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useProfileQuery } from '@/lib/queries';
 import { useRouter } from 'next/navigation';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+
 interface IProps {
   session: any;
   children: ReactNode;
@@ -15,7 +16,7 @@ interface IProps {
 const Nav = ({ session, children }: IProps) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const router = useRouter();
-  const { data: res, isLoading, error } = useProfileQuery(session?.user.id as string);
+  const { data: res, isLoading, error } = useProfileQueryBySessionId();
 
   useEffect(() => {
     if (error || !res || !res.profile) {

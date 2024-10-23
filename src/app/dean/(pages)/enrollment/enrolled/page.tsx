@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useAllEnrollmentQuery, useDeanProfileQuery } from '@/lib/queries';
+import { useAllEnrollmentQuery } from '@/lib/queries';
 import { IEnrollment } from '@/types';
 import { useSession } from 'next-auth/react';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
@@ -13,7 +14,7 @@ const Page = () => {
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
 
   const { data: s } = useSession();
-  const { data: pData, isLoading: pload, error: pError } = useDeanProfileQuery(s?.user.id as string);
+  const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
   const { data, isLoading, error: isEnError } = useAllEnrollmentQuery(pData?.profile?.courseId?.category);
 
   useEffect(() => {

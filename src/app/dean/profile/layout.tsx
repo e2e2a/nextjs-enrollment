@@ -3,17 +3,17 @@ import { dashboardConfig } from '@/constant/dashboard';
 import { ReactNode, useEffect, useState } from 'react';
 import { MainNav } from '@/components/shared/nav/MainNav';
 import { MobileNav } from '@/components/shared/nav/MobileNav';
-import { useDeanProfileQuery } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import { decryptData } from '@/lib/encryption';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 
 const UserRootLayout = ({ children }: { children: ReactNode }) => {
   const { data } = useSession();
   // const session = await auth();
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const { data: res, isLoading, error } = useDeanProfileQuery(data?.user.id as string);
+  const { data: res, isLoading, error } = useProfileQueryBySessionId();
   useEffect(() => {
     if (error || !res) {
       return;

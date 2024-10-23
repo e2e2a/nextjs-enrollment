@@ -6,10 +6,10 @@ import { ReactNode, useEffect, useState } from 'react';
 import { MainNav } from '@/components/shared/nav/MainNav';
 import {  } from 'next-auth/react';
 import { redirect, usePathname } from 'next/navigation';
-import { useProfileAdminQuery, useProfileQuery } from '@/lib/queries';
 import { MobileNav } from '@/components/shared/nav/MobileNav';
 import { SidebarNav } from './SidebarNav';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 interface IProps {
   session: any;
   children: ReactNode;
@@ -20,7 +20,7 @@ const Nav = ({ session, children }: IProps) => {
   /**
    * @todo change profile query by user roles
    */
-  const { data: res, isLoading, error } = useProfileAdminQuery(session?.user.id as string);
+  const { data: res, isLoading, error } = useProfileQueryBySessionId();
   const path = usePathname();
   const [hideSidebar, setHideSidebar] = useState(false);
   // useEffect(() => {

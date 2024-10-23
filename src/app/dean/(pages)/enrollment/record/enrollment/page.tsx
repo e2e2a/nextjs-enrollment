@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useAllStudentEnrollmentRecordCollegeQuery, useDeanProfileQuery, useProfileQuery, useStudentEnrollmentRecordByProfileIdQuery } from '@/lib/queries';
+import { useAllStudentEnrollmentRecordCollegeQuery, useStudentEnrollmentRecordByProfileIdQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useSession } from 'next-auth/react';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 
 const Page = () => {
   const { data: s } = useSession();
@@ -13,7 +14,7 @@ const Page = () => {
   const [filteredEnrollments, setFilteredEnrollments] = useState<any>([]);
   
   const { data, isLoading, error: isEnError } = useAllStudentEnrollmentRecordCollegeQuery('College');
-  const { data: pData, isLoading: pload, error: pError } = useDeanProfileQuery(s?.user.id as string);
+  const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
   useEffect(() => {
     if (isEnError || !data) return;
     if (pError || !pData) return;

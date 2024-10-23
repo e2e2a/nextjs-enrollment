@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { useNewUsernameMutation } from '@/lib/queries/profile/username';
+import { useNewUsernameMutation } from '@/lib/queries/user/username';
 
 type IProps = {
   profile: any;

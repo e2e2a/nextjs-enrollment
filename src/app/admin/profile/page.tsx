@@ -7,10 +7,10 @@ import EmailTab from './components/EmailTab';
 import PasswordTab from './components/PasswordTab';
 import ProfileTab from './components/ProfileTab';
 import ProfileDialog from './components/ProfileDialog';
-import { useProfileAdminQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 import ErrorPage from './components/ErrorPage';
 import { decryptData } from '@/lib/encryption';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile';
 
 const ProfilePage = () => {
   const { data } = useSession();
@@ -26,7 +26,7 @@ const ProfilePage = () => {
     setActiveTab(newTab);
   };
   const session = data?.user;
-  const { data: res, isLoading, error } = useProfileAdminQuery(data?.user.id as string);
+  const { data: res, isLoading, error } = useProfileQueryBySessionId();
 
   useEffect(() => {
     if (error || !res) {
