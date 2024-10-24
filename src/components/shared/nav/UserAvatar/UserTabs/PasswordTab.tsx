@@ -7,7 +7,7 @@ import { useNewPasswordMutation } from '@/lib/queries/user/password';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { NewPasswordValidator } from '@/lib/validators/user/password';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -27,8 +27,8 @@ const PasswordTab = () => {
 
   const onSubmit = async (data: z.infer<typeof NewPasswordValidator>) => {
     mutation.mutate(data, {
-      onSuccess: (res) => {
-        console.log(res);
+      onSuccess: async (res) => {
+        
         if (res.error) return form.setError('currentPassword', { message: res.error });
         makeToastSucess(res.message as string);
         setTimeout(() => {

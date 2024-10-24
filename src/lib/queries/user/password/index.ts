@@ -1,6 +1,7 @@
 import { NewPasswordAction } from '@/action/user/password';
 import { NewPasswordValidator } from '@/lib/validators/user/password';
 import { useMutation } from '@tanstack/react-query';
+import { signOut } from 'next-auth/react';
 import { z } from 'zod';
 
 /**
@@ -12,5 +13,8 @@ import { z } from 'zod';
 export const useNewPasswordMutation = () => {
   return useMutation<any, Error, z.infer<typeof NewPasswordValidator>>({
     mutationFn: async (data) => NewPasswordAction(data),
+    onSuccess: async (data) => {
+      await signOut();
+    }
   });
 };

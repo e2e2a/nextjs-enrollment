@@ -26,7 +26,7 @@ export const NewPasswordAction = async (data: any) => {
 
     const updatedUser = await updateUser(session.user, validatedFields.data.currentPassword!, validatedFields.data.password);
     if (!updatedUser || updatedUser.error) return { error: updatedUser.error, status: 403 };
-    await signOut()
+
     return { message: 'New Password has been set!', status: 200 };
   });
 };
@@ -65,7 +65,7 @@ const updateUser = async (user: any, currentPassword: string, password: string) 
     if (!checkedPassword || checkedPassword.error) return { error: checkedPassword.error, status: 403 };
     const hashedPassword = await hashPassword(password);
 
-    const updateUser = await updateUserById(user._id, hashedPassword);
+    const updateUser = await updateUserById(user._id, { password: hashedPassword });
     if (!updateUser) return { error: 'failed to update the password', status: 403 };
     return { success: true, status: 200 };
   });
