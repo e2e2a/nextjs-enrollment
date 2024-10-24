@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { SignupValidator } from '@/lib/validators/Validator';
+import { SignupValidator } from '@/lib/validators/auth/signUp';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
 import { useCourseQuery, useAdminCreateUserRoleMutation } from '@/lib/queries';

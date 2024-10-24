@@ -150,21 +150,21 @@ export const EnrollmentApprovedStep2 = z.object({
   scholarType: z.string().min(1, { message: 'year must atleast 1 characters.' }),
 });
 
-export const SignupValidator = z
-  .object({
-    email: z.string().email({ message: 'Email is Required.' }),
-    // firstname: z
-    //   .string()
-    //   .min(1, { message: 'Firstname must atleast 1 characters.' }),
-    // lastname: z.string().min(1, { message: 'Lastname must atleast 1 characters.' }),
-    username: z.string().min(1, { message: 'Username must atleast 1 characters.' }),
-    password: z.string().min(6, { message: 'Password must atleast 6 characters.' }),
-    CPassword: z.string(),
-  })
-  .refine((data) => data.password === data.CPassword, {
-    message: "Confirmation password doesn't match!",
-    path: ['CPassword'],
-  });
+// export const SignupValidator = z
+//   .object({
+//     email: z.string().email({ message: 'Email is Required.' }),
+//     // firstname: z
+//     //   .string()
+//     //   .min(1, { message: 'Firstname must atleast 1 characters.' }),
+//     // lastname: z.string().min(1, { message: 'Lastname must atleast 1 characters.' }),
+//     username: z.string().min(1, { message: 'Username must atleast 1 characters.' }),
+//     password: z.string().min(6, { message: 'Password must atleast 6 characters.' }),
+//     CPassword: z.string(),
+//   })
+//   .refine((data) => data.password === data.CPassword, {
+//     message: "Confirmation password doesn't match!",
+//     path: ['CPassword'],
+//   });
 
 export const RecoveryValidator = z.object({
   email: z.string().email({ message: 'Email is Required.' }),

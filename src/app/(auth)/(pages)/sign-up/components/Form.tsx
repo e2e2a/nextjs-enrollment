@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { SignupValidator } from '@/lib/validators/Validator';
+import { SignupValidator } from '@/lib/validators/auth/signUp';
 import { useSignUpMutation } from '@/lib/queries';
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';

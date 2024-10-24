@@ -39,7 +39,8 @@ import {
   verificationCodeResendResponse,
 } from '@/types';
 import { fetchAllUsers } from './api';
-import { EnrollmentApprovedStep2, SignupValidator, StudentProfileValidator } from './validators/Validator';
+import { SignupValidator } from '@/lib/validators/auth/signUp';
+import { EnrollmentApprovedStep2, StudentProfileValidator } from './validators/Validator';
 import { z } from 'zod';
 import { signOutAction, signUpAction } from '@/action/auth';
 import { checkResetPasswordToken, checkToken } from '@/action/token';
