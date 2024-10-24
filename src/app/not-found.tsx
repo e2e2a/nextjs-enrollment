@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { auth } from '@/auth';
-import SignInPage from './(auth)/sign-in/page';
+import SignInPage from './(auth)/(pages)/sign-in/page';
 
 const NotFound = async () => {
   const session = await auth();

@@ -1,7 +1,7 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import { checkAuth } from '../helpers/auth';
+import { checkAuth } from '../../utils/actions/session';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { getSingleProfileResponse } from '@/types';
 import { getTeacherProfileByUserId } from '@/services/teacherProfile';

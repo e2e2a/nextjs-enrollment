@@ -1,21 +1,20 @@
 'use server';
-import { checkAuth } from '@/action/helpers/auth';
+import { checkAuth } from '@/utils/actions/session';
 import dbConnect from '@/lib/db/db';
 import { comparePassword, hashPassword } from '@/lib/hash/bcrypt';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { NewPasswordValidator } from '@/lib/validators/user/password';
 import { updateUserById } from '@/services/user';
-import { signOut } from 'next-auth/react';
 
 /**
  *
  * Handles New Password change for authenticated users.
- * Any ROLES
+ * Any authenticated user can invoke this action.
  *
  * @param {any} data - The data object.
  * @returns Result of the password change action
  */
-export const NewPasswordAction = async (data: any) => {
+export const newPasswordAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
     const session = await checkAuth();
@@ -24,10 +23,10 @@ export const NewPasswordAction = async (data: any) => {
     const validatedFields = NewPasswordValidator.safeParse(data);
     if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
 
-    const updatedUser = await updateUser(session.user, validatedFields.data.currentPassword!, validatedFields.data.password);
+    const updatedUser = await updateUserPassword(session.user, validatedFields.data.currentPassword!, validatedFields.data.password);
     if (!updatedUser || updatedUser.error) return { error: updatedUser.error, status: 403 };
 
-    return { message: 'New Password has been set!', status: 200 };
+    return { message: 'New Password has been set!', status: 201 };
   });
 };
 
@@ -59,9 +58,9 @@ const checkPassword = async (user: any, currentPassword: string) => {
  * @param {string} password - The new password to set.
  * @returns Result of the update user password.
  */
-const updateUser = async (user: any, currentPassword: string, password: string) => {
+const updateUserPassword = async (user: any, currentPassword: string, password: string) => {
   return tryCatch(async () => {
-    const checkedPassword = await checkPassword(user, currentPassword!);
+    const checkedPassword = await checkPassword(user, currentPassword);
     if (!checkedPassword || checkedPassword.error) return { error: checkedPassword.error, status: 403 };
     const hashedPassword = await hashPassword(password);
 

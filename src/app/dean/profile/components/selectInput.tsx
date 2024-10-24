@@ -40,7 +40,6 @@ export function SelectInput({ form, name, label, isNotEditable, classNameInput, 
                 </Select>
               )}
               <label
-                htmlFor={name}
                 className={`sm:text-nowrap w-auto ${
                   isNotEditable
                     ? 'px-1 text-normal text-left font-medium text-md py-2'

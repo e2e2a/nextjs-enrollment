@@ -4,6 +4,7 @@ export interface IIps {
   }
 export interface IUser extends Document {
   userId: Schema.Types.ObjectId;
+  emailToChange: string;
   token: string;
   code: string;
   tokenType: string;
@@ -17,6 +18,9 @@ const schema = new Schema<IUser>(
       ref: 'User',
       required: true,
       unique: true,
+    },
+    emailToChange: {
+        type: String
     },
     token: {
         type: String

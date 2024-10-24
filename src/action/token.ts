@@ -5,6 +5,7 @@ import { getVerificationTokenByUserId } from '@/services/token';
 import { checkTokenResponse, resetPasswordTokenResponse } from '@/types';
 import jwt from 'jsonwebtoken';
 import dbConnect from '@/lib/db/db';
+import { checkAuth } from '../utils/actions/session';
 
 /**
  * Performs checking verification token in the params
@@ -13,7 +14,7 @@ import dbConnect from '@/lib/db/db';
  */
 export const checkToken = async (token: string): Promise<checkTokenResponse> => {
   try {
-    await dbConnect()
+    await dbConnect();
     if (!token) return { error: 'no token provided', status: 400 };
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET!, {
       algorithms: ['HS256'],
@@ -26,10 +27,15 @@ export const checkToken = async (token: string): Promise<checkTokenResponse> => 
     if (!existingToken) {
       return { error: 'Token not found', status: 404 };
     }
-    
+
     const existingUser = await getUserById(decodedToken.userId);
 
     switch (existingToken.tokenType) {
+      case 'ChangeEmail':
+        const session = await checkAuth();
+        if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
+        if (session.user._id !== existingToken.userId._id) return { error: 'Forbidden', status: 403 };
+        break;
       case 'Activation':
       case 'Recovery':
         if (!existingUser || !existingUser.emailVerified) {
@@ -61,7 +67,7 @@ export const checkToken = async (token: string): Promise<checkTokenResponse> => 
  */
 export const checkResetPasswordToken = async (token: string): Promise<resetPasswordTokenResponse> => {
   try {
-    await dbConnect()
+    await dbConnect();
     if (!token) return { error: 'no token provided', status: 400 };
     const userToken = await ResetPassword.findOne({ token });
     if (!userToken) {

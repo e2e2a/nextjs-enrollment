@@ -10,6 +10,7 @@ import { useResendVCodeMutation, useTokenCheckQuery, useVerificationcCodeMutatio
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
 import { makeToastError } from '@/lib/toast/makeToast';
+import { getSession, useSession } from 'next-auth/react';
 
 const VerificationForm = () => {
   const [message, setMessage] = useState<string | undefined>('');
@@ -31,7 +32,6 @@ const VerificationForm = () => {
   const token = searchParams.get('token') ?? '';
 
   const { data: result, error } = useTokenCheckQuery(token);
-
   useEffect(() => {
     if (error) {
       router.push('/recovery');
@@ -81,11 +81,21 @@ const VerificationForm = () => {
     if (verificationCode.length !== 6) return makeToastError('Please complete the verification code.');
     setLoading(true);
     setIsPending(true);
-    const data = {
-      userId: result?.token?.userId._id,
-      verificationCode: verificationCode,
-      Ttype: result?.token?.tokenType,
-    };
+    let data
+    if(result?.token?.tokenType !== 'ChangeEmail'){
+      data = {
+        userId: result?.token?.userId._id,
+        verificationCode: verificationCode,
+        Ttype: result?.token?.tokenType,
+      };
+    }else {
+      data = {
+        userId: result?.token?.userId._id,
+        verificationCode: verificationCode,
+        Ttype: result?.token?.tokenType,
+      };
+    }
+     
     setLabelLink('');
     mutationSubmit.mutate(data, {
       onSuccess: (res) => {

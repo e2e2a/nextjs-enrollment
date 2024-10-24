@@ -23,24 +23,27 @@ export function SelectInput({ form, name, label, isNotEditable, classNameInput, 
           <FormControl>
             <div className={`${isNotEditable ? 'flex flex-row-reverse ' : 'relative bg-slate-50 rounded-lg'}`}>
               {isNotEditable ? (
-                <span className='w-full flex items-center' id={name}>{field.value}</span>
+                <span className='w-full flex items-center' id={name}>
+                  {field.value}
+                </span>
               ) : (
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <SelectTrigger id={name} className='w-full pt-10 pb-4 text-black rounded-xl focus:border-gray-400 ring-0 focus:ring-0 px-4 text-left capitalize '>
                     <SelectValue placeholder={placeholder} />
                   </SelectTrigger>
                   <SelectContent className='bg-white border-gray-300'>
-                    <SelectGroup className='' >
+                    <SelectGroup className=''>
                       {/* <SelectLabel>Options</SelectLabel> */}
                       {selectItems.map((item, index) => (
-                        <SelectItem value={item.value} key={index} className='capitalize '>{item.title}</SelectItem>
-                    ))}
+                        <SelectItem value={item.value} key={index} className='capitalize '>
+                          {item.title}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
               )}
               <label
-                htmlFor={name}
                 className={`sm:text-nowrap w-auto ${
                   isNotEditable
                     ? 'px-1 text-normal text-left font-medium text-md py-2'

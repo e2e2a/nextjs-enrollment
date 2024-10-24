@@ -30,7 +30,7 @@ export const deleteVerificationTokenByid = async (id: string) => {
   }
 };
 
-export const generateVerificationToken = async (userId: string, TokenType: string) => {
+export const generateVerificationToken = async (userId: string, TokenType: string, emailToChange?: string) => {
   const expirationTime = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours in milliseconds
   const token = jwt.sign({ userId, exp: expirationTime.getTime() }, process.env.JWT_SECRET!, { algorithm: 'HS256' });
 
@@ -44,6 +44,7 @@ export const generateVerificationToken = async (userId: string, TokenType: strin
 
   const verificationToken = await Token.create({
     userId,
+    emailToChange: emailToChange,
     token,
     code: activitionCode,
     tokenType: TokenType,

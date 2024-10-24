@@ -77,6 +77,10 @@ export const signOutAction = async (data: any) => {
   try {
     await dbConnect();
     await User.findByIdAndUpdate(data.userId, { $set: { active: false } }, { new: true });
+    // cookies.getAll().forEach((cookie) => {
+    //   if (cookie.name.includes("next-auth"))
+    //     response.cookies.delete(cookie.name);
+    // });
     return { message: 'Logged out successfully!', status: 200 };
   } catch (error) {
     console.error('Error processing request:', error);

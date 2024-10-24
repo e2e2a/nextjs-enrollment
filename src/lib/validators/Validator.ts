@@ -13,9 +13,7 @@ const calculateAge = (birthDate: Date): number => {
   return age;
 };
 
-export const EmailValidator = z.object({
-  email: z.string().email({ message: 'Email is Required...' }),
-});
+
 export const UsernameValidator = z.object({
   username: z.string().min(1, { message: 'Username is Required...' }).max(10, { message: 'Username too long.' }),
 });

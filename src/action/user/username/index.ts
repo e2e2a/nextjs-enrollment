@@ -1,14 +1,16 @@
 'use server';
-import { checkAuth } from '@/action/helpers/auth';
+import { checkAuth } from '@/utils/actions/session';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { UsernameValidator } from '@/lib/validators/Validator';
 import { getUserByUsername, updateUserById } from '@/services/user';
 
 /**
+ * Handles the process of changing a user's username.
+ * Any authenticated user can invoke this action.
  *
- * any roles
- * @returns change username action
+ * @param {any} data - The data object containing the new username to be validated and processed.
+ * @returns Result of the username change action with potential success message, user role, user ID, and status code.
  */
 export const newUsernameAction = async (data: any): Promise<any> => {
   return tryCatch(async () => {
@@ -22,16 +24,20 @@ export const newUsernameAction = async (data: any): Promise<any> => {
     const { username } = validatedFields.data;
     const checked = await checkUsername(session.user, username, validatedFields.data);
     if (checked && checked.error) return { error: checked.error, status: 500 };
-    return { message: 'Username has been updated.', role: session.user.role, id: session.user.id, status: 200 };
+    return { message: 'Username has been updated.', role: session.user.role, id: session.user.id, status: 201 };
   });
 };
 
 /**
+ * 
+ * Validates the new username against the current user's username.
+ * If the new username is unchanged, returns an error.
+ * If it is changed, checks for existence and updates the username.
  *
- * checking username
- * if username is not changed @return error
- * else if username is changed check if its not exist then saved
- * @returns change username action
+ * @param {any} user - The user object containing user data.
+ * @param {string} username - The new username to check.
+ * @param {any} data - The data object containing the new username.
+ * @returns Result of the username check with potential success message or error details.
  */
 const checkUsername = async (user: any, username: string, data: any) => {
   return tryCatch(async () => {
@@ -43,7 +49,7 @@ const checkUsername = async (user: any, username: string, data: any) => {
       if (existingUsername) return { error: 'Username is already exist.', status: 400 };
       const updatedU = await updateUserById(user._id, data);
       if (!updatedU) return { error: 'error updating.', status: 500 };
-      return { success: 'Username has been updated.', status: 400 };
+      return { success: 'Username has been updated.', status: 201 };
     }
   });
 };
