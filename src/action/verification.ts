@@ -12,6 +12,7 @@ import dbConnect from '@/lib/db/db';
 import { checkAuth } from '../utils/actions/session';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { checkNewEmail } from '@/utils/actions/user/email';
+import { handleSignInAction } from '@/utils/actions/auth/signIn';
 
 /**
  * Performs submitting verification code(6-digit)
@@ -56,10 +57,10 @@ export const verificationCodeProcess = async (data: any): Promise<verificationCo
         }
         const updatedEmail = await updateUserEmail(user, userToken.emailToChange);
         if (updatedEmail && updatedEmail.error) return { error: updatedEmail.error, status: 500 };
-        // await signIn('credentials', {
-        //   email: userToken.emailToChange,
-        //   redirect: false,
-        // });
+
+        const signedIn = await handleSignInAction(userToken.userId._id, userToken.userId.email);
+        if (signedIn && signedIn.error) return { error: signedIn.error, status: signedIn.status };
+
         await deleteVerificationTokenByid(userToken._id);
         return { redirect: redirect, status: 201 };
       case 'Recovery':
@@ -108,6 +109,6 @@ const updateUserEmail = async (user: any, email: string) => {
     const updatedUser = await updateUserById(user._id, { email: email });
     if (!updatedUser) return { error: 'Failed to update the email.', status: 403 };
 
-    return { success: true, status: 201 };
+    return { success: 'yesyes', status: 201 };
   });
 };

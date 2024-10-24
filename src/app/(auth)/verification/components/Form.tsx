@@ -10,12 +10,10 @@ import { useResendVCodeMutation, useTokenCheckQuery, useVerificationcCodeMutatio
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
 import { makeToastError } from '@/lib/toast/makeToast';
-import { getSession, useSession } from 'next-auth/react';
 
 const VerificationForm = () => {
   const [message, setMessage] = useState<string | undefined>('');
   const [typeMessage, setTypeMessage] = useState('');
-  const { data:session, update } = useSession();
   const [header, setHeader] = useState<string | undefined>('');
   const [labelLink, setLabelLink] = useState<string | undefined>('');
   const [isPending, setIsPending] = useState<boolean>(false);
@@ -100,7 +98,6 @@ const VerificationForm = () => {
     mutationSubmit.mutate(data, {
       onSuccess: async(res) => {
         if (res.error) return makeToastError(res.error);
-        await update();
         setMessage('Verification completed!');
         setTypeMessage('success');
         if (!res.token) {

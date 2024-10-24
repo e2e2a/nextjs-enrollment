@@ -4,8 +4,10 @@ import { useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
 
 /**
+ * Custom hook to handle update of user's email for any role.
  * 
- * Mutation hook to update the user's email for any role.
+ * This hook utilizes `useMutation` from React Query to manage the update process,
+ * and it automatically invalidates the queries on successful sign-in.
  *
  * @returns {UseMutationResult} Mutation object with status, error, and mutate methods.
  */
