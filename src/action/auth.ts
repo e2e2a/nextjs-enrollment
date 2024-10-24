@@ -18,61 +18,61 @@ import { User } from '@/models/User';
  * Performs sign-in.
  * @param data Any data structure.
  */
-export const signInAction = async (data: any): Promise<SignInResponse> => {
-  try {
-    await dbConnect();
-    const validatedFields = SigninValidator.safeParse(data);
-    if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
+// export const signInAction = async (data: any): Promise<SignInResponse> => {
+//   try {
+//     await dbConnect();
+//     const validatedFields = SigninValidator.safeParse(data);
+//     if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
 
-    const { email, password } = validatedFields.data;
-    // const userCredential = await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe');
-    // console.log('userCredential: ', userCredential)
-    const existingUser = await getUserByEmail(email);
-    // try {
-    //   const myLimit = await rateLimit(6, email);
-    // } catch (error) {
-    //   return { error: 'Rate Limit exceeded.', limit: true, status: 429 };
-    // }
-    if (!existingUser || !existingUser.email || !existingUser.password) {
-      return { error: 'Incorrect email or password.', status: 403 };
-    }
+//     const { email, password } = validatedFields.data;
+//     // const userCredential = await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe');
+//     // console.log('userCredential: ', userCredential)
+//     const existingUser = await getUserByEmail(email);
+//     // try {
+//     //   const myLimit = await rateLimit(6, email);
+//     // } catch (error) {
+//     //   return { error: 'Rate Limit exceeded.', limit: true, status: 429 };
+//     // }
+//     if (!existingUser || !existingUser.email || !existingUser.password) {
+//       return { error: 'Incorrect email or password.', status: 403 };
+//     }
 
-    if (!existingUser.emailVerified) return { error: 'Incorrect email or password.', status: 403 };
-    const isMatch = await comparePassword(password, existingUser.password as string);
+//     if (!existingUser.emailVerified) return { error: 'Incorrect email or password.', status: 403 };
+//     const isMatch = await comparePassword(password, existingUser.password as string);
 
-    if (!isMatch) return { error: 'Incorrect email or password.', status: 403 };
+//     if (!isMatch) return { error: 'Incorrect email or password.', status: 403 };
 
-    // const userIp = await checkingIp(existingUser);
-    // if (userIp.errorIp) return { error: `Forbidden ${userIp.errorIp}`, status: 403 };
-    // if (!userIp || userIp.error || !userIp.success) {
-    //   const tokenType = 'Activation';
-    //   const verificationToken = await generateVerificationToken(existingUser._id, tokenType);
-    //   return { token: verificationToken.token, status: 203 };
-    // }
-    try {
-      await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
-      await User.findByIdAndUpdate(existingUser._id, { active: true }, { new: true });
-      return { message: 'Login successful', role: existingUser.role, status: 200 };
-    } catch (error: any) {
-      if (error instanceof AuthError) {
-        switch (error.type) {
-          case 'CredentialsSignin':
-            return { error: 'Invalid Credentials.', status: 401 };
-          default:
-            return { error: 'Something went wrong.', status: 500 };
-        }
-      }
-      return { error: 'Something went wrong.', status: 500 };
-    }
-  } catch (error) {
-    console.error('Error processing request:', error);
-    return { error: 'Something went wrong.', status: 500 };
-  }
-};
+//     // const userIp = await checkingIp(existingUser);
+//     // if (userIp.errorIp) return { error: `Forbidden ${userIp.errorIp}`, status: 403 };
+//     // if (!userIp || userIp.error || !userIp.success) {
+//     //   const tokenType = 'Activation';
+//     //   const verificationToken = await generateVerificationToken(existingUser._id, tokenType);
+//     //   return { token: verificationToken.token, status: 203 };
+//     // }
+//     try {
+//       await signIn('credentials', {
+//         email,
+//         password,
+//         redirect: false,
+//       });
+//       await User.findByIdAndUpdate(existingUser._id, { active: true }, { new: true });
+//       return { message: 'Login successful', role: existingUser.role, status: 200 };
+//     } catch (error: any) {
+//       if (error instanceof AuthError) {
+//         switch (error.type) {
+//           case 'CredentialsSignin':
+//             return { error: 'Invalid Credentials.', status: 401 };
+//           default:
+//             return { error: 'Something went wrong.', status: 500 };
+//         }
+//       }
+//       return { error: 'Something went wrong.', status: 500 };
+//     }
+//   } catch (error) {
+//     console.error('Error processing request:', error);
+//     return { error: 'Something went wrong.', status: 500 };
+//   }
+// };
 export const signOutAction = async (data: any) => {
   try {
     await dbConnect();

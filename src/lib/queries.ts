@@ -41,7 +41,7 @@ import {
 import { fetchAllUsers } from './api';
 import { EnrollmentApprovedStep2, SigninValidator, SignupValidator, StudentProfileValidator } from './validators/Validator';
 import { z } from 'zod';
-import { signInAction, signOutAction, signUpAction } from '@/action/auth';
+import {  signOutAction, signUpAction } from '@/action/auth';
 import { checkResetPasswordToken, checkToken } from '@/action/token';
 import { verificationCodeProcess, verificationCodeResend } from '@/action/verification';
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
@@ -155,15 +155,15 @@ export const useCollegeEndSemesterMutation = () => {
 //     broadcast: { ack: true },
 //   },
 // });
-export const useSignInMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<SignInResponse, Error, z.infer<typeof SigninValidator>>({
-    mutationFn: async (data) => signInAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
-    },
-  });
-};
+// export const useSignInMutation = () => {
+//   const queryClient = useQueryClient();
+//   return useMutation<SignInResponse, Error, z.infer<typeof SigninValidator>>({
+//     mutationFn: async (data) => signInAction(data),
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
+//     },
+//   });
+// };
 
 export const useSignUpMutation = () => {
   const queryClient = useQueryClient();

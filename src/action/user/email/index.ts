@@ -36,7 +36,7 @@ export const newEmailAction = async (data: any): Promise<any> => {
  * If the new email is unchanged, returns an error.
  * If it is changed, checks for existence and generates a verification token.
  *
- * @param {any} user - The user object containing user data.
+ * @param {Object} user - The user object containing user data.
  * @param {string} email - The new email address to check.
  * @returns Result of the email check with potential success message, verification token, or error details.
  */

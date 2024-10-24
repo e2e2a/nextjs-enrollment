@@ -11,7 +11,7 @@ import { updateUserById } from '@/services/user';
  * Handles New Password change for authenticated users.
  * Any authenticated user can invoke this action.
  *
- * @param {any} data - The data object.
+ * @param {Object} data - The data object.
  * @returns Result of the password change action
  */
 export const newPasswordAction = async (data: any) => {
@@ -34,7 +34,7 @@ export const newPasswordAction = async (data: any) => {
  *
  * Compares the current password with the stored password.
  *
- * @param {any} user - The user object.
+ * @param {Object} user - The user object.
  * @param {string} currentPassword - The current password to verify.
  * @returns Result of the password check.
  */
@@ -53,7 +53,7 @@ const checkPassword = async (user: any, currentPassword: string) => {
  *
  * Verifies current password and updates the user's password.
  *
- * @param {any} user - The user object.
+ * @param {Object} user - The user object.
  * @param {string} currentPassword - The user's current password.
  * @param {string} password - The new password to set.
  * @returns Result of the update user password.

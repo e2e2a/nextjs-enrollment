@@ -9,7 +9,7 @@ import { getUserByUsername, updateUserById } from '@/services/user';
  * Handles the process of changing a user's username.
  * Any authenticated user can invoke this action.
  *
- * @param {any} data - The data object containing the new username to be validated and processed.
+ * @param {Object} data - The data object containing the new username to be validated and processed.
  * @returns Result of the username change action with potential success message, user role, user ID, and status code.
  */
 export const newUsernameAction = async (data: any): Promise<any> => {
@@ -29,12 +29,12 @@ export const newUsernameAction = async (data: any): Promise<any> => {
 };
 
 /**
- * 
+ *
  * Validates the new username against the current user's username.
  * If the new username is unchanged, returns an error.
  * If it is changed, checks for existence and updates the username.
  *
- * @param {any} user - The user object containing user data.
+ * @param {Object} user - The user object containing user data.
  * @param {string} username - The new username to check.
  * @param {any} data - The data object containing the new username.
  * @returns Result of the username check with potential success message or error details.

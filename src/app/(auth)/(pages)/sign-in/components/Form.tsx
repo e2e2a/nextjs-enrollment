@@ -8,9 +8,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useSignInMutation } from '@/lib/queries';
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
+import { useSignInMutation } from '@/lib/queries/auth/signIn';
 
 const SignInForm = () => {
   const [message, setMessage] = useState<string | undefined>('');
@@ -32,7 +32,6 @@ const SignInForm = () => {
     setIsPending(true);
     mutation.mutate(data, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
