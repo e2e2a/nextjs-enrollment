@@ -8,12 +8,15 @@ import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { NewPasswordValidator } from '@/lib/validators/user/password';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signOut, useSession } from 'next-auth/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useLoading } from '../../logout/LoadingContext';
 
 const PasswordTab = () => {
   const { data: session } = useSession();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { setLoading } = useLoading();
   const mutation = useNewPasswordMutation();
 
   const form = useForm<z.infer<typeof NewPasswordValidator>>({
@@ -28,13 +31,25 @@ const PasswordTab = () => {
   const onSubmit = async (data: z.infer<typeof NewPasswordValidator>) => {
     mutation.mutate(data, {
       onSuccess: async (res) => {
-        
-        if (res.error) return form.setError('currentPassword', { message: res.error });
-        makeToastSucess(res.message as string);
-        setTimeout(() => {
-          // window.location.reload();
-        }, 100);
-        return;
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            setIsOpen(false);
+            setLoading(true);
+            signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL, redirect: true });
+            return;
+          case 400:
+          case 401:
+          case 402:
+          case 403:
+            if (res.error) return form.setError('currentPassword', { message: res.error });
+            return;
+          default:
+            setLoading(false);
+            makeToastError(res.error);
+            return;
+        }
       },
       onSettled: () => {
         // setIsPending(false);
@@ -43,7 +58,7 @@ const PasswordTab = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger className='w-full' asChild>
         <Button className='hover:bg-slate-300 w-full rounded-md gap-2 justify-between items-center text-[16px] p-2'>
           <div className='flex items-center gap-2'>

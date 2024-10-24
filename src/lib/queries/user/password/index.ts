@@ -13,8 +13,5 @@ import { z } from 'zod';
 export const useNewPasswordMutation = () => {
   return useMutation<any, Error, z.infer<typeof NewPasswordValidator>>({
     mutationFn: async (data) => NewPasswordAction(data),
-    onSuccess: async (data) => {
-      await signOut();
-    }
   });
 };

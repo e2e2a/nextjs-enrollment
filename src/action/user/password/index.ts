@@ -67,6 +67,6 @@ const updateUser = async (user: any, currentPassword: string, password: string) 
 
     const updateUser = await updateUserById(user._id, { password: hashedPassword });
     if (!updateUser) return { error: 'failed to update the password', status: 403 };
-    return { success: true, status: 200 };
+    return { success: true, status: 201 };
   });
 };

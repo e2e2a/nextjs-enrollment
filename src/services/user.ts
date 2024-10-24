@@ -152,7 +152,7 @@ export const getAllUsers = async () => {
 
 export const updateUserById = async (id: string, data: any) => {
   try {
-    const user = await User.findByIdAndUpdate(id, data, { new: true });
+    const user = await User.findByIdAndUpdate(id, { ...data }, { new: true });
     return user;
   } catch (error) {
     console.log(error);
