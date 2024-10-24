@@ -12,10 +12,13 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useLoading } from '../../logout/LoadingContext';
+import Input from './Input';
+import Image from 'next/image';
 
 const PasswordTab = () => {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
   const { setLoading } = useLoading();
   const mutation = useNewPasswordMutation();
 
@@ -29,6 +32,7 @@ const PasswordTab = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof NewPasswordValidator>) => {
+    setIsPending(true);
     mutation.mutate(data, {
       onSuccess: async (res) => {
         switch (res.status) {
@@ -52,7 +56,7 @@ const PasswordTab = () => {
         }
       },
       onSettled: () => {
-        // setIsPending(false);
+        setIsPending(false);
       },
     });
   };
@@ -75,91 +79,19 @@ const PasswordTab = () => {
             <DialogHeader>
               <span className='font-normal text-[15px] select-none'>
                 {session?.user.firstname} {session?.user.lastname}
-                <span className=' text-[8px] align-middle'> • </span>e2e2a
+                <span className=' text-[8px] align-middle'> • </span>
+                {session?.user?.username}
               </span>
               <DialogTitle className='text-[22px] font-bold text tracking-normal'>New Password</DialogTitle>
               <DialogDescription>Your password must be at least 6 characters and should include a combination of numbers, letters and special characters (!$@%).</DialogDescription>
             </DialogHeader>
-            <FormField
-              control={form.control}
-              name='currentPassword'
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className='relative'>
-                      <input
-                        type='password'
-                        id='currentPassword'
-                        className='block rounded-xl px-5 pb-2 pt-7 w-full text-sm bg-white border border-gray-200 appearance-none dark:text-white focus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom'
-                        placeholder=' '
-                        {...field}
-                      />
-                      <label
-                        htmlFor='currentPassword'
-                        className='absolute text-sm text-muted-foreground duration-200 transform -translate-y-2.5 scale-90 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-90 peer-focus:-translate-y-2.5'
-                      >
-                        Current password
-                      </label>
-                    </div>
-                  </FormControl>
-                  <FormMessage className='text-red pl-2' />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='password'
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className='relative'>
-                      <input
-                        type='password'
-                        id='password'
-                        className='block rounded-xl px-5 pb-2 pt-7 w-full text-sm bg-white border border-gray-200 appearance-none dark:text-white focus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom'
-                        placeholder=' '
-                        {...field}
-                      />
-                      <label
-                        htmlFor='password'
-                        className='absolute text-sm text-muted-foreground duration-200 transform -translate-y-2.5 scale-90 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-90 peer-focus:-translate-y-2.5'
-                      >
-                        New password
-                      </label>
-                    </div>
-                  </FormControl>
-                  <FormMessage className='text-red pl-2' />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='CPassword'
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className='relative'>
-                      <input
-                        type='password'
-                        id='CPassword'
-                        className='block rounded-xl px-5 pb-2 pt-7 w-full text-sm bg-white border border-gray-200 appearance-none dark:text-white focus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom'
-                        placeholder=' '
-                        {...field}
-                      />
-                      <label
-                        htmlFor='CPassword'
-                        className='absolute text-sm text-muted-foreground duration-200 transform -translate-y-2.5 scale-90 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-90 peer-focus:-translate-y-2.5'
-                      >
-                        Re-type new password
-                      </label>
-                    </div>
-                  </FormControl>
-                  <FormMessage className='text-red pl-2' />
-                </FormItem>
-              )}
-            />
+            <Input type='password' form={form} name={'currentPassword'} label={'Current password'} />
+            <Input type='password' form={form} name={'password'} label={'New password'} />
+            <Input type='password' form={form} name={'CPassword'} label={'Re-type new password'} />
             <DialogFooter>
-              <Button type='submit'>Save changes</Button>
+              <Button type='submit' autoFocus={false} className='bg-blue-600 w-44 flex-col ' disabled={isPending}>
+                <span className=' text-white text-[15px] font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Save'}</span>
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>
