@@ -3,7 +3,7 @@ import { getSingleProfileResponse } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 
 /**
- *
+ * @authenticated
  * any roles
  * @returns query of profile by session id or userId
  */

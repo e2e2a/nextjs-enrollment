@@ -7,12 +7,10 @@ import { NewPasswordValidator } from '@/lib/validators/user/password';
 import { updateUserById } from '@/services/user';
 
 /**
+ * Handles New Password change.
+ * Any authenticated role
  *
- * Handles New Password change for authenticated users.
- * Any authenticated user can invoke this action.
- *
- * @param {Object} data - The data object.
- * @returns Result of the password change action
+ * @param {Object} data 
  */
 export const newPasswordAction = async (data: any) => {
   return tryCatch(async () => {
@@ -31,12 +29,10 @@ export const newPasswordAction = async (data: any) => {
 };
 
 /**
+ * Compares the current password.
  *
- * Compares the current password with the stored password.
- *
- * @param {Object} user - The user object.
- * @param {string} currentPassword - The current password to verify.
- * @returns Result of the password check.
+ * @param {Object} user
+ * @param {string} currentPassword 
  */
 const checkPassword = async (user: any, currentPassword: string) => {
   return tryCatch(async () => {
@@ -50,7 +46,6 @@ const checkPassword = async (user: any, currentPassword: string) => {
 };
 
 /**
- *
  * Verifies current password and updates the user's password.
  *
  * @param {Object} user - The user object.

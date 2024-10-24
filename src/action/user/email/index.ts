@@ -9,12 +9,11 @@ import { checkNewEmail } from '@/utils/actions/user/email';
 /**
  *
  * Handles the process of changing a user's email address.
- * Any authenticated user can invoke this action.
+ * Any authenticated role
  *
- * @param {any} data - The data object containing the new email to be validated and processed.
- * @returns Result of the email change action with potential success message, verification token, user role, and status code.
+ * @param {Object} data
  */
-export const newEmailAction = async (data: any): Promise<any> => {
+export const newEmailAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
     const session = await checkAuth();
@@ -36,9 +35,8 @@ export const newEmailAction = async (data: any): Promise<any> => {
  * If the new email is unchanged, returns an error.
  * If it is changed, checks for existence and generates a verification token.
  *
- * @param {Object} user - The user object containing user data.
- * @param {string} email - The new email address to check.
- * @returns Result of the email check with potential success message, verification token, or error details.
+ * @param {Object} user
+ * @param {string} email
  */
 const checkEmail = async (user: any, email: string) => {
   return tryCatch(async () => {

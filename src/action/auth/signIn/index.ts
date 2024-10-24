@@ -14,14 +14,9 @@ import { SigninValidator } from '@/lib/validators/auth/signIn';
 import { handleSignInAction } from '@/utils/actions/auth/signIn';
 
 /**
- *
  * Handles the user sign-in process.
  *
  * @param {any} data - The sign-in data provided by the user (typically includes email and password).
- *
- * The function validates the input fields, checks the user's credentials, and then signs the user in.
- *
- * @returns An object containing the result of the sign-in process, such as a success message, user role, or error details.
  */
 export const signInAction = async (data: any) => {
   return tryCatch(async () => {
@@ -39,17 +34,9 @@ export const signInAction = async (data: any) => {
 };
 
 /**
- *
  * Verifies the user's credentials and checks various conditions for login.
  *
  * @param {any} data - The user-provided sign-in data, including email and password.
- *
- * This function checks if the user exists, if their email is verified, if the password matches,
- * and enforces rate limits on login attempts. It also verifies the user's IP address and
- * returns appropriate error messages or success data.
- *
- * @returns An object containing the result of the user check, which includes success or error messages,
- * the user object if found, rate limit info, or a token if further verification is needed.
  */
 const checkUser = async (data: any) => {
   return tryCatch(async () => {
@@ -70,15 +57,9 @@ const checkUser = async (data: any) => {
 };
 
 /**
- *
  * Enforces rate limiting on actions based on the user's email.
  *
  * @param {string} email - The email address used to track rate limits for the user.
- *
- * This function checks if the user has exceeded the rate limit for a specific action (e.g., sign-in attempts).
- * If the rate limit is exceeded, it returns an error. If the user is within the limit, it returns a success message.
- *
- * @returns An object indicating either success or that the rate limit has been exceeded, along with the appropriate status code.
  */
 const myLimit = async (email: string) => {
   try {
@@ -90,17 +71,9 @@ const myLimit = async (email: string) => {
 };
 
 /**
- * 
- * Checks the user's IP address for security purposes.
+ * Checks the user's IP address .
  * 
  * @param {any} user - The user object containing information needed to verify the IP.
- * 
- * This function compares the current IP address with the user's previously registered IP.
- * If the IP is different or not recognized, it generates a new verification token.
- * If the IP is known and safe, it returns a success message.
- * 
- * @returns An object containing the result of the IP check, which may include a success message, 
- * an error message, or a verification token for further steps.
  */
 const checkIp = async (user: any) => {
   return tryCatch(async () => {

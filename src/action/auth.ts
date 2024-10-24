@@ -91,86 +91,23 @@ export const signOutAction = async (data: any) => {
  * Performs sign-up.
  * @param data Any data structure.
  */
-export const signUpAction = async (data: any): Promise<SignUpResponse> => {
-  try {
-    await dbConnect();
-    const validatedFields = SignupValidator.safeParse(data);
-    if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
+// export const signUpAction = async (data: any): Promise<SignUpResponse> => {
+//   try {
+//     await dbConnect();
+//     const validatedFields = SignupValidator.safeParse(data);
+//     if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
 
-    const { email, password, username } = validatedFields.data;
+//     const { email, password, username } = validatedFields.data;
 
-    const checkConflict = await checkingConflict(email, username);
-    if (!checkConflict.success) return { error: checkConflict?.error, status: checkConflict?.status };
+//     const checkConflict = await checkingConflict(email, username);
+//     if (!checkConflict.success) return { error: checkConflict?.error, status: checkConflict?.status };
 
-    const newUser = await creatingUser(email, username, password);
-    console.log('newUser auth:', newUser);
-    return { message: 'Confirmation email sent!', token: newUser.token, status: 201 };
-  } catch (error) {
-    return { error: 'Something went wrong.', status: 500 };
-  }
-};
+//     const newUser = await creatingUser(email, username, password);
+//     console.log('newUser auth:', newUser);
+//     return { message: 'Confirmation email sent!', token: newUser.token, status: 201 };
+//   } catch (error) {
+//     return { error: 'Something went wrong.', status: 500 };
+//   }
+// };
 
-/**
- * Perfoms checking conflict of email and username
- * @returns string
- */
-const checkingConflict = async (email: string, username: string) => {
-  const existingUser = await getUserByEmail(email);
-  try {
-    if (existingUser) {
-      if (existingUser.emailVerified) {
-        return { error: 'User already exist. Please sign in to continue.', status: 409 };
-      }
-      const checkUsername = await getUserByUsername(username);
-      if (checkUsername) {
-        if (checkUsername.emailVerified) {
-          return { error: 'Username already exist. Please provide another username.', status: 409 };
-        } else {
-          await deleteStudentProfileByUserId(checkUsername._id);
-          await deleteUserByEmail(checkUsername.email);
-        }
-      }
-    } else {
-      const checkUsername = await getUserByUsername(username);
-      if (checkUsername) {
-        if (checkUsername.emailVerified) {
-          return { error: 'Username already exist. Please provide another username.', status: 409 };
-        } else {
-          await deleteStudentProfileByUserId(checkUsername._id);
-          await deleteUserByEmail(checkUsername.email);
-        }
-      }
-    }
-  } catch (error) {
-    console.log('this is my erro in conflict', error);
-  }
-  return { success: 'success', status: 200 };
-};
 
-/**
- * Performs creating user
- * Performs creating verification token
- * Performs email verification send
- * @returns
- */
-const creatingUser = async (email: string, username: string, password: string) => {
-  try {
-    // await dbConnect();
-    const user = await createUser({ email, username }, password);
-    console.log('my user: ', user);
-    await createStudentProfile({ userId: user._id });
-    if (!user) return { error: 'Error creating User', status: 404 };
-
-    const tokenType = 'Verify';
-    const verificationToken = await generateVerificationToken(user._id, tokenType);
-
-    if (!verificationToken) return { error: 'Error creating verificationToken', status: 404 };
-
-    const send = await sendVerificationEmail(verificationToken.email, verificationToken.code, username, 'Confirm your Email');
-    if (!send) return { error: 'Error sending verification email', status: 404 };
-    return { user: user, token: verificationToken.token };
-  } catch (error) {
-    console.log(error);
-    return { user: null, token: null };
-  }
-};

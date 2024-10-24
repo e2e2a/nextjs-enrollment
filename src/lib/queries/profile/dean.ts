@@ -3,8 +3,11 @@ import { getSingleProfileResponse } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 
 /**
- *
- * only admin roles
+ * @authenticated
+ * role dean
+ * Custom hook to query profile of student by param id.
+ * 
+ * @param {string} id
  * @returns query of profile by session id or userId
  */
 export const useProfileQueryByParamsUserIdInDean = (id: string) => {

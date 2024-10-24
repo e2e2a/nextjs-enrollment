@@ -7,10 +7,9 @@ import { UsernameValidator } from '@/lib/validators/user/username';
 
 /**
  * Handles the process of changing a user's username.
- * Any authenticated user can invoke this action.
+ * Any authenticated role
  *
- * @param {Object} data - The data object containing the new username to be validated and processed.
- * @returns Result of the username change action with potential success message, user role, user ID, and status code.
+ * @param {Object} data
  */
 export const newUsernameAction = async (data: any): Promise<any> => {
   return tryCatch(async () => {
@@ -21,8 +20,7 @@ export const newUsernameAction = async (data: any): Promise<any> => {
     const validatedFields = UsernameValidator.safeParse(data);
     if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
 
-    const { username } = validatedFields.data;
-    const checked = await checkUsername(session.user, username, validatedFields.data);
+    const checked = await checkUsername(session.user, validatedFields.data);
     if (checked && checked.error) return { error: checked.error, status: 500 };
     return { message: 'Username has been updated.', role: session.user.role, id: session.user.id, status: 201 };
   });
@@ -30,21 +28,17 @@ export const newUsernameAction = async (data: any): Promise<any> => {
 
 /**
  *
- * Validates the new username against the current user's username.
- * If the new username is unchanged, returns an error.
- * If it is changed, checks for existence and updates the username.
+ * check new username against the current user's username.
  *
- * @param {Object} user - The user object containing user data.
- * @param {string} username - The new username to check.
- * @param {any} data - The data object containing the new username.
- * @returns Result of the username check with potential success message or error details.
+ * @param {Object} user
+ * @param {any} data
  */
-const checkUsername = async (user: any, username: string, data: any) => {
+const checkUsername = async (user: any, data: any) => {
   return tryCatch(async () => {
-    if (username.toLowerCase() === user.username.toLowerCase()) {
+    if (data.username.toLowerCase() === user.username.toLowerCase()) {
       return { error: 'Username is the same.', status: 400 };
     } else {
-      const existingUsername = await getUserByUsername(username);
+      const existingUsername = await getUserByUsername(data.username);
 
       if (existingUsername) return { error: 'Username is already exist.', status: 400 };
       const updatedU = await updateUserById(user._id, data);
