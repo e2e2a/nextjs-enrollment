@@ -14,11 +14,6 @@ const calculateAge = (birthDate: Date): number => {
 };
 
 
-export const UsernameValidator = z.object({
-  username: z.string().min(1, { message: 'Username is Required...' }).max(10, { message: 'Username too long.' }),
-});
-
-
 // export const NewPasswordValidator = z
 //   .object({
 //     currentPassword: z.string().min(1, { message: 'Current password must atleast 1 characters.' }).optional(),

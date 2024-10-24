@@ -2,8 +2,8 @@
 import { checkAuth } from '@/utils/actions/session';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import { UsernameValidator } from '@/lib/validators/Validator';
 import { getUserByUsername, updateUserById } from '@/services/user';
+import { UsernameValidator } from '@/lib/validators/user/username';
 
 /**
  * Handles the process of changing a user's username.

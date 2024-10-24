@@ -2,13 +2,14 @@
 import { Icons } from '@/components/shared/Icons';
 import React, { useEffect, useState } from 'react';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { UsernameValidator } from '@/lib/validators/Validator';
+import { getUserByUsername, updateUserById } from '@/services/user';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { useNewUsernameMutation } from '@/lib/queries/user/username';
+import { UsernameValidator } from '@/lib/validators/user/username';
 
 type IProps = {
   profile: any;
