@@ -20,7 +20,7 @@ const Input = ({ form, type, name, label }: IProps) => {
               <input
                 type={type}
                 id={name}
-                className='block rounded-xl px-5 pb-2 pt-7 w-full text-sm bg-white border border-gray-200 appearance-none dark:text-white focus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom'
+                className='block rounded-xl px-5 pb-2 pt-7 w-full text-sm bg-slate-100 border border-gray-200 appearance-none dark:text-white focus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom'
                 placeholder=' '
                 {...field}
               />

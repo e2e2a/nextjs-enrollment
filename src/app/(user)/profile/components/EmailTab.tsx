@@ -24,9 +24,9 @@ const EmailTab = () => {
   });
   return (
     <Form {...form}>
-      <Card className='mb-8'>
+      <Card className='pb-8'>
         <CardHeader>
-          <CardTitle className='py-3'>
+          <CardTitle className=''>
             <div className='flex justify-center w-full'>
               <h1 className='text-3xl font-semibold tracking-wide text-center'>Email</h1>
             </div>

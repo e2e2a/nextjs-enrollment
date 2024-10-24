@@ -74,7 +74,7 @@ const PasswordTab = () => {
         </Button>
       </DialogTrigger>
       <Form {...form}>
-        <DialogContent className='rounded-md max-w-[500px] bg-sky-50'>
+        <DialogContent className='rounded-md max-w-[500px] bg-white'>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
             <DialogHeader>
               <span className='font-normal text-[15px] select-none'>
@@ -89,7 +89,7 @@ const PasswordTab = () => {
             <Input type='password' form={form} name={'password'} label={'New password'} />
             <Input type='password' form={form} name={'CPassword'} label={'Re-type new password'} />
             <DialogFooter>
-              <Button type='submit' autoFocus={false} className='bg-blue-600 w-44 flex-col ' disabled={isPending}>
+              <Button type='submit' size={'sm'} autoFocus={false} className='bg-blue-600 w-auto px-3 flex-col ' disabled={isPending}>
                 <span className=' text-white text-[15px] font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Save'}</span>
               </Button>
             </DialogFooter>
