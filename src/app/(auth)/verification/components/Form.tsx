@@ -15,7 +15,7 @@ import { getSession, useSession } from 'next-auth/react';
 const VerificationForm = () => {
   const [message, setMessage] = useState<string | undefined>('');
   const [typeMessage, setTypeMessage] = useState('');
-
+  const { data:session, update } = useSession();
   const [header, setHeader] = useState<string | undefined>('');
   const [labelLink, setLabelLink] = useState<string | undefined>('');
   const [isPending, setIsPending] = useState<boolean>(false);
@@ -81,25 +81,26 @@ const VerificationForm = () => {
     if (verificationCode.length !== 6) return makeToastError('Please complete the verification code.');
     setLoading(true);
     setIsPending(true);
-    let data
-    if(result?.token?.tokenType !== 'ChangeEmail'){
+    let data;
+    if (result?.token?.tokenType !== 'ChangeEmail') {
       data = {
         userId: result?.token?.userId._id,
         verificationCode: verificationCode,
         Ttype: result?.token?.tokenType,
       };
-    }else {
+    } else {
       data = {
         userId: result?.token?.userId._id,
         verificationCode: verificationCode,
         Ttype: result?.token?.tokenType,
       };
     }
-     
+
     setLabelLink('');
     mutationSubmit.mutate(data, {
-      onSuccess: (res) => {
+      onSuccess: async(res) => {
         if (res.error) return makeToastError(res.error);
+        await update();
         setMessage('Verification completed!');
         setTypeMessage('success');
         if (!res.token) {

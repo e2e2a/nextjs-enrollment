@@ -1,5 +1,5 @@
 import { signInAction } from "@/action/auth/signIn";
-import { SigninValidator } from "@/lib/validators/Validator";
+import { SigninValidator } from "@/lib/validators/auth/signIn";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 

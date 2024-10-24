@@ -5,10 +5,10 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { SessionProvider } from 'next-auth/react';
 type IProps = {
   children: React.ReactNode;
-  sessionData: any;
+  session: any;
 };
 
-export default function Providers({ children, sessionData }: IProps) {
+export default function Providers({ children, session }: IProps) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -25,7 +25,7 @@ export default function Providers({ children, sessionData }: IProps) {
   );
 
   return (
-    <SessionProvider session={sessionData} refetchOnWindowFocus={false} refetchWhenOffline={false}>
+    <SessionProvider session={session} refetchOnWindowFocus={false} refetchWhenOffline={false}>
       <QueryClientProvider client={queryClient}>
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         {children}

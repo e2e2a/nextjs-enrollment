@@ -3,10 +3,9 @@ import { comparePassword } from '@/lib/hash/bcrypt';
 import { checkingIp } from '@/lib/limiter/checkingIp';
 import rateLimit from '@/lib/limiter/rate-limit';
 import { sendVerificationEmail } from '@/lib/mail/mail';
-import { SigninValidator, SignupValidator } from '@/lib/validators/Validator';
 import { getUserByEmail } from '@/services/user';
 import { generateVerificationToken } from '@/services/token';
-import { SignInResponse, SignUpResponse } from '@/types';
+import { SignInResponse } from '@/types';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import dbConnect from '@/lib/db/db';
@@ -15,6 +14,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { fireAuth } from '@/firebase';
 import { User } from '@/models/User';
 import { tryCatch } from '@/lib/helpers/tryCatch';
+import { SigninValidator } from '@/lib/validators/auth/signIn';
 
 /**
  * Performs sign-in.
@@ -26,33 +26,42 @@ export const signInAction = async (data: any): Promise<SignInResponse> => {
     const validatedFields = SigninValidator.safeParse(data);
     if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
 
-    const existingUser = await getUserByEmail(validatedFields.data.email);
+    const checkedUser = await checkUser(validatedFields.data);
+    if (!checkedUser || checkedUser.error) return { error: checkedUser.error, status: checkedUser.status };
 
-    const isLimit = await myLimit(validatedFields.data.email);
+    const signedIn = await handleSignInAction(checkedUser.user._id, checkedUser.user.email, checkedUser.user.password);
+    if (signedIn && signedIn.error) return { error: signedIn.error, status: signedIn.error };
+    return { message: signedIn.message, role: checkedUser.user.role, status: signedIn.status };
+  });
+};
+const checkUser = async (data: any) => {
+  return tryCatch(async () => {
+    const existingUser = await getUserByEmail(data.email);
+
+    const isLimit = await myLimit(data.email);
     if (!isLimit || isLimit.error || !isLimit.success) return { error: 'Rate Limit exceeded.', limit: true, status: 429 };
 
-    if (!existingUser.emailVerified) return { error: 'Incorrect email or password.', status: 403 };
     if (!existingUser || !existingUser.email || !existingUser.password) return { error: 'Incorrect email or password.', status: 403 };
+    if (!existingUser.emailVerified) return { error: 'Incorrect email or password.', status: 403 };
 
-    const isMatch = await comparePassword(validatedFields.data.password, existingUser.password as string);
+    const isMatch = await comparePassword(data.password, existingUser.password as string);
     if (!isMatch) return { error: 'Incorrect email or password.', status: 403 };
 
     const checkedIp = await checkIp(existingUser);
-    if (checkedIp && checkedIp.error) return { error: 'Confirming Email', token:checkedIp.token, status: 203 };
-
-    const signedIn = await handleSignInAction(existingUser._id, existingUser.email, existingUser.password);
-    if (signedIn && signedIn.error) return { error: signedIn.error, status: signedIn.error };
-    return { message: signedIn.message, role: existingUser.role, status: signedIn.status };
+    if (checkedIp && checkedIp.error) return { error: 'Confirming Email', token: checkedIp.token, status: 203 };
+    return { success: 'yesyes', user: existingUser, status: 201 };
   });
 };
 
 const myLimit = async (email: string) => {
-  try {
-    const p = await rateLimit(6, email);
-    return { success: 'go', status: 201 };
-  } catch (error) {
-    return { error: 'Rate Limit exceeded.', limit: true, status: 429 };
-  }
+  return tryCatch(async () => {
+    try {
+      const p = await rateLimit(6, email);
+      return { success: 'go', status: 201 };
+    } catch (error) {
+      return { error: 'Rate Limit exceeded.', limit: true, status: 429 };
+    }
+  });
 };
 
 const checkIp = async (user: any) => {

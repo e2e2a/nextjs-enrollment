@@ -19,15 +19,15 @@ export const metadata: Metadata = {
 };
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   
-  const sessionData = await auth();
-  console.log('sessionData', sessionData);
+  const session = await auth();
+  console.log('session', session);
   return (
     <html lang='en' className='' suppressHydrationWarning>
       {/* <body className={`custom-scrollbar-body ${inter.className}`} > */}
       <body className={inter.className}>
         <Warning />
         <LoadingProvider>
-          <Providers sessionData={sessionData}>
+          <Providers session={session}>
             {/* <MessageListener> */}
             {children}
             <Toaster position='top-center' reverseOrder={false} />

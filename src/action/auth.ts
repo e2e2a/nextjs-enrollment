@@ -3,7 +3,7 @@ import { comparePassword } from '@/lib/hash/bcrypt';
 import { checkingIp } from '@/lib/limiter/checkingIp';
 import rateLimit from '@/lib/limiter/rate-limit';
 import { sendVerificationEmail } from '@/lib/mail/mail';
-import { SigninValidator, SignupValidator } from '@/lib/validators/Validator';
+import { SignupValidator } from '@/lib/validators/Validator';
 import { checkUserUsername, createUser, deleteUserByEmail, getUserByEmail, getUserByUsername } from '@/services/user';
 import { generateVerificationToken } from '@/services/token';
 import { SignInResponse, SignUpResponse } from '@/types';

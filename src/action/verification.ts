@@ -56,10 +56,10 @@ export const verificationCodeProcess = async (data: any): Promise<verificationCo
         }
         const updatedEmail = await updateUserEmail(user, userToken.emailToChange);
         if (updatedEmail && updatedEmail.error) return { error: updatedEmail.error, status: 500 };
-        await signIn('credentials', {
-          email: userToken.emailToChange,
-          redirect: false,
-        });
+        // await signIn('credentials', {
+        //   email: userToken.emailToChange,
+        //   redirect: false,
+        // });
         await deleteVerificationTokenByid(userToken._id);
         return { redirect: redirect, status: 201 };
       case 'Recovery':

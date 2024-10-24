@@ -29,7 +29,6 @@ export function DataTableDrawer({ user }: IProps) {
     },
   });
   const onSubmit = (data: z.infer<typeof EnrollmentApprovedStep2>) => {
-    // const onSubmit: SubmitHandler<z.infer<typeof SigninValidator>> = async (data: any) => {
     // setIsPending(true);
     const dataa = {
       ...data,

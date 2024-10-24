@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
-import { SigninValidator } from '@/lib/validators/Validator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -11,6 +10,7 @@ import Link from 'next/link';
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
 import { useSignInMutation } from '@/lib/queries/auth/signIn';
+import { SigninValidator } from '@/lib/validators/auth/signIn';
 
 const SignInForm = () => {
   const [message, setMessage] = useState<string | undefined>('');
@@ -51,7 +51,6 @@ const SignInForm = () => {
               return;
             }
             return (window.location.href = `/verification?token=${res.token}`);
-          // return
           default:
             setIsPending(false);
             setMessage(res.error);
