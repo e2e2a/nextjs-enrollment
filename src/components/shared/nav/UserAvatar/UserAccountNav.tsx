@@ -23,7 +23,7 @@ export function UserAccountNav({ session, profile }: IProps) {
           >
             <TooltipTrigger asChild>
               <div className='active:scale-[98.5%] relative rounded-full transition-transform duration-0 active:opacity-95 border shadow-sm drop-shadow-sm border-gray-200'>
-                <UserAvatar session={{ firstname: profile?.firstname, imageUrl: profile?.imageUrl, asd: '' || null }} className='h-10 w-10 ' />
+                <UserAvatar session={{ firstname: profile?.firstname, imageUrl: profile?.imageUrl }} className='h-10 w-10 ' />
                 <div className='absolute bottom-0 right-[.5px] bg-slate-100 border-white border-opacity-40 border rounded-full'>
                   <Icons.chevronDown className='h-3 w-3 stroke-[3px]' />
                 </div>

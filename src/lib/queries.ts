@@ -39,13 +39,12 @@ import {
   verificationCodeResendResponse,
 } from '@/types';
 import { fetchAllUsers } from './api';
-import { EnrollmentApprovedStep2, NewPasswordValidator, SigninValidator, SignupValidator, StudentProfileValidator } from './validators/Validator';
+import { EnrollmentApprovedStep2, SigninValidator, SignupValidator, StudentProfileValidator } from './validators/Validator';
 import { z } from 'zod';
 import { signInAction, signOutAction, signUpAction } from '@/action/auth';
 import { checkResetPasswordToken, checkToken } from '@/action/token';
 import { verificationCodeProcess, verificationCodeResend } from '@/action/verification';
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
-import { NewPassword } from '@/action/user/password/NewPassword';
 import { updateAdminProfile, updateDeanProfile, updateStudentPhoto, updateStudentProfile, updateTeacherProfile } from '@/action/profile/updateData';
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction, getSingleEnrollmentByUserIdIdAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
@@ -232,16 +231,17 @@ export const useRecoveryTokenCheckQuery = (token: string) => {
   });
 };
 
-export const useNewPasswordMutation = () => {
-  return useMutation<resetPasswordResponse, Error, z.infer<typeof NewPasswordValidator>>({
-    mutationFn: async (data) => resetPassword(data),
-  });
-};
-export const useUserNewPasswordMutation = () => {
-  return useMutation<resetPasswordResponse, Error, z.infer<typeof NewPasswordValidator>>({
-    mutationFn: async (data) => NewPassword(data),
-  });
-};
+// export const useNewPasswordMutation = () => {
+//   return useMutation<resetPasswordResponse, Error, z.infer<typeof NewPasswordValidator>>({
+//     mutationFn: async (data) => resetPassword(data),
+//   });
+// };
+
+// export const useUserNewPasswordMutation = () => {
+//   return useMutation<resetPasswordResponse, Error, z.infer<typeof NewPasswordValidator>>({
+//     mutationFn: async (data) => NewPassword(data),
+//   });
+// };
 
 export const useAllUsersQuery = () => {
   return useQuery<any, Error>({

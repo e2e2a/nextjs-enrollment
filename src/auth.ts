@@ -30,6 +30,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       });
     },
   },
+  session: { strategy: 'jwt' },
   callbacks: {
     async signIn({ user, account, profile }) {
       try {
@@ -198,6 +199,5 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   //we cant remove this adapter
   adapter: MongoDBAdapter(clientPromise),
-  session: { strategy: 'jwt' },
   ...authConfig,
 });

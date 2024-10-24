@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { NewPasswordValidator, SigninValidator, SignupValidator } from './validators/Validator';
 import { QueryFunctionContext } from '@tanstack/react-query';
 import { fetchURL } from './helpers/fetchUrl';
 
@@ -41,16 +40,16 @@ export const fetchRecoveryTokenEmail = async ({ queryKey }: QueryFunctionContext
   return res;
 };
 
-export const fetchNewPassword = async (data: z.infer<typeof NewPasswordValidator>) => {
-  const res = await fetchURL(
-    '/api/auth/recovery/reset-password',
-    'POST',
-    'Failed to create new password. Please try again a few minutes.',
-    data
-  );
+// export const fetchNewPassword = async (data: z.infer<typeof NewPasswordValidator>) => {
+//   const res = await fetchURL(
+//     '/api/auth/recovery/reset-password',
+//     'POST',
+//     'Failed to create new password. Please try again a few minutes.',
+//     data
+//   );
 
-  return res;
-};
+//   return res;
+// };
 // review
 export const fetchAllUsers = async () => {
   const res = await fetchURL('/api/users', 'GET', 'Failed to fetch all users. Please try again a few minutes.');

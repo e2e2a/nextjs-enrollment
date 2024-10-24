@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { NewPasswordValidator } from '@/lib/validators/Validator';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useSession } from 'next-auth/react';
 import { Icons } from '@/components/shared/Icons';
 import Input from './Input';
+import { NewPasswordValidator } from '@/lib/validators/user/password';
 
 const PasswordTab = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);

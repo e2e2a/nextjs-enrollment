@@ -1,19 +1,11 @@
 'use client';
 import { Icons } from '@/components/shared/Icons';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { useUserNewPasswordMutation } from '@/lib/queries';
+import { useNewPasswordMutation } from '@/lib/queries/user/password';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { NewPasswordValidator } from '@/lib/validators/Validator';
+import { NewPasswordValidator } from '@/lib/validators/user/password';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import React from 'react';
@@ -21,36 +13,29 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const PasswordTab = () => {
-  const { data:session } = useSession();
-  const mutation = useUserNewPasswordMutation()
+  const { data: session } = useSession();
+  const mutation = useNewPasswordMutation();
+
   const form = useForm<z.infer<typeof NewPasswordValidator>>({
     resolver: zodResolver(NewPasswordValidator),
     defaultValues: {
-      currentPassword: 'y',
+      currentPassword: '',
       password: '',
       CPassword: '',
     },
   });
 
   const onSubmit = async (data: z.infer<typeof NewPasswordValidator>) => {
-    // console.log(data);
-    const newData = {
-      ...data,
-      email: session?.user.email,
-    };
-    mutation.mutate(newData, {
+    mutation.mutate(data, {
       onSuccess: (res) => {
-        if (res.error) {
-          if (res.error) return makeToastError(res.error);
-          return;
-        }
+        console.log(res);
+        if (res.error) return form.setError('currentPassword', { message: res.error });
         makeToastSucess(res.message as string);
         setTimeout(() => {
-          window.location.reload();
+          // window.location.reload();
         }, 100);
-        return ;
+        return;
       },
-
       onSettled: () => {
         // setIsPending(false);
       },
@@ -78,10 +63,7 @@ const PasswordTab = () => {
                 <span className=' text-[8px] align-middle'> • </span>e2e2a
               </span>
               <DialogTitle className='text-[22px] font-bold text tracking-normal'>New Password</DialogTitle>
-              <DialogDescription>
-                Your password must be at least 6 characters and should include a combination of numbers, letters and special
-                characters (!$@%).
-              </DialogDescription>
+              <DialogDescription>Your password must be at least 6 characters and should include a combination of numbers, letters and special characters (!$@%).</DialogDescription>
             </DialogHeader>
             <FormField
               control={form.control}

@@ -1,6 +1,6 @@
 'use server';
 import { sendVerificationEmail } from '@/lib/mail/mail';
-import { NewPasswordValidator, RecoveryValidator } from '@/lib/validators/Validator';
+import { RecoveryValidator } from '@/lib/validators/Validator';
 import { deleteResetPasswordByEmail } from '@/services/resetPassword';
 import { getUserByEmail, updateUserPasswordById } from '@/services/user';
 import { generateVerificationToken } from '@/services/token';
@@ -39,24 +39,24 @@ export const resetPassword = async (data:any): Promise<resetPasswordResponse> =>
   try {
     await dbConnect()
     const { email } = data;
-    const validatedFields = NewPasswordValidator.safeParse(data);
-    if (!validatedFields.success) {
-      return { error: 'Invalid fields!', status: 400 };
-    }
+    // const validatedFields = NewPasswordValidator.safeParse(data);
+    // if (!validatedFields.success) {
+    //   return { error: 'Invalid fields!', status: 400 };
+    // }
     
-    const { password } = validatedFields.data;
-    const existingUser = await getUserByEmail(email);
+    // const { password } = validatedFields.data;
+    // const existingUser = await getUserByEmail(email);
 
-    if (!existingUser || !existingUser.email || !existingUser.emailVerified || !existingUser.password) {
-      return { error: 'Email does not exist!', status: 404 };
-    }
-    const newData = {
-      id: existingUser.id,
-      password: password,
-    };
-    const updateUser = await updateUserPasswordById(newData);
-    if (!updateUser) return { error: 'failed to update the password', status: 403 };
-    await deleteResetPasswordByEmail(email);
+    // if (!existingUser || !existingUser.email || !existingUser.emailVerified || !existingUser.password) {
+    //   return { error: 'Email does not exist!', status: 404 };
+    // }
+    // const newData = {
+    //   id: existingUser.id,
+    //   password: password,
+    // };
+    // const updateUser = await updateUserPasswordById(newData);
+    // if (!updateUser) return { error: 'failed to update the password', status: 403 };
+    // await deleteResetPasswordByEmail(email);
     return { message: 'New Password has been set!', status: 200 };
   } catch (error) {
     console.error('Error processing request:', error);

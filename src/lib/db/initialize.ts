@@ -21,8 +21,10 @@ import EnrollmentSetup from '@/models/EnrollmentSetup';
 import ReportGrade from '@/models/ReportGrade';
 import EnrollmentRecord from '@/models/EnrollmentRecord';
 import TeacherScheduleRecord from '@/models/TeacherScheduleRecord';
+import { Session } from '@/models/Sessions';
 
 type ModelName =
+  | 'Session'
   | 'Course'
   | 'User'
   | 'UserIp'
@@ -46,6 +48,7 @@ type ModelName =
   | 'TeacherScheduleRecord';
 
 const modelsMap: Record<ModelName, mongoose.Model<any>> = {
+  Session,
   Course,
   User,
   UserIp,
