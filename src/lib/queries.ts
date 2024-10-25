@@ -43,7 +43,6 @@ import { SignupValidator } from '@/lib/validators/auth/signUp';
 import { EnrollmentApprovedStep2, StudentProfileValidator } from './validators/Validator';
 import { z } from 'zod';
 import { checkResetPasswordToken } from '@/action/token';
-import {  verificationCodeResend } from '@/action/verification';
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
 import { updateAdminProfile, updateDeanProfile, updateStudentPhoto, updateStudentProfile, updateTeacherProfile } from '@/action/profile/updateData';
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
@@ -208,11 +207,11 @@ interface data {
 //   });
 // };
 
-export const useResendVCodeMutation = () => {
-  return useMutation<verificationCodeResendResponse, Error, data>({
-    mutationFn: async (data) => verificationCodeResend(data),
-  });
-};
+// export const useResendVCodeMutation = () => {
+//   return useMutation<verificationCodeResendResponse, Error, data>({
+//     mutationFn: async (data) => verificationCodeResend(data),
+//   });
+// };
 
 // ============================================================
 // AUTH Recovery

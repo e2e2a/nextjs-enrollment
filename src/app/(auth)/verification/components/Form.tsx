@@ -6,12 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { handleChange, handlePaste } from '@/hook/verification/VerificationInputEvents';
 import { calculateRemainingTime, formatTime } from '@/lib/utils';
-import { useResendVCodeMutation } from '@/lib/queries';
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
 import { makeToastError } from '@/lib/toast/makeToast';
 import { useTokenQueryByParamsToken } from '@/lib/queries/verificationToken';
 import { useVerificationcCodeMutation } from '@/lib/queries/verificationToken/code';
+import { useResendVCodeMutation } from '@/lib/queries/verificationToken/resend';
 
 const VerificationForm = () => {
   const [message, setMessage] = useState<string | undefined>('');
@@ -21,7 +21,6 @@ const VerificationForm = () => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [inputCode, setInputCode] = useState<string[]>(Array(6).fill(''));
-  const [expirationTime, setExpirationTime] = useState<Date | null>(null);
   const [secondsRemaining, setSecondsRemaining] = useState(0);
   const inputRefs = useRef<Array<React.RefObject<HTMLInputElement>>>([]);
   const mutationSubmit = useVerificationcCodeMutation();
@@ -37,14 +36,10 @@ const VerificationForm = () => {
       router.push('/recovery');
       return;
     }
-    console.log('result', result);
     if (result) {
       if (result.error) return router.push('/recovery');
       setHeader('Confirming your verification code');
       setLoading(false);
-      if (result.token && result.token.expiresCode) {
-        setExpirationTime(new Date(result.token.expiresCode));
-      }
     }
   }, [result, error, router]);
 
@@ -55,8 +50,8 @@ const VerificationForm = () => {
         .map((_, i) => inputRefs.current[i] || createRef<HTMLInputElement>());
     }
 
-    if (expirationTime) {
-      const initialSeconds = calculateRemainingTime(expirationTime);
+    if (result && result.token.expiresCode) {
+      const initialSeconds = calculateRemainingTime(new Date(result.token.expiresCode));
       setSecondsRemaining(initialSeconds);
     }
 
@@ -74,7 +69,7 @@ const VerificationForm = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [inputCode.length, secondsRemaining, expirationTime]);
+  }, [inputCode.length, secondsRemaining, result]);
 
   const handleSubmit = async () => {
     const verificationCode = inputCode.join('');
@@ -109,10 +104,7 @@ const VerificationForm = () => {
 
   const onResendCode = async () => {
     setLabelLink('');
-    const data = {
-      // userId: result?.token?.userId._id,
-      userId: '671b65c90e88ecdb1774c6e4',
-    };
+    const data = { token: token };
     mutationResend.mutate(data, {
       onSuccess: (res) => {
         if (res.error) {
@@ -120,9 +112,9 @@ const VerificationForm = () => {
           makeToastError(res.error);
           return;
         }
-        setTimeout(() => {
-          window.location.reload();
-        }, 100);
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 100);
         return;
       },
       onSettled: () => {
@@ -131,8 +123,8 @@ const VerificationForm = () => {
     });
   };
   return (
-    <CardWrapper header={'Verification'} headerLabel={header || 'Please double check your token or sign up again.'} backButtonHref='' backButtonLabel={header ? labelLink : ''} onResendCode={onResendCode}>
-      {expirationTime && !message && (
+    <CardWrapper header={'Verification'} headerLabel={header || 'Please double check your token or sign up again.'} backButtonHref='' backButtonLabel={header ? labelLink : ''} onResendCode={onResendCode} className={''}>
+      {secondsRemaining !== 0 && !message && (
         <div className='flex items-center justify-center'>
           <div className='text-center rounded-md mb-[3%] sm:text-3xl text-xl font-medium'>{formatTime(secondsRemaining)}</div>
         </div>

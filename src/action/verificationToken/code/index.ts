@@ -1,6 +1,5 @@
 'use server';
 import { getIpAddress } from '@/lib/limiter/getIp';
-import { generateVerificationCode } from '@/lib/helpers/verificationCode';
 import { sendVerificationEmail } from '@/lib/mail/mail';
 import { generateResetPasswordToken } from '@/services/resetPassword';
 import { getUserById, updateUserById, updateUserEmailVerifiedById } from '@/services/user';

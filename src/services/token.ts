@@ -1,6 +1,6 @@
 'use server';
-import { generateRandomString } from '@/lib/helpers/verificationCode';
 import { Token } from '@/models/Token';
+import { generateRandomString } from '@/utils/actions/verificationToken/code';
 import jwt from 'jsonwebtoken';
 
 export const getVerificationTokenByToken = async (token: string) => {
