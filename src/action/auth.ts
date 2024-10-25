@@ -73,20 +73,20 @@ import { SignupValidator } from '@/lib/validators/auth/signUp';
 //     return { error: 'Something went wrong.', status: 500 };
 //   }
 // };
-export const signOutAction = async (data: any) => {
-  try {
-    await dbConnect();
-    await User.findByIdAndUpdate(data.userId, { $set: { active: false } }, { new: true });
-    // cookies.getAll().forEach((cookie) => {
-    //   if (cookie.name.includes("next-auth"))
-    //     response.cookies.delete(cookie.name);
-    // });
-    return { message: 'Logged out successfully!', status: 200 };
-  } catch (error) {
-    console.error('Error processing request:', error);
-    return { error: 'Something went wrong.', status: 500 };
-  }
-};
+// export const signOutAction = async (data: any) => {
+//   try {
+//     await dbConnect();
+//     await User.findByIdAndUpdate(data.userId, { $set: { active: false } }, { new: true });
+//     // cookies.getAll().forEach((cookie) => {
+//     //   if (cookie.name.includes("next-auth"))
+//     //     response.cookies.delete(cookie.name);
+//     // });
+//     return { message: 'Logged out successfully!', status: 200 };
+//   } catch (error) {
+//     console.error('Error processing request:', error);
+//     return { error: 'Something went wrong.', status: 500 };
+//   }
+// };
 /**
  * Performs sign-up.
  * @param data Any data structure.

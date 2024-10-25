@@ -7,9 +7,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { SignupValidator } from '@/lib/validators/auth/signUp';
-import { useSignUpMutation } from '@/lib/queries';
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
+import { useSignUpMutation } from '@/lib/queries/auth/signUp';
 
 const SignUpForm = () => {
   const [isPending, setIsPending] = useState(false);

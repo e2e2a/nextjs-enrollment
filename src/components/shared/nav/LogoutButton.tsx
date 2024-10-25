@@ -4,8 +4,8 @@ import { Button } from '../../ui/button';
 import { Icons } from '../Icons';
 import { signOut, useSession } from 'next-auth/react';
 import { useLoading } from './logout/LoadingContext';
-import { useSignOutMutation } from '@/lib/queries';
 import { makeToastError } from '@/lib/toast/makeToast';
+import { useSignOutMutation } from '@/lib/queries/auth/signOut';
 
 const LogoutButton = () => {
   const { data } = useSession();
