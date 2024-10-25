@@ -42,8 +42,8 @@ import { fetchAllUsers } from './api';
 import { SignupValidator } from '@/lib/validators/auth/signUp';
 import { EnrollmentApprovedStep2, StudentProfileValidator } from './validators/Validator';
 import { z } from 'zod';
-import { checkResetPasswordToken, checkToken } from '@/action/token';
-import { verificationCodeProcess, verificationCodeResend } from '@/action/verification';
+import { checkResetPasswordToken } from '@/action/token';
+import {  verificationCodeResend } from '@/action/verification';
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
 import { updateAdminProfile, updateDeanProfile, updateStudentPhoto, updateStudentProfile, updateTeacherProfile } from '@/action/profile/updateData';
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
@@ -185,16 +185,16 @@ export const useCollegeEndSemesterMutation = () => {
 //   });
 // };
 
-export const useTokenCheckQuery = (token: string) => {
-  return useQuery<checkTokenResponse, Error>({
-    queryKey: ['TokenCheck', token],
-    queryFn: async () => checkToken(token),
-    enabled: !!token,
-    retry: 0,
-    refetchOnWindowFocus: false,
-    // retryDelay: (attemptIndex) => attemptIndex * 1000,
-  });
-};
+// export const useTokenCheckQuery = (token: string) => {
+//   return useQuery<checkTokenResponse, Error>({
+//     queryKey: ['TokenCheck', token],
+//     queryFn: async () => checkToken(token),
+//     enabled: !!token,
+//     retry: 0,
+//     refetchOnWindowFocus: false,
+//     // retryDelay: (attemptIndex) => attemptIndex * 1000,
+//   });
+// };
 
 interface data {
   userId: string;
@@ -202,11 +202,11 @@ interface data {
   Ttype?: string;
 }
 
-export const useVerificationcCodeMutation = () => {
-  return useMutation<verificationCodeProcessResponse, Error, any>({
-    mutationFn: async (data) => verificationCodeProcess(data),
-  });
-};
+// export const useVerificationcCodeMutation = () => {
+//   return useMutation<verificationCodeProcessResponse, Error, any>({
+//     mutationFn: async (data) => verificationCodeProcess(data),
+//   });
+// };
 
 export const useResendVCodeMutation = () => {
   return useMutation<verificationCodeResendResponse, Error, data>({

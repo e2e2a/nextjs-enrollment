@@ -6,16 +6,11 @@ import { User } from '@/models/User';
 /**
  * Handles the sign-in process using NextAuth credentials.
  * 
- * @param {string} id - The unique identifier of the user.
- * @param {string} email - The email address of the user.
- * @param {string} [password] - The user's password, optional in some cases.
+ * @param {string} id
+ * @param {string} email
+ * @param {string} [password]
  * 
  * @returns The result object containing either a success message with status or an error message with status.
- * 
- * The function attempts to sign the user in using the 'credentials' provider in NextAuth.
- * If successful, it updates the user's `active` status in the database.
- * In case of an error, it handles specific authentication errors (e.g., invalid credentials)
- * and returns appropriate error messages.
  */
 export const handleSignInAction = async (id: string, email: string, password?: string) => {
   try {

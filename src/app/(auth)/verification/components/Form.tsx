@@ -1,15 +1,17 @@
 'use client';
-import React, { ChangeEvent, createRef, useCallback, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, createRef, useEffect, useRef, useState } from 'react';
 import { PulseLoader } from 'react-spinners';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { handleChange, handlePaste } from '@/hook/verification/VerificationInputEvents';
 import { calculateRemainingTime, formatTime } from '@/lib/utils';
-import { useResendVCodeMutation, useTokenCheckQuery, useVerificationcCodeMutation } from '@/lib/queries';
+import { useResendVCodeMutation } from '@/lib/queries';
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
 import { makeToastError } from '@/lib/toast/makeToast';
+import { useTokenQueryByParamsToken } from '@/lib/queries/verificationToken';
+import { useVerificationcCodeMutation } from '@/lib/queries/verificationToken/code';
 
 const VerificationForm = () => {
   const [message, setMessage] = useState<string | undefined>('');
@@ -29,7 +31,7 @@ const VerificationForm = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get('token') ?? '';
 
-  const { data: result, error } = useTokenCheckQuery(token);
+  const { data: result, error } = useTokenQueryByParamsToken(token);
   useEffect(() => {
     if (error) {
       router.push('/recovery');
@@ -79,24 +81,14 @@ const VerificationForm = () => {
     if (verificationCode.length !== 6) return makeToastError('Please complete the verification code.');
     setLoading(true);
     setIsPending(true);
-    let data;
-    if (result?.token?.tokenType !== 'ChangeEmail') {
-      data = {
-        userId: result?.token?.userId._id,
-        verificationCode: verificationCode,
-        Ttype: result?.token?.tokenType,
-      };
-    } else {
-      data = {
-        userId: result?.token?.userId._id,
-        verificationCode: verificationCode,
-        Ttype: result?.token?.tokenType,
-      };
-    }
+    const data = {
+      token: token,
+      verificationCode: verificationCode,
+    };
 
     setLabelLink('');
     mutationSubmit.mutate(data, {
-      onSuccess: async(res) => {
+      onSuccess: async (res) => {
         if (res.error) return makeToastError(res.error);
         setMessage('Verification completed!');
         setTypeMessage('success');

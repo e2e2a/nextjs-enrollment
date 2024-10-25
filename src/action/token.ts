@@ -12,53 +12,53 @@ import { checkAuth } from '../utils/actions/session';
  *
  * @param token string
  */
-export const checkToken = async (token: string): Promise<checkTokenResponse> => {
-  try {
-    await dbConnect();
-    if (!token) return { error: 'no token provided', status: 400 };
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET!, {
-      algorithms: ['HS256'],
-    }) as jwt.JwtPayload;
+// export const checkToken = async (token: string): Promise<checkTokenResponse> => {
+//   try {
+//     await dbConnect();
+//     if (!token) return { error: 'no token provided', status: 400 };
+//     const decodedToken = jwt.verify(token, process.env.JWT_SECRET!, {
+//       algorithms: ['HS256'],
+//     }) as jwt.JwtPayload;
 
-    if (!decodedToken) {
-      return { error: 'Invalid token', status: 400 };
-    }
-    const existingToken = await getVerificationTokenByUserId(decodedToken.userId);
-    if (!existingToken) {
-      return { error: 'Token not found', status: 404 };
-    }
+//     if (!decodedToken) {
+//       return { error: 'Invalid token', status: 400 };
+//     }
+//     const existingToken = await getVerificationTokenByUserId(decodedToken.userId);
+//     if (!existingToken) {
+//       return { error: 'Token not found', status: 404 };
+//     }
 
-    const existingUser = await getUserById(decodedToken.userId);
+//     const existingUser = await getUserById(decodedToken.userId);
 
-    switch (existingToken.tokenType) {
-      case 'ChangeEmail':
-        const session = await checkAuth();
-        if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-        if (session.user._id !== existingToken.userId._id) return { error: 'Forbidden', status: 403 };
-        break;
-      case 'Activation':
-      case 'Recovery':
-        if (!existingUser || !existingUser.emailVerified) {
-          return { error: 'User email is not verified. Redirecting to recovery page...', status: 400 };
-        }
-        break;
-      case 'Verify':
-        if (!existingUser) {
-          return { error: 'User not found.', status: 404 };
-        }
-        break;
-    }
+//     switch (existingToken.tokenType) {
+//       case 'ChangeEmail':
+//         const session = await checkAuth();
+//         if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
+//         if (session.user._id !== existingToken.userId._id) return { error: 'Forbidden', status: 403 };
+//         break;
+//       case 'Activation':
+//       case 'Recovery':
+//         if (!existingUser || !existingUser.emailVerified) {
+//           return { error: 'User email is not verified. Redirecting to recovery page...', status: 400 };
+//         }
+//         break;
+//       case 'Verify':
+//         if (!existingUser) {
+//           return { error: 'User not found.', status: 404 };
+//         }
+//         break;
+//     }
 
-    const hasExpired = new Date(existingToken.expires) < new Date();
-    if (hasExpired) {
-      return { error: 'Token has expired', status: 400 };
-    }
+//     const hasExpired = new Date(existingToken.expires) < new Date();
+//     if (hasExpired) {
+//       return { error: 'Token has expired', status: 400 };
+//     }
 
-    return { token: existingToken, status: 200 };
-  } catch (error: any) {
-    return { error: `An unexpected error occurred ${error}`, status: 500 };
-  }
-};
+//     return { token: existingToken, status: 200 };
+//   } catch (error: any) {
+//     return { error: `An unexpected error occurred ${error}`, status: 500 };
+//   }
+// };
 
 /**
  * Performs checking reset-password token in the params

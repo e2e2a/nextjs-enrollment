@@ -2,11 +2,10 @@ import { newUsernameAction } from '@/action/user/username';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
+ * @authenticated
+ * any role
  * Custom hook to handle update of user's username for any role.
  * 
- * This hook utilizes `useMutation` from React Query to manage the update process,
- * and it automatically invalidates the queries on successful sign-in.
- *
  * @returns {UseMutationResult} Mutation object with status, error, and mutate methods.
  */
 

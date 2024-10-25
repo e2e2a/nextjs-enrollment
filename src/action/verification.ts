@@ -19,76 +19,76 @@ import { handleSignInAction } from '@/utils/actions/auth/signIn';
  *
  * @param token string
  */
-export const verificationCodeProcess = async (data: any): Promise<verificationCodeProcessResponse> => {
-  const { userId, verificationCode, Ttype } = data;
-  try {
-    await dbConnect();
-    const userToken = await getVerificationTokenByUserId(userId);
-    if (!userToken) return { error: 'Somethings went wrong', status: 403 };
+// export const verificationCodeProcess = async (data: any): Promise<verificationCodeProcessResponse> => {
+//   const { userId, verificationCode, Ttype } = data;
+//   try {
+//     await dbConnect();
+//     const userToken = await getVerificationTokenByUserId(userId);
+//     if (!userToken) return { error: 'Somethings went wrong', status: 403 };
 
-    const hasExpired = new Date(userToken.expiresCode) < new Date();
-    if (hasExpired) return { error: 'Verification Code has expired.', status: 410 };
+//     const hasExpired = new Date(userToken.expiresCode) < new Date();
+//     if (hasExpired) return { error: 'Verification Code has expired.', status: 410 };
 
-    if (verificationCode !== userToken.code) return { error: 'Verification Code not match.', status: 403 };
+//     if (verificationCode !== userToken.code) return { error: 'Verification Code not match.', status: 403 };
 
-    const user = await getUserById(userToken.userId);
-    if (!user) return { error: 'User not found', status: 404 };
+//     const user = await getUserById(userToken.userId);
+//     if (!user) return { error: 'User not found', status: 404 };
 
-    const ip = await getIpAddress();
-    if (!ip) return { error: 'Invalid request type', status: 404 };
-    let redirect;
-    if (user.role === 'ADMIN') {
-      redirect = '/admin';
-    } else if (user.role === 'STUDENT') {
-      redirect = '/';
-    } else if (user.role === 'TEACHER') {
-      redirect = '/';
-    } else if (user.role === 'DEAN') {
-      redirect = '/dean';
-    }
-    switch (Ttype) {
-      case 'ChangeEmail':
-        const session = await checkAuth();
-        if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-        const checkedNewEmail = await checkNewEmail(userToken.emailToChange);
-        if (checkedNewEmail && checkedNewEmail.error) {
-          await deleteVerificationTokenByid(userToken._id);
-          return { error: 'Email is already been used in another account.', status: 500 };
-        }
-        const updatedEmail = await updateUserEmail(user, userToken.emailToChange);
-        if (updatedEmail && updatedEmail.error) return { error: updatedEmail.error, status: 500 };
+//     const ip = await getIpAddress();
+//     if (!ip) return { error: 'Invalid request type', status: 404 };
+//     let redirect;
+//     if (user.role === 'ADMIN') {
+//       redirect = '/admin';
+//     } else if (user.role === 'STUDENT') {
+//       redirect = '/';
+//     } else if (user.role === 'TEACHER') {
+//       redirect = '/';
+//     } else if (user.role === 'DEAN') {
+//       redirect = '/dean';
+//     }
+//     switch (Ttype) {
+//       case 'ChangeEmail':
+//         const session = await checkAuth();
+//         if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
+//         const checkedNewEmail = await checkNewEmail(userToken.emailToChange);
+//         if (checkedNewEmail && checkedNewEmail.error) {
+//           await deleteVerificationTokenByid(userToken._id);
+//           return { error: 'Email is already been used in another account.', status: 500 };
+//         }
+//         const updatedEmail = await updateUserEmail(user, userToken.emailToChange);
+//         if (updatedEmail && updatedEmail.error) return { error: updatedEmail.error, status: 500 };
 
-        const signedIn = await handleSignInAction(userToken.userId._id, userToken.userId.email);
-        if (signedIn && signedIn.error) return { error: signedIn.error, status: signedIn.status };
+//         const signedIn = await handleSignInAction(userToken.userId._id, userToken.userId.email);
+//         if (signedIn && signedIn.error) return { error: signedIn.error, status: signedIn.status };
 
-        await deleteVerificationTokenByid(userToken._id);
-        return { redirect: redirect, status: 201 };
-      case 'Recovery':
-        const RPtoken = await generateResetPasswordToken(userId);
-        await deleteVerificationTokenByid(userToken._id);
-        return { token: RPtoken, status: 201 };
+//         await deleteVerificationTokenByid(userToken._id);
+//         return { redirect: redirect, status: 201 };
+//       case 'Recovery':
+//         const RPtoken = await generateResetPasswordToken(userId);
+//         await deleteVerificationTokenByid(userToken._id);
+//         return { token: RPtoken, status: 201 };
 
-      case 'Activation':
-        await deleteVerificationTokenByid(userToken._id);
-        await updateActiveIp(user._id, ip);
-        await signIn('credentials', {
-          email: user.email,
-          redirect: false,
-        });
-        return { redirect: '/admin', status: 201 };
-      case 'Verify':
-        await updateUserEmailVerifiedById(user._id);
-        await createActiveIp(user._id, ip);
-        await deleteVerificationTokenByid(userToken._id);
-        return { redirect: '/sign-in', status: 201 };
-      default:
-        return { error: 'Invalid request type', status: 400 };
-    }
-  } catch (error) {
-    console.log(error);
-    return { error: 'Internal Server Error', status: 500 };
-  }
-};
+//       case 'Activation':
+//         await deleteVerificationTokenByid(userToken._id);
+//         await updateActiveIp(user._id, ip);
+//         await signIn('credentials', {
+//           email: user.email,
+//           redirect: false,
+//         });
+//         return { redirect: '/admin', status: 201 };
+//       case 'Verify':
+//         await updateUserEmailVerifiedById(user._id);
+//         await createActiveIp(user._id, ip);
+//         await deleteVerificationTokenByid(userToken._id);
+//         return { redirect: '/sign-in', status: 201 };
+//       default:
+//         return { error: 'Invalid request type', status: 400 };
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     return { error: 'Internal Server Error', status: 500 };
+//   }
+// };
 
 export const verificationCodeResend = async (data: any): Promise<verificationCodeResendResponse> => {
   await dbConnect();

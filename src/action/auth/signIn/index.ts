@@ -1,17 +1,16 @@
 'use server';
 import { comparePassword } from '@/lib/hash/bcrypt';
-import { checkingIp } from '@/lib/limiter/checkingIp';
 import rateLimit from '@/lib/limiter/rate-limit';
 import { sendVerificationEmail } from '@/lib/mail/mail';
 import { getUserByEmail } from '@/services/user';
 import { generateVerificationToken } from '@/services/token';
-import { SignInResponse } from '@/types';
 import dbConnect from '@/lib/db/db';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { fireAuth } from '@/firebase';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { SigninValidator } from '@/lib/validators/auth/signIn';
 import { handleSignInAction } from '@/utils/actions/auth/signIn';
+import { checkingIp } from '@/utils/actions/userIp';
 
 /**
  * Handles the user sign-in process.
