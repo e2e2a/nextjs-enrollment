@@ -1,10 +1,10 @@
 import { Schema, models, model } from 'mongoose';
 export interface IIps {
-    address: string;
-  }
+  address: string;
+}
 export interface IUser extends Document {
   userId: Schema.Types.ObjectId;
-  ips: IIps[]
+  ips: IIps[];
 }
 const schema = new Schema<IUser>(
   {
@@ -17,11 +17,10 @@ const schema = new Schema<IUser>(
     ips: [
       {
         address: {
-          type: [String],
-          default: [],
+          type: String,
         },
       },
-      { versionKey: false, timestamps: true }
+      { versionKey: false, timestamps: true },
     ],
   },
   { versionKey: false, timestamps: true }

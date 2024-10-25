@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
 import {
-  checkTokenResponse,
   getAllAdminProfileResponse,
   getAllCurriculumsResponse,
   getAllDeanProfileResponse,
@@ -18,29 +17,17 @@ import {
   getRoomResponse,
   getSingleBlockCourseResponse,
   getSingleEnrollmentResponse,
-  getSingleProfileResponse,
   getStudentCurriculumsResponse,
   getSubjectCategoryCollegeResponse,
   getTeacherProfileResponse,
   getTeacherScheduleResponse,
-  INewPost,
-  INewUser,
   IResponse,
-  IUpdatePost,
-  IUpdateUser,
   recoveryResponse,
-  resetPasswordResponse,
   resetPasswordTokenResponse,
-  SignInResponse,
-  SignUpResponse,
   testResponseaa,
   updateStudentProfileResponse,
-  verificationCodeProcessResponse,
-  verificationCodeResendResponse,
 } from '@/types';
-import { fetchAllUsers } from './api';
-import { SignupValidator } from '@/lib/validators/auth/signUp';
-import { EnrollmentApprovedStep2, StudentProfileValidator } from './validators/Validator';
+import {  StudentProfileValidator } from './validators/Validator';
 import { z } from 'zod';
 import { checkResetPasswordToken } from '@/action/token';
 import { recoveryProcess, resetPassword } from '@/action/resetPassword';
@@ -93,7 +80,6 @@ import {
 } from '@/action/college/curriculums';
 import { removeCourseBlockScheduleAction, updateCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
 import { removeStudentScheduleAction, updateStudentEnrollmentScheduleAction, updateStudentEnrollmentScheduleRequestStatusAction, updateStudentEnrollmentScheduleSuggestedSubjectAction } from '@/action/college/schedules/students';
-import { TeacherProfileValidator } from './validators/AdminValidator';
 import { getEnrollmentSetup, updateEnrollmentSetup } from '@/action/enrollmentSetup';
 import { updateStudentEnrollmentScheduleBySuggestedSubjectAction } from '@/action/college/schedules/students/students';
 import { createTeacherReportGradeAction, getAllTeacherReportGradeAction, getTeacherReportGradeByIdAction, updateTeacherReportGradeStatusByIdAction } from '@/action/college/schedules/teachers/reportGrade/teacher';
@@ -146,72 +132,6 @@ export const useCollegeEndSemesterMutation = () => {
     },
   });
 };
-// ============================================================
-// AUTH QUERIES
-// ============================================================
-// const myChannel = supabase.channel('global-channel', {
-//   config: {
-//     broadcast: { ack: true },
-//   },
-// });
-// export const useSignInMutation = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation<SignInResponse, Error, z.infer<typeof SigninValidator>>({
-//     mutationFn: async (data) => signInAction(data),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
-//     },
-//   });
-// };
-
-// export const useSignUpMutation = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation<SignUpResponse, Error, z.infer<typeof SignupValidator>>({
-//     mutationFn: async (data) => signUpAction(data),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['Students'] });
-//     },
-//   });
-// };
-
-// export const useSignOutMutation = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation<any, Error, any>({
-//     mutationFn: async (data) => signOutAction(data),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
-//     },
-//   });
-// };
-
-// export const useTokenCheckQuery = (token: string) => {
-//   return useQuery<checkTokenResponse, Error>({
-//     queryKey: ['TokenCheck', token],
-//     queryFn: async () => checkToken(token),
-//     enabled: !!token,
-//     retry: 0,
-//     refetchOnWindowFocus: false,
-//     // retryDelay: (attemptIndex) => attemptIndex * 1000,
-//   });
-// };
-
-interface data {
-  userId: string;
-  verificationCode?: string;
-  Ttype?: string;
-}
-
-// export const useVerificationcCodeMutation = () => {
-//   return useMutation<verificationCodeProcessResponse, Error, any>({
-//     mutationFn: async (data) => verificationCodeProcess(data),
-//   });
-// };
-
-// export const useResendVCodeMutation = () => {
-//   return useMutation<verificationCodeResendResponse, Error, data>({
-//     mutationFn: async (data) => verificationCodeResend(data),
-//   });
-// };
 
 // ============================================================
 // AUTH Recovery
@@ -229,18 +149,6 @@ export const useRecoveryTokenCheckQuery = (token: string) => {
     retry: 0,
   });
 };
-
-// export const useNewPasswordMutation = () => {
-//   return useMutation<resetPasswordResponse, Error, z.infer<typeof NewPasswordValidator>>({
-//     mutationFn: async (data) => resetPassword(data),
-//   });
-// };
-
-// export const useUserNewPasswordMutation = () => {
-//   return useMutation<resetPasswordResponse, Error, z.infer<typeof NewPasswordValidator>>({
-//     mutationFn: async (data) => NewPassword(data),
-//   });
-// };
 
 export const useAllUsersQuery = () => {
   return useQuery<any, Error>({
@@ -311,56 +219,6 @@ export const useAdminCreateUserRoleMutation = () => {
     },
   });
 };
-
-// export const useProfileQuery = (id: any) => {
-//   return useQuery<getSingleProfileResponse, Error>({
-//     queryKey: ['userProfile', id],
-//     queryFn: () => getStudentProfileBySessionId(id),
-//     enabled: !!id,
-//     retry: 0,
-//     refetchOnWindowFocus: false,
-//   });
-// };
-
-// export const useTeacherProfileQuery = (id: any) => {
-//   return useQuery<getSingleProfileResponse, Error>({
-//     queryKey: ['userTeacherProfile', id],
-//     queryFn: () => getTeacherProfileBySessionId(id),
-//     enabled: !!id,
-//     retry: 0,
-//     refetchOnWindowFocus: false,
-//   });
-// };
-
-// export const useDeanProfileQuery = (id: any) => {
-//   return useQuery<getSingleProfileResponse, Error>({
-//     queryKey: ['userDeanProfile', id],
-//     queryFn: () => getDeanProfileBySessionId(id),
-//     enabled: !!id,
-//     retry: 0,
-//     refetchOnWindowFocus: false,
-//   });
-// };
-
-// export const useProfileAdminQuery = (id: any) => {
-//   return useQuery<getSingleProfileResponse, Error>({
-//     queryKey: ['userAdminProfile', id],
-//     queryFn: () => getAdminProfileBySessionId(id),
-//     enabled: !!id,
-//     retry: 0,
-//     refetchOnWindowFocus: false,
-//   });
-// };
-
-// export const useProfileQueryByUsername = (username: string) => {
-//   return useQuery<getSingleProfileResponse, Error>({
-//     queryKey: ['userProfileByUsername', username],
-//     enabled: !!username,
-//     queryFn: () => getStudentProfileByUsernameAction(username),
-//     retry: 0,
-//     refetchOnWindowFocus: false,
-//   });
-// };
 
 export const useUpdateProfilePhoto = () => {
   const queryClient = useQueryClient();

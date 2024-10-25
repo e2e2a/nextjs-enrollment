@@ -1,6 +1,4 @@
 'use server';
-import { getIpAddress } from '@/lib/limiter/getIp';
-import { sendVerificationEmail } from '@/lib/mail/mail';
 import { generateResetPasswordToken } from '@/services/resetPassword';
 import { getUserById, updateUserById, updateUserEmailVerifiedById } from '@/services/user';
 import { deleteVerificationTokenByid, getVerificationTokenByUserId } from '@/services/token';
@@ -30,7 +28,7 @@ export const verificationCodeAction = async (data: any): Promise<verificationCod
     if (!checkedToken || checkedToken.error) return { error: checkedToken.error, status: checkedToken.status };
 
     if (data.verificationCode !== checkedToken.token.code) return { error: 'Verification Code not match.', status: 403 };
-    console.log('asdasd', checkedToken.token.userId._id);
+
     const user = await getUserById(checkedToken.token.userId._id);
     if (!user) return { error: 'User not found', status: 404 };
 
@@ -53,8 +51,10 @@ const checkIp = async (user: any) => {
   return tryCatch(async () => {
     const ip = await checkingIp(user);
     if (ip.errorIp) return { error: `Forbidden ${ip.errorIp}`, status: 403 };
+    console.log('its ip', ip);
     if (!ip || ip.error || !ip.success) {
-      await updateActiveIp(user._id, ip.ip);
+      const p = await updateActiveIp(user._id, ip.ip);
+      if (!p) return { error: `Forbidden ${ip.error}`, status: 500 };
     }
     return { success: 'yesyes', status: 201 };
   });

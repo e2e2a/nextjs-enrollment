@@ -24,7 +24,7 @@ export const signInAction = async (data: any) => {
     if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
 
     const checkedUser = await checkUser(validatedFields.data);
-    if (!checkedUser || checkedUser.error) return { error: checkedUser.error, status: checkedUser.status };
+    if (!checkedUser || checkedUser.error) return { error: checkedUser.error, token: checkedUser?.token, status: checkedUser.status };
 
     const signedIn = await handleSignInAction(checkedUser.user._id, checkedUser.user.email, checkedUser.user.password);
     if (signedIn && signedIn.error) return { error: signedIn.error, status: signedIn.status };
@@ -71,7 +71,7 @@ const myLimit = async (email: string) => {
 
 /**
  * Checks the user's IP address .
- * 
+ *
  * @param {any} user - The user object containing information needed to verify the IP.
  */
 const checkIp = async (user: any) => {
@@ -79,8 +79,8 @@ const checkIp = async (user: any) => {
     const userIp = await checkingIp(user);
     if (userIp.errorIp) return { error: `Forbidden ${userIp.errorIp}`, status: 403 };
     if (!userIp || userIp.error || !userIp.success) {
-      const tokenType = 'Activation';
-      const verificationToken = await generateVerificationToken(user._id, tokenType);
+      const verificationToken = await generateVerificationToken(user._id, 'Activation');
+      console.log('userIpqqqq: ', verificationToken);
       return { error: 'New Ip', token: verificationToken.token, status: 203 };
     }
     return { success: 'Old Ip', status: 200 };

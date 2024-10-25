@@ -10,13 +10,12 @@ export const checkingIp = async (user: any) => {
     if (!ip) return { errorIp: 'User has no IP address' };
     const existingActiveIp = await UserIp.findOne({ userId: user._id });
     if (!existingActiveIp) {
-      await createActiveIp(user._id, ip);
-      return { error: 'User has different ip.', ip: ip };
+      await createActiveIp(user._id);
+      return { error: 'Created Ip.' };
     } else {
-      const currentIpArray = existingActiveIp.ips.map((obj: any) => obj.address);
-      if (currentIpArray.flat().includes(ip)) return { success: 'User using the same IP.' };
-      // console.log(`ActiveIp entry for userId ${user._id} already exists with IP ${ip}`);
+      const currentIpArray = existingActiveIp.ips.some((ipEntry: any) => ipEntry.address === ip);
+      if (currentIpArray) return { success: 'User using the same IP.' };
+      return { error: 'User has different ip.', ip: ip };
     }
-    return { error: 'User has different ip.', ip: ip };
   });
 };

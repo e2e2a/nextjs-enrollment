@@ -10,11 +10,11 @@ export const getActiveIpByUserId = async (userId: string) => {
   }
 };
 
-export const createActiveIp = async (userId: any, ip: string) => {
+export const createActiveIp = async (userId: any, ip?: string) => {
   try {
     await UserIp.create({
       userId: userId,
-      ips: [{ address: ip }],
+      ...(ip ? { ips: [{ address: ip }] } : {}),
     });
     return true;
   } catch (error) {
@@ -24,27 +24,15 @@ export const createActiveIp = async (userId: any, ip: string) => {
 };
 
 export const updateActiveIp = async (userId: string, ip: string) => {
-  const existingActiveIp = await getActiveIpByUserId(userId);
-  console.log('exit activeIp', existingActiveIp);
-  if (existingActiveIp) {
-    const activeIp = await UserIp.findOne({ userId: userId, 'ips.address': ip });
-    if (activeIp) {
-      // existingActiveIp.ips.push({ address: ip });
-      // existingActiveIp.updatedAt = new Date();
-      // await existingActiveIp.save();
-      // console.log(`Updated IP for userId ${userId} to ${ip}`);
-      // return true;
+  const activeIp = await UserIp.findOne({ userId: userId });
+  if (activeIp) {
+    const ipExists = activeIp.ips.some((ipEntry: any) => ipEntry.address === ip);
+    if (!ipExists) {
       activeIp.ips.push({ address: ip });
-      activeIp.updatedAt = new Date();
-      await activeIp.save(); // Save the updated document
-      console.log(`Updated IP for userId ${userId} to ${ip}`);
-      return true;
     }
+    activeIp.updatedAt = new Date();
+    await activeIp.save();
     console.log(`Updated IP for userId ${userId} to ${ip}`);
     return true;
-  } else {
-    await createActiveIp(userId, ip);
   }
-
-  return false;
 };

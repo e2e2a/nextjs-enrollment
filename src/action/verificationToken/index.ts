@@ -18,9 +18,8 @@ export const getTokenByParamsTokenAction = async (token: string): Promise<any> =
 
     const checkedType = await checkTokenType(checkedToken.token.userId._id, checkedToken.token.tokenType);
     if (!checkedType || checkedType.error) return { error: checkedType.error, status: checkedType.status };
-    const filteredToken = {
-      expiresCode: checkedToken.token.expiresCode,
-    }
+    const filteredToken = { expiresCode: checkedToken.token.expiresCode }
+    
     return { success: true, token: filteredToken, status: 200 };
   });
 };
