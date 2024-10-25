@@ -20,9 +20,11 @@ export const getTokenByParamsTokenAction = async (token: string): Promise<any> =
     const checkedToken = await checkToken(token);
     if (!checkedToken || checkedToken.error) return { error: checkedToken.error, status: checkedToken.status };
 
-    const checkedType = await checkTokenType(checkedToken.token.userId.id, checkedToken.token.tokenType);
+    const checkedType = await checkTokenType(checkedToken.token.userId._id, checkedToken.token.tokenType);
     if (!checkedType || checkedType.error) return { error: checkedType.error, status: checkedType.status };
-
-    return { success: true, status: 200 };
+    const filteredToken = {
+      expiresCode: checkedToken.token.expiresCode,
+    }
+    return { success: true, token: filteredToken, status: 200 };
   });
 };

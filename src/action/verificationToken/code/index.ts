@@ -31,8 +31,8 @@ export const verificationCodeAction = async (data: any): Promise<verificationCod
     if (!checkedToken || checkedToken.error) return { error: checkedToken.error, status: checkedToken.status };
 
     if (data.verificationCode !== checkedToken.token.code) return { error: 'Verification Code not match.', status: 403 };
-
-    const user = await getUserById(checkedToken.userId._id);
+    console.log('asdasd', checkedToken.token.userId._id);
+    const user = await getUserById(checkedToken.token.userId._id);
     if (!user) return { error: 'User not found', status: 404 };
 
     const userIp = await checkIp(user);
@@ -81,7 +81,7 @@ const checkTokenType = async (user: any, token: any, url: string) => {
       if (resultRecovery && resultRecovery.error) return { error: resultRecovery.error, status: resultRecovery.status };
       return { token: resultRecovery.RPtoken.token, status: 201 };
     case 'Verify':
-      const resultVerify = await handleRecovery(token);
+      const resultVerify = await handleVerify(user, token);
       if (resultVerify && resultVerify.error) return { error: resultVerify.error, status: resultVerify.status };
       return { redirect: '/sign-in', status: 201 };
     default:

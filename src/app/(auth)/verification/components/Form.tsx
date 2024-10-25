@@ -110,7 +110,8 @@ const VerificationForm = () => {
   const onResendCode = async () => {
     setLabelLink('');
     const data = {
-      userId: result?.token?.userId._id,
+      // userId: result?.token?.userId._id,
+      userId: '671b65c90e88ecdb1774c6e4',
     };
     mutationResend.mutate(data, {
       onSuccess: (res) => {
