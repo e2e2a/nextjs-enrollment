@@ -3,7 +3,7 @@ import mongoose, { Document, Schema, model, models } from 'mongoose';
 interface IResetPassword extends Document {
   userId: Schema.Types.ObjectId;
   token: string;
-  expires_at: Date;
+  expires: Date;
 }
 
 const schema = new Schema<IResetPassword>(
@@ -18,7 +18,7 @@ const schema = new Schema<IResetPassword>(
       type: String,
       required: true,
     },
-    expires_at: {
+    expires: {
       type: Date,
       required: true,
     },

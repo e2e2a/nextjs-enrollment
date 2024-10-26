@@ -9,9 +9,9 @@ import { calculateRemainingTime, formatTime } from '@/lib/utils';
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
 import { makeToastError } from '@/lib/toast/makeToast';
-import { useTokenQueryByParamsToken } from '@/lib/queries/verificationToken';
-import { useVerificationcCodeMutation } from '@/lib/queries/verificationToken/code';
-import { useResendVCodeMutation } from '@/lib/queries/verificationToken/resend';
+import { useTokenQueryByParamsToken } from '@/lib/queries/tokens/verification';
+import { useVerificationcCodeMutation } from '@/lib/queries/tokens/verification/code';
+import { useResendVCodeMutation } from '@/lib/queries/tokens/verification/resend';
 
 const VerificationForm = () => {
   const [message, setMessage] = useState<string | undefined>('');
@@ -50,7 +50,7 @@ const VerificationForm = () => {
         .map((_, i) => inputRefs.current[i] || createRef<HTMLInputElement>());
     }
 
-    if (result && result.token.expiresCode) {
+    if (result && result.token && result.token.expiresCode) {
       const initialSeconds = calculateRemainingTime(new Date(result.token.expiresCode));
       setSecondsRemaining(initialSeconds);
     }
@@ -87,12 +87,13 @@ const VerificationForm = () => {
         if (res.error) return makeToastError(res.error);
         setMessage('Verification completed!');
         setTypeMessage('success');
+        console.log('result: ', res)
         if (!res.token) {
           if (res.redirect) {
             return (window.location.href = `${res.redirect}`);
           }
         } else {
-          return (window.location.href = `/recovery/reset-password?token=${res.token.token}`);
+          return (window.location.href = `/recovery/reset-password?token=${res.token}`);
         }
       },
       onSettled: () => {

@@ -4,8 +4,8 @@ import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useRecoveryMutation } from '@/lib/queries';
-import { RecoveryValidator } from '@/lib/validators/Validator';
+import { useRecoveryMutation } from '@/lib/queries/tokens/verification/recovery';
+import { RecoveryValidator } from '@/lib/validators/verificationToken/recovery';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -27,6 +27,7 @@ const RecoveryForm = () => {
     mutation.mutate(data, {
       onSuccess: (res) => {
         if (res.error) {
+          setIsPending(false);
           setMessage(res.error);
           setTypeMessage('error');
           return;
@@ -35,18 +36,11 @@ const RecoveryForm = () => {
         setTypeMessage('success');
         return (window.location.href = `/verification?token=${res.token}`);
       },
-      onSettled: () => {
-        setIsPending(false);
-      },
+      onSettled: () => {},
     });
   };
   return (
-    <CardWrapper
-    header={'Find your email'}
-      headerLabel='Enter your email to reset your password.'
-      backButtonHref='/sign-in'
-      backButtonLabel='Go back to signin?'
-    >
+    <CardWrapper header={'Find your email'} headerLabel='Enter your email to reset your password.' backButtonHref='/sign-in' backButtonLabel='Go back to signin?'>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
           <div className='space-y-4'>

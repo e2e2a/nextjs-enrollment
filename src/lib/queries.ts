@@ -22,15 +22,11 @@ import {
   getTeacherProfileResponse,
   getTeacherScheduleResponse,
   IResponse,
-  recoveryResponse,
-  resetPasswordTokenResponse,
   testResponseaa,
   updateStudentProfileResponse,
 } from '@/types';
 import {  StudentProfileValidator } from './validators/Validator';
 import { z } from 'zod';
-import { checkResetPasswordToken } from '@/action/token';
-import { recoveryProcess, resetPassword } from '@/action/resetPassword';
 import { updateAdminProfile, updateDeanProfile, updateStudentPhoto, updateStudentProfile, updateTeacherProfile } from '@/action/profile/updateData';
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction, getSingleEnrollmentByUserIdIdAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
@@ -136,19 +132,19 @@ export const useCollegeEndSemesterMutation = () => {
 // ============================================================
 // AUTH Recovery
 // ============================================================
-export const useRecoveryMutation = () => {
-  return useMutation<recoveryResponse, Error, any>({
-    mutationFn: async (data) => recoveryProcess(data),
-  });
-};
+// export const useRecoveryMutation = () => {
+//   return useMutation<recoveryResponse, Error, any>({
+//     mutationFn: async (data) => recoveryProcess(data),
+//   });
+// };
 
-export const useRecoveryTokenCheckQuery = (token: string) => {
-  return useQuery<resetPasswordTokenResponse, Error>({
-    queryKey: ['RecoveryTokenCheck', token],
-    queryFn: async () => checkResetPasswordToken(token),
-    retry: 0,
-  });
-};
+// export const useRecoveryTokenCheckQuery = (token: string) => {
+//   return useQuery<resetPasswordTokenResponse, Error>({
+//     queryKey: ['RecoveryTokenCheck', token],
+//     queryFn: async () => checkResetPasswordToken(token),
+//     retry: 0,
+//   });
+// };
 
 export const useAllUsersQuery = () => {
   return useQuery<any, Error>({

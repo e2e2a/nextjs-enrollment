@@ -24,7 +24,7 @@ export const getVerificationTokenByUserId = async (userId: string) => {
 export const deleteVerificationTokenByid = async (id: string) => {
   try {
     await Token.findByIdAndDelete(id);
-    return;
+    return true;
   } catch (error) {
     return false;
   }

@@ -19,7 +19,7 @@ import { redirectUrlByRole } from '@/utils/helpers/redirectUrlByRole';
  *
  * @param token string
  */
-export const verificationCodeAction = async (data: any): Promise<verificationCodeProcessResponse> => {
+export const verificationCodeAction = async (data: any): Promise<any> => {
   return tryCatch(async () => {
     await dbConnect();
     if (!data.token) return { error: 'No token provided', status: 400 };
@@ -44,14 +44,13 @@ export const verificationCodeAction = async (data: any): Promise<verificationCod
 };
 
 /**
- *
+ * Handles check ip
  * @param {Object} user
  */
 const checkIp = async (user: any) => {
   return tryCatch(async () => {
     const ip = await checkingIp(user);
     if (ip.errorIp) return { error: `Forbidden ${ip.errorIp}`, status: 403 };
-    console.log('its ip', ip);
     if (!ip || ip.error || !ip.success) {
       const p = await updateActiveIp(user._id, ip.ip);
       if (!p) return { error: `Forbidden ${ip.error}`, status: 500 };
@@ -61,7 +60,8 @@ const checkIp = async (user: any) => {
 };
 
 /**
- *
+ * Handles Token Type
+ * 
  * @param {Object} user
  * @param {Object} token
  */
@@ -78,7 +78,7 @@ const checkTokenType = async (user: any, token: any, url: string) => {
     case 'Recovery':
       const resultRecovery = await handleRecovery(token);
       if (resultRecovery && resultRecovery.error) return { error: resultRecovery.error, status: resultRecovery.status };
-      return { token: resultRecovery.RPtoken.token, status: 201 };
+      return { token: resultRecovery.token.token, status: 201 };
     case 'Verify':
       const resultVerify = await handleVerify(user, token);
       if (resultVerify && resultVerify.error) return { error: resultVerify.error, status: resultVerify.status };
@@ -140,7 +140,7 @@ const handleRecovery = async (token: any) => {
 };
 
 /**
- *
+ * 
  * @param {Object} user
  * @param {Object} token
  */
@@ -152,7 +152,8 @@ const handleVerify = async (user: any, token: any) => {
 };
 
 /**
- *
+ * Handles update user email
+ * 
  * @param {Object} user
  * @param {string} email
  */

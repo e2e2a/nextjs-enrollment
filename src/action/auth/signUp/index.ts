@@ -55,7 +55,6 @@ const checkingConflict = async (email: string, username: string) => {
 const creatingUser = async (email: string, username: string, password: string) => {
   return tryCatch(async () => {
     const user = await createUser({ email, username }, password);
-    console.log('my user: ', user);
     await createStudentProfile({ userId: user._id });
     if (!user) return { error: 'Error creating User', status: 404 };
 

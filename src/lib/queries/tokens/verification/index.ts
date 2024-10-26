@@ -1,4 +1,4 @@
-import { getTokenByParamsTokenAction } from '@/action/verificationToken';
+import { getTokenByParamsTokenAction } from '@/action/tokens/verification';
 import { useQuery } from '@tanstack/react-query';
 
 /**

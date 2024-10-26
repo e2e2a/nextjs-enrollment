@@ -1,4 +1,4 @@
-import { verificationCodeResend } from '@/action/verificationToken/resend';
+import { verificationCodeResend } from '@/action/tokens/verification/resend';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
