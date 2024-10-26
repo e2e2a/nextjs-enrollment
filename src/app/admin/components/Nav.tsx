@@ -9,7 +9,7 @@ import { redirect, usePathname } from 'next/navigation';
 import { MobileNav } from '@/components/shared/nav/MobileNav';
 import { SidebarNav } from './SidebarNav';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 interface IProps {
   session: any;
   children: ReactNode;

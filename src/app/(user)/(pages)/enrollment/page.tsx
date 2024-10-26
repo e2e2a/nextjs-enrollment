@@ -7,7 +7,7 @@ import { getEnrollmentByUserId } from '@/services/enrollment';
 import { useSession } from 'next-auth/react';
 import { useCourseQuery, useEnrollmentQuery } from '@/lib/queries';
 import Loader from '@/components/shared/Loader';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);

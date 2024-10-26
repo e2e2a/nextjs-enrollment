@@ -7,7 +7,6 @@ import { generateVerificationToken } from '@/services/token';
 import { checkNewEmail } from '@/utils/actions/user/email';
 
 /**
- *
  * Handles the process of changing a user's email address.
  * Any authenticated role
  *
@@ -30,10 +29,7 @@ export const newEmailAction = async (data: any) => {
 };
 
 /**
- *
  * Validates the new email against the current user's email.
- * If the new email is unchanged, returns an error.
- * If it is changed, checks for existence and generates a verification token.
  *
  * @param {Object} user
  * @param {string} email

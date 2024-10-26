@@ -1,11 +1,11 @@
-import { getStudentProfileBySessionIdAction } from '@/action/profile';
+import { getStudentProfileBySessionIdAction } from '@/action/profile/get/session';
 import { getSingleProfileResponse } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 
 /**
- * @authenticated
- * any roles
- * @returns query of profile by session id or userId
+ * Custom hook query profile by session id.
+ *
+ * @returns {UseMutationResult} Mutation object with status, error, and mutate methods.
  */
 export const useProfileQueryBySessionId = () => {
   return useQuery<getSingleProfileResponse, Error>({

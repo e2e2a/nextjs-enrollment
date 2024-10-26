@@ -10,7 +10,7 @@ import ProfileDialog from './components/ProfileDialog';
 import LoaderPage from '@/components/shared/LoaderPage';
 import Loader from '@/components/shared/Loader';
 import ErrorPage from './components/ErrorPage';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const ProfilePage = () => {
   const { data } = useSession();

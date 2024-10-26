@@ -24,9 +24,7 @@ export const getUserRoleStudentAction = async (): Promise<getAllStudentProfileRe
   try {
     await dbConnect();
     const students = await getAllStudentProfile();
-    console.log(students);
     return { students: JSON.parse(JSON.stringify(students)), status: 200 };
-    // return studentProfile;
   } catch (error) {
     console.log('getStudentProfileBySessionId', error);
     return { error: '', status: 500 };

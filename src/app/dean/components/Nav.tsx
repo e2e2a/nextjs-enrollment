@@ -7,7 +7,7 @@ import { SidebarNav } from './SidebarNav';
 import { MainNav } from '@/components/shared/nav/MainNav';
 import { MobileNav } from '@/components/shared/nav/MobileNav';
 import { useRouter } from 'next/navigation';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 const Nav = ({ children }: { children: ReactNode }) => {
   const { data: sessionData } = useSession();
   const [profile, setProfile] = useState({});

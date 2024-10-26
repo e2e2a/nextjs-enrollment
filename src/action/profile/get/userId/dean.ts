@@ -1,15 +1,19 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import { checkAuth } from '../../utils/actions/session';
+import { checkAuth } from '../../../../utils/actions/session';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { getSingleProfileResponse } from '@/types';
+import { getTeacherProfileByUserId } from '@/services/teacherProfile';
+import { getDeanProfileByUserId } from '@/services/deanProfile';
+import { getAdminProfileByUserId } from '@/services/adminProfile';
+import { verifyAdmin } from '../../../../utils/actions/session/roles/admin';
 import { getUserById } from '@/services/user';
-import { verifyDEAN } from '../../utils/actions/session/roles/dean';
+import { verifyDEAN } from '@/utils/actions/session/roles/dean';
 
 /**
  *
- * only dean roles
+ * only admin roles
  * @returns query of profile by session id or userId
  */
 export const getProfileByParamsUserIdAction = async (id: string): Promise<getSingleProfileResponse> => {
@@ -19,10 +23,8 @@ export const getProfileByParamsUserIdAction = async (id: string): Promise<getSin
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
 
     const checkedR = await checkRole(id);
-    if (!checkedR.profile || checkedR.error) {
-      console.log(checkedR.profile);
-      return { error: 'Profile not found.', status: 404 };
-    }
+    if (!checkedR.profile || checkedR.error) return { error: 'Profile not found.', status: 404 };
+
     return { profile: checkedR.profile, status: 200 };
   });
 };
@@ -30,12 +32,11 @@ export const getProfileByParamsUserIdAction = async (id: string): Promise<getSin
 /**
  *
  * check roles
- * @returns profile of students with params id
+ * @returns profile of the session username action
  */
 const checkRole = async (id: any): Promise<any> => {
   return tryCatch(async () => {
     const user = await getUserById(id);
-    if (!user) return { error: 'Forbidden.', status: 403 };
     let profile;
     switch (user.role) {
       case 'STUDENT':

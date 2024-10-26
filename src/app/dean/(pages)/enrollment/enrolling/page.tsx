@@ -6,7 +6,7 @@ import { useAllEnrollmentQuery } from '@/lib/queries';
 import { IEnrollment } from '@/types';
 import { useSession } from 'next-auth/react';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);

@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/shared/Icons';
 import Link from 'next/link';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);

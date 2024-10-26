@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useRPTokenQueryByParamsToken } from '@/lib/queries/tokens/resetPassword';
-import { useResetPasswordMutation } from '@/lib/queries/tokens/resetPassword/resetPassword';
+import { useResetPasswordMutation } from '@/lib/queries/tokens/resetPassword/password';
 import { ResetPasswordValidator } from '@/lib/validators/resetPassword';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useSearchParams } from 'next/navigation';

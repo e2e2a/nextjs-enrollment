@@ -1,24 +1,27 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import { checkAuth } from '../../utils/actions/session';
+import { checkAuth } from '../../../../utils/actions/session';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { getSingleProfileResponse } from '@/types';
 import { getTeacherProfileByUserId } from '@/services/teacherProfile';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getAdminProfileByUserId } from '@/services/adminProfile';
+import { verifyAdmin } from '../../../../utils/actions/session/roles/admin';
+import { getUserById } from '@/services/user';
 
 /**
  *
- * any roles
- * @returns change username action
+ * only admin roles
+ * @returns query of profile by session id or userId
  */
-export const getStudentProfileBySessionIdAction = async (): Promise<getSingleProfileResponse> => {
+export const getProfileByParamsUserIdAction = async (id: string): Promise<getSingleProfileResponse> => {
   return tryCatch(async () => {
     await dbConnect();
-    const session = await checkAuth();
-    if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-    const checkedR = await checkRole(session);
+    const session = await verifyAdmin();
+    if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
+
+    const checkedR = await checkRole(id);
     if (!checkedR.profile || checkedR.error) {
       console.log(checkedR.profile);
       return { error: 'Profile not found.', status: 404 };
@@ -32,21 +35,22 @@ export const getStudentProfileBySessionIdAction = async (): Promise<getSinglePro
  * check roles
  * @returns profile of the session username action
  */
-const checkRole = async (session: any): Promise<any> => {
+const checkRole = async (id: any): Promise<any> => {
   return tryCatch(async () => {
+    const user = await getUserById(id);
     let profile;
-    switch (session.user.role) {
+    switch (user.role) {
       case 'STUDENT':
-        profile = await getStudentProfileByUserId(session.user._id);
+        profile = await getStudentProfileByUserId(user._id);
         break;
       case 'TEACHER':
-        profile = await getTeacherProfileByUserId(session.user._id);
+        profile = await getTeacherProfileByUserId(user._id);
         break;
       case 'DEAN':
-        profile = await getDeanProfileByUserId(session.user._id);
+        profile = await getDeanProfileByUserId(user._id);
         break;
       case 'ADMIN':
-        profile = await getAdminProfileByUserId(session.user._id);
+        profile = await getAdminProfileByUserId(user._id);
         break;
       default:
         return { error: 'Forbidden.', status: 403 };

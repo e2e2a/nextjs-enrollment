@@ -129,67 +129,50 @@ export const useCollegeEndSemesterMutation = () => {
   });
 };
 
-// ============================================================
-// AUTH Recovery
-// ============================================================
-// export const useRecoveryMutation = () => {
-//   return useMutation<recoveryResponse, Error, any>({
-//     mutationFn: async (data) => recoveryProcess(data),
-//   });
-// };
-
-// export const useRecoveryTokenCheckQuery = (token: string) => {
-//   return useQuery<resetPasswordTokenResponse, Error>({
-//     queryKey: ['RecoveryTokenCheck', token],
-//     queryFn: async () => checkResetPasswordToken(token),
+// export const useAllUsersQuery = () => {
+//   return useQuery<any, Error>({
+//     queryKey: ['AllUsers'],
+//     queryFn: () => getAllUsersAction(),
 //     retry: 0,
+//     refetchOnWindowFocus: false,
 //   });
 // };
 
-export const useAllUsersQuery = () => {
-  return useQuery<any, Error>({
-    queryKey: ['AllUsers'],
-    queryFn: () => getAllUsersAction(),
-    retry: 0,
-    refetchOnWindowFocus: false,
-  });
-};
+// export const useUserRolesStudentQuery = () => {
+//   return useQuery<getAllStudentProfileResponse, Error>({
+//     queryKey: ['Students'],
+//     queryFn: () => getUserRoleStudentAction(),
+//     retry: 0,
+//     refetchOnWindowFocus: false,
+//   });
+// };
 
-export const useUserRolesStudentQuery = () => {
-  return useQuery<getAllStudentProfileResponse, Error>({
-    queryKey: ['Students'],
-    queryFn: () => getUserRoleStudentAction(),
-    retry: 0,
-    refetchOnWindowFocus: false,
-  });
-};
+// export const useUserRolesAdminQuery = () => {
+//   return useQuery<getAllAdminProfileResponse, Error>({
+//     queryKey: ['Admins'],
+//     queryFn: () => getUserRoleAdminAction(),
+//     retry: 0,
+//     refetchOnWindowFocus: false,
+//   });
+// };
 
-export const useUserRolesAdminQuery = () => {
-  return useQuery<getAllAdminProfileResponse, Error>({
-    queryKey: ['Admins'],
-    queryFn: () => getUserRoleAdminAction(),
-    retry: 0,
-    refetchOnWindowFocus: false,
-  });
-};
+// export const useUserRolesDeansQuery = () => {
+//   return useQuery<getAllDeanProfileResponse, Error>({
+//     queryKey: ['Deans'],
+//     queryFn: () => getUserRoleDeanAction(),
+//     retry: 0,
+//     refetchOnWindowFocus: false,
+//   });
+// };
 
-export const useUserRolesDeansQuery = () => {
-  return useQuery<getAllDeanProfileResponse, Error>({
-    queryKey: ['Deans'],
-    queryFn: () => getUserRoleDeanAction(),
-    retry: 0,
-    refetchOnWindowFocus: false,
-  });
-};
-
-export const useUserRolesTeacherQuery = () => {
-  return useQuery<getAllTeacherProfileResponse, Error>({
-    queryKey: ['Teachers'],
-    queryFn: () => getUserRoleTeachertAction(),
-    retry: 0,
-    refetchOnWindowFocus: false,
-  });
-};
+// export const useUserRolesTeacherQuery = () => {
+//   return useQuery<getAllTeacherProfileResponse, Error>({
+//     queryKey: ['Teachers'],
+//     queryFn: () => getUserRoleTeachertAction(),
+//     retry: 0,
+//     refetchOnWindowFocus: false,
+//   });
+// };
 
 export const useAdminCreateUserRoleMutation = () => {
   const queryClient = useQueryClient();

@@ -6,7 +6,7 @@ import { useAllTeacherReportGradeQuery } from '@/lib/queries';
 import { IRoom } from '@/types';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useSession } from 'next-auth/react';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);

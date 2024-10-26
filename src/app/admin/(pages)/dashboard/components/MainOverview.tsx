@@ -4,17 +4,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { Overview } from './Overview';
-import { useAllUsersQuery, useUserRolesAdminQuery, useUserRolesDeansQuery, useUserRolesStudentQuery, useUserRolesTeacherQuery } from '@/lib/queries';
+import { useAllUsersQuery } from '@/lib/queries/user/get';
+import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 
 const MainOverview = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [totalAccounts, setTotalAccounts] = useState<number>(0);
   const [totalActive, setTotalActive] = useState<number>(0);
   const { data: AllU, error: AllUError } = useAllUsersQuery();
-  const { data: rsData, error: rsError } = useUserRolesStudentQuery();
-  const { data: rtData, error: rtError } = useUserRolesTeacherQuery();
-  const { data: rdData, error: rdError } = useUserRolesDeansQuery();
-  const { data: raData, error: raError } = useUserRolesAdminQuery();
+  const { data: rsData, error: rsError } = useAllProfileQueryByUserRoles('STUDENT');
+  const { data: rtData, error: rtError } = useAllProfileQueryByUserRoles('TEACHER');
+  const { data: rdData, error: rdError } = useAllProfileQueryByUserRoles('DEAN');
+  const { data: raData, error: raError } = useAllProfileQueryByUserRoles('ADMIN');
   useEffect(() => {
     if (!AllU || AllUError) return;
     if (!rsData || rsError) return;
@@ -23,8 +24,8 @@ const MainOverview = () => {
     if (!raData || raError) return;
 
     if (rsData && rtData && rdData && raData) {
-      if (rsData.students && rtData.teachers && rdData.deans && raData.admins) {
-        const total = rsData.students.length + rtData.teachers.length + rdData.deans.length + raData.admins.length;
+      if (rsData.profiles && rtData.profiles && rdData.profiles && raData.profiles) {
+        const total = rsData.profiles.length + rtData.profiles.length + rdData.profiles.length + raData.profiles.length;
         setTotalAccounts(total);
         const totalActive = AllU.users.filter((u:any) => u.active === true);
         setTotalActive(totalActive.length)
@@ -72,7 +73,7 @@ const MainOverview = () => {
                 </svg>
               </CardHeader>
               <CardContent>
-                <div className='text-2xl font-bold'>{rsData?.students?.length}</div>
+                <div className='text-2xl font-bold'>{rsData?.profiles?.length}</div>
               </CardContent>
             </Card>
             <Card>
@@ -83,7 +84,7 @@ const MainOverview = () => {
                 </svg>
               </CardHeader>
               <CardContent>
-                <div className='text-2xl font-bold'>{rdData?.deans?.length}</div>
+                <div className='text-2xl font-bold'>{rdData?.profiles?.length}</div>
               </CardContent>
             </Card>
             <Card>
@@ -94,7 +95,7 @@ const MainOverview = () => {
                 </svg>
               </CardHeader>
               <CardContent>
-                <div className='text-2xl font-bold'>{rtData?.teachers?.length}</div>
+                <div className='text-2xl font-bold'>{rtData?.profiles?.length}</div>
               </CardContent>
             </Card>
             <Card>
@@ -116,7 +117,7 @@ const MainOverview = () => {
                 </svg>
               </CardHeader>
               <CardContent>
-                <div className='text-2xl font-bold'>{raData?.admins?.length}</div>
+                <div className='text-2xl font-bold'>{raData?.profiles?.length}</div>
               </CardContent>
             </Card>
           </div>

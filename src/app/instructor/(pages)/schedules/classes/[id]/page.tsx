@@ -6,7 +6,7 @@ import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import AddGrades from './components/AddGrades';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);

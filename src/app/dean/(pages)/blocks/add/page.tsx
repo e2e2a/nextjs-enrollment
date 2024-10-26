@@ -16,7 +16,7 @@ import { SelectInput } from './components/SelectInput';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 import { selectType } from '@/constant/course';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState<boolean>(false);

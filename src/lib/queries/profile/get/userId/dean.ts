@@ -1,14 +1,12 @@
-import { getProfileByParamsUserIdAction } from '@/action/profile/dean';
+import { getProfileByParamsUserIdAction } from '@/action/profile/get/userId/dean';
 import { getSingleProfileResponse } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 
 /**
- * @authenticated
- * role dean
- * Custom hook to query profile of student by param id.
- * 
+ * Custom hook query profile by user id.
+ *
  * @param {string} id
- * @returns query of profile by session id or userId
+ * @returns {UseMutationResult} Mutation object with status, error, and mutate methods.
  */
 export const useProfileQueryByParamsUserIdInDean = (id: string) => {
   return useQuery<getSingleProfileResponse, Error>({

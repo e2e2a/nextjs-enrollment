@@ -6,7 +6,7 @@ import { MobileNav } from '@/components/shared/nav/MobileNav';
 import { useSession } from 'next-auth/react';
 import { decryptData } from '@/lib/encryption';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const UserRootLayout = ({ children }: { children: ReactNode }) => {
   const { data } = useSession();

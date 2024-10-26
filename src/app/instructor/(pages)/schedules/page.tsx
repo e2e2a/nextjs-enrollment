@@ -5,7 +5,7 @@ import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import { useTeacherScheduleCollegeQueryByProfileId } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);

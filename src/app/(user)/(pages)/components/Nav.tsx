@@ -7,7 +7,7 @@ import { MobileNav } from '@/components/shared/nav/MobileNav';
 import { SidebarNav } from '@/components/shared/nav/SidebarNav';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useRouter } from 'next/navigation';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 interface IProps {
   session: any;

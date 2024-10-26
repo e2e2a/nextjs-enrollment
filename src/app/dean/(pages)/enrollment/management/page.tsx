@@ -20,7 +20,7 @@ import EnableADW from './components/step4/EnableADW';
 import { DataTable6 } from './components/step6/DataTable6';
 import { columns6 } from './components/step6/Columns6';
 import { useSession } from 'next-auth/react';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const Page = () => {
   const pathname = usePathname();

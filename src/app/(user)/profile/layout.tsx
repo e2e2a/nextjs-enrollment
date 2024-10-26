@@ -5,7 +5,7 @@ import { MainNav } from '@/components/shared/nav/MainNav';
 import { MobileNav } from '@/components/shared/nav/MobileNav';
 import { useSession } from 'next-auth/react';
 import Loader from '@/components/shared/Loader';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const UserRootLayout = ({ children }: { children: ReactNode }) => {
   const { data } = useSession();

@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
-import { useUserRolesTeacherQuery, useCreateCourseBlockMutation, useCreateCourseMutation, useSubjectCollegeQuery, useRoomQuery, useCreateTeacherScheduleCollegeMutation, useCourseQueryByCategory } from '@/lib/queries';
+import {  useCreateCourseBlockMutation, useCreateCourseMutation, useSubjectCollegeQuery, useRoomQuery, useCreateTeacherScheduleCollegeMutation, useCourseQueryByCategory } from '@/lib/queries';
 import { makeToastError } from '@/lib/toast/makeToast';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 import { Combobox } from './components/Combobox';
@@ -18,6 +18,7 @@ import Link from 'next/link';
 import { ComboboxDays } from './components/ComboboxDays';
 import { TeacherScheduleCollegeValidator } from '@/lib/validators/AdminValidator';
 import { ComboboxRoom } from './components/ComboboxRoom';
+import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 const daysOfWeek = [
   { label: 'Monday', value: 'M' },
   { label: 'Tuesday', value: 'T' },
@@ -31,13 +32,11 @@ const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);
   const [loading, setLoading] = useState(true);
   const [rooms, setRooms] = useState([{}]);
-  // This roomId and teacherId is passed in the inputs
-  const [courseCategory, setCourseCategory] = useState('');
-  const [courseId, setCourseId] = useState('');
   const [teacherId, setTeacherId] = useState('');
   const [roomId, setRoomId] = useState('');
   const [teachers, setTeachers] = useState<any[]>([]);
-  const { data: tData, isLoading, isError } = useUserRolesTeacherQuery();
+  // @todo
+  const { data: tData, isLoading, isError } = useAllProfileQueryByUserRoles('TEACHER');
   const { data: sData, isLoading: sLoading, isError: sError } = useSubjectCollegeQuery();
   const { data: rData, isLoading: rLoading, error: rError } = useRoomQuery();
   useEffect(() => {
@@ -45,8 +44,8 @@ const Page = () => {
     if (!sData || sError) return;
 
     if (tData && sData) {
-      if (tData.teachers) {
-        setTeachers(tData.teachers);
+      if (tData.profiles) {
+        setTeachers(tData.profiles);
         setLoading(false);
       }
       return;

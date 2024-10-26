@@ -10,7 +10,7 @@ import { useParams, usePathname } from 'next/navigation';
 import Loader from '@/components/shared/Loader';
 import ErrorPage from './components/ErrorPage';
 import ProfileTabEnrollCollege from './components/ProfileTabEnrollCollege';
-import { useProfileQueryByParamsUserId } from '@/lib/queries/profile/admin';
+import { useProfileQueryByParamsUserId } from '@/lib/queries/profile/get/userId/admin';
 
 const ProfilePage = ({ params }: { params: { id: string } }) => {
   const { data } = useSession();

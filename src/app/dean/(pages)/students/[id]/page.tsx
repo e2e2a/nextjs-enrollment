@@ -6,11 +6,10 @@ import EmailTab from './components/EmailTab';
 import PasswordTab from './components/PasswordTab';
 import ProfileTab from './components/ProfileTab';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useParams, usePathname } from 'next/navigation';
 import Loader from '@/components/shared/Loader';
 import ErrorPage from './components/ErrorPage';
 import ProfileTabEnrollCollege from './components/ProfileTabEnrollCollege';
-import { useProfileQueryByParamsUserIdInDean } from '@/lib/queries/profile/dean';
+import { useProfileQueryByParamsUserIdInDean } from '@/lib/queries/profile/get/userId/dean';
 
 const ProfilePage = ({ params }: { params: { id: string } }) => {
   const { data } = useSession();
@@ -34,7 +33,6 @@ const ProfilePage = ({ params }: { params: { id: string } }) => {
       if (res.profile) {
         setLoading(false);
       }else {
-        //set error here
         setLoading(false);
       }
     }

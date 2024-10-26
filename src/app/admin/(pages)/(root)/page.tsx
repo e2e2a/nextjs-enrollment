@@ -1,6 +1,6 @@
 'use client';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useProfileQueryBySessionId } from '@/lib/queries/profile';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
