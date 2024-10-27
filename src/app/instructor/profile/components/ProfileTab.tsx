@@ -117,7 +117,7 @@ const ProfileTab = ({ profile }: Iprops) => {
                 </div>
               </div>
             )}
-            <div className={`grid sm:grid-cols-2 grid-cols-1 lg:gap-8 ${isNotEditable ? 'justify-around ' : 'px-0 lg:px-11'}`}>
+            <div className={`grid sm:grid-cols-2 grid-cols-1 md:gap-8 ${isNotEditable ? 'justify-around ' : 'px-0 lg:px-11'}`}>
               {/* <h1 className='text-lg font-bold border-b text-center lg:text-left'>Manpower Profile</h1> */}
               <Input isNotEditable={isNotEditable} name={'firstname'} type={'text'} form={form} label={'Firstname:'} classNameInput={'capitalize'} />
               <Input isNotEditable={isNotEditable} name={'middlename'} type={'text'} form={form} label={'Middlename:'} classNameInput={'capitalize'} />

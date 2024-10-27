@@ -105,7 +105,6 @@ const ProfileTab = ({ profile }: Iprops) => {
               <CardDescription className='text-sm font-normal w-full text-center'>Update your profile information here. Ensure all your details are accurate to have the best experience on our platform.</CardDescription>
             </CardTitle>
           </CardHeader>
-          {/* note if its not editable its pb-0 @button */}
           <CardContent className=''>
             {profile.isVerified && (
               <div className='w-full flex justify-end mb-2'>
@@ -115,8 +114,7 @@ const ProfileTab = ({ profile }: Iprops) => {
                 </div>
               </div>
             )}
-            <div className={`grid sm:grid-cols-2 grid-cols-1 lg:gap-8 ${isNotEditable ? 'justify-around ' : 'px-0 lg:px-11'}`}>
-              {/* <h1 className='text-lg font-bold border-b text-center lg:text-left'>Manpower Profile</h1> */}
+            <div className={`grid sm:grid-cols-2 grid-cols-1 md:gap-8 ${isNotEditable ? 'justify-around ' : 'px-0 lg:px-11'}`}>
               <Input isNotEditable={isNotEditable} name={'firstname'} type={'text'} form={form} label={'Firstname:'} classNameInput={'capitalize'} />
               <Input isNotEditable={isNotEditable} name={'middlename'} type={'text'} form={form} label={'Middlename:'} classNameInput={'capitalize'} />
               <Input isNotEditable={isNotEditable} name={'lastname'} type={'text'} form={form} label={'Lastname:'} classNameInput={'capitalize'} />

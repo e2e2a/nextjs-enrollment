@@ -9,11 +9,12 @@ import Image from 'next/image';
 import Username from './Username';
 import { useUpdateProfileMutation } from '@/lib/queries/profile/update/session';
 
-type Iprops = {
+type IProps = {
   session: any;
   profile: any;
 };
-const ProfileDropdown = ({ session, profile }: Iprops) => {
+
+const ProfileDropdown = ({ session, profile }: IProps) => {
   const [imageFile, setImageFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageError, setImageError] = useState('');
@@ -23,10 +24,9 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
   const mutation = useUpdateProfileMutation();
 
   const handleSelectedFile = (files: FileList | null) => {
-    if (files && files[0].size < 10000000) {
+    if (files && files[0].size < 1000000) {
       const file = files[0];
       setImageFile(file);
-      // Preview the image
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -40,7 +40,7 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
   const handleUploadFile = () => {
     const formData = new FormData();
     if (!imagePreview) return setImageError('PSA Birth is required.');
-    formData.append('image', imagePreview!);
+    formData.append('image', imageFile!);
     const data = {
       formData: formData,
     };
@@ -63,7 +63,7 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
       },
     });
   };
-  const handleRemoveFile = () => setImageFile(undefined);
+
   const handleClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -108,7 +108,6 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
                 </div>
                 <input type='file' ref={fileInputRef} style={{ display: 'none' }} accept='image/png' onChange={(e) => handleSelectedFile(e.target.files)} />
 
-                {/* Span that triggers the file input */}
                 <Button onClick={handleClick} disabled={isUploading}>
                   <span className='cursor-pointer p-2 text-blue-600 gap-0 md:gap-2 rounded-md flex items-center'>
                     <div className='bg-slate-100 rounded-full'>

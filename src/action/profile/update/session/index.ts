@@ -22,10 +22,11 @@ export const updateProfileBySessionIdAction = async (data: any) => {
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
 
-    if (data.image) {
+    if (data.formData) {
       const checkedPhoto = await checkPhotoAndSave(data, session);
       if (checkedPhoto && checkedPhoto.error) return { error: checkedPhoto.error, status: checkedPhoto.status };
-      data.imageUrl = checkedPhoto.url;
+      data.imageUrl = checkedPhoto.imageUrl;
+      console.log('checkeddata', data);
     } else {
       data.isVerified = true;
     }
@@ -57,6 +58,7 @@ const checkSessionRole = async (session: any, data: any): Promise<any> => {
         profile = await updateDeanProfile(session.user._id, data);
         break;
       case 'ADMIN':
+        console.log('sessuib cgecj', session.user.role);
         profile = await updateAdminProfile(session.user._id, data);
         break;
       default:
@@ -128,19 +130,21 @@ const updateDeanProfile = async (userId: string, data: any) => {
  */
 const updateAdminProfile = async (userId: string, data: any) => {
   return tryCatch(async () => {
-    if (!data.image) {
+    if (!data.formData) {
       const profileParse = AdminProfileUpdateValidator.safeParse(data);
       if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
     }
-
+    console.log('data', data)
     const profile = await updateAdminProfileByUserId(userId, data);
     if (!profile) return { error: 'Something went wrong. ', status: 500 };
+    console.log('saved new profile', profile);
+    
     return { message: 'Profile has been update. ', status: 201 };
   });
 };
 
 /**
- * update admin profile
+ * check photo and save to firebase
  *
  * @param {Object} data
  * @param {Object} session
@@ -148,11 +152,12 @@ const updateAdminProfile = async (userId: string, data: any) => {
 export const checkPhotoAndSave = async (data: any, session: any) => {
   return tryCatch(async () => {
     const image = data.formData.get('image') as File;
+
     if (!image.name || image === null) return { error: 'File or photo is missing.', status: 403 };
 
-    const storageRef = ref(storage, `enrollment/psa/${session._id}/${image.name}`);
+    const storageRef = ref(storage, `profile/${session.user._id}/${image.name}`);
     await uploadBytes(storageRef, image, { contentType: image.type });
     const url = await getDownloadURL(storageRef);
-    return { success: 'File or photo is missing.', image: url, status: 200 };
+    return { success: 'File or photo is missing.', imageUrl: url, status: 200 };
   });
 };
