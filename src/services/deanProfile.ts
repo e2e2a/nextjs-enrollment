@@ -51,3 +51,13 @@ export const updateDeanProfileById = async (id: string, data: any) => {
     return null;
   }
 };
+
+export const updateDeanProfileByUserId = async (userId: string, data: any) => {
+  try {
+    const updatedProfile = await DeanProfile.findOneAndUpdate({ userId }, { ...data }, { new: true });
+    return updatedProfile;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};

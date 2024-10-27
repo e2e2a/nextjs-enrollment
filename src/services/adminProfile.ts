@@ -1,5 +1,5 @@
 'use server';
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 import AdminProfile from '@/models/AdminProfile';
 const User = mongoose.models.User;
 
@@ -47,7 +47,17 @@ export const updateAdminProfileById = async (id: string, data: any) => {
     const updatedProfile = await AdminProfile.findByIdAndUpdate(id, { ...data, isVerified: true }, { new: true });
     return updatedProfile;
   } catch (error) {
-    console.log(error)
+    console.log(error);
+    return null;
+  }
+};
+
+export const updateAdminProfileByUserId = async (userId: string, data: any) => {
+  try {
+    const updatedProfile = await AdminProfile.findOneAndUpdate({ userId }, { ...data }, { new: true });
+    return updatedProfile;
+  } catch (error) {
+    console.log(error);
     return null;
   }
 };

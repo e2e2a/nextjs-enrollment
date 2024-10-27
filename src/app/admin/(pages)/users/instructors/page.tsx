@@ -1,18 +1,18 @@
 'use client';
 import { columns } from './components/columns';
-import { useUserRolesTeacherQuery } from '@/lib/queries';
 import { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { ITeacherProfile } from '@/types';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 
 export default function Page() {
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error } = useUserRolesTeacherQuery();
+  const { data, isLoading, error } = useAllProfileQueryByUserRoles('TEACHER');
   useEffect(() => {
     if (error || !data) return; //setError 500;
     if (data) {
-      if (data.teachers) {
+      if (data.profiles) {
         setIsPageLoading(false);
       }
     }
@@ -25,7 +25,7 @@ export default function Page() {
       ) : (
         <div className='w-full rounded-md flex flex-col gap-4 items-center px-6 py-8 justify-center bg-white'>
           <h1 className='mb-6 text-3xl font-bold'>Instructors Management</h1>
-          <DataTable columns={columns} data={data?.teachers as ITeacherProfile[]} />
+          <DataTable columns={columns} data={data?.profiles as ITeacherProfile[]} />
         </div>
       )}
     </>

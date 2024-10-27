@@ -12,7 +12,7 @@ import Input from './Input';
 import { BirthdayInput } from './BirthdayInput';
 import { SelectInput } from './selectInput';
 import { profileSelectItems } from '@/constant/profile/selectItems';
-import { useStudentProfileMutation } from '@/lib/queries';
+// import { useStudentProfileMutation } from '@/lib/queries';
 import PSAFile from './PSAFile';
 import GoodMoralFile from './GoodMoralFile';
 import ReportCardFile from './ReportCardFile';
@@ -29,7 +29,8 @@ type Iprops = {
   profile: any;
 };
 const ProfileTab = ({ profile }: Iprops) => {
-  const mutation = useStudentProfileMutation();
+  // @todo admin only to update this profile
+  // const mutation = useStudentProfileMutation();
   const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile.isVerified);
 
   const [defaultValues, setDefaultValues] = useState({
@@ -141,23 +142,23 @@ const ProfileTab = ({ profile }: Iprops) => {
       profileId: profile?._id!,
       ...data,
     };
-    mutation.mutate(profileData, {
-      onSuccess: (res) => {
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            makeToastSucess('Profile has been updated.');
-            return;
-          default:
-            makeToastError('Something went wrong.');
-            return;
-        }
-      },
-      onSettled: () => {
-        // setIsPending(false);
-      },
-    });
+    // mutation.mutate(profileData, {
+    //   onSuccess: (res) => {
+    //     switch (res.status) {
+    //       case 200:
+    //       case 201:
+    //       case 203:
+    //         makeToastSucess('Profile has been updated.');
+    //         return;
+    //       default:
+    //         makeToastError('Something went wrong.');
+    //         return;
+    //     }
+    //   },
+    //   onSettled: () => {
+    //     // setIsPending(false);
+    //   },
+    // });
   };
 
   return (

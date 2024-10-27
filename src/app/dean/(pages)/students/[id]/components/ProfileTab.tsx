@@ -12,7 +12,7 @@ import Input from './Input';
 import { BirthdayInput } from './BirthdayInput';
 import { SelectInput } from './selectInput';
 import { profileSelectItems } from '@/constant/profile/selectItems';
-import { useStudentProfileMutation } from '@/lib/queries';
+// import { useStudentProfileMutation } from '@/lib/queries';
 import PSAFile from './PSAFile';
 import GoodMoralFile from './GoodMoralFile';
 import ReportCardFile from './ReportCardFile';
@@ -29,7 +29,7 @@ type Iprops = {
   profile: any;
 };
 const ProfileTab = ({ profile }: Iprops) => {
-  const mutation = useStudentProfileMutation();
+  // const mutation = useStudentProfileMutation();
   const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile.isVerified);
 
   const [defaultValues, setDefaultValues] = useState({

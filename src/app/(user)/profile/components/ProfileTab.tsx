@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
-import { StudentProfileValidator } from '@/lib/validators/Validator';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -12,16 +11,17 @@ import Input from './Input';
 import { BirthdayInput } from './BirthdayInput';
 import { SelectInput } from './selectInput';
 import { profileSelectItems } from '@/constant/profile/selectItems';
-import { useStudentProfileMutation } from '@/lib/queries';
 import Image from 'next/image';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-type FormData = z.infer<typeof StudentProfileValidator>;
+import { useUpdateProfileMutation } from '@/lib/queries/profile/update/session';
+import { StudentProfileUpdateValidator } from '@/lib/validators/profile/update';
+type FormData = z.infer<typeof StudentProfileUpdateValidator>;
 type Iprops = {
   session?: any;
   profile: any;
 };
 const ProfileTab = ({ profile }: Iprops) => {
-  const mutation = useStudentProfileMutation();
+  const mutation = useUpdateProfileMutation();
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile.isVerified);
   const [defaultValues, setDefaultValues] = useState({
@@ -53,14 +53,13 @@ const ProfileTab = ({ profile }: Iprops) => {
     setIsNotEditable(!isNotEditable);
     form.reset();
   };
-  const form = useForm<z.infer<typeof StudentProfileValidator>>({
-    resolver: zodResolver(StudentProfileValidator),
+  const form = useForm<z.infer<typeof StudentProfileUpdateValidator>>({
+    resolver: zodResolver(StudentProfileUpdateValidator),
     defaultValues,
   });
 
   useEffect(() => {
     const fetchProfileData = async () => {
-      // const profile = await getStudentProfileByUserId(session?.id);
       const profileDefaultValues = {
         firstname: profile?.firstname || '',
         middlename: profile?.middlename || '',

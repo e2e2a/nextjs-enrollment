@@ -6,7 +6,7 @@ export const createStudentProfileProvider = async (userId: any, profile: any) =>
     const newProfile = await StudentProfile.create({
       userId: userId,
       firstname: profile.given_name,
-      lastname: profile.family_name,  
+      lastname: profile.family_name,
       imageUrl: profile.picture,
     });
     return JSON.parse(JSON.stringify(newProfile));
@@ -33,7 +33,7 @@ export const getAllStudentProfile = async () => {
     // console.log(studentProfile);
     return studentProfile;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return null;
   }
 };
@@ -44,7 +44,7 @@ export const getStudentProfileById = async (id: any) => {
     // console.log(studentProfile);
     return JSON.parse(JSON.stringify(studentProfile));
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return null;
   }
 };
@@ -72,7 +72,7 @@ export const deleteStudentProfileByUserId = async (userId: string) => {
 export const updateStudentProfileById = async (id: string, { data }: any) => {
   try {
     const updatedProfile = await StudentProfile.findByIdAndUpdate(id, { ...data, isVerified: true }, { new: true });
-    return JSON.parse(JSON.stringify(updatedProfile));
+    return updatedProfile;
   } catch (error) {
     return null;
   }
@@ -80,9 +80,8 @@ export const updateStudentProfileById = async (id: string, { data }: any) => {
 
 export const updateStudentProfileByUserId = async (userId: string, { data }: any) => {
   try {
-    console.log('data in service', data)
-    const updatedProfile = await StudentProfile.findOneAndUpdate({ userId }, { ...data, isVerified: true }, { new: true });
-    return JSON.parse(JSON.stringify(updatedProfile));
+    const updatedProfile = await StudentProfile.findOneAndUpdate({ userId }, { ...data }, { new: true });
+    return updatedProfile;
   } catch (error) {
     return null;
   }

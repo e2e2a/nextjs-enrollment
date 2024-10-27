@@ -11,12 +11,12 @@ import Input from './Input';
 import { BirthdayInput } from './BirthdayInput';
 import { SelectInput } from './selectInput';
 import { profileSelectItems } from '@/constant/profile/selectItems';
-import { useTeacherProfileMutation } from '@/lib/queries';
-import { TeacherProfileValidator } from '@/lib/validators/TeacherValidator';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import Image from 'next/image';
+import { useUpdateProfileMutation } from '@/lib/queries/profile/update/session';
+import { TeacherProfileUpdateValidator } from '@/lib/validators/profile/update';
 
-type FormData = z.infer<typeof TeacherProfileValidator>;
+type FormData = z.infer<typeof TeacherProfileUpdateValidator>;
 
 type Iprops = {
   session?: any;
@@ -24,7 +24,7 @@ type Iprops = {
 };
 
 const ProfileTab = ({ profile }: Iprops) => {
-  const mutation = useTeacherProfileMutation();
+  const mutation = useUpdateProfileMutation();
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile.isVerified);
   const [defaultValues, setDefaultValues] = useState({
@@ -38,16 +38,15 @@ const ProfileTab = ({ profile }: Iprops) => {
     birthday: new Date(),
   });
 
+  const form = useForm<z.infer<typeof TeacherProfileUpdateValidator>>({
+    resolver: zodResolver(TeacherProfileUpdateValidator),
+    defaultValues,
+  });
+
   const handleEditable = async () => {
     setIsNotEditable(!isNotEditable);
     form.reset();
   };
-
-  const form = useForm<z.infer<typeof TeacherProfileValidator>>({
-    resolver: zodResolver(TeacherProfileValidator),
-    defaultValues,
-  });
-
   useEffect(() => {
     const fetchProfileData = async () => {
       const profileDefaultValues = {

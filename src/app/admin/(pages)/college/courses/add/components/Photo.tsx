@@ -8,7 +8,6 @@ import { makeToastError } from '@/lib/toast/makeToast';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll } from 'firebase/storage';
 import { storage } from '@/firebase';
 import Image from 'next/image';
-import { useUpdateProfilePhoto } from '@/lib/queries';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 type IProps = {
@@ -28,7 +27,7 @@ const Photo = ({ session, handleSelectedFile, handleClick, fileInputRef, imagePr
   // const [isUploading, setIsUploading] = useState(false);
   const [progressUpload, setProgressUpload] = useState(0);
   // const fileInputRef = useRef<HTMLInputElement>(null);
-  const mutation = useUpdateProfilePhoto();
+  // const mutation = useUpdateProfilePhoto();
 
   // const handleSelectedFile = (files: FileList | null) => {
   //   if (files && files?.length > 0) {

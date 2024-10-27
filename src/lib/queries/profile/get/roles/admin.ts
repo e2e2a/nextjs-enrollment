@@ -1,4 +1,4 @@
-import { getAllUserByRoleAction } from '@/action/profile/get/role/admin';
+import { getAllUserByRoleAction } from '@/action/profile/get/role/adminOrDean';
 import { useQuery } from '@tanstack/react-query';
 
 /**

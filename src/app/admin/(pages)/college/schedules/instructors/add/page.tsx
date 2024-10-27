@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
-import { useUserRolesTeacherQuery, useCreateCourseBlockMutation, useCreateCourseMutation, useSubjectCollegeQuery, useRoomQuery, useCreateTeacherScheduleCollegeMutation, useCourseQueryByCategory } from '@/lib/queries';
+import { useSubjectCollegeQuery, useRoomQuery, useCreateTeacherScheduleCollegeMutation, useCourseQueryByCategory } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 import { Combobox } from './components/Combobox';
@@ -18,6 +18,7 @@ import { ComboboxDays } from './components/ComboboxDays';
 import { TeacherScheduleCollegeValidator } from '@/lib/validators/AdminValidator';
 import { ComboboxRoom } from './components/ComboboxRoom';
 import { ComboboxSubjects } from './components/ComboboxSubjects';
+import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 const daysOfWeek = [
   { label: 'Monday', value: 'M' },
   { label: 'Tuesday', value: 'T' },
@@ -38,9 +39,10 @@ const Page = () => {
   const [roomLink, setRoomLink] = useState('');
   const [teachers, setTeachers] = useState<any[]>([]);
   const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
-  const { data: tData, isLoading, isError } = useUserRolesTeacherQuery();
+  const { data: tData, isLoading, isError } = useAllProfileQueryByUserRoles('TEACHER');
   const { data: sData, isLoading: sLoading, isError: sError } = useSubjectCollegeQuery();
   const { data: rData, isLoading: rLoading, error: rError } = useRoomQuery();
+  
   useEffect(() => {
     if (sError || isError || rError) return; //500
   }, [sError, isError, rError]);
@@ -97,7 +99,7 @@ const Page = () => {
             setShowLink(false);
             setRoomLink('');
             setInstructorLink('');
-            setSelectedItems([])
+            setSelectedItems([]);
             formCollege.reset();
             makeToastSucess(res.message);
             return;

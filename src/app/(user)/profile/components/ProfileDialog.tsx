@@ -8,8 +8,9 @@ import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll } from 'firebase/storage';
 import { storage } from '@/firebase';
 import Image from 'next/image';
-import { useUpdateProfilePhoto } from '@/lib/queries';
 import Username from './Username';
+import { useUpdateProfileMutation } from '@/lib/queries/profile/update/session';
+
 type Iprops = {
   session: any;
   profile: any;
@@ -22,7 +23,7 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
   const [isUploading, setIsUploading] = useState(false);
   const [progressUpload, setProgressUpload] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const mutation = useUpdateProfilePhoto();
+  const mutation = useUpdateProfileMutation();
 
   const handleSelectedFile = (files: FileList | null) => {
     if (files && files[0].size < 10000000) {

@@ -12,6 +12,7 @@ export default function Page() {
 
   useEffect(() => {
     if (error || !data) return; //setError 500;
+    console.log(data)
     if (data) {
       if (data.profiles) {
         setIsPageLoading(false);

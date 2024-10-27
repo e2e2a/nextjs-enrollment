@@ -3,13 +3,12 @@ import { Icons } from '@/components/shared/Icons';
 import { UserAvatar } from '@/components/shared/nav/UserAvatar/UserAvatar';
 import { Button } from '@/components/ui/button';
 import React, { useRef, useState } from 'react';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll } from 'firebase/storage';
-import { storage } from '@/firebase';
 import Image from 'next/image';
-import { useUpdateProfilePhoto } from '@/lib/queries';
 import Username from './Username';
+import { useUpdateProfileMutation } from '@/lib/queries/profile/update/session';
+
 type Iprops = {
   session: any;
   profile: any;
@@ -17,17 +16,17 @@ type Iprops = {
 const ProfileDropdown = ({ session, profile }: Iprops) => {
   const [imageFile, setImageFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [downloadURL, setDownloadURL] = useState('');
+  const [imageError, setImageError] = useState('');
   const [dialogOpen, setDialogOpen] = useState<boolean | undefined>(undefined);
   const [isUploading, setIsUploading] = useState(false);
-  const [progressUpload, setProgressUpload] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const mutation = useUpdateProfilePhoto();
+  const mutation = useUpdateProfileMutation();
 
   const handleSelectedFile = (files: FileList | null) => {
     if (files && files[0].size < 10000000) {
       const file = files[0];
       setImageFile(file);
+      // Preview the image
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -39,63 +38,30 @@ const ProfileDropdown = ({ session, profile }: Iprops) => {
   };
 
   const handleUploadFile = () => {
-    if (imageFile) {
-      setIsUploading(true);
-      const name = imageFile.name;
-      const storageRef = ref(storage, `profile/${profile._id}/${name}`);
-      const uploadTask = uploadBytesResumable(storageRef, imageFile);
-
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setProgressUpload(progress); // to show progress upload
-          // switch (snapshot.state) {
-          //   case 'paused':
-          //     console.log('Upload is paused');
-          //     break;
-          //   case 'running':
-          //     console.log('Upload is running');
-          //     break;
-          // }
-        },
-        (error) => {
-          makeToastError(error.message);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
-            const data = {
-              role: session.role,
-              profileId: profile._id,
-              imageUrl: url,
-            };
-            mutation.mutate(data, {
-              onSuccess: (res) => {
-                switch (res.status) {
-                  case 200:
-                  case 201:
-                  case 203:
-                    makeToastSucess('Photo has been uploaded.');
-                    return;
-                  default:
-                    makeToastError('Photo upload failed.');
-                    return;
-                }
-              },
-              onSettled: () => {
-                setDialogOpen(false);
-                setIsUploading(false);
-              },
-            });
-            setDownloadURL(url);
-            // setDialogOpen(false);
-            // setIsUploading(false);
-          });
+    const formData = new FormData();
+    if (!imagePreview) return setImageError('PSA Birth is required.');
+    formData.append('image', imagePreview!);
+    const data = {
+      formData: formData,
+    };
+    mutation.mutate(data, {
+      onSuccess: (res) => {
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            setDialogOpen(false);
+            makeToastSucess('Photo has been uploaded.');
+            return;
+          default:
+            makeToastError('Photo upload failed.');
+            return;
         }
-      );
-    } else {
-      makeToastError('File not found');
-    }
+      },
+      onSettled: () => {
+        setIsUploading(false);
+      },
+    });
   };
   const handleRemoveFile = () => setImageFile(undefined);
   const handleClick = () => {

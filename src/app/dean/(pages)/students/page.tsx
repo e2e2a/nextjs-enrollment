@@ -1,14 +1,14 @@
 'use client';
 import { columns } from './components/columns';
-import { useUserRolesStudentQuery } from '@/lib/queries';
 import { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { IStudentProfile } from '@/types';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 
 export default function Page() {
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error } = useUserRolesStudentQuery();
+  const { data, isLoading, error } = useAllProfileQueryByUserRoles('STUDENT');
 
   useEffect(() => {
     if (error || !data) return; //setError 500;

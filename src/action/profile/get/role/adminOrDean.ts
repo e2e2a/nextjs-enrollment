@@ -6,6 +6,7 @@ import { getAllDeanProfile } from '@/services/deanProfile';
 import { getAllStudentProfile } from '@/services/studentProfile';
 import { getAllTeacherProfile } from '@/services/teacherProfile';
 import { verifyAdmin } from '@/utils/actions/session/roles/admin';
+import { verifyAdminOrDean } from '@/utils/actions/session/roles/adminOrDean';
 
 /**
  * only admin roles
@@ -15,8 +16,11 @@ import { verifyAdmin } from '@/utils/actions/session/roles/admin';
 export const getAllUserByRoleAction = async (role: string) => {
   return tryCatch(async () => {
     await dbConnect();
-    const session = await verifyAdmin();
+    const session = await verifyAdminOrDean();
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
+    if (session.user.role === 'DEAN') {
+      if (role !== 'STUDENT') return { error: 'Forbidden', status: 403 };
+    }
 
     const checkedSearchRole = await checkSearchRole(role);
     if (checkedSearchRole && checkedSearchRole.error) return { error: checkedSearchRole.error, status: checkedSearchRole.status };

@@ -45,7 +45,17 @@ export const updateTeacherProfileById = async (id: string, data: any) => {
     const updatedProfile = await TeacherProfile.findByIdAndUpdate(id, { ...data, isVerified: true }, { new: true });
     return updatedProfile;
   } catch (error) {
-    console.log(error)
+    console.log(error);
+    return null;
+  }
+};
+
+export const updateTeacherProfileByUserId = async (userId: string, data: any) => {
+  try {
+    const updatedProfile = await TeacherProfile.findOneAndUpdate({ userId }, { ...data }, { new: true });
+    return updatedProfile;
+  } catch (error) {
+    console.log(error);
     return null;
   }
 };
