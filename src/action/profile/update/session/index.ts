@@ -26,7 +26,6 @@ export const updateProfileBySessionIdAction = async (data: any) => {
       const checkedPhoto = await checkPhotoAndSave(data, session);
       if (checkedPhoto && checkedPhoto.error) return { error: checkedPhoto.error, status: checkedPhoto.status };
       data.imageUrl = checkedPhoto.imageUrl;
-      console.log('checkeddata', data);
     } else {
       data.isVerified = true;
     }
@@ -58,7 +57,6 @@ const checkSessionRole = async (session: any, data: any): Promise<any> => {
         profile = await updateDeanProfile(session.user._id, data);
         break;
       case 'ADMIN':
-        console.log('sessuib cgecj', session.user.role);
         profile = await updateAdminProfile(session.user._id, data);
         break;
       default:
@@ -134,11 +132,10 @@ const updateAdminProfile = async (userId: string, data: any) => {
       const profileParse = AdminProfileUpdateValidator.safeParse(data);
       if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
     }
-    console.log('data', data)
+
     const profile = await updateAdminProfileByUserId(userId, data);
     if (!profile) return { error: 'Something went wrong. ', status: 500 };
-    console.log('saved new profile', profile);
-    
+
     return { message: 'Profile has been update. ', status: 201 };
   });
 };

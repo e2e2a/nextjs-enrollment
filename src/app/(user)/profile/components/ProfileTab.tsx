@@ -24,30 +24,6 @@ const ProfileTab = ({ profile }: Iprops) => {
   const mutation = useUpdateProfileMutation();
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile.isVerified);
-  const [defaultValues, setDefaultValues] = useState({
-    firstname: '',
-    middlename: '',
-    lastname: '',
-    extensionName: '',
-    numberStreet: '',
-    barangay: '',
-    district: '',
-    cityMunicipality: '',
-    province: '',
-    region: '',
-    emailFbAcc: '',
-    contact: '',
-    nationality: '',
-    sex: '',
-    civilStatus: '',
-    employmentStatus: '',
-    birthday: new Date(), // Default to current date if no profile date
-    birthPlaceCity: '',
-    birthPlaceProvince: '',
-    birthPlaceRegion: '',
-    educationAttainment: '',
-    learnerOrTraineeOrStudentClassification: '',
-  });
 
   const handleEditable = async () => {
     setIsNotEditable(!isNotEditable);
@@ -55,40 +31,56 @@ const ProfileTab = ({ profile }: Iprops) => {
   };
   const form = useForm<z.infer<typeof StudentProfileUpdateValidator>>({
     resolver: zodResolver(StudentProfileUpdateValidator),
-    defaultValues,
+    defaultValues: {
+      firstname: '',
+      middlename: '',
+      lastname: '',
+      extensionName: '',
+      numberStreet: '',
+      barangay: '',
+      district: '',
+      cityMunicipality: '',
+      province: '',
+      region: '',
+      emailFbAcc: '',
+      contact: '',
+      nationality: '',
+      sex: '',
+      civilStatus: '',
+      employmentStatus: '',
+      birthday: new Date(),
+      birthPlaceCity: '',
+      birthPlaceProvince: '',
+      birthPlaceRegion: '',
+      educationAttainment: '',
+      learnerOrTraineeOrStudentClassification: '',
+    },
   });
 
   useEffect(() => {
-    const fetchProfileData = async () => {
-      const profileDefaultValues = {
-        firstname: profile?.firstname || '',
-        middlename: profile?.middlename || '',
-        lastname: profile?.lastname || '',
-        extensionName: profile?.extensionName || '',
-        numberStreet: profile?.numberStreet || '',
-        barangay: profile?.barangay || '',
-        district: profile?.district || '',
-        cityMunicipality: profile?.cityMunicipality || '',
-        province: profile?.province || '',
-        region: profile?.region || '',
-        emailFbAcc: profile?.emailFbAcc || '',
-        contact: profile?.contact || '',
-        nationality: profile?.nationality || '',
-        sex: profile?.sex || '',
-        civilStatus: profile?.civilStatus || '',
-        employmentStatus: profile?.employmentStatus || '',
-        birthday: new Date(profile.birthday) || new Date(Date.now()), // Handle date conversion profile?.birthday ? new Date(profile.birthday) :
-        birthPlaceCity: profile?.birthPlaceCity || '',
-        birthPlaceProvince: profile?.birthPlaceProvince || '',
-        birthPlaceRegion: profile?.birthPlaceRegion || '',
-        educationAttainment: profile?.educationAttainment || '',
-        learnerOrTraineeOrStudentClassification: profile?.learnerOrTraineeOrStudentClassification || '',
-      };
-      setDefaultValues(profileDefaultValues);
-      form.reset(profileDefaultValues); // Reset form with fetched default values
-    };
-    fetchProfileData();
-  }, [form, profile]);
+    form.setValue('firstname', profile.firstname);
+    form.setValue('middlename', profile.middlename);
+    form.setValue('lastname', profile.lastname);
+    form.setValue('extensionName', profile.extensionName);
+    form.setValue('numberStreet', profile.numberStreet);
+    form.setValue('barangay', profile.barangay);
+    form.setValue('district', profile.district);
+    form.setValue('cityMunicipality', profile.cityMunicipality);
+    form.setValue('province', profile.province);
+    form.setValue('region', profile.region);
+    form.setValue('emailFbAcc', profile.emailFbAcc);
+    form.setValue('contact', profile.contact);
+    form.setValue('nationality', profile.nationality);
+    form.setValue('sex', profile.sex);
+    form.setValue('civilStatus', profile.civilStatus);
+    form.setValue('employmentStatus', profile.employmentStatus);
+    form.setValue('birthday', new Date(profile.birthday));
+    form.setValue('birthPlaceCity', profile.birthPlaceCity);
+    form.setValue('birthPlaceProvince', profile.birthPlaceProvince);
+    form.setValue('birthPlaceRegion', profile.birthPlaceRegion);
+    form.setValue('educationAttainment', profile.educationAttainment);
+    form.setValue('learnerOrTraineeOrStudentClassification', profile.learnerOrTraineeOrStudentClassification);
+  }, [form, profile, isNotEditable]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setIsPending(true);
@@ -96,11 +88,8 @@ const ProfileTab = ({ profile }: Iprops) => {
     data.lastname = data.lastname.toLowerCase();
     data.middlename = data.middlename.toLowerCase();
     data.middlename = data.middlename.toLowerCase();
-    const profileData = {
-      profileId: profile?._id!,
-      ...data,
-    };
-    mutation.mutate(profileData, {
+
+    mutation.mutate(data, {
       onSuccess: (res) => {
         switch (res.status) {
           case 200:

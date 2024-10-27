@@ -16,70 +16,52 @@ import Image from 'next/image';
 import { useUpdateProfileMutation } from '@/lib/queries/profile/update/session';
 import { DeanProfileUpdateValidator } from '@/lib/validators/profile/update';
 
-type FormData = z.infer<typeof DeanProfileUpdateValidator>;
-type Iprops = {
+type IProps = {
   session?: any;
   profile: any;
 };
-const ProfileTab = ({ profile }: Iprops) => {
+
+const ProfileTab = ({ profile }: IProps) => {
   const mutation = useUpdateProfileMutation();
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile.isVerified);
-  const [defaultValues, setDefaultValues] = useState({
-    firstname: '',
-    middlename: '',
-    lastname: '',
-    extensionName: '',
-    contact: '',
-    sex: '',
-    civilStatus: '',
-    birthday: new Date(),
-  });
 
   const form = useForm<z.infer<typeof DeanProfileUpdateValidator>>({
     resolver: zodResolver(DeanProfileUpdateValidator),
-    defaultValues,
+    defaultValues: { firstname: '', middlename: '', lastname: '', extensionName: '', contact: '', sex: '', civilStatus: '', birthday: new Date() },
   });
 
   const handleEditable = async () => {
     setIsNotEditable(!isNotEditable);
     form.reset();
   };
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      const profileDefaultValues = {
-        firstname: profile?.firstname || '',
-        middlename: profile?.middlename || '',
-        lastname: profile?.lastname || '',
-        extensionName: profile?.extensionName || '',
-        contact: profile?.contact || '',
-        sex: profile?.sex || '',
-        civilStatus: profile?.civilStatus || '',
-        birthday: profile.birthday ? new Date(profile.birthday) : new Date(Date.now()),
-      };
-      setDefaultValues(profileDefaultValues);
-      form.reset(profileDefaultValues);
-    };
-    fetchProfileData();
-  }, [form, profile]);
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
+  useEffect(() => {
+    form.setValue('firstname', profile.firstname);
+    form.setValue('middlename', profile.middlename);
+    form.setValue('lastname', profile.lastname);
+    form.setValue('extensionName', profile.extensionName);
+    form.setValue('contact', profile.contact);
+    form.setValue('sex', profile.sex);
+    form.setValue('civilStatus', profile.civilStatus);
+    form.setValue('birthday', new Date(profile.birthday));
+  }, [form, profile, isNotEditable]);
+
+  const onSubmit: SubmitHandler<z.infer<typeof DeanProfileUpdateValidator>> = async (data) => {
     setIsPending(true);
     data.firstname = data.firstname.toLowerCase();
     data.lastname = data.lastname.toLowerCase();
     data.middlename = data.middlename.toLowerCase();
     data.middlename = data.middlename.toLowerCase();
-    const profileData = {
-      profileId: profile?._id!,
-      ...data,
-    };
-    mutation.mutate(profileData, {
+
+    mutation.mutate(data, {
       onSuccess: (res) => {
         switch (res.status) {
           case 200:
           case 201:
           case 203:
             makeToastSucess(res.message);
+            setIsNotEditable(true);
             return;
           default:
             makeToastError(res.error);
@@ -133,7 +115,7 @@ const ProfileTab = ({ profile }: Iprops) => {
           {!isNotEditable && (
             <CardFooter className='w-full flex justify-center items-center '>
               <Button type='submit' disabled={isPending} className=' bg-blue-500 hover:bg-blue-400 text-white font-medium tracking-wide' onClick={form.handleSubmit(onSubmit)}>
-                {isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Save'}
+                {isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Submit'}
               </Button>
             </CardFooter>
           )}

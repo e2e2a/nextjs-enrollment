@@ -16,72 +16,51 @@ import Image from 'next/image';
 import { useUpdateProfileMutation } from '@/lib/queries/profile/update/session';
 import { TeacherProfileUpdateValidator } from '@/lib/validators/profile/update';
 
-type FormData = z.infer<typeof TeacherProfileUpdateValidator>;
-
-type Iprops = {
+type IProps = {
   session?: any;
   profile: any;
 };
-
-const ProfileTab = ({ profile }: Iprops) => {
+const ProfileTab = ({ profile }: IProps) => {
   const mutation = useUpdateProfileMutation();
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile.isVerified);
-  const [defaultValues, setDefaultValues] = useState({
-    firstname: '',
-    middlename: '',
-    lastname: '',
-    extensionName: '',
-    contact: '',
-    sex: '',
-    civilStatus: '',
-    birthday: new Date(),
-  });
 
   const form = useForm<z.infer<typeof TeacherProfileUpdateValidator>>({
     resolver: zodResolver(TeacherProfileUpdateValidator),
-    defaultValues,
+    defaultValues: { firstname: '', middlename: '', lastname: '', extensionName: '', contact: '', sex: '', civilStatus: '', birthday: new Date() },
   });
 
   const handleEditable = async () => {
     setIsNotEditable(!isNotEditable);
     form.reset();
   };
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      const profileDefaultValues = {
-        firstname: profile?.firstname || '',
-        middlename: profile?.middlename || '',
-        lastname: profile?.lastname || '',
-        extensionName: profile?.extensionName || '',
-        contact: profile?.contact || '',
-        sex: profile?.sex || '',
-        civilStatus: profile?.civilStatus || '',
-        birthday: profile.birthday ? new Date(profile.birthday) : new Date(Date.now()),
-      };
-      setDefaultValues(profileDefaultValues);
-      form.reset(profileDefaultValues);
-    };
-    fetchProfileData();
-  }, [form, profile]);
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
+  useEffect(() => {
+    form.setValue('firstname', profile.firstname);
+    form.setValue('middlename', profile.middlename);
+    form.setValue('lastname', profile.lastname);
+    form.setValue('extensionName', profile.extensionName);
+    form.setValue('contact', profile.contact);
+    form.setValue('sex', profile.sex);
+    form.setValue('civilStatus', profile.civilStatus);
+    form.setValue('birthday', new Date(profile.birthday));
+  }, [form, profile, isNotEditable]);
+
+  const onSubmit: SubmitHandler<z.infer<typeof TeacherProfileUpdateValidator>> = async (data) => {
     setIsPending(true);
     data.firstname = data.firstname.toLowerCase();
     data.lastname = data.lastname.toLowerCase();
     data.middlename = data.middlename.toLowerCase();
     data.middlename = data.middlename.toLowerCase();
-    const profileData = {
-      profileId: profile?._id!,
-      ...data,
-    };
-    mutation.mutate(profileData, {
+
+    mutation.mutate(data, {
       onSuccess: (res) => {
         switch (res.status) {
           case 200:
           case 201:
           case 203:
             makeToastSucess(res.message);
+            setIsNotEditable(true);
             return;
           default:
             makeToastError(res.error);
@@ -107,7 +86,6 @@ const ProfileTab = ({ profile }: Iprops) => {
               <CardDescription className='text-sm font-normal w-full text-center'>Update your profile information here. Ensure all your details are accurate to have the best experience on our platform.</CardDescription>
             </CardTitle>
           </CardHeader>
-          {/* note if its not editable its pb-0 @button */}
           <CardContent className=''>
             {profile.isVerified && (
               <div className='w-full flex justify-end mb-2'>
@@ -118,7 +96,6 @@ const ProfileTab = ({ profile }: Iprops) => {
               </div>
             )}
             <div className={`grid sm:grid-cols-2 grid-cols-1 md:gap-8 ${isNotEditable ? 'justify-around ' : 'px-0 lg:px-11'}`}>
-              {/* <h1 className='text-lg font-bold border-b text-center lg:text-left'>Manpower Profile</h1> */}
               <Input isNotEditable={isNotEditable} name={'firstname'} type={'text'} form={form} label={'Firstname:'} classNameInput={'capitalize'} />
               <Input isNotEditable={isNotEditable} name={'middlename'} type={'text'} form={form} label={'Middlename:'} classNameInput={'capitalize'} />
               <Input isNotEditable={isNotEditable} name={'lastname'} type={'text'} form={form} label={'Lastname:'} classNameInput={'capitalize'} />
