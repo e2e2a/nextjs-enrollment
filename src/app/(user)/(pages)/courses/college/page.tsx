@@ -1,16 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { useCourseQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { Icons } from '@/components/shared/Icons';
+import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 
 const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data: c, isLoading: cLoading, error: cError } = useCourseQuery();
+  const { data: c, isLoading: cLoading, error: cError } = useCourseQueryByCategory('College');
   useEffect(() => {
     if (cLoading || !c) {
       return;
@@ -35,7 +34,7 @@ const Page = () => {
             </div>
             {/* <div className='grid lg:grid-cols-2 shadow-none drop-shadow-none xl:grid-cols-3 gap-y-8 sm:grid-cols-2 grid-cols-1 gap-4 my-5 w-full place-items-center bg-transparent'> */}
             <div className='grid gap-y-8 sm:grid-cols-1 grid-cols-1 gap-4 my-5 w-full place-items-center bg-transparent'>
-              {c?.courses?.map((course, index) => (
+              {c?.courses?.map((course: any, index: any) => (
                 <Card className='w-full group shadow-sm drop-shadow-sm bg-white' key={index}>
                   <CardHeader className='hidden'>
                     <CardTitle className=' capitalize text-[16px]'></CardTitle>

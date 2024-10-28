@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
-import { useCourseQuery, useAdminCreateUserRoleMutation, useCourseQueryByCategory } from '@/lib/queries';
+import { useAdminCreateUserRoleMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { SelectInput } from './components/SelectInput';
 import Input from './components/Input';
@@ -18,6 +18,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { DeanProfileValidator, DeanValidator } from '@/lib/validators/DeanValidator';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { selectType } from '@/constant/deansCategory';
+import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 
 const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);

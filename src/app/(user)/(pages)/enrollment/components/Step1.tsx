@@ -1,9 +1,8 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TabsContent } from '@/components/ui/tabs';
-import React, { useEffect, useRef, useState } from 'react';
-import { useCourseQuery, useEnrollmentDeleteMutation, useEnrollmentStep1Mutation } from '@/lib/queries';
+import React, { useEffect, useState } from 'react';
+import { useEnrollmentDeleteMutation } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import { Icons } from '@/components/shared/Icons';
 import LoaderPage from '@/components/shared/LoaderPage';

@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useCourseQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 
 interface ICourse {
   id: string;
@@ -19,7 +19,7 @@ const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [courses, setCourses] = useState({});
-  const { data, isLoading, error: isEnError } = useCourseQuery();
+  const { data, isLoading, error: isEnError } = useCourseQueryByCategory('College');
 
   useEffect(() => {
     if (isEnError || !data) return setIsError(true);

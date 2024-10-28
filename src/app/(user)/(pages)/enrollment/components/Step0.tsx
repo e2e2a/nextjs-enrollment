@@ -9,7 +9,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EnrollmentStep1 } from '@/lib/validators/Validator';
-import { useCourseQuery, useEnrollmentDeleteMutation, useEnrollmentStep1Mutation } from '@/lib/queries';
+import { useEnrollmentDeleteMutation, useEnrollmentStep1Mutation } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import { selectType, studentYearData } from '@/constant/enrollment';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
@@ -19,6 +19,7 @@ import FileGoodMoral from './FileGoodMoral';
 import FileTOR from './FileTOR';
 import Image from 'next/image';
 import Input from './Input';
+import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 type IProps = {
   search: any;
   enrollmentSetup: any;
@@ -42,7 +43,7 @@ const Step0 = ({ search, enrollmentSetup }: IProps) => {
 
   const [isUploading, setIsUploading] = useState(false);
   const { data: s } = useSession();
-  const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
+  const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQueryByCategory('College');
   
   useEffect(() => {
     if (isCoursesError || !res || !res.courses) {

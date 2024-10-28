@@ -1,13 +1,13 @@
 'use client';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import EnrollmentForms from './components/Forms';
 import ErrorPage from './components/ErrorPage';
-import { getEnrollmentByUserId } from '@/services/enrollment';
 import { useSession } from 'next-auth/react';
-import { useCourseQuery, useEnrollmentQuery } from '@/lib/queries';
+import { useEnrollmentQuery } from '@/lib/queries';
 import Loader from '@/components/shared/Loader';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
+import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 
 const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -16,13 +16,13 @@ const Page = () => {
   const search = searchParams.get('courses');
   const [allowedCourses, setAllowedCourses] = useState<any>([]);
   const [en, setEn] = useState<any>(null);
-  const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQuery();
+  const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQueryByCategory('College');
   useEffect(() => {
     if (isCoursesError || !res) {
       return setIsError(true);
     }
     if (res) {
-      const courseTitles = res?.courses?.map((course) => course.courseCode.toLowerCase());
+      const courseTitles = res?.courses?.map((course: any) => course.courseCode.toLowerCase());
       setAllowedCourses(courseTitles);
     }
   }, [res, isCoursesError]);
@@ -44,7 +44,7 @@ const Page = () => {
         if (resP.profile.enrollStatus && resP.profile.enrollStatus === 'Pending') {
           if (resE.enrollment) {
             setEn(resE.enrollment);
-            const courseTitles = res?.courses?.map((course) => course.courseCode.toLowerCase());
+            const courseTitles = res?.courses?.map((course: any) => course.courseCode.toLowerCase());
             setAllowedCourses(courseTitles);
             setIsPageLoading(false);
             return;
@@ -68,7 +68,6 @@ const Page = () => {
       } else {
         setIsError(false);
       }
-      // setIsLoading(false);
     };
 
     validateSearchParam();

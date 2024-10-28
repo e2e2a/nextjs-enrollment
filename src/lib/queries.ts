@@ -18,7 +18,7 @@ import {
   IResponse,
   testResponseaa,
 } from '@/types';
-import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
+import { createCourseAction, getAllCourses } from '@/action/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction, getSingleEnrollmentByUserIdIdAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
 import {
   approvedEnrollmentStep1Action,
@@ -37,7 +37,7 @@ import {
   undoEnrollmentToStep3,
   undoEnrollmentToStep4,
 } from '@/action/college/enrollment/admin';
-import { createCollegeCourseBlockAction, getAllBlockTypeAction, getBlockTypeByIdAction } from '@/action/college/courses/blocks';
+import { createCollegeCourseBlockAction, getAllBlockTypeAction, getBlockTypeByIdAction } from '@/action/courses/blocks';
 import { adminCreateUserWithRoleAction } from '@/action/user';
 import {
   createTeacherScheduleAction,
@@ -251,26 +251,26 @@ export const useTeacherProfileQueryByUserId = (id: string) => {
  * Courses Queries And Mutations
  * @returns
  */
-export const useCourseQuery = () => {
-  return useQuery<getCourseResponse, Error>({
-    queryKey: ['Course'],
-    queryFn: () => getAllCourses(),
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-  });
-};
+// export const useCourseQuery = () => {
+//   return useQuery<getCourseResponse, Error>({
+//     queryKey: ['Course'],
+//     queryFn: () => getAllCourses(),
+//     retry: 0,
+//     refetchOnMount: false,
+//     refetchOnWindowFocus: true,
+//   });
+// };
 
-export const useCourseQueryByCategory = (category: any) => {
-  return useQuery<getCourseResponse, Error>({
-    queryKey: ['Course', category],
-    queryFn: () => getAllCoursesByCategory(category),
-    retry: 0,
-    enabled: !!category,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-  });
-};
+// export const useCourseQueryByCategory = (category: any) => {
+//   return useQuery<getCourseResponse, Error>({
+//     queryKey: ['Course', category],
+//     queryFn: () => getAllCoursesByCategory(category),
+//     retry: 0,
+//     enabled: !!category,
+//     refetchOnMount: false,
+//     refetchOnWindowFocus: true,
+//   });
+// };
 
 export const useCreateCourseMutation = () => {
   const queryClient = useQueryClient();

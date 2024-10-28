@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { SignupValidator } from '@/lib/validators/auth/signUp';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
-import { useCourseQuery, useAdminCreateUserRoleMutation } from '@/lib/queries';
+import { useAdminCreateUserRoleMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { SelectInput } from './components/SelectInput';
 import Input from './components/Input';

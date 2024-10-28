@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { CourseBlockCollegeValidator } from '@/lib/validators/Validator';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
-import { useCourseQuery, useCreateCourseBlockMutation, useCreateCourseMutation } from '@/lib/queries';
+import { useCreateCourseBlockMutation, useCreateCourseMutation } from '@/lib/queries';
 import { makeToastError } from '@/lib/toast/makeToast';
 import TextareaField from './Textarea';
 import Input from './Input';
@@ -16,13 +16,14 @@ import { SelectInput } from './SelectInput';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 import { selectType } from '@/constant/course';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 
 const BackUpPage = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);
   const [categorySelected, setCategorySelected] = useState('');
   const [courseSelected, setCourseSelected] = useState('');
   const [course, setCourse] = useState<any[]>([]);
-  const { data: cData, isLoading, isError } = useCourseQuery();
+  const { data: cData, isLoading, isError } = useCourseQueryByCategory('College')
   useEffect(() => {
     if (!cData || !cData.courses || isError) return;
 

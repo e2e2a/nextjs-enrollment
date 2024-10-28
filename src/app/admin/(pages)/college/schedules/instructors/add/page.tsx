@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
-import { useCreateTeacherScheduleCollegeMutation, useCourseQueryByCategory } from '@/lib/queries';
+import { useCreateTeacherScheduleCollegeMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { Combobox } from './components/Combobox';
 import Input from './components/Input';

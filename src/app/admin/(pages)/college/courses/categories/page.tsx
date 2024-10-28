@@ -1,11 +1,10 @@
 'use client';
 import Loader from '@/components/shared/Loader';
-import { useCourseQueryByCategory, useEnrollmentQueryByStep } from '@/lib/queries';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { DataTable1 } from './components/college/DataTable';
 import { columns } from './components/college/Columns';
+import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 
 interface ICourse {
   id: string;

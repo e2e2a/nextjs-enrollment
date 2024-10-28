@@ -63,13 +63,13 @@ export const getAllCourses = async (): Promise<getCourseResponse> => {
   }
 };
 
-export const getAllCoursesByCategory = async (category: any): Promise<getCourseResponse> => {
-  await dbConnect();
-  try {
-    const courses = await getCoursesByCategory(category);
-    return { courses: JSON.parse(JSON.stringify(courses)), status: 200 };
-  } catch (error) {
-    console.log(error);
-    return { error: 'Something went wrong.', status: 500 };
-  }
-};
+// export const getAllCoursesByCategory = async (category: any): Promise<getCourseResponse> => {
+//   await dbConnect();
+//   try {
+//     const courses = await getCoursesByCategory(category);
+//     return { courses: JSON.parse(JSON.stringify(courses)), status: 200 };
+//   } catch (error) {
+//     console.log(error);
+//     return { error: 'Something went wrong.', status: 500 };
+//   }
+// };

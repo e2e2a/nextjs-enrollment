@@ -8,18 +8,18 @@ import { z } from 'zod';
 import { CourseBlockCollegeValidator } from '@/lib/validators/Validator';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
-import { useCourseQuery, useCreateCourseBlockMutation, useCreateCourseMutation } from '@/lib/queries';
+import { useCreateCourseBlockMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import TextareaField from './components/Textarea';
 import Input from './components/Input';
 import { SelectInput } from './components/SelectInput';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
-import { selectType } from '@/constant/course';
+import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 
 const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);
   const [course, setCourse] = useState<any[]>([]);
-  const { data: cData, isLoading, isError } = useCourseQuery();
+  const { data: cData, isLoading, isError } = useCourseQueryByCategory('College');
   useEffect(() => {
     if (!cData || !cData.courses || isError) return;
 
