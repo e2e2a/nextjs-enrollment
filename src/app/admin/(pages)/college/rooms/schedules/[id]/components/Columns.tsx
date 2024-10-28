@@ -31,6 +31,19 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row.courseId.courseCode,
+    id: 'course code',
+    header: 'Course Code',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'> 
+          {user.courseId?.courseCode && user.courseId.courseCode ? user.courseId.courseCode : <div className='text-red'>Not Assign</div>}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: 'Fullname',
     header: ({ column }) => {
       return (

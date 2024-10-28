@@ -1,46 +1,38 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { useSession } from 'next-auth/react';
-import { useCreateRoomMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { Combobox } from './components/Combobox';
-import Link from 'next/link';
-import { RoomCollegeValidator } from '@/lib/validators/AdminValidator';
 import Input from './components/Input';
 import { roomType } from '@/constant/room';
+import { RoomValidator } from '@/lib/validators/room/create';
+import Image from 'next/image';
+import { useCreateRoomMutation } from '@/lib/queries/rooms/create/admin';
 
 const Page = () => {
-  const [isNotEditable, setIsNotEditable] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const [value, setValue] = React.useState('');
   const mutation = useCreateRoomMutation();
-  const { data } = useSession();
-  const session = data?.user;
-  const formCollege = useForm<z.infer<typeof RoomCollegeValidator>>({
-    resolver: zodResolver(RoomCollegeValidator),
+  const formCollege = useForm<z.infer<typeof RoomValidator>>({
+    resolver: zodResolver(RoomValidator),
     defaultValues: {
       roomName: '',
       roomType: '',
       floorLocation: '',
+      educationLevel: 'tertiary',
     },
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof RoomCollegeValidator>> = async (data) => {
+  const onSubmit: SubmitHandler<z.infer<typeof RoomValidator>> = async (data) => {
     data.roomName = data.roomName.toLowerCase();
-    // data.section = data.section.toLowerCase();
-    const dataa = {
-      ...data,
-      educationLevel: 'tertiary',
-    };
-    console.log('data', dataa);
-    mutation.mutate(dataa, {
+
+    mutation.mutate(data, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
@@ -54,7 +46,9 @@ const Page = () => {
             return;
         }
       },
-      onSettled: () => {},
+      onSettled: () => {
+        setIsPending(false);
+      },
     });
   };
   return (
@@ -66,15 +60,6 @@ const Page = () => {
           <div className='text-xs sm:text-sm'>
             <div className=''>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To register a new Room, This list is populated with teacher&apos;s schedule created and managed by the administrator. Providing this information will help synchronize and ensure smooth management.
-              {/* <div className='flex flex-col mt-2'>
-                <span className='text-orange-400 font-medium'>Note:</span>
-                <span>• Newly Registered room must have been registered in teacher&apos;s schedule to display this in student schedule and adding schedule in blocks/sections. </span>
-                <div className='pl-3 flex flex-col '>
-                  <span className='font-medium text-black'>Features to consider:</span>
-                  <span className=''>- Scheduling with rooms</span>
-                  <span className=''>- Printing rooms with schedule</span>
-                </div>
-              </div> */}
             </div>
           </div>
         </CardHeader>
@@ -89,8 +74,8 @@ const Page = () => {
             </CardContent>
             <CardFooter className=''>
               <div className='flex w-full justify-center md:justify-end items-center mt-4'>
-                <Button type='submit' variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-semibold tracking-wide'>
-                  Submit
+                <Button type='submit' variant={'destructive'} disabled={isPending} className='bg-blue-500 hover:bg-blue-700 text-white font-semibold tracking-wide'>
+                  {isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Submit'}
                 </Button>
               </div>
             </CardFooter>
