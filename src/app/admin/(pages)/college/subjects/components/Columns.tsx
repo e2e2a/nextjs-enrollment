@@ -1,20 +1,9 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import Link from 'next/link';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-import { Icons } from '@/components/shared/Icons';
-import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
-import { useState } from 'react';
 import ActionsCell from './ActionsCell';
-import Image from 'next/image';
 import { ISubject } from '@/types';
-
 
 export const columns: ColumnDef<ISubject>[] = [
   {
@@ -36,10 +25,9 @@ export const columns: ColumnDef<ISubject>[] = [
     header: 'subjectCode',
     cell: ({ cell, row }) => {
       const user = row.original;
-      console.log(user);
       return (
         <div key={cell.id} className='flex justify-center items-center uppercase'>
-            {user.subjectCode}
+          {user.subjectCode}
         </div>
       );
     },

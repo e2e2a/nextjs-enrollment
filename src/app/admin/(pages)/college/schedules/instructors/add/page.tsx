@@ -7,9 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
-import { useSubjectCollegeQuery, useCreateTeacherScheduleCollegeMutation, useCourseQueryByCategory } from '@/lib/queries';
+import { useCreateTeacherScheduleCollegeMutation, useCourseQueryByCategory } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 import { Combobox } from './components/Combobox';
 import Input from './components/Input';
 import LoaderPage from '@/components/shared/LoaderPage';
@@ -20,6 +19,7 @@ import { ComboboxRoom } from './components/ComboboxRoom';
 import { ComboboxSubjects } from './components/ComboboxSubjects';
 import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 import { useAllRoomQueryByEduLevel } from '@/lib/queries/rooms/get/all';
+import { useSubjectQueryByCategory } from '@/lib/queries/subjects/get/category';
 
 const daysOfWeek = [
   { label: 'Monday', value: 'M' },
@@ -42,7 +42,7 @@ const Page = () => {
   const [teachers, setTeachers] = useState<any[]>([]);
   const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
   const { data: tData, isLoading, isError } = useAllProfileQueryByUserRoles('TEACHER');
-  const { data: sData, isLoading: sLoading, isError: sError } = useSubjectCollegeQuery();
+  const { data: sData, isLoading: sLoading, isError: sError } = useSubjectQueryByCategory('College');
   const { data: rData, isLoading: rLoading, error: rError } = useAllRoomQueryByEduLevel('tertiary');
   
   useEffect(() => {

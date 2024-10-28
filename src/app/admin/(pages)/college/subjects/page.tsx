@@ -3,25 +3,26 @@ import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useSubjectCollegeQuery } from '@/lib/queries';
 import { ISubject } from '@/types';
+import { useSubjectQueryByCategory } from '@/lib/queries/subjects/get/category';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [subjects, setSubjects] = useState({});
   // Query data based on the validated step parameter
-  const { data, isLoading, error: isEnError } = useSubjectCollegeQuery();
+  const { data, isLoading, error: isEnError } = useSubjectQueryByCategory('College');
 
   useEffect(() => {
-    if (isLoading || !data || !data.subjects) return;
-    if (isEnError) console.log(isEnError.message);
-    if (data) console.log('courses logs:', data.subjects);
-    if (data.subjects) {
-      setSubjects(data.subjects);
-      setIsPageLoading(false);
+    if (isEnError || !data) return;
+
+    if (data) {
+      if (data.subjects) {
+        setSubjects(data.subjects);
+        setIsPageLoading(false);
+      }
     }
-  }, [data, isLoading, isEnError]);
+  }, [data, isEnError]);
 
   return (
     <>

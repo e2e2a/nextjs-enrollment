@@ -2,7 +2,6 @@ import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tansta
 
 import {
   getAllCurriculumsResponse,
-  getAllRoomResponse,
   getAllSchoolYearResponse,
   getAllStudentCurriculumsResponse,
   getAllTeacherProfileResponse,
@@ -11,11 +10,9 @@ import {
   getCourseResponse,
   getCurriculumsResponse,
   getEnrollmentResponse,
-  getRoomResponse,
   getSingleBlockCourseResponse,
   getSingleEnrollmentResponse,
   getStudentCurriculumsResponse,
-  getSubjectCategoryCollegeResponse,
   getTeacherProfileResponse,
   getTeacherScheduleResponse,
   IResponse,
@@ -41,7 +38,6 @@ import {
   undoEnrollmentToStep4,
 } from '@/action/college/enrollment/admin';
 import { createCollegeCourseBlockAction, getAllBlockTypeAction, getBlockTypeByIdAction } from '@/action/college/courses/blocks';
-import { createSubjectCollegeAction, getSubjectCategoryCollegeAction } from '@/action/college/subjects/admin';
 import { adminCreateUserWithRoleAction } from '@/action/user';
 import {
   createTeacherScheduleAction,
@@ -651,30 +647,6 @@ export const useRemoveCourseBlockScheduleMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['BlockTypeById'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
-    },
-  });
-};
-
-/**
- * Admin Subject College
- * @returns Queries and mutations
- */
-export const useSubjectCollegeQuery = () => {
-  return useQuery<getSubjectCategoryCollegeResponse, Error>({
-    queryKey: ['SubjectCollege'],
-    queryFn: () => getSubjectCategoryCollegeAction(),
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-  });
-};
-
-export const useCreateSubjectCollegeMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => createSubjectCollegeAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['SubjectCollege'] });
     },
   });
 };

@@ -6,7 +6,7 @@ import { getAllCurriculum, getCurriculumByCourseId, getCurriculumById, updateCur
 import { getEnrollmentByProfileId } from '@/services/enrollment';
 import { createStudentCurriculum, getAllStudentCurriculum, getStudentCurriculumById, getStudentCurriculumByStudentId } from '@/services/studentCurriculum';
 import { getStudentProfileById } from '@/services/studentProfile';
-import { getSubjectCategoryCollege } from '@/services/subject';
+import { getSubjectByCategory } from '@/services/subject';
 import { getAllCurriculumsResponse, getAllStudentCurriculumsResponse, getCurriculumsResponse, getStudentCurriculumsResponse } from '@/types';
 
 export const getAllCurriculumAction = async (): Promise<getAllCurriculumsResponse> => {
@@ -84,7 +84,7 @@ export const updateCurriculumSubjectByIdAction = async (data: any) => {
     await dbConnect();
     const { CId, subjects } = data;
     //get all subjects
-    const allS = await getSubjectCategoryCollege();
+    const allS = await getSubjectByCategory('College');
 
     // Check if each subject exists in the list of all subjects
     const validSubjectIds = allS.map((subject: any) => subject._id.toString());
@@ -222,7 +222,7 @@ export const updateStudentCurriculumSubjectByIdAction = async (data: any) => {
     await dbConnect();
     const { CId, subjects } = data;
     //get all subjects
-    const allS = await getSubjectCategoryCollege();
+    const allS = await getSubjectByCategory('College');
 
     const validSubjectIds = allS.map((subject: any) => subject._id.toString());
     const invalidSubjects = subjects.filter((subjectId: string) => !validSubjectIds.includes(subjectId));

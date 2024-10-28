@@ -1,7 +1,7 @@
 'use client';
 import Loader from '@/components/shared/Loader';
 import React, { useEffect, useState } from 'react';
-import { useCreateStudentCurriculumMutation, useCurriculumQueryByCourseId, useSchoolYearQuery, useStudentCurriculumQueryByStudentId, useSubjectCollegeQuery } from '@/lib/queries';
+import { useCreateStudentCurriculumMutation, useCurriculumQueryByCourseId, useSchoolYearQuery, useStudentCurriculumQueryByStudentId } from '@/lib/queries';
 import ErrorPage from './components/ErrorPage';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/shared/Icons';

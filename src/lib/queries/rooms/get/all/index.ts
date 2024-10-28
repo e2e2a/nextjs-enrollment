@@ -5,6 +5,7 @@ export const useAllRoomQueryByEduLevel = (level: string) => {
   return useQuery<any, Error>({
     queryKey: ['RoomsByEduLevel', level],
     queryFn: () => getAllRoomByEduLevelAction(level),
+    enabled: !!level,
     retry: 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,

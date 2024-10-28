@@ -3,16 +3,17 @@ import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useSubjectCollegeQuery, useTeacherProfileQueryById, useTeacherScheduleCollegeQueryByProfileId } from '@/lib/queries';
+import { useTeacherProfileQueryById, useTeacherScheduleCollegeQueryByProfileId } from '@/lib/queries';
 import AddInstructorSched from './components/AddInstructorSched';
 import { useAllRoomQueryByEduLevel } from '@/lib/queries/rooms/get/all';
+import { useSubjectQueryByCategory } from '@/lib/queries/subjects/get/category';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data, isLoading, error: isEnError } = useTeacherProfileQueryById(params.id);
   const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleCollegeQueryByProfileId(data?.teacher?._id);
-  const { data: s, isLoading: sLoading, error: sError } = useSubjectCollegeQuery();
+  const { data: s, isLoading: sLoading, error: sError } = useSubjectQueryByCategory('College');
   const { data: r, isLoading: rLoading, error: rError } = useAllRoomQueryByEduLevel('tertiary');
 
   useEffect(() => {

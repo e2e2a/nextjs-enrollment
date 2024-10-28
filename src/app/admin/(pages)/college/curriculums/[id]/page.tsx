@@ -1,23 +1,22 @@
 'use client';
 import Loader from '@/components/shared/Loader';
 import React, { useEffect, useState } from 'react';
-import { useProspectusQueryById, useSchoolYearQuery, useSubjectCollegeQuery } from '@/lib/queries';
+import { useProspectusQueryById } from '@/lib/queries';
 import ErrorPage from './components/ErrorPage';
-import { Button } from '@/components/ui/button';
-import { Icons } from '@/components/shared/Icons';
 import AddForm from './components/AddForm';
 import CurriculumTable from './components/CurriculumTable';
+import { useSubjectQueryByCategory } from '@/lib/queries/subjects/get/category';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isPageError, setIsPageError] = useState(false);
   const { data, isLoading, error: isEnError } = useProspectusQueryById(params.id);
-  const { data:sData, isLoading: sLoading, error: sError } = useSubjectCollegeQuery();
+  const { data:sData, isLoading: sLoading, error: sError } = useSubjectQueryByCategory('College');
   useEffect(() => {
     if (params.id.length === 24) {
       if (isEnError || !data) return;
       if (sError || !sData) return;
-      if (isEnError) console.log(isEnError);
+      
       if (data && sData) {
         setIsPageLoading(false);
       }

@@ -1,25 +1,22 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { SubjectCollegeValidator } from '@/lib/validators/Validator';
 import { Form } from '@/components/ui/form';
-import { useSession } from 'next-auth/react';
-import { useCreateSubjectCollegeMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import Input from './components/Input';
+import { SubjectValidator } from '@/lib/validators/subject/create';
+import { useCreateSubjectMutation } from '@/lib/queries/subjects/create/admin';
 
 const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);
 
-  const mutation = useCreateSubjectCollegeMutation();
-  const { data } = useSession();
-  const session = data?.user;
-  const formCollege = useForm<z.infer<typeof SubjectCollegeValidator>>({
-    resolver: zodResolver(SubjectCollegeValidator),
+  const mutation = useCreateSubjectMutation();
+  const formCollege = useForm<z.infer<typeof SubjectValidator>>({
+    resolver: zodResolver(SubjectValidator),
     defaultValues: {
       category: 'College',
       fixedRateAmount: '0.00',
@@ -32,7 +29,7 @@ const Page = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof SubjectCollegeValidator>> = async (data) => {
+  const onSubmit: SubmitHandler<z.infer<typeof SubjectValidator>> = async (data) => {
     setIsNotEditable(true);
     data.subjectCode = data.subjectCode.toLowerCase();
 
@@ -42,7 +39,6 @@ const Page = () => {
           case 200:
           case 201:
           case 203:
-            // return (window.location.reload());
             formCollege.reset();
             makeToastSucess('New Subject has been added.');
             return;
@@ -70,7 +66,6 @@ const Page = () => {
           <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
             <CardContent className='w-full '>
               <div className='flex flex-col gap-4'>
-                {/* <SelectInput name={'category'} selectItems={selectType.courseType} form={form} label={'Select Category:'} placeholder={'Select course'} setCategorySelected={setCategorySelected} /> */}
                 <Input name={'fixedRateAmount'} type={'text'} form={formCollege} label={'Rate Amount:'} classNameInput={'capitalize'} />
                 <Input name={'preReq'} type={'text'} form={formCollege} label={'Pre. Req.:'} classNameInput={'capitalize'} />
                 <Input name={'subjectCode'} type={'text'} form={formCollege} label={'Subject Code:'} classNameInput={'capitalize'} />

@@ -2,7 +2,6 @@
 import dbConnect from '@/lib/db/db';
 import TeacherSchedule from '@/models/TeacherSchedule';
 import { getRoomById } from '@/services/room';
-import { getSubjecByCourseCode } from '@/services/subject';
 import { getAllTeacherProfile, getTeacherProfileById, getTeacherProfileByUserId } from '@/services/teacherProfile';
 import { createTeacherSchedule, getAllTeacherSchedule, getAllTeacherScheduleByProfileId, getAllTeacherScheduleByScheduleRoomId, getTeacherScheduleById, removeTeacherScheduleById } from '@/services/teacherSchedule';
 // import { createTeacherSchedule, getAllTeacherSchedule, getTeacherScheduleById, getTeacherScheduleByProfileId, getTeacherScheduleByScheduleRoomId } from '@/services/teacherSchedule';
