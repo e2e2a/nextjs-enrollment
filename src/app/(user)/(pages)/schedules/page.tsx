@@ -76,19 +76,12 @@ const Page = () => {
                 <div className='text-center text-xl sm:text-2xl font-semibold tracking-tight'>No Enrollment has been Found.</div>
               </div>
               <span className='text-left sm:text-center w-full px-5 text-[16px]'>Explore our available courses and find the perfect fit for your academic journey. Click the link below to view detailed course offerings.</span>
-              <Link href={''} className='hover:underline hover:text-blue-600 text-blue-500 space-y-2'>
+              <Link href={'/courses'} className='hover:underline hover:text-blue-600 text-blue-500 space-y-2'>
                 <Button size={'sm'} type='button' className='w-auto flex gap-2'>
                   {' '}
                   View Available Course in Categories 👉{' '}
                 </Button>
               </Link>
-              {/* <span className='text-left sm:text-center w-full px-5 sm:px-10 mt-5 sm:mt-10 text-sm text-muted-foreground'>
-                In the meantime, feel free to prepare any documents you may need and stay tuned for updates. If you have any questions, don’t hesitate to reach out to us at <span className='text-blue-500 cursor-pointer'>+639123456789</span> or{' '}
-                <Link href={''} className='hover:underline hover:text-blue-600 text-blue-500'>
-                  jay.abandog@gmail.com
-                </Link>
-                .
-              </span> */}
             </CardContent>
           </Card>
         </div>

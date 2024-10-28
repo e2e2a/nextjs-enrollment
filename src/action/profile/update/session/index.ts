@@ -21,7 +21,7 @@ export const updateProfileBySessionIdAction = async (data: any) => {
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-
+    console.log('data received:', data);
     if (data.formData) {
       const checkedPhoto = await checkPhotoAndSave(data, session);
       if (checkedPhoto && checkedPhoto.error) return { error: checkedPhoto.error, status: checkedPhoto.status };
@@ -74,7 +74,7 @@ const checkSessionRole = async (session: any, data: any): Promise<any> => {
  */
 const updateStudentProfile = async (userId: string, data: any) => {
   return tryCatch(async () => {
-    if (!data.image) {
+    if (!data.formData) {
       const profileParse = StudentProfileUpdateValidator.safeParse(data);
       if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
     }
@@ -92,7 +92,7 @@ const updateStudentProfile = async (userId: string, data: any) => {
  */
 const updateTeacherProfile = async (userId: string, data: any) => {
   return tryCatch(async () => {
-    if (!data.image) {
+    if (!data.formData) {
       const profileParse = TeacherProfileUpdateValidator.safeParse(data);
       if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
     }
@@ -110,7 +110,7 @@ const updateTeacherProfile = async (userId: string, data: any) => {
  */
 const updateDeanProfile = async (userId: string, data: any) => {
   return tryCatch(async () => {
-    if (!data.image) {
+    if (!data.formData) {
       const profileParse = DeanProfileUpdateValidator.safeParse(data);
       if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
     }
@@ -155,6 +155,6 @@ export const checkPhotoAndSave = async (data: any, session: any) => {
     const storageRef = ref(storage, `profile/${session.user._id}/${image.name}`);
     await uploadBytes(storageRef, image, { contentType: image.type });
     const url = await getDownloadURL(storageRef);
-    return { success: 'File or photo is missing.', imageUrl: url, status: 200 };
+    return { success: 'Success.', imageUrl: url, status: 200 };
   });
 };

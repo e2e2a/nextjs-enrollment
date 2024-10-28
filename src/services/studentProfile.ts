@@ -78,7 +78,7 @@ export const updateStudentProfileById = async (id: string, { data }: any) => {
   }
 };
 
-export const updateStudentProfileByUserId = async (userId: string, { data }: any) => {
+export const updateStudentProfileByUserId = async (userId: string, data: any) => {
   try {
     const updatedProfile = await StudentProfile.findOneAndUpdate({ userId }, { ...data }, { new: true });
     return updatedProfile;

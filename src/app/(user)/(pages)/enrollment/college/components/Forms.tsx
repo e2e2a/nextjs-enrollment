@@ -21,6 +21,7 @@ type IProps = {
   profile: any;
 };
 const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
+  console.log('enrollement', enrollment)
   const [value, setValue] = useState('');
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data: esData, isLoading: esLoading, isError: esError } = useEnrollmentSetupQuery();

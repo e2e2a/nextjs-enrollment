@@ -3,13 +3,11 @@ import { Textarea } from '@/components/ui/textarea';
 import React from 'react';
 interface IProps {
   name: string;
-  type: string;
-  isNotEditable: boolean;
   form: any;
   label: string;
   classNameInput?: string;
 }
-const TextareaField = ({ name, type, isNotEditable, form, label, classNameInput }: IProps) => {
+const TextareaField = ({ name, form, label, classNameInput }: IProps) => {
   return (
     <FormField
       control={form.control}
@@ -17,14 +15,13 @@ const TextareaField = ({ name, type, isNotEditable, form, label, classNameInput 
       render={({ field }) => (
         <FormItem>
           <FormControl>
-            <div className={`${isNotEditable ? 'flex flex-row-reverse' : 'relative'}`}>
+            <div className={`relative`}>
               <Textarea
                 id={name}
                 className={`block rounded-xl focus-visible:ring-0 px-5 pb-2 pt-7 w-full text-sm bg-slate-50 border border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-2 focus:border-black peer pl-4 align-text-bottom h-16`}
                 onDragStart={(e) => e.preventDefault()}
-                disabled={isNotEditable}
                 placeholder=''
-                {...field} // Spread any other props (like value, onChange, etc.)
+                {...field}
               />
               <label
                 htmlFor={name}

@@ -18,7 +18,6 @@ import {
   IResponse,
   testResponseaa,
 } from '@/types';
-import { createCourseAction, getAllCourses } from '@/action/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction, getSingleEnrollmentByUserIdIdAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
 import {
   approvedEnrollmentStep1Action,
@@ -272,17 +271,17 @@ export const useTeacherProfileQueryByUserId = (id: string) => {
 //   });
 // };
 
-export const useCreateCourseMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<testResponseaa, Error, any>({
-    mutationFn: async (data) => createCourseAction(data),
-    onSuccess: () => {
-      // Invalidate the 'userProfile' query to trigger a refetch
-      queryClient.invalidateQueries({ queryKey: ['Curriculum'] });
-      queryClient.invalidateQueries({ queryKey: ['Course'] });
-    },
-  });
-};
+// export const useCreateCourseMutation = () => {
+//   const queryClient = useQueryClient();
+//   return useMutation<testResponseaa, Error, any>({
+//     mutationFn: async (data) => createCourseAction(data),
+//     onSuccess: () => {
+//       // Invalidate the 'userProfile' query to trigger a refetch
+//       queryClient.invalidateQueries({ queryKey: ['Curriculum'] });
+//       queryClient.invalidateQueries({ queryKey: ['Course'] });
+//     },
+//   });
+// };
 
 /**
  * Instructor Query Students Schedules/Subjects

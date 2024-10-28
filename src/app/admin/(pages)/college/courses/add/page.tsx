@@ -11,12 +11,12 @@ import Photo from './components/Photo';
 import { useSession } from 'next-auth/react';
 import Input from './components/Input';
 import TextareaField from './components/Textarea';
-import { useCreateCourseMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import CourseToast from '@/lib/toast/CourseToast';
+import { useCreateCourseMutation } from '@/lib/queries/courses/create/admin';
+import Image from 'next/image';
 
 const Page = () => {
-  const [isNotEditable, setIsNotEditable] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -36,7 +36,7 @@ const Page = () => {
   });
   const handleSelectedFile = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 10000000) {
+      if (files[0].size < 1000000) {
         setPhotoError('');
         const file = files[0];
         setImageFile(file);
@@ -46,7 +46,6 @@ const Page = () => {
     }
   };
   useEffect(() => {
-    // Preview the image
     if (imageFile) {
       const reader = new FileReader();
       reader.readAsDataURL(imageFile);
@@ -64,7 +63,7 @@ const Page = () => {
     if (imageFile) {
       setIsUploading(true);
       const formData = new FormData();
-      formData.append('file', imageFile);
+      formData.append('image', imageFile);
       data.courseCode = data.courseCode.toLowerCase();
       data.name = data.name.toLowerCase();
       const dataa = {
@@ -78,6 +77,7 @@ const Page = () => {
             case 200:
             case 201:
             case 203:
+              console.log('res', res);
               // CourseToast(data.courseCode, imagePreview!);
               if (res.message) makeToastSucess(res.message);
               return;
@@ -112,15 +112,15 @@ const Page = () => {
 
               <div className='flex flex-col gap-4'>
                 {/* <SelectInput name={'category'} selectItems={selectType.courseType} form={form} label={'Select Course Category:'} placeholder={'Select Course Category'} /> */}
-                <Input isNotEditable={isNotEditable} name={'courseCode'} type={'text'} form={form} label={'Course Initialism:'} classNameInput={'uppercase'} />
-                <Input isNotEditable={isNotEditable} name={'name'} type={'text'} form={form} label={'Course Name:'} classNameInput={'capitalize'} />
-                <TextareaField isNotEditable={isNotEditable} name={'description'} type={'text'} form={form} label={'Description:'} classNameInput={'capitalize'} />
+                <Input name={'courseCode'} type={'text'} form={form} label={'Course Initialism:'} classNameInput={'uppercase'} />
+                <Input name={'name'} type={'text'} form={form} label={'Course Name:'} classNameInput={'capitalize'} />
+                <TextareaField name={'description'} form={form} label={'Description:'} classNameInput={'capitalize'} />
               </div>
             </CardContent>
             <CardFooter>
               <div className='flex w-full justify-center md:justify-end items-center mt-4'>
-                <Button type='submit' variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-bold'>
-                  Register now!
+                <Button type='submit' disabled={isUploading} variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-bold'>
+                  {isUploading ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Submit'}
                 </Button>
               </div>
             </CardFooter>

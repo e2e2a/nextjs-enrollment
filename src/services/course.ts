@@ -9,8 +9,8 @@ export const createCourse = async (data: any) => {
       category: data.category,
       description: data.description,
     });
-    const c = await newC.save();
-    return c;
+    // const c = await newC.save();
+    return newC;
   } catch (error) {
     console.log(error);
     return null;
