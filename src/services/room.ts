@@ -23,6 +23,17 @@ export const getAllRoom = async () => {
     return [];
   }
 };
+
+export const getAllRoomByEduLevel = async (educationLevel: string) => {
+  try {
+    const r = await Room.find({ educationLevel });
+    return r;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
 export const getRoomById = async (id: any) => {
   try {
     const r = await Room.findById(id).exec();
@@ -42,4 +53,3 @@ export const getRoomByName = async (roomName: any) => {
     return null;
   }
 };
-

@@ -16,15 +16,15 @@ export const createRoomAction = async (data: any) => {
     return { error: 'Something went wrong', status: 500 };
   }
 };
-export const getAllRoomAction = async () => {
-  try {
-    await dbConnect();
-    const rooms = await getAllRoom();
-    return { rooms: JSON.parse(JSON.stringify(rooms)), status: 201 };
-  } catch (error) {
-    return { error: 'Something went wrong', status: 500 };
-  }
-};
+// export const getAllRoomAction = async () => {
+//   try {
+//     await dbConnect();
+//     const rooms = await getAllRoom();
+//     return { rooms: JSON.parse(JSON.stringify(rooms)), status: 201 };
+//   } catch (error) {
+//     return { error: 'Something went wrong', status: 500 };
+//   }
+// };
 
 export const getRoomByIdAction = async (id: string): Promise<getRoomResponse> => {
   try {

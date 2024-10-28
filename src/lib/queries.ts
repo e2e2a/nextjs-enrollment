@@ -43,7 +43,7 @@ import {
 import { createCollegeCourseBlockAction, getAllBlockTypeAction, getBlockTypeByIdAction } from '@/action/college/courses/blocks';
 import { createSubjectCollegeAction, getSubjectCategoryCollegeAction } from '@/action/college/subjects/admin';
 import { adminCreateUserWithRoleAction } from '@/action/user';
-import { createRoomAction, getAllRoomAction, getRoomByIdAction } from '@/action/rooms';
+import { createRoomAction, getRoomByIdAction } from '@/action/rooms';
 import {
   createTeacherScheduleAction,
   getAllTeacherProfileAction,
@@ -659,15 +659,15 @@ export const useRemoveCourseBlockScheduleMutation = () => {
  * Admin Room Management
  * @returns Queries and mutations
  */
-export const useRoomQuery = () => {
-  return useQuery<getAllRoomResponse, Error>({
-    queryKey: ['Rooms'],
-    queryFn: () => getAllRoomAction(),
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-  });
-};
+// export const useRoomQuery = () => {
+//   return useQuery<getAllRoomResponse, Error>({
+//     queryKey: ['Rooms'],
+//     queryFn: () => getAllRoomAction(),
+//     retry: 0,
+//     refetchOnMount: false,
+//     refetchOnWindowFocus: true,
+//   });
+// };
 
 export const useRoomQueryById = (id: string) => {
   return useQuery<getRoomResponse, Error>({

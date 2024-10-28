@@ -1,7 +1,6 @@
 'use client';
-import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { useEnrollmentQueryById, useRoomQuery, useBlockCourseQuery, useTeacherScheduleCollegeQuery } from '@/lib/queries';
+import {  useBlockCourseQuery } from '@/lib/queries';
 import AddStudentSched from './AddStudentSched';
 import LoaderPage from '@/components/shared/LoaderPage';
 interface IProps {

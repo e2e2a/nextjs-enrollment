@@ -3,15 +3,15 @@ import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useRoomQuery } from '@/lib/queries';
 import { IRoom } from '@/types';
+import { useAllRoomQueryByEduLevel } from '@/lib/queries/rooms/get/all';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [rooms, setRooms] = useState({});
   // Query data based on the validated step parameter
-  const { data, isLoading, error: isEnError } = useRoomQuery();
+  const { data, isLoading, error: isEnError } = useAllRoomQueryByEduLevel('tertiary');
 
   useEffect(() => {
     if (isLoading || !data || !data.rooms) return;
