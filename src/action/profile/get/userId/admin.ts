@@ -7,7 +7,7 @@ import { getSingleProfileResponse } from '@/types';
 import { getTeacherProfileByUserId } from '@/services/teacherProfile';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getAdminProfileByUserId } from '@/services/adminProfile';
-import { verifyAdmin } from '../../../../utils/actions/session/roles/admin';
+import { verifyADMIN } from '../../../../utils/actions/session/roles/admin';
 import { getUserById } from '@/services/user';
 
 /**
@@ -18,7 +18,7 @@ import { getUserById } from '@/services/user';
 export const getProfileByParamsUserIdAction = async (id: string): Promise<getSingleProfileResponse> => {
   return tryCatch(async () => {
     await dbConnect();
-    const session = await verifyAdmin();
+    const session = await verifyADMIN();
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
 
     const checkedR = await checkRole(id);

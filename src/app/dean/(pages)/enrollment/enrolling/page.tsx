@@ -7,6 +7,7 @@ import { IEnrollment } from '@/types';
 import { useSession } from 'next-auth/react';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
+import { useAllEnrollmentQueryByCourseId } from '@/lib/queries/enrollment/get/courseId/dean';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
@@ -15,16 +16,19 @@ const Page = () => {
 
   const { data: s } = useSession();
   const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
-  const { data, isLoading, error: isEnError } = useAllEnrollmentQuery(pData?.profile?.courseId?.category);
+  const { data, isLoading, error: isEnError } = useAllEnrollmentQueryByCourseId(pData?.profile?.courseId._id);
 
   useEffect(() => {
     if (isEnError || !data) return;
     if (pError || !pData) return;
 
     if (data && pData) {
-      if (data.enrollment && pData.profile) {
-        const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus !== 'Enrolled' && enrollment.courseId.name === pData?.profile.courseId.name);
+      if (data.students && pData.profile) {
+        const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment.enrollStatus !== 'Enrolled' && enrollment.courseId.name === pData?.profile.courseId.name);
         setEnrolledStudents(filteredEnrollment);
+        setIsPageLoading(false);
+      } else if (data.error) {
+        setIsError(true)
         setIsPageLoading(false);
       }
     }

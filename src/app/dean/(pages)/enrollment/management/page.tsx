@@ -32,7 +32,6 @@ const Page = () => {
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
   const isAllowed = useMemo(() => ['1', '2', '3', '4', '5', '6'], []);
   // Validate the step parameter whenever the search parameter changes
-  const { data: s } = useSession();
   const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
   useEffect(() => {
     if (search === null || !isAllowed.includes(search)) {

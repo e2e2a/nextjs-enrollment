@@ -20,49 +20,49 @@ export const getAllUsersAction = async (): Promise<any> => {
     return { error: '', status: 500 };
   }
 };
-export const getUserRoleStudentAction = async (): Promise<getAllStudentProfileResponse> => {
-  try {
-    await dbConnect();
-    const students = await getAllStudentProfile();
-    return { students: JSON.parse(JSON.stringify(students)), status: 200 };
-  } catch (error) {
-    console.log('getStudentProfileBySessionId', error);
-    return { error: '', status: 500 };
-  }
-};
+// export const getUserRoleStudentAction = async (): Promise<getAllStudentProfileResponse> => {
+//   try {
+//     await dbConnect();
+//     const students = await getAllStudentProfile();
+//     return { students: JSON.parse(JSON.stringify(students)), status: 200 };
+//   } catch (error) {
+//     console.log('getStudentProfileBySessionId', error);
+//     return { error: '', status: 500 };
+//   }
+// };
 
-export const getUserRoleTeachertAction = async (): Promise<getAllTeacherProfileResponse> => {
-  try {
-    await dbConnect();
-    const teachers = await getAllTeacherProfile();
-    return { teachers: JSON.parse(JSON.stringify(teachers)), status: 200 };
-    // return studentProfile;
-  } catch (error) {
-    console.log('getStudentProfileBySessionId', error);
-    return { error: '', status: 500 };
-  }
-};
-export const getUserRoleAdminAction = async (): Promise<getAllAdminProfileResponse> => {
-  try {
-    await dbConnect();
-    const admins = await getAllAdminProfile();
-    return { admins: JSON.parse(JSON.stringify(admins)), status: 200 };
-  } catch (error) {
-    console.log('getStudentProfileBySessionId', error);
-    return { error: '', status: 500 };
-  }
-};
+// export const getUserRoleTeachertAction = async (): Promise<getAllTeacherProfileResponse> => {
+//   try {
+//     await dbConnect();
+//     const teachers = await getAllTeacherProfile();
+//     return { teachers: JSON.parse(JSON.stringify(teachers)), status: 200 };
+//     // return studentProfile;
+//   } catch (error) {
+//     console.log('getStudentProfileBySessionId', error);
+//     return { error: '', status: 500 };
+//   }
+// };
+// export const getUserRoleAdminAction = async (): Promise<getAllAdminProfileResponse> => {
+//   try {
+//     await dbConnect();
+//     const admins = await getAllAdminProfile();
+//     return { admins: JSON.parse(JSON.stringify(admins)), status: 200 };
+//   } catch (error) {
+//     console.log('getStudentProfileBySessionId', error);
+//     return { error: '', status: 500 };
+//   }
+// };
 
-export const getUserRoleDeanAction = async (): Promise<getAllDeanProfileResponse> => {
-  try {
-    await dbConnect();
-    const deans = await getAllDeanProfile();
-    return { deans: JSON.parse(JSON.stringify(deans)), status: 200 };
-  } catch (error) {
-    console.log('getStudentProfileBySessionId', error);
-    return { error: '', status: 500 };
-  }
-};
+// export const getUserRoleDeanAction = async (): Promise<getAllDeanProfileResponse> => {
+//   try {
+//     await dbConnect();
+//     const deans = await getAllDeanProfile();
+//     return { deans: JSON.parse(JSON.stringify(deans)), status: 200 };
+//   } catch (error) {
+//     console.log('getStudentProfileBySessionId', error);
+//     return { error: '', status: 500 };
+//   }
+// };
 
 export const adminCreateUserWithRoleAction = async (data: any) => {
   try {
@@ -141,21 +141,21 @@ const checkingConflict = async (email: string, username: string) => {
   return { success: 'success', status: 200 };
 };
 
-const creatingUserRoleTeacher = async (email: string, username: string, password: string) => {
-  await dbConnect();
-  const user = await createUser({ email, username }, password);
-  await createStudentProfile({ userId: user._id });
-  if (!user) return { error: 'Error creating User', status: 404 };
-  /**
-   * @todo remove comment
-   */
-  // const tokenType = 'Verify';
-  // const verificationToken = await generateVerificationToken(user._id, tokenType);
+// const creatingUserRoleTeacher = async (email: string, username: string, password: string) => {
+//   await dbConnect();
+//   const user = await createUser({ email, username }, password);
+//   await createStudentProfile({ userId: user._id });
+//   if (!user) return { error: 'Error creating User', status: 404 };
+//   /**
+//    * @todo remove comment
+//    */
+//   // const tokenType = 'Verify';
+//   // const verificationToken = await generateVerificationToken(user._id, tokenType);
 
-  // if (!verificationToken) return { error: 'Error creating verificationToken', status: 404 };
+//   // if (!verificationToken) return { error: 'Error creating verificationToken', status: 404 };
 
-  // const send = await sendVerificationEmail(verificationToken.email, verificationToken.code, username, 'Confirm your Email');
-  // if (!send) return { error: 'Error sending verification email', status: 404 };
-  // return { user: user, token: verificationToken.token };
-  return { user: user, status: 201 };
-};
+//   // const send = await sendVerificationEmail(verificationToken.email, verificationToken.code, username, 'Confirm your Email');
+//   // if (!send) return { error: 'Error sending verification email', status: 404 };
+//   // return { user: user, token: verificationToken.token };
+//   return { user: user, status: 201 };
+// };

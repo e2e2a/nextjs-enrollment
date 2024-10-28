@@ -20,9 +20,7 @@ import {
   getTeacherScheduleResponse,
   IResponse,
   testResponseaa,
-  updateStudentProfileResponse,
 } from '@/types';
-import { z } from 'zod';
 import { createCourseAction, getAllCourses, getAllCoursesByCategory } from '@/action/college/courses';
 import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction, getSingleEnrollmentByUserIdIdAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
 import {

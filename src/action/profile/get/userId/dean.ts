@@ -7,7 +7,6 @@ import { getSingleProfileResponse } from '@/types';
 import { getTeacherProfileByUserId } from '@/services/teacherProfile';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getAdminProfileByUserId } from '@/services/adminProfile';
-import { verifyAdmin } from '../../../../utils/actions/session/roles/admin';
 import { getUserById } from '@/services/user';
 import { verifyDEAN } from '@/utils/actions/session/roles/dean';
 

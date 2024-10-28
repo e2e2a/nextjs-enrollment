@@ -14,7 +14,7 @@ export const redirectUrlByRole = (role: string) => {
       redirect = '/';
       break;
     default:
-      return { error: 'User has different ip.', url: '', status: 403 };
+      return { error: 'Forbidden.', url: '', status: 403 };
   }
   return { success: 'yesyes', url: redirect, status: 200 };
 };

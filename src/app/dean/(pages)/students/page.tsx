@@ -4,20 +4,26 @@ import { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { IStudentProfile } from '@/types';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
+import { useAllEnrollmentQueryByCourseId } from '@/lib/queries/enrollment/get/courseId/dean';
 
 export default function Page() {
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error } = useAllProfileQueryByUserRoles('STUDENT');
+  const { data: res, isLoading: pLoading, error: pError } = useProfileQueryBySessionId();
+  /**
+   * @todo
+   */
+  const { data, isLoading, error } = useAllEnrollmentQueryByCourseId(res?.profile.courseId);
 
   useEffect(() => {
     if (error || !data) return; //setError 500;
-    if (data) {
-      if (data.students) {
+    if (pError || !res) return; //setError 500;
+    if (data && res) {
+      if (data.students && res.profile) {
         setIsPageLoading(false);
       }
     }
-  }, [data, error]);
+  }, [data, error, pError, res]);
   return (
     <>
       {isPageLoading ? (

@@ -21,6 +21,10 @@ export const useUpdateProfileMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['AllProfilesByRoles', data.role] });
       queryClient.invalidateQueries({ queryKey: ['ProfileBySessionId'] });
       queryClient.invalidateQueries({ queryKey: ['ProfileByParamsUserIdInAdmin', data.id] });
+      /**
+       * @todo
+       * 1. change this action of the "ProfileByParamsUserIdInDean" query that it will only be courseId of handled dean is equal to student courseId enrolling/enrolled
+       */
       queryClient.invalidateQueries({ queryKey: ['ProfileByParamsUserIdInDean', data.id] });
     },
   });
