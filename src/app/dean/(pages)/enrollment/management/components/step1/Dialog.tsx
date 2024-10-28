@@ -8,11 +8,12 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { selectType } from '@/constant/enrollment';
-import { useApprovedEnrollmentStep1Mutation, useBlockCourseQuery, useSchoolYearQuery } from '@/lib/queries';
+import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { EnrollmentBlockTypeValidator } from '@/lib/validators/AdminValidator';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { useBlockCourseQuery } from '@/lib/queries/blocks/get/all';
 
 type IProps = {
   isPending: boolean;
@@ -42,7 +43,7 @@ export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
 
     if (bData) {
       if (bData.blockTypes) {
-        const filteredBlocks = bData.blockTypes.filter((block) => block.courseId._id === user.courseId._id && block.semester === user.studentSemester && block.year === user.studentYear);
+        const filteredBlocks = bData.blockTypes.filter((block: any) => block.courseId._id === user.courseId._id && block.semester === user.studentSemester && block.year === user.studentYear);
         setBlocks(filteredBlocks);
         setLoader(false);
       }

@@ -9,8 +9,6 @@ import { Icons } from '@/components/shared/Icons';
 import LogoutButton from '@/components/shared/nav/LogoutButton';
 import NavbarFooter from '@/components/shared/nav/NavbarFooter';
 import CollapsibleItem from './CollapsibleItem';
-import { useBlockCourseQuery } from '@/lib/queries';
-import { useEffect, useState } from 'react';
 
 interface DashboardNavProps {
   items: SidebarNavItemAdmin[];

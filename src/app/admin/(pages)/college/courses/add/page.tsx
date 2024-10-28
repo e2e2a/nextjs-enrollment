@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { CourseValidator } from '@/lib/validators/Validator';
 import { Form } from '@/components/ui/form';
 import Photo from './components/Photo';
 import { useSession } from 'next-auth/react';
@@ -15,6 +14,7 @@ import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import CourseToast from '@/lib/toast/CourseToast';
 import { useCreateCourseMutation } from '@/lib/queries/courses/create/admin';
 import Image from 'next/image';
+import { CourseValidatorInCollege } from '@/lib/validators/course/create/college';
 
 const Page = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -25,8 +25,8 @@ const Page = () => {
   const mutation = useCreateCourseMutation();
   const { data } = useSession();
   const session = data?.user;
-  const form = useForm<z.infer<typeof CourseValidator>>({
-    resolver: zodResolver(CourseValidator),
+  const form = useForm<z.infer<typeof CourseValidatorInCollege>>({
+    resolver: zodResolver(CourseValidatorInCollege),
     defaultValues: {
       courseCode: '',
       name: '',
@@ -59,7 +59,7 @@ const Page = () => {
       fileInputRef.current.click();
     }
   };
-  const onSubmit: SubmitHandler<z.infer<typeof CourseValidator>> = async (data) => {
+  const onSubmit: SubmitHandler<z.infer<typeof CourseValidatorInCollege>> = async (data) => {
     if (imageFile) {
       setIsUploading(true);
       const formData = new FormData();

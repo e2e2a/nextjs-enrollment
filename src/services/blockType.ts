@@ -56,12 +56,8 @@ export const getBlockTypeById = async (id: any) => {
 };
 export const getfilterBlockType = async (data: any) => {
   try {
-    // delete data.description
     const { description, ...datas } = data;
-    console.log(' data filter', datas);
-    const newB = await BlockType.find({
-      ...datas,
-    });
+    const newB = await BlockType.findOne({ ...datas });
     return newB;
   } catch (error) {
     return [];

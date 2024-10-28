@@ -1,8 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import {  useBlockCourseQuery } from '@/lib/queries';
 import AddStudentSched from './AddStudentSched';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useBlockCourseQuery } from '@/lib/queries/blocks/get/all';
 interface IProps {
   data: any;
 }

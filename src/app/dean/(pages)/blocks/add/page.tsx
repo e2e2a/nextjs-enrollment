@@ -5,18 +5,17 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { CourseBlockCollegeValidator } from '@/lib/validators/Validator';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
-import { useCreateCourseBlockMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import TextareaField from './components/Textarea';
 import Input from './components/Input';
 import { SelectInput } from './components/SelectInput';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
-import { selectType } from '@/constant/course';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
+import { BlockValidatorInCollege } from '@/lib/validators/block/create/college';
+import { useCreateCourseBlockMutation } from '@/lib/queries/blocks/create/admin';
 
 const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState<boolean>(false);
@@ -35,11 +34,11 @@ const Page = () => {
       }
     }
   }, [pData, pError]);
+
   const mutation = useCreateCourseBlockMutation();
   const { data } = useSession();
-  const session = data?.user;
-  const formCollege = useForm<z.infer<typeof CourseBlockCollegeValidator>>({
-    resolver: zodResolver(CourseBlockCollegeValidator),
+  const formCollege = useForm<z.infer<typeof BlockValidatorInCollege>>({
+    resolver: zodResolver(BlockValidatorInCollege),
     defaultValues: {
       category: 'College',
       courseCode: `${pData?.profile?.courseId.courseCode}`,
@@ -50,7 +49,7 @@ const Page = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof CourseBlockCollegeValidator>> = async (data) => {
+  const onSubmit: SubmitHandler<z.infer<typeof BlockValidatorInCollege>> = async (data) => {
     setIsNotEditable(true);
     data.courseCode = data.courseCode.toLowerCase();
     data.section = data.section.toLowerCase();

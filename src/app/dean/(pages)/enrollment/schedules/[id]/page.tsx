@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useEnrollmentQueryById, useBlockCourseQuery, useEnrollmentSetupQuery } from '@/lib/queries';
+import { useEnrollmentQueryById, useEnrollmentSetupQuery } from '@/lib/queries';
 import AddStudentSched from './components/AddStudentSched';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useBlockCourseQuery } from '@/lib/queries/blocks/get/all';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);

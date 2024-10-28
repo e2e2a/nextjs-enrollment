@@ -3,8 +3,9 @@ import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useBlockCourseQuery, useBlockCourseQueryById, useTeacherScheduleCollegeQuery } from '@/lib/queries';
+import { useTeacherScheduleCollegeQuery } from '@/lib/queries';
 import AddBlockSched from './components/AddBlockSched';
+import { useBlockCourseQueryById } from '@/lib/queries/blocks/get/id';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);

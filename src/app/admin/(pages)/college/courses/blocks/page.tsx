@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useBlockCourseQuery } from '@/lib/queries';
 import { IBlockType } from '@/types';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useBlockCourseQuery } from '@/lib/queries/blocks/get/all';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);

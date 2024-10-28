@@ -3,8 +3,9 @@ import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useBlockCourseQuery, useBlockCourseQueryById, useTeacherScheduleCollegeQuery } from '@/lib/queries';
+import { useTeacherScheduleCollegeQuery } from '@/lib/queries';
 import AddBlockSched from './components/AddBlockSched';
+import { useBlockCourseQueryById } from '@/lib/queries/blocks/get/id';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -13,21 +14,17 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data, isLoading, error: isEnError } = useBlockCourseQueryById(params.id);
   const { data: s, isLoading: sLoading, error: sError } = useTeacherScheduleCollegeQuery();
 
+ 
   useEffect(() => {
-    if (isLoading || !data) return;
-    if (isEnError) console.log(isEnError.message);
-  }, [data, isLoading, isEnError]);
-  useEffect(() => {
-    if (sLoading || !s) return;
-    if (sError) console.log(sError.message);
-  }, [s, sLoading, sError]);
-  useEffect(() => {
+    if (isEnError || !data) return
+    if (sError || !s) return;
+    
     if (s && data) {
       const filteredSchedules = s?.teacherSchedules?.filter((schedule: any) => schedule.blockTypeId === null || !schedule.blockTypeId);
       setTeachersSchedules(filteredSchedules);
       setIsPageLoading(false);
     }
-  }, [s, data]);
+  }, [s, sError, data, isEnError]);
 
   return (
     <>
