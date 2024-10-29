@@ -19,12 +19,14 @@ import FileGoodMoral from './FileGoodMoral';
 import FileTOR from './FileTOR';
 import Image from 'next/image';
 import Input from './Input';
-import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
+
 type IProps = {
   search: any;
   enrollmentSetup: any;
+  courses: any;
 };
-const Step0 = ({ search, enrollmentSetup }: IProps) => {
+
+const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
   const [photoPreview, setPhotoPreview] = useState<File | null>(null);
   const [photoError, setPhotoError] = useState('');
   const PhotoInputRef = useRef<HTMLInputElement>(null);
@@ -43,17 +45,10 @@ const Step0 = ({ search, enrollmentSetup }: IProps) => {
 
   const [isUploading, setIsUploading] = useState(false);
   const { data: s } = useSession();
-  const { data: res, isLoading: isCoursesLoading, error: isCoursesError } = useCourseQueryByCategory('College');
   
-  useEffect(() => {
-    if (isCoursesError || !res || !res.courses) {
-      return;
-    }
-    if (res) console.log('me ♥ you');
-  }, [res, isCoursesLoading, isCoursesError]);
   const handleSelectedPhoto = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 5000000) {
+      if (files[0].size < 1000000) {
         if (files[0].type === 'image/jpeg' || files[0].type === 'image/png') {
           setPhotoError('');
           const file = files[0];
@@ -68,7 +63,7 @@ const Step0 = ({ search, enrollmentSetup }: IProps) => {
   };
   const handleSelectedFile = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 5000000) {
+      if (files[0].size < 1000000) {
         if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
           setFileError('');
           const file = files[0];
@@ -83,7 +78,7 @@ const Step0 = ({ search, enrollmentSetup }: IProps) => {
   };
   const handleSelectedFileGoodMoral = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 5000000) {
+      if (files[0].size < 1000000) {
         if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
           setFileGoodMoralError('');
           const file = files[0];
@@ -98,7 +93,7 @@ const Step0 = ({ search, enrollmentSetup }: IProps) => {
   };
   const handleSelectedFileTOR = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 5000000) {
+      if (files[0].size < 1000000) {
         if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
           setTORError('');
           const file = files[0];
@@ -140,7 +135,10 @@ const Step0 = ({ search, enrollmentSetup }: IProps) => {
   const form = useForm<z.infer<typeof EnrollmentStep1>>({
     resolver: zodResolver(EnrollmentStep1),
     defaultValues: {
-      courseCode: search !== null ? search.toLowerCase() : '',
+      /**
+       * note that separate the validators to save in profile and in enrollment
+       */
+      courseCode: search !== null ? search.toLowerCase() : '', //change this to form.setValues
       studentStatus: '',
       studentYear: '',
       studentSemester: '',
@@ -183,11 +181,13 @@ const Step0 = ({ search, enrollmentSetup }: IProps) => {
     data.studentYear = data.studentYear.toLowerCase();
     data.studentSemester = data.studentSemester.toLowerCase();
     data.schoolYear = data.schoolYear.toLowerCase();
+
     const dataa = {
       ...data,
       userId: s?.user.id,
       formData: formData,
     };
+
     mutation.mutate(dataa, {
       onSuccess: (res) => {
         switch (res.status) {
@@ -195,9 +195,6 @@ const Step0 = ({ search, enrollmentSetup }: IProps) => {
           case 201:
           case 203:
             console.log(res);
-            // setMessage(res?.message);
-            // return (window.location.href = '/');
-            // return (window.location.reload());
             makeToastSucess(`You are enrolling to this course ${data.courseCode.toUpperCase()}`);
             return;
           default:
@@ -256,7 +253,7 @@ const Step0 = ({ search, enrollmentSetup }: IProps) => {
             <CardContent className='w-full space-y-2'>
               <div className='flex flex-col gap-4 w-full'>
                 <div className='grid sm:grid-cols-2 gap-4 w-full'>
-                  <SelectInput label='Course name' form={form} name={'courseCode'} selectItems={res?.courses!} placeholder='Select course' />
+                  <SelectInput label='Course name' form={form} name={'courseCode'} selectItems={courses} placeholder='Select course' />
                   <SelectInput label='Student Status' form={form} name={'studentStatus'} selectItems={selectType.studentStatus} placeholder='Select semester' />
                   <SelectInput label='Select year' form={form} name={'studentYear'} selectItems={studentYearData} placeholder='Select year' />
                   {/* <SelectInput label='Select semester' form={form} name={'studentSemester'} selectItems={studentSemesterData} placeholder='Select semester' /> */}

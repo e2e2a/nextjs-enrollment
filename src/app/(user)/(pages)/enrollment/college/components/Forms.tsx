@@ -1,27 +1,19 @@
 'use client';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import Step0 from './Step0';
-import Step2 from './Step2';
-import Step1 from './Step1';
-import Step3 from './Step3';
-import Step4 from './Step4';
-import Step5 from './Step5';
-import Step6 from './Step6';
-import Congrats from './Congrats';
 import { useEnrollmentSetupQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 import Open from './EnrollmentsStatus/Open';
 import ContinuingCollegeStudent from './ContinuingCollegeStudent';
+import MainTabs from './MainTabs';
+
 type IProps = {
   search: any;
   enrollment: any;
   profile: any;
+  courses: any;
 };
-const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
-  console.log('enrollement', enrollment)
+
+const EnrollmentForms = ({ search, enrollment, profile, courses }: IProps) => {
   const [value, setValue] = useState('');
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data: esData, isLoading: esLoading, isError: esError } = useEnrollmentSetupQuery();
@@ -62,22 +54,8 @@ const EnrollmentForms = ({ search, enrollment, profile }: IProps) => {
             </div>
           )}
 
-          <Tabs value={`${value}`} className='w-full gap-4 '>
-            {!enrollment && !esData?.enrollmentSetup?.enrollmentTertiary.open && <Open es={esData?.enrollmentSetup?.enrollmentTertiary}/>}
-            {esData?.enrollmentSetup?.enrollmentTertiary.open && (!enrollment && profile.studentStatus === 'New Student' && profile.enrollStatus !== 'Enrolled') && <Step0 search={search} enrollmentSetup={esData.enrollmentSetup} /> }
-            {esData?.enrollmentSetup?.enrollmentTertiary.open && (!enrollment && profile.studentStatus === 'Continue' && profile.enrollStatus !== 'Enrolled') && <ContinuingCollegeStudent profile={profile} enrollmentSetup={esData.enrollmentSetup} />}
-            {enrollment && profile.enrollStatus === 'Pending' && (
-              <>
-                <Step1 search={search} enrollment={enrollment} />
-                <Step2 enrollment={enrollment} />
-                <Step3 enrollment={enrollment} />
-                <Step4 enrollment={enrollment} />
-                <Step5 enrollment={enrollment} />
-                <Step6 enrollment={enrollment} />
-              </>
-            )}
-            {enrollment && profile.enrollStatus === 'Enrolled' && <Congrats enrollment={enrollment} />}
-          </Tabs>
+          <MainTabs search={search} value={value} enrollment={enrollment} profile={profile} enrollmentSetup={esData.enrollmentSetup} courses={courses} />
+          
         </div>
       )}
     </>

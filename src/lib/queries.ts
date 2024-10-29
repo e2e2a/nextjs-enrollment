@@ -14,7 +14,7 @@ import {
   getTeacherScheduleResponse,
   IResponse,
 } from '@/types';
-import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentAction, getSingleEnrollmentByUserIdIdAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
+import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentByUserIdIdAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
 import {
   approvedEnrollmentStep1Action,
   approvedEnrollmentStep2Action,
@@ -109,16 +109,6 @@ export const useCollegeEndSemesterMutation = () => {
     },
   });
 };
-
-// export const useAllUsersQuery = () => {
-//   return useQuery<any, Error>({
-//     queryKey: ['AllUsers'],
-//     queryFn: () => getAllUsersAction(),
-//     retry: 0,
-//     refetchOnWindowFocus: false,
-//   });
-// };
-
 
 /**
  * Teacher Grade Report
@@ -234,15 +224,16 @@ export const useAllEnrollmentByTeacherScheduleIdQuery = (data: any) => {
  * Students Enrollment
  * @returns Queries and mutations
  */
-export const useEnrollmentQuery = (data: any) => {
-  return useQuery<getSingleEnrollmentResponse, Error>({
-    queryKey: ['Enrollment'],
-    queryFn: () => getSingleEnrollmentAction(data),
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
-};
+
+// export const useEnrollmentQuery = (data: any) => {
+//   return useQuery<getSingleEnrollmentResponse, Error>({
+//     queryKey: ['Enrollment'],
+//     queryFn: () => getSingleEnrollmentAction(data),
+//     retry: 0,
+//     refetchOnMount: false,
+//     refetchOnWindowFocus: false,
+//   });
+// };
 
 export const useEnrollmentQueryByUserId = (data: any) => {
   return useQuery<getSingleEnrollmentResponse, Error>({

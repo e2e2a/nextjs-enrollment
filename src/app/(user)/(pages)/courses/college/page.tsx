@@ -46,7 +46,7 @@ const Page = () => {
                       </div>
                       <div className='flex flex-col flex-1 p-5'>
                         <div className='flex w-full justify-end items-center hover:underline'>
-                          <Link href={`/enrollment?courses=${course.courseCode}`} className='flex gap-2 items-center text-sm'>
+                          <Link href={`/enrollment/college?courses=${course.courseCode}`} className='flex gap-2 items-center text-sm'>
                             <span className='text-blue-700'>Enroll</span> <Icons.arrowRight className='h-4 w-4' />
                           </Link>
                         </div>

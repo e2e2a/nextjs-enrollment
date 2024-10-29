@@ -18,6 +18,7 @@ export const getStudentProfileBySessionIdAction = async (): Promise<getSinglePro
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
+    
     const checkedR = await checkRole(session);
     if (!checkedR.profile || checkedR.error) return { error: 'Profile not found.', status: 404 };
 

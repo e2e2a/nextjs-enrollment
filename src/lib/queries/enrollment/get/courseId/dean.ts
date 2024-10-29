@@ -1,4 +1,4 @@
-import { getAllStudentByCourseIdAction } from '@/action/profile/get/courseId/dean';
+import { getAllStudentByCourseIdAction } from '@/action/enrollment/get/courseId/dean';
 import { useQuery } from '@tanstack/react-query';
 
 /**

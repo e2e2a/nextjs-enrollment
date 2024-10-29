@@ -1,4 +1,4 @@
-import { getAllUsersAction } from "@/action/user";
+import { getAllUsersAction } from "@/action/user/get/all";
 import { useQuery } from "@tanstack/react-query";
 
 export const useAllUsersQuery = () => {
