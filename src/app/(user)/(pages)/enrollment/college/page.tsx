@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import EnrollmentForms from './components/Forms';
 import ErrorPage from './components/ErrorPage';
 import { useSession } from 'next-auth/react';
-import Loader from '@/components/shared/Loader';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 import { useEnrollmentQueryBySessionId } from '@/lib/queries/enrollment/get/session';
@@ -16,10 +15,10 @@ const Page = () => {
   const searchParams = useSearchParams();
   const search = searchParams.get('courses');
 
-  const { data: res, isLoading: load, error: cError } = useCourseQueryByCategory('College');
-
   const { data: d } = useSession();
   const session = d!.user;
+  
+  const { data: res, isLoading: load, error: cError } = useCourseQueryByCategory('College');
   const { data: resP, isLoading: PLoading, error: PError } = useProfileQueryBySessionId();
   const { data: resE, isLoading: ELoading, error: EError } = useEnrollmentQueryBySessionId(session.id!);
 
