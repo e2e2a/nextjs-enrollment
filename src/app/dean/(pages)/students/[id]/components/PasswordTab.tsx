@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { useSession } from 'next-auth/react';
 import { Icons } from '@/components/shared/Icons';
 import Input from './Input';
-import { NewPasswordValidator } from '@/lib/validators/user/password';
+import { NewPasswordValidator } from '@/lib/validators/user/update/password';
 
 const PasswordTab = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);

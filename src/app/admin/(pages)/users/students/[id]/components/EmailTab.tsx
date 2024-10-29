@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { useSession } from 'next-auth/react';
 import { Icons } from '@/components/shared/Icons';
 import Input from './Input';
-import { EmailValidator } from '@/lib/validators/user/email';
+import { EmailValidator } from '@/lib/validators/user/update/email';
 
 const EmailTab = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);

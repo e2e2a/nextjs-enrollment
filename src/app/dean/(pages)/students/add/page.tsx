@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { SignupValidator } from '@/lib/validators/auth/signUp';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
-import { useAdminCreateUserRoleMutation } from '@/lib/queries';
+// import { useAdminCreateUserRoleMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { SelectInput } from './components/SelectInput';
 import Input from './components/Input';
@@ -20,7 +20,7 @@ import { StudentProfileValidator } from '@/lib/validators/AdminValidator';
 
 const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);
-  const mutation = useAdminCreateUserRoleMutation();
+  // const mutation = useAdminCreateUserRoleMutation();
   const { data } = useSession();
   const [showProfile, setShowProfile] = useState('No');
   const [typeValidate, setTypeValidate] = useState<any>(SignupValidator);
@@ -111,35 +111,35 @@ const Page = () => {
       role: 'STUDENT',
       createProfile: showProfile === 'Yes' ? true : false,
     };
-    mutation.mutate(dataa, {
-      onSuccess: (res) => {
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            formCollege.reset();
-            setShowProfile('No');
-            setTypeValidate(SignupValidator);
-            setDefaultValues({
-              email: '',
-              username: '',
-              password: '',
-              CPassword: '',
-            });
-            makeToastSucess(res.message);
-            return;
-          default:
-            if (res.error) return makeToastError(res.error);
-            return;
-        }
-      },
-      onError: (error) => {
-        console.error(error.message);
-      },
-      onSettled: () => {
-        setIsNotEditable(false);
-      },
-    });
+    // mutation.mutate(dataa, {
+    //   onSuccess: (res) => {
+    //     switch (res.status) {
+    //       case 200:
+    //       case 201:
+    //       case 203:
+    //         formCollege.reset();
+    //         setShowProfile('No');
+    //         setTypeValidate(SignupValidator);
+    //         setDefaultValues({
+    //           email: '',
+    //           username: '',
+    //           password: '',
+    //           CPassword: '',
+    //         });
+    //         makeToastSucess(res.message);
+    //         return;
+    //       default:
+    //         if (res.error) return makeToastError(res.error);
+    //         return;
+    //     }
+    //   },
+    //   onError: (error) => {
+    //     console.error(error.message);
+    //   },
+    //   onSettled: () => {
+    //     setIsNotEditable(false);
+    //   },
+    // });
   };
   return (
     <div className='border py-5 bg-white rounded-xl'>

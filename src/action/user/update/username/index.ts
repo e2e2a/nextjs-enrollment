@@ -3,7 +3,7 @@ import { checkAuth } from '@/utils/actions/session';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getUserByUsername, updateUserById } from '@/services/user';
-import { UsernameValidator } from '@/lib/validators/user/username';
+import { UsernameValidator } from '@/lib/validators/user/update/username';
 
 /**
  * Handles the process of changing a user's username.

@@ -21,10 +21,8 @@ export const getProfileByParamsUserIdAction = async (id: string): Promise<getSin
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
 
     const checkedR = await checkRole(id);
-    if (!checkedR.profile || checkedR.error) {
-      console.log(checkedR.profile);
-      return { error: 'Profile not found.', status: 404 };
-    }
+    if (!checkedR.profile || checkedR.error) return { error: 'Profile not found.', status: 404 };
+    
     return { profile: checkedR.profile, status: 200 };
   });
 };

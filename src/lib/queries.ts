@@ -32,7 +32,6 @@ import {
   undoEnrollmentToStep3,
   undoEnrollmentToStep4,
 } from '@/action/college/enrollment/admin';
-import { adminCreateUserWithRoleAction } from '@/action/user';
 import {
   createTeacherScheduleAction,
   getAllTeacherProfileAction,
@@ -120,30 +119,6 @@ export const useCollegeEndSemesterMutation = () => {
 //   });
 // };
 
-export const useAdminCreateUserRoleMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => adminCreateUserWithRoleAction(data),
-    onSuccess: (data) => {
-      if (data.role) {
-        if (data.role === 'ADMIN') {
-          queryClient.invalidateQueries({ queryKey: ['Admins'] });
-          queryClient.invalidateQueries({ queryKey: ['userAdminProfile'] });
-        } else if (data.role === 'DEAN') {
-          /**
-           * @todo invalidate user role DEAN
-           */
-        } else if (data.role === 'TEACHER') {
-          queryClient.invalidateQueries({ queryKey: ['Teachers'] });
-          queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
-          queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
-        } else if (data.role === 'STUDENT') {
-          queryClient.invalidateQueries({ queryKey: ['Students'] });
-        }
-      }
-    },
-  });
-};
 
 /**
  * Teacher Grade Report

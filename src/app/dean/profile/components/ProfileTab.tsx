@@ -28,7 +28,7 @@ const ProfileTab = ({ profile }: IProps) => {
 
   const form = useForm<z.infer<typeof DeanProfileUpdateValidator>>({
     resolver: zodResolver(DeanProfileUpdateValidator),
-    defaultValues: { firstname: '', middlename: '', lastname: '', extensionName: '', contact: '', sex: '', civilStatus: '', birthday: new Date() },
+    defaultValues: { firstname: '', middlename: '', lastname: '', extensionName: '', contact: '', sex: '', civilStatus: '', birthday: new Date(Date.now()) },
   });
 
   const handleEditable = async () => {

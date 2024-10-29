@@ -9,9 +9,9 @@ import { z } from 'zod';
 import { useSession } from 'next-auth/react';
 import Input from './Input';
 import Image from 'next/image';
-import { EmailValidator } from '@/lib/validators/user/email';
+import { EmailValidator } from '@/lib/validators/user/update/email';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { useNewEmailMutation } from '@/lib/queries/user/email';
+import { useNewEmailMutation } from '@/lib/queries/user/update/email';
 
 const EmailTab = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);

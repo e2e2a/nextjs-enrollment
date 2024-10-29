@@ -8,8 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { useNewUsernameMutation } from '@/lib/queries/user/username';
-import { UsernameValidator } from '@/lib/validators/user/username';
+import { useNewUsernameMutation } from '@/lib/queries/user/update/username';
+import { UsernameValidator } from '@/lib/validators/user/update/username';
 
 type IProps = {
   profile: any;

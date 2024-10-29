@@ -1,4 +1,4 @@
-import { newUsernameAction } from '@/action/user/username';
+import { newUsernameAction } from '@/action/user/update/username';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**

@@ -48,7 +48,7 @@ const ProfileTab = ({ profile }: Iprops) => {
       sex: '',
       civilStatus: '',
       employmentStatus: '',
-      birthday: new Date(),
+      birthday: new Date(Date.now()),
       birthPlaceCity: '',
       birthPlaceProvince: '',
       birthPlaceRegion: '',

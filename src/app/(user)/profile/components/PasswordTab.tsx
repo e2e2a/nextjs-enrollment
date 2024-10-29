@@ -9,9 +9,9 @@ import { z } from 'zod';
 import { signOut, useSession } from 'next-auth/react';
 import Input from './Input';
 import Image from 'next/image';
-import { NewPasswordValidator } from '@/lib/validators/user/password';
+import { NewPasswordValidator } from '@/lib/validators/user/update/password';
 import { useLoading } from '@/components/shared/nav/logout/LoadingContext';
-import { useNewPasswordMutation } from '@/lib/queries/user/password';
+import { useNewPasswordMutation } from '@/lib/queries/user/update/password';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 
 const PasswordTab = () => {

@@ -1,13 +1,16 @@
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import React from 'react';
+
 interface IProps {
   name: string;
   type: string;
   form: any;
   label: string;
   classNameInput?: string;
+  isPending: boolean;
 }
-const Input = ({ name, type, form, label, classNameInput }: IProps) => {
+
+const Input = ({ name, type, form, label, classNameInput,isPending }: IProps) => {
   return (
     <FormField
       control={form.control}
@@ -23,6 +26,7 @@ const Input = ({ name, type, form, label, classNameInput }: IProps) => {
                 onDragStart={(e) => e.preventDefault()}
                 placeholder=''
                 {...field}
+                disabled={isPending}
               />
               <label
                 htmlFor={name}

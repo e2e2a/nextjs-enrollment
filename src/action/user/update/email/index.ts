@@ -2,7 +2,7 @@
 import { checkAuth } from '@/utils/actions/session';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import { EmailValidator } from '@/lib/validators/user/email';
+import { EmailValidator } from '@/lib/validators/user/update/email';
 import { generateVerificationToken } from '@/services/token';
 import { checkNewEmail } from '@/utils/actions/user/email';
 

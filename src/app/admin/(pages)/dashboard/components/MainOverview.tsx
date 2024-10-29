@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { Overview } from './Overview';
-import { useAllUsersQuery } from '@/lib/queries/user/get';
+import { useAllUsersQuery } from '@/lib/queries/user/get/all';
 import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 
 const MainOverview = () => {
@@ -12,10 +12,10 @@ const MainOverview = () => {
   const [totalAccounts, setTotalAccounts] = useState<number>(0);
   const [totalActive, setTotalActive] = useState<number>(0);
   const { data: AllU, error: AllUError } = useAllUsersQuery();
+  const { data: raData, error: raError } = useAllProfileQueryByUserRoles('ADMIN');
   const { data: rsData, error: rsError } = useAllProfileQueryByUserRoles('STUDENT');
   const { data: rtData, error: rtError } = useAllProfileQueryByUserRoles('TEACHER');
   const { data: rdData, error: rdError } = useAllProfileQueryByUserRoles('DEAN');
-  const { data: raData, error: raError } = useAllProfileQueryByUserRoles('ADMIN');
   useEffect(() => {
     if (!AllU || AllUError) return;
     if (!rsData || rsError) return;

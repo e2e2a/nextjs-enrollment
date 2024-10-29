@@ -5,7 +5,8 @@ import { sendVerificationEmail } from '@/lib/mail/mail';
 import { SignupValidator } from '@/lib/validators/auth/signUp';
 import { createStudentProfile } from '@/services/studentProfile';
 import { generateVerificationToken } from '@/services/token';
-import { createUser, getUserByEmail } from '@/services/user';
+import { createUser } from '@/services/user';
+import { checkNewEmail } from '@/utils/actions/user/email';
 import { checkNewUsername } from '@/utils/actions/user/username';
 
 /**
@@ -37,7 +38,7 @@ export const signUpAction = async (data: any) => {
  */
 const checkingConflict = async (email: string, username: string) => {
   return tryCatch(async () => {
-    const existingUser = await getUserByEmail(email);
+    const existingUser = await checkNewEmail(email);
     if (existingUser && existingUser.emailVerified) return { error: 'Email already exist. Please sign in to continue.', status: 409 };
     const checkedUsername = await checkNewUsername(username);
     if (!checkedUsername || !checkedUsername.success) return { error: checkedUsername?.error, status: checkedUsername?.status };

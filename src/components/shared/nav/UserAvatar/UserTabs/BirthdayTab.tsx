@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { NewPasswordValidator } from '@/lib/validators/user/password';
+import { NewPasswordValidator } from '@/lib/validators/user/update/password';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import React from 'react';

@@ -49,6 +49,11 @@ export const AdminProfileUpdateValidator = z
     };
   });
 
+export const DeanProfileExtensionValidator = z.object({
+  category: z.string().min(1, { message: 'Course is Required...' }),
+  courseId: z.string().min(1, { message: 'Category is Required...' }),
+});
+
 export const DeanProfileUpdateValidator = z
   .object({
     firstname: z

@@ -36,6 +36,7 @@ const checkSearchRole = async (role: string) => {
     switch (role) {
       case 'ADMIN':
         profiles = await getAllAdminProfile();
+        break;
       case 'DEAN':
         profiles = await getAllDeanProfile();
         break;
