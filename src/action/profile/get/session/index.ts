@@ -11,7 +11,7 @@ import { checkAuth } from '@/utils/actions/session';
 /**
  *
  * Any authenticated role
- * @returns change username action
+ * @returns profile
  */
 export const getStudentProfileBySessionIdAction = async (): Promise<getSingleProfileResponse> => {
   return tryCatch(async () => {
@@ -28,7 +28,7 @@ export const getStudentProfileBySessionIdAction = async (): Promise<getSinglePro
 /**
  *
  * check roles
- * @returns profile of the session username action
+ * @param {object} session
  */
 const checkRole = async (session: any): Promise<any> => {
   return tryCatch(async () => {

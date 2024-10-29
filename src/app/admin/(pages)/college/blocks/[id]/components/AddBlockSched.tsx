@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
-import { useUpdateCourseBlockScheduleMutation } from '@/lib/queries';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { useUpdateCourseBlockScheduleMutation } from '@/lib/queries/blocks/update';
 
 interface IProps {
   blockType: any;
@@ -33,7 +33,7 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
       makeToastError('Please select at least one schedule to submit.');
       return;
     }
-
+    
     const data = {
       selectedItems,
       blockTypeId: blockType.blockType._id,
@@ -47,9 +47,10 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
           case 203:
             setIsOpen(false);
             setSelectedItems([]);
-            makeToastSucess('New Schedule has been added to blocks.');
+            makeToastSucess(res.message);
             return;
           default:
+            makeToastError(res.error);
             return;
         }
       },

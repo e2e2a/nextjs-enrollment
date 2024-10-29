@@ -1,7 +1,6 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import { checkAuth } from '../../../../utils/actions/session';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { getSingleProfileResponse } from '@/types';
 import { getTeacherProfileByUserId } from '@/services/teacherProfile';
@@ -13,7 +12,7 @@ import { getUserById } from '@/services/user';
 /**
  *
  * only admin roles
- * @returns query of profile by session id or userId
+ * @returns query of profile by userId
  */
 export const getProfileByParamsUserIdAction = async (id: string): Promise<getSingleProfileResponse> => {
   return tryCatch(async () => {
@@ -33,7 +32,7 @@ export const getProfileByParamsUserIdAction = async (id: string): Promise<getSin
 /**
  *
  * check roles
- * @returns profile of the session username action
+ * @param {string} id
  */
 const checkRole = async (id: any): Promise<any> => {
   return tryCatch(async () => {

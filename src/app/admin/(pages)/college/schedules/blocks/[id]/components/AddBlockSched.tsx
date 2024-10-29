@@ -3,20 +3,18 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
-import { useUpdateCourseBlockScheduleMutation } from '@/lib/queries';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { makeToastError } from '@/lib/toast/makeToast';
+import { useUpdateCourseBlockScheduleMutation } from '@/lib/queries/blocks/update';
+
 interface IProps {
   blockType: any;
   s: any;
 }
 
 const AddBlockSched = ({ blockType, s }: IProps) => {
-  console.log(blockType);
-  // const [selectedItems, setSelectedItems] = React.useState<any[]>([{selectedItems: {teacherScheduleId: [], subjectId: []}}]);
   const [selectedItems, setSelectedItems] = React.useState<{ teacherScheduleId: string }[]>([]);
   const mutation = useUpdateCourseBlockScheduleMutation();
-  console.log('selectedItems', selectedItems)
   const handleSelect = (teacherScheduleId: string) => {
     setSelectedItems((prevSelectedItems) => {
       const itemIndex = prevSelectedItems.findIndex((item) => item.teacherScheduleId === teacherScheduleId);
@@ -40,9 +38,9 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
       blockTypeId: blockType.blockType._id,
     };
 
-    console.log(data);
+    console.log('data');
     mutation.mutate(data, {
-      onSuccess: (res: any) => {
+      onSuccess: (res) => {
         console.log(res);
         switch (res.status) {
           case 200:

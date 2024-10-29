@@ -6,10 +6,8 @@ import {
   getAllStudentCurriculumsResponse,
   getAllTeacherProfileResponse,
   getAllTeacherScheduleResponse,
-  getBlockCourseResponse,
   getCurriculumsResponse,
   getEnrollmentResponse,
-  getSingleBlockCourseResponse,
   getSingleEnrollmentResponse,
   getStudentCurriculumsResponse,
   getTeacherProfileResponse,
@@ -58,7 +56,7 @@ import {
   updateStudentCurriculumByIdAction,
   updateStudentCurriculumSubjectByIdAction,
 } from '@/action/college/curriculums';
-import { removeCourseBlockScheduleAction, updateCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
+import { removeCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
 import { removeStudentScheduleAction, updateStudentEnrollmentScheduleAction, updateStudentEnrollmentScheduleRequestStatusAction, updateStudentEnrollmentScheduleSuggestedSubjectAction } from '@/action/college/schedules/students';
 import { getEnrollmentSetup, updateEnrollmentSetup } from '@/action/enrollmentSetup';
 import { updateStudentEnrollmentScheduleBySuggestedSubjectAction } from '@/action/college/schedules/students/students';
@@ -555,48 +553,6 @@ export const useUndoEnrollmentToStep4Mutation = () => {
  * Admin Course BlockType
  * @returns Queries and mutations
  */
-// export const useBlockCourseQuery = () => {
-//   return useQuery<getBlockCourseResponse, Error>({
-//     queryKey: ['BlockType'],
-//     queryFn: () => getAllBlockTypeAction(),
-//     retry: 0,
-//     refetchOnMount: false,
-//     refetchOnWindowFocus: true,
-//   });
-// };
-// export const useBlockCourseQueryById = (data: any) => {
-//   return useQuery<getSingleBlockCourseResponse, Error>({
-//     queryKey: ['BlockTypeById', data],
-//     queryFn: () => getBlockTypeByIdAction(data),
-//     enabled: !!data,
-//     retry: 0,
-//     refetchOnMount: false,
-//     refetchOnWindowFocus: true,
-//   });
-// };
-
-// export const useCreateCourseBlockMutation = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation<any, Error, any>({
-//     mutationFn: async (data) => createCollegeCourseBlockAction(data),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
-//       queryClient.invalidateQueries({ queryKey: ['BlockTypeById'] });
-//     },
-//   });
-// };
-export const useUpdateCourseBlockScheduleMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => updateCourseBlockScheduleAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['BlockType'] });
-      queryClient.invalidateQueries({ queryKey: ['BlockTypeById'] });
-      queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
-      queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
-    },
-  });
-};
 export const useRemoveCourseBlockScheduleMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({

@@ -5,7 +5,12 @@ import { getBlockTypeById } from '@/services/blockType';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { checkAuth } from '@/utils/actions/session';
 
-export const getBlockTypeByIdAction = async (id: any) => {
+/**
+ * 
+ * @param {string} id 
+ * @returns single blockType
+ */
+export const getBlockTypeByIdAction = async (id: string) => {
   return tryCatch(async () => {
     await dbConnect();
     const session = await checkAuth();
@@ -18,7 +23,13 @@ export const getBlockTypeByIdAction = async (id: any) => {
   });
 };
 
-const checkRole = async (session: any, id: any) => {
+/**
+ * check role
+ * 
+ * @param {object} session 
+ * @param {string} id 
+ */
+const checkRole = async (session: any, id: string) => {
   return tryCatch(async () => {
     let b;
     switch (session.user.role) {

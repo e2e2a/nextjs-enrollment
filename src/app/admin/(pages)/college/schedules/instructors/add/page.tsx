@@ -50,14 +50,15 @@ const Page = () => {
   }, [sError, isError, rError]);
 
   useEffect(() => {
+    console.log('tdata: ', tData)
     if (!tData || !rData || !sData) return; //500
     if (rData && tData && sData) {
       if (rData.rooms) {
         const filteredRooms = rData.rooms.filter((room: any) => room.educationLevel === 'tertiary');
         setRooms(filteredRooms);
       }
-      if (tData.teachers) {
-        setTeachers(tData.teachers);
+      if (tData.profiles) {
+        setTeachers(tData.profiles);
       }
       if (sData.subjects) {
       }

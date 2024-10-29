@@ -8,6 +8,11 @@ import { createCurriculum } from '@/services/curriculum';
 import { verifyADMIN } from '@/utils/actions/session/roles/admin';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
+/**
+ * only admin roles
+ *
+ * @param {any} data
+ */
 export const createCourseAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();

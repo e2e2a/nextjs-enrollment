@@ -4,6 +4,12 @@ import { BlockValidatorInCollege } from '@/lib/validators/block/create/college';
 import { createBlockType, getfilterBlockType } from '@/services/blockType';
 import { getCourseByCourseCode } from '@/services/course';
 
+/**
+ * check role
+ *
+ * @param {object} data
+ * @returns create blockType
+ */
 export const createCollegeCourseBlockAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
@@ -19,6 +25,11 @@ export const createCollegeCourseBlockAction = async (data: any) => {
   });
 };
 
+/**
+ * check blockType conflict and store
+ *
+ * @param {object} data
+ */
 const checkBlockType = async (data: any) => {
   return tryCatch(async () => {
     const checkC = await getCourseByCourseCode(data.courseCode);

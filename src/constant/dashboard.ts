@@ -506,12 +506,12 @@ export const dashboardConfig: DashboardConfig = {
               i: [
                 {
                   title: 'Blocks Management',
-                  href: '/admin/college/courses/blocks',
+                  href: '/admin/college/blocks',
                   icon: 'eye',
                 },
                 {
                   title: 'Add Block',
-                  href: '/admin/college/courses/blocks/add',
+                  href: '/admin/college/blocks/add',
                   icon: 'add',
                 },
               ],

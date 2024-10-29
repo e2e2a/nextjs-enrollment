@@ -37,7 +37,7 @@ const Page = () => {
   }, [search, isAllowed, isPageLoading]);
 
   // Query data based on the validated step parameter
-  const { data, isLoading, error: isEnError } = useCourseQueryByCategory(search);
+  const { data, isLoading, error: isEnError } = useCourseQueryByCategory(search as string);
 
   useEffect(() => {
     if (isLoading || !data || !data.courses) return;
