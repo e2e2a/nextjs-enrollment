@@ -24,7 +24,6 @@ import {
   approvedEnrollmentStep6Action,
   CollegeEndSemesterAction,
   getAllEnrollmentByTeacherScheduleIdAction,
-  getEnrollmentByIdAction,
   undoEnrollmentToStep1,
   undoEnrollmentToStep2,
   undoEnrollmentToStep3,
@@ -293,18 +292,6 @@ export const useEnrollmentDeleteMutation = () => {
  * Admin Enrollment
  * @returns Queries and mutations
  */
-
-export const useEnrollmentQueryById = (id: string) => {
-  return useQuery<getSingleEnrollmentResponse, Error>({
-    queryKey: ['EnrollmentById', id],
-    queryFn: () => getEnrollmentByIdAction(id),
-    retry: 0,
-    enabled: !!id,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-  });
-};
-
 export const useUpdateStudentEnrollmentScheduleMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({

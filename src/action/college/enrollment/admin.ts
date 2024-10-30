@@ -313,16 +313,16 @@ export const undoEnrollmentToStep4 = async (data: any) => {
 
 //separate for adding subjects/schedules in student
 
-export const getEnrollmentByIdAction = async (id: any): Promise<getSingleEnrollmentResponse> => {
-  try {
-    await dbConnect();
-    const enrollment = await getEnrollmentById(id);
-    return { enrollment: JSON.parse(JSON.stringify(enrollment)), status: 200 };
-  } catch (error) {
-    console.log('server e :', error);
-    return { error: 'Something went wrong', status: 500 };
-  }
-};
+// export const getEnrollmentByIdAction = async (id: any): Promise<getSingleEnrollmentResponse> => {
+//   try {
+//     await dbConnect();
+//     const enrollment = await getEnrollmentById(id);
+//     return { enrollment: JSON.parse(JSON.stringify(enrollment)), status: 200 };
+//   } catch (error) {
+//     console.log('server e :', error);
+//     return { error: 'Something went wrong', status: 500 };
+//   }
+// };
 
 export const getAllEnrollmentByTeacherScheduleIdAction = async (id: string): Promise<getEnrollmentResponse> => {
   try {

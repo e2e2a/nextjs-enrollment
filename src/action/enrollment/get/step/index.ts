@@ -17,7 +17,7 @@ export const getEnrollmentQueryStepByCategoryAction = async (data: any) => {
 
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-    if (session && session.user.role !== 'ADMIN' && session.user.role !== 'DEAN') return { error: 'Not authenticated.', status: 403 };
+    if (session && session.user.role !== 'ADMIN' && session.user.role !== 'DEAN') return { error: 'Forbidden.', status: 403 };
 
     const checkedRole = await checkRole(session.user, data);
     if (checkedRole && checkedRole.error) return { error: checkedRole.error, status: checkedRole.status };
