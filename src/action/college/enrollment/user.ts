@@ -173,17 +173,17 @@ export const getAllEnrollmentAction = async (userId: any): Promise<getEnrollment
   }
 };
 
-export const getSingleEnrollmentByUserIdIdAction = async (userId: any): Promise<getSingleEnrollmentResponse> => {
-  try {
-    await dbConnect();
-    const enrollment = await getEnrollmentByUserId(userId);
-    if (!enrollment) return { error: 'No enrollment found.', status: 404 };
-    return { enrollment: JSON.parse(JSON.stringify(enrollment)), status: 200 };
-  } catch (error) {
-    console.log('server e :', error);
-    return { error: 'Something went wrong', status: 500 };
-  }
-};
+// export const getSingleEnrollmentByUserIdIdAction = async (userId: any): Promise<getSingleEnrollmentResponse> => {
+//   try {
+//     await dbConnect();
+//     const enrollment = await getEnrollmentByUserId(userId);
+//     if (!enrollment) return { error: 'No enrollment found.', status: 404 };
+//     return { enrollment: JSON.parse(JSON.stringify(enrollment)), status: 200 };
+//   } catch (error) {
+//     console.log('server e :', error);
+//     return { error: 'Something went wrong', status: 500 };
+//   }
+// };
 
 export const updateDropSubjectAction = async (data: any) => {
   try {

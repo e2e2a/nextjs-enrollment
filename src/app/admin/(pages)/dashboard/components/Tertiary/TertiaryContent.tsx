@@ -4,10 +4,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { TertiaryDialog } from './TertiaryDialog';
-import { useAllEnrollmentQuery, useEnrollmentSetupQuery } from '@/lib/queries';
+import { useEnrollmentSetupQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 import TertiaryAlertDialog from './TertiaryAlertDialog';
 import TertiaryDialogEndSemester from './TertiaryDialogEndSemester';
+import { useEnrollmentQueryByCategory } from '@/lib/queries/enrollment/get/category';
 
 const TertiaryContent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +34,7 @@ const TertiaryContent = () => {
     { name: 'Dec', total: 0 },
   ];
   const { data: esData, isLoading: esLoading, isError: esError } = useEnrollmentSetupQuery();
-  const { data: eData, isLoading, error: eError } = useAllEnrollmentQuery('College');
+  const { data: eData, isLoading, error: eError } = useEnrollmentQueryByCategory('College');
 
   useEffect(() => {
     if (!esData || esError) return;
@@ -83,7 +84,9 @@ const TertiaryContent = () => {
       ) : (
         <TabsContent value='tertiary' className='space-y-4'>
           <div className='grid gap-4 grid-cols-1 md:grid-cols-2'>
-            <div className=''>{!esData?.enrollmentSetup?.enrollmentTertiary || !esData?.enrollmentSetup?.enrollmentTertiary?.open ? <TertiaryDialog isPending={false} setIsOpen={setIsOpen} enrollmentSetup={esData.enrollmentSetup} /> : <TertiaryAlertDialog />}</div>
+            <div className=''>
+              {!esData?.enrollmentSetup?.enrollmentTertiary || !esData?.enrollmentSetup?.enrollmentTertiary?.open ? <TertiaryDialog isPending={false} setIsOpen={setIsOpen} enrollmentSetup={esData.enrollmentSetup} /> : <TertiaryAlertDialog />}
+            </div>
             {!esData?.enrollmentSetup?.enrollmentTertiary?.open && esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear && esData?.enrollmentSetup?.enrollmentTertiary?.semester && (
               <div className='w-full flex justify-start md:justify-end'>
                 <TertiaryDialogEndSemester />
@@ -114,7 +117,7 @@ const TertiaryContent = () => {
               </CardContent>
             </Card>
           </div>
-          
+
           <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-7'></div>
           <Card className='col-span-4'>
             <CardHeader>

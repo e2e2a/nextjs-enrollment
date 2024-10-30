@@ -10,9 +10,10 @@ import { verifyADMIN } from '../../../../utils/actions/session/roles/admin';
 import { getUserById } from '@/services/user';
 
 /**
- *
  * only admin roles
- * @returns query of profile by userId
+ * handles query profile by id
+ * 
+ * @param {string} id
  */
 export const getProfileByParamsUserIdAction = async (id: string): Promise<getSingleProfileResponse> => {
   return tryCatch(async () => {

@@ -2,15 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useAllEnrollmentQuery } from '@/lib/queries';
+
 import { IEnrollment } from '@/types';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useEnrollmentQueryByCategory } from '@/lib/queries/enrollment/get/category';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
-  const { data, isLoading, error: isEnError } = useAllEnrollmentQuery('College');
+  const { data, isLoading, error: isEnError } = useEnrollmentQueryByCategory('College');
 
   useEffect(() => {
     if (isEnError || !data) return;

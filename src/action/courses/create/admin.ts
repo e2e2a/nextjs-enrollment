@@ -10,8 +10,9 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 /**
  * only admin roles
- *
- * @param {any} data
+ * handle create course
+ * 
+ * @param {object} data
  */
 export const createCourseAction = async (data: any) => {
   return tryCatch(async () => {
@@ -40,7 +41,7 @@ export const createCourseAction = async (data: any) => {
  * check photo and save to firebase
  *
  * @param {any} formData
- * @param {Object} data
+ * @param {object} data
  */
 export const checkPhotoAndSave = async (formData: any, data: any) => {
   return tryCatch(async () => {

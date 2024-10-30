@@ -4,8 +4,8 @@ import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getCoursesByCategory } from '@/services/course';
 
 /**
- * only admin roles
- *
+ * handles query courses by category
+ * 
  * @param {string} category
  */
 export const getAllCoursesByCategory = async (category: string) => {

@@ -5,6 +5,12 @@ import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getEnrollmentQueryStepByCategory } from '@/services/enrollment';
 import { checkAuth } from '@/utils/actions/session';
 
+/**
+ * only dean and admin are allowed
+ * handles query enrollment by session Id
+ * 
+ * @param {object} data 
+ */
 export const getEnrollmentQueryStepByCategoryAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();

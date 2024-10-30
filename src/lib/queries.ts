@@ -14,7 +14,7 @@ import {
   getTeacherScheduleResponse,
   IResponse,
 } from '@/types';
-import { createEnrollmentAction, deleteEnrollmentAction, getSingleEnrollmentByUserIdIdAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
+import { createEnrollmentAction, deleteEnrollmentAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
 import {
   approvedEnrollmentStep1Action,
   approvedEnrollmentStep2Action,
@@ -23,7 +23,6 @@ import {
   approvedEnrollmentStep5Action,
   approvedEnrollmentStep6Action,
   CollegeEndSemesterAction,
-  getAllEnrollmentAction,
   getAllEnrollmentByTeacherScheduleIdAction,
   getEnrollmentByIdAction,
   undoEnrollmentToStep1,
@@ -234,15 +233,15 @@ export const useAllEnrollmentByTeacherScheduleIdQuery = (data: any) => {
 //   });
 // };
 
-export const useEnrollmentQueryByUserId = (data: any) => {
-  return useQuery<getSingleEnrollmentResponse, Error>({
-    queryKey: ['EnrollmentByUserId'],
-    queryFn: () => getSingleEnrollmentByUserIdIdAction(data),
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
-};
+// export const useEnrollmentQueryByUserId = (data: any) => {
+//   return useQuery<getSingleEnrollmentResponse, Error>({
+//     queryKey: ['EnrollmentByUserId'],
+//     queryFn: () => getSingleEnrollmentByUserIdIdAction(data),
+//     retry: 0,
+//     refetchOnMount: false,
+//     refetchOnWindowFocus: false,
+//   });
+// };
 
 export const useDropSubjectMutation = () => {
   const queryClient = useQueryClient();
@@ -294,16 +293,6 @@ export const useEnrollmentDeleteMutation = () => {
  * Admin Enrollment
  * @returns Queries and mutations
  */
-export const useAllEnrollmentQuery = (category: string) => {
-  return useQuery<getEnrollmentResponse, Error>({
-    queryKey: ['CollegeEnrollment', category],
-    queryFn: () => getAllEnrollmentAction(category),
-    enabled: !!category,
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
-};
 
 export const useEnrollmentQueryById = (id: string) => {
   return useQuery<getSingleEnrollmentResponse, Error>({

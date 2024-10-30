@@ -4,6 +4,12 @@ import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getEnrollmentByUserId } from '@/services/enrollment';
 import { checkAuth } from '@/utils/actions/session';
 
+/**
+ * Any authenticated user
+ * handles query enrollment by session Id
+ * 
+ * @param {string} id 
+ */
 export const getEnrollmentBySessionIdAction = async (id: string) => {
   return tryCatch(async () => {
     await dbConnect();

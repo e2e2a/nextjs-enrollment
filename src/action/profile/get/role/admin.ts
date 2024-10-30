@@ -9,7 +9,8 @@ import { verifyADMIN } from '@/utils/actions/session/roles/admin';
 
 /**
  * only admin roles
- *
+ * handles query all users by roles
+ * 
  * @param {string} role
  */
 export const getAllUserByRoleAction = async (role: string) => {

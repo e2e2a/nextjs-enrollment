@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useAllEnrollmentQuery } from '@/lib/queries';
 import { IEnrollment } from '@/types';
 import { useSession } from 'next-auth/react';
 import LoaderPage from '@/components/shared/LoaderPage';

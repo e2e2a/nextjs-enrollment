@@ -9,9 +9,9 @@ import { getAdminProfileByUserId } from '@/services/adminProfile';
 import { checkAuth } from '@/utils/actions/session';
 
 /**
- *
  * Any authenticated role
- * @returns profile
+ * handles query profile by session id
+ * 
  */
 export const getStudentProfileBySessionIdAction = async (): Promise<getSingleProfileResponse> => {
   return tryCatch(async () => {
@@ -27,8 +27,8 @@ export const getStudentProfileBySessionIdAction = async (): Promise<getSinglePro
 };
 
 /**
- *
  * check roles
+ * 
  * @param {object} session
  */
 const checkRole = async (session: any): Promise<any> => {

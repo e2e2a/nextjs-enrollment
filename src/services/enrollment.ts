@@ -125,7 +125,31 @@ export const getEnrollmentQueryStepByCategory = async (data: any) => {
   }
 };
 
-export const getAllEnrollment = async (category: string) => {
+// export const getAllEnrollment = async (category: string) => {
+//   try {
+//     const enrollment = await Enrollment.find()
+//       .populate('userId')
+//       .populate('courseId')
+//       .populate('profileId')
+//       .populate('blockTypeId')
+//       .populate({
+//         path: 'studentSubjects.teacherScheduleId',
+//         populate: [{ path: 'profileId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
+//       })
+//       .populate({
+//         path: 'studentSubjects.profileId',
+//         populate: [{ path: 'userId' }],
+//       })
+//       .exec();
+//     //@ts-ignore
+//     const filteredEnrollment = enrollment.filter((en) => en.courseId.category === category);
+//     return filteredEnrollment;
+//   } catch (error) {
+//     console.log(error);
+//     return [];
+//   }
+// };
+export const getEnrollmentByCategory = async (category: string) => {
   try {
     const enrollment = await Enrollment.find()
       .populate('userId')

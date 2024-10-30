@@ -1,6 +1,6 @@
 'use server';
 import dbConnect from '@/lib/db/db';
-import { getAllEnrollment, getAllEnrollmentByTeacherScheduleId, getEnrollmentById, updateEnrollmentById } from '@/services/enrollment';
+import { getAllEnrollmentByTeacherScheduleId, getEnrollmentByCategory, getEnrollmentById, updateEnrollmentById } from '@/services/enrollment';
 import { getEnrollmentResponse, getSingleEnrollmentResponse } from '@/types';
 import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { Resend } from 'resend';
@@ -25,17 +25,17 @@ import TeacherSchedule from '@/models/TeacherSchedule';
 import Course from '@/models/Course';
 import BlockType from '@/models/BlockType';
 // import { verificationTemplate } from './emailTemplate/verificationTemplate';
-export const getAllEnrollmentAction = async (category: string): Promise<getEnrollmentResponse> => {
-  try {
-    await dbConnect();
-    const enrollments = await getAllEnrollment(category);
+// export const getAllEnrollmentAction = async (category: string): Promise<getEnrollmentResponse> => {
+//   try {
+//     await dbConnect();
+//     const enrollments = await getAllEnrollment(category);
 
-    return { enrollment: JSON.parse(JSON.stringify(enrollments)), status: 200 };
-  } catch (error) {
-    console.log('server e :', error);
-    return { error: 'Something went wrong', status: 500 };
-  }
-};
+//     return { enrollment: JSON.parse(JSON.stringify(enrollments)), status: 200 };
+//   } catch (error) {
+//     console.log('server e :', error);
+//     return { error: 'Something went wrong', status: 500 };
+//   }
+// };
 // export const getEnrollmentByStepAction = async (userId: any): Promise<getEnrollmentResponse> => {
 //   try {
 //     await dbConnect();
@@ -343,7 +343,7 @@ export const CollegeEndSemesterAction = async (data: any) => {
     const eSetup = await getEnrollmentSetupByName('GODOY');
     const teacherSchedule = await getAllTeacherSchedule();
     const filteredSchedule = teacherSchedule.filter((ts) => ts.category === 'College');
-    const enrollments = await getAllEnrollment(data.category);
+    const enrollments = await getEnrollmentByCategory(data.category);
     const filterEnrolledEnrollments = enrollments.filter((en) => en.enrollStatus === 'Enrolled');
     setProgress(15);
 

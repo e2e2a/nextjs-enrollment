@@ -22,6 +22,7 @@ import EditPSAFile from './edit/EditPSAFile';
 import EditGoodMoralFile from './edit/EditGoodMoralFile';
 import EditReportCardFile from './edit/EditReportCardFile';
 import EditStudentPhoto from './edit/EditStudentPhoto';
+import Link from 'next/link';
 
 type FormData = z.infer<typeof StudentProfileInAdminValidator>;
 type Iprops = {
@@ -353,12 +354,22 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
                   />
                 </div>
               </div>
-              <h1 className='text-lg sm:text-xl font-bold text-center mt-7'>Additional Information for Student Enrollment </h1>
+              <h1 className='text-lg sm:text-xl font-bold text-center mt-7'>Additional Information for Student Enrolling/Enrolled </h1>
               <h1 className='text-sm sm:text-[18px] font-medium border-b text-center mb-4'>
                 Applicant in <span className='text-green-500'>{profile.courseId.category}</span>
               </h1>
-              <h1 className='text-sm sm:text-[18px] font-medium border-b text-center mb-4'>
-                Enrollment Status: <span className='text-green-500'>{profile.enrollStatus}</span>
+              <h1 className='text-sm sm:text-[18px] font-medium border-b text-center mb-4 flex flex-col'>
+                <div className="">
+                  Enrollment Status: <span className='text-green-500'>{profile.enrollStatus}</span>
+                </div>
+                <div className='text-sm font-normal flex w-full justify-center items-center'> 
+                  <Link href={'/courses'} className='hover:underline hover:text-blue-600 text-blue-500 space-y-2'>
+                    <Button size={'sm'} type='button' className='w-auto flex gap-2'>
+                      {' '}
+                      View Enrollment Info 👉{' '}
+                    </Button>
+                  </Link>
+                </div>
               </h1>
               {isNotEditable ? (
                 <>

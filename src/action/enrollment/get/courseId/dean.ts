@@ -2,7 +2,7 @@
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
-import { getAllEnrollment } from '@/services/enrollment';
+import { getEnrollmentByCategory } from '@/services/enrollment';
 import { verifyDEAN } from '@/utils/actions/session/roles/dean';
 
 /**
@@ -35,7 +35,7 @@ const getStudent = async (id: string, courseId: string) => {
     if (!profile) return { error: 'No Profile found.', status: 404 };
     if (courseId !== profile.courseId._id.toString()) return { error: 'Forbidden', status: 403 };
 
-    const e = await getAllEnrollment(profile.courseId.category);
+    const e = await getEnrollmentByCategory(profile.courseId.category);
     // @ts-ignore
     const filteredStudents = e?.filter((s) => s.courseId._id.toString() === courseId);
 
