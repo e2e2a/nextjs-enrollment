@@ -10,7 +10,7 @@ import { verifyDEAN } from '@/utils/actions/session/roles/dean';
  *
  * @param {string} courseId
  */
-export const getAllStudentByCourseIdAction = async (courseId: string) => {
+export const getAllEnrollmentByCourseIdAction = async (courseId: string) => {
   return tryCatch(async () => {
     await dbConnect();
     const session = await verifyDEAN();

@@ -26,7 +26,6 @@ import {
   getAllEnrollmentAction,
   getAllEnrollmentByTeacherScheduleIdAction,
   getEnrollmentByIdAction,
-  getEnrollmentByStepAction,
   undoEnrollmentToStep1,
   undoEnrollmentToStep2,
   undoEnrollmentToStep3,
@@ -303,17 +302,6 @@ export const useAllEnrollmentQuery = (category: string) => {
     retry: 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
-  });
-};
-
-export const useEnrollmentQueryByStep = (data: any) => {
-  return useQuery<getEnrollmentResponse, Error>({
-    queryKey: ['EnrollmentByStep', data],
-    queryFn: () => getEnrollmentByStepAction(data),
-    retry: 0,
-    enabled: !!data,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
   });
 };
 

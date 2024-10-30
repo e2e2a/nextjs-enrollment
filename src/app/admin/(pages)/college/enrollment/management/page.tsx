@@ -1,6 +1,6 @@
 'use client';
 import Loader from '@/components/shared/Loader';
-import { useEnrollmentQueryByStep, useEnrollmentSetupQuery } from '@/lib/queries';
+import { useEnrollmentSetupQuery } from '@/lib/queries';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import { columns } from './components/step1/columns';
@@ -19,6 +19,7 @@ import { columns5 } from './components/step5/Columns5';
 import EnableADW from './components/step4/EnableADW';
 import { DataTable6 } from './components/step6/DataTable6';
 import { columns6 } from './components/step6/Columns6';
+import { useEnrollmentQueryStepByCategory } from '@/lib/queries/enrollment/get/step';
 
 const Page = () => {
   const pathname = usePathname();
@@ -44,7 +45,7 @@ const Page = () => {
   }, [search, isAllowed]);
 
   // Query data based on the validated step parameter
-  const { data, isLoading, error: isEnError } = useEnrollmentQueryByStep(toFilterData);
+  const { data, isLoading, error: isEnError } = useEnrollmentQueryStepByCategory(toFilterData);
   const { data: ESetup, isLoading: ESetupLoading, error: ESetupError } = useEnrollmentSetupQuery();
   useEffect(() => {
     if (isEnError || !data) return;
@@ -106,7 +107,7 @@ const Page = () => {
                 <div className='flex items-center py-4 text-black w-full justify-center'>
                   <h1 className='sm:text-3xl text-xl font-bold '>Step5: Student Payment</h1>
                 </div>
-                <DataTable5 columns={columns5} data={enrolledStudents as IEnrollment[]} />
+                <DataTable5 columns={columns5} data={data.enrollment as IEnrollment[]} />
               </div>
             ) : search === '6' ? (
               <div className=''>

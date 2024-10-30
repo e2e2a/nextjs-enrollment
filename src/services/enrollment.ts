@@ -102,13 +102,23 @@ export const getEnrollmentByProfileId = async (profileId: string) => {
   }
 };
 
-export const getEnrollmentByStep = async (data: any) => {
+export const getEnrollmentQueryStepByCategory = async (data: any) => {
   try {
-    const enrollment = await Enrollment.find({ step: data.step }).populate('userId').populate('courseId').populate('profileId').populate('blockTypeId').exec();
-    // @ts-ignore
-    const filteredEnrollment = enrollment.filter((en) => en.courseId.category === data.category);
-
-    return filteredEnrollment;
+    const enrollment = await Enrollment.find({ category: data.category, step: data.step })
+      .populate('userId')
+      .populate('courseId')
+      .populate('profileId')
+      .populate('blockTypeId')
+      .populate({
+        path: 'studentSubjects.teacherScheduleId',
+        populate: [{ path: 'profileId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
+      })
+      .populate({
+        path: 'studentSubjects.profileId',
+        populate: [{ path: 'userId' }],
+      })
+      .exec();
+    return enrollment;
   } catch (error) {
     console.log(error);
     return [];

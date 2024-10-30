@@ -1,6 +1,6 @@
 'use client';
 import Loader from '@/components/shared/Loader';
-import { useEnrollmentQueryByStep, useEnrollmentSetupQuery } from '@/lib/queries';
+import { useEnrollmentSetupQuery } from '@/lib/queries';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import { columns } from './components/step1/columns';
@@ -19,8 +19,8 @@ import { columns5 } from './components/step5/Columns5';
 import EnableADW from './components/step4/EnableADW';
 import { DataTable6 } from './components/step6/DataTable6';
 import { columns6 } from './components/step6/Columns6';
-import { useSession } from 'next-auth/react';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
+import { useEnrollmentQueryStepByCategory } from '@/lib/queries/enrollment/get/step';
 
 const Page = () => {
   const pathname = usePathname();
@@ -45,7 +45,7 @@ const Page = () => {
     }
   }, [search, pData, isAllowed]);
 
-  const { data, isLoading, error: isEnError } = useEnrollmentQueryByStep(toFilterData);
+  const { data, isLoading, error: isEnError } = useEnrollmentQueryStepByCategory(toFilterData);
   const { data: ESetup, isLoading: ESetupLoading, error: ESetupError } = useEnrollmentSetupQuery();
   useEffect(() => {
     if (isEnError || !data) return;
@@ -86,7 +86,7 @@ const Page = () => {
                     </span>
                   </div>
                 </div>
-                <DataTable1 columns={columns} data={enrolledStudents as IEnrollment[]} />
+                <DataTable1 columns={columns} data={data.enrollment as IEnrollment[]} />
               </div>
             ) : search === '2' ? (
               <div className=''>
@@ -100,7 +100,7 @@ const Page = () => {
                     </span>
                   </div>
                 </div>
-                <DataTable2 columns={columns2} data={enrolledStudents as IEnrollment[]} />
+                <DataTable2 columns={columns2} data={data.enrollment as IEnrollment[]} />
               </div>
             ) : search === '3' ? (
               <div className=''>
@@ -114,7 +114,7 @@ const Page = () => {
                     </span>
                   </div>
                 </div>
-                <DataTable3 columns={columns3} data={enrolledStudents as IEnrollment[]} />
+                <DataTable3 columns={columns3} data={data.enrollment as IEnrollment[]} />
               </div>
             ) : search === '4' ? (
               <div className=''>
@@ -129,7 +129,7 @@ const Page = () => {
                     </span>
                   </div>
                 </div>
-                <DataTable4 columns={columns4} data={enrolledStudents as IEnrollment[]} />
+                <DataTable4 columns={columns4} data={data.enrollment as IEnrollment[]} />
               </div>
             ) : search === '5' ? (
               <div className=''>
@@ -143,7 +143,7 @@ const Page = () => {
                     </span>
                   </div>
                 </div>
-                <DataTable5 columns={columns5} data={enrolledStudents as IEnrollment[]} />
+                <DataTable5 columns={columns5} data={data.enrollment as IEnrollment[]} />
               </div>
             ) : search === '6' ? (
               <div className=''>
