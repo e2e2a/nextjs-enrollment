@@ -26,10 +26,13 @@ const Page = () => {
       }
     }
   }, [resE, eError, router]);
+  
   return (
     <>
       {isPageLoading ? (
-        <LoaderPage />
+        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>
+          <LoaderPage />
+        </div>
       ) : (
         <div className='w-full rounded-md flex flex-col filter-none items-center px-6 py-8 justify-center'>
           <div className='w-full flex justify-center items-center '>

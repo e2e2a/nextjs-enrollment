@@ -47,7 +47,7 @@ export const columns: ColumnDef<IRoom>[] = [
   {
     accessorFn: (row) => row.roomType, // Use accessorFn for nested fields
     id: 'roomType',
-    header: 'roomType',
+    header: 'Room Type',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
@@ -60,7 +60,7 @@ export const columns: ColumnDef<IRoom>[] = [
   {
     accessorFn: (row) => row.floorLocation, // Use accessorFn for nested fields
     id: 'floorLocation',
-    header: 'floorLocation',
+    header: 'Floor Location',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (

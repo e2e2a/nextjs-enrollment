@@ -8,8 +8,7 @@ import { Form } from '@/components/ui/form';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EnrollmentStep1 } from '@/lib/validators/Validator';
-import { useEnrollmentDeleteMutation, useEnrollmentStep1Mutation } from '@/lib/queries';
+import { useEnrollmentDeleteMutation } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import { selectType, studentYearData } from '@/constant/enrollment';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
@@ -19,6 +18,10 @@ import FileGoodMoral from './FileGoodMoral';
 import FileTOR from './FileTOR';
 import Image from 'next/image';
 import Input from './Input';
+import { StudentProfileExtension } from '@/lib/validators/profile/extension';
+import { SelectCourse } from './SelectCourse';
+import InputDisabled from './InputDisabled';
+import { useCreateEnrollmentByCategoryMutation } from '@/lib/queries/enrollment/create';
 
 type IProps = {
   search: any;
@@ -43,9 +46,10 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
   const [fileTORError, setTORError] = useState('');
   const fileTORInputRef = useRef<HTMLInputElement>(null);
 
+  const [selectedCourse, setSelectedCourse] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const { data: s } = useSession();
-  
+
   const handleSelectedPhoto = (files: FileList | null) => {
     if (files && files?.length > 0) {
       if (files[0].size < 1000000) {
@@ -130,19 +134,15 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
   const handleRemoveFile = () => setFilePreview(null);
   const handleRemoveFileGoodMoral = () => setFileGoodMoralPreview(null);
   const handleRemoveFileTOR = () => setFileTORPreview(null);
-  const mutation = useEnrollmentStep1Mutation();
+  const mutation = useCreateEnrollmentByCategoryMutation();
   const deleteMutation = useEnrollmentDeleteMutation();
-  const form = useForm<z.infer<typeof EnrollmentStep1>>({
-    resolver: zodResolver(EnrollmentStep1),
+  const form = useForm<z.infer<typeof StudentProfileExtension>>({
+    resolver: zodResolver(StudentProfileExtension),
     defaultValues: {
-      /**
-       * note that separate the validators to save in profile and in enrollment
-       */
-      courseCode: search !== null ? search.toLowerCase() : '', //change this to form.setValues
       studentStatus: '',
       studentYear: '',
-      studentSemester: '',
-      schoolYear: '',
+      // studentSemester: '',
+      // schoolYear: '',
 
       primarySchoolName: '',
       primarySchoolYear: '',
@@ -162,40 +162,57 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
       MothersContact: '',
     },
   });
-  useEffect(() => {
-    form.setValue('studentSemester', enrollmentSetup.enrollmentTertiary.semester);
-    form.setValue('schoolYear', enrollmentSetup.enrollmentTertiary.schoolYear);
-  }, [form, enrollmentSetup]);
-  const onSubmit: SubmitHandler<z.infer<typeof EnrollmentStep1>> = async (data) => {
+  
+  const onSubmit = async (e: any) => {
+    e.preventDefault();
     const formData = new FormData();
-    if (!filePreview) return setFileError('PSA Birth is required.');
-    formData.append('filePsa', filePreview!);
     if (!photoPreview) return setPhotoError('Student Photo is required.');
     formData.append('photo', photoPreview!);
-    if (!fileGoodMoralPreview) return setFileGoodMoralError('Good Moral is required.');
-    formData.append('fileGoodMoral', fileGoodMoralPreview!);
-    if (!fileTORPreview) return setTORError('Report Card is required.');
-    formData.append('fileTOR', fileTORPreview!);
+    if (!filePreview) return setFileError('PSA Birth is required.');
+    formData.append('filePsa', filePreview);
+    const isAnyFilePresent = fileGoodMoralPreview || fileTORPreview;
 
-    data.courseCode = data.courseCode.toLowerCase();
-    data.studentYear = data.studentYear.toLowerCase();
-    data.studentSemester = data.studentSemester.toLowerCase();
-    data.schoolYear = data.schoolYear.toLowerCase();
+    if (!isAnyFilePresent) {
+      setFileGoodMoralError('Good Moral is required.');
+      setTORError('Report Card is required.');
+    } else {
+      setFileGoodMoralError('');
+      setTORError('');
 
+      if (fileGoodMoralPreview) {
+        formData.append('fileGoodMoral', fileGoodMoralPreview);
+      }
+
+      if (fileTORPreview) {
+        formData.append('fileTOR', fileTORPreview);
+      }
+    }
+    const isProfileValid = await form.trigger();
+    // if (!isProfileValid) return setIsPending(false);
+    if (!isProfileValid) return;
+    // data.courseCode = data.courseCode.toLowerCase();
+    // data.studentYear = data.studentYear.toLowerCase();
+    // data.studentSemester = data.studentSemester.toLowerCase();
+    // data.schoolYear = data.schoolYear.toLowerCase();
+    const profileData = form.getValues();
     const dataa = {
-      ...data,
-      userId: s?.user.id,
+      ...profileData,
+      courseCode: selectedCourse,
       formData: formData,
+      category: 'College'
     };
 
     mutation.mutate(dataa, {
       onSuccess: (res) => {
+        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            console.log(res);
-            makeToastSucess(`You are enrolling to this course ${data.courseCode.toUpperCase()}`);
+            setTimeout(() => {
+              makeToastSucess(`You are enrolling to this course ${selectedCourse.toUpperCase()}`);
+            }, 500);
+            setSelectedCourse('');
             return;
           default:
             // setIsPending(false);
@@ -248,17 +265,17 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
             enrollment. If you have trouble filling out any fields, please check out our documentation or contact us at <span className='text-blue-500 cursor-pointer'>+639123456789</span> for further information.
           </CardDescription>
         </CardHeader>
-        <Form {...form}>
-          <form action='' className='' method='post' onSubmit={form.handleSubmit(onSubmit)}>
+        <form action='' className='' method='post' onSubmit={(e) => onSubmit(e)}>
+          <Form {...form}>
             <CardContent className='w-full space-y-2'>
               <div className='flex flex-col gap-4 w-full'>
                 <div className='grid sm:grid-cols-2 gap-4 w-full'>
-                  <SelectInput label='Course name' form={form} name={'courseCode'} selectItems={courses} placeholder='Select course' />
-                  <SelectInput label='Student Status' form={form} name={'studentStatus'} selectItems={selectType.studentStatus} placeholder='Select semester' />
+                  <SelectCourse selectItems={courses} placeholder='Select course' selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse} />
+                  <SelectInput label='Student Status' form={form} name={'studentStatus'} selectItems={selectType.studentStatus} placeholder='Select status' />
                   <SelectInput label='Select year' form={form} name={'studentYear'} selectItems={studentYearData} placeholder='Select year' />
                   {/* <SelectInput label='Select semester' form={form} name={'studentSemester'} selectItems={studentSemesterData} placeholder='Select semester' /> */}
-                  <Input label={`Select semester`} type='text' form={form} name={'studentSemester'} disabled={true} />
-                  <Input label={`School Year`} type='text' form={form} name={'schoolYear'} disabled={true} />
+                  <InputDisabled label={`Semester`} type='text' disabled={true} value={enrollmentSetup.enrollmentTertiary.semester} />
+                  <InputDisabled label={`School Year`} type='text' disabled={true} value={enrollmentSetup.enrollmentTertiary.schoolYear} />
                 </div>
                 <div className='grid grid-cols-1 xs:grid-cols-2 w-full gap-5'>
                   <FileBirth handleSelectedFile={handleSelectedFile} handleRemoveFile={handleRemoveFile} handleClick={handleClick} fileInputRef={fileInputRef} filePreview={filePreview} fileError={fileError} isUploading={isUploading} />
@@ -326,8 +343,8 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
                 </Button>
               </div>
             </CardFooter>
-          </form>
-        </Form>
+          </Form>
+        </form>
       </Card>
     </TabsContent>
   );

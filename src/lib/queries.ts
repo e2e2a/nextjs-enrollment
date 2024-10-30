@@ -266,17 +266,17 @@ export const useAddSubjectMutation = () => {
     },
   });
 };
-export const useEnrollmentStep1Mutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<getEnrollmentResponse, Error, any>({
-    mutationFn: async (data) => createEnrollmentAction(data),
-    onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: ['userProfile'] });
-      queryClient.refetchQueries({ queryKey: ['Enrollment'] });
-      queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
-    },
-  });
-};
+// export const useEnrollmentStep1Mutation = () => {
+//   const queryClient = useQueryClient();
+//   return useMutation<getEnrollmentResponse, Error, any>({
+//     mutationFn: async (data) => createEnrollmentAction(data),
+//     onSuccess: () => {
+//       queryClient.refetchQueries({ queryKey: ['userProfile'] });
+//       queryClient.refetchQueries({ queryKey: ['Enrollment'] });
+//       queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
+//     },
+//   });
+// };
 
 export const useEnrollmentDeleteMutation = () => {
   const queryClient = useQueryClient();

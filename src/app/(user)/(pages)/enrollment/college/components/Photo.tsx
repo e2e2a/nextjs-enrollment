@@ -15,7 +15,7 @@ const Photo = ({ handleSelectedPhoto, handleRemovePhoto, handleClickPhoto, Photo
   //   const handleRemoveFile = () => setImageFile(undefined);
   return (
     <div className='w-full items-center justify-center'>
-      <span className='text-xs sm:text-sm px-2'>Student Photo</span>
+      <span className='text-xs sm:text-sm px-2'>2x2 Photo</span>
       {photoPreview ? (
         <span className='cursor-pointer pl-1 hover:underline text-blue-600 gap-0 md:gap-2 rounded-md flex items-center'>
           <div className='bg-slate-100 pl-1 rounded-full'>
