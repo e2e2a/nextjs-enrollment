@@ -1,7 +1,7 @@
 'use server';
 import { checkAuth } from '@/utils/actions/session';
 import dbConnect from '@/lib/db/db';
-import { comparePassword, hashPassword } from '@/lib/hash/bcrypt';
+import { comparePassword, hashPassword } from '@/lib/helpers/hash/bcrypt';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { NewPasswordValidator } from '@/lib/validators/user/update/password';
 import { updateUserById } from '@/services/user';

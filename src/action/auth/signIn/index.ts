@@ -1,6 +1,6 @@
 'use server';
-import { comparePassword } from '@/lib/hash/bcrypt';
-import rateLimit from '@/lib/limiter/rate-limit';
+import { comparePassword } from '@/lib/helpers/hash/bcrypt';
+import rateLimit from '@/lib/helpers/limiter/rate-limit';
 import { sendVerificationEmail } from '@/lib/mail/mail';
 import { getUserByEmail } from '@/services/user';
 import { generateVerificationToken } from '@/services/token';

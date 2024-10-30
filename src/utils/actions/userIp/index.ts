@@ -1,6 +1,6 @@
 'use server';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import { getIpAddress } from '@/lib/limiter/getIp';
+import { getIpAddress } from '@/lib/helpers/limiter/getIp';
 import { UserIp } from '@/models/UserIp';
 import { createActiveIp } from '@/services/userIp';
 

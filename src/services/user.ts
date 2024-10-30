@@ -1,5 +1,5 @@
 'use server';
-import { hashPassword } from '@/lib/hash/bcrypt';
+import { hashPassword } from '@/lib/helpers/hash/bcrypt';
 import { User } from '@/models/User';
 import { deleteStudentProfileByUserId } from './studentProfile';
 

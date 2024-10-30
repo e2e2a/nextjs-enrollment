@@ -1,6 +1,6 @@
 'use server';
 import dbConnect from '@/lib/db/db';
-import { hashPassword } from '@/lib/hash/bcrypt';
+import { hashPassword } from '@/lib/helpers/hash/bcrypt';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { ResetPasswordValidator } from '@/lib/validators/resetPassword';
 import { ResetPassword } from '@/models/ResetPasswords';
