@@ -1,4 +1,4 @@
-import { getProfileByParamsUserIdAction } from '@/action/profile/get/userId/admin';
+import { getProfileByParamsUserIdAction } from '@/action/profile/get/userId';
 import { getSingleProfileResponse } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 
@@ -10,7 +10,7 @@ import { useQuery } from '@tanstack/react-query';
  */
 export const useProfileQueryByParamsUserId = (id: string) => {
   return useQuery<getSingleProfileResponse, Error>({
-    queryKey: ['ProfileByParamsUserIdInAdmin', id],
+    queryKey: ['ProfileByParamsUserId', id],
     queryFn: () => getProfileByParamsUserIdAction(id),
     enabled: !!id,
     retry: 0,

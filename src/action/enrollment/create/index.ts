@@ -26,7 +26,7 @@ export const createEnrollmentByCategoryAction = async (data: any) => {
     const checkEnrollment = await getEnrollmentByUserId(session.user._id);
     if (checkEnrollment) return { error: 'You are already Enrolled/Enrolling.', status: 409 };
 
-    // we can check here if the student is having a enrollmentrecord and check the category
+    // we can check here if the student is having a enrollmentrecord and check by the category
 
     const checkedCategory = await checkCategory(session.user, data);
     if (checkedCategory && checkedCategory.error) return { error: checkedCategory.error, status: checkedCategory.status };
@@ -109,7 +109,7 @@ const validateData = async (user: any, files: any, profileId: string, courseId: 
       courseId,
     };
     const pData = {
-      ...profileParse,
+      ...profileParse.data,
       ...sameData,
       psaUrl: files.filePsa.name,
       photoUrl: files.photo.name,
@@ -172,7 +172,7 @@ const uploadFileOrPhoto = async (profile: any, files: any) => {
     }
 
     if (files.fileTOR && files.fileTOR.name) {
-      const storageRefFileTOR = ref(storage, `enrollment/reportCard/${files.getProfile._id}/${files.fileTOR.name}`);
+      const storageRefFileTOR = ref(storage, `enrollment/reportCard/${files.profile._id}/${files.fileTOR.name}`);
       uploads.push(uploadBytes(storageRefFileTOR, files.fileTOR, { contentType: files.fileTOR.type }));
     }
 

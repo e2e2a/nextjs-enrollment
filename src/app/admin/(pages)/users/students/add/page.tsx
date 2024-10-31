@@ -62,8 +62,6 @@ const Page = () => {
     const isUserValid = await formUser.trigger();
     if (configProfile === 'Yes') {
       const isProfileValid = await formProfile.trigger();
-      const profileData = formProfile.getValues();
-      console.log('profileData', profileData);
       if (!isUserValid || !isProfileValid) return setIsPending(false);
     } else {
       if (!isUserValid) return setIsPending(false);

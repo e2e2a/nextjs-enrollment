@@ -8,22 +8,24 @@ import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getAdminProfileByUserId } from '@/services/adminProfile';
 import { verifyADMIN } from '../../../../utils/actions/session/roles/admin';
 import { getUserById } from '@/services/user';
+import { checkAuth } from '@/utils/actions/session';
 
 /**
  * only admin roles
  * handles query profile by id
- * 
+ *
  * @param {string} id
  */
 export const getProfileByParamsUserIdAction = async (id: string): Promise<getSingleProfileResponse> => {
   return tryCatch(async () => {
     await dbConnect();
-    const session = await verifyADMIN();
+    const session = await checkAuth();
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
+    if (session && session.user.role !== 'ADMIN' && session.user.role !== 'DEAN') return { error: 'Forbidden.', status: 403 };
 
-    const checkedR = await checkRole(id);
-    if (!checkedR.profile || checkedR.error) return { error: 'Profile not found.', status: 404 };
-    
+    const checkedR = await checkSeachRole(session.user, id);
+    if (!checkedR.profile || checkedR.error) return { error: checkedR.error, status: 404 };
+
     return { profile: checkedR.profile, status: 200 };
   });
 };
@@ -33,22 +35,29 @@ export const getProfileByParamsUserIdAction = async (id: string): Promise<getSin
  * check roles
  * @param {string} id
  */
-const checkRole = async (id: any): Promise<any> => {
+const checkSeachRole = async (user: any, id: any) => {
   return tryCatch(async () => {
-    const user = await getUserById(id);
+    const u = await getUserById(id);
+    if (user.role === 'DEAN' && u.role !== 'STUDENT') return { error: 'Dont have permission.', status: 403 };
     let profile;
-    switch (user.role) {
+    switch (u.role) {
       case 'STUDENT':
-        profile = await getStudentProfileByUserId(user._id);
+        profile = await getStudentProfileByUserId(u._id);
+        
+        if (user.role === 'DEAN') {
+          const d = await getDeanProfileByUserId(user._id);
+          if (d.courseId._id.toString() !== profile.courseId._id.toString) return { error: 'Dont have permission.', status: 403 };
+        }
+
         break;
       case 'TEACHER':
-        profile = await getTeacherProfileByUserId(user._id);
+        profile = await getTeacherProfileByUserId(u._id);
         break;
       case 'DEAN':
-        profile = await getDeanProfileByUserId(user._id);
+        profile = await getDeanProfileByUserId(u._id);
         break;
       case 'ADMIN':
-        profile = await getAdminProfileByUserId(user._id);
+        profile = await getAdminProfileByUserId(u._id);
         break;
       default:
         return { error: 'Forbidden.', status: 403 };

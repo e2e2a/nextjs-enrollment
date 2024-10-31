@@ -177,72 +177,7 @@ export const StudentCurriculumValidator = z.object({
     .refine((val) => Number(val) >= 1 && Number(val) <= 15, { message: 'Order must be between 1 and 15.' }),
 });
 
-export const StudentProfileInAdminValidator = z
-  .object({
-    // firstname: z.string().min(2, { message: 'Firstname must atleast 2 characters...' }),
-    firstname: z
-      .string()
-      .min(2, 'Name should have at least 2 characters')
-      .refine((value) => nameRegex.test(value ?? ''), { message: 'Name should only contain valid alphabets...' }),
-    middlename: z.string().min(1, { message: 'Middlename must atleast 2 characters...' }),
-    lastname: z.string().min(2, { message: 'Lastname must atleast 2 characters...' }),
-    //extension name added
-    extensionName: z.string().optional(),
-    numberStreet: z.string().min(1, { message: 'Number,Street is required...' }),
-    barangay: z.string().min(1, { message: 'Barangay is required...' }),
-    district: z.string().min(1, { message: 'District is required...' }),
-    cityMunicipality: z.string().min(1, { message: 'City/Municipality is required...' }),
-    province: z.string().min(1, { message: 'Province is required...' }),
-    region: z.string().min(1, { message: 'Region is required...' }),
-    emailFbAcc: z.string().optional(),
-    contact: z
-      .string()
-      .min(11, { message: 'Contact number is required...' })
-      .regex(/^(\+63|0)9\d{9}$/, { message: 'It should be either +639XXXXXXXXX or 09XXXXXXXXX.' }),
-    nationality: z.string().min(1, { message: 'Nationality is required...' }),
-    sex: z.string().min(1, { message: 'Sex is required...' }),
-    civilStatus: z.string().min(1, { message: 'Civil Status is required...' }),
-    employmentStatus: z.string().min(1, { message: 'Employment Status is required...' }),
-    birthday: z.date({ required_error: 'Provide a valid date...' }).refine(
-      (date) => {
-        const isAtLeast14YearsOld = calculateAge(date) >= 14;
-        return isAtLeast14YearsOld;
-      },
-      {
-        message: 'You must be at least 14 years old.',
-      }
-    ),
-    age: z.number().optional(),
-    birthPlaceCity: z.string().min(6, { message: 'City/Municipality is required...' }),
-    birthPlaceProvince: z.string().min(6, { message: 'Province is required...' }),
-    birthPlaceRegion: z.string().min(6, { message: 'Region is required...' }),
-    educationAttainment: z.string().min(6, { message: 'Education Attainment is required.' }),
-    learnerOrTraineeOrStudentClassification: z.string().min(1, { message: 'Classification is required...' }),
-
-    primarySchoolName: z.string().min(5, { message: 'School Name is required...' }).max(30, { message: 'School Name length too long.' }),
-    primarySchoolYear: z.string().min(4, { message: 'School Year is required...' }).max(20, { message: 'School Year length too long.' }),
-    secondarySchoolName: z.string().min(5, { message: 'School Name is required...' }).max(30, { message: 'School Name length too long.' }),
-    secondarySchoolYear: z.string().min(4, { message: 'School Year is required...' }).max(20, { message: 'School Year length too long.' }),
-    seniorHighSchoolName: z.string().min(5, { message: 'School Name is required...' }).max(30, { message: 'School Name length too long.' }),
-    seniorHighSchoolYear: z.string().min(4, { message: 'School Year is required...' }).max(20, { message: 'School Year length too long.' }),
-    seniorHighSchoolStrand: z.string().min(3, { message: 'School Strand is required...' }).max(20, { message: 'School Strand length too long.' }),
-    FathersLastName: z.string().min(2, { message: `Father's Last Name is required...` }).max(20, { message: `Father's Last Name length too long.` }),
-    FathersFirstName: z.string().min(2, { message: `Father's First Name is required...` }).max(20, { message: `Father's First Name length too long.` }),
-    FathersMiddleName: z.string(),
-    FathersContact: z.string().optional(),
-    MothersLastName: z.string().min(2, { message: `Mother's Last Name is required...` }).max(20, { message: `Mother's Last Name length too long.` }),
-    MothersFirstName: z.string().min(2, { message: `Mother's First Name is required...` }).max(20, { message: `Mother's First Name length too long.` }),
-    MothersMiddleName: z.string(),
-    MothersContact: z.string().optional(),
-  })
-  .transform((data) => {
-    return {
-      ...data,
-      age: calculateAge(data.birthday),
-    };
-  });
-
-  export const EnrollmentSetupOpenEnrollmentCollegeValidator = z.object({
-    schoolYear: z.string().min(1, { message: 'Room Name is required...' }),
-    semester: z.string().min(1, { message: 'Room Type is required...' }),
-  });
+export const EnrollmentSetupOpenEnrollmentCollegeValidator = z.object({
+  schoolYear: z.string().min(1, { message: 'Room Name is required...' }),
+  semester: z.string().min(1, { message: 'Room Type is required...' }),
+});

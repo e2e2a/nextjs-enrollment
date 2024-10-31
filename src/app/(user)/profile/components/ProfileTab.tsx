@@ -163,10 +163,28 @@ const ProfileTab = ({ profile }: Iprops) => {
                 <div className='lg:mb-0'>
                   <h1 className='text-lg font-bold border-b text-center lg:text-left'>Personal Information</h1>
                   <div className={`space-y-3 mt-2 mb-3`}>
-                    <SelectInput isNotEditable={isNotEditable} name={'sex'} form={form} label={'Sex:'} classNameInput={'capitalize'} selectItems={profileSelectItems.sex} placeholder='Select gender' />
-                    <SelectInput isNotEditable={isNotEditable} name={'civilStatus'} form={form} label={'Civil Status:'} classNameInput={'capitalize'} selectItems={profileSelectItems.civilStatus} placeholder='Select civil status' />
-                    <SelectInput isNotEditable={isNotEditable} name={'employmentStatus'} form={form} label={'Employment Status:'} classNameInput={'capitalize'} selectItems={profileSelectItems.employmentStatus} placeholder='Select employment status' />
-                    <SelectInput isNotEditable={isNotEditable} name={'educationAttainment'} form={form} label={'Education Attainment:'} classNameInput={'capitalize'} selectItems={profileSelectItems.educationAttainment} placeholder='Select employment status' />
+                    <SelectInput isNotEditable={isNotEditable} name={'sex'} form={form} label={'Sex:'} classNameInput={'capitalize'} selectItems={profileSelectItems.sex} placeholder='Select gender' profile={profile} />
+                    <SelectInput isNotEditable={isNotEditable} name={'civilStatus'} form={form} label={'Civil Status:'} classNameInput={'capitalize'} selectItems={profileSelectItems.civilStatus} placeholder='Select civil status' profile={profile} />
+                    <SelectInput
+                      isNotEditable={isNotEditable}
+                      name={'employmentStatus'}
+                      form={form}
+                      label={'Employment Status:'}
+                      classNameInput={'capitalize'}
+                      selectItems={profileSelectItems.employmentStatus}
+                      placeholder='Select employment status'
+                      profile={profile}
+                    />
+                    <SelectInput
+                      isNotEditable={isNotEditable}
+                      name={'educationAttainment'}
+                      form={form}
+                      label={'Education Attainment:'}
+                      classNameInput={'capitalize'}
+                      selectItems={profileSelectItems.educationAttainment}
+                      placeholder='Select employment status'
+                      profile={profile}
+                    />
                     {/* <BirthdayInput isNotEditable={isNotEditable} name={'birthday'} form={form} label={'Birthday:'} classNameInput={'capitalize'} /> */}
                   </div>
                   <div className='mb-5 mt-7 lg:mb-0'>
@@ -184,6 +202,7 @@ const ProfileTab = ({ profile }: Iprops) => {
                   <h1 className='text-lg font-bold border-b text-center lg:text-left'>Learner/Trainee/Student (Clients) </h1>
                   <div className={`space-y-3 mt-2 mb-3`}>
                     <SelectInput
+                      profile={profile}
                       isNotEditable={isNotEditable}
                       name={'learnerOrTraineeOrStudentClassification'}
                       form={form}

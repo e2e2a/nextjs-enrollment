@@ -39,7 +39,7 @@ const ReportCardFile = ({ user }: { user: any }) => {
             <DialogContent className='max-w-xl bg-white w-full py-10 '>
               <DialogHeader>
                 <DialogTitle className='flex flex-col space-y-1'>
-                  <span>PSA file</span>
+                  <span>Report Card/TOR</span>
                   <span className='font-medium sm:text-lg text-xs'>
                     Student:{' '}
                     <span className=' capitalize sm:text-lg text-xs'>

@@ -6,43 +6,39 @@ import EmailTab from './components/EmailTab';
 import PasswordTab from './components/PasswordTab';
 import ProfileTab from './components/ProfileTab';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useParams, usePathname } from 'next/navigation';
-import Loader from '@/components/shared/Loader';
 import ErrorPage from './components/ErrorPage';
-import ProfileTabEnrollCollege from './components/ProfileTabEnrollCollege';
-import { useProfileQueryByParamsUserId } from '@/lib/queries/profile/get/userId/admin';
+import ProfileTabEnrollCollege from './components/tabs/college/ProfileTabEnrollCollege';
+import { useProfileQueryByParamsUserId } from '@/lib/queries/profile/get/userId';
 
 const ProfilePage = ({ params }: { params: { id: string } }) => {
   const { data } = useSession();
   const [isError, setIsError] = useState(false);
-  const [isOpen, setIsOpen] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [isPageLoading, setIsPageLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('profile');
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+
   const handleTabChange = (newTab: string) => {
     setActiveTab(newTab);
   };
-  const session = data?.user;
+
   const { data: res, isLoading, error } = useProfileQueryByParamsUserId(params.id as string);
 
   useEffect(() => {
-    if (error || !res) {
-      // setIsError(true);
-      return;
-    }
+    if (error || !res) return;
 
     if (res) {
       if (res.profile) {
-        setLoading(false);
+        setIsPageLoading(false);
+      } else if (res.error) {
+        setIsError(true);
+        setIsPageLoading(false);
       }
     }
-  }, [error, res, session, loading]);
+  }, [error, res]);
+
   return (
     <>
-      {loading ? (
-        <Loader />
+      {isPageLoading ? (
+        <LoaderPage />
       ) : (
         <>
           {isError ? (
@@ -66,19 +62,8 @@ const ProfilePage = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='w-full flex flex-col justify-center items-center bg-slate-100 '>
                     <TabsContent value='profile' className={`w-full bg-white my-3 max-w-[69rem] rounded-lg`}>
-                      {(res.profile.enrollStatus === 'Pending' || res.profile.enrollStatus === 'Enrolled') ? (
-                        /**
-                         * @todo
-                         * now we can specify here what the student is enrolling and what to display by there enrolling category data
-                         */
-                        res.profile.courseId && res.profile.courseId.category.toLowerCase() === 'college' ? (
-                          <ProfileTabEnrollCollege profile={res?.profile} />
-                        ) : (
-                          <ProfileTab profile={res?.profile} />
-                        )
-                      ) : (
-                        <ProfileTab profile={res?.profile} />
-                      )}
+                      {!res.profile.enrollStatus && <ProfileTab profile={res?.profile} />}
+                      {res.profile.courseId && res.profile.courseId.category.toLowerCase() === 'college' && <ProfileTabEnrollCollege profile={res?.profile} />}
                     </TabsContent>
                     <TabsContent value='email' className='w-full mb-3 max-w-[69rem]'>
                       <EmailTab />

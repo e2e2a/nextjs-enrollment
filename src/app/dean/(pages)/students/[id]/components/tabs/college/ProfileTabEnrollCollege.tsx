@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
@@ -7,12 +7,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Icons } from '@/components/shared/Icons';
+import Input from '../../Input';
+import { BirthdayInput } from '../../BirthdayInput';
+import { SelectInput } from '../../selectInput';
 import { profileSelectItems } from '@/constant/profile/selectItems';
 // import { useStudentProfileMutation } from '@/lib/queries';
 import { StudentProfileUpdateValidator } from '@/lib/validators/profile/update';
-import { SelectInput } from './selectInput';
-import Input from './Input';
-import { BirthdayInput } from './BirthdayInput';
+import ExtensionData from './ExtensionData';
+import { StudentProfileExtension } from '@/lib/validators/profile/extension';
 import { useUpdateProfileByAdminMutation } from '@/lib/queries/profile/update/id';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 
@@ -22,9 +24,15 @@ type Iprops = {
 };
 
 const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
+  const [photoPreview, setPhotoPreview] = useState<File | null>(null);
+  const [filePreview, setFilePreview] = useState<File | null>(null);
+  const [fileGoodMoralPreview, setFileGoodMoralPreview] = useState<File | null>(null);
+  const [fileTORPreview, setFileTORPreview] = useState<File | null>(null);
+
   const [isPending, setIsPending] = useState(false);
   const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile.isVerified);
   const mutation = useUpdateProfileByAdminMutation();
+
   const formProfile = useForm<z.infer<typeof StudentProfileUpdateValidator>>({
     resolver: zodResolver(StudentProfileUpdateValidator),
     defaultValues: {
@@ -53,6 +61,52 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
     },
   });
 
+  const formExtenstion = useForm<z.infer<typeof StudentProfileExtension>>({
+    resolver: zodResolver(StudentProfileExtension),
+    defaultValues: {
+      studentStatus: '',
+      studentYear: '',
+      // studentSemester: '',
+      // schoolYear: '',
+
+      primarySchoolName: '',
+      primarySchoolYear: '',
+      secondarySchoolName: '',
+      secondarySchoolYear: '',
+      seniorHighSchoolName: '',
+      seniorHighSchoolYear: '',
+      seniorHighSchoolStrand: '',
+
+      FathersLastName: '',
+      FathersFirstName: '',
+      FathersMiddleName: '',
+      FathersContact: '',
+      MothersLastName: '',
+      MothersFirstName: '',
+      MothersMiddleName: '',
+      MothersContact: '',
+    },
+  });
+  useEffect(() => {
+    formExtenstion.setValue('studentStatus', profile.studentStatus);
+    formExtenstion.setValue('studentYear', profile.studentYear);
+    formExtenstion.setValue('primarySchoolName', profile.primarySchoolName);
+    formExtenstion.setValue('primarySchoolYear', profile.primarySchoolYear);
+    formExtenstion.setValue('secondarySchoolName', profile.secondarySchoolName);
+    formExtenstion.setValue('secondarySchoolYear', profile.secondarySchoolYear);
+    formExtenstion.setValue('seniorHighSchoolName', profile.seniorHighSchoolName);
+    formExtenstion.setValue('seniorHighSchoolYear', profile.seniorHighSchoolYear);
+    formExtenstion.setValue('seniorHighSchoolStrand', profile.seniorHighSchoolStrand);
+    formExtenstion.setValue('FathersLastName', profile.FathersLastName);
+    formExtenstion.setValue('FathersFirstName', profile.FathersFirstName);
+    formExtenstion.setValue('FathersMiddleName', profile.FathersMiddleName || '');
+    formExtenstion.setValue('FathersContact', profile.FathersContact || '');
+    formExtenstion.setValue('MothersLastName', profile.MothersLastName);
+    formExtenstion.setValue('MothersFirstName', profile.MothersFirstName);
+    formExtenstion.setValue('MothersMiddleName', profile.MothersMiddleName || '');
+    formExtenstion.setValue('MothersContact', profile.MothersContact || '');
+  }, [formExtenstion, profile, isNotEditable]);
+
   useEffect(() => {
     formProfile.setValue('firstname', profile.firstname);
     formProfile.setValue('middlename', profile.middlename);
@@ -80,12 +134,22 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    const formData = new FormData();
     setIsPending(true);
-    const isProfileValid = await formProfile.trigger();
-    if (!isProfileValid) return setIsPending(false);
+    const formData = new FormData();
+    if (filePreview) formData.append('filePsa', filePreview);
+    if (photoPreview) formData.append('photo', photoPreview);
+    if (fileGoodMoralPreview) formData.append('fileGoodMoral', fileGoodMoralPreview);
+    if (fileTORPreview) formData.append('fileTOR', fileTORPreview);
 
+    const isProfileValid = await formProfile.trigger();
+    if (profile.enrollStatus === 'Enrolled' || profile.enrollStatus === 'Pending') {
+      const isExtensionValid = await formExtenstion.trigger();
+      if (!isExtensionValid || !isProfileValid) return setIsPending(false);
+    } else {
+      if (!isProfileValid) return setIsPending(false);
+    }
     const profileData = formProfile.getValues();
+    const extensionData = formExtenstion.getValues();
     profileData.firstname = profileData.firstname.toLowerCase();
     profileData.lastname = profileData.lastname.toLowerCase();
     profileData.middlename = profileData.middlename.toLowerCase();
@@ -93,10 +157,12 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
 
     const data = {
       ...profileData,
-      userId: profile?.userId._id,
-      configuredExtension: false,
+      ...extensionData,
       formData: formData,
+      configuredExtension: true,
+      userId: profile?.userId._id,
     };
+
     mutation.mutate(data, {
       onSuccess: (res) => {
         console.log(res);
@@ -105,6 +171,7 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
           case 201:
           case 203:
             makeToastSucess(res?.message);
+            setIsNotEditable(!isNotEditable);
             return;
           default:
             makeToastError(res.error);
@@ -116,8 +183,6 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
       },
     });
   };
-
-  //added
 
   return (
     <form action='' method='post' onSubmit={(e) => onSubmit(e)}>
@@ -151,8 +216,8 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
           </CardTitle>
         </CardHeader>
         <CardContent className=''>
-          <Form {...formProfile}>
-            <div className='grid grid-cols-1'>
+          <div className='grid grid-cols-1'>
+            <Form {...formProfile}>
               <div className=' mb-5 lg:mb-0'>
                 <h1 className='text-lg font-bold border-b text-left'>Manpower Profile</h1>
                 <div className={`space-y-3 mt-2 mb-3`}>
@@ -192,8 +257,8 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
                     profile={profile}
                   />
                   <SelectInput
-                    profile={profile}
                     isNotEditable={isNotEditable}
+                    profile={profile}
                     name={'educationAttainment'}
                     form={formProfile}
                     label={'Education Attainment:'}
@@ -201,6 +266,7 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
                     selectItems={profileSelectItems.educationAttainment}
                     placeholder='Select employment status'
                   />
+                  {/* <BirthdayInput isNotEditable={isNotEditable} name={'birthday'} form={form} label={'Birthday:'} classNameInput={'capitalize'} /> */}
                 </div>
               </div>
               <div className='mb-5 lg:mb-0'>
@@ -227,8 +293,23 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
                   />
                 </div>
               </div>
-            </div>
-          </Form>
+            </Form>
+            <Form {...formExtenstion}>
+              <ExtensionData
+                form={formExtenstion}
+                profile={profile}
+                isNotEditable={isNotEditable}
+                photoPreview={photoPreview}
+                filePreview={filePreview}
+                fileGoodMoralPreview={fileGoodMoralPreview}
+                fileTORPreview={fileTORPreview}
+                setPhotoPreview={setPhotoPreview}
+                setFilePreview={setFilePreview}
+                setFileGoodMoralPreview={setFileGoodMoralPreview}
+                setFileTORPreview={setFileTORPreview}
+              />
+            </Form>
+          </div>
         </CardContent>
         {!isNotEditable && (
           <CardFooter className='w-full flex justify-center items-center '>
