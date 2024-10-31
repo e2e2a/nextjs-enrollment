@@ -1,4 +1,4 @@
-import { newPasswordAction } from '@/action/user/update/password';
+import { newPasswordAction } from '@/action/user/update/session/password';
 import { NewPasswordValidator } from '@/lib/validators/user/update/password';
 import { useMutation } from '@tanstack/react-query';
 import { signOut } from 'next-auth/react';

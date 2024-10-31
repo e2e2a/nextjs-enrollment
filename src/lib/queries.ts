@@ -174,6 +174,7 @@ export const useEvaluateApprovedGradeReportMutation = () => {
  * Admin Teacher Profile
  * @returns Queries And Mutations
  */
+// @todo
 export const useAllTeacherProfileQuery = () => {
   return useQuery<getAllTeacherProfileResponse, Error>({
     queryKey: ['TeacherProfile'],
@@ -221,26 +222,6 @@ export const useAllEnrollmentByTeacherScheduleIdQuery = (data: any) => {
  * Students Enrollment
  * @returns Queries and mutations
  */
-
-// export const useEnrollmentQuery = (data: any) => {
-//   return useQuery<getSingleEnrollmentResponse, Error>({
-//     queryKey: ['Enrollment'],
-//     queryFn: () => getSingleEnrollmentAction(data),
-//     retry: 0,
-//     refetchOnMount: false,
-//     refetchOnWindowFocus: false,
-//   });
-// };
-
-// export const useEnrollmentQueryByUserId = (data: any) => {
-//   return useQuery<getSingleEnrollmentResponse, Error>({
-//     queryKey: ['EnrollmentByUserId'],
-//     queryFn: () => getSingleEnrollmentByUserIdIdAction(data),
-//     retry: 0,
-//     refetchOnMount: false,
-//     refetchOnWindowFocus: false,
-//   });
-// };
 
 export const useDropSubjectMutation = () => {
   const queryClient = useQueryClient();

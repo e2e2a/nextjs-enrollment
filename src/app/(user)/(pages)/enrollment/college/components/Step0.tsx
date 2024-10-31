@@ -46,9 +46,8 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
   const [fileTORError, setTORError] = useState('');
   const fileTORInputRef = useRef<HTMLInputElement>(null);
 
-  const [selectedCourse, setSelectedCourse] = useState('');
-  const [isUploading, setIsUploading] = useState(false);
-  const { data: s } = useSession();
+  const [selectedCourse, setSelectedCourse] = useState(search);
+  const [isPending, setIsPending] = useState(false);
 
   const handleSelectedPhoto = (files: FileList | null) => {
     if (files && files?.length > 0) {
@@ -141,8 +140,6 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
     defaultValues: {
       studentStatus: '',
       studentYear: '',
-      // studentSemester: '',
-      // schoolYear: '',
 
       primarySchoolName: '',
       primarySchoolYear: '',
@@ -162,19 +159,29 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
       MothersContact: '',
     },
   });
-  
+
   const onSubmit = async (e: any) => {
     e.preventDefault();
+    setIsPending(true);
     const formData = new FormData();
-    if (!photoPreview) return setPhotoError('Student Photo is required.');
+    if (!photoPreview) {
+      setIsPending(false);
+      setPhotoError('Student Photo is required.');
+      return;
+    }
     formData.append('photo', photoPreview!);
-    if (!filePreview) return setFileError('PSA Birth is required.');
+    if (!filePreview) {
+      setIsPending(false);
+      setPhotoError('Student Photo is required.');
+      return;
+    }
     formData.append('filePsa', filePreview);
     const isAnyFilePresent = fileGoodMoralPreview || fileTORPreview;
 
     if (!isAnyFilePresent) {
       setFileGoodMoralError('Good Moral is required.');
       setTORError('Report Card is required.');
+      setIsPending(false);
     } else {
       setFileGoodMoralError('');
       setTORError('');
@@ -188,23 +195,19 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
       }
     }
     const isProfileValid = await form.trigger();
-    // if (!isProfileValid) return setIsPending(false);
-    if (!isProfileValid) return;
-    // data.courseCode = data.courseCode.toLowerCase();
-    // data.studentYear = data.studentYear.toLowerCase();
-    // data.studentSemester = data.studentSemester.toLowerCase();
-    // data.schoolYear = data.schoolYear.toLowerCase();
+    if (!isProfileValid) return setIsPending(false);
+
     const profileData = form.getValues();
+    profileData.studentYear = profileData.studentYear.toLowerCase();
     const dataa = {
       ...profileData,
       courseCode: selectedCourse,
       formData: formData,
-      category: 'College'
+      category: 'College',
     };
 
     mutation.mutate(dataa, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
@@ -212,18 +215,14 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
             setTimeout(() => {
               makeToastSucess(`You are enrolling to this course ${selectedCourse.toUpperCase()}`);
             }, 500);
-            setSelectedCourse('');
+            setSelectedCourse(search || '');
             return;
           default:
-            // setIsPending(false);
-            // setMessage(res.error);
-            // setTypeMessage('error');
+            setIsPending(false);
+            makeToastError(res.error);
             return;
         }
       },
-      // onSettled: () => {
-      //   setIsPending(false);
-      // },
     });
   };
 
@@ -237,12 +236,8 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
           case 203:
             console.log(res);
             if (res.error) return window.location.reload();
-            // setMessage(res?.message);
-            // return (window.location.reload());
             return;
           default:
-            // setMessage(res.error);
-            // setTypeMessage('error');
             return;
         }
       },
@@ -278,8 +273,8 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
                   <InputDisabled label={`School Year`} type='text' disabled={true} value={enrollmentSetup.enrollmentTertiary.schoolYear} />
                 </div>
                 <div className='grid grid-cols-1 xs:grid-cols-2 w-full gap-5'>
-                  <FileBirth handleSelectedFile={handleSelectedFile} handleRemoveFile={handleRemoveFile} handleClick={handleClick} fileInputRef={fileInputRef} filePreview={filePreview} fileError={fileError} isUploading={isUploading} />
-                  <Photo handleSelectedPhoto={handleSelectedPhoto} handleRemovePhoto={handleRemovePhoto} handleClickPhoto={handleClickPhoto} PhotoInputRef={PhotoInputRef} photoPreview={photoPreview} photoError={photoError} isUploading={isUploading} />
+                  <FileBirth handleSelectedFile={handleSelectedFile} handleRemoveFile={handleRemoveFile} handleClick={handleClick} fileInputRef={fileInputRef} filePreview={filePreview} fileError={fileError} isUploading={isPending} />
+                  <Photo handleSelectedPhoto={handleSelectedPhoto} handleRemovePhoto={handleRemovePhoto} handleClickPhoto={handleClickPhoto} PhotoInputRef={PhotoInputRef} photoPreview={photoPreview} photoError={photoError} isUploading={isPending} />
                   <FileGoodMoral
                     handleSelectedFileGoodMoral={handleSelectedFileGoodMoral}
                     handleRemoveFileGoodMoral={handleRemoveFileGoodMoral}
@@ -287,7 +282,7 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
                     fileGoodMoralInputRef={fileGoodMoralInputRef}
                     fileGoodMoralPreview={fileGoodMoralPreview}
                     fileGoodMoralError={fileGoodMoralError}
-                    isUploading={isUploading}
+                    isUploading={isPending}
                   />
                   <FileTOR
                     handleSelectedFileTOR={handleSelectedFileTOR}
@@ -296,7 +291,7 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
                     fileTORInputRef={fileTORInputRef}
                     fileTORPreview={fileTORPreview}
                     fileTORError={fileTORError}
-                    isUploading={isUploading}
+                    isUploading={isPending}
                   />
                 </div>
                 <div className='mt-4'>
@@ -338,8 +333,8 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
             </CardContent>
             <CardFooter>
               <div className='flex w-full justify-center md:justify-end items-center mt-4'>
-                <Button type='submit' variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-bold'>
-                  Proceed
+                <Button type='submit' disabled={isPending} className=' bg-blue-500 hover:bg-blue-400 text-white font-medium tracking-wide'>
+                  {isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Submit'}
                 </Button>
               </div>
             </CardFooter>

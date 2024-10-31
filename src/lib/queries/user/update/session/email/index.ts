@@ -1,4 +1,4 @@
-import { newEmailAction } from '@/action/user/update/email';
+import { newEmailAction } from '@/action/user/update/session/email';
 import { EmailValidator } from '@/lib/validators/user/update/email';
 import { useMutation } from '@tanstack/react-query';
 import { z } from 'zod';

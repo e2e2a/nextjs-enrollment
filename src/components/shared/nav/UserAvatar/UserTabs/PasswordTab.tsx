@@ -3,7 +3,7 @@ import { Icons } from '@/components/shared/Icons';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { useNewPasswordMutation } from '@/lib/queries/user/update/password';
+import { useNewPasswordMutation } from '@/lib/queries/user/update/session/password';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { NewPasswordValidator } from '@/lib/validators/user/update/password';
 import { zodResolver } from '@hookform/resolvers/zod';

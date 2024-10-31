@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
@@ -15,6 +15,7 @@ import Input from './Input';
 import { BirthdayInput } from './BirthdayInput';
 import { useUpdateProfileByAdminMutation } from '@/lib/queries/profile/update/id';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import Image from 'next/image';
 
 type Iprops = {
   session?: any;
@@ -232,8 +233,8 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
         </CardContent>
         {!isNotEditable && (
           <CardFooter className='w-full flex justify-center items-center '>
-            <Button type='submit' className=' bg-blue-500 hover:bg-blue-400 text-white font-medium tracking-wide'>
-              Submit
+            <Button type='submit' disabled={isPending} className=' bg-blue-500 hover:bg-blue-400 text-white font-medium tracking-wide'>
+              {isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Submit'}
             </Button>
           </CardFooter>
         )}

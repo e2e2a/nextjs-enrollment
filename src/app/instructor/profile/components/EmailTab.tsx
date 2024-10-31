@@ -11,7 +11,7 @@ import Input from './Input';
 import Image from 'next/image';
 import { EmailValidator } from '@/lib/validators/user/update/email';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { useNewEmailMutation } from '@/lib/queries/user/update/email';
+import { useNewEmailMutation } from '@/lib/queries/user/update/session/email';
 
 const EmailTab = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);
