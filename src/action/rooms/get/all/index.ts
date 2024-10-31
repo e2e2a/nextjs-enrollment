@@ -8,7 +8,7 @@ export const getAllRoomByEduLevelAction = async (level: string) => {
     await dbConnect();
 
     const rooms = await getAllRoomByEduLevel(level);
-    
+
     return { rooms: JSON.parse(JSON.stringify(rooms)), status: 201 };
   });
 };

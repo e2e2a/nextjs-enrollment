@@ -41,14 +41,13 @@ const checkTeacherAndSave = async (blockType: any, data: any) => {
   });
 };
 
-
 const updateBlock = async (blockTypeId: any, data: any) => {
   return tryCatch(async () => {
     const bulkOperations = data.selectedItems.map((item: any) => ({
       updateOne: {
         filter: { _id: blockTypeId },
-        update: { $addToSet: { blockSubjects: { teacherScheduleId: item.teacherScheduleId } } }
-      }
+        update: { $addToSet: { blockSubjects: { teacherScheduleId: item.teacherScheduleId } } },
+      },
     }));
 
     const result = await BlockType.bulkWrite(bulkOperations);

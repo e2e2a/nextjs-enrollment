@@ -6,8 +6,8 @@ import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { checkAuth } from '@/utils/actions/session';
 
 /**
- * 
- * @param {string} id 
+ *
+ * @param {string} id
  * @returns single blockType
  */
 export const getBlockTypeByIdAction = async (id: string) => {
@@ -25,9 +25,9 @@ export const getBlockTypeByIdAction = async (id: string) => {
 
 /**
  * check role
- * 
- * @param {object} session 
- * @param {string} id 
+ *
+ * @param {object} session
+ * @param {string} id
  */
 const checkRole = async (session: any, id: string) => {
   return tryCatch(async () => {

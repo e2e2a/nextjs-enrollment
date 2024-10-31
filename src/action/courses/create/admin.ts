@@ -11,7 +11,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 /**
  * only admin roles
  * handle create course
- * 
+ *
  * @param {object} data
  */
 export const createCourseAction = async (data: any) => {

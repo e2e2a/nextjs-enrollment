@@ -5,7 +5,7 @@ import { getCoursesByCategory } from '@/services/course';
 
 /**
  * handles query courses by category
- * 
+ *
  * @param {string} category
  */
 export const getAllCoursesByCategory = async (category: string) => {
@@ -13,7 +13,7 @@ export const getAllCoursesByCategory = async (category: string) => {
     await dbConnect();
 
     const courses = await getCoursesByCategory(category);
-    
+
     return { courses: JSON.parse(JSON.stringify(courses)), status: 200 };
   });
 };

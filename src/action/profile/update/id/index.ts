@@ -7,7 +7,7 @@ import { updateDeanProfileByUserId } from '@/services/deanProfile';
 import { updateStudentProfileByUserId } from '@/services/studentProfile';
 import { updateTeacherProfileByUserId } from '@/services/teacherProfile';
 import { checkAuth } from '@/utils/actions/session';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { ref, uploadBytes } from 'firebase/storage';
 import { storage } from '@/firebase';
 import { StudentProfileExtension } from '@/lib/validators/profile/extension';
 import { getUserById } from '@/services/user';
@@ -108,7 +108,6 @@ const uploadFileOrPhoto = async (profile: any, files: any) => {
     if (files.fileTOR && files.fileTOR.name) {
       const storageRefFileTOR = ref(storage, `enrollment/reportCard/${profile._id}/${files.fileTOR.name}`);
       uploads.push(uploadBytes(storageRefFileTOR, files.fileTOR, { contentType: files.fileTOR.type }));
-      console.log('im here saved');
     }
 
     await Promise.all(uploads);

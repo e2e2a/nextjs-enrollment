@@ -6,10 +6,10 @@ import { checkAuth } from '@/utils/actions/session';
 import mongoose from 'mongoose';
 
 /**
- * Only admin and dean
  * handles query enrollment by id
- * 
- * @param {string} id 
+ * Only admin and dean
+ *
+ * @param {string} id
  */
 export const getEnrollmentByIdAction = async (id: any) => {
   return tryCatch(async () => {

@@ -5,17 +5,17 @@ import { getEnrollmentByCategory } from '@/services/enrollment';
 import { checkAuth } from '@/utils/actions/session';
 
 /**
- * Any authenticated user
  * handles query enrollment by category
- * 
- * @param {string} category 
+ * Any authenticated user
+ *
+ * @param {string} category
  */
 export const getEnrollmentByCategoryAction = async (category: string) => {
   return tryCatch(async () => {
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-    
+
     const enrollments = await getEnrollmentByCategory(category);
 
     return { enrollment: JSON.parse(JSON.stringify(enrollments)), status: 200 };

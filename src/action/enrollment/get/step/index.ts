@@ -8,8 +8,8 @@ import { checkAuth } from '@/utils/actions/session';
 /**
  * only dean and admin are allowed
  * handles query enrollment by session Id
- * 
- * @param {object} data 
+ *
+ * @param {object} data
  */
 export const getEnrollmentQueryStepByCategoryAction = async (data: any) => {
   return tryCatch(async () => {
@@ -19,14 +19,19 @@ export const getEnrollmentQueryStepByCategoryAction = async (data: any) => {
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
     if (session && session.user.role !== 'ADMIN' && session.user.role !== 'DEAN') return { error: 'Forbidden.', status: 403 };
 
-    const checkedRole = await checkRole(session.user, data);
+    const checkedRole = await checkSessionRole(session.user, data);
     if (checkedRole && checkedRole.error) return { error: checkedRole.error, status: checkedRole.status };
 
     return { enrollment: JSON.parse(JSON.stringify(checkedRole.enrollments)), status: 200 };
   });
 };
 
-const checkRole = async (user: any, data: any) => {
+/**
+ * check session role
+ *
+ * @param {object} data
+ */
+const checkSessionRole = async (user: any, data: any) => {
   return tryCatch(async () => {
     let enrollments;
     switch (user.role) {

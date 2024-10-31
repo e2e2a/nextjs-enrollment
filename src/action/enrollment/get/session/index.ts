@@ -7,8 +7,8 @@ import { checkAuth } from '@/utils/actions/session';
 /**
  * Any authenticated user
  * handles query enrollment by session Id
- * 
- * @param {string} id 
+ *
+ * @param {string} id
  */
 export const getEnrollmentBySessionIdAction = async (id: string) => {
   return tryCatch(async () => {

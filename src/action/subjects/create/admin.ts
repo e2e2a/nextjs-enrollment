@@ -10,7 +10,7 @@ export const createNewSubjectAction = async (data: any) => {
     await dbConnect();
     const session = await verifyADMIN();
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
-    
+
     const subjectParse = SubjectValidator.safeParse(data);
     if (!subjectParse.success) return { error: 'Invalid fields!', status: 400 };
 

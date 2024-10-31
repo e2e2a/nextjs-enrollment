@@ -9,7 +9,7 @@ import { getUserById, updateUserById } from '@/services/user';
 
 /**
  * Handles the process of changing a user's email address.
- * Any authenticated role
+ * only admin
  *
  * @param {Object} data
  */
@@ -45,8 +45,6 @@ const checkEmail = async (id: string, email: string) => {
     } else {
       const checkedNewEmail = await checkNewEmail(email);
       if (checkedNewEmail && checkedNewEmail.error) return { error: checkedNewEmail.error, status: 500 };
-
-      console.log('no error, ready to update: ', user._id, email)
 
       const updatedUser = await updateUserById(user._id, { email: email });
       if (!updatedUser) return { error: 'Failed to update the email.', status: 403 };

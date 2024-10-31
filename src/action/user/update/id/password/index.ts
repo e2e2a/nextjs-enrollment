@@ -8,7 +8,7 @@ import { getUserById, updateUserById } from '@/services/user';
 
 /**
  * Handles New Password change.
- * Any authenticated role
+ * only admin
  *
  * @param {Object} data
  */

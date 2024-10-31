@@ -6,6 +6,7 @@ import { getEnrollmentByCategory } from '@/services/enrollment';
 import { verifyDEAN } from '@/utils/actions/session/roles/dean';
 
 /**
+ * handles query enrollment and filtered by courseId
  * only dean roles
  *
  * @param {string} courseId
