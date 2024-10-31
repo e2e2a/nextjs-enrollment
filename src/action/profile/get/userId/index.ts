@@ -43,7 +43,7 @@ const checkSeachRole = async (user: any, id: any) => {
     switch (u.role) {
       case 'STUDENT':
         profile = await getStudentProfileByUserId(u._id);
-        
+
         if (user.role === 'DEAN') {
           const d = await getDeanProfileByUserId(user._id);
           if (d.courseId._id.toString() !== profile.courseId._id.toString) return { error: 'Dont have permission.', status: 403 };
