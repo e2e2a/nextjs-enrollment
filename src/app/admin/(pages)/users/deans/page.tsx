@@ -8,9 +8,10 @@ import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/a
 
 export default function Page() {
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error } = useAllProfileQueryByUserRoles('DEAN')
+  const { data, isLoading, error } = useAllProfileQueryByUserRoles('DEAN');
+
   useEffect(() => {
-    if (error || !data) return; //setError 500;
+    if (error || !data) return;
     if (data) {
       if (data.profiles) {
         setIsPageLoading(false);

@@ -1,16 +1,11 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-
-import { MoreHorizontal, ArrowUpDown } from 'lucide-react';
-
+import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import RoleFilter from './RoleFilter';
 import EmailVerifiedFilter from './EmailVerifiedFilter';
-import { ITeacherProfile } from '@/types';
 import ActionsCell from './ActionsCell';
 
-export const columns: ColumnDef<ITeacherProfile>[] = [
+export const columns: ColumnDef<any>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => {
@@ -33,7 +28,7 @@ export const columns: ColumnDef<ITeacherProfile>[] = [
     },
   },
   {
-    accessorFn: (row) => row.userId.username, // Use accessorFn for nested fields
+    accessorFn: (row) => row.userId.username,
     id: 'username',
     header: 'Username',
     cell: ({ cell, row }) => {
@@ -46,7 +41,7 @@ export const columns: ColumnDef<ITeacherProfile>[] = [
     },
   },
   {
-    accessorFn: (row) => row.userId.email, // Use accessorFn for nested fields
+    accessorFn: (row) => row.userId.email,
     id: 'email',
     header: 'Email',
     cell: ({ cell, row }) => {
@@ -58,10 +53,6 @@ export const columns: ColumnDef<ITeacherProfile>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: 'email',
-  //   header: 'Email'
-  // },
   {
     accessorKey: 'emailVerified',
     accessorFn: (row) => row.userId.emailVerified,
@@ -86,26 +77,21 @@ export const columns: ColumnDef<ITeacherProfile>[] = [
       } else if (filterValue === 'Verified') {
         return emailVerified !== undefined;
       } else {
-        return true; // Show all rows if no specific filter is selected
+        return true;
       }
     },
   },
   {
     accessorFn: (row) => row.userId.role,
-    accessorKey: 'role',
-    // header: 'Role'
-    header: ({ column }) => (
-      <RoleFilter
-        onChange={(role: string | null) => {
-          // Your custom logic to filter based on role
-          column.setFilterValue(role);
-        }}
-      />
-    ),
-    filterFn: (row, columnId, filterValue) => {
-      // Custom filter function for role column
-      if (filterValue === null) return true;
-      return row.original.userId.role === filterValue;
+    id: 'role',
+    header: 'Role',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.userId.role}
+        </div>
+      );
     },
   },
   {

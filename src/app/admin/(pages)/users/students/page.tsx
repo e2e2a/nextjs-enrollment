@@ -11,8 +11,8 @@ export default function Page() {
   const { data, isLoading, error } = useAllProfileQueryByUserRoles('STUDENT');
 
   useEffect(() => {
-    if (error || !data) return; //setError 500;
-    console.log(data)
+    if (error || !data) return;
+
     if (data) {
       if (data.profiles) {
         setIsPageLoading(false);
