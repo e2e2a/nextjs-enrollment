@@ -1,13 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Input from './Input';
-import Image from 'next/image';
 import { NewPasswordValidator } from '@/lib/validators/user/update/password';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { useNewPasswordMutationByAdmin } from '@/lib/queries/user/update/id/password';
@@ -23,13 +21,10 @@ const PasswordTab = ({ profile }: IProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
   const mutation = useNewPasswordMutationByAdmin();
+
   const form = useForm<z.infer<typeof NewPasswordValidator>>({
     resolver: zodResolver(NewPasswordValidator),
-    defaultValues: {
-      currentPassword: '1',
-      password: '',
-      CPassword: '',
-    },
+    defaultValues: { currentPassword: '1', password: '', CPassword: '', },
   });
 
   useEffect(() => {
