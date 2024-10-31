@@ -75,7 +75,6 @@ const updateStudentProfile = async (userId: string, data: any) => {
     const fileTOR = data.formData.has('fileTOR') ? (data.formData.get('fileTOR') as File) : null;
     const photo = data.formData.has('photo') ? (data.formData.get('photo') as File) : null;
 
-    console.log('running', fileTOR?.name);
     const checked = await checkFilesAndValidate({ filePsa, fileGoodMoral, fileTOR, photo }, data);
     if (checked && checked.error) return { error: checked.error, status: checked.status };
 
@@ -87,6 +86,7 @@ const updateStudentProfile = async (userId: string, data: any) => {
     return { message: 'Profile has been update. ', status: 201 };
   });
 };
+
 const uploadFileOrPhoto = async (profile: any, files: any) => {
   return tryCatch(async () => {
     const uploads = [];
@@ -108,7 +108,7 @@ const uploadFileOrPhoto = async (profile: any, files: any) => {
     if (files.fileTOR && files.fileTOR.name) {
       const storageRefFileTOR = ref(storage, `enrollment/reportCard/${profile._id}/${files.fileTOR.name}`);
       uploads.push(uploadBytes(storageRefFileTOR, files.fileTOR, { contentType: files.fileTOR.type }));
-      console.log('im here saved')
+      console.log('im here saved');
     }
 
     await Promise.all(uploads);
@@ -150,11 +150,9 @@ const checkFilesAndValidate = async (files: any, data: any) => {
  */
 const updateTeacherProfile = async (userId: string, data: any) => {
   return tryCatch(async () => {
-    if (!data.formData) {
-      const profileParse = TeacherProfileUpdateValidator.safeParse(data);
-      if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
-    }
-    const profile = await updateTeacherProfileByUserId(userId, data);
+    const profileParse = TeacherProfileUpdateValidator.safeParse(data);
+    if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
+    const profile = await updateTeacherProfileByUserId(userId, { ...profileParse.data, isVerified: true });
     if (!profile) return { error: 'Something went wrong. ', status: 500 };
     return { message: 'Profile has been update. ', status: 201 };
   });
@@ -168,11 +166,10 @@ const updateTeacherProfile = async (userId: string, data: any) => {
  */
 const updateDeanProfile = async (userId: string, data: any) => {
   return tryCatch(async () => {
-    if (!data.formData) {
-      const profileParse = DeanProfileUpdateValidator.safeParse(data);
-      if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
-    }
-    const profile = await updateDeanProfileByUserId(userId, data);
+    const profileParse = DeanProfileUpdateValidator.safeParse(data);
+    if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
+
+    const profile = await updateDeanProfileByUserId(userId, { ...profileParse.data, isVerified: true });
     if (!profile) return { error: 'Something went wrong. ', status: 500 };
     return { message: 'Profile has been update. ', status: 201 };
   });
@@ -186,12 +183,10 @@ const updateDeanProfile = async (userId: string, data: any) => {
  */
 const updateAdminProfile = async (userId: string, data: any) => {
   return tryCatch(async () => {
-    if (!data.formData) {
-      const profileParse = AdminProfileUpdateValidator.safeParse(data);
-      if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
-    }
+    const profileParse = AdminProfileUpdateValidator.safeParse(data);
+    if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
 
-    const profile = await updateAdminProfileByUserId(userId, data);
+    const profile = await updateAdminProfileByUserId(userId, { ...profileParse.data, isVerified: true });
     if (!profile) return { error: 'Something went wrong. ', status: 500 };
 
     return { message: 'Profile has been update. ', status: 201 };
