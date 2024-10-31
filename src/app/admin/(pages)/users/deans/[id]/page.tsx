@@ -24,6 +24,8 @@ const ProfilePage = ({ params }: { params: { id: string } }) => {
 
     if (res) {
       if (res.profile) {
+        //check role
+        if (res.profile.userId.role !== 'DEAN') setIsError(true);
         setIsPageLoading(false);
       } else if (res.error) {
         setIsError(true);
