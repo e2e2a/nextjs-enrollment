@@ -17,18 +17,14 @@ import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 const PasswordTab = () => {
   const [isNotEditable, setIsNotEditable] = useState(false);
   const [isPending, setIsPending] = useState<boolean>(false);
-  const { data } = useSession();
   const { setLoading } = useLoading();
   const mutation = useNewPasswordMutation();
-  const session = data?.user;
+
   const form = useForm<z.infer<typeof NewPasswordValidator>>({
     resolver: zodResolver(NewPasswordValidator),
-    defaultValues: {
-      currentPassword: '',
-      password: '',
-      CPassword: '',
-    },
+    defaultValues: { currentPassword: '', password: '', CPassword: '' },
   });
+  
   const onSubmit = async (data: z.infer<typeof NewPasswordValidator>) => {
     setIsPending(true);
     mutation.mutate(data, {
@@ -46,7 +42,12 @@ const PasswordTab = () => {
           case 402:
           case 403:
           case 404:
-            if (res.error) return form.setError('currentPassword', { message: res.error });
+            if (res.error) {
+              setIsPending(false);
+              setLoading(false);
+              form.setError('currentPassword', { message: res.error });
+              return;
+            }
             return;
           default:
             setLoading(false);

@@ -19,11 +19,10 @@ const EmailTab = () => {
   const mutation = useNewEmailMutation();
   const { data } = useSession();
   const session = data?.user;
+  
   const form = useForm<z.infer<typeof EmailValidator>>({
     resolver: zodResolver(EmailValidator),
-    defaultValues: {
-      email: `${session?.email}`,
-    },
+    defaultValues: { email: `${session?.email}` },
   });
 
   const onSubmit = async (data: z.infer<typeof EmailValidator>) => {
@@ -41,7 +40,11 @@ const EmailTab = () => {
           case 401:
           case 402:
           case 403:
-            if (res.error) return form.setError('email', { message: res.error });
+            if (res.error) {
+              setIsPending(false);
+              form.setError('email', { message: res.error });
+              return;
+            }
             return;
           default:
             setIsPending(false);

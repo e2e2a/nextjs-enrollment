@@ -11,7 +11,6 @@ import ProfileTabEnrollCollege from './components/tabs/college/ProfileTabEnrollC
 import { useProfileQueryByParamsUserId } from '@/lib/queries/profile/get/userId';
 
 const ProfilePage = ({ params }: { params: { id: string } }) => {
-  const { data } = useSession();
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('profile');
@@ -65,11 +64,11 @@ const ProfilePage = ({ params }: { params: { id: string } }) => {
                       {!res.profile.enrollStatus && <ProfileTab profile={res?.profile} />}
                       {res.profile.courseId && res.profile.courseId.category.toLowerCase() === 'college' && <ProfileTabEnrollCollege profile={res?.profile} />}
                     </TabsContent>
-                    <TabsContent value='email' className='w-full mb-3 max-w-[69rem]'>
-                      <EmailTab />
+                    <TabsContent value='email' className='w-full bg-neutral-50  my-10 max-w-[69rem] rounded-lg'>
+                      <EmailTab profile={res?.profile} />
                     </TabsContent>
-                    <TabsContent value='password' className='w-full mb-3 max-w-[69rem]'>
-                      <PasswordTab />
+                    <TabsContent value='password' className='w-full bg-neutral-50  my-10 max-w-[69rem] rounded-lg'>
+                      <PasswordTab profile={res?.profile} />
                     </TabsContent>
                   </div>
                 </Tabs>
