@@ -1,6 +1,5 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import ActionsCell from './ActionsCell';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
 
@@ -39,19 +38,6 @@ export const columns: ColumnDef<any>[] = [
       return fullName.includes(filterValue.toLowerCase());
     },
   },
-  // {
-  //   accessorFn: (row) => row.courseId.courseCode,
-  //   id: 'course code',
-  //   header: 'Course Code',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className=' uppercase'>
-  //         {user.courseId.courseCode}
-  //       </div>
-  //     );
-  //   },
-  // },
   {
     accessorFn: (row) => row.profileId.sex,
     id: 'Gender',
@@ -78,26 +64,4 @@ export const columns: ColumnDef<any>[] = [
       );
     },
   },
-  // {
-  //   accessorFn: (row) => row.endTime,
-  //   id: 'end time',
-  //   header: 'End Time',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className='uppercase'>
-  //         {user.endTime}
-  //       </div>
-  //     );
-  //   },
-  // },
-  // {
-  //   id: 'actions',
-  //   header: 'Actions',
-  //   cell: ({ row }) => {
-  //     const user = row.original;
-
-  //     return <ActionsCell user={user} />;
-  //   },
-  // },
 ];

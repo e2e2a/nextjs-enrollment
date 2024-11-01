@@ -9,7 +9,6 @@ import {
   getEnrollmentResponse,
   getStudentCurriculumsResponse,
   getTeacherProfileResponse,
-  getTeacherScheduleResponse,
   IResponse,
 } from '@/types';
 import { deleteEnrollmentAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
@@ -21,7 +20,6 @@ import {
   approvedEnrollmentStep5Action,
   approvedEnrollmentStep6Action,
   CollegeEndSemesterAction,
-  getAllEnrollmentByTeacherScheduleIdAction,
   undoEnrollmentToStep1,
   undoEnrollmentToStep2,
   undoEnrollmentToStep3,
@@ -194,16 +192,16 @@ export const useTeacherProfileQueryByUserId = (id: string) => {
  * Instructor Query Students Schedules/Subjects
  * @returns Queries and mutations
  */
-export const useAllEnrollmentByTeacherScheduleIdQuery = (data: any) => {
-  return useQuery<any, Error>({
-    queryKey: ['EnrollmentByTeacherScheduleId', data],
-    queryFn: () => getAllEnrollmentByTeacherScheduleIdAction(data),
-    enabled: !!data,
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
-};
+// export const useAllEnrollmentByTeacherScheduleIdQuery = (data: any) => {
+//   return useQuery<any, Error>({
+//     queryKey: ['EnrollmentByTeacherScheduleId', data],
+//     queryFn: () => getAllEnrollmentByTeacherScheduleIdAction(data),
+//     enabled: !!data,
+//     retry: 0,
+//     refetchOnMount: false,
+//     refetchOnWindowFocus: false,
+//   });
+// };
 /**
  * Students Enrollment
  * @returns Queries and mutations

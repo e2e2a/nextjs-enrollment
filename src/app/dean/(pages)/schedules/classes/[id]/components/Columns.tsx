@@ -39,19 +39,19 @@ export const columns: ColumnDef<any>[] = [
       return fullName.includes(filterValue.toLowerCase());
     },
   },
-  {
-    accessorFn: (row) => row.courseId.courseCode,
-    id: 'course code',
-    header: 'Course Code',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {user.courseId.courseCode}
-        </div>
-      );
-    },
-  },
+  // {
+  //   accessorFn: (row) => row.courseId.courseCode,
+  //   id: 'course code',
+  //   header: 'Course Code',
+  //   cell: ({ cell, row }) => {
+  //     const user = row.original;
+  //     return (
+  //       <div key={cell.id} className=' uppercase'>
+  //         {user.courseId.courseCode}
+  //       </div>
+  //     );
+  //   },
+  // },
   {
     accessorFn: (row) => row.profileId.sex,
     id: 'Gender',
@@ -61,6 +61,19 @@ export const columns: ColumnDef<any>[] = [
       return (
         <div key={cell.id} className=' uppercase'>
           {user.profileId.sex}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.grade,
+    id: 'grade',
+    header: 'Grade',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.grade}
         </div>
       );
     },
@@ -78,13 +91,13 @@ export const columns: ColumnDef<any>[] = [
   //     );
   //   },
   // },
-  {
-    id: 'actions',
-    header: 'Actions',
-    cell: ({ row }) => {
-      const user = row.original;
+  // {
+  //   id: 'actions',
+  //   header: 'Actions',
+  //   cell: ({ row }) => {
+  //     const user = row.original;
 
-      return <ActionsCell user={user} />;
-    },
-  },
+  //     return <ActionsCell user={user} />;
+  //   },
+  // },
 ];

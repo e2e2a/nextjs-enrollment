@@ -3,7 +3,6 @@ import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { ITeacherProfile } from '@/types';
 import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 
 const Page = () => {
@@ -15,7 +14,7 @@ const Page = () => {
     if (isEnError || !data) return;
 
     if (data) {
-      if (data.teachers) {
+      if (data.profiles) {
         setIsPageLoading(false);
       } else if (data.error) {
         setIsError(true);
@@ -36,12 +35,12 @@ const Page = () => {
             <div className=''>404</div>
           ) : (
             data &&
-            data.teachers && (
+            data.profiles && (
               <div className=''>
                 <div className='flex items-center py-4 text-black w-full justify-center'>
                   <h1 className='sm:text-3xl text-xl font-bold '>Instructors Management</h1>
                 </div>
-                <DataTable columns={columns} data={data?.teachers as ITeacherProfile[]} />
+                <DataTable columns={columns} data={data?.profiles as any[]} />
               </div>
             )
           )}

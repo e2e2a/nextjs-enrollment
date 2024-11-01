@@ -1,20 +1,19 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useAllEnrollmentByTeacherScheduleIdQuery, useTeacherProfileQueryById } from '@/lib/queries';
-import { useSession } from 'next-auth/react';
+import { useTeacherProfileQueryById } from '@/lib/queries';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import AddGrades from './components/AddGrades';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/id';
+import { useEnrollmentQueryByTeacherScheduleId } from '@/lib/queries/enrollment/get/teacherSchedule';
 
 const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
   const [isError, setIsError] = useState(false);
-  const [teacherStudents, setTeacherStudents] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data, isLoading, error: isEnError } = useTeacherProfileQueryById(params.id);
   const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryById(params.scheduleId, 'College');
-  const { data: s, isLoading: sLoading, error: sError } = useAllEnrollmentByTeacherScheduleIdQuery(ts?.teacherSchedule?._id);
+  const { data: s, isLoading: sLoading, error: sError } = useEnrollmentQueryByTeacherScheduleId({ id: ts?.teacherSchedule?._id, category: 'College' });
   useEffect(() => {
     if (tsError || !ts) return;
     if (isEnError || !data) return;
@@ -22,17 +21,14 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
 
     if (ts && data && s) {
       if (ts.teacherSchedule) {
-        const mytesting = s.enrollment
-          .map((ss: any) => {
-            return ss.studentSubjects.filter((sss: any) => sss.teacherScheduleId._id === ts?.teacherSchedule?._id && sss.status === 'Approved');
-          })
-          .flat();
-        /**
-         * can still be .flat(Infinity)
-         */
-        // }).flat(Infinity);
-        setTeacherStudents(mytesting);
-        // mytesting.map((ss: any) => {console.log('mystes', ss)})
+        if (s.students) {
+          setIsPageLoading(false);
+        } else if (s.error) {
+          setIsError(true);
+          setIsPageLoading(false);
+        }
+      } else if (ts.error) {
+        setIsError(true);
         setIsPageLoading(false);
       }
     }
@@ -102,12 +98,12 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
               </div>
               {ts?.teacherSchedule?.courseId && (
                 <>
-                  <div className='w-full flex justify-start items-center'>
+                  {/* <div className='w-full flex justify-start items-center'>
                     <div className='flex flex-col'>
-                      <AddGrades data={teacherStudents} teacher={ts?.teacherSchedule} />
+                      <AddGrades data={s.students} teacher={ts?.teacherSchedule} />
                     </div>
-                  </div>
-                  <DataTable columns={columns} data={teacherStudents} />
+                  </div> */}
+                  <DataTable columns={columns} data={s.students} />
                 </>
               )}
             </>
