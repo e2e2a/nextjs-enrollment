@@ -34,7 +34,7 @@ export function SidebarNav({ items, profile }: DashboardNavProps) {
             </div>
             <div className='flex items-center p-2'>
               <div className='flex flex-col leading-none'>
-                <p className={`font-medium text-sm capitalize`}>{profile?.firstname && profile?.lastname ? `${profile?.firstname} ${profile.lastname}` : `${session?.username}`}</p>
+                <p className={`font-semibold text-sm capitalize`}>{profile?.firstname && profile?.lastname ? `${profile?.firstname} ${profile.lastname}` : `${session?.username}`}</p>
               </div>
             </div>
           </Link>

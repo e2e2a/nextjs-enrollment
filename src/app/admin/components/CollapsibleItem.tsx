@@ -20,7 +20,7 @@ const CollapsibleItem = ({ Icon, item }: IProps) => {
           <Button type='button' className={`group select-none ${isOpen ? 'rounded-none rounded-tl-lg rounded-tr-lg' : ''} border-0 w-full hover:bg-slate-300  ${isOpen && 'bg-slate-300 bg-opacity-70'} px-5 pr-2 py-6 flex space-x-3 items-center gap-x-1 pl-3 justify-start`}>
             <Icon className={`h-7 w-7 group-hover:stroke-blue-500 ${isOpen && 'stroke-blue-500'}`} />
             <div className='flex items-center w-full justify-between'>
-              <span className='font-semibold  stroke-black text-sm tracking-tight '>{item.title}</span>
+              <span className='font-medium  stroke-black text-sm tracking-tight '>{item.title}</span>
               <ChevronsUpDown className='h-4 w-4' />
             </div>
           </Button>
