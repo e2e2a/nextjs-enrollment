@@ -4,17 +4,15 @@ import {
   getAllCurriculumsResponse,
   getAllSchoolYearResponse,
   getAllStudentCurriculumsResponse,
-  getAllTeacherProfileResponse,
   getAllTeacherScheduleResponse,
   getCurriculumsResponse,
   getEnrollmentResponse,
-  getSingleEnrollmentResponse,
   getStudentCurriculumsResponse,
   getTeacherProfileResponse,
   getTeacherScheduleResponse,
   IResponse,
 } from '@/types';
-import { createEnrollmentAction, deleteEnrollmentAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
+import { deleteEnrollmentAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
 import {
   approvedEnrollmentStep1Action,
   approvedEnrollmentStep2Action,
@@ -31,7 +29,6 @@ import {
 } from '@/action/college/enrollment/admin';
 import {
   createTeacherScheduleAction,
-  getAllTeacherProfileAction,
   getAllTeacherScheduleAction,
   getTeacherProfileByIdAction,
   getTeacherProfileByUserIdAction,
@@ -174,15 +171,6 @@ export const useEvaluateApprovedGradeReportMutation = () => {
  * Admin Teacher Profile
  * @returns Queries And Mutations
  */
-// @todo
-export const useAllTeacherProfileQuery = () => {
-  return useQuery<getAllTeacherProfileResponse, Error>({
-    queryKey: ['TeacherProfile'],
-    queryFn: () => getAllTeacherProfileAction(),
-    retry: 0,
-    refetchOnWindowFocus: false,
-  });
-};
 
 export const useTeacherProfileQueryById = (id: string) => {
   return useQuery<getTeacherProfileResponse, Error>({

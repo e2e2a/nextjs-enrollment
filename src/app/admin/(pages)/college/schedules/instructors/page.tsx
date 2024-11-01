@@ -3,24 +3,26 @@ import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useAllTeacherProfileQuery } from '@/lib/queries';
 import { ITeacherProfile } from '@/types';
+import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error: isEnError } = useAllTeacherProfileQuery();
+  const { data, isLoading, error: isEnError } = useAllProfileQueryByUserRoles('TEACHER');
 
   useEffect(() => {
-    if (isLoading || !data) return;
-    if (isEnError) console.log(isEnError.message);
-    if (data) setIsPageLoading(false);
-    // if (data.teachers) {
-    //   // setSubjects(data.teacherSchedules);
-    //   console.log('data:', data.teachers);
-    //   setIsPageLoading(false);
-    // }
-  }, [data, isLoading, isEnError]);
+    if (isEnError || !data) return;
+
+    if (data) {
+      if (data.teachers) {
+        setIsPageLoading(false);
+      } else if (data.error) {
+        setIsError(true);
+        setIsPageLoading(false);
+      }
+    }
+  }, [data, isEnError]);
 
   return (
     <>

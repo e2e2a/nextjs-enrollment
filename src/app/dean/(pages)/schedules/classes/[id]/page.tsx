@@ -1,7 +1,7 @@
 'use client';
 import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { useAllEnrollmentByTeacherScheduleIdQuery, useTeacherProfileQueryByUserId, useTeacherScheduleCollegeQueryById } from '@/lib/queries';
+import { useAllEnrollmentByTeacherScheduleIdQuery, useTeacherScheduleCollegeQueryById } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
@@ -11,15 +11,13 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data: session } = useSession();
-  const { data, isLoading, error: isEnError } = useTeacherProfileQueryByUserId(session?.user?.id!);
   const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleCollegeQueryById(params.id);
   const { data: s, isLoading: sLoading, error: sError } = useAllEnrollmentByTeacherScheduleIdQuery(ts?.teacherSchedule?._id);
   useEffect(() => {
     if (tsError || !ts) return;
-    if (isEnError || !data) return;
     if (sError || !s) return;
 
-    if (ts && data && s) {
+    if (ts && s) {
       if (ts.teacherSchedule) {
         const mytesting = s.enrollment.map((ss: any) => {
           return ss.studentSubjects.filter((sss: any) => {
@@ -32,7 +30,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         setIsPageLoading(false);
       }
     }
-  }, [ts, tsError, data, isEnError, s, sError]);
+  }, [ts, tsError, s, sError]);
 
   return (
     <>
@@ -44,7 +42,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {isError ? (
             <div className=''>404</div>
-          ) : data && data.teacher ? (
+          ) : ts && ts.teacherSchedule ? (
             <>
               <div className='flex items-center py-4 text-black w-full text-center flex-col'>
                 <div>
