@@ -149,16 +149,16 @@ export const createTeacherScheduleAction = async (data: any) => {
   }
 };
 
-export const getAllTeacherScheduleAction = async (): Promise<getAllTeacherScheduleResponse> => {
-  try {
-    await dbConnect();
-    const subjects = await getAllTeacherSchedule();
-    return { teacherSchedules: JSON.parse(JSON.stringify(subjects)), status: 200 };
-  } catch (error) {
-    console.log('server e :', error);
-    return { error: 'Something went wrong', status: 500 };
-  }
-};
+// export const getAllTeacherScheduleAction = async (): Promise<getAllTeacherScheduleResponse> => {
+//   try {
+//     await dbConnect();
+//     const subjects = await getAllTeacherSchedule();
+//     return { teacherSchedules: JSON.parse(JSON.stringify(subjects)), status: 200 };
+//   } catch (error) {
+//     console.log('server e :', error);
+//     return { error: 'Something went wrong', status: 500 };
+//   }
+// };
 export const getTeacherScheduleByProfileIdAction = async (id: any): Promise<getAllTeacherScheduleResponse> => {
   try {
     await dbConnect();

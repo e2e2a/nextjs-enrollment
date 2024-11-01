@@ -66,6 +66,15 @@ export const getAllTeacherSchedule = async () => {
   }
 };
 
+export const getTeacherScheduleByCategory = async (category: string) => {
+  try {
+    const ts = await TeacherSchedule.find({ category }).populate('profileId').populate('courseId').populate('blockTypeId').populate('subjectId').populate('roomId').exec();
+    return ts;
+  } catch (error) {
+    return [];
+  }
+};
+
 export const getTeacherScheduleById = async (id: any) => {
   try {
     const TProfiles = await TeacherSchedule.findById(id).populate('profileId').populate('courseId').populate('blockTypeId').populate('subjectId').populate('roomId').exec();

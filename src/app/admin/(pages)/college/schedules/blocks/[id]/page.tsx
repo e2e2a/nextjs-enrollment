@@ -3,16 +3,16 @@ import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useTeacherScheduleCollegeQuery } from '@/lib/queries';
 import AddBlockSched from './components/AddBlockSched';
 import { useBlockCourseQueryById } from '@/lib/queries/blocks/get/id';
+import { useTeacherScheduleQueryByCategory } from '@/lib/queries/teacherSchedule/get/category';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [teachersSchedules, setTeachersSchedules] = useState<any>([]);
   const { data, isLoading, error: isEnError } = useBlockCourseQueryById(params.id);
-  const { data: s, isLoading: sLoading, error: sError } = useTeacherScheduleCollegeQuery();
+  const { data: s, isLoading: sLoading, error: sError } = useTeacherScheduleQueryByCategory('College');
 
   useEffect(() => {
     if (isEnError || !data) return;

@@ -29,7 +29,6 @@ import {
 } from '@/action/college/enrollment/admin';
 import {
   createTeacherScheduleAction,
-  getAllTeacherScheduleAction,
   getTeacherProfileByIdAction,
   getTeacherProfileByUserIdAction,
   getTeacherScheduleByIdAction,
@@ -483,15 +482,15 @@ export const useTeacherScheduleCollegeQueryById = (data: any) => {
  * Admin Teacher Schedule Management
  * @returns Queries and mutations
  */
-export const useTeacherScheduleCollegeQuery = () => {
-  return useQuery<getAllTeacherScheduleResponse, Error>({
-    queryKey: ['TeacherSchedule'],
-    queryFn: () => getAllTeacherScheduleAction(),
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-  });
-};
+// export const useTeacherScheduleCollegeQuery = () => {
+//   return useQuery<getAllTeacherScheduleResponse, Error>({
+//     queryKey: ['TeacherSchedule'],
+//     queryFn: () => getAllTeacherScheduleAction(),
+//     retry: 0,
+//     refetchOnMount: false,
+//     refetchOnWindowFocus: true,
+//   });
+// };
 export const useTeacherScheduleCollegeQueryByProfileId = (data: any) => {
   return useQuery<getAllTeacherScheduleResponse, Error>({
     queryKey: ['TeacherScheduleByProfileId', data],

@@ -1,8 +1,21 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
+import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import Link from 'next/link';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { Icons } from '@/components/shared/Icons';
+import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
+import { useState } from 'react';
 import ActionsCell from './ActionsCell';
+import Image from 'next/image';
+import { ITeacherProfile } from '@/types';
 
-export const columns: ColumnDef<any>[] = [
+export const columns: ColumnDef<ITeacherProfile>[] = [
   {
     accessorFn: (row) => '#',
     id: '#',
@@ -16,181 +29,161 @@ export const columns: ColumnDef<any>[] = [
       );
     },
   },
+  // {
+  //   accessorFn: (row) => row.subjectCode,
+  //   accessorKey: 'subjectCode',
+  //   header: 'subjectCode',
+  //   cell: ({ cell, row }) => {
+  //     const user = row.original;
+  //     console.log(user);
+  //     return (
+  //       <div key={cell.id} className='flex justify-center items-center'>
+  //           {user.subjectCode}
+  //       </div>
+  //     );
+  //   },
+  // },
   {
-    accessorFn: (row) => row.courseId.courseCode,
-    id: 'course code',
-    header: 'Course Code',
+    accessorKey: 'name',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Name
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return <div key={cell.id}>{user.lastname && user.firstname ? user.lastname + ',' + ' ' + user.firstname + ' ' + user.middlename : 'Unknown'}</div>;
+    },
+    accessorFn: (row) => `${row.lastname}, ${row.firstname} ${row.middlename}`,
+    filterFn: (row, columnId, filterValue) => {
+      const user = row.original;
+      const fullName = `${row.original.lastname}, ${row.original.firstname} ${row.original.middlename}`.toLowerCase();
+      return fullName.includes(filterValue.toLowerCase());
+    },
+  },
+  {
+    accessorFn: (row) => row.sex,
+    id: 'sex',
+    header: 'Sex',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.courseId.courseCode}
+          {user.sex}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.blockTypeId.section,
-    id: 'block type',
-    header: 'Block Type',
+    accessorFn: (row) => row.userId.email, // Use accessorFn for nested fields
+    id: 'email',
+    header: 'Email',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=''>
+          {user.userId.email}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.isVerified,
+    id: 'ProfileVerified',
+    header: 'Profile Verified',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          Block {user.blockTypeId.section}
+          {user.isVerified ? <span className="text-green-500">TRUE</span> : <span className="text-red">FALSE</span> }
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.blockTypeId.year,
-    id: 'year',
-    header: 'Year',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {user.blockTypeId.year}
-        </div>
-      );
+    accessorKey: 'createdAt',
+    header: 'CreatedAt',
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('createdAt'));
+      const formatted = date.toLocaleDateString();
+      // @example for formatted date ex. January 1, 2015
+      // const options: Intl.DateTimeFormatOptions = {
+      //   year: "numeric",
+      //   month: "short",
+      //   day: "numeric",
+      // };
+
+      // const formattedDate = date.toLocaleDateString("en-US", options);
+
+      // // Manually reformat the string to "Jul 20, 2024"
+      // const [month, day, year] = formattedDate.split(' ');
+      // const formatted = `${month} ${day}, ${year}`;
+      return <div className='font-medium'>{formatted}</div>;
     },
   },
-  {
-    accessorFn: (row) => row.blockTypeId.semester,
-    id: 'semester',
-    header: 'Semester',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {user.blockTypeId.semester}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.subjectId.subjectCode,
-    id: 'subject code',
-    header: 'Subject Code',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {user.subjectId.subjectCode}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.subjectId.name,
-    id: 'Descriptive Title',
-    header: 'Descriptive Title',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {user.subjectId.name}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.subjectId.lec,
-    id: 'lec',
-    header: 'Lec',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {user.subjectId.lec}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.subjectId.lab,
-    id: 'lab',
-    header: 'Lab',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {user.subjectId.lab}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.subjectId.unit,
-    id: 'unit',
-    header: 'Unit',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {user.subjectId.unit}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.days,
-    id: 'days',
-    header: 'Days',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className='uppercase'>
-          {user.days.join(', ')}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.startTime,
-    id: 'start time',
-    header: 'Start Time',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className='uppercase'>
-          {user.startTime}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.endTime,
-    id: 'end time',
-    header: 'End Time',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className='uppercase'>
-          {user.endTime}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.roomId.roomName,
-    id: 'room name',
-    header: 'Room Name',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {user.roomId.roomName}
-        </div>
-      );
-    },
-  },
+  // {
+  //   id: 'actions',
+  //   header: 'Actions',
+  //   cell: ({ row }) => {
+  //     const user = row.original;
+
+  //     return (
+  //       <DropdownMenu modal={false}>
+  //         <DropdownMenuTrigger asChild>
+  //           <div className='flex justify-center items-center w-full'>
+  //             <Button size={'sm'} className='w-auto focus-visible:ring-0 flex bg-blue-500 px-2 py-0 text-neutral-50 font-medium'>
+  //               <span className='sr-only'>Open menu</span>
+  //               Options
+  //             </Button>
+  //           </div>
+  //         </DropdownMenuTrigger>
+  //         <DropdownMenuContent align='end' className='bg-white'>
+  //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+  //           <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user._id)}>Copy user ID</DropdownMenuItem>
+  //           <DropdownMenuItem>
+  //             <DataTableDrawer user={user} />
+  //           </DropdownMenuItem>
+  //           <DropdownMenuSeparator />
+  //           <DropdownMenuItem>
+  //             <Link href={`/profile/${user.userId.username}`}>View profile</Link>
+  //           </DropdownMenuItem>
+  //           <DropdownMenuItem>View payment details</DropdownMenuItem>
+  //         </DropdownMenuContent>
+  //       </DropdownMenu>
+  //     );
+  //   },
+  // },
   {
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
       const user = row.original;
+
       return <ActionsCell user={user} />;
     },
   },
+  // {
+  //   id: 'actions',
+  //   header: 'Actions',
+  //   cell: ({ row }) => {
+  //     const user = row.original;
+  //     return (
+  //       <div className=''>
+  //         <div className='flex justify-center items-center w-full gap-1'>
+  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-green-500 px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
+  //             Make an appointment
+  //             <Icons.check className='h-4 w-4' />
+  //           </Button>
+  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-red px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
+  //             Reject
+  //             <Icons.close className='h-4 w-4' />
+  //           </Button>
+  //         </div>
+  //       </div>
+  //     );
+  //   },
+  // },
 ];

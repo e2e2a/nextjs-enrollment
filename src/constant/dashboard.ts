@@ -23,7 +23,7 @@ export const dashboardConfig: DashboardConfig = {
     //   icon: 'fileBadge',
     //   // disabled: true,
     // },
-    
+
     {
       title: 'Schedules',
       href: '/schedules',
@@ -215,6 +215,11 @@ export const dashboardConfig: DashboardConfig = {
       title: 'Blocks',
       href: '/dean/blocks',
       icon: 'packageSearch',
+    },
+    {
+      title: 'Class Load',
+      href: '/dean/schedules/classes',
+      icon: 'hourglass',
     },
     {
       title: 'Enrollment',

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useTeacherScheduleCollegeQuery, useEnrollmentSetupQuery } from '@/lib/queries';
+import { useEnrollmentSetupQuery } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,20 +10,20 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useEnrollmentQueryBySessionId } from '@/lib/queries/enrollment/get/session';
+import { useTeacherScheduleQueryByCategory } from '@/lib/queries/teacherSchedule/get/category';
 
 const Page = () => {
   const { data: session } = useSession();
   const [schedule, setSchedule] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data, isLoading, error: isEnError } = useEnrollmentQueryBySessionId(session?.user.id!);
-  const { data: b, isLoading: bLoading, error: bError } = useTeacherScheduleCollegeQuery();
+  const { data: b, isLoading: bLoading, error: bError } = useTeacherScheduleQueryByCategory('College');
   const { data: ESetup, isLoading: ESetupLoading, error: ESetupError } = useEnrollmentSetupQuery();
 
   useEffect(() => {
     if (bError || !b) return;
     if (isEnError || !data) return;
     if (ESetupError || !ESetup) return;
-    console.log('en', data);
 
     if (b && data && ESetup) {
       if (data.enrollment) {
