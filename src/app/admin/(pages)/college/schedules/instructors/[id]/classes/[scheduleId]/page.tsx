@@ -1,20 +1,22 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useTeacherProfileQueryById } from '@/lib/queries';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import AddGrades from './components/AddGrades';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/id';
 import { useEnrollmentQueryByTeacherScheduleId } from '@/lib/queries/enrollment/get/teacherSchedule';
+import { useProfileQueryByParamsUserId } from '@/lib/queries/profile/get/userId';
 
 const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error: isEnError } = useTeacherProfileQueryById(params.id);
+  const { data, isLoading, error: isEnError } = useProfileQueryByParamsUserId(params.id);
   const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryById(params.scheduleId, 'College');
   const { data: s, isLoading: sLoading, error: sError } = useEnrollmentQueryByTeacherScheduleId({ id: ts?.teacherSchedule?._id, category: 'College' });
+
   useEffect(() => {
+    console.log('data', data)
     if (tsError || !ts) return;
     if (isEnError || !data) return;
     if (sError || !s) return;
@@ -33,6 +35,7 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
       }
     }
   }, [ts, tsError, data, isEnError, s, sError]);
+
   return (
     <>
       {isPageLoading ? (
@@ -43,7 +46,7 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {isError ? (
             <div className=''>404</div>
-          ) : data && data.teacher ? (
+          ) : data && data.profile ? (
             <>
               <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
                 <div className='mb-3'>

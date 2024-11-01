@@ -159,16 +159,16 @@ export const createTeacherScheduleAction = async (data: any) => {
 //     return { error: 'Something went wrong', status: 500 };
 //   }
 // };
-export const getTeacherScheduleByProfileIdAction = async (id: any): Promise<getAllTeacherScheduleResponse> => {
-  try {
-    await dbConnect();
-    const t = await getAllTeacherScheduleByProfileId(id);
-    return { teacherSchedules: JSON.parse(JSON.stringify(t)), status: 200 };
-  } catch (error) {
-    console.log('server e :', error);
-    return { error: 'Something went wrong', status: 500 };
-  }
-};
+// export const getTeacherScheduleByProfileIdAction = async (id: any): Promise<getAllTeacherScheduleResponse> => {
+//   try {
+//     await dbConnect();
+//     const t = await getAllTeacherScheduleByProfileId(id);
+//     return { teacherSchedules: JSON.parse(JSON.stringify(t)), status: 200 };
+//   } catch (error) {
+//     console.log('server e :', error);
+//     return { error: 'Something went wrong', status: 500 };
+//   }
+// };
 
 export const removeTeacherScheduleCollegeMutation = async (data: any) => {
   try {
@@ -207,16 +207,16 @@ export const removeTeacherScheduleCollegeMutation = async (data: any) => {
 //     return { error: 'Something went wrong', status: 500 };
 //   }
 // };
-export const getTeacherProfileByIdAction = async (id: string): Promise<getTeacherProfileResponse> => {
-  try {
-    await dbConnect();
-    const t = await getTeacherProfileById(id);
-    return { teacher: JSON.parse(JSON.stringify(t)), status: 200 };
-  } catch (error) {
-    console.log('server e :', error);
-    return { error: 'Something went wrong', status: 500 };
-  }
-};
+// export const getTeacherProfileByIdAction = async (id: string): Promise<getTeacherProfileResponse> => {
+//   try {
+//     await dbConnect();
+//     const t = await getTeacherProfileById(id);
+//     return { teacher: JSON.parse(JSON.stringify(t)), status: 200 };
+//   } catch (error) {
+//     console.log('server e :', error);
+//     return { error: 'Something went wrong', status: 500 };
+//   }
+// };
 
 export const getTeacherProfileByUserIdAction = async (id: string): Promise<getTeacherProfileResponse> => {
   try {

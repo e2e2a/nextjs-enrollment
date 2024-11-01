@@ -49,7 +49,13 @@ export const getAllTeacherScheduleByScheduleRoomId = async (roomId: any) => {
 };
 export const getAllTeacherScheduleByProfileId = async (profileId: any) => {
   try {
-    const ts = await TeacherSchedule.find({ profileId }).populate('profileId').populate('courseId').populate('blockTypeId').populate('subjectId').populate('roomId').exec();
+    const ts = await TeacherSchedule.find({ profileId })
+      .populate({ path: 'profileId', populate: [{ path: 'userId' }] })
+      .populate('courseId')
+      .populate('blockTypeId')
+      .populate('subjectId')
+      .populate('roomId')
+      .exec();
     return ts;
   } catch (error) {
     console.log('error e:', error);

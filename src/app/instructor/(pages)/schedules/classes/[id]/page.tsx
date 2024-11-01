@@ -14,6 +14,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data, isLoading, error: isEnError } = useProfileQueryBySessionId();
   const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryById(params.id, 'College');
   const { data: s, isLoading: sLoading, error: sError } = useEnrollmentQueryByTeacherScheduleId({ id: ts?.teacherSchedule?._id, category: 'College' });
+
   useEffect(() => {
     if (tsError || !ts) return;
     if (isEnError || !data) return;
@@ -33,6 +34,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       }
     }
   }, [ts, tsError, data, isEnError, s, sError]);
+  
   return (
     <>
       {isPageLoading ? (

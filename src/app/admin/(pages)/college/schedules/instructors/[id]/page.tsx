@@ -1,18 +1,19 @@
 'use client';
-import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useTeacherProfileQueryById, useTeacherScheduleCollegeQueryByProfileId } from '@/lib/queries';
 import AddInstructorSched from './components/AddInstructorSched';
 import { useAllRoomQueryByEduLevel } from '@/lib/queries/rooms/get/all';
 import { useSubjectQueryByCategory } from '@/lib/queries/subjects/get/category';
+import LoaderPage from '@/components/shared/LoaderPage';
+import { useTeacherScheduleQueryByProfileId } from '@/lib/queries/teacherSchedule/get/all/profileId';
+import { useProfileQueryByParamsUserId } from '@/lib/queries/profile/get/userId';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error: isEnError } = useTeacherProfileQueryById(params.id);
-  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleCollegeQueryByProfileId(data?.teacher?._id);
+  const { data, isLoading, error: isEnError } = useProfileQueryByParamsUserId(params.id);
+  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryByProfileId({ id: data?.profile?._id });
   const { data: s, isLoading: sLoading, error: sError } = useSubjectQueryByCategory('College');
   const { data: r, isLoading: rLoading, error: rError } = useAllRoomQueryByEduLevel('tertiary');
 
@@ -21,6 +22,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (isEnError || !data) return;
     if (sError || !s) return;
     if (rError || !r) return;
+    
     if (ts && data && s && r) {
       setIsPageLoading(false);
     }
@@ -30,13 +32,13 @@ const Page = ({ params }: { params: { id: string } }) => {
     <>
       {isPageLoading ? (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>
-          <Loader />
+          <LoaderPage />
         </div>
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {isError ? (
             <div className=''>404</div>
-          ) : data && data.teacher ? (
+          ) : data && data.profile ? (
             <>
               <div className='flex items-center py-4 text-black w-full text-center flex-col'>
                 <div>
@@ -44,12 +46,12 @@ const Page = ({ params }: { params: { id: string } }) => {
                 </div>
                 <div className=''>
                   <h1 className='sm:text-sm text-lg font-bold capitalize'>
-                    {data.teacher.firstname} {data.teacher.middlename} {data.teacher.lastname} {data.teacher.extensionName ? data.teacher.extensionName : ''}
+                    {data.profile.firstname} {data.profile.middlename} {data.profile.lastname} {data.profile.extensionName ? data.profile.extensionName : ''}
                   </h1>
                 </div>
               </div>
               <div className='w-full flex justify-end items-center'>
-                <AddInstructorSched teacher={data.teacher} s={s?.subjects} r={r?.rooms} />
+                <AddInstructorSched teacher={data.profile} s={s?.subjects} r={r?.rooms} />
               </div>
               <DataTable columns={columns} data={ts?.teacherSchedules} />
             </>

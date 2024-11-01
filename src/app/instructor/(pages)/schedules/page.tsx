@@ -1,38 +1,38 @@
 'use client';
-import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useTeacherScheduleCollegeQueryByProfileId } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
+import { useTeacherScheduleQueryByProfileId } from '@/lib/queries/teacherSchedule/get/all/profileId';
+import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const { data: session } = useSession();
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data, isLoading, error: isEnError } = useProfileQueryBySessionId();
-  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleCollegeQueryByProfileId(data?.profile?._id);
-  useEffect(() => {
-    if (isLoading || !data) return;
-    if (isEnError) return setIsError(true);
-  }, [data, isLoading, isEnError]);
-  useEffect(() => {
-    if (tsLoading || !ts) return;
-    if (tsError) return setIsError(true);
-  }, [ts, tsLoading, tsError]);
+  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryByProfileId({ id: data?.profile?._id });
 
   useEffect(() => {
+    if (tsError || !ts) return;
+    if (isEnError || !data) return;
+
     if (ts && data) {
+      if (ts.error) {
+        setIsPageLoading(false);
+        setIsError(true);
+        return;
+      }
       setIsPageLoading(false);
     }
-  }, [ts, data]);
+  }, [ts, tsError, data, isEnError]);
 
   return (
     <>
       {isPageLoading ? (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>
-          <Loader />
+          <LoaderPage />
         </div>
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
