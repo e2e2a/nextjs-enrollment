@@ -1,17 +1,17 @@
 'use client';
-import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { useAllEnrollmentByTeacherScheduleIdQuery, useTeacherScheduleCollegeQueryById } from '@/lib/queries';
+import { useAllEnrollmentByTeacherScheduleIdQuery } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import AddGrades from './components/AddGrades';
+import LoaderPage from '@/components/shared/LoaderPage';
+import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/id';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data: session } = useSession();
-  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleCollegeQueryById(params.id);
+  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryById(params.id, 'College');
   const { data: s, isLoading: sLoading, error: sError } = useAllEnrollmentByTeacherScheduleIdQuery(ts?.teacherSchedule?._id);
   useEffect(() => {
     if (tsError || !ts) return;
@@ -19,14 +19,6 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     if (ts && s) {
       if (ts.teacherSchedule) {
-        const mytesting = s.enrollment.map((ss: any) => {
-          return ss.studentSubjects.filter((sss: any) => {
-            // return console.log('sss2', sss.teacherScheduleId._id);
-            return sss.teacherScheduleId._id === ts?.teacherSchedule?._id;
-          });
-        });
-
-        mytesting.map((ss: any) => {console.log('mystes', ss)})
         setIsPageLoading(false);
       }
     }
@@ -36,14 +28,14 @@ const Page = ({ params }: { params: { id: string } }) => {
     <>
       {isPageLoading ? (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>
-          <Loader />
+          <LoaderPage />
         </div>
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {isError ? (
             <div className=''>404</div>
           ) : ts && ts.teacherSchedule ? (
-            <>
+            <div className=''>
               <div className='flex items-center py-4 text-black w-full text-center flex-col'>
                 <div>
                   <h1 className='xs:text-lg sm:text-xl font-bold uppercase'>Instructor Students</h1>
@@ -59,13 +51,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <span className='text-[12px] xs:text-sm sm:text-lg font-semibold'> {ts?.teacherSchedule?.roomId.roomName}</span>
                 </div>
               </div>
-              <div className='w-full flex justify-start items-center'>
-                <div className='flex flex-col'>
-                  <AddGrades data={s?.enrollment} teacher={ts?.teacherSchedule} />
-                </div>
-              </div>
               <DataTable columns={columns} data={s?.enrollment} />
-            </>
+            </div>
           ) : (
             <div className=''>404</div>
           )}

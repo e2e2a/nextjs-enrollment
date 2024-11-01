@@ -186,16 +186,16 @@ export const removeTeacherScheduleCollegeMutation = async (data: any) => {
   }
 };
 
-export const getTeacherScheduleByIdAction = async (id:string): Promise<getTeacherScheduleResponse> => {
-  try {
-    await dbConnect();
-    const t = await getTeacherScheduleById(id);
-    return { teacherSchedule: JSON.parse(JSON.stringify(t)), status: 200 };
-  } catch (error) {
-    console.log('server e :', error);
-    return { error: 'Something went wrong', status: 500 };
-  }
-};
+// export const getTeacherScheduleByIdAction = async (id:string): Promise<getTeacherScheduleResponse> => {
+//   try {
+//     await dbConnect();
+//     const t = await getTeacherScheduleById(id);
+//     return { teacherSchedule: JSON.parse(JSON.stringify(t)), status: 200 };
+//   } catch (error) {
+//     console.log('server e :', error);
+//     return { error: 'Something went wrong', status: 500 };
+//   }
+// };
 
 // export const getAllTeacherProfileAction = async (): Promise<getAllTeacherProfileResponse> => {
 //   try {

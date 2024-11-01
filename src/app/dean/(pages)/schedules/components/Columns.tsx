@@ -157,14 +157,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.roomName,
+    accessorFn: (row) => row.roomId.roomName,
     id: 'room name',
     header: 'Room Name',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.endTime}
+          {user.roomId.roomName}
         </div>
       );
     },

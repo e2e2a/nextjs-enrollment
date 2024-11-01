@@ -31,7 +31,6 @@ import {
   createTeacherScheduleAction,
   getTeacherProfileByIdAction,
   getTeacherProfileByUserIdAction,
-  getTeacherScheduleByIdAction,
   getTeacherScheduleByProfileIdAction,
   removeTeacherScheduleCollegeMutation,
 } from '@/action/college/schedules/teachers';
@@ -464,20 +463,6 @@ export const useRemoveCourseBlockScheduleMutation = () => {
   });
 };
 
-/**
- * Instructor Teacher Schedule By Id
- * @returns Queries and mutations
- */
-export const useTeacherScheduleCollegeQueryById = (data: any) => {
-  return useQuery<getTeacherScheduleResponse, Error>({
-    queryKey: ['TeacherScheduleByProfileId', data],
-    queryFn: () => getTeacherScheduleByIdAction(data),
-    retry: 0,
-    enabled: !!data,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-  });
-};
 /**
  * Admin Teacher Schedule Management
  * @returns Queries and mutations

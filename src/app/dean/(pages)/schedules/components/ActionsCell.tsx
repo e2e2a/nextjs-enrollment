@@ -1,5 +1,5 @@
 import React from 'react';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Command, CommandGroup, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Icons } from '@/components/shared/Icons';
 import { useState } from 'react';
@@ -25,20 +25,21 @@ const ActionsCell = ({ user }: IProps) => {
         </PopoverTrigger>
         <PopoverContent align='center' className='w-[230px] bg-neutral-50 px-1 py-0'>
           <Command>
-            {/* <CommandInput placeholder='Search language...' /> */}
             <CommandList>
-              {/* <CommandEmpty>No language found.</CommandEmpty> */}
               <CommandGroup className=''>
                 <Button disabled={isPending} size={'sm'} className={'w-full group focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-0 gap-x-1 justify-start items-center hover:text-neutral-50 font-medium'}>
-                  <Link href={`${isPending ? '' : `/admin/college/schedules/instructors/${user._id}`}`} className={'w-full h-full group/item rounded-md focus-visible:ring-0 flex text-black bg-transparent gap-x-1 justify-start items-center group-hover:hover:text-neutral-50'}>
+                  <Link
+                    href={`${isPending ? '' : `/dean/schedules/classes/${user._id}`}`}
+                    className={'w-full h-full group/item rounded-md focus-visible:ring-0 flex text-black bg-transparent gap-x-1 justify-start items-center group-hover:hover:text-neutral-50'}
+                  >
                     <Icons.eye className='h-4 w-4' />
-                    View Instructor Schedule
+                    View Class Load
                   </Link>
                 </Button>
-                <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
+                {/* <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
                   <Icons.close className='h-4 w-4' />
                   Delete Course
-                </Button>
+                </Button> */}
                 {/* <DataTableDrawer user={user} /> */}
               </CommandGroup>
             </CommandList>

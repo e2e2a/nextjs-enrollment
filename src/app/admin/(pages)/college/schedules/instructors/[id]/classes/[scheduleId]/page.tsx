@@ -1,18 +1,19 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useAllEnrollmentByTeacherScheduleIdQuery, useTeacherProfileQueryById, useTeacherScheduleCollegeQueryById } from '@/lib/queries';
+import { useAllEnrollmentByTeacherScheduleIdQuery, useTeacherProfileQueryById } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import AddGrades from './components/AddGrades';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/id';
 
 const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
   const [isError, setIsError] = useState(false);
   const [teacherStudents, setTeacherStudents] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data, isLoading, error: isEnError } = useTeacherProfileQueryById(params.id);
-  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleCollegeQueryById(params.scheduleId);
+  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryById(params.scheduleId, 'College');
   const { data: s, isLoading: sLoading, error: sError } = useAllEnrollmentByTeacherScheduleIdQuery(ts?.teacherSchedule?._id);
   useEffect(() => {
     if (tsError || !ts) return;
