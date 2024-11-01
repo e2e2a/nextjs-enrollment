@@ -4,24 +4,27 @@ import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import { useTeacherScheduleQueryByCategory } from '@/lib/queries/teacherSchedule/get/category';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
+  const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
   const { data, isLoading, error: isEnError } = useTeacherScheduleQueryByCategory('College');
 
   useEffect(() => {
     if (isEnError || !data) return;
-console.log(['data', data])
-    if (data) {
-      if (data.teachers) {
+    if (pError || !pData) return;
+
+    if (data && pData) {
+      if (data.teacherSchedules) {
         setIsPageLoading(false);
       } else if (data.error) {
         setIsError(true);
         setIsPageLoading(false);
       }
     }
-  }, [data, isEnError]);
+  }, [data, isEnError, pData, pError]);
 
   return (
     <>
@@ -34,13 +37,19 @@ console.log(['data', data])
           {isError ? (
             <div className=''>404</div>
           ) : (
-            data &&
-            data.teachers && (
+            data && (
               <div className=''>
-                <div className='flex items-center py-4 text-black w-full justify-center'>
-                  <h1 className='sm:text-3xl text-xl font-bold '>Instructors Management</h1>
+                <div className='mb-3 text-center w-full'>
+                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Schedule Management</h1>
                 </div>
-                <DataTable columns={columns} data={data?.teachers as any} />
+                <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1 mb-10'>
+                  <div className='justify-between items-start flex w-full'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Department: <span className='font-normal'>{pData?.profile.courseId.name}</span>
+                    </span>
+                  </div>
+                </div>
+                <DataTable columns={columns} data={data?.teacherSchedules as any[]} />
               </div>
             )
           )}

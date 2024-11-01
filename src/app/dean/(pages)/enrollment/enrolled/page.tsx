@@ -53,11 +53,6 @@ const Page = () => {
                     Department: <span className='font-normal'>{pData?.profile.courseId.name}</span>
                   </span>
                 </div>
-                {/* <div className='flex w-full justify-start sm:justify-end'>
-                  <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                    Block: <span className='font-normal'>{data.reportedGrades.teacherScheduleId.blockTypeId.section}</span>
-                  </span>
-                </div> */}
               </div>
               <DataTable columns={columns} data={enrolledStudents as IEnrollment[]} />
             </div>

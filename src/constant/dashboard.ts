@@ -218,7 +218,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: 'Class Load',
-      href: '/dean/schedules/classes',
+      href: '/dean/schedules',
       icon: 'hourglass',
     },
     {

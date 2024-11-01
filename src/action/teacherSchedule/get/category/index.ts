@@ -2,6 +2,7 @@
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
+import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { getTeacherScheduleByCategory } from '@/services/teacherSchedule';
 import { checkAuth } from '@/utils/actions/session';
 
@@ -39,7 +40,7 @@ const checkSessionRole = async (user: any, category: string) => {
         ts = filteredDean;
         break;
       case 'STUDENT':
-        const stud = await getDeanProfileByUserId(user._id);
+        const stud = await getStudentProfileByUserId(user._id);
         const filteredStud = sched.filter((s: any) => s.courseId && s.courseId._id.toString() === stud.courseId._id.toString());
         ts = filteredStud;
         break;
