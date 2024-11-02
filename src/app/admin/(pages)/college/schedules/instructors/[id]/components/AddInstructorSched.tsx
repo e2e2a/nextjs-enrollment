@@ -1,9 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
-import { useCreateTeacherScheduleCollegeMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { Form } from '@/components/ui/form';
 import { CardContent, CardFooter } from '@/components/ui/card';
@@ -11,11 +10,13 @@ import { ComboboxSubjects } from '../../add/components/ComboboxSubjects';
 import { ComboboxRoom } from '../../add/components/ComboboxRoom';
 import { ComboboxDays } from '../../add/components/ComboboxDays';
 import Input from '../../add/components/Input';
-import { TeacherScheduleCollegeValidator } from '@/lib/validators/AdminValidator';
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { TeacherScheduleCollegeValidator } from '@/lib/validators/teacherSchedule/create/college';
+import { useCreateTeacherScheduleByCategoryMutation } from '@/lib/queries/teacherSchedule/create';
+
 interface IProps {
   teacher: any;
   r: any;
@@ -30,14 +31,16 @@ const daysOfWeek = [
   { label: 'Saturday', value: 'Sa' },
   { label: 'Sunday', value: 'Su' },
 ];
+
 const AddInstructorSched = ({ teacher, r, s }: IProps) => {
   const [roomId, setRoomId] = useState('');
   const [showLink, setShowLink] = useState(false);
   const [instructorLink, setInstructorLink] = useState('');
   const [roomLink, setRoomLink] = useState('');
   const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
-  const mutation = useCreateTeacherScheduleCollegeMutation();
-  const formCollege = useForm<z.infer<typeof TeacherScheduleCollegeValidator>>({
+  const mutation = useCreateTeacherScheduleByCategoryMutation();
+
+  const form = useForm<z.infer<typeof TeacherScheduleCollegeValidator>>({
     resolver: zodResolver(TeacherScheduleCollegeValidator),
     defaultValues: {
       teacherId: teacher._id,
@@ -48,8 +51,8 @@ const AddInstructorSched = ({ teacher, r, s }: IProps) => {
       endTime: '',
     },
   });
+
   const onSubmit: SubmitHandler<z.infer<typeof TeacherScheduleCollegeValidator>> = async (data) => {
-    //we need to revised the room to roomId and teacher to teacherId
     setShowLink(false);
     setRoomLink('');
     setInstructorLink('');
@@ -69,7 +72,7 @@ const AddInstructorSched = ({ teacher, r, s }: IProps) => {
             setRoomLink('');
             setInstructorLink('');
             setSelectedItems([]);
-            formCollege.reset();
+            form.reset();
             makeToastSucess(res.message);
             return;
           default:
@@ -131,15 +134,15 @@ const AddInstructorSched = ({ teacher, r, s }: IProps) => {
               </div>
             </div>
           )}
-          <Form {...formCollege}>
-            <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
+          <Form {...form}>
+            <form method='post' onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-4'>
               <CardContent className='w-full '>
                 <div className='flex flex-col gap-4'>
-                  <ComboboxSubjects name={'subjectId'} selectItems={s} form={formCollege} label={'Select Subject:'} placeholder={'Select Subject'} />
-                  <ComboboxRoom name={'roomId'} selectItems={r} form={formCollege} label={'Select Room:'} placeholder={'Select Room'} setRoomId={setRoomId} />
-                  <ComboboxDays name={'days'} selectItems={daysOfWeek} form={formCollege} label={'Select Day/s:'} placeholder={'Select Day/s'} selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
-                  <Input name={'startTime'} type={'time'} form={formCollege} label={'Start Time:'} classNameInput={''} />
-                  <Input name={'endTime'} type={'time'} form={formCollege} label={'End Time:'} classNameInput={''} />
+                  <ComboboxSubjects name={'subjectId'} selectItems={s} form={form} label={'Select Subject:'} placeholder={'Select Subject'} />
+                  <ComboboxRoom name={'roomId'} selectItems={r} form={form} label={'Select Room:'} placeholder={'Select Room'} setRoomId={setRoomId} />
+                  <ComboboxDays name={'days'} selectItems={daysOfWeek} form={form} label={'Select Day/s:'} placeholder={'Select Day/s'} selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
+                  <Input name={'startTime'} type={'time'} form={form} label={'Start Time:'} classNameInput={''} />
+                  <Input name={'endTime'} type={'time'} form={form} label={'End Time:'} classNameInput={''} />
                 </div>
               </CardContent>
               <CardFooter>

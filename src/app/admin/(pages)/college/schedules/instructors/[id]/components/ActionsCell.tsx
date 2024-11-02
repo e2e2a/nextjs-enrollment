@@ -24,7 +24,6 @@ const ActionsCell = ({ user }: IProps) => {
     };
     mutation.mutate(data, {
       onSuccess: (res: any) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:

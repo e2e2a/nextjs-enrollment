@@ -7,19 +7,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { useSession } from 'next-auth/react';
-import { useCreateTeacherScheduleCollegeMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { Combobox } from './components/Combobox';
 import Input from './components/Input';
 import LoaderPage from '@/components/shared/LoaderPage';
 import Link from 'next/link';
 import { ComboboxDays } from './components/ComboboxDays';
-import { TeacherScheduleCollegeValidator } from '@/lib/validators/AdminValidator';
 import { ComboboxRoom } from './components/ComboboxRoom';
 import { ComboboxSubjects } from './components/ComboboxSubjects';
 import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 import { useAllRoomQueryByEduLevel } from '@/lib/queries/rooms/get/all';
 import { useSubjectQueryByCategory } from '@/lib/queries/subjects/get/category';
+import { TeacherScheduleCollegeValidator } from '@/lib/validators/teacherSchedule/create/college';
+import { useCreateTeacherScheduleByCategoryMutation } from '@/lib/queries/teacherSchedule/create';
 
 const daysOfWeek = [
   { label: 'Monday', value: 'M' },
@@ -30,6 +30,7 @@ const daysOfWeek = [
   { label: 'Saturday', value: 'Sa' },
   { label: 'Sunday', value: 'Su' },
 ];
+
 const Page = () => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -44,13 +45,12 @@ const Page = () => {
   const { data: tData, isLoading, isError } = useAllProfileQueryByUserRoles('TEACHER');
   const { data: sData, isLoading: sLoading, isError: sError } = useSubjectQueryByCategory('College');
   const { data: rData, isLoading: rLoading, error: rError } = useAllRoomQueryByEduLevel('tertiary');
-  
+
   useEffect(() => {
     if (sError || isError || rError) return; //500
   }, [sError, isError, rError]);
 
   useEffect(() => {
-    console.log('tdata: ', tData)
     if (!tData || !rData || !sData) return; //500
     if (rData && tData && sData) {
       if (rData.rooms) {
@@ -67,9 +67,9 @@ const Page = () => {
     }
   }, [rData, tData, sData]);
 
-  const mutation = useCreateTeacherScheduleCollegeMutation();
+  const mutation = useCreateTeacherScheduleByCategoryMutation();
   const { data } = useSession();
-  const session = data?.user;
+
   const formCollege = useForm<z.infer<typeof TeacherScheduleCollegeValidator>>({
     resolver: zodResolver(TeacherScheduleCollegeValidator),
     defaultValues: {
@@ -89,6 +89,7 @@ const Page = () => {
     setInstructorLink('');
     data.roomId = roomId;
     data.teacherId = teacherId;
+
     const dataa = {
       ...data,
       category: 'College',
@@ -137,14 +138,6 @@ const Page = () => {
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To register a new instructor, please fill out the necessary details, including personal information, qualifications, and assigned courses. This form ensures accurate scheduling and smooth onboarding of
                   instructors into the system.
                 </p>
-                {/* <div className='flex flex-col mt-2'>
-                  <span className='text-orange-300 font-medium'>Note:</span>
-                  <span>• Newly Registered teacher must have been registered in blocks/sections schedule to display this in student. </span>
-                  <div className='pl-3 flex flex-col'>
-                    <span className='font-medium'>Features to consider:</span>
-                    <span className=''>- Adding/Droping Subjects with schedule</span>
-                  </div>
-                </div> */}
               </div>
             </CardHeader>
             {showLink && (
@@ -154,7 +147,7 @@ const Page = () => {
                     <span className='text-red'>Schedule Conflict</span>
                     {instructorLink && (
                       <Link href={`/admin/college/schedules/instructors/${instructorLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
-                        See Professor Schedule
+                        See Instructor Schedule
                       </Link>
                     )}
                     {roomLink && (

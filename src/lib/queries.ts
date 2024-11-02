@@ -13,7 +13,6 @@ import {
   CollegeEndSemesterAction,
 } from '@/action/college/enrollment/admin';
 import {
-  createTeacherScheduleAction,
   removeTeacherScheduleCollegeMutation,
 } from '@/action/college/schedules/teachers';
 import { createSchoolYearAction, getAllSchoolYearAction } from '@/action/schoolyear';
@@ -272,17 +271,6 @@ export const useRemoveCourseBlockScheduleMutation = () => {
  * Admin Teacher Schedule Management
  * @returns Queries and mutations
  */
-
-export const useCreateTeacherScheduleCollegeMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => createTeacherScheduleAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
-      queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
-    },
-  });
-};
 export const useRemoveTeacherScheduleCollegeMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
