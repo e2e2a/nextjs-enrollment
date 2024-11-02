@@ -1,79 +1,71 @@
 'use client';
 import React from 'react';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Command, CommandGroup, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Icons } from '@/components/shared/Icons';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
-import { useApprovedEnrollmentStep2Mutation, useUndoEnrollmentToStep1Mutation } from '@/lib/queries';
-import { DialogStep1Button } from './Dialog';
+import { DialogStep2Button } from './Dialog';
+import { useUpdateEnrollmentStepMutation } from '@/lib/queries/enrollment/update/id/step';
+import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { useForm } from 'react-hook-form';
+import { EnrollmentBlockTypeValidator } from '@/lib/validators/enrollment/update/college/step2';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
 type IProps = {
   user: any;
 };
+
 const ActionsCell2 = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
-  const undoMutation = useUndoEnrollmentToStep1Mutation();
-  const mutation = useApprovedEnrollmentStep2Mutation();
   const [isOpen, setIsOpen] = useState(false);
-  const actionFormUndo = () => {
-    const data = {
+  const mutation = useUpdateEnrollmentStepMutation();
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const form = useForm<z.infer<typeof EnrollmentBlockTypeValidator>>({
+    resolver: zodResolver(EnrollmentBlockTypeValidator),
+    defaultValues: {
+      studentType: '',
+      blockType: '',
+    },
+  });
+  const actionFormSubmit = async (e: any, request: string) => {
+    e.preventDefault();
+    setIsPending(true);
+    if (request === 'Approved') {
+      const isValid = await form.trigger();
+      if (!isValid) return setIsPending(false);
+    }
+    const parseData = form.getValues();
+
+    const dataa = {
+      category: 'College',
+      step: 2,
       EId: user._id,
-      step: user.step,
-      blockType: user.blockType,
+      request,
+      ...(parseData ? parseData : {}),
     };
 
-    undoMutation.mutate(data, {
-      onSuccess: (res) => {
-        console.log(res);
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            // setTypeMessage('success');
-            // setMessage(res?.message);
-            // return (window.location.href = '/');
-            console.log(res);
-            return;
-          default:
-            //create maketoast
-            // setIsPending(false);
-            // setMessage(res.error);
-            // setTypeMessage('error');
-            return;
-        }
-      },
-      onSettled: () => {},
-    });
-  };
-  const actionFormSubmit = () => {
-    // setIsPending(true);
-    const dataa = {
-      EId: user._id,
-    };
     mutation.mutate(dataa, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            // setTypeMessage('success');
-            // setMessage(res?.message);
-            console.log(res);
+            makeToastSucess(res.message);
             return;
           default:
-            //create maketoast
-            // setIsPending(false);
-            // setMessage(res.error);
-            // setTypeMessage('error');
+            makeToastError(res.error);
             return;
         }
       },
-      onSettled: () => {},
+      onSettled: () => {
+        setIsPending(false);
+      },
     });
-  }
+  };
   return (
     <div className=''>
       <Popover>
@@ -95,30 +87,26 @@ const ActionsCell2 = ({ user }: IProps) => {
                     View student profile
                   </div>
                 </Link>
-                <Link href={`/dean/students/curriculums/${user.profileId._id}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
+                <Link href={`/admin/college/curriculums/students/${user.profileId._id}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
                   <div className='flex justify-center items-center text-sm font-medium gap-x-1'>
                     <Icons.fileStack className='h-4 w-4' />
                     Apply Credits
                   </div>
                 </Link>
-                {/* @todo */}
+                {/* @Approved step 2 Dialog */}
+                <DialogStep2Button isPending={isPending} form={form} user={user} setIsOpen={setIsOpen} isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} actionFormSubmit={actionFormSubmit} />
 
-                {/* {user.studentStatus === 'new student' || user.studentStatus === 'transfer student' ? (
-                  <Button type='button' disabled={isPending} size={'sm'} className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}>
-                    <Icons.check className='h-4 w-4' />
-                    Apply Credits
-                  </Button>
-                ) : null} */}
-                {/* <DialogStep1Button isPending={isPending} user={user} /> */}
-                {/* <Button size={'sm'} type='submit' onClick={actionFormSubmit} className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}>
-                  <Icons.check className='h-4 w-4' />
-                  Complete Current Step
-                </Button> */}
-                <DialogStep1Button isPending={isPending} user={user} setIsOpen={setIsOpen} />
-                <Button disabled={isPending} type='button' size={'sm'} onClick={actionFormUndo} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-yellow-400 px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
+                <Button
+                  disabled={isPending}
+                  type='button'
+                  size={'sm'}
+                  onClick={(e) => actionFormSubmit(e, 'Undo')}
+                  className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-yellow-400 px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}
+                >
                   <Icons.rotateCcw className='h-4 w-4' />
                   Undo last Step
                 </Button>
+
                 {/* <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
                   <Icons.close className='h-4 w-4' />
                   Reject Enrollee

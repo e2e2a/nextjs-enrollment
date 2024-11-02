@@ -6,8 +6,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { columns } from './components/step1/columns';
 import { columns2 } from './components/step2/columns';
 import { DataTable1 } from './components/step1/DataTable';
-import { Button } from '@/components/ui/button';
-import { DataTableDrawer } from './components/Drawer';
 import { DataTable2 } from './components/step2/DataTable2';
 import { IEnrollment } from '@/types';
 import { columns4 } from './components/step4/Columns4';
@@ -22,7 +20,6 @@ import { columns6 } from './components/step6/Columns6';
 import { useEnrollmentQueryStepByCategory } from '@/lib/queries/enrollment/get/step';
 
 const Page = () => {
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const search = searchParams.get('step');
   const [isError, setIsError] = useState(false);

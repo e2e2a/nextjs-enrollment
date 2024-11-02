@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import React from 'react';
 import { Command, CommandGroup, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -7,42 +7,47 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
-import { DialogStep1Button } from './Dialog';
-import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
+import { useUpdateEnrollmentStepMutation } from '@/lib/queries/enrollment/update/id/step';
+import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+
 type IProps = {
   user: any;
 };
+
 const ActionsCell = ({ user }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState<boolean>(false);
-  const mutation = useApprovedEnrollmentStep1Mutation();
-  const actionFormSubmit = () => {
-    // setIsPending(true);
+  const mutation = useUpdateEnrollmentStepMutation();
+
+  const actionFormSubmit = (e: any) => {
+    e.preventDefault();
+    setIsPending(true);
+
     const dataa = {
       EId: user._id,
+      step: 1,
+      request: 'Approved',
+      category: 'College',
     };
+
     mutation.mutate(dataa, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            // setTypeMessage('success');
-            // setMessage(res?.message);
-            console.log(res);
+            makeToastSucess(res.message);
             return;
           default:
-            //create maketoast
-            // setIsPending(false);
-            // setMessage(res.error);
-            // setTypeMessage('error');
+            makeToastError(res.error);
             return;
         }
       },
-      onSettled: () => {},
+      onSettled: () => {
+        setIsPending(false);
+      },
     });
-  }
+  };
   return (
     <div className=''>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -67,17 +72,15 @@ const ActionsCell = ({ user }: IProps) => {
                     View student profile
                   </Link>
                 </Button>
-                
-                <Button size={'sm'} type='submit' onClick={actionFormSubmit} className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}>
+
+                <Button size={'sm'} type='submit' onClick={(e) => actionFormSubmit(e)} className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}>
                   <Icons.check className='h-4 w-4' />
                   Complete Current Step
                 </Button>
-                {/* <DialogStep1Button isPending={isPending} user={user} setIsOpen={setIsOpen} /> */}
                 <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
                   <Icons.close className='h-4 w-4' />
                   Reject Enrollee
                 </Button>
-                {/* <DataTableDrawer user={user} /> */}
               </CommandGroup>
             </CommandList>
           </Command>

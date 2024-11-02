@@ -2,7 +2,7 @@
 import dbConnect from '@/lib/db/db';
 import { getCourseByCourseCode } from '@/services/course';
 import { createEnrollment, deleteEnrollmentById, getEnrollmentById, getEnrollmentByProfileId, getEnrollmentByUserId, updateEnrollmentById } from '@/services/enrollment';
-import { getStudentProfileById, getStudentProfileByUserId, updateStudentProfileById } from '@/services/studentProfile';
+import { getStudentProfileById, getStudentProfileByUserId } from '@/services/studentProfile';
 import { getEnrollmentResponse, getSingleEnrollmentResponse, IResponse } from '@/types';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll, uploadBytes } from 'firebase/storage';
 import { storage } from '@/firebase';
@@ -146,39 +146,6 @@ export const deleteEnrollmentAction = async (EId: any): Promise<IResponse> => {
     return { error: 'Something went wrong', status: 500 };
   }
 };
-
-// export const getSingleEnrollmentAction = async (userId: any): Promise<getSingleEnrollmentResponse> => {
-//   try {
-//     await dbConnect();
-//     const enrollment = await getEnrollmentByUserId(userId);
-//     return { enrollment: JSON.parse(JSON.stringify(enrollment)), status: 200 };
-//   } catch (error) {
-//     console.log('server e :', error);
-//     return { error: 'Something went wrong', status: 500 };
-//   }
-// };
-// export const getAllEnrollmentAction = async (userId: any): Promise<getEnrollmentResponse> => {
-//   try {
-//     await dbConnect();
-//     const enrollment = await getEnrollmentByUserId(userId);
-//     return { enrollment: JSON.parse(JSON.stringify(enrollment)), status: 200 };
-//   } catch (error) {
-//     console.log('server e :', error);
-//     return { error: 'Something went wrong', status: 500 };
-//   }
-// };
-
-// export const getSingleEnrollmentByUserIdIdAction = async (userId: any): Promise<getSingleEnrollmentResponse> => {
-//   try {
-//     await dbConnect();
-//     const enrollment = await getEnrollmentByUserId(userId);
-//     if (!enrollment) return { error: 'No enrollment found.', status: 404 };
-//     return { enrollment: JSON.parse(JSON.stringify(enrollment)), status: 200 };
-//   } catch (error) {
-//     console.log('server e :', error);
-//     return { error: 'Something went wrong', status: 500 };
-//   }
-// };
 
 export const updateDropSubjectAction = async (data: any) => {
   try {

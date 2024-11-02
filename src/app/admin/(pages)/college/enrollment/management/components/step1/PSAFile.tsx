@@ -10,21 +10,27 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 const PSAFile = ({ user }: { user: any }) => {
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+
   useEffect(() => {
     const fetchFileUrl = async () => {
       try {
-        const filePath = `enrollment/psa/${user.profileId._id}/${user.profileId.psaUrl}`;
-        // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
-        const fileRef = ref(storage, filePath);
+        if (user && user.profileId.psaUrl) {
+          const filePath = `enrollment/psa/${user.profileId._id}/${user.profileId.psaUrl}`;
+          // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
+          const fileRef = ref(storage, filePath);
 
-        const url = await getDownloadURL(fileRef);
-        setFileUrl(url);
+          const url = await getDownloadURL(fileRef);
+          setFileUrl(url);
+        } else {
+          setFileUrl(null);
+        }
       } catch (error) {
         console.error('Error fetching file URL: ', error);
       }
     };
     fetchFileUrl();
   }, [user, fileUrl]);
+
   return (
     <>
       {user ? (
@@ -55,7 +61,9 @@ const PSAFile = ({ user }: { user: any }) => {
                   ) : (
                     <Image src={fileUrl} alt={user.profileId.firstname || 'nothing to say'} width={600} priority height={600} className='object-contain' />
                   )
-                ) : <div className='items-center justify-center text-red'>No Birth Certertificate</div>}
+                ) : (
+                  <div className='items-center justify-center text-red'>No Birth Certertificate</div>
+                )}
               </div>
             </DialogContent>
           </Dialog>

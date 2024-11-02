@@ -235,22 +235,10 @@ export const columns4: ColumnDef<IEnrollment>[] = [
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
       const formatted = date.toLocaleDateString();
-      // @example for formatted date ex. January 1, 2015
-      // const options: Intl.DateTimeFormatOptions = {
-      //   year: "numeric",
-      //   month: "short",
-      //   day: "numeric",
-      // };
 
-      // const formattedDate = date.toLocaleDateString("en-US", options);
-
-      // // Manually reformat the string to "Jul 20, 2024"
-      // const [month, day, year] = formattedDate.split(' ');
-      // const formatted = `${month} ${day}, ${year}`;
       return <div className='font-medium'>{formatted}</div>;
     },
   },
-
   {
     id: 'actions',
     header: 'Actions',

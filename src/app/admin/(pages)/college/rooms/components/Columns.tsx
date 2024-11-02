@@ -1,18 +1,8 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import Link from 'next/link';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-import { Icons } from '@/components/shared/Icons';
-import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
-import { useState } from 'react';
 import ActionsCell from './ActionsCell';
-import Image from 'next/image';
 import { IRoom } from '@/types';
 
 export const columns: ColumnDef<IRoom>[] = [
@@ -45,7 +35,7 @@ export const columns: ColumnDef<IRoom>[] = [
   },
 
   {
-    accessorFn: (row) => row.roomType, // Use accessorFn for nested fields
+    accessorFn: (row) => row.roomType,
     id: 'roomType',
     header: 'Room Type',
     cell: ({ cell, row }) => {
@@ -58,7 +48,7 @@ export const columns: ColumnDef<IRoom>[] = [
     },
   },
   {
-    accessorFn: (row) => row.floorLocation, // Use accessorFn for nested fields
+    accessorFn: (row) => row.floorLocation,
     id: 'floorLocation',
     header: 'Floor Location',
     cell: ({ cell, row }) => {
@@ -71,7 +61,7 @@ export const columns: ColumnDef<IRoom>[] = [
     },
   },
   {
-    accessorFn: (row) => row.isRoomAvailable, // Use accessorFn for nested fields
+    accessorFn: (row) => row.isRoomAvailable,
     id: 'isRoomAvailable',
     header: 'isRoomAvailable',
     cell: ({ cell, row }) => {
@@ -89,18 +79,7 @@ export const columns: ColumnDef<IRoom>[] = [
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
       const formatted = date.toLocaleDateString();
-      // @example for formatted date ex. January 1, 2015
-      // const options: Intl.DateTimeFormatOptions = {
-      //   year: "numeric",
-      //   month: "short",
-      //   day: "numeric",
-      // };
 
-      // const formattedDate = date.toLocaleDateString("en-US", options);
-
-      // // Manually reformat the string to "Jul 20, 2024"
-      // const [month, day, year] = formattedDate.split(' ');
-      // const formatted = `${month} ${day}, ${year}`;
       return <div className='font-medium'>{formatted}</div>;
     },
   },
@@ -113,25 +92,4 @@ export const columns: ColumnDef<IRoom>[] = [
       return <ActionsCell user={user} />;
     },
   },
-  // {
-  //   id: 'actions',
-  //   header: 'Actions',
-  //   cell: ({ row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div className=''>
-  //         <div className='flex justify-center items-center w-full gap-1'>
-  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-green-500 px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
-  //             Make an appointment
-  //             <Icons.check className='h-4 w-4' />
-  //           </Button>
-  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-red px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
-  //             Reject
-  //             <Icons.close className='h-4 w-4' />
-  //           </Button>
-  //         </div>
-  //       </div>
-  //     );
-  //   },
-  // },
 ];

@@ -42,7 +42,6 @@ export function DataTable2<TData, TValue>({ columns, data }: DataTableProps<TDat
 
   return (
     <div>
-      {/* Filters */}
       <div className='flex items-center justify-between w-full '>
         <div className='flex items-center py-4 text-black'>
           <Input
@@ -56,7 +55,6 @@ export function DataTable2<TData, TValue>({ columns, data }: DataTableProps<TDat
           <SearchBy setSearchBy={setSearchBy} />
         </div>
 
-        {/* Column visibility */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='outline' className='ml-auto'>

@@ -54,7 +54,7 @@ const Page = () => {
 
     if (data && ESetup && pData) {
       if (data.enrollment && ESetup.enrollmentSetup && pData.profile) {
-        const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus !== 'Enrolled' && pData.profile.courseId._id === enrollment.courseId._id);
+        const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus !== 'Enrolled');
         setEnrolledStudents(filteredEnrollment);
         setIsPageLoading(false);
         return;

@@ -1,35 +1,11 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import Link from 'next/link';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-import { Icons } from '@/components/shared/Icons';
-import { useApprovedEnrollmentStep1Mutation } from '@/lib/queries';
-import { useState } from 'react';
 import ActionsCell from './ActionsCell';
-import Image from 'next/image';
 import { IBlockType } from '@/types';
 
 export const columns: ColumnDef<IBlockType>[] = [
-  // {
-  //   accessorFn: (row) => row.subjectCode,
-  //   accessorKey: 'subjectCode',
-  //   header: 'subjectCode',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     console.log(user);
-  //     return (
-  //       <div key={cell.id} className='flex justify-center items-center'>
-  //           {user.subjectCode}
-  //       </div>
-  //     );
-  //   },
-  // },
   {
     accessorKey: 'name',
     header: ({ column }) => {
@@ -52,28 +28,26 @@ export const columns: ColumnDef<IBlockType>[] = [
     },
   },
   {
-    accessorFn: (row) => row.courseId.courseCode, // Use accessorFn for nested fields
+    accessorFn: (row) => row.courseId.courseCode,
     id: 'Course Code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {/* {Array.isArray(user.schedule) ? user.schedule.length : 0} */}
           {user.courseId.courseCode}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.courseId.name, // Use accessorFn for nested fields
+    accessorFn: (row) => row.courseId.name,
     id: 'course title',
     header: 'Course Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {/* {Array.isArray(user.schedule) ? user.schedule.length : 0} */}
           {user.courseId.name}
         </div>
       );
@@ -85,18 +59,7 @@ export const columns: ColumnDef<IBlockType>[] = [
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
       const formatted = date.toLocaleDateString();
-      // @example for formatted date ex. January 1, 2015
-      // const options: Intl.DateTimeFormatOptions = {
-      //   year: "numeric",
-      //   month: "short",
-      //   day: "numeric",
-      // };
 
-      // const formattedDate = date.toLocaleDateString("en-US", options);
-
-      // // Manually reformat the string to "Jul 20, 2024"
-      // const [month, day, year] = formattedDate.split(' ');
-      // const formatted = `${month} ${day}, ${year}`;
       return <div className='font-medium'>{formatted}</div>;
     },
   },

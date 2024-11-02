@@ -10,28 +10,30 @@ import { Icons } from '@/components/shared/Icons';
 const StudentPhoto = ({ user }: { user: any }) => {
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  /**
-   * @todo
-   * this file should be a `enrollment/psa/${user._id}/${user.psaFileName}.png`
-   * const filePath = `enrollment/psa/${user._id}/logo1.png`;
-   */
+
   useEffect(() => {
     const fetchFileUrl = async () => {
       try {
-        const photoPath = `enrollment/studentphoto/${user.profileId._id}/${user.profileId.photoUrl}`;
-        // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
+        if (user && user.profileId.photoUrl) {
+          const photoPath = `enrollment/studentphoto/${user?.profileId._id}/${user?.profileId.photoUrl}`;
+          // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
 
-        const fileRef = ref(storage, photoPath);
+          const fileRef = ref(storage, photoPath);
 
-        const url = await getDownloadURL(fileRef);
-        setPhotoUrl(url);
+          const url = await getDownloadURL(fileRef);
+          setPhotoUrl(url);
+        } else {
+          setPhotoUrl(null);
+        }
       } catch (error) {
         console.error('Error fetching file URL: ', error);
       }
     };
-    fetchFileUrl();
+    if (user) {
+      fetchFileUrl();
+    }
   }, [user, photoUrl]);
-  // console.log('url', fileUrl)
+
   const handleDownload = async () => {
     if (photoUrl) {
       try {

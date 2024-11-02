@@ -10,21 +10,27 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 const ReportCardFile = ({ user }: { user: any }) => {
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+
   useEffect(() => {
     const fetchFileUrl = async () => {
       try {
-        const filePath = `enrollment/reportCard/${user.profileId._id}/${user.profileId.reportCardUrl}`;
-        // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
-        const fileRef = ref(storage, filePath);
+        if (user && user.profileId.reportCardUrl) {
+          const filePath = `enrollment/reportCard/${user.profileId._id}/${user.profileId.reportCardUrl}`;
+          // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
+          const fileRef = ref(storage, filePath);
 
-        const url = await getDownloadURL(fileRef);
-        setFileUrl(url);
+          const url = await getDownloadURL(fileRef);
+          setFileUrl(url);
+        } else {
+          setFileUrl(null);
+        }
       } catch (error) {
         console.error('Error fetching file URL: ', error);
       }
     };
     fetchFileUrl();
   }, [user, fileUrl]);
+
   return (
     <>
       {user ? (

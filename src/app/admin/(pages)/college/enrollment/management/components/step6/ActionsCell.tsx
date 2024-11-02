@@ -7,8 +7,13 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
-import { useApprovedEnrollmentStep6Mutation, useUndoEnrollmentToStep4Mutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { useUpdateEnrollmentStepMutation } from '@/lib/queries/enrollment/update/id/step';
+import { EnrollmentStatusValidator } from '@/lib/validators/enrollment/update/college/step6';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { DialogStep6Button } from './Dialog';
+import { z } from 'zod';
 
 type IProps = {
   user: any;
@@ -16,40 +21,37 @@ type IProps = {
 
 const ActionsCell3 = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
-  const mutation = useApprovedEnrollmentStep6Mutation();
-  // const undoMutation = useUndoEnrollmentToStep5Mutation();
-  // const actionFormUndo = () => {
-  //   setIsPending(true);
-  //   const data = {
-  //     EId: user._id,
-  //     step: user.step,
-  //     blockType: user.blockType,
-  //   };
-  //   undoMutation.mutate(data, {
-  //     onSuccess: (res) => {
-  //       switch (res.status) {
-  //         case 200:
-  //         case 201:
-  //         case 203:
-  //           makeToastSucess(res.message);
-  //           return;
-  //         default:
-  //           makeToastError(res.error);
-  //           return;
-  //       }
-  //     },
-  //     onSettled: () => {
-  //       setIsPending(false);
-  //     },
-  //   });
-  // };
-  const actionFormSubmit = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const mutation = useUpdateEnrollmentStepMutation();
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+  const form = useForm<z.infer<typeof EnrollmentStatusValidator>>({
+    resolver: zodResolver(EnrollmentStatusValidator),
+    defaultValues: {
+      enrollStatus: '',
+    },
+  });
+
+  const actionFormSubmit = async (e: any, request: string) => {
+    e.preventDefault();
     setIsPending(true);
+    if (request === 'Approved') {
+      const isValid = await form.trigger();
+      if (!isValid) return setIsPending(false);
+    }
+    const parseData = form.getValues();
+
     const dataa = {
+      category: 'College',
+      step: 6,
       EId: user._id,
+      request,
+      ...(parseData ? parseData : {}),
     };
+
     mutation.mutate(dataa, {
       onSuccess: (res) => {
+        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
@@ -101,26 +103,18 @@ const ActionsCell3 = ({ user }: IProps) => {
                     View Subjects
                   </div>
                 </Link>
+                <DialogStep6Button isPending={isPending} form={form} user={user} setIsOpen={setIsOpen} isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} actionFormSubmit={actionFormSubmit} />
+
                 <Button
-                  type='button'
-                  disabled={isPending}
-                  onClick={actionFormSubmit}
-                  size={'sm'}
-                  className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}
-                >
-                  <Icons.check className='h-4 w-4' />
-                  Complete Student Enrollment
-                </Button>
-                {/* <Button
                   disabled={isPending}
                   type='button'
                   size={'sm'}
-                  onClick={actionFormUndo}
+                  onClick={(e) => actionFormSubmit(e, 'Undo')}
                   className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-yellow-400 px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}
                 >
                   <Icons.rotateCcw className='h-4 w-4' />
                   Undo last Step
-                </Button> */}
+                </Button>
                 {/* <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
                   <Icons.close className='h-4 w-4' />
                   Reject Enrollee

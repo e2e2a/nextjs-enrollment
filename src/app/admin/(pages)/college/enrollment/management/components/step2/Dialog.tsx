@@ -2,40 +2,29 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { selectType } from '@/constant/enrollment';
-import { useApprovedEnrollmentStep2Mutation } from '@/lib/queries';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { EnrollmentBlockTypeValidator } from '@/lib/validators/AdminValidator';
-import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { useBlockCourseQuery } from '@/lib/queries/blocks/get/all';
 
 type IProps = {
   isPending: boolean;
+  form: any;
   user: any;
+  isDialogOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  actionFormSubmit: any;
 };
-export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+export function DialogStep2Button({ isPending, user, form, isDialogOpen, setIsDialogOpen, setIsOpen, actionFormSubmit }: IProps) {
   const [loader, setLoader] = useState<boolean>(false);
   const [blocks, setBlocks] = useState<any>([]);
   const [blockDisable, setBlockDisable] = useState<boolean>(false);
 
   const { data: bData, isLoading: bLoading, isError: bError } = useBlockCourseQuery();
-  const mutation = useApprovedEnrollmentStep2Mutation();
-
-  const form = useForm<z.infer<typeof EnrollmentBlockTypeValidator>>({
-    resolver: zodResolver(EnrollmentBlockTypeValidator),
-    defaultValues: {
-      studentType: '',
-      blockType: '',
-    },
-  });
 
   useEffect(() => {
     if (!bData || bError) return;
@@ -49,34 +38,9 @@ export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
       return;
     }
   }, [bData, bError, bLoading, user]);
-  const actionFormSubmit = (data: z.infer<typeof EnrollmentBlockTypeValidator>) => {
-    // setIsPending(true);
-    setIsOpen(false);
-    const dataa = {
-      EId: user._id,
-      ...data,
-    };
-    mutation.mutate(dataa, {
-      onSuccess: (res: any) => {
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            makeToastSucess(res.message);
-            return;
-          default:
-            // setIsPending(false);
-            makeToastError(res.error);
-            return;
-        }
-      },
-      onSettled: () => {
-        setIsDialogOpen(false);
-      },
-    });
-  };
+
   useEffect(() => {
-    const subscription = form.watch((e) => {
+    const subscription = form.watch((e: any) => {
       if (e.studentType !== 'regular') {
         if (form.getValues('blockType') !== '') {
           form.setValue('blockType', ''); // Reset blockType only if necessary
@@ -88,7 +52,7 @@ export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
     });
 
     return () => subscription.unsubscribe();
-  }, [form,blockDisable]);
+  }, [form, blockDisable]);
   return (
     <Dialog onOpenChange={setIsDialogOpen} open={isDialogOpen}>
       <DialogTrigger asChild>
@@ -148,9 +112,7 @@ export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
                           </SelectGroup>
                         </SelectContent>
                       </Select>
-                      <label
-                        className='pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'
-                      >
+                      <label className='pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'>
                         {'Student Type'}
                       </label>
                     </div>
@@ -166,7 +128,7 @@ export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
                 <FormItem>
                   <FormControl>
                     <div className='relative bg-slate-50 rounded-lg'>
-                      <Select onValueChange={field.onChange} value={field.value} disabled={blockDisable} >
+                      <Select onValueChange={field.onChange} value={field.value} disabled={blockDisable}>
                         <SelectTrigger id={'blockType'} className='w-full pt-10 pb-4 capitalize focus-visible:ring-0 text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
                           <SelectValue placeholder={'Select student type'} />
                         </SelectTrigger>
@@ -184,9 +146,7 @@ export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
                           </SelectGroup>
                         </SelectContent>
                       </Select>
-                      <label
-                        className='pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'
-                      >
+                      <label className='pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'>
                         {'Block type'}
                       </label>
                     </div>
@@ -198,7 +158,7 @@ export function DialogStep1Button({ isPending, user, setIsOpen }: IProps) {
           </form>
         </Form>
         <DialogFooter className='justify-end flex flex-row'>
-          <Button type='submit' onClick={form.handleSubmit(actionFormSubmit)} variant='secondary'>
+          <Button type='submit' onClick={(e) => actionFormSubmit(e, 'Approved')} variant='secondary'>
             Submit
           </Button>
           <DialogClose asChild>

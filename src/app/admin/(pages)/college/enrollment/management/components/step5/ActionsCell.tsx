@@ -1,56 +1,34 @@
 'use client';
 import React from 'react';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Command, CommandGroup, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Icons } from '@/components/shared/Icons';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
-import { useApprovedEnrollmentStep5Mutation, useUndoEnrollmentToStep4Mutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { useUpdateEnrollmentStepMutation } from '@/lib/queries/enrollment/update/id/step';
 
 type IProps = {
   user: any;
 };
+
 const ActionsCell3 = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
-  /**
-   * @todo
-   * 1. update the payment in the student profile
-   */
-  const mutation = useApprovedEnrollmentStep5Mutation();
-  const undoMutation = useUndoEnrollmentToStep4Mutation();
-  const actionFormUndo = () => {
+  const mutation = useUpdateEnrollmentStepMutation();
+
+  const actionFormSubmit = (e: any, request: string) => {
+    e.preventDefault();
     setIsPending(true);
-    const data = {
-      EId: user._id,
-      step: user.step,
-      blockType: user.blockType,
-    };
-    undoMutation.mutate(data, {
-      onSuccess: (res) => {
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            makeToastSucess(res.message);
-            return;
-          default:
-            makeToastError(res.error);
-            return;
-        }
-      },
-      onSettled: () => {
-        setIsPending(false);
-      },
-    });
-  };
-  const actionFormSubmit = () => {
-    setIsPending(true);
+
     const dataa = {
       EId: user._id,
+      step: 5,
+      request,
+      category: 'College',
     };
+
     mutation.mutate(dataa, {
       onSuccess: (res) => {
         switch (res.status) {
@@ -105,7 +83,7 @@ const ActionsCell3 = ({ user }: IProps) => {
                 <Button
                   type='button'
                   disabled={isPending}
-                  onClick={actionFormSubmit}
+                  onClick={(e) => actionFormSubmit(e, 'Approved')}
                   size={'sm'}
                   className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}
                 >
@@ -116,7 +94,7 @@ const ActionsCell3 = ({ user }: IProps) => {
                   disabled={isPending}
                   type='button'
                   size={'sm'}
-                  onClick={actionFormUndo}
+                  onClick={(e) => actionFormSubmit(e, 'Undo')}
                   className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-yellow-400 px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}
                 >
                   <Icons.rotateCcw className='h-4 w-4' />

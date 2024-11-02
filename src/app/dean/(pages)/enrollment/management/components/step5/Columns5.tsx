@@ -9,9 +9,9 @@ import StudentPhoto from '../step1/StudentPhoto';
 import PSAFile from '../step1/PSAFile';
 import ReportCardFile from '../step1/ReportCardFile';
 import GoodMoralFile from '../step1/GoodMoralFile';
-import StudentStatusFilter from '../filters/StudentStatusFilter';
-import SemesterFilter from '../filters/SemesterFilter';
 import YearFilter from '../filters/YearFilter';
+import SemesterFilter from '../filters/SemesterFilter';
+import StudentStatusFilter from '../filters/StudentStatusFilter';
 
 export const columns5: ColumnDef<IEnrollment>[] = [
   {

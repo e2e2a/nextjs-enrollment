@@ -1,20 +1,7 @@
 'use client';
 import * as React from 'react';
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { UseFormReturn } from 'react-hook-form';
 
 interface IProps {
@@ -23,32 +10,23 @@ interface IProps {
   label: string;
   selectItems: { name: string }[];
   placeholder: string;
-  asd: boolean,
+  asd: boolean;
   setIsScholarType?: React.Dispatch<React.SetStateAction<string | null>>;
   scholarType?: string | null;
 }
 
-export function SelectInput({
-  form,
-  name,
-  label,
-  selectItems,
-  placeholder,
-  scholarType,
-  asd,
-  setIsScholarType,
-}: IProps) {
+export function SelectInput({ form, name, label, selectItems, placeholder, scholarType, asd, setIsScholarType }: IProps) {
   const [isDisabled, setIsDisabled] = React.useState(false);
   const [data, setData] = React.useState('');
 
   React.useEffect(() => {
-      if (scholarType && scholarType !== '' && scholarType !== 'None') {
-        setData('Regular');
-        setIsDisabled(true);
-      } else {
-        setData('');
-        setIsDisabled(false);
-      }
+    if (scholarType && scholarType !== '' && scholarType !== 'None') {
+      setData('Regular');
+      setIsDisabled(true);
+    } else {
+      setData('');
+      setIsDisabled(false);
+    }
   }, [scholarType]);
 
   return (
@@ -62,30 +40,23 @@ export function SelectInput({
               <Select
                 disabled={isDisabled}
                 onValueChange={(value) => {
-                  console.log(value)
+                  console.log(value);
                   field.onChange(value);
-                  console.log(data)
-                  console.log('field.value', field.value)
+                  console.log(data);
+                  console.log('field.value', field.value);
                   if (asd) {
                     setData(value);
                   }
                 }}
-                value={data !== '' ? data : field.value }
+                value={data !== '' ? data : field.value}
               >
-                <SelectTrigger
-                  id={name}
-                  className='w-full pt-10 pb-4 text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'
-                >
+                <SelectTrigger id={name} className='w-full pt-10 pb-4 text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
                   <SelectValue placeholder={placeholder} />
                 </SelectTrigger>
                 <SelectContent className='bg-white border-gray-300'>
                   <SelectGroup>
                     {selectItems.map((item, index) => (
-                      <SelectItem
-                        value={item.name}
-                        key={index}
-                        className='capitalize'
-                      >
+                      <SelectItem value={item.name} key={index} className='capitalize'>
                         {item.name}
                       </SelectItem>
                     ))}

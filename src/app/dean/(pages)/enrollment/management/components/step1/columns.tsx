@@ -2,7 +2,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DialogStep1Button } from './Dialog';
 import ActionsCell from './ActionsCell';
 import { IEnrollment } from '@/types';
 import PSAFile from './PSAFile';
@@ -46,9 +45,8 @@ export const columns: ColumnDef<IEnrollment>[] = [
       return fullName.includes(filterValue.toLowerCase());
     },
   },
-
   {
-    accessorFn: (row) => row.courseId.courseCode, // Use accessorFn for nested fields
+    accessorFn: (row) => row.courseId.courseCode,
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
@@ -147,22 +145,9 @@ export const columns: ColumnDef<IEnrollment>[] = [
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
       const formatted = date.toLocaleDateString();
-      // @example for formatted date ex. January 1, 2015
-      // const options: Intl.DateTimeFormatOptions = {
-      //   year: "numeric",
-      //   month: "short",
-      //   day: "numeric",
-      // };
-
-      // const formattedDate = date.toLocaleDateString("en-US", options);
-
-      // // Manually reformat the string to "Jul 20, 2024"
-      // const [month, day, year] = formattedDate.split(' ');
-      // const formatted = `${month} ${day}, ${year}`;
       return <div className='font-medium'>{formatted}</div>;
     },
   },
-
   {
     id: 'actions',
     header: 'Actions',

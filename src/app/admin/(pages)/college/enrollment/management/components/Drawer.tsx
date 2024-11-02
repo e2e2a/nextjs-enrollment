@@ -6,7 +6,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useForm } from 'react-hook-form';
 import { EnrollmentApprovedStep2 } from '@/lib/validators/Validator';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useApprovedEnrollmentStep2Mutation } from '@/lib/queries';
 import { z } from 'zod';
 import { SelectInput } from './SelectInput';
 import { selectType } from '@/constant/enrollment';
@@ -17,7 +16,7 @@ type IProps = {
 };
 export function DataTableDrawer({ user }: IProps) {
   const [goal, setGoal] = React.useState(350);
-  const mutation = useApprovedEnrollmentStep2Mutation();
+  // const mutation = useApprovedEnrollmentStep2Mutation();
   const [isNotEditable, setIsNotEditable] = React.useState(false);
   const [isScholarType, setIsScholarType] = React.useState<string | null>(null);
   const [isDisabled, setIsDisabled] = React.useState(false);
@@ -35,29 +34,25 @@ export function DataTableDrawer({ user }: IProps) {
       ...data,
       EId: user._id,
     };
-    mutation.mutate(dataa, {
-      onSuccess: (res) => {
-        console.log(res);
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            // setTypeMessage('success');
-            // setMessage(res?.message);
-            // return (window.location.href = '/');
-            // return (window.location.href = `/verification?token=${res.token}`);
-            console.log(res);
-            return;
-          default:
-            // setMessage(res.error);
-            // setTypeMessage('error');
-            return;
-        }
-      },
-      onSettled: () => {
-        // setIsPending(false);
-      },
-    });
+    // mutation.mutate(dataa, {
+    //   onSuccess: (res) => {
+    //     console.log(res);
+    //     switch (res.status) {
+    //       case 200:
+    //       case 201:
+    //       case 203:
+    //         // setTypeMessage('success');
+    //         console.log(res);
+    //         return;
+    //       default:
+    //         // setMessage(res.error);
+    //         return;
+    //     }
+    //   },
+    //   onSettled: () => {
+    //     // setIsPending(false);
+    //   },
+    // });
   };
   return (
     <Drawer modal={true}>

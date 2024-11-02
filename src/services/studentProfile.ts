@@ -69,9 +69,9 @@ export const deleteStudentProfileByUserId = async (userId: string) => {
   }
 };
 
-export const updateStudentProfileById = async (id: string, { data }: any) => {
+export const updateStudentProfileById = async (id: string, data: any) => {
   try {
-    const updatedProfile = await StudentProfile.findByIdAndUpdate(id, { ...data, isVerified: true }, { new: true });
+    const updatedProfile = await StudentProfile.findByIdAndUpdate(id, { $set: { ...data, isVerified: true } }, { new: true });
     return updatedProfile;
   } catch (error) {
     return null;

@@ -5,23 +5,12 @@ import {
   getAllSchoolYearResponse,
   getAllStudentCurriculumsResponse,
   getCurriculumsResponse,
-  getEnrollmentResponse,
   getStudentCurriculumsResponse,
   IResponse,
 } from '@/types';
 import { deleteEnrollmentAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
 import {
-  approvedEnrollmentStep1Action,
-  approvedEnrollmentStep2Action,
-  approvedEnrollmentStep3Action,
-  approvedEnrollmentStep4Action,
-  approvedEnrollmentStep5Action,
-  approvedEnrollmentStep6Action,
   CollegeEndSemesterAction,
-  undoEnrollmentToStep1,
-  undoEnrollmentToStep2,
-  undoEnrollmentToStep3,
-  undoEnrollmentToStep4,
 } from '@/action/college/enrollment/admin';
 import {
   createTeacherScheduleAction,
@@ -159,21 +148,6 @@ export const useEvaluateApprovedGradeReportMutation = () => {
 };
 
 /**
- * Admin Teacher Profile
- * @returns Queries And Mutations
- */
-
-// export const useTeacherProfileQueryById = (id: string) => {
-//   return useQuery<getTeacherProfileResponse, Error>({
-//     queryKey: ['TeacherProfileById', id],
-//     queryFn: () => getTeacherProfileByIdAction(id),
-//     enabled: !!id,
-//     retry: 0,
-//     refetchOnWindowFocus: false,
-//   });
-// };
-
-/**
  * Students Enrollment
  * @returns Queries and mutations
  */
@@ -190,6 +164,7 @@ export const useDropSubjectMutation = () => {
     },
   });
 };
+
 export const useAddSubjectMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
@@ -202,17 +177,6 @@ export const useAddSubjectMutation = () => {
     },
   });
 };
-// export const useEnrollmentStep1Mutation = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation<getEnrollmentResponse, Error, any>({
-//     mutationFn: async (data) => createEnrollmentAction(data),
-//     onSuccess: () => {
-//       queryClient.refetchQueries({ queryKey: ['userProfile'] });
-//       queryClient.refetchQueries({ queryKey: ['Enrollment'] });
-//       queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
-//     },
-//   });
-// };
 
 export const useEnrollmentDeleteMutation = () => {
   const queryClient = useQueryClient();
@@ -286,135 +250,7 @@ export const useRemoveStudentScheduleMutation = () => {
     },
   });
 };
-//step1 approved
-export const useApprovedEnrollmentStep1Mutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<getEnrollmentResponse, Error, any>({
-    mutationFn: async (data) => approvedEnrollmentStep1Action(data),
-    onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-      // const serverResponse = await myChannel.send({
-      //   type: 'broadcast',
-      //   event: 'message',
-      //   payload: { message: [{queryKey: 'EnrollmentByStep'}, {querKey: 'Enrollment'}] },
-      // });
-      // console.log('Server response:', serverResponse);
-      // Send a message to the channel
-      channel.postMessage({ type: 'data-updated', queryKey: 'exampleQueryKey' });
-    },
-  });
-};
 
-//step2 approved
-export const useApprovedEnrollmentStep2Mutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => approvedEnrollmentStep2Action(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-    },
-  });
-};
-
-//step3 approved
-export const useApprovedEnrollmentStep3Mutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => approvedEnrollmentStep3Action(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-    },
-  });
-};
-
-//step4 approved
-export const useApprovedEnrollmentStep4Mutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => approvedEnrollmentStep4Action(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-    },
-  });
-};
-
-//step5 approved
-export const useApprovedEnrollmentStep5Mutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => approvedEnrollmentStep5Action(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
-      queryClient.invalidateQueries({ queryKey: ['CollegeEnrollment'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-    },
-  });
-};
-
-//step6 approved
-export const useApprovedEnrollmentStep6Mutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => approvedEnrollmentStep6Action(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentByStep'] });
-      queryClient.invalidateQueries({ queryKey: ['CollegeEnrollment'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-    },
-  });
-};
-
-//step2 undo
-export const useUndoEnrollmentToStep1Mutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => undoEnrollmentToStep1(data),
-    onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-    },
-  });
-};
-
-//step3 undo
-export const useUndoEnrollmentToStep2Mutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => undoEnrollmentToStep2(data),
-    onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-    },
-  });
-};
-
-//step4 undo
-export const useUndoEnrollmentToStep3Mutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => undoEnrollmentToStep3(data),
-    onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-    },
-  });
-};
-
-//step5 undo
-export const useUndoEnrollmentToStep4Mutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => undoEnrollmentToStep4(data),
-    onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-    },
-  });
-};
 /**
  * Admin Course BlockType
  * @returns Queries and mutations
@@ -436,16 +272,6 @@ export const useRemoveCourseBlockScheduleMutation = () => {
  * Admin Teacher Schedule Management
  * @returns Queries and mutations
  */
-// export const useTeacherScheduleCollegeQueryByProfileId = (data: any) => {
-//   return useQuery<getAllTeacherScheduleResponse, Error>({
-//     queryKey: ['TeacherScheduleByProfileId', data],
-//     queryFn: () => getTeacherScheduleByProfileIdAction(data),
-//     retry: 0,
-//     enabled: !!data,
-//     refetchOnMount: false,
-//     refetchOnWindowFocus: true,
-//   });
-// };
 
 export const useCreateTeacherScheduleCollegeMutation = () => {
   const queryClient = useQueryClient();
