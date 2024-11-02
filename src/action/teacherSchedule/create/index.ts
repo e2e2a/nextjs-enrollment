@@ -7,6 +7,11 @@ import { getTeacherProfileById } from '@/services/teacherProfile';
 import { createTeacherSchedule, getAllTeacherScheduleByProfileId, getAllTeacherScheduleByScheduleRoomId } from '@/services/teacherSchedule';
 import mongoose from 'mongoose';
 
+/**
+ * handles creation of teacher schedule
+ *
+ * @param {object} data
+ */
 export const createTeacherScheduleAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
@@ -18,6 +23,11 @@ export const createTeacherScheduleAction = async (data: any) => {
   });
 };
 
+/**
+ * check category and store new schedule
+ *
+ * @param {object} data
+ */
 const checkCategory = async (data: any) => {
   return tryCatch(async () => {
     let a;
@@ -33,6 +43,11 @@ const checkCategory = async (data: any) => {
   });
 };
 
+/**
+ * handles college category and store new schedule
+ *
+ * @param {object} data
+ */
 const handlesCollege = (data: any) => {
   return tryCatch(async () => {
     const isValidTeacherId = mongoose.Types.ObjectId.isValid(data.teacherId);
@@ -64,6 +79,13 @@ const handlesCollege = (data: any) => {
   });
 };
 
+/**
+ * check teacher schedule conflict
+ *
+ * @param {object} scheds
+ * @param {object} data
+ * @param {object} teacher
+ */
 const checkTeacherScheduleConflict = async (scheds: any, data: any, teacher: any) => {
   return tryCatch(async () => {
     if (data.days.length === 0) return { error: 'Please fill the required Days field.', status: 403 };
@@ -88,6 +110,11 @@ const checkTeacherScheduleConflict = async (scheds: any, data: any, teacher: any
   });
 };
 
+/**
+ * check room schedule conflict
+ *
+ * @param {object} data
+ */
 const checkSchedulesInRooms = (data: any) => {
   return tryCatch(async () => {
     if (data.days.length === 0) return { error: 'Please fill the required Days field.', status: 403 };

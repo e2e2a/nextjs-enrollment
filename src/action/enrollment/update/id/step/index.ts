@@ -9,10 +9,15 @@ import { createStudentCurriculum } from '@/services/studentCurriculum';
 import { updateStudentProfileById } from '@/services/studentProfile';
 import { checkAuth } from '@/utils/actions/session';
 
+/**
+ * update Enrollment by id
+ * Approved/Rejected/Undo
+ *
+ * @param {object} data
+ */
 export const updateEnrollmentStepAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
-    console.log('data i receieved: ', data);
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
     if (session.user.role !== 'DEAN' && session.user.role !== 'ADMIN') return { error: 'forbidden', status: 403 };
@@ -24,6 +29,11 @@ export const updateEnrollmentStepAction = async (data: any) => {
   });
 };
 
+/**
+ *
+ * @param {object} user
+ * @param {object} data
+ */
 const checkCategory = async (user: any, data: any) => {
   return tryCatch(async () => {
     let c;
@@ -43,6 +53,12 @@ const checkCategory = async (user: any, data: any) => {
   });
 };
 
+/**
+ *
+ * @param {object} user
+ * @param {object} data
+ * @param {object} e
+ */
 const checkSessionRole = async (user: any, data: any, e: any) => {
   return tryCatch(async () => {
     if (user.role === 'DEAN') {
@@ -58,6 +74,11 @@ const checkSessionRole = async (user: any, data: any, e: any) => {
   });
 };
 
+/**
+ *
+ * @param {object} user
+ * @param {object} data
+ */
 const categoryCollege = async (user: any, data: any) => {
   return tryCatch(async () => {
     const checkE = await getEnrollmentById(data.EId);
@@ -95,6 +116,11 @@ const categoryCollege = async (user: any, data: any) => {
   });
 };
 
+/**
+ *
+ * @param {object} data
+ * @param {object} e
+ */
 const handleStep1 = async (data: any, e: any) => {
   return tryCatch(async () => {
     if (data.request === 'Approved') {
@@ -111,6 +137,11 @@ const handleStep1 = async (data: any, e: any) => {
   });
 };
 
+/**
+ *
+ * @param {object} data
+ * @param {object} e
+ */
 const handleStep2 = async (data: any, e: any) => {
   return tryCatch(async () => {
     if (data.request === 'Approved') {
@@ -144,6 +175,11 @@ const handleStep2 = async (data: any, e: any) => {
   });
 };
 
+/**
+ *
+ * @param {object} data
+ * @param {object} e
+ */
 const handleStep3 = async (data: any, e: any) => {
   return tryCatch(async () => {
     if (data.request === 'Approved') {
@@ -171,6 +207,11 @@ const handleStep3 = async (data: any, e: any) => {
   });
 };
 
+/**
+ *
+ * @param {object} data
+ * @param {object} e
+ */
 const handleStep4 = async (data: any, e: any) => {
   return tryCatch(async () => {
     if (data.request === 'Approved') {
@@ -191,6 +232,11 @@ const handleStep4 = async (data: any, e: any) => {
   });
 };
 
+/**
+ *
+ * @param {object} data
+ * @param {object} e
+ */
 const handleStep5 = async (data: any, e: any) => {
   return tryCatch(async () => {
     if (data.request === 'Approved') {
@@ -214,12 +260,17 @@ const handleStep5 = async (data: any, e: any) => {
   });
 };
 
+/**
+ *
+ * @param {object} data
+ * @param {object} e
+ */
 const handleStep6 = async (data: any, e: any) => {
   return tryCatch(async () => {
     if (data.request === 'Approved') {
       if (data.enrollStatus !== 'Enrolled' || data.enrollStatus !== 'Temporary Enrolled') return { error: 'Not valid', status: 403 };
       await updateEnrollmentById(e._id, { enrollStatus: 'Enrolled' });
-      
+
       const b = await StudentCurriculum.findOne({ studentId: e.profileId._id, courseId: e.courseId._id });
       if (!b) {
         const createSC = await createStudentCurriculum({ studentId: e.profileId._id, courseId: e.courseId._id });

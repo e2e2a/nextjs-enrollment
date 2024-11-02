@@ -4,6 +4,11 @@ import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getAllTeacherScheduleByProfileId } from '@/services/teacherSchedule';
 import { checkAuth } from '@/utils/actions/session';
 
+/**
+ * query teacher schedule by profile id
+ *
+ * @param {object} data
+ */
 export const getTeacherScheduleByProfileIdAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();

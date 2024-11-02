@@ -6,6 +6,11 @@ import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { getTeacherScheduleByCategory } from '@/services/teacherSchedule';
 import { checkAuth } from '@/utils/actions/session';
 
+/**
+ * query teacher schedule by category
+ *
+ * @param {string} category
+ */
 export const getTeacherScheduleByCategoryAction = async (category: string) => {
   return tryCatch(async () => {
     await dbConnect();

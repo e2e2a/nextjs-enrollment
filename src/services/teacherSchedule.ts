@@ -13,31 +13,6 @@ export const createTeacherSchedule = async (data: any) => {
   }
 };
 
-// export const getAllTeacherSchedule = async () => {
-//   try {
-//     const TProfiles = await TeacherSchedule.find().populate('profileId').populate('schedule.blockTypeId').populate('schedule.subjectId').populate('schedule.roomId').exec();
-//     return TProfiles;
-//   } catch (error) {
-//     return [];
-//   }
-// };
-// export const getTeacherScheduleById = async (id: any) => {
-//   try {
-//     const TProfile = await TeacherSchedule.findById(id).populate('profileId').populate('schedule.blockTypeId').populate('schedule.subjectId').populate('schedule.roomId').exec();
-//     return TProfile;
-//   } catch (error) {
-//     return null;
-//   }
-// };
-// export const getTeacherScheduleByProfileId = async (profileId: any) => {
-//   try {
-//     const TProfile = await TeacherSchedule.findOne({ profileId }).populate('profileId').populate('schedule.blockTypeId').populate('schedule.subjectId').populate('schedule.roomId').exec();
-//     return TProfile;
-//   } catch (error) {
-//     return null;
-//   }
-// };
-
 export const getAllTeacherScheduleByScheduleRoomId = async (roomId: any) => {
   try {
     const ts = await TeacherSchedule.find({ roomId: roomId });
