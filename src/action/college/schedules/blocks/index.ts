@@ -3,12 +3,12 @@ import dbConnect from '@/lib/db/db';
 import BlockType from '@/models/BlockType';
 import TeacherSchedule from '@/models/TeacherSchedule';
 import { getBlockTypeById } from '@/services/blockType';
+
 /**
  * 
  * @note
  * hard to transfer this one because we still have a super admin role which is needed to make a boolean for trash
  */ 
-
 export const removeCourseBlockScheduleAction = async (data: any) => {
   try {
     await dbConnect();

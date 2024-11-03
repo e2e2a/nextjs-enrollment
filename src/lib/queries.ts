@@ -8,7 +8,7 @@ import {
   getStudentCurriculumsResponse,
   IResponse,
 } from '@/types';
-import { deleteEnrollmentAction, updateAddSubjectAction, updateDropSubjectAction } from '@/action/college/enrollment/user';
+import { deleteEnrollmentAction} from '@/action/college/enrollment/user';
 import {
   CollegeEndSemesterAction,
 } from '@/action/college/enrollment/admin';
@@ -29,7 +29,7 @@ import {
   updateStudentCurriculumSubjectByIdAction,
 } from '@/action/college/curriculums';
 import { removeCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
-import { removeStudentScheduleAction, updateStudentEnrollmentScheduleRequestStatusAction } from '@/action/college/schedules/students';
+import { removeStudentScheduleAction } from '@/action/college/schedules/students';
 import { getEnrollmentSetup, updateEnrollmentSetup } from '@/action/enrollmentSetup';
 import { createTeacherReportGradeAction, getAllTeacherReportGradeAction, getTeacherReportGradeByIdAction, updateTeacherReportGradeStatusByIdAction } from '@/action/college/schedules/teachers/reportGrade/teacher';
 import { evaluateApprovedGradeReportAction } from '@/action/college/schedules/teachers/reportGrade/admin';
@@ -149,33 +149,6 @@ export const useEvaluateApprovedGradeReportMutation = () => {
  * Students Enrollment
  * @returns Queries and mutations
  */
-
-// export const useDropSubjectMutation = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation<any, Error, any>({
-//     mutationFn: async (data) => updateDropSubjectAction(data),
-//     onSuccess: () => {
-//       queryClient.refetchQueries({ queryKey: ['CollegeEnrollment'] });
-//       queryClient.refetchQueries({ queryKey: ['EnrollmentByStep'] });
-//       queryClient.refetchQueries({ queryKey: ['EnrollmentById'] });
-//       queryClient.refetchQueries({ queryKey: ['EnrollmentByUserId'] });
-//     },
-//   });
-// };
-
-// export const useAddSubjectMutation = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation<any, Error, any>({
-//     mutationFn: async (data) => updateAddSubjectAction(data),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
-//       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-//       queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
-//       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
-//     },
-//   });
-// };
-
 export const useEnrollmentDeleteMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<IResponse, Error, any>({
@@ -190,53 +163,6 @@ export const useEnrollmentDeleteMutation = () => {
  * Admin Enrollment
  * @returns Queries and mutations
  */
-// export const useUpdateStudentEnrollmentScheduleMutation = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation<any, Error, any>({
-//     mutationFn: async (data) => updateStudentEnrollmentScheduleAction(data),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
-//       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-//     },
-//   });
-// };
-// export const useUpdateStudentEnrollmentScheduleBySuggestedSubjectMutation = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation<any, Error, any>({
-//     mutationFn: async (data) => updateStudentEnrollmentScheduleBySuggestedSubjectAction(data),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
-//       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-//       queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
-//     },
-//   });
-// };
-
-// export const useUpdateStudentEnrollmentScheduleSuggestedSubjectMutation = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation<any, Error, any>({
-//     mutationFn: async (data) => updateStudentEnrollmentScheduleSuggestedSubjectAction(data),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
-//       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-//       queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
-//       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
-//     },
-//   });
-// };
-
-// export const useUpdateStudentEnrollmentScheduleRequestStatusMutation = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation<any, Error, any>({
-//     mutationFn: async (data) => updateStudentEnrollmentScheduleRequestStatusAction(data),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
-//       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-//       queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
-//       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
-//     },
-//   });
-// };
 
 export const useRemoveStudentScheduleMutation = () => {
   const queryClient = useQueryClient();
