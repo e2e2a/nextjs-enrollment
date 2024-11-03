@@ -225,18 +225,18 @@ export const useEnrollmentDeleteMutation = () => {
 //   });
 // };
 
-export const useUpdateStudentEnrollmentScheduleRequestStatusMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => updateStudentEnrollmentScheduleRequestStatusAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
-      queryClient.invalidateQueries({ queryKey: ['BlockType'] });
-    },
-  });
-};
+// export const useUpdateStudentEnrollmentScheduleRequestStatusMutation = () => {
+//   const queryClient = useQueryClient();
+//   return useMutation<any, Error, any>({
+//     mutationFn: async (data) => updateStudentEnrollmentScheduleRequestStatusAction(data),
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
+//       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+//       queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
+//       queryClient.invalidateQueries({ queryKey: ['BlockType'] });
+//     },
+//   });
+// };
 
 export const useRemoveStudentScheduleMutation = () => {
   const queryClient = useQueryClient();

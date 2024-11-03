@@ -5,7 +5,7 @@ import { Icons } from '@/components/shared/Icons';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
-import { useRemoveStudentScheduleMutation, useUpdateStudentEnrollmentScheduleRequestStatusMutation } from '@/lib/queries';
+import { useRemoveStudentScheduleMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import Image from 'next/image';
 import { useUpdateStudentEnrollmentScheduleMutation } from '@/lib/queries/enrollment/update/id/schedule';
