@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
-import { useUpdateStudentEnrollmentScheduleMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { Input } from '@/components/ui/input';
 // import FilterBySelect from './FilterBySelect';
@@ -34,11 +33,6 @@ const AddGrades = ({ teacher, data }: IProps) => {
       })
       .filter((schedule) => schedule.studentSubjects.length > 0); // Remove schedules with no matching subjects
   }, [data, teacher]);
-  console.log('students', students);
-  const [isEnabled, setIsEnabled] = React.useState(false);
-  const [selectedItems, setSelectedItems] = React.useState<{ teacherScheduleId: string }[]>([]);
-
-  const mutation = useUpdateStudentEnrollmentScheduleMutation();
 
   return (
     <Dialog>

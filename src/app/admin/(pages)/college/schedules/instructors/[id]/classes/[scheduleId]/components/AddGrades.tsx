@@ -1,9 +1,9 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
-import { useCreateGradeReportMutation, useUpdateStudentEnrollmentScheduleMutation } from '@/lib/queries';
+import { useCreateGradeReportMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { Input } from '@/components/ui/input';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
@@ -16,10 +16,8 @@ interface IProps {
 }
 
 const AddGrades = ({ teacher, data }: IProps) => {
-  const [students, setStudent] = useState<any>([]);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
-  // const [isEnabled, setIsEnabled] = React.useState(false);
   const mutation = useCreateGradeReportMutation();
   const [grades, setGrades] = useState<any>([]);
 

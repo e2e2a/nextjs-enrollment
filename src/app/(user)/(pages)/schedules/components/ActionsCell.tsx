@@ -1,12 +1,11 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { useDropSubjectMutation, useUpdateEnrollmentSetupMutation, useUpdateStudentEnrollmentScheduleBySuggestedSubjectMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
-import TeacherSchedule from '@/models/TeacherSchedule';
+import { useUpdateStudentEnrollmentScheduleMutation } from '@/lib/queries/enrollment/update/id/schedule';
 
 interface IProps {
   user: any;
@@ -18,12 +17,12 @@ const ActionsCell = ({ user }: IProps) => {
   const [inputValue, setInputValue] = useState('');
   const [errorInTypeInput, setErrorInTypeInput] = useState(false);
   const [inputValueType, setInputValueType] = useState('');
-  const [isNotValid, setIsNotValid] = useState(false);
+
   const handleInputChange = (e: any) => {
     const value = e.target.value;
     setInputValue(value);
 
-    if (value === user.teacherScheduleId.subjectId.name) {
+    if (value.toLowerCase() === user.teacherScheduleId.subjectId.name.toLowerCase()) {
       setErrorInSUbjectInput(false);
     } else {
       setErrorInSUbjectInput(true);
@@ -40,22 +39,27 @@ const ActionsCell = ({ user }: IProps) => {
     }
   };
 
-  const mutation = useDropSubjectMutation();
+  const mutation = useUpdateStudentEnrollmentScheduleMutation();
 
-  const actionFormEnable = () => {
+  const actionFormEnable = (request: string) => {
     setIsUploading(true);
-    if (inputValue !== user.teacherScheduleId.subjectId.name) {
-      setErrorInSUbjectInput(true);
-      return;
-    }
-    if (inputValueType !== 'drop') {
-      setErrorInSUbjectInput(true);
-      return;
+    if (request !== 'Suggested') {
+      if (inputValue.toLowerCase() !== user.teacherScheduleId.subjectId.name.toLowerCase()) {
+        setIsUploading(false);
+        setErrorInSUbjectInput(true);
+        return;
+      }
+      if (inputValueType.toLowerCase() !== 'drop') {
+        setIsUploading(false);
+        setErrorInSUbjectInput(true);
+        return;
+      }
     }
     const data = {
+      category: 'College',
       profileId: user.profileId._id,
-      studentSubjectId: user._id,
-      request: 'drop',
+      teacherScheduleId: user.teacherScheduleId._id,
+      request,
     };
 
     mutation.mutate(data, {
@@ -77,35 +81,7 @@ const ActionsCell = ({ user }: IProps) => {
       },
     });
   };
-  const acceptSuggestMutation = useUpdateStudentEnrollmentScheduleBySuggestedSubjectMutation();
-  const actionFormAcceptSuggest = () => {
-    setIsUploading(true);
-    const dataa = {
-      category: 'College',
-      teacherScheduleId: user.teacherScheduleId._id,
-      profileId: user.profileId._id,
-    };
-    acceptSuggestMutation.mutate(dataa, {
-      onSuccess: (res) => {
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            setIsOpen(false);
-            makeToastSucess(res.message);
-            return;
-          default:
-            if (res.error) {
-              makeToastError(res.error);
-            }
-            return;
-        }
-      },
-      onSettled: () => {
-        setIsUploading(false);
-      },
-    });
-  };
+
   return (
     <>
       {!user.request && (
@@ -137,7 +113,7 @@ const ActionsCell = ({ user }: IProps) => {
               </div>
               <div className='grid grid-cols-1 gap-y-1'>
                 <div className='text-[14px] text-muted-foreground'>
-                  To verify, type <span className='font-bold'>drop</span> below:
+                  To verify, type <span className='font-bold'>Drop</span> below:
                 </div>
                 <div className=''>
                   <Input type='text' name='type' className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none ring-0 focus:ring-1 focus:ring-red' value={inputValueType} onChange={handleInputChangeInType} placeholder='Enter subject name' />
@@ -149,7 +125,7 @@ const ActionsCell = ({ user }: IProps) => {
                 <AlertDialogAction type='button' className='hidden'>
                   abzxc
                 </AlertDialogAction>
-                <Button disabled={isUploading} onClick={actionFormEnable} className='bg-dark-4 text-white'>
+                <Button disabled={isUploading} onClick={() => actionFormEnable('Drop')} className='bg-dark-4 text-white'>
                   <span className=' text-white text-[15px] font-medium'>{isUploading ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Continue'}</span>
                 </Button>
               </AlertDialogFooter>
@@ -176,7 +152,7 @@ const ActionsCell = ({ user }: IProps) => {
               <AlertDialogAction type='button' className='hidden'>
                 abzxc
               </AlertDialogAction>
-              <Button disabled={isUploading} onClick={actionFormAcceptSuggest} className='bg-dark-4 text-white'>
+              <Button disabled={isUploading} onClick={() => actionFormEnable('Suggested')} className='bg-dark-4 text-white'>
                 <span className=' text-white text-[15px] font-medium'>{isUploading ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Continue'}</span>
               </Button>
             </AlertDialogFooter>

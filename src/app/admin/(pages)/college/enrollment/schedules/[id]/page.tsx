@@ -93,9 +93,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                 </div>
               </div>
-              <div className='w-full flex justify-end items-center'>
-                <AddStudentSched student={data.enrollment} b={schedules} />
-              </div>
+              {data.enrollment.step >= 3 && (
+                <div className='w-full flex justify-end items-center'>
+                  <AddStudentSched student={data.enrollment} b={schedules} />
+                </div>
+              )}
               <DataTable columns={columns} data={data?.enrollment.studentSubjects} enrollmentSetup={ESetup.enrollmentSetup} enrollment={data.enrollment} />
             </>
           ) : (

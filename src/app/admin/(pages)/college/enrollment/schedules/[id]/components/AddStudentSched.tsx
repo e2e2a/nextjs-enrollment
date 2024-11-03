@@ -1,13 +1,13 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
-import { useUpdateStudentEnrollmentScheduleMutation, useUpdateStudentEnrollmentScheduleSuggestedSubjectMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { z } from 'zod';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import FilterBySelect from './FilterBySelect';
+import { useUpdateStudentEnrollmentScheduleMutation } from '@/lib/queries/enrollment/update/id/schedule';
+import SuggestDialog from './SuggestDialog';
 
 interface IProps {
   student: any;
@@ -15,14 +15,17 @@ interface IProps {
 }
 
 const AddStudentSched = ({ student, b }: IProps) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
   const [studentCourse, setStudentCourse] = useState('');
   const [studentBlockType, setStudentBlockType] = useState('');
   const [studentYear, setStudentYear] = useState('');
   const [studentSemester, setStudentSemester] = useState('');
   const [pageLoader, setPageLoader] = useState(true);
   const [schedules, setSchedules] = useState<any>([]);
+
   useEffect(() => {
-    if (!student) return;
+    if (!student) return setPageLoader(true);
     if (student) {
       setStudentCourse(student.courseId.courseCode);
       setStudentBlockType(student?.blockTypeId?.section);
@@ -31,13 +34,13 @@ const AddStudentSched = ({ student, b }: IProps) => {
       setPageLoader(false);
     }
   }, [student]);
+
   useEffect(() => {
     if (!Array.isArray(b) || b.length === 0) {
       setSchedules([]);
       return;
     }
 
-    // const filteredSchedules = b.filter((schedule) => schedule.courseId !== undefined && schedule.courseId !== null && schedule.courseId.courseCode === studentCourse);
     const filteredSchedules = b.filter((schedule) => schedule.courseId !== undefined && schedule.courseId !== null && schedule.year === studentYear && schedule.semester === studentSemester);
 
     setSchedules(filteredSchedules);
@@ -50,14 +53,13 @@ const AddStudentSched = ({ student, b }: IProps) => {
     setSelectedItems((prevSelectedItems) => {
       const itemIndex = prevSelectedItems.findIndex((item) => item.teacherScheduleId === teacherScheduleId);
       if (itemIndex > -1) {
-        // Item is already selected, so remove it
         return prevSelectedItems.filter((item) => item.teacherScheduleId !== teacherScheduleId);
       } else {
-        // Item is not selected, so add it
         return [...prevSelectedItems, { teacherScheduleId }];
       }
     });
   };
+
   const handleRemove = (teacherScheduleId: string) => {
     setSelectedItems((prevSelectedItems) => {
       // Filter to keep only items where teacherScheduleId is not equal to the provided one
@@ -67,23 +69,27 @@ const AddStudentSched = ({ student, b }: IProps) => {
   const isSelected = (teacherScheduleId: string) => {
     return selectedItems.some((item) => item.teacherScheduleId === teacherScheduleId);
   };
-  const [roomId, setRoomId] = useState('');
+
   const mutation = useUpdateStudentEnrollmentScheduleMutation();
-  
-  const actionFormSubmit = () => {
-    //we need to revised the room to roomId and teacher to teacherId
-    // data.roomId = roomId;
+
+  const actionFormSubmit = (request: string, teacherScheduleId?: string) => {
+    setIsPending(true)
+
     const dataa = {
       category: 'College',
-      selectedItems: selectedItems,
+      request: request,
+      selectedItems: request === 'Add' ? selectedItems : request === 'Suggested' ? [{ teacherScheduleId }] : null,
       enrollmentId: student._id,
     };
+
     mutation.mutate(dataa, {
       onSuccess: (res) => {
         switch (res.status) {
           case 200:
           case 201:
           case 203:
+            setSelectedItems([])
+            setIsOpen(false)
             makeToastSucess(res.message);
             return;
           default:
@@ -93,37 +99,12 @@ const AddStudentSched = ({ student, b }: IProps) => {
             return;
         }
       },
-      onSettled: () => {},
-    });
-  };
- 
-  const suggestMutation = useUpdateStudentEnrollmentScheduleSuggestedSubjectMutation();
-  const actionFormSubmitSuggestSubject = (teacherScheduleId: any) => {
-    //we need to revised the room to roomId and teacher to teacherId
-    // data.roomId = roomId;
-    const dataa = {
-      category: 'College',
-      teacherScheduleId: teacherScheduleId,
-      enrollmentId: student._id,
-    };
-    suggestMutation.mutate(dataa, {
-      onSuccess: (res) => {
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            makeToastSucess(res.message);
-            return;
-          default:
-            if (res.error) {
-              makeToastError(res.error);
-            }
-            return;
-        }
+      onSettled: () => {
+        setIsPending(false)
       },
-      onSettled: () => {},
     });
   };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -146,7 +127,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
             <span className='text-sm font-bold uppercase'>
               {student.profileId.firstname} {student.profileId.middlename} {student.profileId.lastname} {student.profileId.extensionName ? student.profileId.extensionName : ''}
             </span>
-            <span className='text-sm font-bold capitalize'>Block: {student?.blockTypeId?.section ? student.blockTypeId.section : 'N/A' }</span>
+            <span className='text-sm font-bold capitalize'>Block: {student?.blockTypeId?.section ? student.blockTypeId.section : 'N/A'}</span>
           </DialogTitle>
           <DialogDescription>Select subjects to add in the table.</DialogDescription>
         </DialogHeader>
@@ -186,7 +167,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                     })}
                   </div>
                 </span>
-                <Button type='submit' disabled={isEnabled} className='bg-blue-600 text-neutral-50' size={'sm'} onClick={() => actionFormSubmit()} variant='secondary'>
+                <Button type='submit' disabled={isEnabled} className='bg-blue-600 text-neutral-50' size={'sm'} onClick={() => actionFormSubmit('Add')} variant='secondary'>
                   Save
                 </Button>
               </div>
@@ -210,11 +191,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                             const section = (b.section ?? '').toLowerCase();
                             const studentType = (studentBlockType ?? '').toLowerCase();
                             if (section === studentType) {
-                              const enrolledTeacherScheduleIds = new Set(
-                                student.studentSubjects
-                                  .filter((sched: any) => sched.status !== 'suggested')
-                                  .map((sched: any) => sched.teacherScheduleId._id)
-                              );
+                              const enrolledTeacherScheduleIds = new Set(student.studentSubjects.filter((sched: any) => sched.status !== 'suggested').map((sched: any) => sched.teacherScheduleId._id));
                               return (
                                 <div className='' key={b._id}>
                                   {b.blockSubjects.length > 0 ? (
@@ -225,7 +202,8 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                           <div className='grid sm:grid-cols-2 grid-cols-1 w-full'>
                                             <div className='flex flex-col text-xs sm:text-sm order-2 sm:order-1'>
                                               <span className=' font-semibold border-1 sm:border-0'>
-                                                Instructor: {s.teacherScheduleId.profileId.firstname} {s.teacherScheduleId.profileId.middlename} {s.teacherScheduleId.profileId.lastname} {s.teacherScheduleId.profileId?.extensionName ? s.teacherScheduleId.profileId.extensionName : ''}
+                                                Instructor: {s.teacherScheduleId.profileId.firstname} {s.teacherScheduleId.profileId.middlename} {s.teacherScheduleId.profileId.lastname}{' '}
+                                                {s.teacherScheduleId.profileId?.extensionName ? s.teacherScheduleId.profileId.extensionName : ''}
                                               </span>
                                               <span className=' font-semibold'>
                                                 Department: <span className='uppercase'>{s.teacherScheduleId.courseId.name}</span>
@@ -270,17 +248,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                     <Icons.add className='h-4 w-4' />
                                                     <span className='sm:flex text-xs sm:text-sm'>Add</span>
                                                   </Button>
-                                                  <Button
-                                                    onClick={() => {
-                                                      actionFormSubmitSuggestSubject(s.teacherScheduleId._id);
-                                                    }}
-                                                    type='button'
-                                                    size={'sm'}
-                                                    className={'focus-visible:ring-0 flex bg-transparent rounded-tl-none rounded-bl-none bg-orange-500 px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
-                                                  >
-                                                    <Icons.star className='h-4 w-4 fill-white mr-1' />
-                                                    <span className='sm:flex text-xs sm:text-sm'>Suggest</span>
-                                                  </Button>
+                                                  {student.step > 3 && <SuggestDialog isPending={isPending} isOpen={isOpen} setIsOpen={setIsOpen} teacherScheduleId={s.teacherScheduleId._id} actionFormSubmit={actionFormSubmit}/>}
                                                 </div>
                                               )}
                                             </div>
