@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { fireAuth, storage } from '@/firebase';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { Icons } from '@/components/shared/Icons';
 
 const PSAFile = ({ user }: { user: any }) => {
   const [fileUrl, setFileUrl] = useState<string | null>(null);
@@ -13,21 +14,39 @@ const PSAFile = ({ user }: { user: any }) => {
 
   useEffect(() => {
     const fetchFileUrl = async () => {
-      try {
-        if (!user.psaUrl) return;
-        const filePath = `enrollment/psa/${user._id}/${user.psaUrl}`;
+      if (navigator.onLine && user && user.profileId.psaUrl) {
+        const filePath = `enrollment/psa/${user.profileId._id}/${user.profileId.psaUrl}`;
         // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
         const fileRef = ref(storage, filePath);
 
         const url = await getDownloadURL(fileRef);
         setFileUrl(url);
-      } catch (error) {
-        console.error('Error fetching file URL: ', error);
+      } else {
+        setFileUrl(null);
       }
     };
     fetchFileUrl();
   }, [user, fileUrl]);
-  
+
+  const handleDownload = async () => {
+    if (fileUrl) {
+      try {
+        const response = await fetch(fileUrl);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${user.profileId.firstname} ${user.profileId.middlename[0] + '.'} ${user.profileId.lastname} ${user.profileId.extensionName ? user.profileId.extensionName : ''}.png`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('Error downloading file: ', error);
+      }
+    }
+  };
   return (
     <>
       {user ? (
@@ -35,19 +54,28 @@ const PSAFile = ({ user }: { user: any }) => {
           <Button type='button' onClick={() => setIsOpen(true)} className='text-sm hover:underline text-blue-600'>
             Open
           </Button>
-
-          {/* Dialog to show enlarged image */}
           <Dialog open={isOpen} modal={false} onOpenChange={setIsOpen}>
             <DialogContent className='max-w-xl bg-white w-full py-10 '>
               <DialogHeader>
                 <DialogTitle className='flex flex-col space-y-1'>
-                  <span>Birth Certificate</span>
-                  <span className='font-medium sm:text-lg text-xs'>
-                    Student:{' '}
-                    <span className=' capitalize sm:text-lg text-xs'>
-                      {user.firstname} {user.middlename[0] + '.'} {user.lastname} {user.extensionName ? user.extensionName : ''}
-                    </span>
-                  </span>
+                  <div className='flex flex-row'>
+                    <div className='flex-1 flex items-start flex-col'>
+                      <span>Birth Certificate</span>
+                      <span className='font-medium sm:text-lg text-xs'>
+                        Student:{' '}
+                        <span className=' capitalize sm:text-lg text-xs'>
+                          {user.profileId.firstname} {user.profileId.middlename[0] + '.'} {user.profileId.lastname} {user.profileId.extensionName ? user.profileId.extensionName : ''}
+                        </span>
+                      </span>
+                    </div>
+                    {fileUrl && !fileUrl.includes('.pdf') && (
+                      <div className='flex justify-end items-start'>
+                        <Button type='button' onClick={handleDownload} className='text-sm hover:underline text-blue-600'>
+                          <Icons.download className='h-5 w-5' />
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </DialogTitle>
                 <DialogDescription className='hidden'>asdasd</DialogDescription>
               </DialogHeader>
@@ -56,7 +84,7 @@ const PSAFile = ({ user }: { user: any }) => {
                   fileUrl.includes('.pdf') ? (
                     <iframe src={fileUrl} width='100%' height='400px' className='border-0' title='PDF Preview' />
                   ) : (
-                    <Image src={fileUrl} alt={user.firstname || 'nothing to say'} width={600} priority height={600} className='object-contain' />
+                    <Image src={fileUrl} alt={user.profileId.firstname || 'nothing to say'} width={600} priority height={600} className='object-contain' />
                   )
                 ) : (
                   <div className='items-center justify-center text-red'>No Birth Certertificate</div>
