@@ -1,20 +1,9 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
-import {
-  getAllCurriculumsResponse,
-  getAllSchoolYearResponse,
-  getAllStudentCurriculumsResponse,
-  getCurriculumsResponse,
-  getStudentCurriculumsResponse,
-  IResponse,
-} from '@/types';
-import { deleteEnrollmentAction} from '@/action/college/enrollment/user';
-import {
-  CollegeEndSemesterAction,
-} from '@/action/college/enrollment/admin';
-import {
-  removeTeacherScheduleCollegeMutation,
-} from '@/action/college/schedules/teachers';
+import { getAllCurriculumsResponse, getAllSchoolYearResponse, getAllStudentCurriculumsResponse, getCurriculumsResponse, getStudentCurriculumsResponse, IResponse } from '@/types';
+import { deleteEnrollmentAction } from '@/action/college/enrollment/user';
+import { CollegeEndSemesterAction } from '@/action/college/enrollment/admin';
+import { removeTeacherScheduleCollegeMutation } from '@/action/college/schedules/teachers';
 import { createSchoolYearAction, getAllSchoolYearAction } from '@/action/schoolyear';
 import {
   createStudentCurriculumAction,
