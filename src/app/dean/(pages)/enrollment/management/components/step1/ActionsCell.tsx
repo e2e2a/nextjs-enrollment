@@ -63,15 +63,12 @@ const ActionsCell = ({ user }: IProps) => {
           <Command>
             <CommandList>
               <CommandGroup className=''>
-                <Button type='button' disabled={isPending} size={'sm'} className={'w-full group focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-0 gap-x-1 justify-start items-center hover:text-neutral-50 font-medium'}>
-                  <Link
-                    href={`${isPending ? '' : `admin/users/students/${user.userId._id}`}`}
-                    className={'w-full h-full group/item rounded-md focus-visible:ring-0 flex text-black bg-transparent gap-x-1 justify-start items-center group-hover:hover:text-neutral-50'}
-                  >
+                <Link href={`/dean/students/${user.userId._id}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
+                  <div className='flex justify-center items-center text-sm font-medium gap-x-1'>
                     <Icons.eye className='h-4 w-4' />
                     View student profile
-                  </Link>
-                </Button>
+                  </div>
+                </Link>
 
                 <Button size={'sm'} type='submit' onClick={(e) => actionFormSubmit(e)} className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}>
                   <Icons.check className='h-4 w-4' />

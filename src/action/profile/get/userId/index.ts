@@ -25,7 +25,6 @@ export const getProfileByParamsUserIdAction = async (id: string): Promise<getSin
 
     const checkedR = await checkSeachRole(session.user, id);
     if (!checkedR.profile || checkedR.error) return { error: checkedR.error, status: 404 };
-
     return { profile: checkedR.profile, status: 200 };
   });
 };
@@ -46,7 +45,7 @@ const checkSeachRole = async (user: any, id: any) => {
 
         if (user.role === 'DEAN') {
           const d = await getDeanProfileByUserId(user._id);
-          if (d.courseId._id.toString() !== profile.courseId._id.toString) return { error: 'Dont have permission.', status: 403 };
+          if (d.courseId._id.toString() !== profile.courseId._id.toString()) return { error: 'Dont have permission.', status: 403 };
         }
 
         break;

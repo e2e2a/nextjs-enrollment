@@ -63,7 +63,7 @@ const checkSessionRole = async (user: any, data: any, e: any) => {
   return tryCatch(async () => {
     if (user.role === 'DEAN') {
       const p = await getDeanProfileByUserId(user._id);
-      if (p.courseId._id !== e.courseId._id) return { error: 'Forbidden', status: 403 };
+      if (p.courseId._id.toString() !== e.courseId._id.toString()) return { error: 'Forbidden', status: 403 };
       return { success: true, message: '', status: 201 };
     } else if (user.role === 'ADMIN') {
       //overAll
