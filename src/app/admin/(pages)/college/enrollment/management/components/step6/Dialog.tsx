@@ -4,10 +4,8 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Icons } from '@/components/shared/Icons';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { selectType } from '@/constant/enrollment';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { useBlockCourseQuery } from '@/lib/queries/blocks/get/all';
+import { useState } from 'react';
 
 type IProps = {
   isPending: boolean;
@@ -21,16 +19,8 @@ type IProps = {
 
 export function DialogStep6Button({ isPending, user, form, isDialogOpen, setIsDialogOpen, setIsOpen, actionFormSubmit }: IProps) {
   const [loader, setLoader] = useState<boolean>(false);
-  const [blocks, setBlocks] = useState<any>([]);
-  const [blockDisable, setBlockDisable] = useState<boolean>(false);
-  const options = [
-    {
-      name: 'Enrolled',
-    },
-    {
-      name: 'Temporary Enrolled',
-    },
-  ];
+
+  const options = [{ name: 'Enrolled' }, { name: 'Temporary Enrolled' }];
 
   return (
     <Dialog onOpenChange={setIsDialogOpen} open={isDialogOpen}>
@@ -47,7 +37,7 @@ export function DialogStep6Button({ isPending, user, form, isDialogOpen, setIsDi
           e.preventDefault();
         }}
       >
-        <form method='post' onSubmit={(e) => actionFormSubmit(e, 'Approved')}  className='gap-4 flex flex-col'>
+        <form method='post' onSubmit={(e) => actionFormSubmit(e, 'Approved')} className='gap-4 flex flex-col'>
           <DialogHeader>
             <DialogTitle className='flex flex-col space-y-1'>
               <span>Complete Current Step</span>{' '}
@@ -58,7 +48,7 @@ export function DialogStep6Button({ isPending, user, form, isDialogOpen, setIsDi
                 </span>
               </span>
             </DialogTitle>
-            <DialogDescription>To confirm the enrollee, please fill in the required input indicating the type of block assigned to them.</DialogDescription>
+            <DialogDescription>&nbsp;&nbsp;&nbsp;&nbsp;To confirm the enrollee status, please fill in the required input indicating the status of the student assigned to them. Please review the information carefully before submitting.</DialogDescription>
           </DialogHeader>
 
           <Form {...form}>
@@ -72,19 +62,19 @@ export function DialogStep6Button({ isPending, user, form, isDialogOpen, setIsDi
             )}
             <FormField
               control={form.control}
-              name={'studentType'}
+              name={'enrollStatus'}
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <div className='relative bg-slate-50 rounded-lg'>
                       <Select onValueChange={field.onChange} value={field.value}>
-                        <SelectTrigger id={'studentType'} className='w-full pt-10 pb-4 capitalize focus-visible:ring-0 text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
+                        <SelectTrigger id={'enrollStatus'} className='w-full pt-10 pb-4 capitalize focus-visible:ring-0 text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
                           <SelectValue placeholder={'Select student type'} />
                         </SelectTrigger>
                         <SelectContent className='bg-white border-gray-300 focus-visible:ring-0'>
                           <SelectGroup className='focus-visible:ring-0'>
-                            {selectType.studentType.map((item: any, index: any) => (
-                              <SelectItem value={item.value} key={index} className='capitalize '>
+                            {options.map((item: any, index: any) => (
+                              <SelectItem value={item.name} key={index} className='capitalize '>
                                 {item.name}
                               </SelectItem>
                             ))}
@@ -92,7 +82,7 @@ export function DialogStep6Button({ isPending, user, form, isDialogOpen, setIsDi
                         </SelectContent>
                       </Select>
                       <label className='pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'>
-                        {'Student Type'}
+                        Student Status
                       </label>
                     </div>
                   </FormControl>

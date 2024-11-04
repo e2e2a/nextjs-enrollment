@@ -1,21 +1,25 @@
-let i = '1';
+// console.log('message1:',018 - 015);
+// console.log('message2:',String.raw`HelloTwitter\nworld`);
+// console.log('message3:','This is a string.' instanceof String);
+// console.log('message4:', 0.1 + 0.2 == 0.3);
+// console.log('message5:', 0.3 + 0.2 == 0.5);
+// console.log('message6:', 0.3 + 0.2 == 0.5);
 
-const hybrid = async () => {
-  switch (Number(i)) {
-    case 1:
-      console.log('First case');
-      break;
-    case 2:
-      console.log('Second case');
-      break;
-    default:
-      console.log('false case');
-      return i; // Return i if no case matches
-  }
-  i = Number(i) + 1;
-  return { i };
+// const isTrue = true == [];
+// const isFalse = true == ![];
+// console.log('message4:', isTrue + isFalse);
+const user = {
+  name: 'Alice',
+  greet: function () {
+    console.log(`Hello, my name is ${this.name}`);
+  },
 };
 
-hybrid().then((i) => {
-  console.log('i', i.i);
-});
+setTimeout(user.greet.bind(user), 1000);
+
+//Always check for undefined and null explicitly if both are valid values in your application.
+if (user.age !== null && user.age !== undefined) {
+  console.log(`User's age is ${user.age}`);
+} else {
+  console.log('Age is not provided');
+}
