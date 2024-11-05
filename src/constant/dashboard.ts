@@ -283,6 +283,17 @@ export const dashboardConfig: DashboardConfig = {
           icon: 'packageSearch',
         },
         {
+          title: 'Temporary Enrolled',
+          i: [
+            {
+              title: 'View Temporary Enrolled',
+              href: '/dean/enrollment/temporary',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
           title: 'Recent Records',
           i: [
             {
@@ -605,6 +616,17 @@ export const dashboardConfig: DashboardConfig = {
                   icon: 'packageSearch',
                 },
                 {
+                  title: 'Temporary',
+                  i: [
+                    {
+                      title: 'View Temporary Enrolled',
+                      href: '/admin/college/enrollment/temporary',
+                      icon: 'eye',
+                    },
+                  ],
+                  icon: 'packageSearch',
+                },
+                {
                   title: 'Reported Grades',
                   i: [
                     {
@@ -631,34 +653,6 @@ export const dashboardConfig: DashboardConfig = {
                   ],
                   icon: 'packageSearch',
                 },
-                // {
-                //   title: `Student's Enrollment`,
-                //   i: [
-                //     {
-                //       title: 'Enrolled Students',
-                //       i: [
-                //         {
-                //           title: 'View Enrolled Students',
-                //           href: '/admin/college/enrollment/enrolled',
-                //           icon: 'eye',
-                //         },
-                //       ],
-                //       icon: 'packageSearch',
-                //     },
-                //     {
-                //       title: `Student's Schedule`,
-                //       i: [
-                //         {
-                //           title: 'View Enrolled Students',
-                //           href: '/admin/college/schedules/instructors',
-                //           icon: 'eye',
-                //         },
-                //       ],
-                //       icon: 'packageSearch',
-                //     },
-                //   ],
-                //   icon: 'packageSearch',
-                // },
               ],
               icon: 'packageSearch',
             },
@@ -694,45 +688,6 @@ export const dashboardConfig: DashboardConfig = {
               ],
               icon: 'packageSearch',
             },
-            // {
-            //   title: 'Schedules',
-            //   i: [
-            //     {
-            //       title: `Instructor's Schedules`,
-            //       i: [
-            //         {
-            //           title: 'Instructor Schedules',
-            //           href: '/admin/college/schedules/instructors',
-            //           icon: 'eye',
-            //         },
-            //         {
-            //           title: 'Add Instructor Schedule',
-            //           href: '/admin/college/schedules/instructors/add',
-            //           icon: 'add',
-            //         },
-            //       ],
-            //       icon: 'packageSearch',
-            //     },
-            //     {
-            //       title: `Block's Schedules`,
-            //       i: [
-            //         {
-            //           title: `Schedules Management`,
-            //           href: '/admin/college/schedules/blocks',
-            //           icon: 'eye',
-            //         },
-            //         {
-            //           title: 'Add Block Schedule',
-            //           href: '/admin/college/schedules/blocks/add',
-            //           icon: 'add',
-            //         },
-            //       ],
-            //       icon: 'packageSearch',
-            //     },
-            //   ],
-            //   icon: 'packageSearch',
-            // },
-
             {
               title: 'Rooms',
               i: [

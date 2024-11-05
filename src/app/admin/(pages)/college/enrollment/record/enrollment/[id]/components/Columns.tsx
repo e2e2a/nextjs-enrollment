@@ -166,13 +166,10 @@ export const columns: ColumnDef<any>[] = [
         </div>
       );
     },
-    accessorFn: (row) =>
-      `${row.teacher.firstname} ${row.teacher.middlename} ${row.teacher.lastname} ${row.teacher.extensionName ? row.teacher.extensionName : ''}`,
+    accessorFn: (row) => `${row.teacher.firstname} ${row.teacher.middlename} ${row.teacher.lastname} ${row.teacher.extensionName ? row.teacher.extensionName : ''}`,
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user.teacher.firstname} ${user.teacher.middlename} ${user.teacher.lastname} ${
-        user.teacher.extensionName ? user.teacher.extensionName : ''
-      }`.toLowerCase();
+      const fullName = `${user.teacher.firstname} ${user.teacher.middlename} ${user.teacher.lastname} ${user.teacher.extensionName ? user.teacher.extensionName : ''}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
@@ -188,20 +185,6 @@ export const columns: ColumnDef<any>[] = [
       );
     },
   },
-  //show this col if row.profileId.enrollStatus !== 'Enrolled
-  // {
-  //   accessorFn: (row) => {return false},
-  //   id: 'status',
-  //   header: 'Status',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className=''>
-  //         {user.profileId.enrollStatus !== 'Enrolled' ? user.status : null}
-  //       </div>
-  //     );
-  //   },
-  // },
   {
     id: 'status',
     header: 'Status',
@@ -248,14 +231,6 @@ export const columns: ColumnDef<any>[] = [
       );
     },
   },
-  // {
-  //   id: 'request',
-  //   header: 'Request',
-  //   cell: ({ row }) => {
-  //     const user = row.original;
-  //     return <ActionsCell user={user} />;
-  //   },
-  // },
   {
     id: 'requestStatusInDean',
     header: 'Approved By Dean',

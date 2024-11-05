@@ -17,7 +17,7 @@ const Page = () => {
 
   const { data: d } = useSession();
   const session = d!.user;
-  
+
   const { data: res, isLoading: load, error: cError } = useCourseQueryByCategory('College');
   const { data: resP, isLoading: PLoading, error: PError } = useProfileQueryBySessionId();
   const { data: resE, isLoading: ELoading, error: EError } = useEnrollmentQueryBySessionId(session.id!);
@@ -34,8 +34,7 @@ const Page = () => {
           if (!courseTitles.includes(search.toLowerCase())) return setIsError(true);
         }
 
-        // if (resP.profile.enrollStatus && resP.profile.enrollStatus === 'Pending') {
-        if (resP.profile.enrollStatus === 'Pending') {
+        if (resP.profile.enrollStatus && resP.profile.enrollStatus === 'Pending') {
           if (resE.enrollment) {
             setIsPageLoading(false);
             return;

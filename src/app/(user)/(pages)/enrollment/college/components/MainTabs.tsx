@@ -27,11 +27,12 @@ type IProps = {
  */
 
 const MainTabs = ({ search, value, enrollment, profile, enrollmentSetup, courses }: IProps) => {
+  const isEnrolled = (profile.enrollStatus !== 'Enrolled' && profile.enrollStatus !== 'Temporary Enrolled')
   return (
     <Tabs value={`${value}`} className='w-full gap-4 '>
       {!enrollment && !enrollmentSetup?.enrollmentTertiary.open && <Open es={enrollmentSetup?.enrollmentTertiary} />}
-      {enrollmentSetup?.enrollmentTertiary.open && (!enrollment && profile.studentStatus === 'New Student' && profile.enrollStatus !== 'Enrolled') && <Step0 search={search} enrollmentSetup={enrollmentSetup} courses={courses} />}
-      {enrollmentSetup?.enrollmentTertiary.open && (!enrollment && profile.studentStatus === 'Continue' && profile.enrollStatus !== 'Enrolled') && <ContinuingCollegeStudent profile={profile} enrollmentSetup={enrollmentSetup} />}
+      {enrollmentSetup?.enrollmentTertiary.open && (!enrollment && profile.studentStatus === 'New Student' && isEnrolled) && <Step0 search={search} enrollmentSetup={enrollmentSetup} courses={courses} />}
+      {enrollmentSetup?.enrollmentTertiary.open && (!enrollment && profile.studentStatus === 'Continue' && isEnrolled) && <ContinuingCollegeStudent profile={profile} enrollmentSetup={enrollmentSetup} />}
       {enrollment && profile.enrollStatus === 'Pending' && (
         <>
           <Step1 search={search} enrollment={enrollment} />
@@ -42,7 +43,7 @@ const MainTabs = ({ search, value, enrollment, profile, enrollmentSetup, courses
           <Step6 enrollment={enrollment} />
         </>
       )}
-      {enrollment && profile.enrollStatus === 'Enrolled' && <Congrats enrollment={enrollment} />}
+      {enrollment && (profile.enrollStatus === 'Enrolled' || profile.enrollStatus === 'Temporary Enrolled') && <Congrats enrollment={enrollment} />}
     </Tabs>
   );
 };

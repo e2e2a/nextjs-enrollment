@@ -58,7 +58,7 @@ const Congrats = ({ enrollment }: IProps) => {
                   </span>
                   ,
                 </span>
-                <span className='text-sm text-left mt-4 px-5 sm:px-10 w-full'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thank you for your patience throughout the enrollment process. We are pleased to confirm that you are now <span className="text-green-500">officially enrolled</span> . You can view your official study load <Link href={'/schedules'} className='text-blue-500 hover:underline'>here</Link>.</span>
+                <span className='text-sm text-left mt-4 px-5 sm:px-10 w-full'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thank you for your patience throughout the enrollment process. We are pleased to confirm that you are now <span className="text-green-500"> { enrollment.enrollStatus === 'Enrolled' ? 'officially enrolled' : 'Temporary Enrolled' }</span> . You can view your official study load <Link href={'/schedules'} className='text-blue-500 hover:underline'>here</Link>.</span>
               </div>
               {/* <div className='my-10'>
                 <div className='flex w-full items-center justify-center'>

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import { IEnrollment } from '@/types';
-import { useSession } from 'next-auth/react';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { useAllEnrollmentQueryByCourseId } from '@/lib/queries/enrollment/get/courseId/dean';
@@ -18,19 +17,14 @@ const Page = () => {
 
   useEffect(() => {
     if (isEnError || !data) return;
-    if (pError || !pData) return;
-
-    if (data && pData) {
-      if (data.students && pData.profile) {
-        const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled');
+    if (data) {
+      if (data.enrollment) {
+        const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Temporary Enrolled');
         setEnrolledStudents(filteredEnrollment);
-        setIsPageLoading(false);
-      } else if (data.error) {
-        setIsError(true);
         setIsPageLoading(false);
       }
     }
-  }, [data, isEnError, pData, pError]);
+  }, [data, isEnError]);
 
   return (
     <>
@@ -45,14 +39,7 @@ const Page = () => {
           ) : (
             <div className=''>
               <div className='mb-3 text-center w-full'>
-                <h1 className='text-lg sm:text-2xl font-bold uppercase'>Enrolled Student Management</h1>
-              </div>
-              <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
-                <div className='justify-between items-start flex w-full'>
-                  <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                    Department: <span className='font-normal'>{pData?.profile.courseId.name}</span>
-                  </span>
-                </div>
+                <h1 className='text-lg sm:text-2xl font-bold uppercase'>Temporary Enrolled Student Management</h1>
               </div>
               <DataTable columns={columns} data={enrolledStudents as IEnrollment[]} />
             </div>

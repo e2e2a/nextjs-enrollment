@@ -14,6 +14,10 @@ export const createEnrollment = async (data: any) => {
   }
 };
 
+/**
+ * @todo
+ * @param id 
+ */
 export const getEnrollmentById = async (id: any) => {
   try {
     const e = await Enrollment.findById(id)

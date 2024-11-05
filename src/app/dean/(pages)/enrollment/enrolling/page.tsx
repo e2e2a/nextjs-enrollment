@@ -23,11 +23,11 @@ const Page = () => {
 
     if (data && pData) {
       if (data.students && pData.profile) {
-        const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment.enrollStatus !== 'Enrolled' && enrollment.courseId.name === pData?.profile.courseId.name);
+        const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment.enrollStatus !== 'Enrolled');
         setEnrolledStudents(filteredEnrollment);
         setIsPageLoading(false);
       } else if (data.error) {
-        setIsError(true)
+        setIsError(true);
         setIsPageLoading(false);
       }
     }

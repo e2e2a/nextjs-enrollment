@@ -42,6 +42,10 @@ const TertiaryContent = () => {
 
     if (esData && eData) {
       if (esData.enrollmentSetup && eData.enrollment) {
+        /**
+         * @todo
+         * 1. add Temporary enrolled
+         */
         const filteredEnrolled = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled');
         setEnrolledStudents(filteredEnrolled);
         const filteredEnrolling = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Pending');

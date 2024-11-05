@@ -132,17 +132,21 @@ const ExtensionData = ({ form, profile, isNotEditable, photoPreview, filePreview
   return (
     <div>
       <h1 className='text-lg sm:text-xl font-bold text-center mt-7'>Additional Information for Student Enrolling/Enrolled </h1>
-     
+
       <h1 className='text-sm sm:text-[18px] font-medium border-b text-center mb-4 flex flex-col'>
         <div className='flex flex-col'>
           <div className=''>
-          Applicant in: <span className='text-green-500'>{profile.courseId.category}</span>
+            Applicant in: <span className='text-green-500'>{profile.courseId.category}</span>
           </div>
           <div className=''>
-            Enrollment Status: <span className='text-green-500'>{profile.enrollStatus}</span>
+            Enrollment Status:
+            {profile.enrollStatus === 'Pending' && <span className='font-normal text-blue-500'>{profile.enrollStatus}</span>}
+            {profile.enrollStatus === 'Enrolled' && <span className='font-normal text-green-500'>{profile.enrollStatus}</span>}
+            {profile.enrollStatus === 'Temporary Enrolled' && <span className='font-normal text-orange-500'>{profile.enrollStatus}</span>}
+            {profile.enrollStatus === 'Rejected' && <span className='font-normal text-red'>{profile.enrollStatus}</span>}
           </div>
           <div className=''>
-            Department: <span className='text-green-500'>{profile.courseId.name}</span>
+            Department: <span className='text-green-500 capitalize'>{profile.courseId.name}</span>
           </div>
         </div>
         <div className='text-sm font-normal flex w-full justify-center items-center'>

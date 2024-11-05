@@ -142,7 +142,7 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
     if (fileTORPreview) formData.append('fileTOR', fileTORPreview);
 
     const isProfileValid = await formProfile.trigger();
-    if (profile.enrollStatus === 'Enrolled' || profile.enrollStatus === 'Pending') {
+    if (profile.enrollStatus === 'Enrolled' || profile.enrollStatus === 'Temporary Enrolled' || profile.enrollStatus === 'Pending') {
       const isExtensionValid = await formExtenstion.trigger();
       if (!isExtensionValid || !isProfileValid) return setIsPending(false);
     } else {
