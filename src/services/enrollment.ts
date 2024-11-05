@@ -16,7 +16,7 @@ export const createEnrollment = async (data: any) => {
 
 /**
  * @todo
- * @param id 
+ * 1. always filter it non rejected status
  */
 export const getEnrollmentById = async (id: any) => {
   try {
@@ -25,22 +25,13 @@ export const getEnrollmentById = async (id: any) => {
       .populate('courseId')
       .populate('profileId')
       .populate('blockTypeId')
-      // .populate('studentSubjects.teacherScheduleId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
-        populate: [
-          { path: 'profileId' }, // Populate profileId inside teacherScheduleId
-          { path: 'courseId' },
-          { path: 'subjectId' },
-          { path: 'roomId' },
-          { path: 'blockTypeId' },
-        ],
+        populate: [{ path: 'profileId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
       })
       .populate({
         path: 'studentSubjects.profileId',
-        populate: [
-          { path: 'userId' }, // Populate profileId inside teacherScheduleId
-        ],
+        populate: [{ path: 'userId' }],
       })
       .exec();
     return e;
@@ -52,7 +43,7 @@ export const getEnrollmentById = async (id: any) => {
 
 export const getEnrollmentByUserId = async (userId: string) => {
   try {
-    const enrollment = await Enrollment.findOne({ userId })
+    const enrollment = await Enrollment.findOne({ userId, enrollStatus: { $ne: 'Rejected' } })
       .populate('userId')
       .populate('courseId')
       .populate('profileId')
@@ -76,29 +67,20 @@ export const getEnrollmentByUserId = async (userId: string) => {
 
 export const getEnrollmentByProfileId = async (profileId: string) => {
   try {
-    const enrollment = await Enrollment.findOne({ profileId })
+    const enrollment = await Enrollment.findOne({ profileId, enrollStatus: { $ne: 'Rejected' } })
       .populate('userId')
       .populate('courseId')
       .populate('profileId')
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
-        populate: [
-          { path: 'profileId' }, // Populate profileId inside teacherScheduleId
-          { path: 'subjectId' },
-          { path: 'courseId' },
-          { path: 'roomId' },
-          { path: 'blockTypeId' },
-        ],
+        populate: [{ path: 'profileId' }, { path: 'subjectId' }, { path: 'courseId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
       })
       .populate({
         path: 'studentSubjects.profileId',
-        populate: [
-          { path: 'userId' }, // Populate profileId inside teacherScheduleId
-        ],
+        populate: [{ path: 'userId' }],
       })
       .exec();
-    // console.log('i am exec...', enrollment);
     return enrollment;
   } catch (error) {
     console.log(error);
@@ -108,7 +90,7 @@ export const getEnrollmentByProfileId = async (profileId: string) => {
 
 export const getEnrollmentQueryStepByCategory = async (data: any) => {
   try {
-    const enrollment = await Enrollment.find({ category: data.category, step: data.step })
+    const enrollment = await Enrollment.find({ category: data.category, step: data.step, enrollStatus: { $ne: 'Rejected' } })
       .populate('userId')
       .populate('courseId')
       .populate('profileId')
@@ -131,7 +113,7 @@ export const getEnrollmentQueryStepByCategory = async (data: any) => {
 
 export const getEnrollmentByCategory = async (category: string) => {
   try {
-    const enrollment = await Enrollment.find()
+    const enrollment = await Enrollment.find({ enrollStatus: { $ne: 'Rejected' } })
       .populate('userId')
       .populate('courseId')
       .populate('profileId')
@@ -156,7 +138,7 @@ export const getEnrollmentByCategory = async (category: string) => {
 
 export const getAllEnrollmentByTeacherScheduleId = async (teacherScheduleId: any) => {
   try {
-    const enrollment = await Enrollment.find({ 'studentSubjects.teacherScheduleId': teacherScheduleId })
+    const enrollment = await Enrollment.find({ enrollStatus: { $ne: 'Rejected' }, 'studentSubjects.teacherScheduleId': teacherScheduleId })
       .populate('userId')
       .populate('courseId')
       .populate('profileId')
