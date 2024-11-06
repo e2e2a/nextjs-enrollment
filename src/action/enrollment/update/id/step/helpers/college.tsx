@@ -22,6 +22,11 @@ export const categoryCollege = async (user: any, data: any) => {
     if (checkedR && checkedR.error) return { error: checkedR.error, status: 403 };
 
     let r;
+    if (data.request === 'Rejected') {
+      r = await handleReject(user, data, checkE);
+      return r;
+    }
+
     switch (Number(checkE.step)) {
       case 1:
         r = await handleStep1(data, checkE);
@@ -45,7 +50,21 @@ export const categoryCollege = async (user: any, data: any) => {
       default:
         return { error: 'Foribbeden.', status: 403 };
     }
+
+    if (r && r.error) return { error: r.error, status: r.status };
     return { success: true, message: r.message, prevStep: r.prevStep, nextStep: r.nextStep, status: 201 };
+  });
+};
+
+const handleReject = async (user: any, data: any, e: any) => {
+  return tryCatch(async () => {
+    if (user.role !== 'ADMIN') return { error: 'Forbidden.', status: 403 };
+
+    const rejectedCount = Number(e.rejectedCount ?? 0) + 1;
+    await updateStudentProfileById(e.profileId._id, { studentType: '', enrollStatus: '', rejectedCount });
+    await updateEnrollmentById(e._id, { enrollStatus: 'Rejected', rejectedRemark: data.rejectedRemark });
+
+    return { message: `Student Enrollment has been ${data.request}`, status: 201 };
   });
 };
 

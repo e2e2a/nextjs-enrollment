@@ -18,7 +18,9 @@ export interface IEnrollment extends Document {
   studentType?: string;
   scholarType: 'TWSP' | 'STEP' | 'PESFA' | 'UAQTEA' | 'None';
   studentSubjects: Number;
+
   rejectedRemark: string;
+  
 }
 
 const schema = new Schema<IEnrollment>(
@@ -114,6 +116,7 @@ const schema = new Schema<IEnrollment>(
     rejectedRemark: {
       type: String,
     },
+    
   },
   {
     versionKey: false,
@@ -121,6 +124,6 @@ const schema = new Schema<IEnrollment>(
   }
 );
 
-const Enrollment = models.Course || model<IEnrollment>('Enrollment', schema);
+const Enrollment = models.Enrollment || model<IEnrollment>('Enrollment', schema);
 
 export default Enrollment;

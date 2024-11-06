@@ -9,6 +9,11 @@ import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
 import { useUpdateEnrollmentStepMutation } from '@/lib/queries/enrollment/update/id/step';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { RejectDialog } from '../RejectDialog';
+import { RejectedRemarkValidator } from '@/lib/validators/enrollment/update/college/rejectEnrollee';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 
 type IProps = {
   user: any;
@@ -17,17 +22,35 @@ type IProps = {
 const ActionsCell = ({ user }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState<boolean>(false);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
   const mutation = useUpdateEnrollmentStepMutation();
 
-  const actionFormSubmit = (e: any) => {
+  const formReject = useForm<z.infer<typeof RejectedRemarkValidator>>({
+    resolver: zodResolver(RejectedRemarkValidator),
+    defaultValues: {
+      rejectedRemark:
+        'Thank you for your interest in joining our program. Unfortunately, we were unable to proceed with your application due to missing required information. Please feel free to reach out for more details, and we encourage you to apply again once all information is complete.',
+    },
+  });
+
+  const actionFormSubmit = async (e: any, request: string) => {
     e.preventDefault();
     setIsPending(true);
+
+    if (request === 'Rejected') {
+      const isValid = await formReject.trigger();
+      if (!isValid) return setIsPending(false);
+    }
+
+    const parseRejectData = formReject.getValues();
 
     const dataa = {
       EId: user._id,
       step: 1,
-      request: 'Approved',
+      request,
       category: 'College',
+      ...(parseRejectData ? parseRejectData : {}),
     };
 
     mutation.mutate(dataa, {
@@ -36,6 +59,7 @@ const ActionsCell = ({ user }: IProps) => {
           case 200:
           case 201:
           case 203:
+            setIsDialogOpen(false);
             makeToastSucess(res.message);
             return;
           default:
@@ -48,6 +72,7 @@ const ActionsCell = ({ user }: IProps) => {
       },
     });
   };
+
   return (
     <div className=''>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -73,14 +98,17 @@ const ActionsCell = ({ user }: IProps) => {
                   </Link>
                 </Button>
 
-                <Button size={'sm'} type='submit' onClick={(e) => actionFormSubmit(e)} className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}>
+                <Button
+                  size={'sm'}
+                  disabled={isPending}
+                  type='submit'
+                  onClick={(e) => actionFormSubmit(e, 'Approved')}
+                  className={'w-full focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-500 px-2 py-0 gap-x-1 justify-start hover:text-neutral-50 font-medium'}
+                >
                   <Icons.check className='h-4 w-4' />
                   Complete Current Step
                 </Button>
-                <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
-                  <Icons.close className='h-4 w-4' />
-                  Reject Enrollee
-                </Button>
+                <RejectDialog isPending={isPending} form={formReject} user={user} setIsOpen={setIsOpen} isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} actionFormSubmit={actionFormSubmit} />
               </CommandGroup>
             </CommandList>
           </Command>

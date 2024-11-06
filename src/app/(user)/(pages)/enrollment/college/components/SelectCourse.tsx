@@ -7,10 +7,11 @@ interface IProps {
   selectItems: any;
   placeholder: string;
   selectedCourse: string;
+  isCourseError: string;
   setSelectedCourse: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export function SelectCourse({ selectItems, placeholder, selectedCourse, setSelectedCourse }: IProps) {
+export function SelectCourse({ selectItems, placeholder, selectedCourse, isCourseError, setSelectedCourse }: IProps) {
   return (
     <div className='relative bg-slate-50 rounded-lg'>
       <Select onValueChange={setSelectedCourse} value={selectedCourse}>
@@ -39,6 +40,7 @@ export function SelectCourse({ selectItems, placeholder, selectedCourse, setSele
       >
         Select course
       </label>
+      <p className='text-sm font-medium text-destructive text-red pl-2'>{isCourseError}</p>
     </div>
   );
 }

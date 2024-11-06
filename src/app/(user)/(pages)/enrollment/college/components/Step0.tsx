@@ -46,7 +46,8 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
   const [fileTORError, setTORError] = useState('');
   const fileTORInputRef = useRef<HTMLInputElement>(null);
 
-  const [selectedCourse, setSelectedCourse] = useState(search);
+  const [selectedCourse, setSelectedCourse] = useState(search || '');
+  const [isCourseError, setIsCourseError] = useState('');
   const [isPending, setIsPending] = useState(false);
 
   const handleSelectedPhoto = (files: FileList | null) => {
@@ -163,6 +164,15 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
   const onSubmit = async (e: any) => {
     e.preventDefault();
     setIsPending(true);
+    if (!selectedCourse) {
+      setIsPending(false);
+      setIsCourseError('Please select a course');
+      return;
+    }
+
+    const isProfileValid = await form.trigger();
+    if (!isProfileValid) return setIsPending(false);
+
     const formData = new FormData();
     if (!photoPreview) {
       setIsPending(false);
@@ -194,8 +204,6 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
         formData.append('fileTOR', fileTORPreview);
       }
     }
-    const isProfileValid = await form.trigger();
-    if (!isProfileValid) return setIsPending(false);
 
     const profileData = form.getValues();
     profileData.studentYear = profileData.studentYear.toLowerCase();
@@ -265,7 +273,7 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
             <CardContent className='w-full space-y-2'>
               <div className='flex flex-col gap-4 w-full'>
                 <div className='grid sm:grid-cols-2 gap-4 w-full'>
-                  <SelectCourse selectItems={courses} placeholder='Select course' selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse} />
+                  <SelectCourse selectItems={courses} placeholder='Select course' isCourseError={isCourseError} selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse} />
                   <SelectInput label='Student Status' form={form} name={'studentStatus'} selectItems={selectType.studentStatus} placeholder='Select status' />
                   <SelectInput label='Select year' form={form} name={'studentYear'} selectItems={studentYearData} placeholder='Select year' />
                   {/* <SelectInput label='Select semester' form={form} name={'studentSemester'} selectItems={studentSemesterData} placeholder='Select semester' /> */}

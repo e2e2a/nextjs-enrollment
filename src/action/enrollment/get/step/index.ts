@@ -14,7 +14,6 @@ import { checkAuth } from '@/utils/actions/session';
 export const getEnrollmentQueryStepByCategoryAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
-
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
     if (session && session.user.role !== 'ADMIN' && session.user.role !== 'DEAN') return { error: 'Forbidden.', status: 403 };

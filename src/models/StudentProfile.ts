@@ -58,6 +58,8 @@ export interface IProfile extends Document {
   isVerified: boolean;
 
   payment: boolean;
+
+  rejectedCount: Number;
 }
 const schema = new Schema<IProfile>(
   {
@@ -150,6 +152,10 @@ const schema = new Schema<IProfile>(
     isVerified: { type: Boolean, default: false },
 
     payment: { type: Boolean },
+
+    rejectedCount: {
+      type: Number,
+    },
   },
   {
     versionKey: false,

@@ -1,4 +1,5 @@
 import {
+  Ban,
   FilePenLine,
   Star,
   Download,
@@ -59,6 +60,7 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
+  ban: Ban,
   filePenLine: FilePenLine,
   star: Star,
   download: Download,
