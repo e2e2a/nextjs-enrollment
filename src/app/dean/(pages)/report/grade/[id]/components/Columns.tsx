@@ -32,20 +32,6 @@ export const columns: ColumnDef<any>[] = [
       return fullName.includes(filterValue.toLowerCase());
     },
   },
-
-  // {
-  //   accessorFn: (row) => row.teacherScheduleId.courseId.courseCode,
-  //   id: 'course code',
-  //   header: 'Course Code',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className=' uppercase'>
-  //         {user.teacherScheduleId.courseId.courseCode}
-  //       </div>
-  //     );
-  //   },
-  // },
   {
     accessorFn: (row) => row.profileId.sex,
     id: 'gender',
@@ -60,64 +46,68 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.grade,
-    id: 'grade',
-    header: 'Grade',
+    accessorFn: (row) => row.firstGrade,
+    id: 'prelim',
+    header: 'Prelim',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase font-bold'>
-          {user.grade}
+        <div key={cell.id} className='uppercase'>
+          {user?.firstGrade}
         </div>
       );
     },
   },
-  // {
-  //   accessorFn: (row) => row.floorLocation, // Use accessorFn for nested fields
-  //   id: 'floorLocation',
-  //   header: 'floorLocation',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className=' uppercase'>
-  //         {user.floorLocation ? user.floorLocation : 'N/A'}
-  //       </div>
-  //     );
-  //   },
-  // },
-  // {
-  //   accessorFn: (row) => row.isRoomAvailable, // Use accessorFn for nested fields
-  //   id: 'isRoomAvailable',
-  //   header: 'isRoomAvailable',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className=' uppercase'>
-  //         {user.isRoomAvailable ? 'TRUE' : 'FALSE'}
-  //       </div>
-  //     );
-  //   },
-  // },
-
-  // {
-  //   id: 'actions',
-  //   header: 'Actions',
-  //   cell: ({ row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div className=''>
-  //         <div className='flex justify-center items-center w-full gap-1'>
-  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-green-500 px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
-  //             Make an appointment
-  //             <Icons.check className='h-4 w-4' />
-  //           </Button>
-  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-red px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
-  //             Reject
-  //             <Icons.close className='h-4 w-4' />
-  //           </Button>
-  //         </div>
-  //       </div>
-  //     );
-  //   },
-  // },
+  {
+    accessorFn: (row) => row.secondGrade,
+    id: 'midterm',
+    header: 'Midterm',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.secondGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.thirdGrade,
+    id: 'semi-final',
+    header: 'Semi-final',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.thirdGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.fourthGrade,
+    id: 'final',
+    header: 'Final',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.fourthGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.averageTotal,
+    id: 'averageTotal',
+    header: 'Average Total',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.averageTotal}
+        </div>
+      );
+    },
+  },
 ];

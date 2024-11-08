@@ -178,13 +178,86 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    id: 'grade',
-    header: 'Grade',
+    id: 'requestStatusInRegistrar',
+    header: 'Approved By Registrar',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.grade}
+          {user.requestStatusInRegistrar === 'Approved' ? (
+            <span className='text-green-500 text-xs'>{user.requestStatusInRegistrar}</span>
+          ) : user.requestStatusInRegistrar === 'Pending' ? (
+            <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
+          ) : user.requestStatusInRegistrar === 'Declined' ? (
+            <span className='text-red text-xs'>{user.requestStatusInRegistrar}</span>
+          ) : (
+            <span className='text-gray-400 text-xs'>N/A</span>
+          )}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.firstGrade,
+    id: 'prelim',
+    header: 'Prelim',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.firstGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.secondGrade,
+    id: 'midterm',
+    header: 'Midterm',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.secondGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.thirdGrade,
+    id: 'semi-final',
+    header: 'Semi-final',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.thirdGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.fourthGrade,
+    id: 'final',
+    header: 'Final',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.fourthGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.averageTotal,
+    id: 'averageTotal',
+    header: 'Average Total',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.averageTotal}
         </div>
       );
     },

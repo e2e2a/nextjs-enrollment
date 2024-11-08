@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import { IEnrollment } from '@/types';
-import { useSession } from 'next-auth/react';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { useAllEnrollmentQueryByCourseId } from '@/lib/queries/enrollment/get/courseId/dean';

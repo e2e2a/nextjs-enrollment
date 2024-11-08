@@ -195,7 +195,13 @@ export const columns: ColumnDef<any>[] = [
       return (
         <div key={cell.id} className='uppercase '>
           {!user.request && <div className='text-gray-500 text-xs'>N/A</div>}
-          {user.request && user.request === 'add' ? <div className='text-green-500 text-xs font-bold'>Add</div> : user.request === 'drop' ? <div className='text-red text-xs font-bold'>Drop</div> :user.request === 'suggested' ? <div className='text-orange-300 text-xs font-bold'>Suggested</div> : null}
+          {user.request && user.request === 'add' ? (
+            <div className='text-green-500 text-xs font-bold'>Add</div>
+          ) : user.request === 'drop' ? (
+            <div className='text-red text-xs font-bold'>Drop</div>
+          ) : user.request === 'suggested' ? (
+            <div className='text-orange-300 text-xs font-bold'>Suggested</div>
+          ) : null}
         </div>
       );
     },
@@ -207,14 +213,15 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          
           {user.requestStatusInDean === 'Approved' ? (
             <span className='text-green-500 text-xs'>{user.requestStatusInDean}</span>
           ) : user.requestStatusInDean === 'Pending' ? (
             <span className='text-blue-500 text-xs'>{user.requestStatusInDean}</span>
           ) : user.requestStatusInDean === 'Declined' ? (
             <span className='text-red text-xs'>{user.requestStatusInDean}</span>
-          ) : <span className='text-gray-400 text-xs'>N/A</span>}
+          ) : (
+            <span className='text-gray-400 text-xs'>N/A</span>
+          )}
         </div>
       );
     },
@@ -232,20 +239,74 @@ export const columns: ColumnDef<any>[] = [
             <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
           ) : user.requestStatusInRegistrar === 'Declined' ? (
             <span className='text-red text-xs'>{user.requestStatusInRegistrar}</span>
-          ) : <span className='text-gray-400 text-xs'>N/A</span>}
+          ) : (
+            <span className='text-gray-400 text-xs'>N/A</span>
+          )}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.grade,
-    id: 'grade',
-    header: 'Grade',
+    accessorFn: (row) => row.firstGrade,
+    id: 'prelim',
+    header: 'Prelim',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.grade}
+          {user?.firstGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.secondGrade,
+    id: 'midterm',
+    header: 'Midterm',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.secondGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.thirdGrade,
+    id: 'semi-final',
+    header: 'Semi-final',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.thirdGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.fourthGrade,
+    id: 'final',
+    header: 'Final',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.fourthGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.averageTotal,
+    id: 'averageTotal',
+    header: 'Average Total',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.averageTotal}
         </div>
       );
     },

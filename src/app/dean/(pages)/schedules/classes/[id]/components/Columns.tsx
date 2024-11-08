@@ -39,19 +39,6 @@ export const columns: ColumnDef<any>[] = [
       return fullName.includes(filterValue.toLowerCase());
     },
   },
-  // {
-  //   accessorFn: (row) => row.courseId.courseCode,
-  //   id: 'course code',
-  //   header: 'Course Code',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className=' uppercase'>
-  //         {user.courseId.courseCode}
-  //       </div>
-  //     );
-  //   },
-  // },
   {
     accessorFn: (row) => row.profileId.sex,
     id: 'Gender',
@@ -66,38 +53,68 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.grade,
-    id: 'grade',
-    header: 'Grade',
+    accessorFn: (row) => row.firstGrade,
+    id: 'prelim',
+    header: 'Prelim',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.grade}
+        <div key={cell.id} className='uppercase'>
+          {user?.firstGrade}
         </div>
       );
     },
   },
-  // {
-  //   accessorFn: (row) => row.endTime,
-  //   id: 'end time',
-  //   header: 'End Time',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className='uppercase'>
-  //         {user.endTime}
-  //       </div>
-  //     );
-  //   },
-  // },
-  // {
-  //   id: 'actions',
-  //   header: 'Actions',
-  //   cell: ({ row }) => {
-  //     const user = row.original;
-
-  //     return <ActionsCell user={user} />;
-  //   },
-  // },
+  {
+    accessorFn: (row) => row.secondGrade,
+    id: 'midterm',
+    header: 'Midterm',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.secondGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.thirdGrade,
+    id: 'semi-final',
+    header: 'Semi-final',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.thirdGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.fourthGrade,
+    id: 'final',
+    header: 'Final',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.fourthGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.averageTotal,
+    id: 'averageTotal',
+    header: 'Average Total',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.averageTotal}
+        </div>
+      );
+    },
+  },
 ];

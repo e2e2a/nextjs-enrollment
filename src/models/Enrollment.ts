@@ -20,7 +20,6 @@ export interface IEnrollment extends Document {
   studentSubjects: Number;
 
   rejectedRemark: string;
-  
 }
 
 const schema = new Schema<IEnrollment>(
@@ -110,13 +109,37 @@ const schema = new Schema<IEnrollment>(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'StudentProfile',
         },
-        grade: { type: String },
+        
+        firstGrade: {
+          type: Number,
+          default: 2.0,
+          set: (v: any) => parseFloat(parseFloat(v).toFixed(2)),
+        },
+        secondGrade: {
+          type: Number,
+          default: 2.0,
+          set: (v: any) => parseFloat(parseFloat(v).toFixed(2)),
+        },
+        thirdGrade: {
+          type: Number,
+          default: 2.0,
+          set: (v: any) => parseFloat(parseFloat(v).toFixed(2)),
+        },
+        fourthGrade: {
+          type: Number,
+          default: 2.0,
+          set: (v: any) => parseFloat(parseFloat(v).toFixed(2)),
+        },
+        averageTotal: {
+          type: Number,
+          default: 2.0,
+          set: (v: any) => parseFloat(parseFloat(v).toFixed(2)),
+        },
       },
     ],
     rejectedRemark: {
       type: String,
     },
-    
   },
   {
     versionKey: false,

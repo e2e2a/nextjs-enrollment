@@ -143,7 +143,7 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
               <div className='w-full pl-11'>
                 <h1 className='text-3xl font-bold leading-[140%] tracking-wide text-center'>Student Profile</h1>
                 <h1 className='text-lg font-bold tracking-wide text-center capitalize'>
-                  {profile.lastname && profile.lastname + ','} {profile.firstname} {profile.middlename} {profile.middlename && profile.extensionName + '.'}
+                  {profile?.lastname && profile.lastname + ','} {profile?.firstname} {profile?.middlename} {profile?.extensionName && profile.extensionName + '.'}
                 </h1>
               </div>
             </div>

@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { ColumnDef, flexRender, SortingState, VisibilityState, ColumnFiltersState, getCoreRowModel, getSortedRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import SearchBy from './SearchBy';
@@ -26,6 +25,7 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
       setEnrollmentStudentStatus(enrollment.enrollStatus);
     }
   }, [data, enrollment]);
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -73,7 +73,11 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
                 {headerGroup.headers.map((header) => {
                   if (enrollmentStudentStatus) {
                     if (enrollmentStudentStatus === 'Pending') {
-                      if (header.id === 'grade') return;
+                      if (header.id === 'prelim') return;
+                      if (header.id === 'midterm') return;
+                      if (header.id === 'semi-final') return;
+                      if (header.id === 'final') return;
+                      if (header.id === 'averageTotal') return;
                     }
 
                     if (enrollmentStudentStatus === 'Pending' || enrollmentStudentStatus === 'Enrolled') {
@@ -116,7 +120,11 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
                     {row.getVisibleCells().map((cell) => {
                       if (enrollmentStudentStatus) {
                         if (enrollmentStudentStatus === 'Pending') {
-                          if (cell.column.id === 'grade') return;
+                          if (cell.column.id === 'prelim') return;
+                          if (cell.column.id === 'midterm') return;
+                          if (cell.column.id === 'semi-final') return;
+                          if (cell.column.id === 'final') return;
+                          if (cell.column.id === 'averageTotal') return;
                         }
 
                         if (enrollmentStudentStatus === 'Pending' || enrollmentStudentStatus === 'Enrolled') {

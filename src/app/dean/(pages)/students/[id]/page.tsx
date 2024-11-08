@@ -63,7 +63,7 @@ const ProfilePage = ({ params }: { params: { id: string } }) => {
                   <div className='w-full flex flex-col justify-center items-center bg-slate-100 '>
                     <TabsContent value='profile' className={`w-full bg-white my-3 max-w-[69rem] rounded-lg`}>
                       {!res.profile.enrollStatus && <ProfileTab profile={res?.profile} />}
-                      {res.profile.courseId && res.profile.courseId.category.toLowerCase() === 'college' && <ProfileTabEnrollCollege profile={res?.profile} />}
+                      {res.profile.enrollStatus && res.profile.courseId && res.profile.courseId.category.toLowerCase() === 'college' && <ProfileTabEnrollCollege profile={res?.profile} />}
                     </TabsContent>
                     <TabsContent value='email' className='w-full mb-3 max-w-[69rem]'>
                       <EmailTab />

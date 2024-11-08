@@ -10,14 +10,12 @@ import { useAllEnrollmentQueryByCourseId } from '@/lib/queries/enrollment/get/co
 export default function Page() {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data: res, isLoading: pLoading, error: pError } = useProfileQueryBySessionId();
-  /**
-   * @todo
-   */
+  
   const { data, isLoading, error } = useAllEnrollmentQueryByCourseId(res?.profile.courseId);
 
   useEffect(() => {
-    if (error || !data) return; //setError 500;
-    if (pError || !res) return; //setError 500;
+    if (error || !data) return;
+    if (pError || !res) return;
     if (data && res) {
       if (data.students && res.profile) {
         setIsPageLoading(false);
