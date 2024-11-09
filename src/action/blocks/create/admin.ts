@@ -1,3 +1,4 @@
+'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { BlockValidatorInCollege } from '@/lib/validators/block/create/college';

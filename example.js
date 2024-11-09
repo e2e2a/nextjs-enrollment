@@ -32,4 +32,4 @@
 let number
 number = '3'
 
-console.log('qwe', 3 === Number(number))
+console.log('qwe', 3 === Number('3'))

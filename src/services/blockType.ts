@@ -18,12 +18,22 @@ export const getAllBlockType = async () => {
       .populate('courseId')
       .populate({
         path: 'blockSubjects.teacherScheduleId',
-        populate: [
-          { path: 'profileId' }, // Populate profileId inside teacherScheduleId
-          { path: 'subjectId' }, // Populate profileId inside teacherScheduleId
-          { path: 'blockTypeId' }, // Populate profileId inside teacherScheduleId
-          { path: 'courseId' },
-        ],
+        populate: [{ path: 'profileId' }, { path: 'subjectId' }, { path: 'blockTypeId' }, { path: 'courseId' }],
+      })
+      .exec();
+    return p;
+  } catch (error) {
+    return [];
+  }
+};
+
+export const getBlockTypeByCourseId = async (courseId: string) => {
+  try {
+    const p = await BlockType.find({ courseId })
+      .populate('courseId')
+      .populate({
+        path: 'blockSubjects.teacherScheduleId',
+        populate: [{ path: 'profileId' }, { path: 'subjectId' }, { path: 'blockTypeId' }, { path: 'courseId' }],
       })
       .exec();
     return p;
@@ -39,13 +49,7 @@ export const getBlockTypeById = async (id: any) => {
       // .populate('blockSubjects.teacherScheduleId')
       .populate({
         path: 'blockSubjects.teacherScheduleId',
-        populate: [
-          { path: 'profileId' }, // Populate profileId inside teacherScheduleId
-          { path: 'subjectId' }, // Populate profileId inside teacherScheduleId
-          { path: 'blockTypeId' }, // Populate profileId inside teacherScheduleId
-          { path: 'roomId' },
-          { path: 'courseId' },
-        ],
+        populate: [{ path: 'profileId' }, { path: 'subjectId' }, { path: 'blockTypeId' }, { path: 'roomId' }, { path: 'courseId' }],
       })
       .exec();
     return p;

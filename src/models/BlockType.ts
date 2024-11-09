@@ -1,21 +1,14 @@
 import mongoose, { Schema, models, model } from 'mongoose';
 
-// Define the Subject interface to match the schema
-export interface IBlockSubject {
-  subjectId: mongoose.Schema.Types.ObjectId;
-//   professorId: mongoose.Schema.Types.ObjectId;
-  days: string[];
-  startTime?: string;
-  endTime?: string;
-}
 export interface IBlockType extends Document {
   courseId: mongoose.Schema.Types.ObjectId;
   category: string;
   semester: string;
   year: string;
   section: string;
-  blockSubjects: IBlockSubject[];
+  blockSubjects: any;
 }
+
 const schema = new Schema<IBlockType>(
   {
     courseId: {
@@ -36,7 +29,6 @@ const schema = new Schema<IBlockType>(
     },
     blockSubjects: [
       {
-        //remember this is not like this instead this will be a reference to the teacherSchedule
         teacherScheduleId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'TeacherSchedule',

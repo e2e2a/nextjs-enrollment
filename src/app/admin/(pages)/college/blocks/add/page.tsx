@@ -6,7 +6,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { useSession } from 'next-auth/react';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import TextareaField from './components/Textarea';
 import Input from './components/Input';
@@ -26,12 +25,11 @@ const Page = () => {
     if (cData) return setCourse(cData.courses);
   }, [cData, isLoading, isError]);
   const mutation = useCreateCourseBlockMutation();
-  const { data } = useSession();
-  const session = data?.user;
+
   const formCollege = useForm<z.infer<typeof BlockValidatorInCollege>>({
     resolver: zodResolver(BlockValidatorInCollege),
     defaultValues: {
-      category: "College",
+      category: 'College',
       courseCode: '',
       year: '',
       semester: '',
@@ -41,10 +39,10 @@ const Page = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof BlockValidatorInCollege>> = async (data) => {
-    setIsNotEditable(true)
+    setIsNotEditable(true);
     data.courseCode = data.courseCode.toLowerCase();
     data.section = data.section.toLowerCase();
-  
+
     mutation.mutate(data, {
       onSuccess: (res) => {
         switch (res.status) {
@@ -52,7 +50,7 @@ const Page = () => {
           case 201:
           case 203:
             formCollege.reset();
-            if(res.message) makeToastSucess(`New Block has been added ${data.courseCode.toUpperCase()}`)
+            if (res.message) makeToastSucess(`New Block has been added ${data.courseCode.toUpperCase()}`);
             return;
           default:
             if (res.error) return makeToastError(res.error);
@@ -60,7 +58,7 @@ const Page = () => {
         }
       },
       onSettled: () => {
-        setIsNotEditable(false)
+        setIsNotEditable(false);
       },
     });
   };
@@ -70,8 +68,8 @@ const Page = () => {
         <CardHeader className='space-y-3'>
           <CardTitle className='text-lg xs:text-2xl sm:text-3xl text-center w-full uppercase'>Add a New Block in Course</CardTitle>
           <CardDescription className='text-xs sm:text-sm'>
-            &nbps;&nbps;&nbps;&nbps;To register a new block, start by selecting the course from the list provided. This list is populated with courses created and managed by the administrator. Next, specify the academic year and semester for the block to ensure it is correctly
-            aligned with the course schedule. Providing this information will help synchronize the block with the appropriate course and academic period.
+            &nbps;&nbps;&nbps;&nbps;To register a new block, start by selecting the course from the list provided. This list is populated with courses created and managed by the administrator. Next, specify the academic year and semester for the block to
+            ensure it is correctly aligned with the course schedule. Providing this information will help synchronize the block with the appropriate course and academic period.
           </CardDescription>
         </CardHeader>
         <Form {...formCollege}>
