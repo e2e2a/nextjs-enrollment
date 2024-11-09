@@ -44,7 +44,7 @@ const ProfileTab = ({ profile }: IProps) => {
     form.setValue('contact', profile.contact);
     form.setValue('sex', profile.sex);
     form.setValue('civilStatus', profile.civilStatus);
-    form.setValue('birthday', new Date(profile.birthday));
+    form.setValue('birthday', new Date(profile?.birthday ? profile.birthday : Date.now()));
   }, [form, profile, isNotEditable]);
 
   const onSubmit: SubmitHandler<z.infer<typeof DeanProfileUpdateValidator>> = async (data) => {

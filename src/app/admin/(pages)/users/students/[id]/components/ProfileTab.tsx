@@ -71,7 +71,7 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
     formProfile.setValue('sex', profile.sex);
     formProfile.setValue('civilStatus', profile.civilStatus);
     formProfile.setValue('employmentStatus', profile.employmentStatus);
-    formProfile.setValue('birthday', new Date(profile.birthday));
+    formProfile.setValue('birthday', new Date(profile?.birthday ? profile.birthday : Date.now()));
     formProfile.setValue('birthPlaceCity', profile.birthPlaceCity);
     formProfile.setValue('birthPlaceProvince', profile.birthPlaceProvince);
     formProfile.setValue('birthPlaceRegion', profile.birthPlaceRegion);

@@ -11,7 +11,7 @@ export const checkingIp = async (user: any) => {
     const existingActiveIp = await UserIp.findOne({ userId: user._id });
     if (!existingActiveIp) {
       await createActiveIp(user._id);
-      return { error: 'Created Ip.' };
+      return { error: 'Created Ip.', ip: ip };
     } else {
       const currentIpArray = existingActiveIp.ips.some((ipEntry: any) => ipEntry.address === ip);
       if (currentIpArray) return { success: 'User using the same IP.' };

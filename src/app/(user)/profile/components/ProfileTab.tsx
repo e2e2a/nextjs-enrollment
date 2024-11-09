@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
@@ -74,7 +74,7 @@ const ProfileTab = ({ profile }: Iprops) => {
     form.setValue('sex', profile.sex);
     form.setValue('civilStatus', profile.civilStatus);
     form.setValue('employmentStatus', profile.employmentStatus);
-    form.setValue('birthday', new Date(profile.birthday));
+    form.setValue('birthday', new Date(profile?.birthday ? profile.birthday : Date.now()));
     form.setValue('birthPlaceCity', profile.birthPlaceCity);
     form.setValue('birthPlaceProvince', profile.birthPlaceProvince);
     form.setValue('birthPlaceRegion', profile.birthPlaceRegion);
