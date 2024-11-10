@@ -9,6 +9,7 @@ import LoaderPage from '@/components/shared/LoaderPage';
 import TertiaryAlertDialog from './TertiaryAlertDialog';
 import TertiaryDialogEndSemester from './TertiaryDialogEndSemester';
 import { useEnrollmentQueryByCategory } from '@/lib/queries/enrollment/get/category';
+import MainGrade from './grades/MainGrade';
 
 const TertiaryContent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -87,7 +88,7 @@ const TertiaryContent = () => {
         <LoaderPage />
       ) : (
         <TabsContent value='tertiary' className='space-y-4'>
-          <div className='grid gap-4 grid-cols-1 md:grid-cols-2'>
+          <div className='grid gap-4 grid-cols-1 sm:grid-cols-2'>
             <div className=''>
               {!esData?.enrollmentSetup?.enrollmentTertiary || !esData?.enrollmentSetup?.enrollmentTertiary?.open ? <TertiaryDialog isPending={false} setIsOpen={setIsOpen} enrollmentSetup={esData.enrollmentSetup} /> : <TertiaryAlertDialog />}
             </div>
@@ -97,6 +98,9 @@ const TertiaryContent = () => {
               </div>
             )}
           </div>
+
+          {esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear && esData?.enrollmentSetup?.enrollmentTertiary?.semester && <MainGrade setup={esData?.enrollmentSetup?.enrollmentTertiary} />}
+
           <div className='grid gap-4 md:grid-cols-2'>
             <Card>
               <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>

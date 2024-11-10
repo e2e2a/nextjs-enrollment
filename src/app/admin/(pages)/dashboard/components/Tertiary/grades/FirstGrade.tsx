@@ -3,10 +3,15 @@ import React, { useState } from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import { Icons } from '@/components/shared/Icons';
 import { useUpdateEnrollmentSetupMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-const TertiaryAlertDialog = () => {
+
+interface IProps {
+  setup: any;
+}
+
+const FirstGrade = ({ setup }: IProps) => {
+  console.log('firstGrade', setup.firstGrade);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const mutation = useUpdateEnrollmentSetupMutation();
@@ -14,7 +19,7 @@ const TertiaryAlertDialog = () => {
   const handleSubmit = () => {
     const data = {
       name: 'GODOY',
-      'enrollmentTertiary.open': false,
+      'enrollmentTertiary.firstGrade.open': !setup.firstGrade?.open,
     };
 
     mutation.mutate(data, {
@@ -23,7 +28,7 @@ const TertiaryAlertDialog = () => {
           case 200:
           case 201:
           case 203:
-            makeToastSucess('Enrollment in college has been closed');
+            makeToastSucess('Prelim Grading is Open.');
             return;
           default:
             makeToastError(res.error);
@@ -38,31 +43,23 @@ const TertiaryAlertDialog = () => {
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <Button type='button' disabled={isUploading} variant='outline' size={'sm'} className='sm:text-sm text-xs gap-2 bg-red text-white'>
-          <Icons.graduationCap className='h-6 w-6' />
-          <span className=' text-white text-[15px] font-medium'>{isUploading ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Close/End Enrollment'}</span>
+        <Button type='button' disabled={isUploading} variant='outline' size={'sm'} className={`sm:text-sm text-xs gap-1 ${setup.firstGrade?.open ? 'bg-red' : 'bg-green-500'}  text-white`}>
+          <span className='h-6 w-6 flex items-center'>📝</span>
+          <span className=' text-white text-sm font-medium'>{isUploading ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Open Prelim Grading'}</span>
         </Button>
       </AlertDialogTrigger>
       <form action='' className='p-0 m-0' method='post'>
         <AlertDialogContent className='bg-white text-black'>
           <AlertDialogHeader>
-            <AlertDialogTitle>Closed Enrollment</AlertDialogTitle>
-            <AlertDialogDescription className=''>
-              &nbsp;&nbsp;&nbsp;&nbsp;This action will close the enrollment form for students. Please be aware that once closed, students will no longer be able to submit their enrollment forms for college.
-            </AlertDialogDescription>
+            <AlertDialogTitle>{setup?.firstGrade?.open ? 'Closing' : 'Opening'} the Grading of Prelim</AlertDialogTitle>
+            <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;{setup?.firstGrade?.open ? 'This action will closed the grading system for the Prelim.' : 'This action will open the grading system for the Prelim.'}</AlertDialogDescription>
           </AlertDialogHeader>
-          {/* <div className='bg-[#ffd6d6] py-2 rounded-sm'>
-            <div className='text-red px-3 text-sm'>
-              <span className='font-bold '>WARNING:</span> <span className='text-sm font-light'> Once submitted, this action cannot be reversed without contacting the registrar.</span>
-            </div>
-          </div> */}
-
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction type='button' className='hidden'>
               abzxc
             </AlertDialogAction>
-            <Button disabled={isUploading} onClick={handleSubmit} className='bg-dark-4 text-white'>
+            <Button disabled={isUploading} onClick={() => handleSubmit()} className='bg-dark-4 text-white'>
               <span className=' text-white text-[15px] font-medium'>{isUploading ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Continue'}</span>
             </Button>
           </AlertDialogFooter>
@@ -72,4 +69,4 @@ const TertiaryAlertDialog = () => {
   );
 };
 
-export default TertiaryAlertDialog;
+export default FirstGrade;

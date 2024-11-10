@@ -38,8 +38,12 @@ export function TertiaryDialog({ enrollmentSetup, isPending, setIsOpen }: IProps
     // setIsPending(true);
     setIsOpen(false);
     const dataa = {
-      enrollmentTertiary: { open: true, semester: data.semester, schoolYear: data.schoolYear },
+      name: 'GODOY',
+      'enrollmentTertiary.open': true,
+      'enrollmentTertiary.semester': data.semester,
+      'enrollmentTertiary.schoolYear': data.schoolYear,
     };
+
     mutation.mutate(dataa, {
       onSuccess: (res: any) => {
         switch (res.status) {
@@ -62,7 +66,8 @@ export function TertiaryDialog({ enrollmentSetup, isPending, setIsOpen }: IProps
   const actionFormOpenSubmit = () => {
     setIsOpen(false);
     const dataa = {
-      enrollmentTertiary: { open: true },
+      name: 'GODOY',
+      'enrollmentTertiary.open': true,
     };
     mutation.mutate(dataa, {
       onSuccess: (res: any) => {
@@ -86,7 +91,7 @@ export function TertiaryDialog({ enrollmentSetup, isPending, setIsOpen }: IProps
 
   return (
     <>
-      {(enrollmentSetup.enrollmentTertiary.schoolYear && enrollmentSetup.enrollmentTertiary.semester) ? (
+      {enrollmentSetup.enrollmentTertiary.schoolYear && enrollmentSetup.enrollmentTertiary.semester ? (
         <Dialog onOpenChange={setIsDialogOpen} open={isDialogOpen}>
           <DialogTrigger asChild>
             <Button size={'sm'} className={'w-auto focus-visible:ring-0 flex mb-2 bg-transparent bg-green-500 px-2 py-0 gap-x-1 justify-start text-neutral-50 font-medium tracking-tight'}>
@@ -103,7 +108,7 @@ export function TertiaryDialog({ enrollmentSetup, isPending, setIsOpen }: IProps
           >
             <DialogHeader>
               <DialogTitle className='flex flex-col space-y-1'>
-                <span>Complete Current Step</span>{' '}
+                <span>Opening Enrollment</span>{' '}
               </DialogTitle>
               <DialogDescription>The semester and school year have already been configured. Are you sure you want to reopen college enrollment?</DialogDescription>
             </DialogHeader>

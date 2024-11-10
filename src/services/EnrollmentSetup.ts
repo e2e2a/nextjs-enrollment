@@ -13,10 +13,11 @@ export const getEnrollmentSetupByName = async (name: string) => {
 
 export const updateEnrollmentSetupByName = async (name: string, data: any) => {
   try {
-    const setup = await EnrollmentSetup.findOneAndUpdate({ name }, { $set:data }, { new: true }).exec();
+    console.log('data', data);
+    const setup = await EnrollmentSetup.findOneAndUpdate({ name }, { $set: data }, { new: true }).exec();
     return setup;
   } catch (error) {
-    console.log(error);
+    console.log('error1', error);
     return null;
   }
 };

@@ -9,25 +9,18 @@ export interface IEnrollmentSetup extends Document {
 
 const schema = new Schema<IEnrollmentSetup>(
   {
-    name: {
-      type: String,
-    },
+    name: { type: String },
     enrollmentTertiary: {
-      open: {
-        type: Boolean,
-      },
-      schoolYear: {
-        type: String,
-      },
-      semester: {
-        type: String,
-      },
+      open: { type: Boolean },
+      firstGrade: { open: { type: Boolean, default: false } },
+      secondGrade: { open: { type: Boolean, default: false } },
+      thirdGrade: { open: { type: Boolean, default: false } },
+      fourthGrade: { open: { type: Boolean, default: false } },
+      schoolYear: { type: String },
+      semester: { type: String },
     },
 
-    addOrDropSubjects: {
-      type: Boolean,
-      default: false,
-    },
+    addOrDropSubjects: { type: Boolean, default: false },
   },
   {
     versionKey: false,

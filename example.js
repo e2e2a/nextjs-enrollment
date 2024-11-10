@@ -29,7 +29,11 @@
 //   nothing: null,
 // };
 // console.log('user:', Number(user.nothing ?? 0) + 1);
-let number
-number = '3'
+// let number
+// number = '3'
 
-console.log('qwe', 3 === Number('3'))
+// console.log('qwe', 3 === Number('3'))
+
+const p = true
+
+console.log('try', !p)
