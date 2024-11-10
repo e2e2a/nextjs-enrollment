@@ -178,26 +178,6 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    id: 'requestStatusInRegistrar',
-    header: 'Approved By Registrar',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className='uppercase'>
-          {user.requestStatusInRegistrar === 'Approved' ? (
-            <span className='text-green-500 text-xs'>{user.requestStatusInRegistrar}</span>
-          ) : user.requestStatusInRegistrar === 'Pending' ? (
-            <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
-          ) : user.requestStatusInRegistrar === 'Declined' ? (
-            <span className='text-red text-xs'>{user.requestStatusInRegistrar}</span>
-          ) : (
-            <span className='text-gray-400 text-xs'>N/A</span>
-          )}
-        </div>
-      );
-    },
-  },
-  {
     accessorFn: (row) => row.firstGrade,
     id: 'prelim',
     header: 'Prelim',

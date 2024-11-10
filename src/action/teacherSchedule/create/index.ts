@@ -73,7 +73,7 @@ const handlesCollege = (data: any) => {
     const roomConflict = await checkSchedulesInRooms(data);
     if (roomConflict && roomConflict.error) return roomConflict;
 
-    const createdSched = await createTeacherSchedule({ profileId: teacher._id, ...tsParse.data });
+    const createdSched = await createTeacherSchedule({ profileId: teacher._id, category: data.category, ...tsParse.data });
     if (!createdSched) return { error: 'Something went wrong.', status: 500 };
     return { message: 'yesyes', success: true, status: 201 };
   });

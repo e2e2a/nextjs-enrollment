@@ -111,29 +111,19 @@ const schema = new Schema<IEnrollment>(
         },
         
         firstGrade: {
-          type: Number,
-          default: 2.0,
-          set: (v: any) => parseFloat(parseFloat(v).toFixed(2)),
+          type: String,
         },
         secondGrade: {
-          type: Number,
-          default: 2.0,
-          set: (v: any) => parseFloat(parseFloat(v).toFixed(2)),
+          type: String,
         },
         thirdGrade: {
-          type: Number,
-          default: 2.0,
-          set: (v: any) => parseFloat(parseFloat(v).toFixed(2)),
+          type: String,
         },
         fourthGrade: {
-          type: Number,
-          default: 2.0,
-          set: (v: any) => parseFloat(parseFloat(v).toFixed(2)),
+          type: String,
         },
         averageTotal: {
-          type: Number,
-          default: 2.0,
-          set: (v: any) => parseFloat(parseFloat(v).toFixed(2)),
+          type: String,
         },
       },
     ],

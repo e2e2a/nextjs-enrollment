@@ -16,7 +16,9 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isEnabled, setIsEnabled] = React.useState(false);
   const [selectedItems, setSelectedItems] = React.useState<{ teacherScheduleId: string }[]>([]);
+
   const mutation = useUpdateCourseBlockScheduleMutation();
+
   const handleSelect = (teacherScheduleId: string) => {
     setSelectedItems((prevSelectedItems) => {
       const itemIndex = prevSelectedItems.findIndex((item) => item.teacherScheduleId === teacherScheduleId);
@@ -27,13 +29,14 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
       }
     });
   };
+
   const actionFormSubmit = () => {
     setIsEnabled(true);
     if (selectedItems.length === 0) {
       makeToastError('Please select at least one schedule to submit.');
       return;
     }
-    
+
     const data = {
       selectedItems,
       blockTypeId: blockType.blockType._id,
@@ -59,9 +62,11 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
       },
     });
   };
+
   const isSelected = (teacherScheduleId: string) => {
     return selectedItems.some((item) => item.teacherScheduleId === teacherScheduleId);
   };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -81,52 +86,52 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
           <DialogTitle className='flex flex-col space-y-1'>
             <span>Add New BLock Schedule</span>
           </DialogTitle>
-          <DialogDescription>Please fill the year, semester, SY and List Order to follow.</DialogDescription>
+          <DialogDescription>Select some schedules to add.</DialogDescription>
         </DialogHeader>
-        <div className=''>
+        <div className='w-full'>
           {selectedItems.length > 0 && (
-            <div className='flex justify-between'>
-              <span className=''>
-                Add list:
-                <div className='flex flex-col'>
-                  {selectedItems.map((item, index) => {
-                    const selectedItem = s.find((i: any) => i._id === item.teacherScheduleId);
-                    if (selectedItem) {
-                      return (
-                        <div key={`${selectedItem._id}`} className='text-green-500 flex gap-3'>
-                          <div className='flex flex-col text-sm'>
-                            <div className=''>
-                              <span className='border rounded-full border-gray-600 px-1.5'>{index + 1}</span>
-                            </div>{' '}
-                            <span>
-                              Instructor: {selectedItem.profileId.firstname} {selectedItem.profileId.middlename} {selectedItem.profileId.lastname}
+            <>
+              <div className='flex justify-between w-full mb-5'>
+                <div className='w-full'>Add list:</div>
+                <Button type='submit' disabled={isEnabled} className='bg-blue-600 text-neutral-50' size={'sm'} onClick={() => actionFormSubmit()} variant='secondary'>
+                  Save
+                </Button>
+              </div>
+              <div className='flex w-full flex-col max-h-32 overflow-y-auto '>
+                {selectedItems.map((item, index) => {
+                  const selectedItem = s.find((i: any) => i._id === item.teacherScheduleId);
+                  if (selectedItem) {
+                    return (
+                      <div key={`${selectedItem._id}`} className='text-green-500 flex gap-3 w-full justify-between'>
+                        <div className='flex flex-col text-sm'>
+                          <div className=''>
+                            <span className='border rounded-full border-gray-600 px-1.5'>{index + 1}</span>
+                          </div>{' '}
+                          <span>
+                            Instructor: {selectedItem.profileId.firstname} {selectedItem.profileId.middlename} {selectedItem.profileId.lastname}
+                          </span>
+                          <span>Subject Code: {selectedItem.subjectId.subjectCode}</span>
+                          <span>Descriptive Title: {selectedItem.subjectId.name}</span>
+                          <span className=''>
+                            Time:{' '}
+                            <span className='uppercase'>
+                              {selectedItem.startTime} - {selectedItem.endTime}
                             </span>
-                            <span>Subject Code: {selectedItem.subjectId.subjectCode}</span>
-                            <span>Descriptive Title: {selectedItem.subjectId.name}</span>
-                            <span className=''>
-                              Time:{' '}
-                              <span className='uppercase'>
-                                {selectedItem.startTime} - {selectedItem.endTime}
-                              </span>
-                            </span>
-                            <span className=''>
-                              Room: <span className='uppercase'>{selectedItem.roomId.roomName}</span>
-                            </span>
-                          </div>
-                          <span className='text-red cursor-pointer py-1 mr-5' onClick={() => handleSelect(selectedItem._id)}>
-                            <Icons.trash className='h-3 w-3' />
+                          </span>
+                          <span className=''>
+                            Room: <span className='uppercase'>{selectedItem.roomId.roomName}</span>
                           </span>
                         </div>
-                      );
-                    }
-                    return null;
-                  })}
-                </div>
-              </span>
-              <Button type='submit' disabled={isEnabled} className='bg-blue-600 text-neutral-50' size={'sm'} onClick={() => actionFormSubmit()} variant='secondary'>
-                Save
-              </Button>
-            </div>
+                        <div className='text-red flex justify-end cursor-pointer py-1 mr-5' onClick={() => handleSelect(selectedItem._id)}>
+                          <Icons.trash className='h-3 w-3' />
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+            </>
           )}
         </div>
         <div className='overflow-auto w-full bg-slate-50 rounded-lg'>

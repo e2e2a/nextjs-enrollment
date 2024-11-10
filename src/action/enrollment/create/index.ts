@@ -172,7 +172,7 @@ const uploadFileOrPhoto = async (profile: any, files: any) => {
     }
 
     if (files.fileTOR && files.fileTOR.name) {
-      const storageRefFileTOR = ref(storage, `enrollment/reportCard/${files.profile._id}/${files.fileTOR.name}`);
+      const storageRefFileTOR = ref(storage, `enrollment/reportCard/${profile._id}/${files.fileTOR.name}`);
       uploads.push(uploadBytes(storageRefFileTOR, files.fileTOR, { contentType: files.fileTOR.type }));
     }
 

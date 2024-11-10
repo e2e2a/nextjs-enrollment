@@ -80,9 +80,9 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
                       if (header.id === 'averageTotal') return;
                     }
 
-                    if (enrollmentStudentStatus === 'Pending' || enrollmentStudentStatus === 'Enrolled') {
+                    if (enrollmentStudentStatus === 'Pending' || enrollmentStudentStatus === 'Enrolled' || enrollmentStudentStatus === 'Temporary Enrolled') {
                       if (!enrollmentSetup.addOrDropSubjects) {
-                        if (enrollmentStudentStatus === 'Enrolled') {
+                        if (enrollmentStudentStatus === 'Enrolled' || enrollmentStudentStatus === 'Temporary Enrolled') {
                           if (header.id === 'status') return;
                           if (header.id === 'requesting') return;
                           if (header.id === 'request status') return;
@@ -127,9 +127,9 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
                           if (cell.column.id === 'averageTotal') return;
                         }
 
-                        if (enrollmentStudentStatus === 'Pending' || enrollmentStudentStatus === 'Enrolled') {
+                        if (enrollmentStudentStatus === 'Pending' || enrollmentStudentStatus === 'Enrolled' || enrollmentStudentStatus === 'Temporary Enrolled') {
                           if (!enrollmentSetup.addOrDropSubjects) {
-                            if (enrollmentStudentStatus === 'Enrolled') {
+                            if (enrollmentStudentStatus === 'Enrolled' || enrollmentStudentStatus === 'Temporary Enrolled') {
                               if (cell.column.id === 'status') return;
                               if (cell.column.id === 'requesting') return;
                               if (cell.column.id === 'request status') return;

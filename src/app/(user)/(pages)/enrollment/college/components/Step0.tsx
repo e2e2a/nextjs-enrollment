@@ -223,7 +223,9 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
             setTimeout(() => {
               makeToastSucess(`You are enrolling to this course ${selectedCourse.toUpperCase()}`);
             }, 500);
+            setIsPending(false);
             setSelectedCourse(search || '');
+            form.reset()
             return;
           default:
             setIsPending(false);

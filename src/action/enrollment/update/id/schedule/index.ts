@@ -59,7 +59,6 @@ const checkTypeRequest = async (user: any, data: any, e: any) => {
             if (user.role === 'ADMIN') {
               request = await ApprovedByAdminAddSubjectCollege(data, e);
             } else if (user.role === 'DEAN') {
-              console.log('its running');
               request = await ApprovedByDeanAddSubjectCollege(data, e);
             }
           } else {
@@ -83,7 +82,6 @@ const checkTypeRequest = async (user: any, data: any, e: any) => {
         }
         if (user.role === 'DEAN') {
           // approval/declined of drop subject
-          console.log('running', data);
           request = await ApprovedByDeanDropSubjectCollege(data, e);
         }
         break;
@@ -129,10 +127,10 @@ const ApprovedByDeanAddSubjectCollege = async (data: any, e: any) => {
       }
     } else if (data.type === 'Declined') {
       enrollmentToUpdate.requestStatusInDean = 'Declined';
-      if (enrollmentToUpdate.requestStatusInRegistrar === 'Declined') {
-        enrollmentToUpdate.requestStatus = 'Declined';
-        enrollmentToUpdate.status = 'Declined';
-      }
+      // if (enrollmentToUpdate.requestStatusInRegistrar === 'Declined') {
+      enrollmentToUpdate.requestStatus = 'Declined';
+      enrollmentToUpdate.status = 'Declined';
+      // }
     }
 
     await e.save();
@@ -164,10 +162,10 @@ const ApprovedByAdminAddSubjectCollege = async (data: any, e: any) => {
       }
     } else if (data.type === 'Declined') {
       enrollmentToUpdate.requestStatusInRegistrar = 'Declined';
-      if (enrollmentToUpdate.requestStatusInDean === 'Declined') {
-        enrollmentToUpdate.requestStatus = 'Declined';
-        enrollmentToUpdate.status = 'Declined';
-      }
+      // if (enrollmentToUpdate.requestStatusInDean === 'Declined') {
+      enrollmentToUpdate.requestStatus = 'Declined';
+      enrollmentToUpdate.status = 'Declined';
+      // }
     }
 
     await e.save();
@@ -199,10 +197,10 @@ const ApprovedByAdminDropSubjectCollege = async (data: any, e: any) => {
       }
     } else if (data.type === 'Declined') {
       enrollmentToUpdate.requestStatusInRegistrar = 'Declined';
-      if (enrollmentToUpdate.requestStatusInDean === 'Declined') {
-        enrollmentToUpdate.requestStatus = 'Declined';
-        enrollmentToUpdate.status = 'Approved';
-      }
+      // if (enrollmentToUpdate.requestStatusInDean === 'Declined') {
+      enrollmentToUpdate.requestStatus = 'Declined';
+      enrollmentToUpdate.status = 'Approved';
+      // }
     }
 
     await e.save();
@@ -234,10 +232,10 @@ const ApprovedByDeanDropSubjectCollege = async (data: any, e: any) => {
       }
     } else if (data.type === 'Declined') {
       enrollmentToUpdate.requestStatusInDean = 'Declined';
-      if (enrollmentToUpdate.requestStatusInRegistrar === 'Declined') {
-        enrollmentToUpdate.requestStatus = 'Declined';
-        enrollmentToUpdate.status = 'Approved';
-      }
+      // if (enrollmentToUpdate.requestStatusInRegistrar === 'Declined') {
+      enrollmentToUpdate.requestStatus = 'Declined';
+      enrollmentToUpdate.status = 'Approved';
+      // }
     }
 
     await e.save();

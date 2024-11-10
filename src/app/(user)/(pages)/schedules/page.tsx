@@ -5,7 +5,7 @@ import { columns } from './components/Columns';
 import { useEnrollmentSetupQuery } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -87,6 +87,11 @@ const Page = () => {
           <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
             <div className='mb-3'>
               <h1 className='text-lg sm:text-2xl font-bold uppercase'>Student&apos; Schedules</h1>
+              {data.enrollment.enrollStatus === 'Pending' && data.enrollment.step > 3 && (
+                <span className='text-[15px] font-semibold'>
+                  Drop/Add Subjects: {ESetup?.enrollmentSetup?.addOrDropSubjects ? <span className='text-green-500 text-[15px] font-semibold'>Open</span> : <span className='text-red text-[15px] font-semibold'>Closed</span>}
+                </span>
+              )}
             </div>
             <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
               <div className='justify-between items-center flex w-full'>
