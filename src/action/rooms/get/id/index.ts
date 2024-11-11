@@ -4,6 +4,11 @@ import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getRoomById } from '@/services/room';
 import { getAllTeacherSchedule } from '@/services/teacherSchedule';
 
+/**
+ * handles query room by id
+ *
+ * @param {string} id
+ */
 export const getRoomByIdAction = async (id: string): Promise<any> => {
   return tryCatch(async () => {
     await dbConnect();

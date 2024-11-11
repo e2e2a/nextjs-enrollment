@@ -20,7 +20,7 @@ import {
 import { removeCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
 import { removeStudentScheduleAction } from '@/action/college/schedules/students';
 import { getEnrollmentSetup, updateEnrollmentSetup } from '@/action/enrollmentSetup';
-import { createTeacherReportGradeAction, getAllTeacherReportGradeAction, getTeacherReportGradeByIdAction, updateTeacherReportGradeStatusByIdAction } from '@/action/college/schedules/teachers/reportGrade/teacher';
+import { getTeacherReportGradeByIdAction, updateTeacherReportGradeStatusByIdAction } from '@/action/college/schedules/teachers/reportGrade/teacher';
 import { evaluateApprovedGradeReportAction } from '@/action/college/schedules/teachers/reportGrade/admin';
 import {
   getAllStudentEnrollmentRecordCollegeAction,
@@ -75,14 +75,6 @@ export const useCollegeEndSemesterMutation = () => {
  * Teacher Grade Report
  * @returns
  */
-export const useAllTeacherReportGradeQuery = () => {
-  return useQuery<any, Error>({
-    queryKey: ['TeacherReportGrade'],
-    queryFn: () => getAllTeacherReportGradeAction(),
-    retry: 0,
-    refetchOnWindowFocus: false,
-  });
-};
 export const useTeacherReportGradeQueryById = (id: any) => {
   return useQuery<any, Error>({
     queryKey: ['TeacherReportGradeById', id],
@@ -90,17 +82,6 @@ export const useTeacherReportGradeQueryById = (id: any) => {
     queryFn: () => getTeacherReportGradeByIdAction(id),
     retry: 0,
     refetchOnWindowFocus: false,
-  });
-};
-
-export const useCreateGradeReportMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => createTeacherReportGradeAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['TeacherReportGrade'] });
-      queryClient.invalidateQueries({ queryKey: ['TeacherReportGradeById'] });
-    },
   });
 };
 

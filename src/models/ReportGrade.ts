@@ -5,6 +5,7 @@ export interface IReportGrade extends Document {
   userId: mongoose.Schema.Types.ObjectId;
   teacherId: mongoose.Schema.Types.ObjectId;
   teacherScheduleId: mongoose.Schema.Types.ObjectId;
+  type: string;
   reportedGrade: any;
   scholarType: string;
   statusInDean: 'Pending' | 'Approved' | 'Declined';
@@ -15,9 +16,7 @@ export interface IReportGrade extends Document {
 }
 const schema = new Schema<IReportGrade>(
   {
-    category: {
-      type: String,
-    },
+    category: { type: String },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -30,6 +29,7 @@ const schema = new Schema<IReportGrade>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'TeacherSchedule',
     },
+    type: { type: String },
     reportedGrade: [
       {
         profileId: {
@@ -43,13 +43,8 @@ const schema = new Schema<IReportGrade>(
       type: String,
       enum: ['Pending', 'Approved', 'Declined'],
     },
-    evaluated: {
-      type: Boolean,
-    },
-
-    schoolYear: {
-      type: String,
-    },
+    evaluated: { type: Boolean },
+    schoolYear: { type: String },
     // isDeleted: {
     //   type: Boolean,
     // },

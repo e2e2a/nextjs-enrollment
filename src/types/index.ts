@@ -1,6 +1,5 @@
 import { Icons } from '@/components/shared/Icons';
 
-//
 export type IVerificationToken = {
   id: string;
   userId: any;
@@ -21,7 +20,7 @@ export type IResetPasswordToken = {
   createdAt: Date;
   updatedAt: Date;
 };
-//
+
 export type IUpdateUser = {
   userId: string;
   name: string;
@@ -60,36 +59,6 @@ export type UserRole = {
 export type IUserPassword = IId & {
   password: string;
 };
-/**
- * @todo
- * create type User Profile
- */
-export type IUserData = {
-  firstname?: string;
-  lastname?: string;
-  username?: string;
-  email?: string;
-  imageUrl?: string | null;
-};
-
-export type IUser = IId & {
-  username?: string;
-  email?: string;
-  imageUrl?: string | null;
-} & UserRole;
-
-export type INewUser = {
-  name: string;
-  email: string;
-  username: string;
-  password: string;
-};
-
-export interface INavLink {
-  imgURL: string;
-  route: string;
-  label: string;
-}
 
 export type NavItem = {
   title: string;
@@ -175,7 +144,7 @@ export type DashboardConfig = {
   sidebarNav: SidebarNavItem[];
   sidebarInstructor: SidebarNavItemInstructor[];
   sidebarDean: SidebarNavItemDean[];
-  
+
   mainNavAdmin: MainNavItem[];
   sidebarAdmin: SidebarNavItemAdmin[];
 };
@@ -281,9 +250,6 @@ export type IEnrollment = {
   createdAt: Date;
   updatedAt: Date;
 };
-export type getSingleEnrollmentResponse = {
-  enrollment?: IEnrollment;
-} & IResponse;
 
 export type getEnrollmentResponse = {
   enrollment?: IEnrollment[];
@@ -303,9 +269,6 @@ export type IBlockType = {
 export type getBlockCourseResponse = {
   blockTypes?: IBlockType[];
 } & IResponse;
-export type getSingleBlockCourseResponse = {
-  blockType?: IBlockType;
-} & IResponse;
 
 export interface ISubject {
   id?: any;
@@ -321,9 +284,6 @@ export interface ISubject {
   createdAt: Date;
   updatedAt: Date;
 }
-export type getSubjectCategoryCollegeResponse = {
-  subjects?: ISubject[];
-} & IResponse;
 
 export interface IStudentProfile {
   _id: string;
@@ -469,12 +429,7 @@ export interface IRoom {
   createdAt: Date;
   updatedAt: Date;
 }
-export type getAllRoomResponse = {
-  rooms?: IRoom[];
-} & IResponse;
-export type getRoomResponse = {
-  room?: IRoom;
-} & IResponse;
+
 export type ISchoolYear = {
   id?: any;
   _id: any;
@@ -532,9 +487,3 @@ export type ITeacherSchedule = {
   createdAt: Date;
   updatedAt: Date;
 };
-export type getAllTeacherScheduleResponse = {
-  teacherSchedules?: ITeacherSchedule[];
-} & IResponse;
-export type getTeacherScheduleResponse = {
-  teacherSchedule?: ITeacherSchedule;
-} & IResponse;

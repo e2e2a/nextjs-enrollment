@@ -2,15 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useAllTeacherReportGradeQuery, useTeacherReportGradeQueryById, useTeacherScheduleRecordByIdQuery } from '@/lib/queries';
-import { IRoom } from '@/types';
+import { useTeacherScheduleRecordByIdQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  //   const [rooms, setRooms] = useState({});
   const { data, isLoading, error: isEnError } = useTeacherScheduleRecordByIdQuery(params.id);
+
   useEffect(() => {
     if (isEnError || !data) return;
     if (data) {
@@ -37,7 +36,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className=''>
               <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
                 <div className='mb-3'>
-                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Schdule Management</h1>
+                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Schedule Management</h1>
                 </div>
                 <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
                   <div className='justify-between items-center flex w-full'>

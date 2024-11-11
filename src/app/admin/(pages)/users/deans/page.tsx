@@ -2,7 +2,7 @@
 import { columns } from './components/columns';
 import { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
-import { IAdminProfile, IDeanProfile } from '@/types';
+import { IDeanProfile } from '@/types';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 

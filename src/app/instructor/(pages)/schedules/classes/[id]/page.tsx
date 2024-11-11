@@ -7,6 +7,7 @@ import LoaderPage from '@/components/shared/LoaderPage';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/id';
 import { useEnrollmentQueryByTeacherScheduleId } from '@/lib/queries/enrollment/get/teacherSchedule';
+import { useEnrollmentSetupQuery } from '@/lib/queries';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -14,11 +15,13 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data, isLoading, error: isEnError } = useProfileQueryBySessionId();
   const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryById(params.id, 'College');
   const { data: s, isLoading: sLoading, error: sError } = useEnrollmentQueryByTeacherScheduleId({ id: ts?.teacherSchedule?._id, category: 'College' });
+  const { data: esData, isLoading: esLoading, isError: esError } = useEnrollmentSetupQuery();
 
   useEffect(() => {
     if (tsError || !ts) return;
     if (isEnError || !data) return;
     if (sError || !s) return;
+    if (esError || !esData) return;
 
     if (ts && data && s) {
       if (ts.teacherSchedule) {
@@ -33,8 +36,8 @@ const Page = ({ params }: { params: { id: string } }) => {
         setIsPageLoading(false);
       }
     }
-  }, [ts, tsError, data, isEnError, s, sError]);
-  
+  }, [ts, tsError, data, isEnError, s, sError, esData, esError]);
+
   return (
     <>
       {isPageLoading ? (
@@ -102,7 +105,10 @@ const Page = ({ params }: { params: { id: string } }) => {
                 <>
                   <div className='w-full flex justify-start items-center'>
                     <div className='flex flex-col'>
-                      <AddGrades data={s.students} teacher={ts?.teacherSchedule} />
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.firstGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'firstGrade'} />}
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.secondGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'secondGrade'} />}
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.thirdGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'thirdGrade'} />}
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.fourthGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'fourthGrade'} />}
                     </div>
                   </div>
                   <DataTable columns={columns} data={s.students} />{' '}

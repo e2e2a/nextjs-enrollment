@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import AddGrades from './components/AddGrades';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/id';
 import { useEnrollmentQueryByTeacherScheduleId } from '@/lib/queries/enrollment/get/teacherSchedule';
@@ -16,7 +15,6 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
   const { data: s, isLoading: sLoading, error: sError } = useEnrollmentQueryByTeacherScheduleId({ id: ts?.teacherSchedule?._id, category: 'College' });
 
   useEffect(() => {
-    console.log('data', data)
     if (tsError || !ts) return;
     if (isEnError || !data) return;
     if (sError || !s) return;
@@ -99,16 +97,7 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
                   </div>
                 </div>
               </div>
-              {ts?.teacherSchedule?.courseId && (
-                <>
-                  {/* <div className='w-full flex justify-start items-center'>
-                    <div className='flex flex-col'>
-                      <AddGrades data={s.students} teacher={ts?.teacherSchedule} />
-                    </div>
-                  </div> */}
-                  <DataTable columns={columns} data={s.students} />
-                </>
-              )}
+              {ts?.teacherSchedule?.courseId && <DataTable columns={columns} data={s.students} />}
             </>
           ) : (
             <div className=''>404</div>

@@ -2,22 +2,18 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useAllTeacherReportGradeQuery, useTeacherReportGradeQueryById, useTeacherScheduleRecordByIdQuery } from '@/lib/queries';
-import { IRoom } from '@/types';
+import { useTeacherScheduleRecordByIdQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  //   const [rooms, setRooms] = useState({});
   const { data, isLoading, error: isEnError } = useTeacherScheduleRecordByIdQuery(params.id);
+
   useEffect(() => {
     if (isEnError || !data) return;
     if (data) {
       if (data.teacherScheduleRecord) {
-        // console.log(data.teacherScheduleRecord);
-        // const filteredRooms = data?.rooms.filter((room: IRoom) => room.educationLevel === 'tertiary');
-        // setRooms(filteredRooms);
         setIsPageLoading(false);
       }
     }

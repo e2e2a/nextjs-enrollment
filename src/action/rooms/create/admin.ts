@@ -5,6 +5,11 @@ import { RoomValidator } from '@/lib/validators/room/create';
 import { createRoom, getRoomByName } from '@/services/room';
 import { verifyADMIN } from '@/utils/actions/session/roles/admin';
 
+/**
+ * handles create room
+ *
+ * @param {Object} data
+ */
 export const createRoomAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();

@@ -5,6 +5,11 @@ import { SubjectValidator } from '@/lib/validators/subject/create';
 import { createNewSubject, getSubjectBySubjectCode } from '@/services/subject';
 import { verifyADMIN } from '@/utils/actions/session/roles/admin';
 
+/**
+ * handles create subject by category
+ *
+ * @param {Object} data
+ */
 export const createNewSubjectAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();

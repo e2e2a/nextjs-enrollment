@@ -15,7 +15,6 @@ export const getEnrollmentByTeacherScheduleIdAction = async (data: any) => {
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
 
     const res = await checkSessionRole(session.user, data);
-    console.log('myresponse', res)
     if (res && res.error) return { error: res.error, status: res.status };
 
     return { students: JSON.parse(JSON.stringify(res.students)), status: 200 };

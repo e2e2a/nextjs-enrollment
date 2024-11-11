@@ -3,7 +3,7 @@ import { getVerificationTokenByUserId } from '@/services/token';
 import { Token } from '@/models/Token';
 
 export const generateRandomString = async () => {
-  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Uppercase letters and numbers
+  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let result = '';
   for (let i = 0; i < 6; i++) {
     const randomIndex = Math.floor(Math.random() * charset.length);

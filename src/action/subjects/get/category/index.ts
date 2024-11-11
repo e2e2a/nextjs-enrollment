@@ -3,6 +3,11 @@ import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getSubjectByCategory } from '@/services/subject';
 
+/**
+ * handles query subject by category
+ *
+ * @param {string} category
+ */
 export const getSubjectByCategoryAction = async (category: string) => {
   return tryCatch(async () => {
     await dbConnect();

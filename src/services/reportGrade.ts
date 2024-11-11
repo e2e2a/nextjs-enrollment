@@ -1,7 +1,7 @@
 'use server';
 import ReportGrade from '@/models/ReportGrade';
 
-export const createTeacherReportGrade = async (data: any) => {
+export const createReportGrade = async (data: any) => {
   try {
     const newReportGrade = await ReportGrade.create({
       ...data,
@@ -13,9 +13,9 @@ export const createTeacherReportGrade = async (data: any) => {
   }
 };
 
-export const getAllTeacherReportGrade = async () => {
+export const getReportGradeByCategory = async (category: string) => {
   try {
-    const rg = await ReportGrade.find()
+    const rg = await ReportGrade.find({ category })
       .populate('userId')
       .populate('teacherId')
       .populate('teacherScheduleId')
@@ -28,12 +28,14 @@ export const getAllTeacherReportGrade = async () => {
         populate: [{ path: 'courseId' }, { path: 'userId' }],
       })
       .exec();
+
     return rg;
   } catch (error) {
     console.log(error);
     return [];
   }
 };
+
 export const getTeacherReportGradeById = async (id: any) => {
   try {
     const rg = await ReportGrade.findById(id)

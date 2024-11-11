@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useAllTeacherReportGradeQuery, useStudentEnrollmentRecordByIdQuery, useStudentEnrollmentRecordByProfileIdQuery, useTeacherReportGradeQueryById } from '@/lib/queries';
-import { IRoom } from '@/types';
+import { useStudentEnrollmentRecordByIdQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = ({ params }: { params: { id: string } }) => {
@@ -11,14 +10,15 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [schedule, setSchedule] = useState([]);
   const { data, isLoading, error: isEnError } = useStudentEnrollmentRecordByIdQuery(params.id);
+
   useEffect(() => {
     if (isEnError || !data) return;
     if (data) {
       if (data.enrollmentRecord) {
         const filteredSchedules = data.enrollmentRecord?.studentSubjects?.filter((ss: any) => ss.status === 'Approved');
-        setSchedule(filteredSchedules)
+        setSchedule(filteredSchedules);
         setIsPageLoading(false);
-      } else if(data.error) {
+      } else if (data.error) {
         setIsError(true);
         setIsPageLoading(false);
       }

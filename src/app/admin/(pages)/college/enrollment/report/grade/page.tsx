@@ -2,15 +2,15 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useAllTeacherReportGradeQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useReportGradeQueryByCategory } from '@/lib/queries/reportGrade/get/all';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [teacherRG, setTeacherRG] = useState([]);
   // Query data based on the validated step parameter
-  const { data, isLoading, error: isEnError } = useAllTeacherReportGradeQuery();
+  const { data, isLoading, error: isEnError } = useReportGradeQueryByCategory('College');
 
   useEffect(() => {
     if (isEnError || !data) return;
