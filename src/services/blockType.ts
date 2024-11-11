@@ -12,9 +12,9 @@ export const createBlockType = async (data: any) => {
   }
 };
 
-export const getAllBlockType = async () => {
+export const getBlockTypeByCategory = async (category: string) => {
   try {
-    const p = await BlockType.find()
+    const p = await BlockType.find({ category })
       .populate('courseId')
       .populate({
         path: 'blockSubjects.teacherScheduleId',

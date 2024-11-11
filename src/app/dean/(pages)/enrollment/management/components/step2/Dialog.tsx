@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { selectType } from '@/constant/enrollment';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { useBlockCourseQuery } from '@/lib/queries/blocks/get/all';
+import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/all';
 
 type IProps = {
   isPending: boolean;
@@ -24,7 +24,7 @@ export function DialogStep2Button({ isPending, user, form, isDialogOpen, setIsDi
   const [blocks, setBlocks] = useState<any>([]);
   const [blockDisable, setBlockDisable] = useState<boolean>(false);
 
-  const { data: bData, isLoading: bLoading, isError: bError } = useBlockCourseQuery();
+  const { data: bData, isLoading: bLoading, isError: bError } = useBlockCourseQueryByCategory('College');
 
   useEffect(() => {
     if (!bData || bError) return;

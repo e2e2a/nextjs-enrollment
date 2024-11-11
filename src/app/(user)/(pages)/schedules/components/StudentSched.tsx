@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import AddStudentSched from './AddStudentSched';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useBlockCourseQuery } from '@/lib/queries/blocks/get/all';
+import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/all';
 interface IProps {
   data: any;
 }
@@ -10,7 +10,7 @@ const StudentSched = ({ data }: IProps) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [schedules, setSchedules] = useState<any>([]);
-  const { data: b, isLoading: bLoading, error: bError } = useBlockCourseQuery();
+  const { data: b, isLoading: bLoading, error: bError } = useBlockCourseQueryByCategory('College');
 
   useEffect(() => {
     if (bError || !b) return;

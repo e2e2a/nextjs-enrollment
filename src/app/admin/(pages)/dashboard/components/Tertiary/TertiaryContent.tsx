@@ -10,16 +10,17 @@ import TertiaryAlertDialog from './TertiaryAlertDialog';
 import TertiaryDialogEndSemester from './TertiaryDialogEndSemester';
 import { useEnrollmentQueryByCategory } from '@/lib/queries/enrollment/get/category';
 import MainGrade from './grades/MainGrade';
+import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/all';
+import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
+import StudentsByCourses from './studentsByCourses/StudentsByCourses';
 
 const TertiaryContent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [enrollingStudents, setEnrollingStudents] = useState<any>([]);
+  const [temporaryEnrolledStudents, setTemporaryEnrolledStudents] = useState<any>([]);
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
-  const [enrolledFirstYear, setEnrolledFirstYear] = useState<any>([]);
-  const [enrolledSecondYear, setEnrolledSecondYear] = useState<any>([]);
-  const [enrolledThirdYear, setEnrolledThirdYear] = useState<any>([]);
-  const [enrolledFourthYear, setEnrolledFourthYear] = useState<any>([]);
+  const [enrollingStudents, setEnrollingStudents] = useState<any>([]);
+
   const dataEnrolled = [
     { name: 'Jan', total: 0 },
     { name: 'Feb', total: 0 },
@@ -36,58 +37,50 @@ const TertiaryContent = () => {
   ];
   const { data: esData, isLoading: esLoading, isError: esError } = useEnrollmentSetupQuery();
   const { data: eData, isLoading, error: eError } = useEnrollmentQueryByCategory('College');
+  const { data: bData, isLoading: bLoading, error: bError } = useBlockCourseQueryByCategory('College');
+  const { data: cData, isLoading: cLoading, error: cError } = useCourseQueryByCategory('College');
 
   useEffect(() => {
     if (!esData || esError) return;
     if (eError || !eData) return;
+    if (bError || !bData) return;
+    if (cError || !cData) return;
 
     if (esData && eData) {
       if (esData.enrollmentSetup && eData.enrollment) {
-        /**
-         * @todo
-         * 1. add Temporary enrolled
-         */
+        const filteredTemporaryEnrolled = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Temporary Enrolled');
+        setTemporaryEnrolledStudents(filteredTemporaryEnrolled);
         const filteredEnrolled = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled');
         setEnrolledStudents(filteredEnrolled);
         const filteredEnrolling = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Pending');
         setEnrollingStudents(filteredEnrolling);
-        const filteredEnrolledFirstYear = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled' && enrollment.studentYear === '1st year');
-        setEnrolledFirstYear(filteredEnrolledFirstYear);
-        const filteredEnrolledSecondYear = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled' && enrollment.studentYear === '2nd year');
-        setEnrolledSecondYear(filteredEnrolledSecondYear);
-        const filteredEnrolledThirdYear = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled' && enrollment.studentYear === '3rd year');
-        setEnrolledThirdYear(filteredEnrolledThirdYear);
-        const filteredEnrolledFourthYear = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled' && enrollment.studentYear === '4th year');
-        setEnrolledFourthYear(filteredEnrolledFourthYear);
-        // setBlocks(esData.blockTypes);
+
         setIsPageLoading(false);
       }
       return;
     }
-  }, [esData, esError, eData, eError]);
+  }, [esData, esError, eData, eError, bData, bError, cData, cError]);
+
   const currentYear = new Date().getFullYear();
   if (enrolledStudents.length > 0) {
     enrolledStudents.forEach((student: any) => {
       const enrollmentDate = new Date(student.createdAt);
-      const monthIndex = enrollmentDate.getMonth(); // Get month index (0-11)
+      const monthIndex = enrollmentDate.getMonth();
 
       // Check if the year matches the current year
       if (enrollmentDate.getFullYear() === currentYear) {
-        dataEnrolled[monthIndex].total += 1; // Increment the total for that month
+        dataEnrolled[monthIndex].total += 1;
       }
     });
   }
-  /**
-   * @todo
-   * enrolledStudents
-   * filtered by year
-   */
+
   return (
     <>
       {isPageLoading ? (
         <LoaderPage />
       ) : (
         <TabsContent value='tertiary' className='space-y-4'>
+          <h1 className='font-semibold tracking-tight text-[18px] xs:text-xl text-center my-5'>Start/Close/End Enrollment</h1>
           <div className='grid gap-4 grid-cols-1 sm:grid-cols-2'>
             <div className=''>
               {!esData?.enrollmentSetup?.enrollmentTertiary || !esData?.enrollmentSetup?.enrollmentTertiary?.open ? <TertiaryDialog isPending={false} setIsOpen={setIsOpen} enrollmentSetup={esData.enrollmentSetup} /> : <TertiaryAlertDialog />}
@@ -101,31 +94,44 @@ const TertiaryContent = () => {
 
           {esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear && esData?.enrollmentSetup?.enrollmentTertiary?.semester && <MainGrade setup={esData?.enrollmentSetup?.enrollmentTertiary} />}
 
-          <div className='grid gap-4 md:grid-cols-2'>
-            <Card>
-              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                <CardTitle className='text-sm font-medium'>Enrolling Student</CardTitle>
-                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
-                  <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
-                </svg>
-              </CardHeader>
-              <CardContent>
-                <div className='text-2xl font-bold'>{enrollingStudents.length}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                <CardTitle className='text-sm font-medium'>Enrolled Student</CardTitle>
-                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
-                  <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
-                </svg>
-              </CardHeader>
-              <CardContent>
-                <div className='text-2xl font-bold'>{enrolledStudents.length}</div>
-              </CardContent>
-            </Card>
+          <div className='w-full'>
+            <h1 className='font-semibold tracking-tight text-[18px] xs:text-xl text-center mt-10 mb-5'>Overall Students</h1>
+            <div className='grid gap-4 md:grid-cols-2'>
+              <Card>
+                <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+                  <CardTitle className='text-sm font-medium'>Enrolling Student</CardTitle>
+                  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
+                    <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
+                  </svg>
+                </CardHeader>
+                <CardContent>
+                  <div className='text-2xl font-bold'>{enrollingStudents.length}</div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+                  <CardTitle className='text-sm font-medium'>Enrolled Student</CardTitle>
+                  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
+                    <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
+                  </svg>
+                </CardHeader>
+                <CardContent>
+                  <div className='text-2xl font-bold'>{enrolledStudents.length}</div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+                  <CardTitle className='text-sm font-medium'>Temporary Enrolled Student</CardTitle>
+                  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
+                    <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
+                  </svg>
+                </CardHeader>
+                <CardContent>
+                  <div className='text-2xl font-bold'>{temporaryEnrolledStudents.length}</div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-
           <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-7'></div>
           <Card className='col-span-4'>
             <CardHeader>
@@ -141,55 +147,8 @@ const TertiaryContent = () => {
               </ResponsiveContainer>
             </CardContent>
           </Card>
-          <div className='grid gap-4 md:grid-cols-2'>
-            <Card>
-              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                <CardTitle className='text-sm font-medium'>Enrolling Student</CardTitle>
-                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
-                  <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
-                </svg>
-              </CardHeader>
-              <CardContent>
-                <p className='text-xs text-muted-foreground'>1st year</p>
-                <div className='text-2xl font-bold'>{enrolledFirstYear.length}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                <CardTitle className='text-sm font-medium'>Enrolled Student</CardTitle>
-                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
-                  <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
-                </svg>
-              </CardHeader>
-              <CardContent>
-                <p className='text-xs text-muted-foreground'>2nd year</p>
-                <div className='text-2xl font-bold'>{enrolledSecondYear.length}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                <CardTitle className='text-sm font-medium'>Enrolled Student</CardTitle>
-                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
-                  <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
-                </svg>
-              </CardHeader>
-              <CardContent>
-                <p className='text-xs text-muted-foreground'>3rd year</p>
-                <div className='text-2xl font-bold'>{enrolledThirdYear.length}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                <CardTitle className='text-sm font-medium'>Enrolled Student</CardTitle>
-                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' className='h-4 w-4 text-muted-foreground'>
-                  <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
-                </svg>
-              </CardHeader>
-              <CardContent>
-                <p className='text-xs text-muted-foreground'>4th year</p>
-                <div className='text-2xl font-bold'>{enrolledFourthYear.length}</div>
-              </CardContent>
-            </Card>
+          <div className='grid gap-4 md:grid-cols-1'>
+            <StudentsByCourses enrollments={eData.enrollment} courses={cData?.courses} blockTypes={bData?.blockTypes} />
           </div>
         </TabsContent>
       )}

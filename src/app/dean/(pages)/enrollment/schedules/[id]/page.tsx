@@ -5,7 +5,7 @@ import { columns } from './components/Columns';
 import { useEnrollmentSetupQuery } from '@/lib/queries';
 import AddStudentSched from './components/AddStudentSched';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useBlockCourseQuery } from '@/lib/queries/blocks/get/all';
+import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/all';
 import { useEnrollmentQueryById } from '@/lib/queries/enrollment/get/id';
 
 const Page = ({ params }: { params: { id: string } }) => {
@@ -13,7 +13,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [schedules, setSchedules] = useState<any>([]);
   const { data, isLoading, error: isEnError } = useEnrollmentQueryById(params.id);
-  const { data: b, isLoading: bLoading, error: bError } = useBlockCourseQuery();
+  const { data: b, isLoading: bLoading, error: bError } = useBlockCourseQueryByCategory('College');
   const { data: ESetup, isLoading: ESetupLoading, error: ESetupError } = useEnrollmentSetupQuery();
   // const { data: b, isLoading: bLoading, error: bError } = useTeacherScheduleCollegeQuery();
 

@@ -4,18 +4,17 @@ import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import { IBlockType } from '@/types';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/shared/Icons';
 import Link from 'next/link';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
-import { useBlockCourseQuery } from '@/lib/queries/blocks/get/all';
+import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/all';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [blocks, setBlocks] = useState<any>([]);
-  const { data, isLoading, error } = useBlockCourseQuery();
+  const { data, isLoading, error } = useBlockCourseQueryByCategory('College');
   const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
 
   useEffect(() => {

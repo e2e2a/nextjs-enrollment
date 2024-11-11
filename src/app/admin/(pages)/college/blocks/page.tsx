@@ -4,12 +4,12 @@ import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import { IBlockType } from '@/types';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useBlockCourseQuery } from '@/lib/queries/blocks/get/all';
+import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/all';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error } = useBlockCourseQuery();
+  const { data, isLoading, error } = useBlockCourseQueryByCategory('College');
 
   useEffect(() => {
     if (error || !data) return setIsError(true);
