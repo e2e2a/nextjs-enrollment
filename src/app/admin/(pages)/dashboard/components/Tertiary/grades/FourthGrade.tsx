@@ -10,7 +10,7 @@ interface IProps {
   setup: any;
 }
 
-const FirstGrade = ({ setup }: IProps) => {
+const FourthGrade = ({ setup }: IProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isPending, setIsPending] = useState<boolean>(false);
   const mutation = useUpdateEnrollmentSetupMutation();
@@ -20,7 +20,7 @@ const FirstGrade = ({ setup }: IProps) => {
     setIsPending(true);
     const data = {
       name: 'GODOY',
-      'enrollmentTertiary.firstGrade.open': !setup.firstGrade?.open,
+      'enrollmentTertiary.fourthGrade.open': !setup.fourthGrade?.open,
     };
 
     mutation.mutate(data, {
@@ -30,7 +30,7 @@ const FirstGrade = ({ setup }: IProps) => {
           case 201:
           case 203:
             setIsOpen(false);
-            makeToastSucess('Prelim Grading is Open.');
+            makeToastSucess('Final Grading is Open.');
             return;
           default:
             makeToastError(res.error);
@@ -45,16 +45,16 @@ const FirstGrade = ({ setup }: IProps) => {
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <Button type='button' disabled={isPending} variant='outline' size={'sm'} className={`sm:text-sm text-xs gap-1 ${setup.firstGrade?.open ? 'bg-red' : 'bg-green-500'}  text-white`}>
+        <Button type='button' disabled={isPending} variant='outline' size={'sm'} className={`sm:text-sm text-xs gap-1 ${setup.fourthGrade?.open ? 'bg-red' : 'bg-green-500'}  text-white`}>
           <span className='h-6 w-6 flex items-center'>📝</span>
-          <span className=' text-white text-sm font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Open Prelim Grading'}</span>
+          <span className=' text-white text-sm font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Open Final Grading'}</span>
         </Button>
       </AlertDialogTrigger>
       <form action='' className='p-0 m-0' method='post'>
         <AlertDialogContent className='bg-white text-black'>
           <AlertDialogHeader>
-            <AlertDialogTitle>{setup?.firstGrade?.open ? 'Closing' : 'Opening'} the Grading of Prelim</AlertDialogTitle>
-            <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;{setup?.firstGrade?.open ? 'This action will closed the grading system for the Prelim.' : 'This action will open the grading system for the Prelim.'}</AlertDialogDescription>
+            <AlertDialogTitle>{setup?.firstGrade?.open ? 'Closing' : 'Opening'} the Grading of Final</AlertDialogTitle>
+            <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;{setup?.firstGrade?.open ? 'This action will closed the grading system for the Final.' : 'This action will open the grading system for the Final.'}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -71,4 +71,4 @@ const FirstGrade = ({ setup }: IProps) => {
   );
 };
 
-export default FirstGrade;
+export default FourthGrade;
