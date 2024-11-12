@@ -37,7 +37,6 @@ const AddGrades = ({ teacher, data, type }: IProps) => {
     const dataa = {
       category: 'College',
       teacherScheduleId: teacher._id,
-      teacherId: teacher.profileId._id,
       type: type,
       reportedGrade: grades,
     };

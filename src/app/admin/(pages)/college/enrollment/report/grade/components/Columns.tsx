@@ -112,6 +112,23 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row.type,
+    id: 'type',
+    header: 'Type',
+    cell: ({ cell, row }) => {
+      const type = row.original?.type;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {type === 'firstGrade' && 'Prelim'}
+          {type === 'secondGrade' && 'Midterm'}
+          {type === 'thirdGrade' && 'Semi-final'}
+          {type === 'fourthGrade' && 'Final'}
+          {''} Grade
+        </div>
+      );
+    },
+  },
+  {
     accessorFn: (row) => row.statusInDean,
     id: 'Approved By Dean',
     header: 'Approved By Dean',
@@ -145,18 +162,6 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
       const formatted = date.toLocaleDateString();
-      // @example for formatted date ex. January 1, 2015
-      // const options: Intl.DateTimeFormatOptions = {
-      //   year: "numeric",
-      //   month: "short",
-      //   day: "numeric",
-      // };
-
-      // const formattedDate = date.toLocaleDateString("en-US", options);
-
-      // // Manually reformat the string to "Jul 20, 2024"
-      // const [month, day, year] = formattedDate.split(' ');
-      // const formatted = `${month} ${day}, ${year}`;
       return <div className='font-medium'>{formatted}</div>;
     },
   },
