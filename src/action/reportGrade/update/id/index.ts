@@ -4,6 +4,7 @@ import { getReportGradeById } from '@/services/reportGrade';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { checkAuth } from '@/utils/actions/session';
 import { getTeacherProfileByUserId } from '@/services/teacherProfile';
+import { getDeanProfileByUserId } from '@/services/deanProfile';
 
 /**
  * handles update report grade by id
@@ -16,7 +17,6 @@ export const updateReportGradeAction = async (data: any) => {
 
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-    if (session && session.user.role !== 'TEACHER') return { error: 'Forbidden', status: 403 };
 
     const category = await checkCategory(session.user, data);
     if (category && category.error) return { error: category.error, status: category.status };
@@ -55,14 +55,11 @@ const checkCategory = async (user: any, data: any) => {
 const handleCollege = async (user: any, data: any) => {
   return tryCatch(async () => {
     const e = await getReportGradeById(data.reportGradeId);
-    const a = await checkType(e.type);
+    if (!e) return { error: `No Report Grade Found. `, status: 404 };
 
-    if (!e) {
-      return { error: `You have already report a grade in ${a.message}`, status: 403 };
-    } else {
-      const p = await checkRole(user, data, e, a.message);
-      return p;
-    }
+    const a = await checkType(e.type);
+    const p = await checkRole(user, data, e, a.message);
+    return p;
   });
 };
 
@@ -80,7 +77,7 @@ const checkRole = async (user: any, data: any, e: any, message: string) => {
       case 'TEACHER':
         return await handleTeacher(user, data, e, message);
       case 'DEAN':
-        break;
+        return await handleDean(user, data, e, message);
       case 'ADMIN':
         break;
       default:
@@ -115,6 +112,26 @@ const handleTeacher = async (user: any, data: any, e: any, message: string) => {
       default:
         return { error: 'Invalid request.', status: 403 };
     }
+  });
+};
+
+/**
+ * handle dean role
+ *
+ * @param {object} user
+ * @param {object} data
+ * @param {object} e
+ * @param {string} message
+ */
+const handleDean = async (user: any, data: any, e: any, message: string) => {
+  return tryCatch(async () => {
+    const p = await getDeanProfileByUserId(user._id);
+    if (e.teacherScheduleId.courseId._id.toString() !== p.courseId._id.toString()) return { error: 'Forbiddenaa.', status: 403 };
+
+    e.statusInDean = data.statusInDean;
+    await e.save();
+
+    return { message: `Grades in ${message} has been ${data.statusInDean}.`, teacherId: p._id.toString(), category: data.category, status: 201 };
   });
 };
 

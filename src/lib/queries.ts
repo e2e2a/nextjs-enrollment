@@ -89,16 +89,16 @@ export const useTeacherReportGradeQueryById = (id: any) => {
  * Dean changing Status of grade report
  * @returns
  */
-export const useChangeStatusGradeReportMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => updateTeacherReportGradeStatusByIdAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['TeacherReportGrade'] });
-      queryClient.invalidateQueries({ queryKey: ['TeacherReportGradeById'] });
-    },
-  });
-};
+// export const useChangeStatusGradeReportMutation = () => {
+//   const queryClient = useQueryClient();
+//   return useMutation<any, Error, any>({
+//     mutationFn: async (data) => updateTeacherReportGradeStatusByIdAction(data),
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({ queryKey: ['TeacherReportGrade'] });
+//       queryClient.invalidateQueries({ queryKey: ['TeacherReportGradeById'] });
+//     },
+//   });
+// };
 
 /**
  * Admin Evaluate of grade report

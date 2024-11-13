@@ -9,7 +9,6 @@ import { useReportGradeQueryByCategory } from '@/lib/queries/reportGrade/get/cat
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [teacherRG, setTeacherRG] = useState([]);
   const { data, isLoading, error: isEnError } = useReportGradeQueryByCategory('College');
   const { data: pData, isLoading: pload, error } = useProfileQueryBySessionId();
 
@@ -18,9 +17,7 @@ const Page = () => {
     if (error || !pData) return;
 
     if (data && pData) {
-      if (data.reportedGrades && pData.profile) {
-        const filteredRG = data?.reportedGrades.filter((rg: any) => rg.teacherScheduleId.courseId._id === pData.profile.courseId._id && rg.statusInDean !== 'Declined');
-        setTeacherRG(filteredRG);
+      if (pData.profile) {
         setIsPageLoading(false);
       }
     }
@@ -41,7 +38,7 @@ const Page = () => {
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-bold '>Grades Report Management</h1>
               </div>
-              <DataTable columns={columns} data={teacherRG as any[]} />
+              <DataTable columns={columns} data={data.reportedGrades as any[]} />
             </div>
           )}
         </div>
