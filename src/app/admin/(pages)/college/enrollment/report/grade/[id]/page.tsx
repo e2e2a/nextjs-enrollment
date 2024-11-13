@@ -2,15 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useTeacherReportGradeQueryById } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 import EvaluationButton from './components/EvaluationButton';
+import { useReportGradeQueryById } from '@/lib/queries/reportGrade/get/id';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  //   const [rooms, setRooms] = useState({});
-  const { data, isLoading, error: isEnError } = useTeacherReportGradeQueryById(params.id);
+  const { data, isLoading, error: isEnError } = useReportGradeQueryById(params.id);
 
   useEffect(() => {
     if (isEnError || !data) return;

@@ -6,9 +6,12 @@ export const useUpdateGradeReportMutation = () => {
   return useMutation<any, Error, any>({
     mutationFn: async (data) => await updateReportGradeAction(data),
     onSuccess: async (data) => {
-      console.log('data passed', data);
-      queryClient.invalidateQueries({ queryKey: ['ReportGradeByCategory', data.category] });
-      queryClient.invalidateQueries({ queryKey: ['ReportGradeByTeacherId', data.teacherId] });
+      if (!data.error) {
+        console.log('passed');
+        queryClient.invalidateQueries({ queryKey: ['ReportGradeById', data.id] });
+        queryClient.invalidateQueries({ queryKey: ['ReportGradeByCategory', data.category] });
+        queryClient.invalidateQueries({ queryKey: ['ReportGradeByTeacherId', data.teacherId] });
+      }
     },
   });
 };

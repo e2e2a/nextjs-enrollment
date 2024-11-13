@@ -103,12 +103,12 @@ const handleTeacher = async (user: any, data: any, e: any, message: string) => {
       case 'Update':
         e.reportedGrade = data.reportedGrade;
         await e.save();
-        return { message: `Grades in ${message} has been updated.`, teacherId: p._id.toString(), category: data.category, status: 201 };
+        return { message: `Grades in ${message} has been updated.`, teacherId: p._id.toString(), category: data.category, id: e._id.toString(), status: 201 };
       case 'Trash':
         if (e.statusInDean === 'Approved') return { error: `Cannot Delete Reported Grade Once it's Approved`, status: 403 };
         e.isTrash = true;
         await e.save();
-        return { message: `Reported Grades has been deleted.`, teacherId: p._id.toString(), category: data.category, status: 201 };
+        return { message: `Reported Grades has been deleted.`, teacherId: p._id.toString(), category: data.category, id: e._id.toString(), status: 201 };
       default:
         return { error: 'Invalid request.', status: 403 };
     }
@@ -127,11 +127,12 @@ const handleDean = async (user: any, data: any, e: any, message: string) => {
   return tryCatch(async () => {
     const p = await getDeanProfileByUserId(user._id);
     if (e.teacherScheduleId.courseId._id.toString() !== p.courseId._id.toString()) return { error: 'Forbiddenaa.', status: 403 };
-
+    if (e.evaluated === true) return { error: 'The reported grade has already been evaluated.', status: 401 };
+    if (e.statusInDean === data.statusInDean) return { error: `Reported grades has already been ${data.statusInDean}`, status: 403 };
     e.statusInDean = data.statusInDean;
     await e.save();
 
-    return { message: `Grades in ${message} has been ${data.statusInDean}.`, teacherId: p._id.toString(), category: data.category, status: 201 };
+    return { message: `Grades in ${message} has been ${data.statusInDean}.`, teacherId: p._id.toString(), category: data.category, id: e._id.toString(), status: 201 };
   });
 };
 

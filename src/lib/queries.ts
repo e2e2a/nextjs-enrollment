@@ -20,7 +20,6 @@ import {
 import { removeCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
 import { removeStudentScheduleAction } from '@/action/college/schedules/students';
 import { getEnrollmentSetup, updateEnrollmentSetup } from '@/action/enrollmentSetup';
-import { getTeacherReportGradeByIdAction, updateTeacherReportGradeStatusByIdAction } from '@/action/college/schedules/teachers/reportGrade/teacher';
 import { evaluateApprovedGradeReportAction } from '@/action/college/schedules/teachers/reportGrade/admin';
 import {
   getAllStudentEnrollmentRecordCollegeAction,
@@ -70,35 +69,6 @@ export const useCollegeEndSemesterMutation = () => {
     },
   });
 };
-
-/**
- * Teacher Grade Report
- * @returns
- */
-export const useTeacherReportGradeQueryById = (id: any) => {
-  return useQuery<any, Error>({
-    queryKey: ['TeacherReportGradeById', id],
-    enabled: !!id,
-    queryFn: () => getTeacherReportGradeByIdAction(id),
-    retry: 0,
-    refetchOnWindowFocus: false,
-  });
-};
-
-/**
- * Dean changing Status of grade report
- * @returns
- */
-// export const useChangeStatusGradeReportMutation = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation<any, Error, any>({
-//     mutationFn: async (data) => updateTeacherReportGradeStatusByIdAction(data),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['TeacherReportGrade'] });
-//       queryClient.invalidateQueries({ queryKey: ['TeacherReportGradeById'] });
-//     },
-//   });
-// };
 
 /**
  * Admin Evaluate of grade report
