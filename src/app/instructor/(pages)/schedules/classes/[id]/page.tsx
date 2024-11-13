@@ -9,13 +9,11 @@ import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/i
 import { useEnrollmentQueryByTeacherScheduleId } from '@/lib/queries/enrollment/get/teacherSchedule';
 import { useEnrollmentSetupQuery } from '@/lib/queries';
 import { useReportGradeQueryByTeacherId } from '@/lib/queries/reportGrade/get/teacherId';
-import { useSession } from 'next-auth/react';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
 
-  const { data: session } = useSession();
   const { data, isLoading, error: isEnError } = useProfileQueryBySessionId();
   const { data: rgData, isLoading: rpLoading, error: rgError } = useReportGradeQueryByTeacherId(data?.profile?._id as string);
   const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryById(params.id, 'College');

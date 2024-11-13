@@ -5,7 +5,6 @@ import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { useReportGradeQueryByTeacherId } from '@/lib/queries/reportGrade/get/teacherId';
-import { useSession } from 'next-auth/react';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
