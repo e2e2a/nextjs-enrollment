@@ -1,12 +1,12 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { getEnrollmentByProfileId } from '@/services/enrollment';
-import { getTeacherReportGradeById, updateTeacherReportGradeStatusById } from '@/services/reportGrade';
+import { getReportGradeById, updateTeacherReportGradeStatusById } from '@/services/reportGrade';
 
 export const evaluateApprovedGradeReportAction = async (data: any) => {
   try {
     await dbConnect();
-    const reportedGrades = await getTeacherReportGradeById(data.reportGradeId);
+    const reportedGrades = await getReportGradeById(data.reportGradeId);
     if (!reportedGrades) return { error: 'Something went wrong.', status: 403 };
     for (const rg of reportedGrades.reportedGrade) {
       const se = await getEnrollmentByProfileId(rg.profileId._id);

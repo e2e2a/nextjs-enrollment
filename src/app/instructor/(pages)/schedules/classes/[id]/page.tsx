@@ -8,11 +8,16 @@ import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/id';
 import { useEnrollmentQueryByTeacherScheduleId } from '@/lib/queries/enrollment/get/teacherSchedule';
 import { useEnrollmentSetupQuery } from '@/lib/queries';
+import { useReportGradeQueryByTeacherId } from '@/lib/queries/reportGrade/get/teacherId';
+import { useSession } from 'next-auth/react';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
+
+  const { data: session } = useSession();
   const { data, isLoading, error: isEnError } = useProfileQueryBySessionId();
+  const { data: rgData, isLoading: rpLoading, error: rgError } = useReportGradeQueryByTeacherId(data?.profile?._id as string);
   const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryById(params.id, 'College');
   const { data: s, isLoading: sLoading, error: sError } = useEnrollmentQueryByTeacherScheduleId({ id: ts?.teacherSchedule?._id, category: 'College' });
   const { data: esData, isLoading: esLoading, isError: esError } = useEnrollmentSetupQuery();
@@ -22,6 +27,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (isEnError || !data) return;
     if (sError || !s) return;
     if (esError || !esData) return;
+    if (rgError || !rgData) return;
 
     if (ts && data && s) {
       if (ts.teacherSchedule) {
@@ -36,7 +42,8 @@ const Page = ({ params }: { params: { id: string } }) => {
         setIsPageLoading(false);
       }
     }
-  }, [ts, tsError, data, isEnError, s, sError, esData, esError]);
+    console.log('rgData', rgData);
+  }, [ts, tsError, data, isEnError, s, sError, esData, esError, rgData, rgError]);
 
   return (
     <>
@@ -105,10 +112,10 @@ const Page = ({ params }: { params: { id: string } }) => {
                 <>
                   <div className='w-full flex justify-start items-center'>
                     <div className='flex flex-col'>
-                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.firstGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'firstGrade'} />}
-                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.secondGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'secondGrade'} />}
-                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.thirdGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'thirdGrade'} />}
-                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.fourthGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'fourthGrade'} />}
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.firstGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'firstGrade'} reportGrades={rgData?.reportGrades} />}
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.secondGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'secondGrade'} reportGrades={rgData?.reportGrades} />}
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.thirdGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'thirdGrade'} reportGrades={rgData?.reportGrades} />}
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.fourthGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'fourthGrade'} reportGrades={rgData?.reportGrades} />}
                     </div>
                   </div>
                   <DataTable columns={columns} data={s.students} />{' '}

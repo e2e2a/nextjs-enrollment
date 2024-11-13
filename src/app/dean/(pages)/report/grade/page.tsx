@@ -4,7 +4,7 @@ import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
-import { useReportGradeQueryByCategory } from '@/lib/queries/reportGrade/get/all';
+import { useReportGradeQueryByCategory } from '@/lib/queries/reportGrade/get/category';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);

@@ -15,7 +15,7 @@ export const createReportGrade = async (data: any) => {
 
 export const getReportGradeByCategory = async (category: string) => {
   try {
-    const rg = await ReportGrade.find({ category })
+    const rg = await ReportGrade.find({ category, statusInDean: { $ne: 'Rejected' }, isTrash: { $ne: true } })
       .populate('userId')
       .populate('teacherId')
       .populate('teacherScheduleId')
@@ -36,7 +36,30 @@ export const getReportGradeByCategory = async (category: string) => {
   }
 };
 
-export const getTeacherReportGradeById = async (id: any) => {
+export const getReportGradeByTeacherId = async (teacherId: string) => {
+  try {
+    const rg = await ReportGrade.find({ teacherId, statusInDean: { $ne: 'Rejected' }, isTrash: { $ne: true } })
+      .populate('userId')
+      .populate('teacherId')
+      .populate('teacherScheduleId')
+      .populate({
+        path: 'teacherScheduleId',
+        populate: [{ path: 'profileId' }, { path: 'blockTypeId' }, { path: 'courseId' }, { path: 'roomId' }, { path: 'subjectId' }],
+      })
+      .populate({
+        path: 'reportedGrade.profileId',
+        populate: [{ path: 'courseId' }, { path: 'userId' }],
+      })
+      .exec();
+
+    return rg;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const getReportGradeById = async (id: any) => {
   try {
     const rg = await ReportGrade.findById(id)
       .populate('userId')

@@ -11,8 +11,8 @@ export interface IReportGrade extends Document {
   statusInDean: 'Pending' | 'Approved' | 'Declined';
   evaluated: boolean;
 
-  // isDeleted: boolean;
   schoolYear: string;
+  isTrash: boolean;
 }
 const schema = new Schema<IReportGrade>(
   {
@@ -41,13 +41,11 @@ const schema = new Schema<IReportGrade>(
     ],
     statusInDean: {
       type: String,
-      enum: ['Pending', 'Approved', 'Declined'],
+      enum: ['Pending', 'Approved', 'Rejected'],
     },
     evaluated: { type: Boolean },
     schoolYear: { type: String },
-    // isDeleted: {
-    //   type: Boolean,
-    // },
+    isTrash: { type: Boolean },
   },
   {
     versionKey: false,

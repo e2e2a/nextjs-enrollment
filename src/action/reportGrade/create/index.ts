@@ -1,7 +1,7 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { getEnrollmentSetupByName } from '@/services/EnrollmentSetup';
-import { createReportGrade } from '@/services/reportGrade';
+import { createReportGrade, getReportGradeByTeacherId } from '@/services/reportGrade';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { checkAuth } from '@/utils/actions/session';
 import { getTeacherProfileByUserId } from '@/services/teacherProfile';
@@ -62,7 +62,15 @@ const handleCollege = async (user: any, data: any) => {
     if (a && a.error) return { error: a.error, status: a.status };
 
     const p = await getTeacherProfileByUserId(user._id);
-    
+
+    const b = await getReportGradeByTeacherId(p._id);
+    if (b && b.length > 0) {
+      const e = b.filter((e) => e.teacherScheduleId._id.toString() === data.teacherScheduleId && e.type === data.type);
+      if (e && e.length > 0) {
+        return { error: `You have already report a grade in ${a.message}`, status: 409 };
+      }
+    }
+
     data.teacherId = p._id;
     data.statusInDean = 'Pending';
     data.evaluated = false;
@@ -81,22 +89,27 @@ const handleCollege = async (user: any, data: any) => {
  */
 const checkType = async (type: string, ESetup: any) => {
   return tryCatch(async () => {
+    let message;
     switch (type) {
       case 'firstGrade':
+        message = 'Prelim';
         if (!ESetup.firstGrade.open) return { error: 'Reporting Grade for Prelim is closed.', status: 404 };
         break;
       case 'secondGrade':
+        message = 'Midterm';
         if (!ESetup.secondGrade.open) return { error: 'Reporting Grade for Midterm is closed.', status: 404 };
         break;
       case 'thirdGrade':
+        message = 'Semi-final';
         if (!ESetup.thirdGrade.open) return { error: 'Reporting Grade for Semi-final is closed.', status: 404 };
         break;
       case 'fourthGrade':
+        message = 'Final';
         if (!ESetup.fourthGrade.open) return { error: 'Reporting Grade for Final is closed.', status: 404 };
         break;
       default:
         return { error: 'Forbidden.', status: 403 };
     }
-    return { success: 'yesyes', status: 200 };
+    return { success: 'yesyes', message, status: 200 };
   });
 };

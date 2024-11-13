@@ -1,6 +1,6 @@
 'use server';
 import dbConnect from '@/lib/db/db';
-import { getTeacherReportGradeById, updateTeacherReportGradeStatusById } from '@/services/reportGrade';
+import { getReportGradeById, updateTeacherReportGradeStatusById } from '@/services/reportGrade';
 
 // export const createTeacherReportGradeAction = async (data: any) => {
 //   try {
@@ -32,7 +32,7 @@ import { getTeacherReportGradeById, updateTeacherReportGradeStatusById } from '@
 export const getTeacherReportGradeByIdAction = async (id: any) => {
   try {
     await dbConnect();
-    const reportedGrades = await getTeacherReportGradeById(id);
+    const reportedGrades = await getReportGradeById(id);
     return { reportedGrades: JSON.parse(JSON.stringify(reportedGrades)), status: 201 };
   } catch (error) {
     console.log('server e :', error);

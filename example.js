@@ -34,6 +34,6 @@
 
 // console.log('qwe', 3 === Number('3'))
 
-const p = true
+const p = { "name": "alice"}
 
-console.log('try', !p)
+console.log('try', p.name)
