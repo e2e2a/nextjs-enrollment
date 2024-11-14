@@ -8,16 +8,15 @@ import Image from 'next/image';
 import { useUpdateGradeReportMutation } from '@/lib/queries/reportGrade/update/id';
 
 type IProps = {
-  request: string;
   user: any;
   isPending: boolean;
   setIsPending: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const AlertDialogPage = ({ request, user, isPending, setIsPending }: IProps) => {
+const AlertDialogPage = ({ user, isPending, setIsPending }: IProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const mutation = useUpdateGradeReportMutation();
 
+  const mutation = useUpdateGradeReportMutation();
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setIsPending(true);
@@ -25,7 +24,6 @@ const AlertDialogPage = ({ request, user, isPending, setIsPending }: IProps) => 
     const dataa = {
       category: 'College',
       reportGradeId: user._id,
-      statusInDean: request === 'Approve' ? 'Approved' : 'Rejected',
     };
 
     mutation.mutate(dataa, {
@@ -37,10 +35,7 @@ const AlertDialogPage = ({ request, user, isPending, setIsPending }: IProps) => 
             makeToastSucess(res?.message);
             return;
           default:
-            if (res.error) {
-              makeToastError(res.error);
-            }
-            return;
+            if (res.error) return makeToastError(res.error);
         }
       },
       onSettled: () => {
@@ -53,23 +48,17 @@ const AlertDialogPage = ({ request, user, isPending, setIsPending }: IProps) => 
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <div className='flex justify-end w-full'>
-          <Button
-            type='button'
-            disabled={isPending}
-            size={'sm'}
-            className={`w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start ${request === 'Approve' ? 'hover:bg-green-500' : 'hover:bg-red'} px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium`}
-          >
-            {request === 'Approve' && <Icons.check className='h-4 w-4' />}
-            {request === 'Reject' && <Icons.ban className='h-4 w-4' />}
-            <span className=' text-[15px] font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : <span className=''>{request} Report Grade</span>}</span>
+        <div className='flex justify-end '>
+          <Button type='button' disabled={isPending} size={'sm'} className={` focus-visible:ring-0 mb-2 bg-transparent flex justify-start bg-green-500 px-2 py-0 gap-x-1 text-neutral-50 font-medium`}>
+            <Icons.check className='h-4 w-4' />
+            <span className=' text-[15px] font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : <span className=''>Evaluate Report Grade</span>}</span>
           </Button>
         </div>
       </AlertDialogTrigger>
       <AlertDialogContent className='bg-white text-black'>
         <AlertDialogHeader>
-          <AlertDialogTitle>{request} Report Grade</AlertDialogTitle>
-          <AlertDialogDescription className=' py-5'>&nbsp;&nbsp;&nbsp;&nbsp;Are you sure you want to {request} this report?</AlertDialogDescription>
+          <AlertDialogTitle>Evaluate Report Grade</AlertDialogTitle>
+          <AlertDialogDescription className=' py-5'>&nbsp;&nbsp;&nbsp;&nbsp;Are you sure you want to Evaluate this report?</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>

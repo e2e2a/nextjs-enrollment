@@ -18,6 +18,7 @@ const EvaluationButton = ({ user }: IProps) => {
   const mutation = useUpdateGradeReportMutation();
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    setIsPending(true);
 
     const dataa = {
       category: 'College',
@@ -33,10 +34,7 @@ const EvaluationButton = ({ user }: IProps) => {
             makeToastSucess(res?.message);
             return;
           default:
-            if (res.error) {
-              makeToastError(res.error);
-            }
-            return;
+            if (res.error) return makeToastError(res.error);
         }
       },
       onSettled: () => {

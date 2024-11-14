@@ -20,8 +20,7 @@ export const updateReportGradeAction = async (data: any) => {
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
 
     const category = await checkCategory(session.user, data);
-    if (category && category.error) return { error: category.error, status: category.status };
-
+    console.log(category);
     return category;
   });
 };
@@ -60,6 +59,7 @@ const handleCollege = async (user: any, data: any) => {
 
     const a = await checkType(e.type);
     const p = await checkRole(user, data, e, a.message);
+    console.log(p);
     return p;
   });
 };
@@ -168,15 +168,10 @@ const handleAdmin = async (user: any, data: any, e: any, message: string) => {
         for (const subject of filteredSubjects) {
           subject[gradeField] = rg.grade;
           if (e.type === 'fourthGrade') {
-            const firstGrade = Number(subject.firstGrade);
-            const secondGrade = Number(subject.secondGrade);
-            const thirdGrade = Number(subject.thirdGrade);
-            const fourthGrade = Number(subject.fourthGrade);
-            if (!isNaN(firstGrade) && !isNaN(secondGrade) && !isNaN(thirdGrade) && !isNaN(fourthGrade)) {
-              subject.averageTotal = firstGrade + secondGrade + thirdGrade + fourthGrade;
+            const grades = [Number(subject.firstGrade), Number(subject.secondGrade), Number(subject.thirdGrade), Number(subject.fourthGrade)].filter((grade) => !isNaN(grade));
+            if (grades.length > 3) {
+              subject.averageTotal = parseFloat((grades.reduce((sum, grade) => sum + grade, 0) / grades.length).toFixed(2));
             }
-
-            return;
           }
 
           await se.save();

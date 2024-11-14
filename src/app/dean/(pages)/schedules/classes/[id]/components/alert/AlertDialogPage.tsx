@@ -53,13 +53,8 @@ const AlertDialogPage = ({ request, user, isPending, setIsPending }: IProps) => 
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <div className='flex justify-end w-full'>
-          <Button
-            type='button'
-            disabled={isPending}
-            size={'sm'}
-            className={`w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start ${request === 'Approve' ? 'hover:bg-green-500' : 'hover:bg-red'} px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium`}
-          >
+        <div className='flex justify-end '>
+          <Button type='button' disabled={isPending} size={'sm'} className={` focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start ${request === 'Approve' ? 'bg-green-500' : 'bg-red'}  px-2 py-0 gap-x-1 text-neutral-50 font-medium`}>
             {request === 'Approve' && <Icons.check className='h-4 w-4' />}
             {request === 'Reject' && <Icons.ban className='h-4 w-4' />}
             <span className=' text-[15px] font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : <span className=''>{request} Report Grade</span>}</span>

@@ -6,18 +6,22 @@ import LoaderPage from '@/components/shared/LoaderPage';
 import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/id';
 import { useEnrollmentQueryByTeacherScheduleId } from '@/lib/queries/enrollment/get/teacherSchedule';
 import { useProfileQueryByParamsUserId } from '@/lib/queries/profile/get/userId';
+import { useReportGradeQueryByTeacherId } from '@/lib/queries/reportGrade/get/teacherId';
+import ViewGrades from './components/ViewGrades';
 
 const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data, isLoading, error: isEnError } = useProfileQueryByParamsUserId(params.id);
   const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryById(params.scheduleId, 'College');
+  const { data: rgData, isLoading: rpLoading, error: rgError } = useReportGradeQueryByTeacherId(ts?.teacherSchedule.profileId?._id as string);
   const { data: s, isLoading: sLoading, error: sError } = useEnrollmentQueryByTeacherScheduleId({ id: ts?.teacherSchedule?._id, category: 'College' });
 
   useEffect(() => {
     if (tsError || !ts) return;
     if (isEnError || !data) return;
     if (sError || !s) return;
+    if (rgError || !rgData) return;
 
     if (ts && data && s) {
       if (ts.teacherSchedule) {
@@ -32,7 +36,7 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
         setIsPageLoading(false);
       }
     }
-  }, [ts, tsError, data, isEnError, s, sError]);
+  }, [ts, tsError, data, isEnError, s, sError, rgData, rgError]);
 
   return (
     <>
@@ -97,7 +101,15 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
                   </div>
                 </div>
               </div>
-              {ts?.teacherSchedule?.courseId && <DataTable columns={columns} data={s.students} />}
+              {ts?.teacherSchedule?.courseId && (
+                <>
+                  {' '}
+                  <div className='w-full flex justify-start items-center'>
+                    <div className='flex flex-col'>{rgData.reportGrades && <ViewGrades data={s.students} teacher={ts?.teacherSchedule} type={'firstGrade'} reportGrades={rgData?.reportGrades} />}</div>
+                  </div>
+                  <DataTable columns={columns} data={s.students} />
+                </>
+              )}
             </>
           ) : (
             <div className=''>404</div>

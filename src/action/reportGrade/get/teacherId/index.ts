@@ -1,6 +1,7 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
+import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getReportGradeByTeacherId } from '@/services/reportGrade';
 import { getTeacherProfileByUserId } from '@/services/teacherProfile';
 import { checkAuth } from '@/utils/actions/session';
@@ -15,12 +16,35 @@ export const getReportGradeByTeacherIdAction = async (teacherId: string) => {
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-    if (session && session.user.role !== 'TEACHER') return { error: 'Forbidden', status: 403 };
 
-    const p = await getTeacherProfileByUserId(session.user._id);
-    if (teacherId !== p._id.toString()) return { error: 'Forbidden', status: 403 };
+    const a = await checkRole(session.user, teacherId);
+    return a;
+  });
+};
 
-    const reportGrades = await getReportGradeByTeacherId(p._id);
-    return { reportGrades: JSON.parse(JSON.stringify(reportGrades)), status: 201 };
+const checkRole = async (user: any, teacherId: string) => {
+  return tryCatch(async () => {
+    let reportGrades;
+    let rp;
+    switch (user.role) {
+      case 'DEAN':
+        const d = await getDeanProfileByUserId(user._id);
+        rp = await getReportGradeByTeacherId(teacherId);
+        const isValid = rp.find((r) => r.teacherScheduleId.courseId._id.toString() === d.courseId._id.toString());
+        if (!isValid) return { error: 'Forbidden', status: 403 };
+        break;
+      case 'TEACHER':
+        const t = await getTeacherProfileByUserId(user._id);
+        if (teacherId !== t._id.toString()) return { error: 'Forbidden', status: 403 };
+        rp = await getReportGradeByTeacherId(t._id);
+        break;
+      case 'ADMIN':
+        rp = await getReportGradeByTeacherId(teacherId);
+        break;
+      default:
+        return { error: 'Forbidden', status: 403 };
+    }
+    reportGrades = JSON.parse(JSON.stringify(rp));
+    return { reportGrades, status: 200 };
   });
 };
