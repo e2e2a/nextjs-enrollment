@@ -1,13 +1,11 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import RoleFilter from './RoleFilter';
 import EmailVerifiedFilter from './EmailVerifiedFilter';
-import { IStudentProfile } from '@/types';
+import ActionsCell from './ActionsCell';
 
-export const columns: ColumnDef<IStudentProfile>[] = [
+export const columns: ColumnDef<any>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => {
@@ -19,7 +17,7 @@ export const columns: ColumnDef<IStudentProfile>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original;
+      const user = row.original.profileId;
       return (
         <div key={cell.id} className='capitalize'>
           {user.lastname && user.firstname ? `${user.firstname} ${user.middlename} ${user.lastname} ${user.extensionName ? user.extensionName + '.' : ''}` : 'Unknown'}
@@ -27,17 +25,17 @@ export const columns: ColumnDef<IStudentProfile>[] = [
       );
     },
     accessorFn: (row) => {
-      const { lastname, firstname, middlename, extensionName } = row;
+      const { lastname, firstname, middlename, extensionName } = row.profileId;
       return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
     },
     filterFn: (row, columnId, filterValue) => {
-      const user = row.original;
-      const fullName = `${row.original.firstname ?? ''} ${row.original.middlename ?? ''} ${row.original.lastname ?? ''} ${row.original.extensionName ?? ''}`.toLowerCase().trim();
+      const user = row.original.profileId;
+      const fullName = `${user.firstname ?? ''} ${user.middlename ?? ''} ${user.lastname ?? ''} ${user.extensionName ?? ''}`.toLowerCase().trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
   {
-    accessorFn: (row) => row.userId.username, // Use accessorFn for nested fields
+    accessorFn: (row) => row.userId.username,
     id: 'username',
     header: 'Username',
     cell: ({ cell, row }) => {
@@ -65,9 +63,11 @@ export const columns: ColumnDef<IStudentProfile>[] = [
   {
     accessorKey: 'emailVerified',
     accessorFn: (row) => row.userId.emailVerified,
+    // header: 'Email Verified',
     header: ({ column }) => (
       <EmailVerifiedFilter
         onChange={(emailVerified: string | null) => {
+          // Your custom logic to filter based on role
           column.setFilterValue(emailVerified);
         }}
       />
@@ -90,18 +90,15 @@ export const columns: ColumnDef<IStudentProfile>[] = [
   },
   {
     accessorFn: (row) => row.userId.role,
-    accessorKey: 'role',
-    // header: 'Role'
-    header: ({ column }) => (
-      <RoleFilter
-        onChange={(role: string | null) => {
-          column.setFilterValue(role);
-        }}
-      />
-    ),
-    filterFn: (row, columnId, filterValue) => {
-      if (filterValue === null) return true;
-      return row.original.userId.role === filterValue;
+    id: 'role',
+    header: 'Role',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.userId.role}
+        </div>
+      );
     },
   },
   {
@@ -118,25 +115,9 @@ export const columns: ColumnDef<IStudentProfile>[] = [
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
-      const user = row.original;
+      const user = row.original.profileId;
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className='h-8 w-8 p-0'>
-              <span className='sr-only'>Open menu</span>
-              <MoreHorizontal className='h-4 w-4' />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end' className='bg-white'>
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user._id)}>Copy user ID</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <ActionsCell user={user} />;
     },
   },
 ];

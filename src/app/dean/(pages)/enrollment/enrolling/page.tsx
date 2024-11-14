@@ -21,7 +21,7 @@ const Page = () => {
 
     if (data && pData) {
       if (data.students && pData.profile) {
-        const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment.enrollStatus !== 'Enrolled');
+        const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment.enrollStatus === 'Pending');
         setEnrolledStudents(filteredEnrollment);
         setIsPageLoading(false);
       } else if (data.error) {
@@ -52,11 +52,6 @@ const Page = () => {
                     Department: <span className='font-normal'>{pData?.profile.courseId.name}</span>
                   </span>
                 </div>
-                {/* <div className='flex w-full justify-start sm:justify-end'>
-                  <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                    Block: <span className='font-normal'>{data.reportedGrades.teacherScheduleId.blockTypeId.section}</span>
-                  </span>
-                </div> */}
               </div>
               <DataTable columns={columns} data={enrolledStudents as IEnrollment[]} />
             </div>

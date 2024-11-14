@@ -18,8 +18,8 @@ const Page = () => {
   useEffect(() => {
     if (isEnError || !data) return;
     if (data) {
-      if (data.enrollment) {
-        const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Temporary Enrolled');
+      if (data.students) {
+        const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment.enrollStatus === 'Temporary Enrolled');
         setEnrolledStudents(filteredEnrollment);
         setIsPageLoading(false);
       }

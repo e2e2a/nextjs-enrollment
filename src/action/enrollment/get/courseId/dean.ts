@@ -18,9 +18,8 @@ export const getAllEnrollmentByCourseIdAction = async (courseId: string) => {
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
 
     const s = await getStudent(session.user._id, courseId);
-    if (s && s.error) return { error: s.error, status: s.status };
 
-    return { students: JSON.parse(JSON.stringify(s.students)), status: 200 };
+    return s;
   });
 };
 
@@ -37,9 +36,8 @@ const getStudent = async (id: string, courseId: string) => {
     if (courseId !== profile.courseId._id.toString()) return { error: 'Forbidden', status: 403 };
 
     const e = await getEnrollmentByCategory(profile.courseId.category);
-    // @ts-ignore
-    const filteredStudents = e?.filter((s) => s.courseId._id.toString() === courseId);
 
-    return { students: filteredStudents, status: 200 };
+    const filteredStudents = e?.filter((s) => s.courseId._id.toString() === courseId);
+    return { students: JSON.parse(JSON.stringify(filteredStudents)), status: 200 };
   });
 };

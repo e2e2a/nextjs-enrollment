@@ -14,7 +14,7 @@ import mongoose from 'mongoose';
 export const getEnrollmentByProfileIdAction = async (id: any) => {
   return tryCatch(async () => {
     await dbConnect();
-
+    console.log('running')
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
     if (session && session.user.role !== 'ADMIN' && session.user.role !== 'DEAN') return { error: 'Forbidden.', status: 403 };

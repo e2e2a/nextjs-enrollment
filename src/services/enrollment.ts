@@ -116,7 +116,10 @@ export const getEnrollmentByCategory = async (category: string) => {
     const enrollment = await Enrollment.find({ enrollStatus: { $ne: 'Rejected' } })
       .populate('userId')
       .populate('courseId')
-      .populate('profileId')
+      .populate({
+        path: 'profileId',
+        populate: [{ path: 'courseId' }, { path: 'userId' }],
+      })
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
@@ -124,10 +127,10 @@ export const getEnrollmentByCategory = async (category: string) => {
       })
       .populate({
         path: 'studentSubjects.profileId',
-        populate: [{ path: 'userId' }],
+        populate: [{ path: 'userId' }, { path: 'courseId' }],
       })
       .exec();
-    //@ts-ignore
+
     const filteredEnrollment = enrollment.filter((en) => en.courseId.category === category);
     return filteredEnrollment;
   } catch (error) {
@@ -149,7 +152,7 @@ export const getAllEnrollmentByTeacherScheduleId = async (teacherScheduleId: any
       })
       .populate({
         path: 'studentSubjects.profileId',
-        populate: [{ path: 'userId' }],
+        populate: [{ path: 'userId' }, { path: 'courseId' }],
       })
       .exec();
     return enrollment;

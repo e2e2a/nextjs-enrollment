@@ -11,7 +11,6 @@ import Input from '../../Input';
 import { BirthdayInput } from '../../BirthdayInput';
 import { SelectInput } from '../../selectInput';
 import { profileSelectItems } from '@/constant/profile/selectItems';
-// import { useStudentProfileMutation } from '@/lib/queries';
 import { StudentProfileUpdateValidator } from '@/lib/validators/profile/update';
 import ExtensionData from './ExtensionData';
 import { StudentProfileExtension } from '@/lib/validators/profile/extension';
