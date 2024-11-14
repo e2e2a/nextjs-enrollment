@@ -2,7 +2,7 @@
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { checkAuth } from '@/utils/actions/session';
-import { categoryCollege } from './helpers/college';
+import { handlesCollege } from './helpers/college';
 
 /**
  * update Enrollment by id
@@ -17,7 +17,7 @@ export const updateEnrollmentStepAction = async (data: any) => {
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
     if (session.user.role !== 'DEAN' && session.user.role !== 'ADMIN') return { error: 'forbidden', status: 403 };
 
-    const checked = await checkCategory(session.user, data);
+    const checked = await checkEducationCategory(session.user, data);
     if (checked && checked.error) return { error: checked.error, status: 403 };
     // await sendEmailWithPDF(checkE);
     return { message: checked.message, prevStep: checked.prevStep, nextStep: checked.nextStep, status: 201 };
@@ -29,12 +29,12 @@ export const updateEnrollmentStepAction = async (data: any) => {
  * @param {object} user
  * @param {object} data
  */
-const checkCategory = async (user: any, data: any) => {
+const checkEducationCategory = async (user: any, data: any) => {
   return tryCatch(async () => {
     let c;
     switch (data.category) {
       case 'College':
-        c = await categoryCollege(user, data);
+        c = await handlesCollege(user, data);
         break;
       case '2':
         // we can add here if there are multiple categories
@@ -42,8 +42,8 @@ const checkCategory = async (user: any, data: any) => {
       default:
         return { error: 'forbidden.', status: 403 };
     }
-    if (c && c.error) return { error: c.error, status: 403 };
+    if (!c) return { error: 'forbidden.', status: 403 };
 
-    return { success: 'Foribbeden.', message: c.message, prevStep: c.prevStep, nextStep: c.nextStep, status: 200 };
+    return c;
   });
 };

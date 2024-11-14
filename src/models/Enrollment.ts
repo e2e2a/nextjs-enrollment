@@ -24,9 +24,7 @@ export interface IEnrollment extends Document {
 
 const schema = new Schema<IEnrollment>(
   {
-    category: {
-      type: String,
-    },
+    category: { type: String },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -43,12 +41,8 @@ const schema = new Schema<IEnrollment>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'BlockType',
     },
-    studentYear: {
-      type: String,
-    },
-    studentSemester: {
-      type: String,
-    },
+    studentYear: { type: String },
+    studentSemester: { type: String },
     onProcess: { type: Boolean, default: false },
     step: { type: Number, default: 1 },
     schoolYear: { type: String },
@@ -67,9 +61,7 @@ const schema = new Schema<IEnrollment>(
       default: 'New Student',
       enum: ['New Student', 'Continue', 'Transferee', 'Returning'],
     },
-    isStudentProfile: {
-      type: String,
-    },
+    isStudentProfile: { type: String },
     studentType: {
       type: String,
       // enum: ['Regular', 'Non-Regular'],
@@ -109,27 +101,15 @@ const schema = new Schema<IEnrollment>(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'StudentProfile',
         },
-        
-        firstGrade: {
-          type: String,
-        },
-        secondGrade: {
-          type: String,
-        },
-        thirdGrade: {
-          type: String,
-        },
-        fourthGrade: {
-          type: String,
-        },
-        averageTotal: {
-          type: String,
-        },
+
+        firstGrade: { type: String, default: '' },
+        secondGrade: { type: String, default: '' },
+        thirdGrade: { type: String, default: '' },
+        fourthGrade: { type: String, default: '' },
+        averageTotal: { type: String, default: '' },
       },
     ],
-    rejectedRemark: {
-      type: String,
-    },
+    rejectedRemark: { type: String },
   },
   {
     versionKey: false,

@@ -6,19 +6,16 @@ import { Icons } from '@/components/shared/Icons';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
-import UpdateAlert from '../Alerts/UpdateAlert';
 import { useUpdateGradeReportMutation } from '@/lib/queries/reportGrade/update/id';
-import DeleteAlert from '../Alerts/DeleteAlert';
+import UpdateAlert from '../alerts/UpdateAlert';
 
 interface IProps {
-  data: any;
   teacher: any;
   type: string;
   reportGrades: any;
 }
 
-const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
-  const [isDisabled, setIsDisabled] = useState<boolean>(true);
+const UpdateDialog = ({ teacher, type, reportGrades }: IProps) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
@@ -28,12 +25,12 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
   const [grades, setGrades] = useState<any>([]);
 
   useEffect(() => {
-    const initialGrades = reportGrades.reportedGrade.map((s: any) => ({
+    const initialGrades = reportGrades?.reportedGrade.map((s: any) => ({
       profileId: s.profileId._id,
       grade: s.grade,
     }));
     setGrades(initialGrades);
-  }, [data, reportGrades]);
+  }, [reportGrades]);
 
   const handleGradeChange = (index: any, profileId: any, value: any) => {
     const updatedGrades = [...grades];
@@ -60,7 +57,6 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
           case 200:
           case 201:
           case 203:
-            setIsDisabled(true);
             setIsOpen(false);
             makeToastSucess(res?.message);
             return;
@@ -80,15 +76,9 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
   return (
     <Dialog open={isOpen} modal={true} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button size={'sm'} className={`focus-visible:ring-0 flex mb-2 bg-transparent bg-blue-500  px-2 py-0 gap-x-1 justify-center text-neutral-50 font-medium`}>
+        <Button size={'sm'} className={`w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-blue-500 px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium`}>
           <Icons.eye className='h-4 w-4' />
-          <span className='flex'>
-            Report Grades in {''}
-            {type === 'firstGrade' && 'Prelim'}
-            {type === 'secondGrade' && 'Midterm'}
-            {type === 'thirdGrade' && 'Semi-final'}
-            {type === 'fourthGrade' && 'Final'}
-          </span>
+          <span className='flex'>Update</span>
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -142,36 +132,7 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
             </div>
             {!reportGrades.evaluated && (
               <div className='flex justify-end w-full'>
-                <Button
-                  type='button'
-                  onClick={() => {
-                    setIsDisabled(!isDisabled);
-                  }}
-                  disabled={isUploading}
-                  variant='outline'
-                  size={'sm'}
-                  className={`focus-visible:ring-0 flex mb-2 bg-transparent ${isDisabled ? 'bg-blue-500' : 'bg-red'} px-2 py-0 gap-x-1 justify-center text-neutral-50 font-medium`}
-                >
-                  <div className=' text-white text-[15px] font-medium flex gap-1 items-center'>
-                    {isUploading ? (
-                      <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' />
-                    ) : (
-                      <>
-                        {isDisabled ? (
-                          <>
-                            <Icons.squarePen className='h-4 w-4' /> Edit
-                          </>
-                        ) : (
-                          <>
-                            <Icons.ban className='h-4 w-4' /> Cancel
-                          </>
-                        )}
-                      </>
-                    )}
-                  </div>
-                </Button>
-                {isDisabled && <DeleteAlert isUploading={isUploading} setIsOpen={setIsOpen} reportGrades={reportGrades} />}
-                {!isDisabled && <UpdateAlert isUploading={isUploading} isAlertOpen={isAlertOpen} setIsAlertOpen={setIsAlertOpen} handleSubmit={handleSubmit} />}
+                <UpdateAlert isUploading={isUploading} isAlertOpen={isAlertOpen} setIsAlertOpen={setIsAlertOpen} handleSubmit={handleSubmit} />
               </div>
             )}
 
@@ -192,21 +153,26 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
                 </tr>
               </thead>
               <tbody className='bg-white divide-y divide-gray-200'>
-                {reportGrades.reportedGrade.map((s: any, index: any) => {
-                  return (
-                    <tr key={index}>
-                      <td className='px-6 py-4 whitespace-nowrap'>{index + 1}</td>
-                      <td className='px-6 py-4 whitespace-nowrap capitalize'>
-                        {s.profileId.firstname} {s.profileId?.middlename} {s.profileId?.lastname} {s.profileId?.lastname ? s.profileId?.lastname + '.' : ''}
-                      </td>
-                      <td className='px-6 py-4 whitespace-nowrap uppercase'>{reportGrades.teacherScheduleId?.courseId?.courseCode}</td>
-                      <td className='px-6 py-4 whitespace-nowrap'>{s.profileId?.sex}</td>
-                      <td className='px-6 py-4 whitespace-nowrap text-center'>
-                        {isDisabled ? s.grade : <Input className='w-20 text-sm text-center border-2 border-blue-400' onChange={(e) => handleGradeChange(index, s.profileId._id, e.target.value)} placeholder='' value={grades[index]?.grade} />}
-                      </td>
-                    </tr>
-                  );
-                })}
+                {reportGrades &&
+                  reportGrades.reportedGrade.map((s: any, index: any) => {
+                    return (
+                      <tr key={index}>
+                        <td className='px-6 py-4 whitespace-nowrap'>{index + 1}</td>
+                        <td className='px-6 py-4 whitespace-nowrap capitalize'>
+                          {s.profileId.firstname} {s.profileId?.middlename} {s.profileId?.lastname} {s.profileId?.lastname ? s.profileId?.lastname + '.' : ''}
+                        </td>
+                        <td className='px-6 py-4 whitespace-nowrap uppercase'>{reportGrades.teacherScheduleId?.courseId?.courseCode}</td>
+                        <td className='px-6 py-4 whitespace-nowrap'>{s.profileId?.sex}</td>
+                        <td className='px-6 py-4 whitespace-nowrap text-center'>
+                          {reportGrades.statusInDean === 'Approved' ? (
+                            s.grade
+                          ) : (
+                            <Input className='w-20 text-sm text-center border-2 border-blue-400' onChange={(e) => handleGradeChange(index, s.profileId._id, e.target.value)} placeholder='' value={grades[index]?.grade} />
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>
@@ -216,4 +182,4 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
   );
 };
 
-export default ViewDialog;
+export default UpdateDialog;

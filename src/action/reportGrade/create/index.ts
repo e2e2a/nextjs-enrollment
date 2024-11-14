@@ -22,7 +22,7 @@ export const createReportGradeAction = async (data: any) => {
     const category = await checkCategory(session.user, data);
     if (category && category.error) return { error: category.error, status: category.status };
 
-    return { message: 'Grade has been Report.', status: 201 };
+    return category;
   });
 };
 
@@ -44,7 +44,6 @@ const checkCategory = async (user: any, data: any) => {
       default:
         return { error: 'Forbidden.', status: 403 };
     }
-    if (p && p.error) return { error: p.error, status: p.status };
     return p;
   });
 };
@@ -78,6 +77,7 @@ const handleCollege = async (user: any, data: any) => {
 
     const createdReportGrade = await createReportGrade(data);
     if (!createdReportGrade) return { error: 'Something went wrong.', status: 500 };
+    return { success: true, message: `Grade Report in ${a.message} has been created.`, teacherId: p._id.toString(), category: data.category, status: 201 };
   });
 };
 

@@ -20,7 +20,6 @@ import {
 import { removeCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
 import { removeStudentScheduleAction } from '@/action/college/schedules/students';
 import { getEnrollmentSetup, updateEnrollmentSetup } from '@/action/enrollmentSetup';
-import { evaluateApprovedGradeReportAction } from '@/action/college/schedules/teachers/reportGrade/admin';
 import {
   getAllStudentEnrollmentRecordCollegeAction,
   getAllTeacherScheduleRecordByCollegeAction,
@@ -66,21 +65,6 @@ export const useCollegeEndSemesterMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
       queryClient.invalidateQueries({ queryKey: ['EnrollmentSetup'] });
-    },
-  });
-};
-
-/**
- * Admin Evaluate of grade report
- * @returns
- */
-export const useEvaluateApprovedGradeReportMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => evaluateApprovedGradeReportAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['TeacherReportGrade'] });
-      queryClient.invalidateQueries({ queryKey: ['TeacherReportGradeById'] });
     },
   });
 };

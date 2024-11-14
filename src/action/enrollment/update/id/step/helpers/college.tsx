@@ -12,7 +12,7 @@ import { updateStudentProfileById } from '@/services/studentProfile';
  * @param {object} user
  * @param {object} data
  */
-export const categoryCollege = async (user: any, data: any) => {
+export const handlesCollege = async (user: any, data: any) => {
   return tryCatch(async () => {
     const checkE = await getEnrollmentById(data.EId);
     if (!checkE || checkE.category !== data.category) return { error: 'No enrollment found to update.', status: 404 };

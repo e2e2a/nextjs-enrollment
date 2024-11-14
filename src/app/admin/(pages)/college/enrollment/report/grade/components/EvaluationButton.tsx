@@ -52,7 +52,7 @@ const EvaluationButton = ({ user }: IProps) => {
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
           <AlertDialogTrigger asChild>
             <div className='flex justify-start sm:justify-center w-full'>
-              <Button type='button' disabled={isPending} size={'sm'} className='w-auto focus-visible:ring-0 mb-2 bg-transparent flex justify-start bg-green-500 px-2 py-0 gap-x-1 text-neutral-50 font-medium'>
+              <Button type='button' disabled={isPending} size={'sm'} className='w-full group focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-green-600 px-2 py-0 gap-x-1 justify-start items-center hover:text-neutral-50 font-medium'>
                 <span className=' text-[15px] font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Evaluate Grades'}</span>
               </Button>
             </div>

@@ -6,8 +6,10 @@ export const useCreateGradeReportMutation = () => {
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createReportGradeAction(data),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['ReportGrade', data.category] });
-      queryClient.invalidateQueries({ queryKey: ['TeacherReportGradeById'] });
+      if (data && !data.error) {
+        queryClient.invalidateQueries({ queryKey: ['ReportGradeByCategory', data.category] });
+        queryClient.invalidateQueries({ queryKey: ['ReportGradeByTeacherId', data.teacherId] });
+      }
     },
   });
 };

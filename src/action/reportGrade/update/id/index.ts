@@ -5,6 +5,7 @@ import { tryCatch } from '@/lib/helpers/tryCatch';
 import { checkAuth } from '@/utils/actions/session';
 import { getTeacherProfileByUserId } from '@/services/teacherProfile';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
+import { getEnrollmentByProfileId } from '@/services/enrollment';
 
 /**
  * handles update report grade by id
@@ -79,11 +80,10 @@ const checkRole = async (user: any, data: any, e: any, message: string) => {
       case 'DEAN':
         return await handleDean(user, data, e, message);
       case 'ADMIN':
-        break;
+        return await handleAdmin(user, data, e, message);
       default:
         return { error: 'Forbidden.', status: 403 };
     }
-    return { success: 'yesyes', status: 200 };
   });
 };
 
@@ -132,7 +132,60 @@ const handleDean = async (user: any, data: any, e: any, message: string) => {
     e.statusInDean = data.statusInDean;
     await e.save();
 
-    return { message: `Grades in ${message} has been ${data.statusInDean}.`, teacherId: p._id.toString(), category: data.category, id: e._id.toString(), status: 201 };
+    return { message: `Grades in ${message} has been ${data.statusInDean}.`, teacherId: e.teacherId._id.toString(), category: data.category, id: e._id.toString(), status: 201 };
+  });
+};
+
+/**
+ * handle dean role
+ *
+ * @param {object} user
+ * @param {object} data
+ * @param {object} e
+ * @param {string} message
+ */
+const handleAdmin = async (user: any, data: any, e: any, message: string) => {
+  return tryCatch(async () => {
+    for (const rg of e.reportedGrade) {
+      const se = await getEnrollmentByProfileId(rg.profileId._id);
+      if (se && se.studentSubjects.length > 0) {
+        const filteredSubjects = se.studentSubjects.filter((subject: any) => {
+          return subject.teacherScheduleId._id.toString() === e.teacherScheduleId._id.toString();
+        });
+
+        let gradeField = '';
+
+        if (e.type === 'firstGrade') {
+          gradeField = 'firstGrade';
+        } else if (e.type === 'secondGrade') {
+          gradeField = 'secondGrade';
+        } else if (e.type === 'thirdGrade') {
+          gradeField = 'thirdGrade';
+        } else if (e.type === 'fourthGrade') {
+          gradeField = 'fourthGrade';
+        }
+
+        for (const subject of filteredSubjects) {
+          subject[gradeField] = rg.grade;
+          if (e.type === 'fourthGrade') {
+            const firstGrade = Number(subject.firstGrade);
+            const secondGrade = Number(subject.secondGrade);
+            const thirdGrade = Number(subject.thirdGrade);
+            const fourthGrade = Number(subject.fourthGrade);
+            if (!isNaN(firstGrade) && !isNaN(secondGrade) && !isNaN(thirdGrade) && !isNaN(fourthGrade)) {
+              subject.averageTotal = firstGrade + secondGrade + thirdGrade + fourthGrade;
+            }
+
+            return;
+          }
+
+          await se.save();
+        }
+      }
+    }
+    e.evaluated = true;
+    await e.save();
+    return { message: `Reported Grades in ${message} has been Evaluated.`, teacherId: e.teacherId._id.toString(), category: data.category, id: e._id.toString(), status: 201 };
   });
 };
 

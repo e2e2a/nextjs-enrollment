@@ -42,7 +42,7 @@ const Page = () => {
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-bold '>Your Grades Report Management</h1>
               </div>
-              <DataTable columns={columns} data={data.reportedGrades as any[]} />
+              <DataTable columns={columns} data={data.reportGrades as any[]} />
             </div>
           )}
         </div>

@@ -15,7 +15,6 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (isEnError || !data) return;
     if (data) {
       if (data.reportedGrades) {
-        console.log(data.reportedGrades);
         setIsPageLoading(false);
       }
     }
@@ -75,6 +74,31 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Block: <span className='font-normal'>{data.reportedGrades.teacherScheduleId.blockTypeId.section}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Type:
+                      <span className='font-normal'>
+                        {' '}
+                        {data.reportedGrades.type === 'firstGrade' && 'Prelim'}
+                        {data.reportedGrades.type === 'secondGrade' && 'Midterm'}
+                        {data.reportedGrades.type === 'thirdGrade' && 'Semi-final'}
+                        {data.reportedGrades.type === 'fourthGrade' && 'Final'}
+                        {''} Grade
+                      </span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Status:
+                      <span className='font-normal text-sm text-green-500 uppercase'> {data.reportedGrades.statusInDean}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Evaluated:
+                      <span className='font-normal text-sm uppercase'> {data.reportedGrades.evaluated ? <span className=' text-green-500'>True</span> : <span className=' text-blue-500'>False</span>}</span>
                     </span>
                   </div>
                 </div>
