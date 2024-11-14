@@ -1,18 +1,46 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Enrollment Management System
+
+## Introduction
+
+This project is a School Enrollment Management System. It is designed to automate and simplify the complex tasks of managing a school's operations or student's enrollments.
+
+## Database
+
+The system uses MongoDB as its database. MongoDB is a source-available cross-platform document-oriented database program. It is classified as a NoSQL database program, which provides high performance, high availability, and easy scalability.
 
 ## Getting Started
 
-First, run the development server:
+1. **Copy the `.env` file**  
+    First, create a `.env` file by copying the `.env.example` template file in the root directory. Update the environment variables as needed, especially the database connection string.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Set up MongoDB  
+   Ensure to have a MongoDB database or [download it here](https://www.mongodb.com/try/download/community).
+
+3. Seed initial data
+   Before seeding, navigate to src/seeders/admin and update the database name on line 45 if necessary.
+
+   Once your database is configured, seed the initial data by running:
+
+   ```bash
+
+   node src/seeders/admin
+   ```
+
+4. Run the development server
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   # or
+   bun dev
+   ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
