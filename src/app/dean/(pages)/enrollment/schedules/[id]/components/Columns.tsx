@@ -164,17 +164,14 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='capitalize'>
-          {user.teacherScheduleId.profileId.firstname} {user.teacherScheduleId.profileId.middlename} {user.teacherScheduleId.profileId.lastname} {user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName : ''}
+          {user.teacherScheduleId.profileId.firstname ?? ''} {user.teacherScheduleId.profileId.middlename ?? ''} {user.teacherScheduleId.profileId.lastname} {user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName : ''}
         </div>
       );
     },
-    accessorFn: (row) =>
-      `${row.teacherScheduleId.profileId.firstname} ${row.teacherScheduleId.profileId.middlename} ${row.teacherScheduleId.profileId.lastname} ${row.teacherScheduleId.profileId.extensionName ? row.teacherScheduleId.profileId.extensionName : ''}`,
+    accessorFn: (row) => `${row.teacherScheduleId.profileId.firstname ?? ''} ${row.teacherScheduleId.profileId.middlename ?? ''} ${row.teacherScheduleId.profileId.lastname ?? ''} ${row.teacherScheduleId.profileId.extensionName ?? ''}`.trim(),
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user.teacherScheduleId.profileId.firstname} ${user.teacherScheduleId.profileId.middlename} ${user.teacherScheduleId.profileId.lastname} ${
-        user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName : ''
-      }`.toLowerCase();
+      const fullName = `${user.teacherScheduleId.profileId.firstname ?? ''} ${user.teacherScheduleId.profileId.middlename ?? ''} ${user.teacherScheduleId.profileId.lastname} ${user.teacherScheduleId.profileId.extensionName ?? ''}`.toLowerCase().trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
@@ -195,7 +192,13 @@ export const columns: ColumnDef<any>[] = [
       return (
         <div key={cell.id} className='uppercase '>
           {!user.request && <div className='text-gray-500 text-xs'>N/A</div>}
-          {user.request && user.request === 'add' ? <div className='text-green-500 text-xs font-bold'>Add</div> : user.request === 'drop' ? <div className='text-red text-xs font-bold'>Drop</div> :user.request === 'suggested' ? <div className='text-orange-300 text-xs font-bold'>Suggested</div> : null}
+          {user.request && user.request === 'add' ? (
+            <div className='text-green-500 text-xs font-bold'>Add</div>
+          ) : user.request === 'drop' ? (
+            <div className='text-red text-xs font-bold'>Drop</div>
+          ) : user.request === 'suggested' ? (
+            <div className='text-orange-300 text-xs font-bold'>Suggested</div>
+          ) : null}
         </div>
       );
     },
@@ -207,14 +210,15 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          
           {user.requestStatusInDean === 'Approved' ? (
             <span className='text-green-500 text-xs'>{user.requestStatusInDean}</span>
           ) : user.requestStatusInDean === 'Pending' ? (
             <span className='text-blue-500 text-xs'>{user.requestStatusInDean}</span>
           ) : user.requestStatusInDean === 'Declined' ? (
             <span className='text-red text-xs'>{user.requestStatusInDean}</span>
-          ) : <span className='text-gray-400 text-xs'>N/A</span>}
+          ) : (
+            <span className='text-gray-400 text-xs'>N/A</span>
+          )}
         </div>
       );
     },
@@ -232,7 +236,9 @@ export const columns: ColumnDef<any>[] = [
             <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
           ) : user.requestStatusInRegistrar === 'Declined' ? (
             <span className='text-red text-xs'>{user.requestStatusInRegistrar}</span>
-          ) : <span className='text-gray-400 text-xs'>N/A</span>}
+          ) : (
+            <span className='text-gray-400 text-xs'>N/A</span>
+          )}
         </div>
       );
     },

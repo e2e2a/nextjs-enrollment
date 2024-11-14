@@ -125,7 +125,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
             <span>Add New Student Subjects</span>
             <span className='capitalize'>Course: {student.courseId.name}</span>
             <span className='text-sm font-bold uppercase'>
-              {student.profileId.firstname} {student.profileId.middlename} {student.profileId.lastname} {student.profileId.extensionName ? student.profileId.extensionName : ''}
+              {student.profileId.firstname} {student.profileId.middlename ?? ''} {student.profileId.lastname} {student.profileId.extensionName ? student.profileId.extensionName + '.' : ''}
             </span>
             <span className='text-sm font-bold capitalize'>Block: {student?.blockTypeId?.section ? student.blockTypeId.section : 'N/A'}</span>
           </DialogTitle>

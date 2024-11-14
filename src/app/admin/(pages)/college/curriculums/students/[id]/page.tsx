@@ -85,7 +85,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           <div className='flex flex-col items-center py-4 text-black w-full text-center'>
             <h1 className='sm:text-2xl text-xl font-bold w-full uppercase text-center'>
-              {data?.curriculum?.studentId.lastname}, {data?.curriculum?.studentId.firstname} {data?.curriculum?.studentId.extensionName && data?.curriculum?.studentId.extensionName + '.'} {data?.curriculum?.studentId.middlename}{' '}
+              {data?.curriculum?.studentId.firstname} {data?.curriculum?.studentId?.middlename ?? ''} {data?.curriculum?.studentId.lastname} {data?.curriculum?.studentId.extensionName && data?.curriculum?.studentId.extensionName + '.'}
             </h1>
             <h1 className='sm:text-3xl text-xl font-bold w-full uppercase text-center'>{data?.curriculum?.courseId?.name}</h1>
           </div>

@@ -18,12 +18,19 @@ export const columns: ColumnDef<any>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original;
-      return <div key={cell.id}>{user.lastname && user.firstname ? user.lastname + ',' + ' ' + user.firstname + ' ' + user.middlename : 'Unknown'}</div>;
+      return (
+        <div key={cell.id} className='capitalize'>
+          {user.lastname && user.firstname ? `${user.firstname} ${user.middlename} ${user.lastname} ${user.extensionName ? user.extensionName + '.' : ''}` : 'Unknown'}
+        </div>
+      );
     },
-    accessorFn: (row) => `${row.lastname}, ${row.firstname}`,
+    accessorFn: (row) => {
+      const { lastname, firstname, middlename, extensionName } = row;
+      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+    },
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${row.original.lastname}, ${row.original.firstname} ${row.original.middlename}`.toLowerCase();
+      const fullName = `${row.original.firstname ?? ''} ${row.original.middlename ?? ''} ${row.original.lastname ?? ''} ${row.original.extensionName ?? ''}`.toLowerCase().trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },

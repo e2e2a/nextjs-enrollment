@@ -29,12 +29,16 @@ export const columns: ColumnDef<any>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original;
-      return <div key={cell.id}>{user.profileId.lastname && user.profileId.firstname ? user.profileId.lastname + ',' + ' ' + user.profileId.firstname + ' ' + user.profileId.middlename : 'Unknown'}</div>;
+      return (
+        <div key={cell.id} className='capitalize'>
+          {user.profileId?.firstname} {user.profileId?.middlename ?? ''} {user.profileId?.lastname} {user.profileId?.extensionName ? `${user.profileId.extensionName}. ` : ''}
+        </div>
+      );
     },
-    accessorFn: (row) => `${row.profileId.lastname}, ${row.profileId.firstname} ${row.profileId.middlename}`,
+    accessorFn: (row) => `${row.profileId.firstname ?? ''} ${row.profileId.middlename ?? ''} ${row.profileId.lastname ?? ''} ${row.profileId.extensionName ?? ''}`.trim(),
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${row.original.profileId.lastname}, ${row.original.profileId.firstname} ${row.original.profileId.middlename}`.toLowerCase();
+      const fullName = `${user.profileId.firstname ?? ''} ${user.profileId.middlename ?? ''} ${user.profileId.lastname ?? ''} ${user.profileId.extensionName ?? ''}`.toLowerCase().trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },

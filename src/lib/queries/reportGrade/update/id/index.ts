@@ -11,6 +11,9 @@ export const useUpdateGradeReportMutation = () => {
         queryClient.invalidateQueries({ queryKey: ['ReportGradeById', data.id] });
         queryClient.invalidateQueries({ queryKey: ['ReportGradeByCategory', data.category] });
         queryClient.invalidateQueries({ queryKey: ['ReportGradeByTeacherId', data.teacherId] });
+        if (data.teacherScheduleId) {
+          queryClient.invalidateQueries({ queryKey: ['EnrollmentByTeacherScheduleId', { id: data.teacherScheduleId, category: data.category }] });
+        }
       }
     },
   });

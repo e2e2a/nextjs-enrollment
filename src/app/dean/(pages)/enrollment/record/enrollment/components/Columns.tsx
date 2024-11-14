@@ -17,12 +17,19 @@ export const columns: ColumnDef<any>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original;
-      return <div key={cell.id} className='capitalize'>{user.profileId.lastname && user.profileId.firstname ? user.profileId.lastname + ',' + ' ' + user.profileId.firstname + ' ' + user.profileId.middlename : 'Unknown'} {user.profileId.extensionName ? user.profileId.extensionName + '.' : ''}</div>;
+      return (
+        <div key={cell.id} className=' capitalize'>
+          {user.profileId.firstname ?? ''}
+          {user.profileId.middlename ?? ''} {user.profileId.lastname ?? ''} {user.profileId.extensionName ? user.profileId.extensionName + '.' : ''}
+        </div>
+      );
     },
-    accessorFn: (row) => `${row.lastname}, ${row.firstname}`,
+    accessorFn: (row) => {
+      const { lastname, firstname, middlename, extensionName } = row.profileId;
+      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+    },
     filterFn: (row, columnId, filterValue) => {
-      const user = row.original;
-      const fullName = `${row.original.profileId.lastname}, ${row.original.profileId.firstname} ${row.original.profileId.middlename} ${row.original.profileId.extensionName}.`.toLowerCase();
+      const fullName = `${row.original.profileId.firstname ?? ''} ${row.original.profileId.middlename ?? ''} ${row.original.profileId.lastname ?? ''} ${row.original.profileId.extensionName ?? ''}`.toLowerCase().trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },

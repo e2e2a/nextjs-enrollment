@@ -126,7 +126,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
             <span>Add New Student Subjects</span>
             <span className='capitalize'>Course: {student.courseId.name}</span>
             <span className='text-sm font-bold uppercase'>
-              {student.profileId.firstname} {student.profileId.middlename} {student.profileId.lastname} {student.profileId.extensionName ? student.profileId.extensionName : ''}
+              {student.profileId.firstname} {student.profileId.middlename ?? ''} {student.profileId.lastname} {student.profileId.extensionName ? student.profileId.extensionName + '.' : ''}
             </span>
             <span className='text-sm font-bold capitalize'>Block: {student?.blockTypeId?.section ? student.blockTypeId.section : 'N/A'}</span>
           </DialogTitle>
@@ -153,7 +153,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                               </div>{' '}
                               {/* Numbering starts from 1 */}
                               <span>
-                                Instructor: {selectedItem.profileId.firstname} {selectedItem.profileId.middlename} {selectedItem.profileId.lastname}
+                                Instructor: {selectedItem.profileId.firstname} {selectedItem.profileId.middlename ?? ''} {selectedItem.profileId.lastname}
                               </span>
                               <span>Title: {selectedItem.subjectId.name}</span>
                               <span>Code: {selectedItem.subjectId.subjectCode}</span>
@@ -203,8 +203,8 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                           <div className='grid sm:grid-cols-2 grid-cols-1 w-full'>
                                             <div className='flex flex-col text-xs sm:text-sm order-2 sm:order-1'>
                                               <span className=' font-semibold border-1 sm:border-0'>
-                                                Instructor: {s.teacherScheduleId.profileId.firstname} {s.teacherScheduleId.profileId.middlename} {s.teacherScheduleId.profileId.lastname}{' '}
-                                                {s.teacherScheduleId.profileId?.extensionName ? s.teacherScheduleId.profileId.extensionName : ''}
+                                                Instructor: {s.teacherScheduleId.profileId.firstname} {s.teacherScheduleId.profileId.middlename ?? ''} {s.teacherScheduleId.profileId.lastname}{' '}
+                                                {s.teacherScheduleId.profileId?.extensionName ? s.teacherScheduleId.profileId.extensionName + '.' : ''}
                                               </span>
                                               <span className=' font-semibold'>
                                                 Department: <span className='uppercase'>{s.teacherScheduleId.courseId.name}</span>

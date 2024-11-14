@@ -40,22 +40,23 @@ export const columns3: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.profileId.lastname}, {user.profileId.firstname} {user.profileId.middlename}
+          {user.profileId.firstname ?? ''}
+          {user.profileId.middlename ?? ''} {user.profileId.lastname ?? ''} {user.profileId.extensionName ? user.profileId.extensionName + '.' : ''}
         </div>
       );
     },
     accessorFn: (row) => {
-      const { lastname, firstname, middlename } = row.profileId;
-      return `${lastname}, ${firstname} ${middlename}`;
+      const { lastname, firstname, middlename, extensionName } = row.profileId;
+      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
     },
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.profileId.lastname}, ${row.original.profileId.firstname} ${row.original.profileId.middlename}`.toLowerCase();
+      const fullName = `${row.original.profileId.firstname ?? ''} ${row.original.profileId.middlename ?? ''} ${row.original.profileId.lastname ?? ''} ${row.original.profileId.extensionName ?? ''}`.toLowerCase().trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
 
   {
-    accessorFn: (row) => row.courseId.courseCode, // Use accessorFn for nested fields
+    accessorFn: (row) => row.courseId.courseCode,
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
@@ -206,7 +207,7 @@ export const columns3: ColumnDef<IEnrollment>[] = [
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
       const formatted = date.toLocaleDateString();
-      
+
       return <div className='font-medium'>{formatted}</div>;
     },
   },

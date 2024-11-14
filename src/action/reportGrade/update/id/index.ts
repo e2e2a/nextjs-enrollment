@@ -20,7 +20,7 @@ export const updateReportGradeAction = async (data: any) => {
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
 
     const category = await checkCategory(session.user, data);
-    console.log(category);
+
     return category;
   });
 };
@@ -59,7 +59,7 @@ const handleCollege = async (user: any, data: any) => {
 
     const a = await checkType(e.type);
     const p = await checkRole(user, data, e, a.message);
-    console.log(p);
+
     return p;
   });
 };
@@ -180,7 +180,7 @@ const handleAdmin = async (user: any, data: any, e: any, message: string) => {
     }
     e.evaluated = true;
     await e.save();
-    return { message: `Reported Grades in ${message} has been Evaluated.`, teacherId: e.teacherId._id.toString(), category: data.category, id: e._id.toString(), status: 201 };
+    return { message: `Reported Grades in ${message} has been Evaluated.`, teacherId: e.teacherId._id.toString(), teacherScheduleId: e.teacherScheduleId._id.toString(), category: data.category, id: e._id.toString(), status: 201 };
   });
 };
 

@@ -20,6 +20,7 @@ type IProps = {
   session?: any;
   profile: any;
 };
+
 const ProfileTab = ({ profile }: IProps) => {
   const mutation = useUpdateProfileMutation();
   const [isPending, setIsPending] = useState<boolean>(false);

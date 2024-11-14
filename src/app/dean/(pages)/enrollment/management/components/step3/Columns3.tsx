@@ -40,16 +40,17 @@ export const columns3: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.profileId.lastname}, {user.profileId.firstname} {user.profileId.middlename}
+          {user.profileId.firstname ?? ''}
+          {user.profileId.middlename ?? ''} {user.profileId.lastname ?? ''} {user.profileId.extensionName ? user.profileId.extensionName + '.' : ''}
         </div>
       );
     },
     accessorFn: (row) => {
-      const { lastname, firstname, middlename } = row.profileId;
-      return `${lastname}, ${firstname} ${middlename}`;
+      const { lastname, firstname, middlename, extensionName } = row.profileId;
+      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
     },
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.profileId.lastname}, ${row.original.profileId.firstname} ${row.original.profileId.middlename}`.toLowerCase();
+      const fullName = `${row.original.profileId.firstname ?? ''} ${row.original.profileId.middlename ?? ''} ${row.original.profileId.lastname ?? ''} ${row.original.profileId.extensionName ?? ''}`.toLowerCase().trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },

@@ -40,7 +40,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Instructor:{' '}
                       <span className='font-normal'>
-                        {data?.reportedGrades.teacherId.firstname} {data?.reportedGrades.teacherId.middlename} {data?.reportedGrades.teacherId.lastname} {data?.reportedGrades.teacherId.extensionName ? data?.reportedGrades.teacherId.extensionName + '.' : ''}
+                        {data?.reportedGrades.teacherId.firstname} {data?.reportedGrades.teacherId.middlename ?? ''} {data?.reportedGrades.teacherId.lastname} {data?.reportedGrades.teacherId.extensionName ? data?.reportedGrades.teacherId.extensionName + '.' : ''}
                       </span>
                     </span>
                   </div>

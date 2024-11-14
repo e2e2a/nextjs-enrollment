@@ -19,12 +19,19 @@ export const columns: ColumnDef<IAdminProfile>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original;
-      return <div key={cell.id}>{user.lastname && user.firstname ? user.lastname + ',' + ' ' + user.firstname + ' ' + user.middlename : 'Unknown'}</div>;
+      return (
+        <div key={cell.id} className='capitalize'>
+          {user.lastname && user.firstname ? `${user.firstname} ${user.middlename} ${user.lastname} ${user.extensionName ? user.extensionName + '.' : ''}` : 'Unknown'}
+        </div>
+      );
     },
-    accessorFn: (row) => `${row.lastname}, ${row.firstname}`,
+    accessorFn: (row) => {
+      const { lastname, firstname, middlename, extensionName } = row;
+      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+    },
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${row.original.lastname}, ${row.original.firstname} ${row.original.middlename}`.toLowerCase();
+      const fullName = `${row.original.firstname ?? ''} ${row.original.middlename ?? ''} ${row.original.lastname ?? ''} ${row.original.extensionName ?? ''}`.toLowerCase().trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
@@ -101,18 +108,7 @@ export const columns: ColumnDef<IAdminProfile>[] = [
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
       const formatted = date.toLocaleDateString();
-      // @example for formatted date ex. January 1, 2015
-      // const options: Intl.DateTimeFormatOptions = {
-      //   year: "numeric",
-      //   month: "short",
-      //   day: "numeric",
-      // };
 
-      // const formattedDate = date.toLocaleDateString("en-US", options);
-
-      // // Manually reformat the string to "Jul 20, 2024"
-      // const [month, day, year] = formattedDate.split(' ');
-      // const formatted = `${month} ${day}, ${year}`;
       return <div className='font-medium'>{formatted}</div>;
     },
   },

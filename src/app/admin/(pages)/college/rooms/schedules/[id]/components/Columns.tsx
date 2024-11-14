@@ -24,7 +24,7 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'> 
+        <div key={cell.id} className=' uppercase'>
           {user.blockTypeId && user.blockTypeId.section ? user.blockTypeId.section : <div className='text-red'>Not Assign</div>}
         </div>
       );
@@ -37,7 +37,7 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'> 
+        <div key={cell.id} className=' uppercase'>
           {user.courseId?.courseCode && user.courseId.courseCode ? user.courseId.courseCode : <div className='text-red'>Not Assign</div>}
         </div>
       );
@@ -56,15 +56,19 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='capitalize'>
-          {user.profileId.firstname} {user.profileId.middlename} {user.profileId.lastname} {user.profileId.extensionName ? user.profileId.extensionName : ''}
+        <div key={cell.id} className=' capitalize'>
+          {user.profileId.firstname ?? ''}
+          {user.profileId.middlename ?? ''} {user.profileId.lastname ?? ''} {user.profileId.extensionName ? user.profileId.extensionName + '.' : ''}
         </div>
       );
     },
-    accessorFn: (row) => `${row.profileId.firstname} ${row.profileId.middlename} ${row.profileId.lastname} ${row.profileId.extensionName ? row.profileId.extensionName : ''}`,
+    accessorFn: (row) => {
+      const { lastname, firstname, middlename, extensionName } = row.profileId;
+      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+    },
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user.profileId.firstname} ${user.profileId.middlename} ${user.profileId.lastname} ${user.profileId.extensionName ? user.profileId.extensionName : ''}`.toLowerCase();
+      const fullName = `${row.original.profileId.firstname ?? ''} ${row.original.profileId.middlename ?? ''} ${row.original.profileId.lastname ?? ''} ${row.original.profileId.extensionName ?? ''}`.toLowerCase().trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },

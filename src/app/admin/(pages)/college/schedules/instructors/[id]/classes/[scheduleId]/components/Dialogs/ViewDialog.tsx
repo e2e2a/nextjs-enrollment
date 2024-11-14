@@ -3,10 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
-import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { Input } from '@/components/ui/input';
-import Image from 'next/image';
-import { useUpdateGradeReportMutation } from '@/lib/queries/reportGrade/update/id';
 import AlertDialogPage from '../alert/AlertDialogPage';
 
 interface IProps {
@@ -20,9 +17,6 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
-
-  const mutation = useUpdateGradeReportMutation();
 
   const [grades, setGrades] = useState<any>([]);
 
@@ -40,42 +34,6 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
     setGrades(updatedGrades);
   };
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    setIsUploading(true);
-
-    const dataa = {
-      category: 'College',
-      request: 'Update',
-      reportGradeId: reportGrades._id,
-      teacherScheduleId: teacher._id,
-      type: type,
-      reportedGrade: grades,
-    };
-
-    mutation.mutate(dataa, {
-      onSuccess: (res) => {
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            setIsDisabled(true);
-            setIsOpen(false);
-            makeToastSucess(res?.message);
-            return;
-          default:
-            if (res.error) {
-              makeToastError(res.error);
-            }
-            return;
-        }
-      },
-      onSettled: () => {
-        setIsAlertOpen(false);
-        setIsUploading(false);
-      },
-    });
-  };
   return (
     <Dialog open={isOpen} modal={true} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -167,7 +125,7 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
                     <tr key={index}>
                       <td className='px-6 py-4 whitespace-nowrap'>{index + 1}</td>
                       <td className='px-6 py-4 whitespace-nowrap capitalize'>
-                        {s.profileId.firstname} {s.profileId?.middlename} {s.profileId?.lastname} {s.profileId?.lastname ? s.profileId?.lastname + '.' : ''}
+                        {s.profileId?.firstname} {s.profileId?.middlename} {s.profileId?.lastname} {s.profileId?.extensionName ? s.profileId?.extensionName + '.' : ''}
                       </td>
                       <td className='px-6 py-4 whitespace-nowrap uppercase'>{reportGrades.teacherScheduleId?.courseId?.courseCode}</td>
                       <td className='px-6 py-4 whitespace-nowrap'>{s.profileId?.sex}</td>

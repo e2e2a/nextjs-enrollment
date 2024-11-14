@@ -18,16 +18,16 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.student.lastname}, {user.student.firstname} {user.student.middlename ? user.student.middlename + '.' : ''} {user.student.middlename}
+          {user.student.firstname} {user.student.middlename ?? ''} {user.student.lastname} {user.student.extensionName ? user.student.extensionName + '.' : ''}
         </div>
       );
     },
     accessorFn: (row) => {
-      const { student } = row;
-      return `${student}`;
+      const { lastname, firstname, middlename, extensionName } = row.student;
+      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
     },
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.student.lastname}, ${row.original.student.firstname} ${row.original.student.middlename ? row.original.student.middlename + '.' : ''} ${row.original.student.middlename}`.toLowerCase();
+      const fullName = `${row.original.student.firstname} ${row.original.student.middlename ?? ''} ${row.original.student.lastname} ${row.original.student.extensionName ?? ''}`.toLowerCase().trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },

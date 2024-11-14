@@ -46,7 +46,7 @@ const sendEmailWithPDF = async (checkE: any) => {
           html: '<h1>Example Content </h1>',
           attachments: [
             {
-              filename: `${newE.profileId.firstname} ${newE.profileId.middlename} ${newE.profileId.lastname}.pdf`,
+              filename: `${newE.profileId.firstname} ${newE.profileId.middlename ?? ''} ${newE.profileId.lastname}.pdf`,
               content: pdfDataUri,
               encoding: 'base64',
               contentType: 'application/pdf',

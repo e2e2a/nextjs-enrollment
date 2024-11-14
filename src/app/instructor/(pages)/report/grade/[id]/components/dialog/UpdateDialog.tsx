@@ -159,7 +159,7 @@ const UpdateDialog = ({ teacher, type, reportGrades }: IProps) => {
                       <tr key={index}>
                         <td className='px-6 py-4 whitespace-nowrap'>{index + 1}</td>
                         <td className='px-6 py-4 whitespace-nowrap capitalize'>
-                          {s.profileId.firstname} {s.profileId?.middlename} {s.profileId?.lastname} {s.profileId?.lastname ? s.profileId?.lastname + '.' : ''}
+                          {s.profileId.firstname} {s.profileId?.middlename} {s.profileId?.lastname} {s.profileId?.extensionName ? s.profileId?.extensionName + '.' : ''}
                         </td>
                         <td className='px-6 py-4 whitespace-nowrap uppercase'>{reportGrades.teacherScheduleId?.courseId?.courseCode}</td>
                         <td className='px-6 py-4 whitespace-nowrap'>{s.profileId?.sex}</td>

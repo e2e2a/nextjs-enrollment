@@ -38,7 +38,7 @@ export function RejectDialog({ isPending, user, form, isDialogOpen, setIsDialogO
               <span className='text-sm sm:text-[15px] font-normal'>
                 Student Name:{' '}
                 <span className='text-sm sm:text-[15px] font-medium capitalize'>
-                  {user.profileId.firstname} {user.profileId.middlename[0] + '.'} {user.profileId.lastname} {user.profileId?.extensionName ? user.profileId?.extensionName + '.' : ''}
+                  {user.profileId.firstname} {user.profileId.middlename && user.profileId.middlename[0] + '.'} {user.profileId.lastname} {user.profileId?.extensionName ? user.profileId?.extensionName + '.' : ''}
                 </span>
               </span>
             </DialogTitle>

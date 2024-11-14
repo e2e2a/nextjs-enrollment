@@ -19,16 +19,16 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.teacherId.lastname}, {user.teacherId.firstname} {user.teacherId.middlename ? user.teacherId.middlename + '.' : ''} {user.teacherId.middlename}
+          {user.teacherId.firstname}, {user.teacherId.middlename} {user.teacherId.lastname} {user.teacherId.extensionName ? user.teacherId.extensionName + '.' : ''}
         </div>
       );
     },
     accessorFn: (row) => {
-      const { roomName } = row;
-      return `${roomName}`;
+      const { lastname, firstname, middlename, extensionName } = row.teacherId;
+      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
     },
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.roomName}`.toLowerCase();
+      const fullName = `${row.original.teacherId.firstname ?? ''} ${row.original.teacherId.middlename ?? ''} ${row.original.teacherId.lastname ?? ''} ${row.original.teacherId.extensionName ?? ''}`.toLowerCase().trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
@@ -122,7 +122,7 @@ export const columns: ColumnDef<any>[] = [
           {type === 'firstGrade' && 'Prelim'}
           {type === 'secondGrade' && 'Midterm'}
           {type === 'thirdGrade' && 'Semi-final'}
-          {type === 'fourthGrade' && 'Final'} 
+          {type === 'fourthGrade' && 'Final'}
           {''} Grade
         </div>
       );

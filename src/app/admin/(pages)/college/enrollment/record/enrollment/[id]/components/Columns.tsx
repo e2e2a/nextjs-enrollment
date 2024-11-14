@@ -162,14 +162,14 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='capitalize'>
-          {user.teacher.firstname} {user.teacher.middlename} {user.teacher.lastname} {user.teacher.extensionName ? user.teacher.extensionName : ''}
+          {user.teacher.firstname} {user.teacher.middlename ?? ''} {user.teacher.lastname} {user.teacher.extensionName ? user.teacher.extensionName + '.' : ''}
         </div>
       );
     },
-    accessorFn: (row) => `${row.teacher.firstname} ${row.teacher.middlename} ${row.teacher.lastname} ${row.teacher.extensionName ? row.teacher.extensionName : ''}`,
+    accessorFn: (row) => `${row.teacher.firstname ?? ''} ${row.teacher.middlename ?? ''} ${row.teacher.lastname ?? ''} ${row.teacher.extensionName ?? ''}`,
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user.teacher.firstname} ${user.teacher.middlename} ${user.teacher.lastname} ${user.teacher.extensionName ? user.teacher.extensionName : ''}`.toLowerCase();
+      const fullName = `${user.teacher.firstname} ${user.teacher.middlename ?? ''} ${user.teacher.lastname} ${user.teacher.extensionName ? user.teacher.extensionName : ''}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
