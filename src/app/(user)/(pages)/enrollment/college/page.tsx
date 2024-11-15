@@ -36,6 +36,7 @@ const Page = () => {
 
         if (resP.profile.enrollStatus && resP.profile.enrollStatus === 'Pending') {
           if (resE.enrollment) {
+            setIsError(false);
             setIsPageLoading(false);
             return;
           } else {
@@ -44,6 +45,7 @@ const Page = () => {
             return;
           }
         } else {
+          setIsError(false);
           setIsPageLoading(false);
           return;
         }

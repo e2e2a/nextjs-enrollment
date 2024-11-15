@@ -46,5 +46,11 @@ const a = 'asdasd';
 //   averageTotal = firstGrade + secondGrade + thirdGrade + fourthGrade;
 // }
 // console.log('averageTotal', 3 + null);
-const b = `${a.toUpperCase()}`
-console.log(b);
+// const b = `${a.toUpperCase()}`
+// console.log(b);
+
+//biggest problem
+const key1 = { category: 'a' };
+const key2 = { category: 'a' };
+console.log(key1 === key2); // false
+console.log(JSON.stringify(key1) === JSON.stringify(key2)); // true

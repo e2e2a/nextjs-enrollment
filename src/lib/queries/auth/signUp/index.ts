@@ -12,8 +12,12 @@ export const useSignUpMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, z.infer<typeof SignupValidator>>({
     mutationFn: async (data) => signUpAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['Students'] });
+    onSuccess: (data) => {
+      if (!data.error) {
+        console.log('running', data);
+        queryClient.invalidateQueries({ queryKey: ['AllProfilesByRoles', data.role] });
+        queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
+      }
     },
   });
 };

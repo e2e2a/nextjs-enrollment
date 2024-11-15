@@ -112,7 +112,7 @@ const validateData = async (user: any, files: any, profileId: string, courseId: 
       ...sameData,
       psaUrl: files.filePsa.name,
       photoUrl: files.photo.name,
-      goodMoralUrl: files.fileTOR ? files.fileGoodMoral.name : null,
+      goodMoralUrl: files.fileGoodMoral ? files.fileGoodMoral.name : null,
       reportCardUrl: files.fileTOR ? files.fileTOR.name : null,
     };
     const eData = {

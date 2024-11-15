@@ -7,7 +7,7 @@ export const useEnrollmentQueryBySessionId = (id: string) => {
     queryFn: () => getEnrollmentBySessionIdAction(id),
     enabled: !!id,
     retry: 0,
-    refetchOnMount: false,
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
 };

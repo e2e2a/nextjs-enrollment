@@ -1,7 +1,7 @@
 'use client';
 import Loader from '@/components/shared/Loader';
 import { useEnrollmentSetupQuery } from '@/lib/queries';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import { columns } from './components/step1/columns';
 import { columns2 } from './components/step2/columns';
@@ -24,7 +24,7 @@ const Page = () => {
   const search = searchParams.get('step');
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [toFilterData, setToFilterData] = useState<any>([]);
+  const [toFilterData, setToFilterData] = useState<any>({});
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
   const isAllowed = useMemo(() => ['1', '2', '3', '4', '5', '6'], []);
   // Validate the step parameter whenever the search parameter changes

@@ -65,7 +65,7 @@ const creatingUser = async (email: string, username: string, password: string) =
     if (!verificationToken) return { error: 'Error creating verificationToken', status: 404 };
 
     const send = await sendVerificationEmail(verificationToken.email, verificationToken.code, username, 'Confirm your Email');
-    if (!send) return { error: 'Error sending verification email', status: 404 };
+    // if (!send) return { error: 'Error sending verification email', status: 404 };
     return { user: user, token: verificationToken.token };
   });
 };
