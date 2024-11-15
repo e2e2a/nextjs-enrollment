@@ -20,7 +20,6 @@ export const createReportGradeAction = async (data: any) => {
     if (session && session.user.role !== 'TEACHER') return { error: 'Forbidden', status: 403 };
 
     const category = await checkCategory(session.user, data);
-    if (category && category.error) return { error: category.error, status: category.status };
 
     return category;
   });
@@ -74,6 +73,12 @@ const handleCollege = async (user: any, data: any) => {
     data.statusInDean = 'Pending';
     data.evaluated = false;
     data.schoolYear = ESetup.enrollmentTertiary.schoolYear;
+
+    data.reportedGrade.map((e: any) => {
+      if (!e.grade || e.grade === undefined || e.grade === null) {
+        e.grade = 5.0;
+      }
+    });
 
     const createdReportGrade = await createReportGrade(data);
     if (!createdReportGrade) return { error: 'Something went wrong.', status: 500 };

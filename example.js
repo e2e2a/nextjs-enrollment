@@ -34,15 +34,16 @@
 
 // console.log('qwe', 3 === Number('3'))
 
-// const firstGrade = '3';
+const firstGrade = '0';
 // const secondGrade = '1';
 // const thirdGrade = '3';
-const firstGrade = Number('3');
-const secondGrade = Number('3');
-const thirdGrade = Number('3');
-const fourthGrade = Number(undefined);
-let averageTotal;
-if (!isNaN(firstGrade) && !isNaN(secondGrade) && !isNaN(thirdGrade) && !isNaN(fourthGrade)) {
-  averageTotal = firstGrade + secondGrade + thirdGrade + fourthGrade;
-}
-console.log('averageTotal', 3 + null);
+// const firstGrade = Number('3');
+// const secondGrade = Number('3');
+// const thirdGrade = Number('3');
+// const fourthGrade = Number(undefined);
+// let averageTotal;
+// if (!isNaN(firstGrade) && !isNaN(secondGrade) && !isNaN(thirdGrade) && !isNaN(fourthGrade)) {
+//   averageTotal = firstGrade + secondGrade + thirdGrade + fourthGrade;
+// }
+// console.log('averageTotal', 3 + null);
+console.log('1', Number(firstGrade) === !firstGrade);

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
@@ -22,6 +22,14 @@ const CreateDialog = ({ teacher, data, type }: IProps) => {
   const mutation = useCreateGradeReportMutation();
 
   const [grades, setGrades] = useState<any>([]);
+
+  useEffect(() => {
+    const initialGrades = data.map((s: any) => ({
+      profileId: s.profileId._id,
+      grade: s.grade,
+    }));
+    setGrades(initialGrades);
+  }, [data]);
 
   const handleGradeChange = (index: any, profileId: any, value: any) => {
     const updatedGrades = [...grades];
@@ -93,7 +101,14 @@ const CreateDialog = ({ teacher, data, type }: IProps) => {
               {type === 'fourthGrade' && 'Final'}
             </span>
           </DialogTitle>
-          <DialogDescription className='hidden'>Select subjects to add in the table.</DialogDescription>
+          <DialogDescription className='' asChild>
+            <div className=''>
+              <div className='text-orange-500'>Reminder:</div>
+              <div className=''>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Empty grades consider as <span className='text-red'>5.0</span>
+              </div>
+            </div>
+          </DialogDescription>
         </DialogHeader>
 
         <div className='overflow-auto w-full bg-slate-50 rounded-lg'>
