@@ -100,7 +100,7 @@ const handleChangeEmail = async (user: any, token: any) => {
     const checkedNewEmail = await checkNewEmail(token.emailToChange);
     if (checkedNewEmail && checkedNewEmail.error) {
       await deleteVerificationTokenByid(token._id);
-      return { error: 'Email is already been used in another account.', status: 500 };
+      return { error: 'Email is already been used in another account.', status: checkedNewEmail.status };
     }
     const updatedEmail = await updateUserEmail(user, token.emailToChange);
     if (updatedEmail && updatedEmail.error) return { error: updatedEmail.error, status: 500 };

@@ -86,8 +86,7 @@ const ProfileTab = ({ profile }: Iprops) => {
     setIsPending(true);
     data.firstname = data.firstname.toLowerCase();
     data.lastname = data.lastname.toLowerCase();
-    data.middlename = data.middlename.toLowerCase();
-    data.middlename = data.middlename.toLowerCase();
+    data.middlename = data.middlename?.toLowerCase();
 
     mutation.mutate(data, {
       onSuccess: (res) => {

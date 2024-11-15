@@ -34,7 +34,7 @@
 
 // console.log('qwe', 3 === Number('3'))
 
-const firstGrade = '0';
+const a = 'asdasd';
 // const secondGrade = '1';
 // const thirdGrade = '3';
 // const firstGrade = Number('3');
@@ -46,4 +46,5 @@ const firstGrade = '0';
 //   averageTotal = firstGrade + secondGrade + thirdGrade + fourthGrade;
 // }
 // console.log('averageTotal', 3 + null);
-console.log('1', Number(firstGrade) === !firstGrade);
+const b = `${a.toUpperCase()}`
+console.log(b);

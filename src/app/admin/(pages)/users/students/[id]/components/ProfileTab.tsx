@@ -89,8 +89,7 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
     const profileData = formProfile.getValues();
     profileData.firstname = profileData.firstname.toLowerCase();
     profileData.lastname = profileData.lastname.toLowerCase();
-    profileData.middlename = profileData.middlename.toLowerCase();
-    profileData.middlename = profileData.middlename.toLowerCase();
+    profileData.middlename = profileData.middlename?.toLowerCase();
 
     const data = {
       ...profileData,

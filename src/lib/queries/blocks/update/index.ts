@@ -11,6 +11,7 @@ export const useUpdateCourseBlockScheduleMutation = () => {
         queryClient.invalidateQueries({ queryKey: ['BlockTypeByCourseId', data.courseId] });
         if (data.ts && data.ts.length > 0) {
           for (const item of data.ts) {
+            queryClient.invalidateQueries({ queryKey: ['useEnrollmentQueryByTeacherScheduleId', { id: item.teacherScheduleId, category: data.category }] }); // @todo broadcast
             queryClient.invalidateQueries({ queryKey: ['TeacherScheduleById', item.teacherScheduleId] }); // @todo broadcast
           }
         }

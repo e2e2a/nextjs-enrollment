@@ -39,7 +39,7 @@ export const signUpAction = async (data: any) => {
 const checkingConflict = async (email: string, username: string) => {
   return tryCatch(async () => {
     const existingUser = await checkNewEmail(email);
-    if (existingUser && existingUser.emailVerified) return { error: 'Email already exist. Please sign in to continue.', status: 409 };
+    if (existingUser && existingUser.error) return { error: 'Email already exist. Please sign in to continue.', status: existingUser.status };
     const checkedUsername = await checkNewUsername(username);
     if (!checkedUsername || !checkedUsername.success) return { error: checkedUsername?.error, status: checkedUsername?.status };
     return { success: 'success', status: 200 };

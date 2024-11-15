@@ -29,7 +29,7 @@ export const adminCreateUserWithRoleAction = async (data: any) => {
 
     const checkedRole = await createProfile(data, checkConflict.data);
 
-    return { message: `New ${data.role} is Created!`, role: data.role, status: 201 };
+    return checkedRole;
   });
 };
 
@@ -44,17 +44,17 @@ const checkingConflict = async (data: any) => {
     if (!userParse.success) return { error: 'Invalid fields!', status: 400 };
 
     const existingUser = await checkNewEmail(userParse.data.email);
-    if (existingUser && existingUser.emailVerified) return { error: 'Email already exist. Please sign in to continue.', status: 409 };
+    if (existingUser && existingUser.error) return { error: 'Email already exist. Please sign in to continue.', status: existingUser.status };
 
     const checkedUsername = await checkNewUsername(userParse.data.username);
-    if (!checkedUsername || !checkedUsername.success) return { error: checkedUsername?.error, status: checkedUsername?.status };
+    if (checkedUsername && checkedUsername.error) return { error: checkedUsername?.error, status: checkedUsername?.status };
 
-    return { success: 'success', data: userParse.data, status: 200 };
+    return { success: true, data: userParse.data, status: 200 };
   });
 };
 
 /**
- * check roles to store
+ * check roles to store profile
  *
  * @param {object} data
  * @param {object} userData
@@ -99,7 +99,7 @@ const createAdmin = async (data: any, userData: any) => {
     const createdU = await createUser({ email: userData.email, username: userData.username, role: data.role, emailVerified: new Date(Date.now()) }, userData.password);
     if (!createdU) return { error: 'Error Creating User', status: 404 };
 
-    if (data.configProfile === 'Yes') await createAdminProfile({ userId: createdU._id, ...profileParse!.data, isVerified: true });
+    await createAdminProfile({ userId: createdU._id, ...(data.configProfile === 'Yes' ? { ...profileParse!.data, isVerified: true } : { isVerified: false }) });
     return { success: 'yesyes.', status: 201 };
   });
 };
@@ -114,8 +114,8 @@ const createTeacher = async (data: any, userData: any) => {
     const createdU = await createUser({ email: userData.email, username: userData.username, role: data.role, emailVerified: new Date(Date.now()) }, userData.password);
     if (!createdU) return { error: 'Error Creating User', status: 404 };
 
-    if (data.configProfile === 'Yes') await createTeacherProfile({ userId: createdU._id, ...profileParse!.data, isVerified: true });
-    return { success: 'yesyes.', status: 201 };
+    await createTeacherProfile({ userId: createdU._id, ...(data.configProfile === 'Yes' ? { ...profileParse!.data, isVerified: true } : { isVerified: false }) });
+    return { success: true, status: 201 };
   });
 };
 
@@ -158,7 +158,7 @@ const createStudent = async (data: any, userData: any) => {
     const createdU = await createUser({ email: userData.email, username: userData.username, role: data.role, emailVerified: new Date(Date.now()) }, userData.password);
     if (!createdU) return { error: 'Error Creating User', status: 404 };
 
-    if (data.configProfile === 'Yes') await createStudentProfile({ userId: createdU._id, ...profileParse!.data, isVerified: true });
-    return { success: 'yesyes.', status: 201 };
+    await createStudentProfile({ userId: createdU._id, ...(data.configProfile === 'Yes' ? { ...profileParse!.data, isVerified: true } : { isVerified: false }) });
+    return { success: true, status: 201 };
   });
 };

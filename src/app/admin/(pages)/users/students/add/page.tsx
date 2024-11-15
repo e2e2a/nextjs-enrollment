@@ -70,7 +70,7 @@ const Page = () => {
     const profileData = formProfile.getValues();
     profileData.firstname = profileData.firstname.toLowerCase();
     profileData.lastname = profileData.lastname.toLowerCase();
-    profileData.middlename = profileData.middlename.toLowerCase();
+    profileData.middlename = profileData.middlename?.toLowerCase();
     if (profileData.extensionName) profileData.extensionName = profileData.extensionName.toLowerCase();
 
     const data = { ...userData, ...profileData, role: 'STUDENT', configProfile: configProfile };

@@ -40,7 +40,7 @@ const checkEmail = async (user: any, email: string) => {
       return { error: 'Email is the same.', status: 400 };
     } else {
       const checkedNewEmail = await checkNewEmail(email);
-      if (checkedNewEmail && checkedNewEmail.error) return { error: checkedNewEmail.error, status: 500 };
+      if (checkedNewEmail && checkedNewEmail.error) return { error: checkedNewEmail.error, status: checkedNewEmail.status };
       const verificationToken = await generateVerificationToken(user._id, 'ChangeEmail', email);
       if (!verificationToken) return { error: 'Error creating verificationToken', status: 404 };
 
