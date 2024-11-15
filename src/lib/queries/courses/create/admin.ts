@@ -6,8 +6,10 @@ export const useCreateCourseMutation = () => {
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createCourseAction(data),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['Curriculum'] });
-      queryClient.invalidateQueries({ queryKey: ['CourseByCategory', data.category] });
+      if (!data.error) {
+        queryClient.invalidateQueries({ queryKey: ['Curriculum'] });
+        queryClient.invalidateQueries({ queryKey: ['CourseByCategory', data.category] });
+      }
     },
   });
 };

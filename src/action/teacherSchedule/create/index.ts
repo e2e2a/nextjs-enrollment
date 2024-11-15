@@ -17,9 +17,8 @@ export const createTeacherScheduleAction = async (data: any) => {
     await dbConnect();
 
     const category = await checkCategory(data);
-    if (category && category.error) return category;
 
-    return { message: 'Schedule has been added to instructor.', status: 201 };
+    return category;
   });
 };
 
@@ -38,8 +37,8 @@ const checkCategory = async (data: any) => {
       default:
         return { error: 'Invalid category.', status: 400 };
     }
-    if (a && a.error) return { error: a.error, errorRoomLink: a.errorRoomLink, errorInsLink: a.errorInsLink, status: a.status };
-    return { success: true, message: a.message, status: a.status };
+    if (a && a.error) return a;
+    return { success: true, ...a };
   });
 };
 
@@ -75,7 +74,7 @@ const handlesCollege = (data: any) => {
 
     const createdSched = await createTeacherSchedule({ profileId: teacher._id, category: data.category, ...tsParse.data });
     if (!createdSched) return { error: 'Something went wrong.', status: 500 };
-    return { message: 'yesyes', success: true, status: 201 };
+    return { success: true, message: 'Schedule has been added to instructor.', category: data.category, status: 201 };
   });
 };
 

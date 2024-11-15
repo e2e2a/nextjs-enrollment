@@ -21,7 +21,6 @@ const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState<boolean>(false);
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
   const [course, setCourse] = useState<any[]>([]);
-  const { data: s } = useSession();
   const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
 
   useEffect(() => {
@@ -91,8 +90,6 @@ const Page = () => {
               <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
                 <CardContent className='w-full '>
                   <div className='flex flex-col gap-4'>
-                    {/* <SelectInput name={'category'} selectItems={selectType.courseType} form={form} label={'Select Category:'} placeholder={'Select course'} setCategorySelected={setCategorySelected} /> */}
-                    {/* <SelectInput name={'courseCode'} selectItems={course} form={formCollege} label={'Select Course:'} placeholder={'Select course'} /> */}
                     <SelectInput name={'year'} selectItems={studentYearData} form={formCollege} label={'Select Block Year:'} placeholder={'Select block year'} />
                     <SelectInput name={'semester'} selectItems={studentSemesterData} form={formCollege} label={'Select Block Semester:'} placeholder={'Select block semester'} />
                     <Input name={'section'} type={'text'} form={formCollege} label={'Block type:'} classNameInput={'capitalize'} />

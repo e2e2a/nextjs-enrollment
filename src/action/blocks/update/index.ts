@@ -15,10 +15,9 @@ export const updateCourseBlockScheduleAction = async (data: any) => {
     const checkedTeach = await checkTeacherAndSave(blockType, data);
     if (checkedTeach && checkedTeach.error) return { error: checkedTeach.error, status: checkedTeach.status };
 
-    const updatedBlock = await updateBlock(blockType._id, data);
-    if (updatedBlock && updatedBlock.error) return { error: updatedBlock.error, status: 404 };
+    const updatedBlock = await updateBlock(blockType, data);
 
-    return { message: `Schedule added to Block ${blockType.section.toUpperCase()}.`, status: 201 };
+    return updatedBlock;
   });
 };
 
@@ -41,18 +40,18 @@ const checkTeacherAndSave = async (blockType: any, data: any) => {
   });
 };
 
-const updateBlock = async (blockTypeId: any, data: any) => {
+const updateBlock = async (blockType: any, data: any) => {
   return tryCatch(async () => {
     const bulkOperations = data.selectedItems.map((item: any) => ({
       updateOne: {
-        filter: { _id: blockTypeId },
+        filter: { _id: blockType._id },
         update: { $addToSet: { blockSubjects: { teacherScheduleId: item.teacherScheduleId } } },
       },
     }));
 
     const result = await BlockType.bulkWrite(bulkOperations);
 
-    return { message: 'New Schedule has been added.', status: 200 };
+    return { success: true, message: `Schedule added to Block ${blockType.section.toUpperCase()}.`, id: blockType._id.toString(), courseId: blockType.courseId._id.toString(), ts: data.selectedItems, status: 201 };
   });
 };
 

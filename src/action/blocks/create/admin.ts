@@ -20,9 +20,8 @@ export const createCollegeCourseBlockAction = async (data: any) => {
     if (!blockParse.success) return { error: 'Invalid fields!', status: 400 };
 
     const checkedBlock = await checkBlockType(blockParse.data);
-    if (checkedBlock && checkedBlock.error) return { error: checkedBlock.error, status: checkedBlock.status };
 
-    return { message: 'Block Type created successfully created', status: 201 };
+    return checkedBlock;
   });
 };
 
@@ -44,6 +43,6 @@ const checkBlockType = async (data: any) => {
     const p = await createBlockType(data);
     if (!p) return { error: 'Something went wrong in creating block.', status: 500 };
 
-    return { success: 'yesyes', status: 201 };
+    return { success: true, message: 'Block Type created successfully created', courseId: checkC._id, category: checkC.category, status: 201 };
   });
 };

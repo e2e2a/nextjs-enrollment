@@ -5,11 +5,16 @@ export const useUpdateCourseBlockScheduleMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateCourseBlockScheduleAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['BlockType'] });
-      queryClient.invalidateQueries({ queryKey: ['BlockTypeById'] });
-      queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
-      queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
+    onSuccess: (data) => {
+      if (!data.error) {
+        queryClient.invalidateQueries({ queryKey: ['BlockTypeById', data.id] });
+        queryClient.invalidateQueries({ queryKey: ['BlockTypeByCourseId', data.courseId] });
+        if (data.ts && data.ts.length > 0) {
+          for (const item of data.ts) {
+            queryClient.invalidateQueries({ queryKey: ['TeacherScheduleById', item.teacherScheduleId] }); // @todo broadcast
+          }
+        }
+      }
     },
   });
 };

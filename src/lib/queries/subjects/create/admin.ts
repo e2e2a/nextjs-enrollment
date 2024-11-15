@@ -6,7 +6,9 @@ export const useCreateSubjectMutation = () => {
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createNewSubjectAction(data),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['SubjectByCategory', data.category] });
+      if (!data.error) {
+        queryClient.invalidateQueries({ queryKey: ['SubjectByCategory', data.category] });
+      }
     },
   });
 };

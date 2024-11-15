@@ -19,7 +19,7 @@ import { checkNewUsername } from '@/utils/actions/user/username';
  * @param {Object} data
  */
 export const adminCreateUserWithRoleAction = async (data: any) => {
-  try {
+  return tryCatch(async () => {
     await dbConnect();
     const session = await verifyADMIN();
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
@@ -27,13 +27,10 @@ export const adminCreateUserWithRoleAction = async (data: any) => {
     const checkConflict = await checkingConflict(data);
     if (checkConflict && checkConflict.error) return { error: checkConflict?.error, status: checkConflict?.status };
 
-    const checkedRole = await checkRole(data, checkConflict.data);
-    if (checkedRole && checkedRole.error) return { error: checkedRole?.error, status: checkedRole?.status };
+    const checkedRole = await createProfile(data, checkConflict.data);
 
     return { message: `New ${data.role} is Created!`, role: data.role, status: 201 };
-  } catch (error) {
-    return { error: 'Something went wrong.', status: 500 };
-  }
+  });
 };
 
 /**
@@ -62,7 +59,7 @@ const checkingConflict = async (data: any) => {
  * @param {object} data
  * @param {object} userData
  */
-const checkRole = async (data: any, userData: any) => {
+const createProfile = async (data: any, userData: any) => {
   return tryCatch(async () => {
     let profile;
     switch (data.role) {
@@ -81,10 +78,11 @@ const checkRole = async (data: any, userData: any) => {
       default:
         return { error: 'Forbidden.', status: 403 };
     }
-    if (profile && profile.error) return { error: profile.error, status: profile.status };
-    return { success: 'yesyes', status: 200 };
+    if (!profile) return { error: 'Not found', status: 404 };
+    return { success: true, message: `New ${data.role} is Created!`, role: data.role, status: 201 };
   });
 };
+
 /**
  * store user and profile
  *
