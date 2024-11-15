@@ -4,14 +4,12 @@ import { getUserByEmail, getUserById, updateUserLogin } from './services/user';
 import { User } from './models/User';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import dbConnect from './lib/db/db';
-// import { MongoClient } from 'mongodb';
+import { MongoClient } from 'mongodb';
 import Account from './models/Account';
-import { createStudentProfile, createStudentProfileProvider, getStudentProfileByUserId } from './services/studentProfile';
+import { createStudentProfileProvider } from './services/studentProfile';
 import { createAccount } from './services/account';
-// import { getTeacherProfileByUserId } from './services/teacherProfile';
-// import { getAdminProfileByUserId } from './services/adminProfile';
-// const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
-const clientPromise = dbConnect().then((mongoose) => mongoose.connection.getClient());
+const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
+// const clientPromise = dbConnect().then((mongoose) => mongoose.connection.getClient());
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -65,54 +63,15 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           if (!existingUser || !existingUser.emailVerified) {
             return false;
           }
-          // await updateUserLogin(existingUser._id);
           return true;
         }
         return false;
       } catch (error) {
         console.error('Error during signIn callback:', error);
-        return false; // Return false for any error
+        return false;
       }
     },
-    // async session({ session, token }) {
-    //   await dbConnect();
-    //   if (token && session.user) {
-    //     if (token.sub) {
-    //       const user = await getUserById(token.sub);
-    //       if (user) {
-    //         session.user.id = user._id;
-    //         session.user.role = user.role;
-    //         session.user.username = user.username;
-    //         // if (user.role === 'STUDENT') {
-    //         //   p = await getStudentProfileByUserId(user._id);
-    //         // } else if (user.role === 'TEACHER') {
-    //         //   p = await getTeacherProfileByUserId(user._id);
-    //         // } else if (user.role === 'ADMIN') {
-    //         //   p = await getAdminProfileByUserId(user._id);
-    //         // } else if (user.role === 'DEAN') {
-    //         //   /**
-    //         //    * @todo
-    //         //    * DEAN ROLE
-    //         //    */
-    //         // }
-    //         // const profile = JSON.parse(JSON.stringify(p));
-    //         // session.user.profileVerified = profile.isVerified;
-    //         // session.user.firstname = profile.firstname;
-    //         // session.user.lastname = profile.lastname;
-    //         // session.user.imageUrl = profile.imageUrl;
-    //         // session.user.birthday = new Date(user.birthday);
-    //         // if (user.birthday) {
-    //         // }
-    //       }
-    //       // if (token.role) {
-    //       //   session.user.role = token.role;
-    //       // }
-    //     }
-    //   }
-    //   return session;
-    // },
     async session({ session, token }) {
-      // await dbConnect();
       if (token && token.sub && session.user) {
         session.user.id = token.sub;
         session.user.role = token.role;
@@ -120,9 +79,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
         // If you need specific profile details, you can add them to token.profile in jwt
         // session.user.profileVerified = token.profile?.isVerified;
-        // session.user.firstname = token.profile?.firstname;
-        // session.user.lastname = token.profile?.lastname;
-        // session.user.imageUrl = token.profile?.imageUrl;
       }
 
       return session;
@@ -153,7 +109,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       } else if (account && account.provider === 'google') {
         // If the user signs in, cache data in the token
         if (user) {
-          // @ts-ignore
           const userData = await getUserById(user.id);
           token.sub = userData._id;
           token.role = userData.role;
@@ -175,27 +130,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       return token;
     },
-
-    // async jwt({ token, user }) {
-    //   await dbConnect();
-    //   // @ts-ignore
-    //   if (user) token.sub = user._id;
-    //   if (!user && token.email) {
-    //     const existUser = await getUserByEmail(token.email);
-    //     token.sub = existUser._id;
-    //   }
-    //   // if (account) {
-    //   //   token.sub = account.id;
-    //   // }
-    //   if (token.sub) {
-    //     const existUser = await getUserById(token.sub);
-    //     if (!existUser) return token;
-
-    //     token.role = existUser.role;
-    //   }
-
-    //   return token;
-    // },
   },
   //we cant remove this adapter
   adapter: MongoDBAdapter(clientPromise),
