@@ -1,9 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useEnrollmentSetupQuery } from '@/lib/queries';
+import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
 import LoaderPage from '@/components/shared/LoaderPage';
-import Open from './EnrollmentsStatus/Open';
-import ContinuingCollegeStudent from './ContinuingCollegeStudent';
 import MainTabs from './MainTabs';
 
 type IProps = {
@@ -17,6 +15,7 @@ const EnrollmentForms = ({ search, enrollment, profile, courses }: IProps) => {
   const [value, setValue] = useState('');
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data: esData, isLoading: esLoading, isError: esError } = useEnrollmentSetupQuery();
+
   useEffect(() => {
     if (!esData || esError) return;
 
@@ -33,6 +32,7 @@ const EnrollmentForms = ({ search, enrollment, profile, courses }: IProps) => {
     if (!enrollment) return setValue('0');
     if (enrollment && enrollment.step) return setValue(enrollment.step as string);
   }, [value, enrollment]);
+
   return (
     <>
       {isPageLoading ? (
@@ -55,7 +55,6 @@ const EnrollmentForms = ({ search, enrollment, profile, courses }: IProps) => {
           )}
 
           <MainTabs search={search} value={value} enrollment={enrollment} profile={profile} enrollmentSetup={esData.enrollmentSetup} courses={courses} />
-          
         </div>
       )}
     </>

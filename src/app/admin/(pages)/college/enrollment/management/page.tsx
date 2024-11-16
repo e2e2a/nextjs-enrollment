@@ -1,6 +1,6 @@
 'use client';
 import Loader from '@/components/shared/Loader';
-import { useEnrollmentSetupQuery } from '@/lib/queries';
+import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import { columns } from './components/step1/columns';

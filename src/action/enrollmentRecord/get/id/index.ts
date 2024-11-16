@@ -1,7 +1,7 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import {  getEnrollmentRecordById } from '@/services/enrollmentRecord';
+import { getEnrollmentRecordById } from '@/services/enrollmentRecord';
 import { checkAuth } from '@/utils/actions/session';
 
 /**
@@ -18,6 +18,7 @@ export const getEnrollmentRecordByIdAction = async (id: string) => {
     // student/dean/admin
     const er = await getEnrollmentRecordById(id);
     if (!er) return { error: 'Not Found.', status: 404 };
-    return { enrollmentRecord: JSON.parse(JSON.stringify(er)), status: 201 };
+
+    return { enrollmentRecord: JSON.parse(JSON.stringify(er)), status: 200 };
   });
 };

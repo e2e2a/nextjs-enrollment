@@ -8,11 +8,11 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { studentSemesterData } from '@/constant/enrollment';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { EnrollmentSetupOpenEnrollmentCollegeValidator } from '@/lib/validators/AdminValidator';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { SelectInput } from '../SelectInputs';
-import { useUpdateEnrollmentSetupMutation } from '@/lib/queries';
+import { useUpdateEnrollmentSetupMutation } from '@/lib/queries/enrollmentSetup/update';
 
 type IProps = {
   enrollmentSetup: any;
@@ -28,15 +28,13 @@ export function TertiaryDialog({ enrollmentSetup, isPending, setIsOpen }: IProps
 
   const form = useForm<z.infer<typeof EnrollmentSetupOpenEnrollmentCollegeValidator>>({
     resolver: zodResolver(EnrollmentSetupOpenEnrollmentCollegeValidator),
-    defaultValues: {
-      semester: '',
-      schoolYear: 'SY2024-2025',
-    },
+    defaultValues: { semester: '', schoolYear: 'SY2024-2025' },
   });
 
   const actionFormSubmit = (data: z.infer<typeof EnrollmentSetupOpenEnrollmentCollegeValidator>) => {
     // setIsPending(true);
     setIsOpen(false);
+
     const dataa = {
       name: 'GODOY',
       'enrollmentTertiary.open': true,
@@ -63,12 +61,12 @@ export function TertiaryDialog({ enrollmentSetup, isPending, setIsOpen }: IProps
       },
     });
   };
+
   const actionFormOpenSubmit = () => {
     setIsOpen(false);
-    const dataa = {
-      name: 'GODOY',
-      'enrollmentTertiary.open': true,
-    };
+
+    const dataa = { name: 'GODOY', 'enrollmentTertiary.open': true };
+
     mutation.mutate(dataa, {
       onSuccess: (res: any) => {
         switch (res.status) {

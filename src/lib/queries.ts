@@ -19,31 +19,9 @@ import {
 } from '@/action/college/curriculums';
 import { removeCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
 import { removeStudentScheduleAction } from '@/action/college/schedules/students';
-import { getEnrollmentSetup, updateEnrollmentSetup } from '@/action/enrollmentSetup';
 const channel = new BroadcastChannel('my-channel');
 // import { supabase } from './supabaseClient';
 
-/**
- *
- * @returns EnrollmentSetup
- */
-export const useEnrollmentSetupQuery = () => {
-  return useQuery<any, Error>({
-    queryKey: ['EnrollmentSetup'],
-    queryFn: () => getEnrollmentSetup(),
-    retry: 0,
-    refetchOnWindowFocus: false,
-  });
-};
-export const useUpdateEnrollmentSetupMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => updateEnrollmentSetup(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentSetup'] });
-    },
-  });
-};
 /**
  * College End Semester
  * @returns

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import { useUpdateEnrollmentSetupMutation } from '@/lib/queries';
+import { useUpdateEnrollmentSetupMutation } from '@/lib/queries/enrollmentSetup/update';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 
 interface IProps {
@@ -42,6 +42,7 @@ const SecondGrade = ({ setup }: IProps) => {
       },
     });
   };
+
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
