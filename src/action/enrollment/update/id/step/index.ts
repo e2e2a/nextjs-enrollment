@@ -41,7 +41,6 @@ const checkEducationCategory = async (user: any, data: any) => {
       default:
         return { error: 'forbidden.', status: 403 };
     }
-    if (!c) return { error: 'forbidden.', status: 403 };
 
     return c;
   });

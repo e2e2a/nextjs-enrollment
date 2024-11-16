@@ -7,16 +7,11 @@ export const useUpdateEnrollmentStepMutation = () => {
     mutationFn: async (data) => updateEnrollmentStepAction(data),
     onSuccess: async (data) => {
       if (!data.error) {
-        /**
-         * @todo start
-         */
-        queryClient.invalidateQueries({ queryKey: ['EnrollmentByCategory', data.category] });
-        queryClient.invalidateQueries({ queryKey: ['AllEnrollmentByCourseId', data.courseId] });
-        queryClient.invalidateQueries({ queryKey: ['EnrollmentByProfileId', data.profileId] });
-        queryClient.invalidateQueries({ queryKey: ['EnrollmentBySessionId', data.userId] });
-        /**
-         * @todo end
-         */
+        queryClient.invalidateQueries({ queryKey: ['EnrollmentByCategory', data.category] }); // @todo broadcast
+        queryClient.invalidateQueries({ queryKey: ['AllEnrollmentByCourseId', data.courseId] }); // @todo broadcast
+        if (data.profileId) queryClient.invalidateQueries({ queryKey: ['EnrollmentByProfileId', data.profileId] }); // @todo broadcast
+        queryClient.invalidateQueries({ queryKey: ['EnrollmentBySessionId', data.userId] }); // @todo broadcast
+
         if (data.prevStep) queryClient.invalidateQueries({ queryKey: ['EnrollmentStepByCategory', `${data.category}-${data.prevStep}`] });
         if (data.nextStep) queryClient.invalidateQueries({ queryKey: ['EnrollmentStepByCategory', `${data.category}-${data.prevStep}`] });
       }

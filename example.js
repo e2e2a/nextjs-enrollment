@@ -50,7 +50,19 @@ const a = 'asdasd';
 // console.log(b);
 
 //biggest problem
-const key1 = { category: 'a' };
-const key2 = { category: 'a' };
+const key1 = { category: 'a', step: 1 };
+const key2 = { category: 'a', step: 1 };
 console.log(key1 === key2); // false
 console.log(JSON.stringify(key1) === JSON.stringify(key2)); // true
+
+const funct1 = async () => {
+  return { category: 'ab' };
+};
+const funct2 = async () => {
+  const a = await funct1();
+  return { category: 'abs', ...a };
+};
+const funct3 = async () => {
+  return { category: 'abs', category: 'as' }; //the result will be the last category value {category: 'ab, category: 'a'} = category: 'a'
+};
+funct2().then((e) => console.log('e', e));
