@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useTeacherScheduleRecordByProfileIdQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useSession } from 'next-auth/react';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
+import { useTeacherScheduleRecordQueryByProfileId } from '@/lib/queries/teacherScheduleRecord/get/profileId';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
@@ -13,7 +13,7 @@ const Page = () => {
   const [teacherRG, setTeacherRG] = useState([]);
   const { data: s } = useSession();
   const { data: pData, isLoading: pload, error } = useProfileQueryBySessionId();
-  const { data, isLoading, error: isEnError } = useTeacherScheduleRecordByProfileIdQuery(pData?.profile?._id);
+  const { data, isLoading, error: isEnError } = useTeacherScheduleRecordQueryByProfileId(pData?.profile?._id);
 
   useEffect(() => {
     if (isEnError || !data) return;

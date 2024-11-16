@@ -20,14 +20,6 @@ import {
 import { removeCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
 import { removeStudentScheduleAction } from '@/action/college/schedules/students';
 import { getEnrollmentSetup, updateEnrollmentSetup } from '@/action/enrollmentSetup';
-import {
-  getAllStudentEnrollmentRecordCollegeAction,
-  getAllTeacherScheduleRecordByCollegeAction,
-  getStudentEnrollmentRecordByIdAction,
-  getStudentEnrollmentRecordByProfileIdAction,
-  getTeacherScheduleRecordByIdAction,
-  getTeacherScheduleRecordByProfileIdAction,
-} from '@/action/college/records/admin';
 const channel = new BroadcastChannel('my-channel');
 // import { supabase } from './supabaseClient';
 
@@ -269,80 +261,5 @@ export const useUpdateStudentCurriculumLayerSubjectMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['StudentCurriculum'] });
       queryClient.invalidateQueries({ queryKey: ['StudentCurriculumById'] });
     },
-  });
-};
-
-/**
- * Teacher Schedule Record
- * @returns
- *
- */
-export const useTeacherScheduleRecordByProfileIdQuery = (profileId: any) => {
-  return useQuery<any, Error>({
-    queryKey: ['TeacherScheduleRecordByProfileId', profileId],
-    queryFn: () => getTeacherScheduleRecordByProfileIdAction(profileId),
-    enabled: !!profileId,
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-  });
-};
-export const useTeacherScheduleRecordByIdQuery = (profileId: any) => {
-  return useQuery<any, Error>({
-    queryKey: ['TeacherScheduleRecordById', profileId],
-    queryFn: () => getTeacherScheduleRecordByIdAction(profileId),
-    enabled: !!profileId,
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-  });
-};
-/**
- * queries for students records
- * @returns
- */
-export const useStudentEnrollmentRecordByProfileIdQuery = (profileId: any) => {
-  return useQuery<any, Error>({
-    queryKey: ['StudentEnrollmentRecordByProfileId', profileId],
-    queryFn: () => getStudentEnrollmentRecordByProfileIdAction(profileId),
-    enabled: !!profileId,
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-  });
-};
-export const useStudentEnrollmentRecordByIdQuery = (profileId: any) => {
-  return useQuery<any, Error>({
-    queryKey: ['StudentEnrollmentRecordById', profileId],
-    queryFn: () => getStudentEnrollmentRecordByIdAction(profileId),
-    enabled: !!profileId,
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-  });
-};
-/**
- * queries for all enrollment records and schedules record for instructors
- * @returns
- */
-export const useAllStudentEnrollmentRecordCollegeQuery = (category: string) => {
-  return useQuery<any, Error>({
-    queryKey: ['StudentEnrollmentRecordCollege', category],
-    queryFn: () => getAllStudentEnrollmentRecordCollegeAction(category),
-    enabled: !!category,
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-  });
-};
-
-export const useTeacherScheduleRecordCollegeQuery = (category: string) => {
-  return useQuery<any, Error>({
-    queryKey: ['TeacherScheduleRecordCollege', category],
-    queryFn: () => getAllTeacherScheduleRecordByCollegeAction(category),
-    enabled: !!category,
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
   });
 };

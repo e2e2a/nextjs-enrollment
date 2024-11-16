@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useTeacherScheduleRecordByIdQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useTeacherScheduleRecordQueryById } from '@/lib/queries/teacherScheduleRecord/get/id';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error: isEnError } = useTeacherScheduleRecordByIdQuery(params.id);
+  const { data, isLoading, error: isEnError } = useTeacherScheduleRecordQueryById(params.id);
 
   useEffect(() => {
     if (isEnError || !data) return;

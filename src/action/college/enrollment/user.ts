@@ -4,7 +4,7 @@ import { createEnrollment, deleteEnrollmentById, getEnrollmentById, getEnrollmen
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { getEnrollmentResponse, IResponse } from '@/types';
 import StudentProfile from '@/models/StudentProfile';
-import { getStudentEnrollmentRecordByProfileId } from '@/services/enrollmentRecord';
+import { getEnrollmentRecordByProfileId } from '@/services/enrollmentRecord';
 /**
  * this is for continuing student
  * 
@@ -28,7 +28,7 @@ export const createEnrollmentContinuingAction = async (data: any): Promise<getEn
     if (!cc) return { message: 'Something went wrong.', status: 500 };
 
     if (data.studentStatus === 'Returning') {
-      const record = await getStudentEnrollmentRecordByProfileId(getProfile._id);
+      const record = await getEnrollmentRecordByProfileId(getProfile._id);
       if (!record) return { error: 'No record found', status: 403 };
       if (getProfile.studentSemester === data.studentSemester) {
         return { message: 'Returning student: needs to wait for the next available enrollment period', status: 403 };

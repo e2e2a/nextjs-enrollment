@@ -1,7 +1,7 @@
 'use server';
 import TeacherScheduleRecord from '@/models/TeacherScheduleRecord';
 
-export const getAllTeacherScheduleRecordByCollege = async (category: any) => {
+export const getTeacherScheduleRecordBycategory = async (category: string) => {
   try {
     const TProfile = await TeacherScheduleRecord.find({ category }).populate('profileId').exec();
     return TProfile;
@@ -10,7 +10,8 @@ export const getAllTeacherScheduleRecordByCollege = async (category: any) => {
     return null;
   }
 };
-export const getTeacherScheduleRecordByProfileId = async (profileId: any) => {
+
+export const getTeacherScheduleRecordByProfileId = async (profileId: string) => {
   try {
     const TProfile = await TeacherScheduleRecord.find({ profileId }).populate('profileId').exec();
     return TProfile;
@@ -19,7 +20,8 @@ export const getTeacherScheduleRecordByProfileId = async (profileId: any) => {
     return null;
   }
 };
-export const getTeacherScheduleRecordById = async (id: any) => {
+
+export const getTeacherScheduleRecordById = async (id: string) => {
   try {
     const TProfile = await TeacherScheduleRecord.findById(id).populate('profileId').exec();
     return TProfile;

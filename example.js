@@ -54,6 +54,7 @@ const key1 = { category: 'a', step: 1 };
 const key2 = { category: 'a', step: 1 };
 console.log(key1 === key2); // false
 console.log(JSON.stringify(key1) === JSON.stringify(key2)); // true
+console.log(key1 === JSON.stringify(key2)); // false
 
 const funct1 = async () => {
   return { category: 'ab' };

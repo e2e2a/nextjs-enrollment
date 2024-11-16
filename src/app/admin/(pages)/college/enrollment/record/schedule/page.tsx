@@ -2,24 +2,19 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useTeacherScheduleRecordByProfileIdQuery, useTeacherScheduleRecordCollegeQuery } from '@/lib/queries';
+import { useTeacherScheduleRecordQueryByCategory } from '@/lib/queries/teacherScheduleRecord/get/category';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useSession } from 'next-auth/react';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [teacherRG, setTeacherRG] = useState([]);
-  const { data: s } = useSession();
-  const { data, isLoading, error: isEnError } = useTeacherScheduleRecordCollegeQuery('College');
+  const { data, isLoading, error: isEnError } = useTeacherScheduleRecordQueryByCategory('College');
 
   useEffect(() => {
     if (isEnError || !data) return;
 
-    if (data ) {
+    if (data) {
       if (data.teacherScheduleRecords) {
-        // const filteredRG = data?.teacherScheduleRecord.filter((rg: any) => rg.teacherId._id === pData.profile._id);
-        // setTeacherRG(filteredRG);
         setIsPageLoading(false);
       }
     }
