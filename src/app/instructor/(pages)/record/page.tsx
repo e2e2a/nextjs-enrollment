@@ -41,7 +41,7 @@ const Page = () => {
           ) : (
             <div className=''>
               <div className='flex items-center py-4 text-black w-full justify-center'>
-                <h1 className='sm:text-3xl text-xl font-semibold tracking-tight '>Your Schdule&apos;s Records</h1>
+                <h1 className='sm:text-3xl text-xl font-semibold tracking-tight '>Your Schedule&apos;s Records</h1>
               </div>
               <DataTable columns={columns} data={data.teacherScheduleRecord as any[]} />
             </div>

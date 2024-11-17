@@ -42,7 +42,7 @@ const checkCategory = async (user: any, data: any, e: any) => {
         return { error: 'Invalid category.', status: 400 };
     }
 
-    return { ...category, category: e.courseId.category, courseId: e.courseId._id.toString(), userId: e.userId._id.toString() };
+    return { ...category, id: e._id.toString(), category: e.courseId.category, courseId: e.courseId._id.toString(), userId: e.userId._id.toString() };
   });
 };
 

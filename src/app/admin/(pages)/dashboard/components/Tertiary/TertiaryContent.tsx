@@ -10,7 +10,7 @@ import TertiaryAlertDialog from './TertiaryAlertDialog';
 import TertiaryDialogEndSemester from './TertiaryDialogEndSemester';
 import { useEnrollmentQueryByCategory } from '@/lib/queries/enrollment/get/category';
 import MainGrade from './grades/MainGrade';
-import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/all';
+import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/category';
 import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 import StudentsByCourses from './studentsByCourses/StudentsByCourses';
 

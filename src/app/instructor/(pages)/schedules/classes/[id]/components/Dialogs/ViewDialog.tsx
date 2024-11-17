@@ -31,20 +31,30 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
     const initialGrades = reportGrades.reportedGrade.map((s: any) => ({
       profileId: s.profileId._id,
       grade: s.grade,
+      error: false, // for error messages
     }));
     setGrades(initialGrades);
   }, [data, reportGrades]);
 
   const handleGradeChange = (index: any, profileId: any, value: any) => {
+    value = value.trim();
+    let error = false;
+    if (isNaN(value) && String(value).toLowerCase() !== 'inc') error = true;
     const updatedGrades = [...grades];
-    updatedGrades[index] = { profileId, grade: value };
+    updatedGrades[index] = { profileId, grade: value, error };
     setGrades(updatedGrades);
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setIsUploading(true);
-
+    const g = await grades.filter((g: any) => g.error === true);
+    if (g.length > 0) {
+      makeToastError('Only Number/INC are allowed');
+      setIsAlertOpen(false);
+      setIsUploading(false);
+      return;
+    }
     const dataa = {
       category: 'College',
       request: 'Update',
@@ -201,8 +211,9 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
                       </td>
                       <td className='px-6 py-4 whitespace-nowrap uppercase'>{reportGrades.teacherScheduleId?.courseId?.courseCode}</td>
                       <td className='px-6 py-4 whitespace-nowrap'>{s.profileId?.sex}</td>
-                      <td className='px-6 py-4 whitespace-nowrap text-center'>
+                      <td className='px-6 py-4 whitespace-nowrap flex flex-col justify-center items-center w-full'>
                         {isDisabled ? s.grade : <Input className='w-20 text-sm text-center border-2 border-blue-400' onChange={(e) => handleGradeChange(index, s.profileId._id, e.target.value)} placeholder='' value={grades[index]?.grade} />}
+                        <div className=''>{grades && grades[index]?.error && <p className='text-xs text-red'>Only Number/INC are allowed</p>}</div>
                       </td>
                     </tr>
                   );

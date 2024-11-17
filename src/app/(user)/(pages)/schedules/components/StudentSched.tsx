@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import AddStudentSched from './AddStudentSched';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/all';
+import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/category';
 interface IProps {
   data: any;
 }

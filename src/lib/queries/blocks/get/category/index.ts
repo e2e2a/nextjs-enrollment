@@ -1,4 +1,4 @@
-import { getBlockTypeByCategoryAction } from '@/action/blocks/get/all';
+import { getBlockTypeByCategoryAction } from '@/action/blocks/get/category';
 import { useQuery } from '@tanstack/react-query';
 
 export const useBlockCourseQueryByCategory = (category: string) => {

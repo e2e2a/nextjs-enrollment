@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/shared/Icons';
 import Link from 'next/link';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
-import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/all';
+import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/category';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);

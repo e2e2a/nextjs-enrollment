@@ -117,7 +117,7 @@ const Page = () => {
               </div>
               <div className='flex w-full justify-start sm:justify-end'>
                 <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                  Block: <span className='font-normal'>{data.enrollment?.blockTypeId?.section ? data.enrollment.blockTypeId.section : 'N/A'}</span>
+                  Block: <span className='font-normal'>{data.enrollment?.blockTypeId?.section ? data.enrollment.blockTypeId?.section : 'N/A'}</span>
                 </span>
               </div>
               <div className='flex w-full justify-start'>

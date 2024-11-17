@@ -18,14 +18,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.blockTypeId.section,
+    accessorFn: (row) => row.teacherScheduleId?.blockTypeId?.section,
     id: 'block type',
     header: 'Block Type',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          Block {user.teacherScheduleId.blockTypeId.section}
+          Block {user.teacherScheduleId?.blockTypeId?.section}
         </div>
       );
     },

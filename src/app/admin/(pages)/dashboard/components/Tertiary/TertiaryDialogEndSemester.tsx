@@ -4,23 +4,23 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { useCollegeEndSemesterMutation } from '@/lib/queries';
+import { useCollegeEndSemesterMutation } from '@/lib/queries/endSemester';
 import { Icons } from '@/components/shared/Icons';
 import { Checkbox } from '@/components/ui/checkbox';
-import { getProgress } from '@/action/college/enrollment/helpers/progress';
+
 const TertiaryDialogEndSemester = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [deleteInstructor, setDeleteInstructor] = useState<boolean>(false);
   const mutation = useCollegeEndSemesterMutation();
+
   const handleCheckboxChange = (e: any) => {
     setDeleteInstructor(e);
   };
+
   const actionFormDisable = () => {
-    const data = {
-      category: 'College',
-      deleteInstructor: deleteInstructor,
-    };
+    const data = { category: 'College', deleteInstructor: deleteInstructor };
+
     mutation.mutate(data, {
       onSuccess: (res: any) => {
         switch (res.status) {
@@ -43,7 +43,7 @@ const TertiaryDialogEndSemester = () => {
   return (
     <>
       {isUploading ? (
-        <span className='text-sm'>{getProgress()}%</span>
+        <span className='text-sm'>qweqwe</span>
       ) : (
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
           <AlertDialogTrigger asChild>
@@ -55,7 +55,7 @@ const TertiaryDialogEndSemester = () => {
             <AlertDialogContent className='bg-white text-black'>
               <AlertDialogHeader>
                 <AlertDialogTitle>End Semester</AlertDialogTitle>
-                <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;This action will ended the semester. Please be aware that Students who have not received a grade will automatically be assigned an &apos;INC&apos; (Incomplete).</AlertDialogDescription>
+                <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;This action will ended the semester. Please be aware that Students who have not received a grade will automatically be assigned an 5.0 (Incomplete).</AlertDialogDescription>
               </AlertDialogHeader>
               <div className='bg-[#ffd6d6] py-2 rounded-sm'>
                 <div className='text-red px-3 text-sm'>

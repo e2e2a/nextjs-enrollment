@@ -50,7 +50,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{data.teacherScheduleRecord.course}</span>
+                      Department: <span className='font-normal'>{data.teacherScheduleRecord.course.name}</span>
                     </span>
                   </div>
                   <div className='justify-between items-center flex w-full'>

@@ -167,7 +167,12 @@ const schema = new Schema<IEnrollmentRecord>(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'StudentProfile',
         },
-        grade: { type: String },
+        // new field added 17-11-24
+        firstGrade: { type: String, default: 'INC' },
+        secondGrade: { type: String, default: 'INC' },
+        thirdGrade: { type: String, default: 'INC' },
+        fourthGrade: { type: String, default: 'INC' },
+        averageTotal: { type: String, default: 'INC' },
       },
     ],
   },

@@ -33,7 +33,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className=''>
               <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
                 <div className='mb-3'>
-                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Schdule Management</h1>
+                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Schedule Management</h1>
                 </div>
                 <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
                   <div className='justify-between items-center flex w-full'>
@@ -47,7 +47,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{data.teacherScheduleRecord.course}</span>
+                      Department: <span className='font-normal'>{data.teacherScheduleRecord.course.name}</span>
                     </span>
                   </div>
                   <div className='justify-between items-center flex w-full'>

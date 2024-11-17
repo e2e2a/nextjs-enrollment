@@ -15,7 +15,7 @@ export const updateEnrollmentSetupAction = async (data: any) => {
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
     if (session && session.user.role !== 'ADMIN') return { error: 'Forbidden.', status: 403 };
 
-    if (data.name !== 'GODOY') return { error: 'is not valid.', status: 500 };
+    // if (data.name !== 'GODOY') return { error: 'is not valid.', status: 500 };
     await updateEnrollmentSetupByName('GODOY', data);
 
     return { message: 'Success', status: 201 };

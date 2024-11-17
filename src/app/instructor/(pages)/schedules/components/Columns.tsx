@@ -30,33 +30,33 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.blockTypeId.section,
+    accessorFn: (row) => row.blockTypeId?.section,
     id: 'block type',
     header: 'Block Type',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-           {user.blockTypeId?.section ? <span className="text-xs">Block {user.blockTypeId.section}</span> : <span className="text-xs text-red">N/A</span> }
+           {user.blockTypeId?.section ? <span className="text-xs">Block {user.blockTypeId?.section}</span> : <span className="text-xs text-red">N/A</span> }
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.blockTypeId.year,
+    accessorFn: (row) => row.blockTypeId?.year,
     id: 'year',
     header: 'Year',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.blockTypeId?.year ? user.blockTypeId.year : <span className="text-xs text-red">N/A</span> }
+          {user.blockTypeId?.year ? user.blockTypeId?.year : <span className="text-xs text-red">N/A</span> }
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.blockTypeId.semester,
+    accessorFn: (row) => row.blockTypeId?.semester,
     id: 'semester',
     header: 'Semester',
     cell: ({ cell, row }) => {

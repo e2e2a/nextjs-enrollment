@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { selectType } from '@/constant/enrollment';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/all';
+import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/category';
 
 type IProps = {
   isPending: boolean;

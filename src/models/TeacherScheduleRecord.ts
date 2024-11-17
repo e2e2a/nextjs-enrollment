@@ -24,10 +24,8 @@ const schema = new Schema<ITeacherScheduleRecord>(
       ref: 'TeacherProfile',
     },
     course: {
-      type: String,
-    },
-    courseCode: {
-      type: String,
+      name: { type: String },
+      courseCode: { type: String },
     },
     // this sectionId will be used to compare which section and subject to compare with students
     blockType: {
@@ -68,42 +66,28 @@ const schema = new Schema<ITeacherScheduleRecord>(
       },
     },
     room: {
-      roomName: {
-        type: String,
-      },
+      roomName: { type: String },
     },
     days: {
       type: [String],
       default: [],
     },
-    startTime: {
-      type: String,
-    },
-    endTime: {
-      type: String,
-    },
+    startTime: { type: String },
+    endTime: { type: String },
     studentsInClass: [
       {
         student: {
-          firstname: {
-            type: String,
-          },
-          middlename: {
-            type: String,
-          },
-          lastname: {
-            type: String,
-          },
-          extensionName: {
-            type: String,
-          },
-          sex: {
-            type: String,
-          },
+          firstname: { type: String },
+          middlename: { type: String },
+          lastname: { type: String },
+          extensionName: { type: String },
+          sex: { type: String },
         },
-        grade: {
-          type: Number,
-        },
+        firstGrade: { type: Number },
+        secondGrade: { type: Number },
+        thirdGrade: { type: Number },
+        fourthGrade: { type: Number },
+        averageTotal: { type: Number },
       },
     ],
   },

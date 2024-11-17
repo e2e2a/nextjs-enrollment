@@ -1,10 +1,9 @@
-'use server';
+'use client';
 import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject, listAll, uploadBytes } from 'firebase/storage';
 import { storage } from '@/firebase';
 import fs from 'fs';
 import path from 'path';
-import dbConnect from '@/lib/db/db';
 import { updateEnrollmentById } from '@/services/enrollment';
 export const createPDF = async (checkE: any) => {
   try {
@@ -471,9 +470,9 @@ export const createPDF = async (checkE: any) => {
        })
        .then(async (url) => {
           console.log('File available at', url);
-          await dbConnect()
-          const p = await updateEnrollmentById(checkE._id,{pdfUrl: url})
-          return p
+          // await dbConnect()
+          // const p = await updateEnrollmentById(checkE._id,{pdfUrl: url})
+          // return p
        })
        .catch((error) => {
           console.error('Upload failed:', error);

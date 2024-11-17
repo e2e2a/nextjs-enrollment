@@ -238,7 +238,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                     Room: <span className='uppercase'>{s.teacherScheduleId.roomId.roomName}</span>
                                                   </span>
                                                   <span className=''>
-                                                    Block: <span className='uppercase'>Block {s.teacherScheduleId.blockTypeId.section}</span>
+                                                    Block: <span className='uppercase'>Block {s.teacherScheduleId?.blockTypeId?.section}</span>
                                                   </span>
                                                 </div>
                                               </div>

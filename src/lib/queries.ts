@@ -2,7 +2,6 @@ import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tansta
 
 import { getAllCurriculumsResponse, getAllSchoolYearResponse, getAllStudentCurriculumsResponse, getCurriculumsResponse, getStudentCurriculumsResponse, IResponse } from '@/types';
 import { deleteEnrollmentAction } from '@/action/college/enrollment/user';
-import { CollegeEndSemesterAction } from '@/action/college/enrollment/admin';
 import { removeTeacherScheduleCollegeMutation } from '@/action/college/schedules/teachers';
 import { createSchoolYearAction, getAllSchoolYearAction } from '@/action/schoolyear';
 import {
@@ -21,23 +20,6 @@ import { removeCourseBlockScheduleAction } from '@/action/college/schedules/bloc
 import { removeStudentScheduleAction } from '@/action/college/schedules/students';
 const channel = new BroadcastChannel('my-channel');
 // import { supabase } from './supabaseClient';
-
-/**
- * College End Semester
- * @returns
- */
-export const useCollegeEndSemesterMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => CollegeEndSemesterAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentByUserId'] });
-      queryClient.invalidateQueries({ queryKey: ['EnrollmentSetup'] });
-    },
-  });
-};
 
 /**
  * Students Enrollment
