@@ -129,6 +129,6 @@ const handleCategoryCollege = async (data: any) => {
     const enrollmentTertiary = { open: false, schoolYear: '', semester: '' };
     await updateEnrollmentSetupByName('GODOY', enrollmentTertiary);
 
-    return { success: true, message: `Category ${data.category}-${eSetup.enrollmentTertiary.semester}-${eSetup.enrollmentTertiary.schoolYear} has been ended.`, status: 201 };
+    return { success: true, message: `Category ${data.category}-${eSetup.enrollmentTertiary.semester}-${eSetup.enrollmentTertiary.schoolYear} has been ended.`, category: data.category, deleteInstructor: data.deleteInstructor, courses: courses, status: 201 };
   });
 };
