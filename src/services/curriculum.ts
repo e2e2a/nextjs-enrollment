@@ -22,6 +22,23 @@ export const getAllCurriculum = async () => {
     return null;
   }
 };
+
+export const getCurriculumByCategory = async (category: string) => {
+  try {
+    const p = await Curriculum.find({ category })
+      .populate('courseId')
+      .populate({
+        path: 'curriculum.subjectsFormat',
+        populate: [{ path: 'subjectId' }],
+      })
+      .exec();
+    return p;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
 export const getCurriculumById = async (id: any) => {
   try {
     const p = await Curriculum.findById(id).populate('courseId').populate('curriculum.subjectsFormat.subjectId').exec();
@@ -34,7 +51,13 @@ export const getCurriculumById = async (id: any) => {
 
 export const getCurriculumByCourseId = async (courseId: any) => {
   try {
-    const p = await Curriculum.findOne({courseId}).populate('courseId').populate('curriculum.subjectsFormat.subjectId').exec();
+    const p = await Curriculum.findOne({ courseId })
+      .populate('courseId')
+      .populate({
+        path: 'curriculum.subjectsFormat',
+        populate: [{ path: 'subjectId' }],
+      })
+      .exec();
     return p;
   } catch (error) {
     console.log(error);

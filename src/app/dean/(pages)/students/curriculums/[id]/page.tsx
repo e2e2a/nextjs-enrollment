@@ -1,13 +1,14 @@
 'use client';
 import Loader from '@/components/shared/Loader';
 import React, { useEffect, useState } from 'react';
-import { useCreateStudentCurriculumMutation, useCurriculumQueryByCourseId, useSchoolYearQuery, useStudentCurriculumQueryByStudentId } from '@/lib/queries';
+import { useCreateStudentCurriculumMutation, useSchoolYearQuery, useStudentCurriculumQueryByStudentId } from '@/lib/queries';
 import ErrorPage from './components/ErrorPage';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/shared/Icons';
 import AddForm from './components/AddForm';
 import CurriculumTable from './components/CurriculumTable';
 import ViewLackingSubjects from './components/ViewLackingSubjects';
+import { useCurriculumQueryByCourseId } from '@/lib/queries/curriculum/get/courseId';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);

@@ -30,7 +30,7 @@ export const createCourseAction = async (data: any) => {
     const checkName = await getCourseByName(data.name);
     if (checkName) return { error: 'Course name already exist, please choose another name.', status: 409 };
 
-    const a = await checkPhotoAndSave(formData, courseParse.data);
+    const a = await checkPhotoAndStore(formData, courseParse.data);
 
     return a;
   });
@@ -42,7 +42,7 @@ export const createCourseAction = async (data: any) => {
  * @param {any} formData
  * @param {object} data
  */
-export const checkPhotoAndSave = async (formData: any, data: any) => {
+export const checkPhotoAndStore = async (formData: any, data: any) => {
   return tryCatch(async () => {
     const image = formData.get('image') as File;
     if (!image.name || image === null) return { error: 'File or photo is missing.', status: 403 };
@@ -55,7 +55,7 @@ export const checkPhotoAndSave = async (formData: any, data: any) => {
     cc.imageUrl = url;
     await cc.save();
 
-    await createCurriculum({ courseId: cc._id });
+    await createCurriculum({ category: data.category, courseId: cc._id });
 
     return { success: true, message: 'New Course has been added.', category: data.category, status: 201 };
   });

@@ -1,4 +1,4 @@
-import { createCourseAction } from '@/action/courses/create/admin';
+import { createCourseAction } from '@/action/courses/create';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useCreateCourseMutation = () => {
@@ -7,7 +7,7 @@ export const useCreateCourseMutation = () => {
     mutationFn: async (data) => createCourseAction(data),
     onSuccess: (data) => {
       if (!data.error) {
-        queryClient.invalidateQueries({ queryKey: ['Curriculum'] });
+        queryClient.invalidateQueries({ queryKey: ['CurriculumByCategory', data.category] });
         queryClient.invalidateQueries({ queryKey: ['CourseByCategory', data.category] });
       }
     },

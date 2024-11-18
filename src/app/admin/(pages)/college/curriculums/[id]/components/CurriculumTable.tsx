@@ -8,16 +8,14 @@ interface IProps {
 }
 
 const CurriculumTable = ({ data, s }: IProps) => {
-  if (!data || !data.curriculum) return <div>No data found</div>;
-
   return (
     <>
-      {data.curriculum.length > 0 ? (
+      {data.curriculum && data.curriculum.length > 0 ? (
         data.curriculum.map((item: any, index: any) => (
           <div key={index} className='mb-20'>
             <div className='w-full items-center flex justify-between mb-2'>
               <span className='text-[8px] sm:text-sm'>Order: {item.order}</span>
-              <span className=' font-bold text-sm sm:text-lg'>
+              <span className=' font-bold text-sm sm:text-lg capitalize'>
                 {item.year} - {item.semester}
               </span>
               <span className=' font-bold text-lg'>
@@ -61,7 +59,7 @@ const CurriculumTable = ({ data, s }: IProps) => {
           </div>
         ))
       ) : (
-        <div>No curriculum data available</div>
+        <div>No Curriculum Layer Data Found.</div>
       )}
     </>
   );
