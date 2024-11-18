@@ -1,5 +1,6 @@
 'use server';
 import { tryCatch } from '@/lib/helpers/tryCatch';
+import { IEnrollmentRecord } from '@/models/EnrollmentRecord';
 import StudentCurriculum from '@/models/StudentCurriculum';
 import { createStudentCurriculum } from '@/services/studentCurriculum';
 
@@ -19,7 +20,7 @@ export const getEnrollmentRecordData = async (filterEnrolledEnrollments: any) =>
         studentSubjects: <any>[],
         // Add any additional fields required by your EnrollmentRecord model
       };
-      let studentSubjects = [];
+      let studentSubjects: IEnrollmentRecord[] = [];
       for (const ss of enrollment.studentSubjects) {
         const processedSubjectRecord = {
           ...ss,
@@ -50,7 +51,10 @@ export const getEnrollmentRecordData = async (filterEnrolledEnrollments: any) =>
 const updateStudentCurriculum = async (enrollment: any, studentSubjects: any) => {
   return tryCatch(async () => {
     let studentCurriculum;
-    studentCurriculum = await StudentCurriculum.findOne({ studentId: enrollment.profileId._id, courseId: enrollment.courseId._id });
+    studentCurriculum = await StudentCurriculum.findOne({ studentId: enrollment.profileId._id, courseId: enrollment.courseId._id }).populate({
+      path: 'curriculum.subjectsFormat',
+      populate: [{ path: 'subjectId' }],
+    });
     if (!studentCurriculum) studentCurriculum = await createStudentCurriculum({ studentId: enrollment.profileId._id, courseId: enrollment.courseId._id });
     const curriculumExists = studentCurriculum.curriculum.some((c: any) => c.year === enrollment.studentYear && c.semester === enrollment.studentSemester && enrollment.schoolYear === c.schoolYear);
 
@@ -64,13 +68,14 @@ const updateStudentCurriculum = async (enrollment: any, studentSubjects: any) =>
               let subjectFound = false;
 
               for (const subject of curriculum.subjectsFormat) {
-                if (studentS.subject.id.toString() === subject.subjectId._id.toString()) {
+                // console.log('1', subject.subjectId);
+                if (studentS.subject.subjectCode === subject.subjectId.subjectCode) {
+                  // console.log('2', subject.subjectId);
                   const a = await getAverageGrade(studentS, true);
                   subject.grade = a.grade;
                   subjectFound = true;
                 }
               }
-
               if (!subjectFound) await getAverageGrade(studentS, false, updateSubjects);
             }
           }
@@ -100,10 +105,12 @@ const getAverageGrade = async (studentS: any, found: boolean, updateSubjects?: a
       if (found) return { grade: 'INC' };
       updateSubjects.push({ subjectId: studentS.subject._id, grade: 'INC' });
     } else {
+      const b = grades.filter((e) => !e);
+      if (found && b.length > 0) return { grade: 'INC' };
       const validGrades = grades.filter((grade) => !isNaN(grade));
       const averageGrade = parseFloat((validGrades.reduce((sum, grade) => sum + grade, 0) / validGrades.length).toFixed(2));
       if (found) return { grade: averageGrade };
-      updateSubjects.push({ subjectId: studentS.subject._id, grade: averageGrade });
+      updateSubjects.push({ subjectId: studentS.subject._id, grade: b.length > 0 ? 'INC' : averageGrade });
     }
   });
 };

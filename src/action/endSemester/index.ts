@@ -104,30 +104,31 @@ const handleCategoryCollege = async (data: any) => {
 
     // new added
     const tsRecordData = await getTeacherScheduleRecordData(filteredSchedule, filterEnrolledEnrollments, eSetup.enrollmentTertiary);
-    console.log('tsRecordData', tsRecordData)
+
     const enRecordData = await getEnrollmentRecordData(filterEnrolledEnrollments);
 
     const courses = await Course.find({ category: 'College' }).select('_id');
     const courseIds = courses.map((course) => course._id);
 
     // Use bulk operation
-    // await StudentProfile.updateMany({ courseId: { $in: courseIds }, studentStatus: 'Continue', enrollStatus: { $in: ['', 'Pending'] } }, { $set: { studentStatus: 'Returning', enrollStatus: '' } }, { new: true });
-    // await StudentProfile.updateMany({ courseId: { $in: courseIds }, studentStatus: 'New Student', enrollStatus: 'Pending' }, { $set: { enrollStatus: '' } }, { new: true });
-    // await TeacherScheduleRecord.insertMany(tsRecordData.data); // reminder to test this first
-    // await EnrollmentRecord.insertMany(enRecordData.data);
-    // await Enrollment.deleteMany({ category: 'College' });
+    await StudentProfile.updateMany({ courseId: { $in: courseIds }, studentStatus: 'Continue', enrollStatus: { $in: ['', 'Pending'] } }, { $set: { studentStatus: 'Returning', enrollStatus: '' } }, { new: true });
+    await StudentProfile.updateMany({ courseId: { $in: courseIds }, studentStatus: 'New Student', enrollStatus: 'Pending' }, { $set: { enrollStatus: '' } }, { new: true });
+    await TeacherScheduleRecord.insertMany(tsRecordData.data);
+    await EnrollmentRecord.insertMany(enRecordData.data);
+    await Enrollment.deleteMany({ category: 'College' });
 
-    // await ReportGrade.deleteMany({ category: 'College' });
+    await ReportGrade.deleteMany({ category: 'College' });
 
-    // if (data.deleteInstructor) {
-    //   await BlockType.updateMany({ category: 'College' }, { $set: { blockSubjects: [] } }, { new: true });
-    //   await TeacherSchedule.deleteMany({ category: 'College' });
-    // }
+    if (data.deleteInstructor) {
+      await BlockType.updateMany({ category: 'College' }, { $set: { blockSubjects: [] } }, { new: true });
+      await TeacherSchedule.deleteMany({ category: 'College' });
+    }
 
-    // await StudentProfile.updateMany({ courseId: { $in: courseIds }, enrollStatus: 'Enrolled' }, { $set: { studentStatus: 'Continue', enrollStatus: '' } }, { new: true });
+    await StudentProfile.updateMany({ courseId: { $in: courseIds }, enrollStatus: 'Enrolled' }, { $set: { studentStatus: 'Continue', enrollStatus: '' } }, { new: true });
 
-    // const enrollmentTertiary = { open: false, schoolYear: '', semester: '' };
-    // await updateEnrollmentSetupByName('GODOY', enrollmentTertiary);
+    const enrollmentTertiary = { open: false, schoolYear: '', semester: '' };
+    await updateEnrollmentSetupByName('GODOY', enrollmentTertiary);
+
     return { success: true, message: `Category ${data.category}-${eSetup.enrollmentTertiary.semester}-${eSetup.enrollmentTertiary.schoolYear} has been ended.`, status: 201 };
   });
 };

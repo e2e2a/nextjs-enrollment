@@ -99,7 +99,18 @@ const fourthGrade = Number('asdasd');
 // const grades = [Number(firstGrade), Number(secondGrade), Number(thirdGrade), Number(fourthGrade)];
 // console.log('asd', grades.some(isNaN));
 
-const a = ''
-const b = 'bb'
+// const a = ''
+// const b = 'bb'
 
-console.log('example', a ?? b)
+// console.log('example', a ?? b)
+
+const funct1 = async () => {
+  let a = [];
+  await funct2(a);
+  return a;
+};
+const funct2 = async (a) => {
+  a.push({ name: 'hello word' });
+};
+
+funct1().then((a) => console.log('a', a));

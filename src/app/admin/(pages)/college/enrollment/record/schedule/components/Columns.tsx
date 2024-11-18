@@ -126,8 +126,8 @@ export const columns: ColumnDef<any>[] = [
   },
   {
     accessorFn: (row) => row.room?.roomName,
-    id: 'room',
-    header: 'Room',
+    id: 'room name',
+    header: 'Room Name',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
