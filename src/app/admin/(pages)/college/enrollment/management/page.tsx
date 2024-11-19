@@ -1,5 +1,4 @@
 'use client';
-import Loader from '@/components/shared/Loader';
 import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -18,6 +17,7 @@ import EnableADW from './components/step4/EnableADW';
 import { DataTable6 } from './components/step6/DataTable6';
 import { columns6 } from './components/step6/Columns6';
 import { useEnrollmentQueryStepByCategory } from '@/lib/queries/enrollment/get/step';
+import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = () => {
   const searchParams = useSearchParams();
@@ -62,7 +62,7 @@ const Page = () => {
     <>
       {isPageLoading ? (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>
-          <Loader />
+          <LoaderPage />
         </div>
       ) : (
         data &&

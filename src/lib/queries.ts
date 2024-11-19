@@ -1,10 +1,10 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
-import { getAllSchoolYearResponse, getAllStudentCurriculumsResponse, getStudentCurriculumsResponse, IResponse } from '@/types';
+import { getAllSchoolYearResponse, IResponse } from '@/types';
 import { deleteEnrollmentAction } from '@/action/college/enrollment/user';
 import { removeTeacherScheduleCollegeMutation } from '@/action/college/schedules/teachers';
 import { createSchoolYearAction, getAllSchoolYearAction } from '@/action/schoolyear';
-import { createStudentCurriculumAction, getAllStudentCurriculumAction, getStudentCurriculumByStudentIdAction, updateStudentCurriculumByIdAction, updateStudentCurriculumSubjectByIdAction } from '@/action/studentCurrirulum';
+import { createStudentCurriculumAction, updateStudentCurriculumByIdAction, updateStudentCurriculumSubjectByIdAction } from '@/action/studentCurrirulum';
 import { removeCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
 import { removeStudentScheduleAction } from '@/action/college/schedules/students';
 const channel = new BroadcastChannel('my-channel');
@@ -100,27 +100,6 @@ export const useCreateSchoolYearMutation = () => {
  * Admin Student Curriculum
  * @returns Queries and mutations
  */
-export const useStudentCurriculumQuery = () => {
-  return useQuery<getAllStudentCurriculumsResponse, Error>({
-    queryKey: ['StudentCurriculum'],
-    queryFn: () => getAllStudentCurriculumAction(),
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-  });
-};
-
-export const useStudentCurriculumQueryByStudentId = (id: any) => {
-  return useQuery<getStudentCurriculumsResponse, Error>({
-    queryKey: ['StudentCurriculumById', id],
-    queryFn: () => getStudentCurriculumByStudentIdAction(id),
-    retry: 0,
-    enabled: !!id,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-  });
-};
-
 export const useCreateStudentCurriculumMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({

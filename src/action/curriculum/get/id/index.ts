@@ -9,7 +9,7 @@ export const getCurriculumByIdAction = async (id: string) => {
     await dbConnect();
 
     const isValidObjectId = mongoose.Types.ObjectId.isValid(id);
-    if (!isValidObjectId) return { error: `Forbidden.`, status: 403 };
+    if (!isValidObjectId) return { error: `Not valid.`, status: 400 };
 
     const p = await getCurriculumById(id);
     if (!p) return { error: 'Not found', status: 404 };

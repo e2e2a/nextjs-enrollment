@@ -2,36 +2,27 @@
 import dbConnect from '@/lib/db/db';
 import StudentCurriculum from '@/models/StudentCurriculum';
 import { getEnrollmentByProfileId } from '@/services/enrollment';
-import { createStudentCurriculum, getAllStudentCurriculum, getStudentCurriculumById, getStudentCurriculumByStudentId } from '@/services/studentCurriculum';
+import { createStudentCurriculum, getStudentCurriculumById, getStudentCurriculumByStudentId } from '@/services/studentCurriculum';
 import { getStudentProfileById } from '@/services/studentProfile';
 import { getSubjectByCategory } from '@/services/subject';
-import { getAllStudentCurriculumsResponse, getStudentCurriculumsResponse } from '@/types';
+import { getStudentCurriculumsResponse } from '@/types';
 
 /**
  * @StudentCurriculum
  */
-export const getAllStudentCurriculumAction = async (): Promise<getAllStudentCurriculumsResponse> => {
-  try {
-    await dbConnect();
-    const p = await getAllStudentCurriculum();
-    return { curriculums: JSON.parse(JSON.stringify(p)), status: 201 };
-  } catch (error) {
-    return { error: 'Something went wrong', status: 500 };
-  }
-};
 
-export const getStudentCurriculumByStudentIdAction = async (id: any): Promise<getStudentCurriculumsResponse> => {
-  try {
-    await dbConnect();
-    const p = await getStudentCurriculumByStudentId(id);
-    if (!p) {
-      return { error: 'not found', status: 404 };
-    }
-    return { curriculum: JSON.parse(JSON.stringify(p)), status: 201 };
-  } catch (error) {
-    return { error: 'Something went wrong', status: 500 };
-  }
-};
+// export const getStudentCurriculumByStudentIdAction = async (id: any): Promise<getStudentCurriculumsResponse> => {
+//   try {
+//     await dbConnect();
+//     const p = await getStudentCurriculumByStudentId(id);
+//     if (!p) {
+//       return { error: 'not found', status: 404 };
+//     }
+//     return { curriculum: JSON.parse(JSON.stringify(p)), status: 201 };
+//   } catch (error) {
+//     return { error: 'Something went wrong', status: 500 };
+//   }
+// };
 export const createStudentCurriculumAction = async (data: any) => {
   try {
     await dbConnect();

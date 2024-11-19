@@ -55,7 +55,7 @@ const updateStudentCurriculum = async (enrollment: any, studentSubjects: any) =>
       path: 'curriculum.subjectsFormat',
       populate: [{ path: 'subjectId' }],
     });
-    if (!studentCurriculum) studentCurriculum = await createStudentCurriculum({ studentId: enrollment.profileId._id, courseId: enrollment.courseId._id });
+    if (!studentCurriculum) studentCurriculum = await createStudentCurriculum({ category: 'College', studentId: enrollment.profileId._id, courseId: enrollment.courseId._id });
     const curriculumExists = studentCurriculum.curriculum.some((c: any) => c.year === enrollment.studentYear && c.semester === enrollment.studentSemester && enrollment.schoolYear === c.schoolYear);
 
     if (curriculumExists) {
@@ -110,7 +110,7 @@ const getAverageGrade = async (studentS: any, found: boolean, updateSubjects?: a
       const validGrades = grades.filter((grade) => !isNaN(grade));
       const averageGrade = parseFloat((validGrades.reduce((sum, grade) => sum + grade, 0) / validGrades.length).toFixed(2));
       if (found) return { grade: averageGrade };
-      updateSubjects.push({ subjectId: studentS.subject._id, grade: b.length > 0 ? 'INC' : averageGrade });
+      updateSubjects.push({ subjectId: studentS.subject._id.toString(), grade: b.length > 0 ? 'INC' : averageGrade });
     }
   });
 };

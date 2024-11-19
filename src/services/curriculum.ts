@@ -13,15 +13,6 @@ export const createCurriculum = async (data: any) => {
     return null;
   }
 };
-export const getAllCurriculum = async () => {
-  try {
-    const p = await Curriculum.find().populate('courseId').exec();
-    return p;
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
-};
 
 export const getCurriculumByCategory = async (category: string) => {
   try {

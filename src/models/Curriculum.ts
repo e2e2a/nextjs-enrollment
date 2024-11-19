@@ -5,6 +5,7 @@ export interface ICurriculum extends Document {
   courseId: mongoose.Schema.Types.ObjectId;
   curriculum: any;
 }
+
 const curriculumSchema = new Schema(
   {
     year: {
@@ -32,6 +33,7 @@ const curriculumSchema = new Schema(
   },
   { _id: true } // Enable _id for subdocuments
 );
+
 const schema = new Schema<ICurriculum>(
   {
     category: { type: String },

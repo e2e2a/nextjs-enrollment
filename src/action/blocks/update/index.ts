@@ -77,7 +77,7 @@ const checkTeacherScheduleId = async (data: any, blockType: any) => {
               (newStartHours < existingEndHours || (newStartHours === existingEndHours && newStartMinutes < existingEndMinutes)) && (newEndHours > existingStartHours || (newEndHours === existingStartHours && newEndMinutes > existingStartMinutes));
 
             if (isTimeOverlap) {
-              return { error: `Block Schedule conflict Time:${teacherSchedule.startTime}-${teacherSchedule.endTime}.`, errorInsLink: `${teacherSchedule._id}`, status: 409 };
+              return { error: `Block Schedule conflict Time:${teacherSchedule.startTime}-${teacherSchedule.endTime}.`, errorInsLink: `${teacherSchedule._id.toString()}`, status: 409 };
             }
           }
         }

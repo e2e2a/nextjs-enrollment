@@ -102,7 +102,7 @@ const checkTeacherScheduleConflict = async (scheds: any, data: any, teacher: any
         const isTimeOverlap =
           (newStartHours < existingEndHours || (newStartHours === existingEndHours && newStartMinutes < existingEndMinutes)) && (newEndHours > existingStartHours || (newEndHours === existingStartHours && newEndMinutes > existingStartMinutes));
 
-        if (isTimeOverlap) return { error: 'Instructor Schedule conflict. Please adjust the times or days.', errorInsLink: `${teacher.userId._id}`, status: 409 };
+        if (isTimeOverlap) return { error: 'Instructor Schedule conflict. Please adjust the times or days.', errorInsLink: `${teacher.userId._id.toString()}`, status: 409 };
       }
     }
     return { success: true, message: 'No conflict', status: 200 };

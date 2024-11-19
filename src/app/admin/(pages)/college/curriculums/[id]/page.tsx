@@ -1,11 +1,11 @@
 'use client';
-import Loader from '@/components/shared/Loader';
 import React, { useEffect, useState } from 'react';
 import ErrorPage from './components/ErrorPage';
 import AddForm from './components/AddForm';
 import CurriculumTable from './components/CurriculumTable';
 import { useSubjectQueryByCategory } from '@/lib/queries/subjects/get/category';
 import { useCurriculumQueryById } from '@/lib/queries/curriculum/get/id';
+import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -24,7 +24,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   return (
     <>
       {isPageLoading ? (
-        <Loader />
+        <LoaderPage />
       ) : isPageError ? (
         <ErrorPage />
       ) : data && data.curriculum === null ? (

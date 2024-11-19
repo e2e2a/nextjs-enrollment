@@ -43,6 +43,6 @@ const checkBlockType = async (data: any) => {
     const p = await createBlockType(data);
     if (!p) return { error: 'Something went wrong in creating block.', status: 500 };
 
-    return { success: true, message: 'Block Type created successfully created', courseId: checkC._id, category: checkC.category, status: 201 };
+    return { success: true, message: 'Block Type created successfully created', courseId: checkC._id.toString(), category: checkC.category, status: 201 };
   });
 };

@@ -62,6 +62,6 @@ const checkConflicts = async (data: any) => {
       const conflictOrderExists = c.curriculum.some((entry: any) => entry.order === data.order);
       if (conflictOrderExists) return { error: `Conflict: Order ${data.order} is already occupied, choose another order number.`, status: 409 };
     }
-    return { success: true, message: `${data.year}-${data.semester} has been added.`, id: c._id, courseId: c.courseId._id, category: data.category, status: 201 };
+    return { success: true, message: `${data.year}-${data.semester} has been added.`, id: c._id.toString(), courseId: c.courseId._id.toString(), category: data.category, status: 201 };
   });
 };

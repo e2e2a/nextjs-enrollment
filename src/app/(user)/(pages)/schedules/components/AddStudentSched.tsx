@@ -144,7 +144,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                   </div>{' '}
                                   {/* Numbering starts from 1 */}
                                   <span>
-                                    Instructor: {selectedItem.profileId.firstname} {selectedItem.profileId.middlename} {selectedItem.profileId.lastname}
+                                    Instructor: {selectedItem.profileId.firstname} {selectedItem.profileId?.middlename} {selectedItem.profileId.lastname}
                                   </span>
                                   <span>Title: {selectedItem.subjectId.name}</span>
                                   <span>Code: {selectedItem.subjectId.subjectCode}</span>
@@ -220,7 +220,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                 </div>
                                                 <div className='flex flex-col text-xs sm:text-sm'>
                                                   <span className=' font-semibold'>
-                                                    Instructor: {s.teacherScheduleId.profileId.firstname} {s.teacherScheduleId.profileId.middlename} {s.teacherScheduleId.profileId.lastname}
+                                                    Instructor: {s.teacherScheduleId.profileId.firstname} {s.teacherScheduleId.profileId.middlename ?? ''} {s.teacherScheduleId.profileId.lastname}
                                                   </span>
                                                   <span className=' font-semibold'>
                                                     Course Code: <span className='uppercase'>{s.teacherScheduleId.courseId.courseCode}</span>

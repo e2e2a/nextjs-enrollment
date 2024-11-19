@@ -60,7 +60,7 @@ const handleReject = async (user: any, data: any, e: any) => {
     await updateStudentProfileById(e.profileId._id, { studentType: '', enrollStatus: '', rejectedCount });
     await updateEnrollmentById(e._id, { enrollStatus: 'Rejected', rejectedRemark: data.rejectedRemark });
 
-    return { message: `Student Enrollment has been ${data.request}`, profileId: e.profileId._id.toString(), status: 201 };
+    return { message: `Student Enrollment has been ${data.request}`, prevStep: e.step, userId: e.userId._id.toString(), courseId: e.courseId._id.toString(), profileId: e.profileId._id.toString(), status: 201 };
   });
 };
 
@@ -240,7 +240,7 @@ const handleStep6 = async (data: any, e: any) => {
       await updateEnrollmentById(e._id, { enrollStatus: data.enrollStatus });
 
       const b = await StudentCurriculum.findOne({ studentId: e.profileId._id, courseId: e.courseId._id });
-      if (!b) await createStudentCurriculum({ studentId: e.profileId._id, courseId: e.courseId._id });
+      if (!b) await createStudentCurriculum({ category: data.category, studentId: e.profileId._id, courseId: e.courseId._id });
 
       await updateStudentProfileById(e.profileId._id, { enrollStatus: data.enrollStatus });
       return { message: `Student Enrollment has been ${data.enrollStatus}`, category: data.category, status: 201 };

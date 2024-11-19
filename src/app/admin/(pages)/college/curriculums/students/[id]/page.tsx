@@ -1,51 +1,46 @@
 'use client';
-import Loader from '@/components/shared/Loader';
 import React, { useEffect, useState } from 'react';
-import { useCreateStudentCurriculumMutation, useSchoolYearQuery, useStudentCurriculumQueryByStudentId } from '@/lib/queries';
+import { useCreateStudentCurriculumMutation, useSchoolYearQuery } from '@/lib/queries';
 import ErrorPage from './components/ErrorPage';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/shared/Icons';
 import AddForm from './components/AddForm';
 import CurriculumTable from './components/CurriculumTable';
 import ViewLackingSubjects from './components/ViewLackingSubjects';
-import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { useCurriculumQueryByCourseId } from '@/lib/queries/curriculum/get/courseId';
+import LoaderPage from '@/components/shared/LoaderPage';
+import { useStudentCurriculumQueryByStudentId } from '@/lib/queries/studentCurriculum/get/studentId';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [isPageError, setIsPageError] = useState(false);
 
-  const { data, isLoading, error: isEnError } = useStudentCurriculumQueryByStudentId(params.id);
+  const { data, isLoading, error } = useStudentCurriculumQueryByStudentId(params.id);
   const { data: syData, isLoading: syLoading, error: syError } = useSchoolYearQuery();
-  const { data: sData, isLoading: sLoading, error: sError } = useCurriculumQueryByCourseId(data?.curriculum?.courseId._id);
+  const { data: sData, isLoading: sLoading, error: sError } = useCurriculumQueryByCourseId(data?.curriculum?.courseId._id ?? 'a');
   const mutation = useCreateStudentCurriculumMutation();
+
   useEffect(() => {
-    if (params.id.length === 24) {
-      if (isEnError || !data) return;
-      if (syError || !syData) return;
-      if (sError || !sData) return;
-      if (data && syData && sData) {
-        setIsPageLoading(false);
-      }
-    } else {
-      setIsPageError(true);
+    if (error || !data) return;
+    if (syError || !syData) return;
+
+    if (sError || !sData) return;
+    if (data && syData && sData) {
+      setIsPageLoading(false);
     }
-  }, [data, isEnError, syData, syError, sData, sError, params]);
+  }, [data, error, syData, syError, sData, sError]);
 
   const actionFormSubmit = () => {
-    const data = {
-      studentId: params.id,
-    };
+    const data = { studentId: params.id };
+
     mutation.mutate(data, {
       onSuccess: (res: any) => {
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            makeToastSucess('Student Curriculum has been created.');
+            // return (window.location.href = '/');
             return;
           default:
-            makeToastError('Something went wrong.');
             return;
         }
       },
@@ -54,8 +49,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   };
   return (
     <>
-      {data && data.error === 'not found' ? (
-        // <ErrorPage />
+      {data && data.error && data.error === 'not found' && (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           <div className='flex items-center py-4 text-black w-full text-center'>
             <h1 className='sm:text-3xl text-xl font-bold w-full uppercase text-center'>Student Curriculum not found</h1>
@@ -78,27 +72,30 @@ const Page = ({ params }: { params: { id: string } }) => {
             </Button>
           </div>
         </div>
-      ) : isPageLoading ? (
-        <Loader />
-      ) : isPageError ? (
-        <ErrorPage />
+      )}
+      {data && data.error && data.error !== 'not found' && <ErrorPage />}
+      {isPageLoading ? (
+        <LoaderPage />
       ) : (
-        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
-          <div className='flex flex-col items-center py-4 text-black w-full text-center'>
-            <h1 className='sm:text-2xl text-xl font-bold w-full uppercase text-center'>
-              {data?.curriculum?.studentId.firstname} {data?.curriculum?.studentId?.middlename ?? ''} {data?.curriculum?.studentId.lastname} {data?.curriculum?.studentId.extensionName && data?.curriculum?.studentId.extensionName + '.'}
-            </h1>
-            <h1 className='sm:text-3xl text-xl font-bold w-full uppercase text-center'>{data?.curriculum?.courseId?.name}</h1>
+        data &&
+        data.curriculum && (
+          <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
+            <div className='flex flex-col items-center py-4 text-black w-full text-center'>
+              <h1 className='sm:text-2xl text-xl font-bold w-full uppercase text-center'>
+                {data?.curriculum?.studentId.lastname}, {data?.curriculum?.studentId.firstname} {data?.curriculum?.studentId.extensionName && data?.curriculum?.studentId.extensionName + '.'} {data?.curriculum?.studentId.middlename ?? ''}{' '}
+              </h1>
+              <h1 className='sm:text-3xl text-xl font-bold w-full uppercase text-center'>{data?.curriculum?.courseId?.name}</h1>
+            </div>
+            <div className=' w-full flex items-center justify-center'></div>
+            <div className=' w-full flex gap-2 flex-col  sm:flex-row items-center justify-center'>
+              {data?.curriculum?.curriculum.length > 0 && <ViewLackingSubjects c={data?.curriculum} sData={sData?.curriculum?.curriculum} />}
+              <AddForm c={data?.curriculum} syData={syData?.sy} />
+            </div>
+            <div className=''>
+              <CurriculumTable data={data?.curriculum} s={sData?.curriculum?.curriculum} />
+            </div>
           </div>
-          <div className=' w-full flex items-center justify-center'></div>
-          <div className=' w-full flex gap-2 flex-col  sm:flex-row items-center justify-center'>
-            {data?.curriculum?.curriculum.length > 0 && <ViewLackingSubjects c={data?.curriculum} syData={syData?.sy} sData={sData?.curriculum?.curriculum} />}
-            <AddForm c={data?.curriculum} syData={syData?.sy} />
-          </div>
-          <div className=''>
-            <CurriculumTable data={data?.curriculum} s={sData?.curriculum?.curriculum} />
-          </div>
-        </div>
+        )
       )}
     </>
   );

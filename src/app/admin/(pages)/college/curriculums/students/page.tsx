@@ -1,27 +1,25 @@
 'use client';
-import Loader from '@/components/shared/Loader';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useStudentCurriculumQuery } from '@/lib/queries';
 import { IStudentCurriculum } from '@/types';
+import LoaderPage from '@/components/shared/LoaderPage';
+import { useStudentCurriculumQueryByCategory } from '@/lib/queries/studentCurriculum/get/category';
 
 const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
-
-  const { data, isLoading, error: isEnError } = useStudentCurriculumQuery();
+  const { data, isLoading, error } = useStudentCurriculumQueryByCategory('College');
 
   useEffect(() => {
-    if (isEnError || !data) return;
-    if (data) {
-      setIsPageLoading(false);
-    }
-  }, [data, isEnError]);
-  
+    if (error || !data) return;
+
+    if (data) return setIsPageLoading(false);
+  }, [data, error]);
+
   return (
     <>
       {isPageLoading ? (
-        <Loader />
+        <LoaderPage />
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           <div className='flex items-center py-4 text-black w-full text-center'>
