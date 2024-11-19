@@ -1,4 +1,4 @@
-import { getStudentCurriculumByStudentIdAction } from '@/action/studentCurrirulum/get/studentId';
+import { getStudentCurriculumByStudentIdAction } from '@/action/studentCurrirulum/get/profileId';
 import { useQuery } from '@tanstack/react-query';
 
 export const useStudentCurriculumQueryByStudentId = (studentId: any) => {

@@ -111,7 +111,7 @@ const ActionsCell3 = ({ user }: IProps) => {
                     View student profile
                   </div>
                 </Link>
-                <Link href={`/admin/college/curriculums/students/${user.profileId._id}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
+                <Link href={`/admin/college/curriculums/students/solo/${user.profileId._id}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
                   <div className='flex justify-center items-center text-sm font-medium gap-x-1'>
                     <Icons.fileStack className='h-4 w-4' />
                     Apply Credits

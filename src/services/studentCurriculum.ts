@@ -33,7 +33,7 @@ export const getStudentCurriculumById = async (id: any) => {
 };
 export const getStudentCurriculumByStudentId = async (studentId: any) => {
   try {
-    const p = await StudentCurriculum.findOne({ studentId }).populate('studentId').populate('courseId').populate('curriculum.subjectsFormat.subjectId').exec();
+    const p = await StudentCurriculum.find({ studentId }).populate('studentId').populate('courseId').populate('curriculum.subjectsFormat.subjectId').exec();
     return p;
   } catch (error) {
     console.log(error);

@@ -4,7 +4,7 @@ import { getAllSchoolYearResponse, IResponse } from '@/types';
 import { deleteEnrollmentAction } from '@/action/college/enrollment/user';
 import { removeTeacherScheduleCollegeMutation } from '@/action/college/schedules/teachers';
 import { createSchoolYearAction, getAllSchoolYearAction } from '@/action/schoolyear';
-import { createStudentCurriculumAction, updateStudentCurriculumByIdAction, updateStudentCurriculumSubjectByIdAction } from '@/action/studentCurrirulum';
+import { updateStudentCurriculumByIdAction, updateStudentCurriculumSubjectByIdAction } from '@/action/studentCurrirulum';
 import { removeCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
 import { removeStudentScheduleAction } from '@/action/college/schedules/students';
 const channel = new BroadcastChannel('my-channel');
@@ -100,17 +100,6 @@ export const useCreateSchoolYearMutation = () => {
  * Admin Student Curriculum
  * @returns Queries and mutations
  */
-export const useCreateStudentCurriculumMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => createStudentCurriculumAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['StudentCurriculum'] });
-      queryClient.invalidateQueries({ queryKey: ['StudentCurriculumById'] });
-    },
-  });
-};
-
 export const useUpdateStudentCurriculumLayerMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({

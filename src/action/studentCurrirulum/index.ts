@@ -1,55 +1,39 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import StudentCurriculum from '@/models/StudentCurriculum';
-import { getEnrollmentByProfileId } from '@/services/enrollment';
-import { createStudentCurriculum, getStudentCurriculumById, getStudentCurriculumByStudentId } from '@/services/studentCurriculum';
-import { getStudentProfileById } from '@/services/studentProfile';
+import { getStudentCurriculumById } from '@/services/studentCurriculum';
 import { getSubjectByCategory } from '@/services/subject';
-import { getStudentCurriculumsResponse } from '@/types';
 
 /**
  * @StudentCurriculum
  */
-
-// export const getStudentCurriculumByStudentIdAction = async (id: any): Promise<getStudentCurriculumsResponse> => {
+// export const createStudentCurriculumAction = async (data: any) => {
 //   try {
 //     await dbConnect();
-//     const p = await getStudentCurriculumByStudentId(id);
-//     if (!p) {
-//       return { error: 'not found', status: 404 };
+//     const studentP = await getStudentProfileById(data.studentId);
+//     if (!studentP) {
+//       return { error: 'Invalid Student Id.', status: 500 };
 //     }
-//     return { curriculum: JSON.parse(JSON.stringify(p)), status: 201 };
+//     const studentE = await getEnrollmentByProfileId(data.studentId);
+//     if (!studentE) {
+//       return { error: 'Invalid Student Id.', status: 500 };
+//     }
+//     // const curriculum = await getCurriculumByCourseId(studentE.courseId._id)
+//     // if (!curriculum) {
+//     //   return { error: 'Curriculum not found.', status: 500 };
+//     // }
+//     // console.log(curriculum)
+//     // @ts-ignore
+//     data.courseId = studentE.courseId._id;
+//     const studentCurriculum = await createStudentCurriculum(data);
+//     if (!studentCurriculum) {
+//       return { error: 'Something went wrong.', status: 500 };
+//     }
+//     return { curriculum: JSON.parse(JSON.stringify({})), status: 201 };
 //   } catch (error) {
 //     return { error: 'Something went wrong', status: 500 };
 //   }
 // };
-export const createStudentCurriculumAction = async (data: any) => {
-  try {
-    await dbConnect();
-    const studentP = await getStudentProfileById(data.studentId);
-    if (!studentP) {
-      return { error: 'Invalid Student Id.', status: 500 };
-    }
-    const studentE = await getEnrollmentByProfileId(data.studentId);
-    if (!studentE) {
-      return { error: 'Invalid Student Id.', status: 500 };
-    }
-    // const curriculum = await getCurriculumByCourseId(studentE.courseId._id)
-    // if (!curriculum) {
-    //   return { error: 'Curriculum not found.', status: 500 };
-    // }
-    // console.log(curriculum)
-    // @ts-ignore
-    data.courseId = studentE.courseId._id;
-    const studentCurriculum = await createStudentCurriculum(data);
-    if (!studentCurriculum) {
-      return { error: 'Something went wrong.', status: 500 };
-    }
-    return { curriculum: JSON.parse(JSON.stringify({})), status: 201 };
-  } catch (error) {
-    return { error: 'Something went wrong', status: 500 };
-  }
-};
 
 export const updateStudentCurriculumByIdAction = async (data: any) => {
   try {
