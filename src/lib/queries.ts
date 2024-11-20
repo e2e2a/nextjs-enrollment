@@ -1,9 +1,7 @@
-import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
-import { getAllSchoolYearResponse, IResponse } from '@/types';
 import { deleteEnrollmentAction } from '@/action/college/enrollment/user';
 import { removeTeacherScheduleCollegeMutation } from '@/action/college/schedules/teachers';
-import { createSchoolYearAction, getAllSchoolYearAction } from '@/action/schoolyear';
 import { removeCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
 import { removeStudentScheduleAction } from '@/action/college/schedules/students';
 const channel = new BroadcastChannel('my-channel');
@@ -15,7 +13,7 @@ const channel = new BroadcastChannel('my-channel');
  */
 export const useEnrollmentDeleteMutation = () => {
   const queryClient = useQueryClient();
-  return useMutation<IResponse, Error, any>({
+  return useMutation<any, Error, any>({
     mutationFn: async (data) => deleteEnrollmentAction(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
@@ -27,7 +25,6 @@ export const useEnrollmentDeleteMutation = () => {
  * Admin Enrollment
  * @returns Queries and mutations
  */
-
 export const useRemoveStudentScheduleMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
@@ -67,34 +64,6 @@ export const useRemoveTeacherScheduleCollegeMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
       queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
-    },
-  });
-};
-
-/**
- * Admin School Year
- * @returns Queries and mutations
- */
-export const useSchoolYearQuery = () => {
-  return useQuery<getAllSchoolYearResponse, Error>({
-    queryKey: ['SchoolYear'],
-    queryFn: () => getAllSchoolYearAction(),
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: true,
-  });
-};
-
-/**
- *
- * @todo Remove
- */
-export const useCreateSchoolYearMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => createSchoolYearAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['SchoolYear'] });
     },
   });
 };

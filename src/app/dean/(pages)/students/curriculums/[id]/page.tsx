@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useSchoolYearQuery } from '@/lib/queries';
 import ErrorPage from './components/ErrorPage';
 import AddForm from './components/AddForm';
 import CurriculumTable from './components/CurriculumTable';
@@ -8,23 +7,22 @@ import ViewLackingSubjects from './components/ViewLackingSubjects';
 import { useCurriculumQueryByCourseId } from '@/lib/queries/curriculum/get/courseId';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useStudentCurriculumQueryById } from '@/lib/queries/studentCurriculum/get/id';
+import { SchoolYear } from '@/constant/schoolYear';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
 
   const { data, isLoading, error } = useStudentCurriculumQueryById(params.id);
-  const { data: syData, isLoading: syLoading, error: syError } = useSchoolYearQuery();
   const { data: sData, isLoading: sLoading, error: sError } = useCurriculumQueryByCourseId(data?.curriculum?.courseId._id ?? 'a');
 
   useEffect(() => {
     if (error || !data) return;
-    if (syError || !syData) return;
 
     if (sError || !sData) return;
-    if (data && syData && sData) {
+    if (data && sData) {
       setIsPageLoading(false);
     }
-  }, [data, error, syData, syError, sData, sError]);
+  }, [data, error, sData, sError]);
 
   return (
     <>
@@ -44,7 +42,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className=' w-full flex items-center justify-center'></div>
             <div className=' w-full flex gap-2 flex-col  sm:flex-row items-center justify-center'>
               {data?.curriculum?.curriculum.length > 0 && <ViewLackingSubjects c={data?.curriculum} sData={sData?.curriculum?.curriculum} />}
-              <AddForm c={data?.curriculum} syData={syData?.sy} />
+              <AddForm c={data?.curriculum} syData={SchoolYear} />
             </div>
             <div className=''>
               <CurriculumTable data={data?.curriculum} s={sData?.curriculum?.curriculum} />

@@ -17,7 +17,6 @@ const modelsToInitialize = [
   'TeacherProfile',
   'TeacherSchedule',
   'Room',
-  'SchoolYear',
   'Curriculum',
   'StudentCurriculum',
   'StudentSchedule',
