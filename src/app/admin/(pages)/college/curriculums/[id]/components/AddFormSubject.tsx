@@ -83,18 +83,12 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
           <span className='flex'>Edit Subjects</span>
         </Button>
       </DialogTrigger>
-      <DialogContent
-        className='sm:max-w-6xl w-full bg-white focus-visible:ring-0 '
-        onOpenAutoFocus={(e) => e.preventDefault()}
-        onInteractOutside={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <DialogContent className='sm:max-w-6xl w-full bg-white focus-visible:ring-0 ' onOpenAutoFocus={(e) => e.preventDefault()} onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle className='flex flex-col space-y-1'>
             <span>Add New Curriculum Subject</span>
           </DialogTitle>
-          <DialogDescription>Please fill the year, semester, SY and List Order to follow.</DialogDescription>
+          <DialogDescription className=''>Selection of subjects.</DialogDescription>
         </DialogHeader>
         <div className=''>
           <div className='flex justify-between'>

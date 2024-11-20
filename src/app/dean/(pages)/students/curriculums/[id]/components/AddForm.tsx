@@ -8,10 +8,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
 import { z } from 'zod';
 import { StudentCurriculumValidator } from '@/lib/validators/AdminValidator';
-import { useUpdateStudentCurriculumLayerMutation } from '@/lib/queries';
+import { useUpdateStudentCurriculumLayerMutation } from '@/lib/queries/studentCurriculum/update/curriculum';
 import { SelectInput } from './SelectInput';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 import Input from './Input';
+import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 
 interface IProps {
   c: any;
@@ -19,60 +20,50 @@ interface IProps {
 }
 
 const AddForm = ({ c, syData }: IProps) => {
-  const [value, setValue] = useState('');
+  const [isPending, setIsPending] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const mutation = useUpdateStudentCurriculumLayerMutation();
+
   const form = useForm<z.infer<typeof StudentCurriculumValidator>>({
     resolver: zodResolver(StudentCurriculumValidator),
-    defaultValues: {
-      schoolYear: '',
-      year: '',
-      semester: '',
-      order: '0',
-    },
+    defaultValues: { schoolYear: '', year: '', semester: '', order: '0' },
   });
-  const handleChange = (e: any) => {
-    let inputValue = e.target.value;
-    // Optionally, format input value if necessary
-    setValue(inputValue);
-  };
+
   const actionFormSubmit = (data: z.infer<typeof StudentCurriculumValidator>) => {
+    setIsPending(true);
     data.year = data.year.toLowerCase();
     data.semester = data.semester.toLowerCase();
-    const dataa = {
-      ...data,
-      CId: c._id
-    }
+    const dataa = { ...data, id: c._id };
+
     mutation.mutate(dataa, {
       onSuccess: (res: any) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            // return (window.location.href = '/');
+            form.reset();
+            setIsOpen(false);
+            makeToastSucess(res.message);
             return;
           default:
+            makeToastError(res.error);
             return;
         }
       },
-      onSettled: () => {},
+      onSettled: () => {
+        setIsPending(false);
+      },
     });
   };
   return (
-    <Dialog>
-      <DialogTrigger asChild >
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
         <Button size={'sm'} className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-green-500 px-2 py-0 gap-x-1 justify-center text-neutral-50 font-medium'}>
           <Icons.add className='h-4 w-4' />
           <span className='flex'>Add Curriculum Layer</span>
         </Button>
       </DialogTrigger>
-      <DialogContent
-        className='sm:max-w-md w-full bg-white focus-visible:ring-0 '
-        onOpenAutoFocus={(e) => e.preventDefault()}
-        onInteractOutside={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <DialogContent className='sm:max-w-md w-full bg-white focus-visible:ring-0 ' onOpenAutoFocus={(e) => e.preventDefault()} onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle className='flex flex-col space-y-1'>
             <span>Add New Curriculum Layer</span>
@@ -88,7 +79,7 @@ const AddForm = ({ c, syData }: IProps) => {
           </form>
         </Form>
         <DialogFooter className='justify-end flex flex-row'>
-          <Button type='submit' onClick={form.handleSubmit(actionFormSubmit)} variant='secondary'>
+          <Button type='submit' disabled={isPending} onClick={form.handleSubmit(actionFormSubmit)} variant='secondary'>
             Submit
           </Button>
           <DialogClose asChild>

@@ -29,11 +29,11 @@ const ViewLackingSubjects = ({ c, sData }: IProps) => {
 
           const studentSub = studentCurr.subjectsFormat.map((subject: any) => subject.subjectId._id.toString()); // Extract student subject IDs
           const studentSubjects = studentCurr.subjectsFormat.filter((subject: any) => !subject.grade || (subject.grade && subject.grade.toLowerCase() === 'inc')).map((s: any) => s);
-          if (studentSubjects.length > 0) missingSubjectsGradeObj[yearKey] = studentSubjects;
+          missingSubjectsGradeObj[yearKey] = studentSubjects;
 
           // Find missing subjects
           const notTakenSubjects = requiredSubjects.filter((currSubject: any) => !studentSub.includes(currSubject.subjectId._id)).map((currSubject: any) => currSubject);
-          if (notTakenSubjects.length > 0) missingSubjectsObj[yearKey] = notTakenSubjects;
+          missingSubjectsObj[yearKey] = notTakenSubjects;
         }
       });
 
@@ -93,12 +93,6 @@ const ViewLackingSubjects = ({ c, sData }: IProps) => {
                   <div className='flex flex-col gap-y-6 lg:hidden'>
                     {subjects.map((subject: any, index) => (
                       <div className='flex flex-col w-full' key={index}>
-                        {/* <div className='flex items-center justify-end bg-gray-200'>
-                          <Button size={'sm'} className='text-xs p-1 bg-green-600 text-white'>
-                            <Icons.add className='w-4 h-4' /> Add
-                          </Button>
-                        </div> */}
-
                         <div className='bg-gray-200 border border-neutral-50 pl-3'>Subject Code: {subject.subjectId.subjectCode}</div>
                         <div className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {subject.subjectId.name}</div>
                         <div className='bg-gray-200 border border-neutral-50 pl-3'>Pre Req.: {subject.subjectId.preReq}</div>
@@ -115,7 +109,6 @@ const ViewLackingSubjects = ({ c, sData }: IProps) => {
             <div>No missing subjects found.</div>
           )}
         </div>
-
         <DialogFooter className='justify-end flex flex-row'>
           <DialogClose asChild>
             <Button type='button' variant='secondary'>

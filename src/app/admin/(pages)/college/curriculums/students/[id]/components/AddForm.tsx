@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
 import { z } from 'zod';
 import { StudentCurriculumValidator } from '@/lib/validators/AdminValidator';
-import { useUpdateStudentCurriculumLayerMutation } from '@/lib/queries';
+import { useUpdateStudentCurriculumLayerMutation } from '@/lib/queries/studentCurriculum/update/curriculum';
 import { SelectInput } from './SelectInput';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 import Input from './Input';

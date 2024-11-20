@@ -14,12 +14,12 @@ export const createStudentCurriculumAction = async (data: any) => {
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
     if (session && session.user.role !== 'ADMIN' && session.user.role !== 'DEAN') return { error: 'Forbidden.', status: 403 };
 
-    const a = await checkCategory(session.user, data);
+    const a = await checkEducationalCategory(session.user, data);
     return a;
   });
 };
 
-const checkCategory = async (user: any, data: any) => {
+const checkEducationalCategory = async (user: any, data: any) => {
   return tryCatch(async () => {
     switch (data.category) {
       case 'College':
@@ -48,6 +48,6 @@ const handleCollege = async (user: any, data: any) => {
     const c = await createStudentCurriculum({ category: data.category, studentId: data.studentId, courseId: studentP.courseId._id });
     studentP.studentCurriculumId = c._id;
     const d = await studentP.save();
-    return { success: true, message: 'New Student Curriculum has been added.', id: c._id.toString(), status: 201 };
+    return { success: true, message: 'New Student Curriculum has been added.', id: c._id.toString(), studentId: d._id.toString(), category: data.category, status: 201 };
   });
 };

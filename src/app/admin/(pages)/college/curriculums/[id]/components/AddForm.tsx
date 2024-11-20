@@ -21,18 +21,12 @@ interface IProps {
 const AddForm = ({ c }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [value, setValue] = useState('');
   const mutation = useUpdateCurriculumLayerMutation();
+
   const form = useForm<z.infer<typeof ProspectusValidator>>({
     resolver: zodResolver(ProspectusValidator),
     defaultValues: { year: '', semester: '', order: '0' },
   });
-
-  const handleChange = (e: any) => {
-    let inputValue = e.target.value;
-    // Optionally, format input value if necessary
-    setValue(inputValue);
-  };
 
   const actionFormSubmit = (data: z.infer<typeof ProspectusValidator>) => {
     setIsPending(true);
@@ -47,6 +41,7 @@ const AddForm = ({ c }: IProps) => {
           case 200:
           case 201:
           case 203:
+            form.reset();
             setIsOpen(false);
             makeToastSucess(res.message);
             return;
@@ -69,13 +64,7 @@ const AddForm = ({ c }: IProps) => {
           <span className='flex'>Add Curriculum Layer</span>
         </Button>
       </DialogTrigger>
-      <DialogContent
-        className='sm:max-w-md w-full bg-white focus-visible:ring-0 '
-        onOpenAutoFocus={(e) => e.preventDefault()}
-        onInteractOutside={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <DialogContent className='sm:max-w-md w-full bg-white focus-visible:ring-0 ' onOpenAutoFocus={(e) => e.preventDefault()} onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle className='flex flex-col space-y-1'>
             <span>Add New Curriculum Layer</span>

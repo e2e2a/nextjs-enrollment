@@ -4,7 +4,6 @@ import { getAllSchoolYearResponse, IResponse } from '@/types';
 import { deleteEnrollmentAction } from '@/action/college/enrollment/user';
 import { removeTeacherScheduleCollegeMutation } from '@/action/college/schedules/teachers';
 import { createSchoolYearAction, getAllSchoolYearAction } from '@/action/schoolyear';
-import { updateStudentCurriculumByIdAction, updateStudentCurriculumSubjectByIdAction } from '@/action/studentCurrirulum';
 import { removeCourseBlockScheduleAction } from '@/action/college/schedules/blocks';
 import { removeStudentScheduleAction } from '@/action/college/schedules/students';
 const channel = new BroadcastChannel('my-channel');
@@ -86,38 +85,16 @@ export const useSchoolYearQuery = () => {
   });
 };
 
+/**
+ *
+ * @todo Remove
+ */
 export const useCreateSchoolYearMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createSchoolYearAction(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['SchoolYear'] });
-    },
-  });
-};
-
-/**
- * Admin Student Curriculum
- * @returns Queries and mutations
- */
-export const useUpdateStudentCurriculumLayerMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => updateStudentCurriculumByIdAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['StudentCurriculum'] });
-      queryClient.invalidateQueries({ queryKey: ['StudentCurriculumById'] });
-    },
-  });
-};
-
-export const useUpdateStudentCurriculumLayerSubjectMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, any>({
-    mutationFn: async (data) => updateStudentCurriculumSubjectByIdAction(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['StudentCurriculum'] });
-      queryClient.invalidateQueries({ queryKey: ['StudentCurriculumById'] });
     },
   });
 };

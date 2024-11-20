@@ -21,10 +21,8 @@ export const updateCurriculumSubjectsAction = async (data: any) => {
 
     const newCurriculumEntry = data.subjects.map((subject: any, index: number) => ({ order: index + 1, subjectId: subject }));
 
-    // Clear existing entries
-    await Curriculum.updateOne({ 'curriculum._id': data.id }, { $set: { 'curriculum.$.subjectsFormat': [] } });
-    // Add new entries
-    const a = await Curriculum.findOneAndUpdate({ 'curriculum._id': data.id }, { $push: { 'curriculum.$.subjectsFormat': { $each: newCurriculumEntry } } }, { new: true });
+    await Curriculum.updateOne({ 'curriculum._id': data.id }, { $set: { 'curriculum.$.subjectsFormat': [] } }); // Clear existing entries
+    const a = await Curriculum.findOneAndUpdate({ 'curriculum._id': data.id }, { $push: { 'curriculum.$.subjectsFormat': { $each: newCurriculumEntry } } }, { new: true }); // Add new entries
 
     return { message: `Subjects has been updated.`, category: data.category, id: a._id.toString(), status: 201 };
   });
