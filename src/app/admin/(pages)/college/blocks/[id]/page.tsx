@@ -1,11 +1,11 @@
 'use client';
-import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import AddBlockSched from './components/AddBlockSched';
 import { useBlockCourseQueryById } from '@/lib/queries/blocks/get/id';
 import { useTeacherScheduleQueryByCategory } from '@/lib/queries/teacherSchedule/get/category';
+import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -28,7 +28,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   return (
     <>
       {isPageLoading ? (
-        <Loader />
+        <LoaderPage />
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {isError ? (

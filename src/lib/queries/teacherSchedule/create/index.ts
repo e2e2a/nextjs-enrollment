@@ -5,9 +5,10 @@ export const useCreateTeacherScheduleByCategoryMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createTeacherScheduleAction(data),
-    onSuccess: () => {
-    //   queryClient.invalidateQueries({ queryKey: ['TeacherSchedule'] });
-    //   queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByProfileId'] });
+    onSuccess: (data) => {
+      if (!data.error) {
+        queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByCategory', data.category] });
+      }
     },
   });
 };

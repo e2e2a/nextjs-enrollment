@@ -2,16 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useAllStudentEnrollmentRecordCollegeQuery, useStudentEnrollmentRecordByProfileIdQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useSession } from 'next-auth/react';
+import { useEnrollmentRecordQueryByCategory } from '@/lib/queries/enrollmentRecord/get/category';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data: s } = useSession();
-  
-  const { data, isLoading, error: isEnError } = useAllStudentEnrollmentRecordCollegeQuery('College');
+
+  const { data, isLoading, error: isEnError } = useEnrollmentRecordQueryByCategory('College');
 
   useEffect(() => {
     if (isEnError || !data) return;

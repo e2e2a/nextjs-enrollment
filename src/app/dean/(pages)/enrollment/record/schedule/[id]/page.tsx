@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useTeacherScheduleRecordByIdQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useTeacherScheduleRecordQueryById } from '@/lib/queries/teacherScheduleRecord/get/id';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error: isEnError } = useTeacherScheduleRecordByIdQuery(params.id);
+  const { data, isLoading, error: isEnError } = useTeacherScheduleRecordQueryById(params.id);
 
   useEffect(() => {
     if (isEnError || !data) return;
@@ -50,7 +50,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{data.teacherScheduleRecord.course}</span>
+                      Department: <span className='font-normal'>{data.teacherScheduleRecord.course.name}</span>
                     </span>
                   </div>
                   <div className='justify-between items-center flex w-full'>

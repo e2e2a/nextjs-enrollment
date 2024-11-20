@@ -8,7 +8,6 @@ import PasswordTab from './components/PasswordTab';
 import ProfileTab from './components/ProfileTab';
 import ProfileDialog from './components/ProfileDialog';
 import LoaderPage from '@/components/shared/LoaderPage';
-import Loader from '@/components/shared/Loader';
 import ErrorPage from './components/ErrorPage';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
@@ -42,7 +41,7 @@ const ProfilePage = () => {
   return (
     <>
       {loading ? (
-        <Loader />
+        <LoaderPage />
       ) : (
         <div className='flex justify-center flex-col items-center'>
           <Tabs defaultValue='profile' onValueChange={handleTabChange} className='w-full'>

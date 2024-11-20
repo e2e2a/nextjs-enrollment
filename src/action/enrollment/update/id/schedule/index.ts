@@ -26,9 +26,8 @@ export const updateStudentEnrollmentScheduleAction = async (data: any) => {
     if (!enrollment) return { error: 'Enrollment ID is not valid.', status: 404 };
 
     const c = await checkCategory(session.user, data, enrollment);
-    if (c && c.error) return { error: c.error, status: c.status };
 
-    return { message: c.message, status: c.status };
+    return c;
   });
 };
 
@@ -43,8 +42,7 @@ const checkCategory = async (user: any, data: any, e: any) => {
         return { error: 'Invalid category.', status: 400 };
     }
 
-    if (category && category.error) return category;
-    return { message: category.message, status: category.status };
+    return { ...category, id: e._id.toString(), category: e.courseId.category, courseId: e.courseId._id.toString(), userId: e.userId._id.toString() };
   });
 };
 
@@ -62,41 +60,22 @@ const checkTypeRequest = async (user: any, data: any, e: any) => {
               request = await ApprovedByDeanAddSubjectCollege(data, e);
             }
           } else {
-            // if its admin then it automatically add
-            request = await addStudentSubjectCollege(data, e);
+            request = await addStudentSubjectCollege(data, e); // if its admin then it automatically add
           }
         }
-        if (user.role === 'STUDENT') {
-          // if its student it may request add
-          request = await requestAddStudentSubjectCollege(data, e);
-        }
+        if (user.role === 'STUDENT') request = await requestAddStudentSubjectCollege(data, e); // if its student it may request add
         break;
       case 'Drop':
-        if (user.role === 'STUDENT') {
-          // if its student it may request drop
-          request = await requestDropStudentSubjectCollege(data, e);
-        }
-        if (user.role === 'ADMIN') {
-          // approval/declined of drop subject
-          request = await ApprovedByAdminDropSubjectCollege(data, e);
-        }
-        if (user.role === 'DEAN') {
-          // approval/declined of drop subject
-          request = await ApprovedByDeanDropSubjectCollege(data, e);
-        }
+        if (user.role === 'STUDENT') request = await requestDropStudentSubjectCollege(data, e); // if its student it may request drop
+        if (user.role === 'ADMIN') request = await ApprovedByAdminDropSubjectCollege(data, e); // approval/declined of drop subject
+        if (user.role === 'DEAN') request = await ApprovedByDeanDropSubjectCollege(data, e); // approval/declined of drop subject
         break;
       case 'Suggested':
-        if (user.role === 'ADMIN' || user.role === 'DEAN') {
-          // if its admin then it automatically suggest
-          request = await suggestStudentSubjectCollege(data, e);
-        }
-        if (user.role === 'STUDENT') {
-          // if its student it may accept add
-          request = await AcceptSuggestedSubjectCollege(data, e);
-        }
+        if (user.role === 'ADMIN' || user.role === 'DEAN') request = await suggestStudentSubjectCollege(data, e); // if its admin then it automatically suggest
+        if (user.role === 'STUDENT') request = await AcceptSuggestedSubjectCollege(data, e); // if its student it may accept add
         break;
       default:
-        return { error: 'Invalid category.', status: 400 };
+        return { error: 'Invalid category.', status: 403 };
     }
 
     return request;
@@ -334,7 +313,7 @@ const addStudentSubjectCollege = async (data: any, e: any) => {
         { new: true }
       );
     }
-    return { message: 'student subjects updated successfully.', status: 201 };
+    return { message: 'Student subjects updated successfully.', status: 201 };
   });
 };
 
@@ -356,7 +335,7 @@ const suggestStudentSubjectCollege = async (data: any, e: any) => {
         { new: true }
       );
     }
-    return { message: 'student subjects updated successfully.', status: 201 };
+    return { message: 'Student subjects updated successfully.', status: 201 };
   });
 };
 

@@ -1,10 +1,10 @@
 'use client';
-import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import { ISubject } from '@/types';
 import { useSubjectQueryByCategory } from '@/lib/queries/subjects/get/category';
+import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
@@ -28,7 +28,7 @@ const Page = () => {
     <>
       {isPageLoading ? (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>
-          <Loader />
+          <LoaderPage />
         </div>
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>

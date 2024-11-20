@@ -4,7 +4,7 @@ import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import { IBlockType } from '@/types';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/all';
+import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/category';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);

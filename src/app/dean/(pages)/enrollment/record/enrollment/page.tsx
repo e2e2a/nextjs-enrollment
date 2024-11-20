@@ -2,26 +2,24 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useAllStudentEnrollmentRecordCollegeQuery, useStudentEnrollmentRecordByProfileIdQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useSession } from 'next-auth/react';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
+import { useEnrollmentRecordQueryByCategory } from '@/lib/queries/enrollmentRecord/get/category';
 
 const Page = () => {
-  const { data: s } = useSession();
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [filteredEnrollments, setFilteredEnrollments] = useState<any>([]);
-  
-  const { data, isLoading, error: isEnError } = useAllStudentEnrollmentRecordCollegeQuery('College');
+
+  const { data, isLoading, error: isEnError } = useEnrollmentRecordQueryByCategory('College');
   const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
+
   useEffect(() => {
     if (isEnError || !data) return;
     if (pError || !pData) return;
 
     if (data && pData) {
       if (data.enrollmentRecords && pData.profile) {
-        
         const filteredEnrollment = data?.enrollmentRecords?.filter((enrollment: any) => enrollment.course === pData?.profile.courseId.name && enrollment.courseCode === pData?.profile.courseId.courseCode);
         setFilteredEnrollments(filteredEnrollment);
         setIsPageLoading(false);

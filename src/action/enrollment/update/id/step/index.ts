@@ -18,9 +18,8 @@ export const updateEnrollmentStepAction = async (data: any) => {
     if (session.user.role !== 'DEAN' && session.user.role !== 'ADMIN') return { error: 'forbidden', status: 403 };
 
     const checked = await checkEducationCategory(session.user, data);
-    if (checked && checked.error) return { error: checked.error, status: 403 };
     // await sendEmailWithPDF(checkE);
-    return { message: checked.message, prevStep: checked.prevStep, nextStep: checked.nextStep, status: 201 };
+    return checked;
   });
 };
 
@@ -42,7 +41,6 @@ const checkEducationCategory = async (user: any, data: any) => {
       default:
         return { error: 'forbidden.', status: 403 };
     }
-    if (!c) return { error: 'forbidden.', status: 403 };
 
     return c;
   });

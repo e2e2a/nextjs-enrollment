@@ -51,8 +51,7 @@ const ProfileTab = ({ profile }: IProps) => {
     setIsPending(true);
     data.firstname = data.firstname.toLowerCase();
     data.lastname = data.lastname.toLowerCase();
-    data.middlename = data.middlename.toLowerCase();
-    data.middlename = data.middlename.toLowerCase();
+    data.middlename = data.middlename?.toLowerCase();
 
     const dataa = {
       ...data,

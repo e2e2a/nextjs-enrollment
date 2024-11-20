@@ -47,14 +47,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.courseCode,
+    accessorFn: (row) => row.course.courseCode,
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.courseCode}
+          {user.course.courseCode}
         </div>
       );
     },
@@ -126,8 +126,8 @@ export const columns: ColumnDef<any>[] = [
   },
   {
     accessorFn: (row) => row.room?.roomName,
-    id: 'room',
-    header: 'Room',
+    id: 'room name',
+    header: 'Room Name',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (

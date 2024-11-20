@@ -6,7 +6,9 @@ export const useCreateRoomMutation = () => {
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createRoomAction(data),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['RoomsByEduLevel', data.level] });
+      if (!data.error) {
+        queryClient.invalidateQueries({ queryKey: ['RoomsByEduLevel', data.level] });
+      }
     },
   });
 };

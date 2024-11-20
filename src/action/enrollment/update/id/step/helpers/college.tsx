@@ -21,12 +21,9 @@ export const handlesCollege = async (user: any, data: any) => {
     const checkedR = await checkSessionRole(user, data, checkE);
     if (checkedR && checkedR.error) return { error: checkedR.error, status: 403 };
 
-    let r;
-    if (data.request === 'Rejected') {
-      r = await handleReject(user, data, checkE);
-      return r;
-    }
+    if (data.request === 'Rejected') return await handleReject(user, data, checkE);
 
+    let r;
     switch (Number(checkE.step)) {
       case 1:
         r = await handleStep1(data, checkE);
@@ -51,8 +48,7 @@ export const handlesCollege = async (user: any, data: any) => {
         return { error: 'Foribbeden.', status: 403 };
     }
 
-    if (r && r.error) return { error: r.error, status: r.status };
-    return { success: true, message: r.message, prevStep: r.prevStep, nextStep: r.nextStep, status: 201 };
+    return { ...r, category: data.category, prevStep: checkE.step, userId: checkE.userId._id.toString(), courseId: checkE.courseId._id.toString() };
   });
 };
 
@@ -64,7 +60,7 @@ const handleReject = async (user: any, data: any, e: any) => {
     await updateStudentProfileById(e.profileId._id, { studentType: '', enrollStatus: '', rejectedCount });
     await updateEnrollmentById(e._id, { enrollStatus: 'Rejected', rejectedRemark: data.rejectedRemark });
 
-    return { message: `Student Enrollment has been ${data.request}`, status: 201 };
+    return { message: `Student Enrollment has been ${data.request}`, prevStep: e.step, userId: e.userId._id.toString(), courseId: e.courseId._id.toString(), profileId: e.profileId._id.toString(), status: 201 };
   });
 };
 
@@ -98,7 +94,7 @@ const handleStep1 = async (data: any, e: any) => {
     if (data.request === 'Approved') {
       const newStep = e.step + 1;
       await updateEnrollmentById(e._id, { step: newStep });
-      return { message: `Student Enrollment has been proceed in step ${newStep}`, prevStep: e.step, nextStep: newStep, status: 201 };
+      return { message: `Student Enrollment has been proceed in step ${newStep}`, nextStep: newStep, status: 201 };
     } else if (data.request === 'Undo') {
       return { error: 'Step 1 cannot be undo cuz its the first step.', message: '', status: 403 };
     } else if (data.request === 'Rejected') {
@@ -133,12 +129,12 @@ const handleStep2 = async (data: any, e: any) => {
       await updateStudentProfileById(e.profileId._id, { studentType: data.studentType });
       await updateEnrollmentById(e._id, dataToUpdate);
 
-      return { message: `Student Enrollment has been proceed in step ${newStep}`, prevStep: e.step, nextStep: newStep, status: 201 };
+      return { message: `Student Enrollment has been proceed in step ${newStep}`, nextStep: newStep, status: 201 };
     } else if (data.request === 'Undo') {
       const newStep = Number(e.step) - 1;
 
       await updateEnrollmentById(e._id, { step: newStep });
-      return { message: `Student Enrollment has been undo in step ${newStep}`, prevStep: e.step, nextStep: newStep, status: 201 };
+      return { message: `Student Enrollment has been undo in step ${newStep}`, nextStep: newStep, status: 201 };
     } else if (data.request === 'Rejected') {
       return { success: true, message: '', status: 201 };
     } else {
@@ -158,7 +154,7 @@ const handleStep3 = async (data: any, e: any) => {
       const newStep = e.step + 1;
       await updateEnrollmentById(e._id, { step: newStep });
 
-      return { message: `Student Enrollment has been proceed in step ${newStep}`, prevStep: e.step, nextStep: newStep, status: 201 };
+      return { message: `Student Enrollment has been proceed in step ${newStep}`, nextStep: newStep, status: 201 };
     } else if (data.request === 'Undo') {
       const newStep = Number(e.step) - 1;
 
@@ -170,7 +166,7 @@ const handleStep3 = async (data: any, e: any) => {
 
       await updateStudentProfileById(e.profileId._id, { studentType: '' });
       await updateEnrollmentById(e._id, dataToUpdate);
-      return { message: `Student Enrollment has been undo in step ${newStep}`, prevStep: e.step, nextStep: newStep, status: 201 };
+      return { message: `Student Enrollment has been undo in step ${newStep}`, nextStep: newStep, status: 201 };
     } else if (data.request === 'Rejected') {
       return { success: true, message: '', status: 201 };
     } else {
@@ -190,12 +186,12 @@ const handleStep4 = async (data: any, e: any) => {
       const newStep = e.step + 1;
       await updateEnrollmentById(e._id, { step: newStep });
 
-      return { message: `Student Enrollment has been proceed in step ${newStep}`, prevStep: e.step, nextStep: newStep, status: 201 };
+      return { message: `Student Enrollment has been proceed in step ${newStep}`, nextStep: newStep, status: 201 };
     } else if (data.request === 'Undo') {
       const newStep = Number(e.step) - 1;
 
       await updateEnrollmentById(e._id, { step: newStep });
-      return { message: `Student Enrollment has been undo in step ${newStep}`, prevStep: e.step, nextStep: newStep, status: 201 };
+      return { message: `Student Enrollment has been undo in step ${newStep}`, nextStep: newStep, status: 201 };
     } else if (data.request === 'Rejected') {
       return { success: true, message: '', status: 201 };
     } else {
@@ -218,14 +214,14 @@ const handleStep5 = async (data: any, e: any) => {
        */
       await updateStudentProfileById(e.profileId._id, { payment: true });
       await updateEnrollmentById(e._id, { step: newStep });
-      return { message: `Student Enrollment has been proceed in step ${newStep}`, prevStep: e.step, nextStep: newStep, status: 201 };
+      return { message: `Student Enrollment has been proceed in step ${newStep}`, category: data.category, nextStep: newStep, status: 201 };
     } else if (data.request === 'Undo') {
       const newStep = Number(e.step) - 1;
 
       await updateEnrollmentById(e._id, { step: newStep });
-      return { message: `Student Enrollment has been undo in step ${newStep}`, prevStep: e.step, nextStep: newStep, status: 201 };
+      return { message: `Student Enrollment has been undo in step ${newStep}`, category: data.category, nextStep: newStep, status: 201 };
     } else if (data.request === 'Rejected') {
-      return { success: true, message: '', status: 201 };
+      return { success: true, message: '', category: data.category, status: 201 };
     } else {
       return { error: 'parang wala lang.', message: '123', status: 403 };
     }
@@ -239,16 +235,15 @@ const handleStep5 = async (data: any, e: any) => {
  */
 const handleStep6 = async (data: any, e: any) => {
   return tryCatch(async () => {
-    console.log('recieve data:', data);
     if (data.request === 'Approved') {
       if (data.enrollStatus !== 'Enrolled' && data.enrollStatus !== 'Temporary Enrolled') return { error: 'Not valid', status: 403 };
       await updateEnrollmentById(e._id, { enrollStatus: data.enrollStatus });
 
       const b = await StudentCurriculum.findOne({ studentId: e.profileId._id, courseId: e.courseId._id });
-      if (!b) await createStudentCurriculum({ studentId: e.profileId._id, courseId: e.courseId._id });
+      if (!b) await createStudentCurriculum({ category: data.category, studentId: e.profileId._id, courseId: e.courseId._id });
 
       await updateStudentProfileById(e.profileId._id, { enrollStatus: data.enrollStatus });
-      return { message: `Student Enrollment has been ${data.enrollStatus}`, prevStep: e.step, status: 201 };
+      return { message: `Student Enrollment has been ${data.enrollStatus}`, category: data.category, status: 201 };
     } else if (data.request === 'Undo') {
       const newStep = Number(e.step) - 1;
       /**
@@ -256,9 +251,9 @@ const handleStep6 = async (data: any, e: any) => {
        */
       await updateStudentProfileById(e.profileId._id, { payment: false });
       await updateEnrollmentById(e._id, { step: newStep });
-      return { message: `Student Enrollment has been undo in step ${newStep}`, prevStep: e.step, nextStep: newStep, status: 201 };
+      return { message: `Student Enrollment has been undo in step ${newStep}`, category: data.category, nextStep: newStep, status: 201 };
     } else if (data.request === 'Rejected') {
-      return { success: true, message: '', status: 201 };
+      return { success: true, message: '', category: data.category, status: 201 };
     } else {
       return { error: 'parang wala lang.', message: '123', status: 403 };
     }

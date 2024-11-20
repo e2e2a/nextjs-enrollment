@@ -9,6 +9,8 @@ import StudentPhoto from '../../management/components/step1/StudentPhoto';
 import StudentStatusFilter from '../../management/components/filters/StudentStatusFilter';
 import SemesterFilter from '../../management/components/filters/SemesterFilter';
 import YearFilter from '../../management/components/filters/YearFilter';
+import ReportCardFile from '../../management/components/step1/ReportCardFile';
+import GoodMoralFile from '../../management/components/step1/GoodMoralFile';
 
 export const columns: ColumnDef<IEnrollment>[] = [
   {
@@ -108,7 +110,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.psaUrl,
+    accessorFn: (row) => row.profileId.psaUrl,
     accessorKey: 'psa file',
     header: 'PSA file',
     cell: ({ row }) => {
@@ -118,7 +120,27 @@ export const columns: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.photoUrl,
+    accessorFn: (row) => row.profileId.goodMoralUrl,
+    accessorKey: 'good moral',
+    header: 'Good Moral',
+    cell: ({ row }) => {
+      const user = row.original;
+
+      return <GoodMoralFile user={user} />;
+    },
+  },
+  {
+    accessorFn: (row) => row.profileId.reportCardUrl,
+    accessorKey: 'Report Card',
+    header: 'Report Card',
+    cell: ({ row }) => {
+      const user = row.original;
+
+      return <ReportCardFile user={user} />;
+    },
+  },
+  {
+    accessorFn: (row) => row.profileId.photoUrl,
     accessorKey: 'student photo',
     header: 'Student Photo',
     cell: ({ row }) => {
@@ -128,14 +150,14 @@ export const columns: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.blockTypeId.section,
+    accessorFn: (row) => row.blockTypeId?.section,
     accessorKey: 'block type',
     header: 'Block Type',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.blockTypeId.section && `block ${user.blockTypeId.section}`}
+          {user.blockTypeId?.section && `block ${user.blockTypeId?.section}`}
         </div>
       );
     },

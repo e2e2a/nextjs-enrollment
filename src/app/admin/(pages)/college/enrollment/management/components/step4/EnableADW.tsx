@@ -2,22 +2,25 @@
 import React, { useState } from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { useUpdateEnrollmentSetupMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import Image from 'next/image';
+import { useUpdateEnrollmentSetupMutation } from '@/lib/queries/enrollmentSetup/update';
+
 interface IProps {
   enrollmentSetup: any;
 }
+
 const EnableADW = ({ enrollmentSetup }: IProps) => {
   const [isUploading, setIsUploading] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean | undefined>(false);
   const mutation = useUpdateEnrollmentSetupMutation();
+
   const actionFormEnable = (addOrDropSubjects: boolean) => {
     setIsOpen(false);
     setIsUploading(true);
-    const data = {
-      addOrDropSubjects: addOrDropSubjects,
-    };
+
+    const data = { addOrDropSubjects: addOrDropSubjects };
+
     mutation.mutate(data, {
       onSuccess: (res: any) => {
         switch (res.status) {
@@ -36,6 +39,7 @@ const EnableADW = ({ enrollmentSetup }: IProps) => {
       },
     });
   };
+
   return (
     <>
       {enrollmentSetup.addOrDropSubjects ? (

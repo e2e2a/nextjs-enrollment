@@ -128,7 +128,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
             <span className='text-sm font-bold uppercase'>
               {student.profileId.firstname} {student.profileId.middlename ?? ''} {student.profileId.lastname} {student.profileId.extensionName ? student.profileId.extensionName + '.' : ''}
             </span>
-            <span className='text-sm font-bold capitalize'>Block: {student?.blockTypeId?.section ? student.blockTypeId.section : 'N/A'}</span>
+            <span className='text-sm font-bold capitalize'>Block: {student?.blockTypeId?.section ? student.blockTypeId?.section : 'N/A'}</span>
           </DialogTitle>
           <DialogDescription>Select subjects to add in the table.</DialogDescription>
         </DialogHeader>
@@ -222,7 +222,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                 Room: <span className='uppercase'>{s.teacherScheduleId.roomId.roomName}</span>
                                               </span>
                                               <span className=''>
-                                                Block: <span className='uppercase'>Block {s.teacherScheduleId.blockTypeId.section}</span>
+                                                Block: <span className='uppercase'>Block {s.teacherScheduleId?.blockTypeId?.section}</span>
                                               </span>
                                             </div>
                                             <div className='justify-end sm:items-center flex items-end order-1 '>

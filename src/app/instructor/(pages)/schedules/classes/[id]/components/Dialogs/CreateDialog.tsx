@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
@@ -23,16 +23,35 @@ const CreateDialog = ({ teacher, data, type }: IProps) => {
 
   const [grades, setGrades] = useState<any>([]);
 
+  useEffect(() => {
+    const initialGrades = data.map((s: any) => ({
+      profileId: s.profileId._id,
+      grade: s.grade,
+      error: false, // for error messages
+    }));
+    setGrades(initialGrades);
+  }, [data]);
+
   const handleGradeChange = (index: any, profileId: any, value: any) => {
+    value = value.trim();
+    let error = false;
+    if (isNaN(value) && String(value).toLowerCase() !== 'inc') error = true;
+
     const updatedGrades = [...grades];
-    updatedGrades[index] = { profileId, grade: value };
+    updatedGrades[index] = { profileId, grade: value, error };
     setGrades(updatedGrades);
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setIsUploading(true);
-
+    const g = await grades.filter((g: any) => isNaN(g.grade) && String(g.grade).toLowerCase() !== 'inc');
+    if (g.length > 0) {
+      makeToastError('Only Number/INC are allowed');
+      setIsAlertOpen(false);
+      setIsUploading(false);
+      return;
+    }
     const dataa = {
       category: 'College',
       teacherScheduleId: teacher._id,
@@ -93,7 +112,14 @@ const CreateDialog = ({ teacher, data, type }: IProps) => {
               {type === 'fourthGrade' && 'Final'}
             </span>
           </DialogTitle>
-          <DialogDescription className='hidden'>Select subjects to add in the table.</DialogDescription>
+          <DialogDescription className='' asChild>
+            <div className=''>
+              <div className='text-orange-500'>Reminder:</div>
+              <div className=''>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Empty grades consider as <span className='text-red'>5.0</span>
+              </div>
+            </div>
+          </DialogDescription>
         </DialogHeader>
 
         <div className='overflow-auto w-full bg-slate-50 rounded-lg'>
@@ -107,7 +133,7 @@ const CreateDialog = ({ teacher, data, type }: IProps) => {
                   <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>Fullname</th>
                   <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>Course Code</th>
                   <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>Gender</th>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                  <th className='px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider'>
                     {type === 'firstGrade' && 'Prelim'}
                     {type === 'secondGrade' && 'Midterm'}
                     {type === 'thirdGrade' && 'Semi-final'}
@@ -125,8 +151,9 @@ const CreateDialog = ({ teacher, data, type }: IProps) => {
                     </td>
                     <td className='px-6 py-4 whitespace-nowrap uppercase'>{s.teacherScheduleId.courseId.courseCode}</td>
                     <td className='px-6 py-4 whitespace-nowrap'>{s.profileId.sex}</td>
-                    <td className='px-6 py-4 whitespace-nowrap'>
+                    <td className='px-6 py-4 whitespace-nowrap flex flex-col justify-center items-center w-full'>
                       <Input className='w-20 text-sm text-center border-2 border-blue-400' onChange={(e) => handleGradeChange(index, s.profileId._id, e.target.value)} placeholder='' value={s.grades} />
+                      <div className=''>{grades && grades[index]?.error && <p className='text-xs text-red'>Only Number/INC are allowed</p>}</div>
                     </td>
                   </tr>
                 ))}

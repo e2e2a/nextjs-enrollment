@@ -1,5 +1,5 @@
 import { createEnrollmentContinuingAction } from '@/action/college/enrollment/user';
-import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useEnrollmentContinuingStep0Mutation = () => {
   const queryClient = useQueryClient();

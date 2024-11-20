@@ -163,14 +163,14 @@ export const columns5: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.blockTypeId.section,
+    accessorFn: (row) => row.blockTypeId?.section,
     accessorKey: 'block type',
     header: 'Block Type',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.blockTypeId?.section ? `block ${user.blockTypeId.section}` : 'N/A'}
+          {user?.blockTypeId?.section ? `block ${user.blockTypeId?.section}` : 'N/A'}
         </div>
       );
     },

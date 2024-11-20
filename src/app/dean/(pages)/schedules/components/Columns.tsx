@@ -60,14 +60,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.blockTypeId.section,
+    accessorFn: (row) => row.blockTypeId?.section,
     id: 'section',
     header: 'Section',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.blockTypeId.section}
+          {user.blockTypeId?.section}
         </div>
       );
     },

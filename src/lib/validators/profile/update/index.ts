@@ -22,7 +22,7 @@ export const AdminProfileUpdateValidator = z
       .string()
       .min(2, 'Name should have at least 2 characters')
       .refine((value) => nameRegex.test(value ?? ''), { message: 'Name should only contain valid alphabets...' }),
-    middlename: z.string().min(1, { message: 'Middlename must atleast 2 characters...' }),
+    middlename: z.string().optional(),
     lastname: z.string().min(2, { message: 'Lastname must atleast 2 characters...' }),
     extensionName: z.string().optional(),
     contact: z
@@ -60,7 +60,7 @@ export const DeanProfileUpdateValidator = z
       .string()
       .min(2, 'Name should have at least 2 characters')
       .refine((value) => nameRegex.test(value ?? ''), { message: 'Name should only contain valid alphabets...' }),
-    middlename: z.string().min(1, { message: 'Middlename must atleast 2 characters...' }),
+    middlename: z.string().optional(),
     lastname: z.string().min(2, { message: 'Lastname must atleast 2 characters...' }),
     extensionName: z.string().optional(),
     contact: z
@@ -93,7 +93,7 @@ export const TeacherProfileUpdateValidator = z
       .string()
       .min(2, 'Name should have at least 2 characters')
       .refine((value) => nameRegex.test(value ?? ''), { message: 'Name should only contain valid alphabets...' }),
-    middlename: z.string().min(1, { message: 'Middlename must atleast 2 characters...' }),
+    middlename: z.string().optional(),
     lastname: z.string().min(2, { message: 'Lastname must atleast 2 characters...' }),
     extensionName: z.string().optional(),
     contact: z
@@ -126,7 +126,7 @@ export const StudentProfileUpdateValidator = z
       .string()
       .min(2, 'Name should have at least 2 characters')
       .refine((value) => nameRegex.test(value ?? ''), { message: 'Name should only contain valid alphabets...' }),
-    middlename: z.string().min(1, { message: 'Middlename must atleast 2 characters...' }),
+    middlename: z.string().optional(),
     lastname: z.string().min(2, { message: 'Lastname must atleast 2 characters...' }),
     extensionName: z.string().optional(),
     numberStreet: z.string().min(1, { message: 'Number,Street is required...' }),

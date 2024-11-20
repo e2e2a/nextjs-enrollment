@@ -6,7 +6,6 @@ import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { ref, uploadBytes } from 'firebase/storage';
 import { storage } from '@/firebase';
 import StudentProfile from '@/models/StudentProfile';
-import { getStudentEnrollmentRecordByProfileId } from '@/services/enrollmentRecord';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { checkAuth } from '@/utils/actions/session';
 import { StudentProfileExtension } from '@/lib/validators/profile/extension';
@@ -29,8 +28,8 @@ export const createEnrollmentByCategoryAction = async (data: any) => {
     // we can check here if the student is having a enrollmentrecord and check by the category
 
     const checkedCategory = await checkCategory(session.user, data);
-    if (checkedCategory && checkedCategory.error) return { error: checkedCategory.error, status: checkedCategory.status };
-    return { message: 'success', status: checkedCategory.status };
+
+    return checkedCategory;
   });
 };
 
@@ -50,8 +49,8 @@ const checkCategory = async (user: any, data: any) => {
       default:
         return { error: 'Invalid category.', status: 400 };
     }
-    if (category && category.error) return { error: category.error, status: category.error };
-    return { success: 'yesyes', status: 201 };
+
+    return category;
   });
 };
 
@@ -85,7 +84,7 @@ const categoryCollege = async (user: any, data: any) => {
     const updatedProfile = await StudentProfile.findByIdAndUpdate(getProfile._id, validated.pData, { new: true });
     if (!updatedProfile) return { message: 'Something went wrong.', status: 500 };
 
-    return { message: 'hello world success', status: 201 };
+    return { success: true, message: `You are enrolling to this course ${course.courseCode.toUpperCase()}`, category: data.category, courseId: course._id.toString(), profileId: getProfile._id.toString(), userId: getProfile.userId._id.toString(), status: 201 };
   });
 };
 
@@ -113,7 +112,7 @@ const validateData = async (user: any, files: any, profileId: string, courseId: 
       ...sameData,
       psaUrl: files.filePsa.name,
       photoUrl: files.photo.name,
-      goodMoralUrl: files.fileTOR ? files.fileGoodMoral.name : null,
+      goodMoralUrl: files.fileGoodMoral ? files.fileGoodMoral.name : null,
       reportCardUrl: files.fileTOR ? files.fileTOR.name : null,
     };
     const eData = {
@@ -126,7 +125,7 @@ const validateData = async (user: any, files: any, profileId: string, courseId: 
       onProcess: true,
       studentStatus: data.studentStatus,
     };
-    return { success: 'yesyes', pData, eData, status: 200 };
+    return { success: true, pData, eData, status: 200 };
   });
 };
 

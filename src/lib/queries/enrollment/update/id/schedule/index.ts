@@ -5,9 +5,17 @@ export const useUpdateStudentEnrollmentScheduleMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => updateStudentEnrollmentScheduleAction(data),
-    onSuccess: () => {
-    //   queryClient.invalidateQueries({ queryKey: ['Enrollment'] });
-    //   queryClient.invalidateQueries({ queryKey: ['EnrollmentById'] });
+    onSuccess: (data) => {
+      if (!data.error) {
+        console.log('data', data)
+        queryClient.invalidateQueries({ queryKey: ['EnrollmentById', data.id] });
+        queryClient.invalidateQueries({ queryKey: ['BlockTypeByCategory', data.category] });
+        queryClient.invalidateQueries({ queryKey: ['BlockTypeByCourseId', data.category] });
+        queryClient.invalidateQueries({ queryKey: ['EnrollmentByCategory', data.category] });
+        queryClient.invalidateQueries({ queryKey: ['AllEnrollmentByCourseId', data.courseId] });
+        queryClient.invalidateQueries({ queryKey: ['EnrollmentBySessionId', data.userId] });
+        queryClient.invalidateQueries({ queryKey: ['EnrollmentStepByCategory', `${data.category}-${data.step}`] });
+      }
     },
   });
 };

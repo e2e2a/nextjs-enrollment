@@ -1,34 +1,30 @@
 'use client';
-import Loader from '@/components/shared/Loader';
 import React, { useEffect, useState } from 'react';
-import { useProspectusQueryById } from '@/lib/queries';
 import ErrorPage from './components/ErrorPage';
 import AddForm from './components/AddForm';
 import CurriculumTable from './components/CurriculumTable';
 import { useSubjectQueryByCategory } from '@/lib/queries/subjects/get/category';
+import { useCurriculumQueryById } from '@/lib/queries/curriculum/get/id';
+import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isPageError, setIsPageError] = useState(false);
-  const { data, isLoading, error: isEnError } = useProspectusQueryById(params.id);
-  const { data:sData, isLoading: sLoading, error: sError } = useSubjectQueryByCategory('College');
+  const { data, isLoading, error: isEnError } = useCurriculumQueryById(params.id);
+  const { data: sData, isLoading: sLoading, error: sError } = useSubjectQueryByCategory('College');
   useEffect(() => {
-    if (params.id.length === 24) {
-      if (isEnError || !data) return;
-      if (sError || !sData) return;
-      
-      if (data && sData) {
-        setIsPageLoading(false);
-      }
-    } else {
-      setIsPageError(true);
+    if (isEnError || !data) return;
+    if (sError || !sData) return;
+
+    if (data && sData) {
+      setIsPageLoading(false);
     }
   }, [data, isEnError, sData, sError, params]);
 
   return (
     <>
       {isPageLoading ? (
-        <Loader />
+        <LoaderPage />
       ) : isPageError ? (
         <ErrorPage />
       ) : data && data.curriculum === null ? (
@@ -42,9 +38,9 @@ const Page = ({ params }: { params: { id: string } }) => {
             {/* <Button type='button' size={'sm'} className='bg-green-500 text-white flex gap-1 px-2'>
               <Icons.add className='w-4 h-4' /> Add New
             </Button> */}
-            <AddForm c={data?.curriculum}/>
+            <AddForm c={data?.curriculum} />
           </div>
-          <div className="">
+          <div className=''>
             <CurriculumTable data={data?.curriculum} s={sData?.subjects} />
           </div>
         </div>

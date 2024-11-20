@@ -129,6 +129,7 @@ export const getEnrollmentByCategory = async (category: string) => {
         path: 'studentSubjects.profileId',
         populate: [{ path: 'userId' }, { path: 'courseId' }],
       })
+      .lean()
       .exec();
 
     const filteredEnrollment = enrollment.filter((en) => en.courseId.category === category);

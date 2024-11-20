@@ -34,15 +34,83 @@
 
 // console.log('qwe', 3 === Number('3'))
 
-// const firstGrade = '3';
+// const a = 'asdasd';
 // const secondGrade = '1';
 // const thirdGrade = '3';
 const firstGrade = Number('3');
 const secondGrade = Number('3');
 const thirdGrade = Number('3');
-const fourthGrade = Number(undefined);
-let averageTotal;
-if (!isNaN(firstGrade) && !isNaN(secondGrade) && !isNaN(thirdGrade) && !isNaN(fourthGrade)) {
-  averageTotal = firstGrade + secondGrade + thirdGrade + fourthGrade;
-}
-console.log('averageTotal', 3 + null);
+const fourthGrade = Number('asdasd');
+// let averageTotal;
+// if (!isNaN(firstGrade) && !isNaN(secondGrade) && !isNaN(thirdGrade) && !isNaN(fourthGrade)) {
+//   averageTotal = firstGrade + secondGrade + thirdGrade + fourthGrade;
+// }
+// console.log('averageTotal', 3 + null);
+// const b = `${a.toUpperCase()}`
+// console.log(b);
+
+//biggest problem
+// const key1 = { category: 'a', step: 1 };
+// const key2 = { category: 'a', step: 1 };
+// console.log(key1 === key2); // false
+// console.log(JSON.stringify(key1) === JSON.stringify(key2)); // true
+// console.log(key1 === JSON.stringify(key2)); // false
+
+// const funct1 = async () => {
+//   return { category: 'ab' };
+// };
+// const funct2 = async () => {
+//   const a = await funct1();
+//   return { category: 'abs', ...a };
+// };
+// const funct3 = async () => {
+//   return { category: 'abs', category: 'as' }; //the result will be the last category value {category: 'ab, category: 'a'} = category: 'a'
+// };
+// funct2().then((e) => console.log('e', e));
+
+// let val
+// val = 1
+// val ??= 'qwe';
+// console.log(val);
+
+// const mongoose = require('mongoose');
+
+// // Define the schema
+// const userSchema = new mongoose.Schema({
+//   firstname: { type: String, required: true },
+// });
+// const User = mongoose.model('User', userSchema);
+
+// const b = {
+//   firstname: 'john',
+//   middlename: 'john',
+// };
+
+// // Example usage
+// const user = new User({
+//   ...b,
+// });
+
+// console.log('myuser', user);
+
+// const b = Number('INC');
+// console.log('b', b ? 1: 0 + 1);
+// console.log('b', b ? 1 : 0);
+// const grades = [Number(firstGrade), Number(secondGrade), Number(thirdGrade), Number(fourthGrade)];
+// console.log('asd', grades.some(isNaN));
+
+// const a = ''
+// const b = 'bb'
+
+// console.log('example', a ?? b)
+
+const funct1 = async () => {
+  let a = [];
+  await funct2(a);
+  return a;
+};
+const funct2 = async (a) => {
+  a.push({ name: 'hello word' });
+};
+
+funct1().then((a) => console.log('a', a));

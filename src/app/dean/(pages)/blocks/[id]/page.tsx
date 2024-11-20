@@ -1,11 +1,11 @@
 'use client';
-import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import AddBlockSched from './components/AddBlockSched';
 import { useBlockCourseQueryById } from '@/lib/queries/blocks/get/id';
 import { useTeacherScheduleQueryByCategory } from '@/lib/queries/teacherSchedule/get/category';
+import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -14,11 +14,10 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data, isLoading, error: isEnError } = useBlockCourseQueryById(params.id);
   const { data: s, isLoading: sLoading, error: sError } = useTeacherScheduleQueryByCategory('College');
 
- 
   useEffect(() => {
-    if (isEnError || !data) return
+    if (isEnError || !data) return;
     if (sError || !s) return;
-    
+
     if (s && data) {
       const filteredSchedules = s?.teacherSchedules?.filter((schedule: any) => schedule.blockTypeId === null || !schedule.blockTypeId);
       setTeachersSchedules(filteredSchedules);
@@ -29,7 +28,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   return (
     <>
       {isPageLoading ? (
-        <Loader />
+        <LoaderPage />
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {isError ? (
@@ -60,16 +59,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                     </span>
                   </div>
                 </div>
-                {/* <div>
-                  <h1 className='sm:text-2xl text-lg font-bold uppercase'>Block Scheduling</h1>
-                  <h1 className='sm:text-2xl text-lg font-bold uppercase'>{data.blockType.courseId.name}</h1>
-                  <h1 className='text-lg font-bold uppercase'>Block {data.blockType.section}</h1>
-                </div>
-                <div className=''>
-                  <h1 className='sm:text-sm text-lg font-bold'>
-                    {data.blockType.year} - {data.blockType.semester}
-                  </h1>
-                </div> */}
               </div>
               <div className='w-full flex justify-end items-center'>
                 <AddBlockSched blockType={data} s={teachersSchedules} />

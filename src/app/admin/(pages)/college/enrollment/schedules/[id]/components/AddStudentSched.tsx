@@ -28,12 +28,12 @@ const AddStudentSched = ({ student, b }: IProps) => {
     if (!student) return setPageLoader(true);
     if (student) {
       setStudentCourse(student.courseId.courseCode);
-      setStudentBlockType(student?.blockTypeId?.section);
+      setStudentBlockType(studentBlockType || student?.blockTypeId?.section);
       setStudentYear(student.studentYear);
       setStudentSemester(student.studentSemester);
       setPageLoader(false);
     }
-  }, [student]);
+  }, [student, studentBlockType]);
 
   useEffect(() => {
     if (!Array.isArray(b) || b.length === 0) {
@@ -73,7 +73,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
   const mutation = useUpdateStudentEnrollmentScheduleMutation();
 
   const actionFormSubmit = (request: string, teacherScheduleId?: string) => {
-    setIsPending(true)
+    setIsPending(true);
 
     const dataa = {
       category: 'College',
@@ -88,8 +88,8 @@ const AddStudentSched = ({ student, b }: IProps) => {
           case 200:
           case 201:
           case 203:
-            setSelectedItems([])
-            setIsOpen(false)
+            setSelectedItems([]);
+            setIsOpen(false);
             makeToastSucess(res.message);
             return;
           default:
@@ -100,7 +100,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
         }
       },
       onSettled: () => {
-        setIsPending(false)
+        setIsPending(false);
       },
     });
   };
@@ -127,7 +127,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
             <span className='text-sm font-bold uppercase'>
               {student.profileId.firstname} {student.profileId.middlename ?? ''} {student.profileId.lastname} {student.profileId.extensionName ? student.profileId.extensionName + '.' : ''}
             </span>
-            <span className='text-sm font-bold capitalize'>Block: {student?.blockTypeId?.section ? student.blockTypeId.section : 'N/A'}</span>
+            <span className='text-sm font-bold capitalize'>Block: {student?.blockTypeId?.section ? student.blockTypeId?.section : 'N/A'}</span>
           </DialogTitle>
           <DialogDescription>Select subjects to add in the table.</DialogDescription>
         </DialogHeader>
@@ -221,7 +221,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                 Room: <span className='uppercase'>{s.teacherScheduleId.roomId.roomName}</span>
                                               </span>
                                               <span className=''>
-                                                Block: <span className='uppercase'>Block {s.teacherScheduleId.blockTypeId.section}</span>
+                                                Block: <span className='uppercase'>Block {s.teacherScheduleId?.blockTypeId?.section}</span>
                                               </span>
                                             </div>
                                             <div className='justify-end sm:items-center flex items-end order-1 '>
@@ -248,7 +248,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                     <Icons.add className='h-4 w-4' />
                                                     <span className='sm:flex text-xs sm:text-sm'>Add</span>
                                                   </Button>
-                                                  {student.step > 3 && <SuggestDialog isPending={isPending} isOpen={isOpen} setIsOpen={setIsOpen} teacherScheduleId={s.teacherScheduleId._id} actionFormSubmit={actionFormSubmit}/>}
+                                                  {student.step > 3 && <SuggestDialog isPending={isPending} isOpen={isOpen} setIsOpen={setIsOpen} teacherScheduleId={s.teacherScheduleId._id} actionFormSubmit={actionFormSubmit} />}
                                                 </div>
                                               )}
                                             </div>

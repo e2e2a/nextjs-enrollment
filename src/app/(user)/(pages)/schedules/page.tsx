@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useEnrollmentSetupQuery } from '@/lib/queries';
+import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
 import { useSession } from 'next-auth/react';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -117,7 +117,7 @@ const Page = () => {
               </div>
               <div className='flex w-full justify-start sm:justify-end'>
                 <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                  Block: <span className='font-normal'>{data.enrollment?.blockTypeId?.section ? data.enrollment.blockTypeId.section : 'N/A'}</span>
+                  Block: <span className='font-normal'>{data.enrollment?.blockTypeId?.section ? data.enrollment.blockTypeId?.section : 'N/A'}</span>
                 </span>
               </div>
               <div className='flex w-full justify-start'>

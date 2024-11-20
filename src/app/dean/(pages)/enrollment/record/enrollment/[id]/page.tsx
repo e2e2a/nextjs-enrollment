@@ -2,14 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useStudentEnrollmentRecordByIdQuery } from '@/lib/queries';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useEnrollmentRecordQueryById } from '@/lib/queries/enrollmentRecord/get/id';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [schedule, setSchedule] = useState([]);
-  const { data, isLoading, error: isEnError } = useStudentEnrollmentRecordByIdQuery(params.id);
+  const { data, isLoading, error: isEnError } = useEnrollmentRecordQueryById(params.id);
 
   useEffect(() => {
     if (isEnError || !data) return;

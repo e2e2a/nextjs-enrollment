@@ -10,7 +10,6 @@ import Subject from '@/models/Subject';
 import TeacherProfile from '@/models/TeacherProfile';
 import TeacherSchedule from '@/models/TeacherSchedule';
 import Room from '@/models/Room';
-import SchoolYear from '@/models/SchoolYear';
 import Curriculum from '@/models/Curriculum';
 import StudentCurriculum from '@/models/StudentCurriculum';
 import StudentSchedule from '@/models/StudentSchedule';
@@ -36,7 +35,6 @@ type ModelName =
   | 'TeacherProfile'
   | 'TeacherSchedule'
   | 'Room'
-  | 'SchoolYear'
   | 'Curriculum'
   | 'StudentCurriculum'
   | 'StudentSchedule'
@@ -60,7 +58,6 @@ const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   TeacherProfile,
   TeacherSchedule,
   Room,
-  SchoolYear,
   Curriculum,
   StudentCurriculum,
   StudentSchedule,

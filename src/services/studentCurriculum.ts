@@ -13,9 +13,9 @@ export const createStudentCurriculum = async (data: any) => {
     return null;
   }
 };
-export const getAllStudentCurriculum = async () => {
+export const getStudentCurriculumByCategory = async (category: string) => {
   try {
-    const p = await StudentCurriculum.find().populate('studentId').populate('courseId').exec();
+    const p = await StudentCurriculum.find({ category }).populate('studentId').populate('courseId').populate('curriculum.subjectsFormat.subjectId').exec();
     return p;
   } catch (error) {
     console.log(error);
@@ -33,7 +33,7 @@ export const getStudentCurriculumById = async (id: any) => {
 };
 export const getStudentCurriculumByStudentId = async (studentId: any) => {
   try {
-    const p = await StudentCurriculum.findOne({studentId}).populate('studentId').populate('courseId').populate('curriculum.subjectsFormat.subjectId').exec();
+    const p = await StudentCurriculum.find({ studentId }).populate('studentId').populate('courseId').populate('curriculum.subjectsFormat.subjectId').exec();
     return p;
   } catch (error) {
     console.log(error);

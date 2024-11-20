@@ -7,8 +7,8 @@ import LoaderPage from '@/components/shared/LoaderPage';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/id';
 import { useEnrollmentQueryByTeacherScheduleId } from '@/lib/queries/enrollment/get/teacherSchedule';
-import { useEnrollmentSetupQuery } from '@/lib/queries';
 import { useReportGradeQueryByTeacherId } from '@/lib/queries/reportGrade/get/teacherId';
+import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -40,7 +40,6 @@ const Page = ({ params }: { params: { id: string } }) => {
         setIsPageLoading(false);
       }
     }
-    console.log('rgData', rgData);
   }, [ts, tsError, data, isEnError, s, sError, esData, esError, rgData, rgError]);
 
   return (
@@ -64,7 +63,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Fullname:{' '}
                       <span className='font-normal'>
-                        {ts?.teacherSchedule?.profileId.firstname} {ts?.teacherSchedule?.profileId.middlename ?? ''} {ts?.teacherSchedule?.profileId.lastname} {ts?.teacherSchedule?.profileId.extensionName ? ts?.teacherSchedule?.profileId.extensionName + '.' : ''}
+                        {ts?.teacherSchedule?.profileId.firstname} {ts?.teacherSchedule?.profileId.middlename ?? ''} {ts?.teacherSchedule?.profileId.lastname}{' '}
+                        {ts?.teacherSchedule?.profileId.extensionName ? ts?.teacherSchedule?.profileId.extensionName + '.' : ''}
                       </span>
                     </span>
                   </div>
@@ -80,7 +80,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Block: <span className='font-normal'>{ts?.teacherSchedule?.blockTypeId?.section ? ts?.teacherSchedule.blockTypeId.section : 'N/A'}</span>
+                      Block: <span className='font-normal'>{ts?.teacherSchedule?.blockTypeId?.section ? ts?.teacherSchedule?.blockTypeId?.section : 'N/A'}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start'>

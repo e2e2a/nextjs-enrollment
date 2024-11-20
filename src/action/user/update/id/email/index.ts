@@ -44,7 +44,7 @@ const checkEmail = async (id: string, email: string) => {
       return { error: 'Email is the same.', status: 400 };
     } else {
       const checkedNewEmail = await checkNewEmail(email);
-      if (checkedNewEmail && checkedNewEmail.error) return { error: checkedNewEmail.error, status: 500 };
+      if (checkedNewEmail && checkedNewEmail.error) return { error: checkedNewEmail.error, status: checkedNewEmail.status };
 
       const updatedUser = await updateUserById(user._id, { email: email });
       if (!updatedUser) return { error: 'Failed to update the email.', status: 403 };

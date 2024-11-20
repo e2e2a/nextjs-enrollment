@@ -19,12 +19,12 @@ export const createNewSubjectAction = async (data: any) => {
     const subjectParse = SubjectValidator.safeParse(data);
     if (!subjectParse.success) return { error: 'Invalid fields!', status: 400 };
 
-    const checkedSC = await getSubjectBySubjectCode(data.subjectCode);
-    if (checkedSC) return { error: 'Subject Code already Exists.', status: 409 };
+    const sConflict = await getSubjectBySubjectCode(data.subjectCode);
+    if (sConflict) return { error: 'Subject Code already Exists.', status: 409 };
 
     const createdSubject = await createNewSubject(data);
     if (!createdSubject) return { error: 'Something went wrong.', status: 500 };
 
-    return { message: 'Subject created successfully.', status: 201 };
+    return { message: 'Subject created successfully.', category: data.category, status: 201 };
   });
 };

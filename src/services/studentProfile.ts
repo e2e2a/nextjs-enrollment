@@ -40,7 +40,7 @@ export const getAllStudentProfile = async () => {
 export const getStudentProfileById = async (id: any) => {
   try {
     const studentProfile = await StudentProfile.findById(id).populate('userId').populate('courseId').exec();
-    return JSON.parse(JSON.stringify(studentProfile));
+    return studentProfile;
   } catch (error) {
     console.log(error);
     return null;

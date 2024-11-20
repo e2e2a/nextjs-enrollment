@@ -12,7 +12,7 @@ import Input from './components/Input';
 import TextareaField from './components/Textarea';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import CourseToast from '@/lib/toast/CourseToast';
-import { useCreateCourseMutation } from '@/lib/queries/courses/create/admin';
+import { useCreateCourseMutation } from '@/lib/queries/courses/create';
 import Image from 'next/image';
 import { CourseValidatorInCollege } from '@/lib/validators/course/create/college';
 

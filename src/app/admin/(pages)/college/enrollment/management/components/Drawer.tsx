@@ -67,7 +67,7 @@ export function DataTableDrawer({ user }: IProps) {
               <div className='gap-1.5 flex text-[13px] sm:text-[15px]'>
                 <span className='font-normal'>Student Name:</span>
                 <span className='capitalize font-medium'>
-                  {user.profileId.firstname} {user.profileId.middlename[0] && user.profileId.middlename[0] + '.'} {user.profileId.lastname}
+                  {user.profileId.firstname} {user.profileId?.middlename[0] && user.profileId?.middlename[0] + '.'} {user.profileId.lastname}
                 </span>
               </div>
               <DrawerDescription className='opacity-100 text-black font-normal text-sm'>Please Set first the student type and scholar type.</DrawerDescription>

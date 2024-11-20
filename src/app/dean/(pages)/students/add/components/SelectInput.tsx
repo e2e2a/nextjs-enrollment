@@ -9,10 +9,10 @@ interface IProps {
   label: string;
   selectItems: any;
   placeholder: string;
-  isNotEditable: boolean;
+  isPending: boolean;
 }
 
-export function SelectInput({ form, name, label, selectItems, placeholder,isNotEditable }: IProps) {
+export function SelectInput({ form, name, label, selectItems, placeholder, isPending }: IProps) {
   return (
     <FormField
       control={form.control}
@@ -21,7 +21,7 @@ export function SelectInput({ form, name, label, selectItems, placeholder,isNotE
         <FormItem>
           <FormControl>
             <div className='relative bg-slate-50 rounded-lg'>
-              <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isNotEditable}>
+              <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
                 <SelectTrigger id={name} className='w-full pt-10 pb-4 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
                   <SelectValue placeholder={placeholder} />
                 </SelectTrigger>
@@ -43,7 +43,6 @@ export function SelectInput({ form, name, label, selectItems, placeholder,isNotE
                 </SelectContent>
               </Select>
               <label
-                htmlFor={name}
                 className={`pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5`}
               >
                 {label}

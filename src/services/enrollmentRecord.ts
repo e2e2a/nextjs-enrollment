@@ -1,7 +1,7 @@
 'use server';
 import EnrollmentRecord from '@/models/EnrollmentRecord';
 
-export const getAllStudentEnrollmentRecordByCollege = async (category: string) => {
+export const getEnrollmentRecordByCategory = async (category: string) => {
   try {
     const TProfile = await EnrollmentRecord.find({ category }).populate('profileId').exec();
     return TProfile;
@@ -10,7 +10,7 @@ export const getAllStudentEnrollmentRecordByCollege = async (category: string) =
     return null;
   }
 };
-export const getStudentEnrollmentRecordByProfileId = async (profileId: any) => {
+export const getEnrollmentRecordByProfileId = async (profileId: any) => {
   try {
     const TProfile = await EnrollmentRecord.find({ profileId }).populate('profileId').exec();
     return TProfile;
@@ -20,7 +20,7 @@ export const getStudentEnrollmentRecordByProfileId = async (profileId: any) => {
   }
 };
 
-export const getStudentEnrollmentRecordById = async (id: any) => {
+export const getEnrollmentRecordById = async (id: any) => {
   try {
     const TProfile = await EnrollmentRecord.findById(id).populate('profileId').exec();
     return TProfile;

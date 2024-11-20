@@ -1,16 +1,16 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { TabsContent } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { TertiaryDialog } from './TertiaryDialog';
-import { useEnrollmentSetupQuery } from '@/lib/queries';
+import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
 import LoaderPage from '@/components/shared/LoaderPage';
 import TertiaryAlertDialog from './TertiaryAlertDialog';
 import TertiaryDialogEndSemester from './TertiaryDialogEndSemester';
 import { useEnrollmentQueryByCategory } from '@/lib/queries/enrollment/get/category';
 import MainGrade from './grades/MainGrade';
-import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/all';
+import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/category';
 import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 import StudentsByCourses from './studentsByCourses/StudentsByCourses';
 

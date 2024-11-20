@@ -40,7 +40,7 @@ export const getAllTeacherScheduleByProfileId = async (profileId: any) => {
 
 export const getAllTeacherSchedule = async () => {
   try {
-    const ts = await TeacherSchedule.find().populate('profileId').populate('courseId').populate('blockTypeId').populate('subjectId').populate('roomId').exec();
+    const ts = await TeacherSchedule.find().populate('profileId').populate('courseId').populate('blockTypeId').populate('subjectId').populate('roomId').lean().exec();
     return ts;
   } catch (error) {
     return [];

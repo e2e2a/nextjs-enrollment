@@ -1,7 +1,6 @@
 'use client';
-import Loader from '@/components/shared/Loader';
-import { useEnrollmentSetupQuery } from '@/lib/queries';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
+import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import { columns } from './components/step1/columns';
 import { columns2 } from './components/step2/columns';
@@ -18,13 +17,14 @@ import EnableADW from './components/step4/EnableADW';
 import { DataTable6 } from './components/step6/DataTable6';
 import { columns6 } from './components/step6/Columns6';
 import { useEnrollmentQueryStepByCategory } from '@/lib/queries/enrollment/get/step';
+import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = () => {
   const searchParams = useSearchParams();
   const search = searchParams.get('step');
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [toFilterData, setToFilterData] = useState<any>([]);
+  const [toFilterData, setToFilterData] = useState<any>({});
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
   const isAllowed = useMemo(() => ['1', '2', '3', '4', '5', '6'], []);
   // Validate the step parameter whenever the search parameter changes
@@ -62,7 +62,7 @@ const Page = () => {
     <>
       {isPageLoading ? (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>
-          <Loader />
+          <LoaderPage />
         </div>
       ) : (
         data &&

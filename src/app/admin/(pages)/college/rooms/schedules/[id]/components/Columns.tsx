@@ -18,14 +18,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => (row.blockTypeId ? row.blockTypeId.section : 'block'),
+    accessorFn: (row) => (row.blockTypeId ? row.blockTypeId?.section : 'block'),
     id: 'block type',
     header: 'Block Type',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.blockTypeId && user.blockTypeId.section ? user.blockTypeId.section : <div className='text-red'>Not Assign</div>}
+          {user.blockTypeId && user.blockTypeId?.section ? user.blockTypeId?.section : <div className='text-red'>Not Assign</div>}
         </div>
       );
     },

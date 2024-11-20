@@ -4,18 +4,16 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { Icons } from '@/components/shared/Icons';
-import { useUpdateEnrollmentSetupMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { useUpdateEnrollmentSetupMutation } from '@/lib/queries/enrollmentSetup/update';
+
 const TertiaryAlertDialog = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const mutation = useUpdateEnrollmentSetupMutation();
 
   const handleSubmit = () => {
-    const data = {
-      name: 'GODOY',
-      'enrollmentTertiary.open': false,
-    };
+    const data = { name: 'GODOY', 'enrollmentTertiary.open': false };
 
     mutation.mutate(data, {
       onSuccess: (res: any) => {

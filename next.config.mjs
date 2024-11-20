@@ -1,4 +1,10 @@
 /** @type {import('next').NextConfig} */
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const nextConfig = {
   //   compiler: {
   //     removeConsole: true,
@@ -6,22 +12,26 @@ const nextConfig = {
   // Customize Webpack configuration
   // webpack: (config, { isServer }) => {
   //   // Example: Aliases
-  //   config.resolve.alias = {
-  //     ...config.resolve.alias,
-  //     '@components': path.resolve(__dirname, 'src/components'),
-  //   };
-
-  //   // Important: return the modified config
+  //   // config.resolve.alias = {
+  //   //   ...config.resolve.alias,
+  //   //   '@components': path.resolve(__dirname, 'src/components'),
+  //   // };
+  //   config.module.rules.push({
+  //     test: /pdf-lib/,
+  //     type: 'javascript/auto',
+  //   });
   //   return config;
   // },
+  // experimental: {
+  //   serverComponentsExternalPackages: ['@pdf-lib'],
+  // },
+
   // swcMinify: true,
   // experimental: {
   //   optimizeServerReact: true,
   //   cpus: 15,
   //   optimisticClientCache: true,
   // },
-
-
 
   async redirects() {
     const isInMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === '1';

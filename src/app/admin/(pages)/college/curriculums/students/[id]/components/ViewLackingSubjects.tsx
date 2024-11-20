@@ -3,76 +3,45 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
-import { z } from 'zod';
-import { StudentCurriculumValidator } from '@/lib/validators/AdminValidator';
-import { useUpdateStudentCurriculumLayerMutation } from '@/lib/queries';
+import ViewMissingGrades from './ViewMissingGrades';
 
 interface IProps {
   c: any;
-  syData: any;
   sData: any;
 }
 
-const ViewLackingSubjects = ({ c, syData, sData }: IProps) => {
+const ViewLackingSubjects = ({ c, sData }: IProps) => {
   const [missingSubjects, setMissingSubjects] = useState<Record<string, any[]>>({});
-  const mutation = useUpdateStudentCurriculumLayerMutation();
+  const [missingGradeSubjects, setMissingGradeSubjects] = useState<Record<string, any[]>>({});
 
   useEffect(() => {
     if (sData?.length > 0 && sData) {
       const missingSubjectsObj: Record<string, any[]> = {};
+      const missingSubjectsGradeObj: Record<string, any[]> = {};
 
       c.curriculum.forEach((studentCurr: any) => {
         const yearKey = `${studentCurr.year} - ${studentCurr.semester}`;
+        const curriculumByYearAndSemester = sData.find((s: any) => studentCurr.year.toLowerCase() === s.year.toLowerCase() && studentCurr.semester.toLowerCase() === s.semester.toLowerCase());
 
-        const curriculumByYearAndSemester = sData.filter((curr: any) => {
-          return studentCurr.year === curr.year && studentCurr.semester === curr.semester;
-        });
         // If there's a matching curriculum, compare subjects
-        if (curriculumByYearAndSemester.length > 0) {
-          const requiredSubjects = curriculumByYearAndSemester[0].subjectsFormat; // Assuming only one curriculum per year-semester
+        if (curriculumByYearAndSemester) {
+          const requiredSubjects = curriculumByYearAndSemester.subjectsFormat;
 
-          const studentSubjects = studentCurr.subjectsFormat.filter((subject: any) => (subject.grade && subject.grade !== 'INC') || (subject.grade && subject.grade !== 'DROP')).map((subject: any) => subject.subjectId._id.toString()); // Extract student subject IDs
-          console.log('studentSubjects', studentSubjects);
+          const studentSub = studentCurr.subjectsFormat.map((subject: any) => subject.subjectId._id.toString()); // Extract student subject IDs
+          const studentSubjects = studentCurr.subjectsFormat.filter((subject: any) => !subject.grade || (subject.grade && subject.grade.toLowerCase() === 'inc')).map((s: any) => s);
+          missingSubjectsGradeObj[yearKey] = studentSubjects;
 
           // Find missing subjects
-          const notTakenSubjects = requiredSubjects
-            .filter((currSubject: any) => !studentSubjects.includes(currSubject.subjectId._id)) // Get subjects that the student does not have
-            .map((currSubject: any) => currSubject);
-          console.log('notTakenSubjects', notTakenSubjects);
-          // If there are missing subjects, add them to the object
-          if (notTakenSubjects.length > 0) {
-            missingSubjectsObj[yearKey] = notTakenSubjects;
-          }
+          const notTakenSubjects = requiredSubjects.filter((currSubject: any) => !studentSub.includes(currSubject.subjectId._id)).map((currSubject: any) => currSubject);
+          missingSubjectsObj[yearKey] = notTakenSubjects;
         }
       });
 
-      // Update the state with the missing subjects
+      setMissingGradeSubjects(missingSubjectsGradeObj);
       setMissingSubjects(missingSubjectsObj);
     }
   }, [sData, c]);
-  console.log('missing subjects', Object.keys(missingSubjects));
-  const actionFormSubmit = (data: z.infer<typeof StudentCurriculumValidator>) => {
-    data.year = data.year.toLowerCase();
-    data.semester = data.semester.toLowerCase();
-    const dataa = {
-      ...data,
-      CId: c._id,
-    };
-    mutation.mutate(dataa, {
-      onSuccess: (res: any) => {
-        console.log(res);
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            return;
-          default:
-            return;
-        }
-      },
-      onSettled: () => {},
-    });
-  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -81,13 +50,7 @@ const ViewLackingSubjects = ({ c, syData, sData }: IProps) => {
           <span className='flex'>View Lacking Subjects</span>
         </Button>
       </DialogTrigger>
-      <DialogContent
-        className='sm:max-w-6xl w-full bg-white focus-visible:ring-0 max-h-[75vh] overflow-y-auto'
-        onOpenAutoFocus={(e) => e.preventDefault()}
-        onInteractOutside={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <DialogContent className='sm:max-w-6xl w-full bg-white focus-visible:ring-0 max-h-[75vh] overflow-y-auto' onOpenAutoFocus={(e) => e.preventDefault()} onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle className='flex flex-col space-y-1'>
             <span>Lacking Subjects</span>
@@ -99,6 +62,7 @@ const ViewLackingSubjects = ({ c, syData, sData }: IProps) => {
             <div className='w-full'>
               {Object.entries(missingSubjects).map(([yearSem, subjects], index) => (
                 <div className='w-full mb-10' key={index}>
+                  {Object.keys(missingGradeSubjects).length > 0 && <ViewMissingGrades s={missingGradeSubjects} yearSem={yearSem} />}
                   <h2 className='text-red'>Missing Subjects: {yearSem}</h2>
                   <div className='lg:flex hidden'>
                     <table className='min-w-full bg-white border '>
