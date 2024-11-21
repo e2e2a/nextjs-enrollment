@@ -1,9 +1,10 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { DataTable } from './components/DataTable';
+import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { useEnrollmentRecordQueryByProfileId } from '@/lib/queries/enrollmentRecord/get/profileId';
-import CategoryTable from './components/CategoryTable';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
@@ -37,7 +38,7 @@ const Page = () => {
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-semibold tracking-tight '>Enrollment Records</h1>
               </div>
-              <CategoryTable data={data.enrollmentRecord} />
+              <DataTable columns={columns} data={data.enrollmentRecord as any[]} />
             </div>
           )}
         </div>

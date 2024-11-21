@@ -44,7 +44,7 @@ const schema = new Schema<IEnrollmentRecord>(
       },
     },
 
-    studentType:{ type: String },
+    studentType: { type: String },
     studentYear: { type: String },
     studentSemester: { type: String },
     step: { type: Number, default: 1 },
@@ -53,21 +53,18 @@ const schema = new Schema<IEnrollmentRecord>(
     enrollStatus: {
       type: String,
       default: 'Pending',
-      enum: ['Pending', 'Rejected', 'Enrolled', 'Failed', 'Completed'],
+      enum: ['Pending', 'Rejected', 'Temporary Enrolled', 'Enrolled', 'Failed', 'Completed'],
     },
-    
+
     enrollmentStatus: {
       type: String,
       enum: ['Success', 'Failed'],
     },
-
     studentStatus: {
       type: String,
       default: 'New Student',
       enum: ['New Student', 'Continue', 'Transferee'],
     },
-
-    
     scholarType: {
       type: String,
       enum: ['TWSP', 'STEP', 'PESFA', 'UAQTEA', 'None'],
@@ -117,7 +114,7 @@ const schema = new Schema<IEnrollmentRecord>(
             type: String,
           },
         },
-        blockType:{
+        blockType: {
           year: {
             type: String,
           },
