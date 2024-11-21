@@ -30,7 +30,7 @@ export const getCurriculumByCategory = async (category: string) => {
   }
 };
 
-export const getCurriculumById = async (id: any) => {
+export const getCurriculumById = async (id: string) => {
   try {
     const p = await Curriculum.findById(id).populate('courseId').populate('curriculum.subjectsFormat.subjectId').exec();
     return p;
@@ -40,7 +40,7 @@ export const getCurriculumById = async (id: any) => {
   }
 };
 
-export const getCurriculumByCourseId = async (courseId: any) => {
+export const getCurriculumByCourseId = async (courseId: string) => {
   try {
     const p = await Curriculum.findOne({ courseId })
       .populate('courseId')

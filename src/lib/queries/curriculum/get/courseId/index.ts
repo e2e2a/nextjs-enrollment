@@ -1,7 +1,7 @@
 import { getCurriculumByCourseIdAction } from '@/action/curriculum/get/courseId';
 import { useQuery } from '@tanstack/react-query';
 
-export const useCurriculumQueryByCourseId = (courseId: any) => {
+export const useCurriculumQueryByCourseId = (courseId: string) => {
   return useQuery<any, Error>({
     queryKey: ['CurriculumByCourseId', courseId],
     queryFn: () => getCurriculumByCourseIdAction(courseId),
