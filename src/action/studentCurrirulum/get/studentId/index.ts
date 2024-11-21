@@ -7,6 +7,11 @@ import { getStudentProfileById } from '@/services/studentProfile';
 import { checkAuth } from '@/utils/actions/session';
 import mongoose from 'mongoose';
 
+/**
+ * handle query student curriculum by studentId
+ *
+ * @param {string} studentId
+ */
 export const getStudentCurriculumByStudentIdAction = async (studentId: any) => {
   return tryCatch(async () => {
     await dbConnect();
@@ -18,6 +23,12 @@ export const getStudentCurriculumByStudentIdAction = async (studentId: any) => {
   });
 };
 
+/**
+ * handle check role
+ *
+ * @param {object} user
+ * @param {string} studentId
+ */
 const checkRole = async (user: any, studentId: string) => {
   return tryCatch(async () => {
     const isValidObjectId = mongoose.Types.ObjectId.isValid(studentId);
@@ -34,7 +45,7 @@ const checkRole = async (user: any, studentId: string) => {
         const p = await getDeanProfileByUserId(user._id);
         if (a.courseId._id.toString() !== p.courseId._id.toString()) return { error: 'Forbidden.', status: 403 };
         const c = b?.filter((e) => e.courseId._id.toString() === p.courseId._id.toString());
-        console.log('c', c?.length)
+        console.log('c', c?.length);
         return { curriculums: JSON.parse(JSON.stringify(c)), status: 200 };
       default:
         return { error: 'Forbidden.', status: 403 };

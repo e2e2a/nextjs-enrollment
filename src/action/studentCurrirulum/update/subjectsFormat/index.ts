@@ -4,6 +4,11 @@ import { tryCatch } from '@/lib/helpers/tryCatch';
 import StudentCurriculum from '@/models/StudentCurriculum';
 import { getSubjectByCategory } from '@/services/subject';
 
+/**
+ * handle update curriculum layer
+ *
+ * @param {object} data
+ */
 export const updateStudentCurriculumSubjectsAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();

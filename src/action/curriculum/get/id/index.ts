@@ -4,6 +4,11 @@ import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getCurriculumById } from '@/services/curriculum';
 import mongoose from 'mongoose';
 
+/**
+ * handle query curriculum by id
+ *
+ * @param {string} id
+ */
 export const getCurriculumByIdAction = async (id: string) => {
   return tryCatch(async () => {
     await dbConnect();

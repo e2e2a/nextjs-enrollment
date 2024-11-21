@@ -5,6 +5,11 @@ import Curriculum from '@/models/Curriculum';
 import { getSubjectByCategory } from '@/services/subject';
 import { checkAuth } from '@/utils/actions/session';
 
+/**
+ * handle update curriculum layer
+ *
+ * @param {object} data
+ */
 export const updateCurriculumSubjectsAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();

@@ -7,6 +7,11 @@ import { getStudentProfileById } from '@/services/studentProfile';
 import { checkAuth } from '@/utils/actions/session';
 import mongoose from 'mongoose';
 
+/**
+ * handle query student curriculum by id
+ *
+ * @param {string} id
+ */
 export const getStudentCurriculumByIdAction = async (id: any) => {
   return tryCatch(async () => {
     await dbConnect();
@@ -18,6 +23,12 @@ export const getStudentCurriculumByIdAction = async (id: any) => {
   });
 };
 
+/**
+ * handle check role
+ *
+ * @param {object} user
+ * @param {string} id
+ */
 const checkRole = async (user: any, id: string) => {
   return tryCatch(async () => {
     const isValidObjectId = mongoose.Types.ObjectId.isValid(id);

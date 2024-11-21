@@ -4,6 +4,11 @@ import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getStudentCurriculumByCategory } from '@/services/studentCurriculum';
 import { checkAuth } from '@/utils/actions/session';
 
+/**
+ * handle query student curriculum by category
+ *
+ * @param {string} category
+ */
 export const getStudentCurriculumByCategoryAction = async (category: string) => {
   return tryCatch(async () => {
     await dbConnect();
