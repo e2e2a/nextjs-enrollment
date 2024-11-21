@@ -1,16 +1,4 @@
 {
-  "build": {
-    "env": {
-      "VERCEL_ENV": "production"
-    }
-  },
-  "ignoreBuildStep": true,
-  "git": {
-    "deployments": {
-      "branches": ["main"]
-    }
-  },
-
   "functions": {
     "app/api/**/*.ts": {
       "maxDuration": 55
