@@ -6,6 +6,8 @@ import { checkAuth } from '@/utils/actions/session';
 import { getTeacherProfileByUserId } from '@/services/teacherProfile';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getEnrollmentByProfileId } from '@/services/enrollment';
+import { generateViewGradeToken } from '@/services/token';
+import { sendVerificationEmail } from '@/lib/mail/mail';
 
 /**
  * handles update report grade by id
@@ -176,10 +178,14 @@ const handleAdmin = async (user: any, data: any, e: any, message: string) => {
 
           await se.save();
         }
+        const verificationToken = await generateViewGradeToken(se.userId._id, 'View Grades');
+        if (!verificationToken) return { error: 'Error creating verificationToken', status: verificationToken.status };
       }
     }
     e.evaluated = true;
     await e.save();
+
+    // const send = await sendVerificationEmail(verificationToken.email, verificationToken.code, username, 'Confirm your Email');
     return { message: `Reported Grades in ${message} has been Evaluated.`, teacherId: e.teacherId._id.toString(), teacherScheduleId: e.teacherScheduleId._id.toString(), category: data.category, id: e._id.toString(), status: 201 };
   });
 };

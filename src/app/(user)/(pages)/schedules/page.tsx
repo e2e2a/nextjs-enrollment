@@ -31,7 +31,7 @@ const Page = () => {
         if (ESetup.enrollmentSetup.addOrDropSubjects) {
           setSchedule(data.enrollment?.studentSubjects);
         } else {
-          if (data.enrollment?.enrollStatus === 'Enrolled') {
+          if (data.enrollment?.enrollStatus === 'Enrolled' || data.enrollment?.enrollStatus === 'Temporary Enrolled') {
             setSchedule(filteredSchedules);
           } else {
             setSchedule(data.enrollment?.studentSubjects);
@@ -86,7 +86,7 @@ const Page = () => {
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
             <div className='mb-3'>
-              <h1 className='text-lg sm:text-2xl font-bold uppercase'>Student&apos; Schedules</h1>
+              <h1 className='text-lg sm:text-2xl font-bold uppercase'>Student&apos;s Schedules</h1>
               {data.enrollment.enrollStatus === 'Pending' && data.enrollment.step > 3 && (
                 <span className='text-[15px] font-semibold'>
                   Drop/Add Subjects: {ESetup?.enrollmentSetup?.addOrDropSubjects ? <span className='text-green-500 text-[15px] font-semibold'>Open</span> : <span className='text-red text-[15px] font-semibold'>Closed</span>}

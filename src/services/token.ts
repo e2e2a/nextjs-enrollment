@@ -21,6 +21,15 @@ export const getVerificationTokenByUserId = async (userId: string) => {
   }
 };
 
+export const getVerificationTokenByParentId = async (parentId: string) => {
+  try {
+    const verificationToken = await Token.findOne({ parentId }).populate('parentId').exec();
+    return JSON.parse(JSON.stringify(verificationToken));
+  } catch (error) {
+    return null;
+  }
+};
+
 export const deleteVerificationTokenByid = async (id: string) => {
   try {
     await Token.findByIdAndDelete(id);
@@ -50,6 +59,24 @@ export const generateVerificationToken = async (userId: string, TokenType: strin
     tokenType: TokenType,
     expires: expirationTime,
     expiresCode: expireCode,
+  });
+  return verificationToken;
+};
+
+export const generateViewGradeToken = async (parentId: string, TokenType: string) => {
+  const expirationTime = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  const token = jwt.sign({ parentId, exp: expirationTime.getTime() }, process.env.JWT_SECRET!, { algorithm: 'HS256' });
+
+  const existingToken = await getVerificationTokenByParentId(parentId);
+  if (existingToken) {
+    await deleteVerificationTokenByid(existingToken._id);
+  }
+
+  const verificationToken = await Token.create({
+    parentId,
+    token,
+    tokenType: TokenType,
+    expires: expirationTime,
   });
   return verificationToken;
 };
