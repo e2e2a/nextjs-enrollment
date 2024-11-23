@@ -2,14 +2,13 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TabsContent } from '@/components/ui/tabs';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { SelectInput } from './SelectInput';
 import { Form } from '@/components/ui/form';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEnrollmentDeleteMutation } from '@/lib/queries';
-import { useSession } from 'next-auth/react';
 import { selectType, studentYearData } from '@/constant/enrollment';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import FileBirth from './FileBirth';
@@ -154,10 +153,12 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
       FathersFirstName: '',
       FathersMiddleName: '',
       FathersContact: '',
+      FathersEmail: '',
       MothersLastName: '',
       MothersFirstName: '',
       MothersMiddleName: '',
       MothersContact: '',
+      MothersEmail: '',
     },
   });
 
@@ -224,7 +225,7 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
               makeToastSucess(res.message);
             }, 500);
             setSelectedCourse(search || '');
-            form.reset()
+            form.reset();
             setIsPending(false);
             return;
           default:
@@ -330,12 +331,14 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
                       <Input label={`Father's First Name`} type='text' form={form} name={'FathersFirstName'} />
                       <Input label={`Father's Middle Name`} type='text' form={form} name={'FathersMiddleName'} />
                       <Input label={`Father's Contact Number`} type='text' form={form} name={'FathersContact'} />
+                      <Input label={`Father's Email`} type='text' form={form} name={'FathersEmail'} />
                     </div>
                     <div className='flex flex-col gap-2'>
                       <Input label={`Mother's Last Name`} type='text' form={form} name={'MothersLastName'} />
                       <Input label={`Mother's First Name`} type='text' form={form} name={'MothersFirstName'} />
                       <Input label={`Mother's Middle Name`} type='text' form={form} name={'MothersMiddleName'} />
                       <Input label={`Mother's Contact Number`} type='text' form={form} name={'MothersContact'} />
+                      <Input label={`Mother's Email`} type='text' form={form} name={'MothersEmail'} />
                     </div>
                   </div>
                 </div>

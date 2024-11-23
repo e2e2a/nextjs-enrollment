@@ -248,10 +248,12 @@ const ExtensionData = ({ form, profile, isNotEditable, photoPreview, filePreview
               <Input isNotEditable={isNotEditable} label={`Father's First Name:`} type={'text'} form={form} name={'FathersFirstName'} classNameInput={'capitalize'} />
               <Input isNotEditable={isNotEditable} label={`Father's Middle Name:`} type={'text'} form={form} name={'FathersMiddleName'} classNameInput={'capitalize'} />
               <Input isNotEditable={isNotEditable} label={`Father's Contact Number:`} type={'text'} form={form} name={'FathersContact'} classNameInput={'capitalize'} />
+              <Input isNotEditable={isNotEditable} label={`Father's Email:`} type={'text'} form={form} name={'FathersEmail'} classNameInput={'capitalize'} />
               <Input isNotEditable={isNotEditable} label={`Mother's Last Name:`} type={'text'} form={form} name={'MothersLastName'} classNameInput={'capitalize'} />
               <Input isNotEditable={isNotEditable} label={`Mother's First Name:`} type={'text'} form={form} name={'MothersFirstName'} />
               <Input isNotEditable={isNotEditable} label={`Mother's Middle Name:`} type={'text'} form={form} name={'MothersMiddleName'} />
               <Input isNotEditable={isNotEditable} label={`Mother's Contact Number:`} type={'text'} form={form} name={'MothersContact'} classNameInput={'capitalize'} />
+              <Input isNotEditable={isNotEditable} label={`Mother's Email:`} type={'text'} form={form} name={'MothersEmail'} classNameInput={'capitalize'} />
             </div>
           </div>
         </div>

@@ -45,10 +45,12 @@ export interface IProfile extends Document {
   FathersFirstName: string;
   FathersMiddleName: string;
   FathersContact: string;
+  FathersEmail: string;
   MothersLastName: string;
   MothersFirstName: string;
   MothersMiddleName: string;
   MothersContact: string;
+  MothersEmail: string;
 
   photoUrl: string;
   enrollStatus?: 'Pending' | 'Completed' | 'Temporary Enrolled' | 'Enrolled';
@@ -105,26 +107,11 @@ const schema = new Schema<IProfile>(
       default: 'New Student',
       enum: ['New Student', 'Continue', 'Transferee'],
     },
-    // isEnrolled: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // isEnrolling: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // isStudying: {
-    //   type: Boolean,
-    //   default: false,
-    // },
     enrollStatus: {
       type: String,
       enum: ['Pending', 'Enrolled', 'Temporary Enrolled', 'Completed'],
     },
-    // printLimit: {
-    //   type: Number,
-    //   default: 0,
-    // },
+
     psaUrl: { type: String },
     goodMoralUrl: { type: String },
     reportCardUrl: { type: String },
@@ -142,10 +129,12 @@ const schema = new Schema<IProfile>(
     FathersFirstName: { type: String },
     FathersMiddleName: { type: String },
     FathersContact: { type: String },
+    FathersEmail: { type: String },
     MothersLastName: { type: String },
     MothersFirstName: { type: String },
     MothersMiddleName: { type: String },
     MothersContact: { type: String },
+    MothersEmail: { type: String },
 
     studentType: { type: String },
     imageUrl: { type: String },

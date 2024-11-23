@@ -65,8 +65,6 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
     defaultValues: {
       studentStatus: '',
       studentYear: '',
-      // studentSemester: '',
-      // schoolYear: '',
 
       primarySchoolName: '',
       primarySchoolYear: '',
@@ -80,10 +78,12 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
       FathersFirstName: '',
       FathersMiddleName: '',
       FathersContact: '',
+      FathersEmail: '',
       MothersLastName: '',
       MothersFirstName: '',
       MothersMiddleName: '',
       MothersContact: '',
+      MothersEmail: '',
     },
   });
   useEffect(() => {
