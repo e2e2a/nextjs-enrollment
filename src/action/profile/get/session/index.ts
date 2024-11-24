@@ -7,6 +7,7 @@ import { getTeacherProfileByUserId } from '@/services/teacherProfile';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getAdminProfileByUserId } from '@/services/adminProfile';
 import { checkAuth } from '@/utils/actions/session';
+import { getAccountingProfileByUserId } from '@/services/accountingProfile';
 
 /**
  * Any authenticated role
@@ -46,6 +47,9 @@ const checkRole = async (session: any): Promise<any> => {
         break;
       case 'ADMIN':
         profile = await getAdminProfileByUserId(session.user._id);
+        break;
+      case 'ACCOUNTING':
+        profile = await getAccountingProfileByUserId(session.user._id);
         break;
       default:
         return { error: 'Forbidden.', status: 403 };
