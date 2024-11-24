@@ -780,23 +780,28 @@ export const dashboardConfig: DashboardConfig = {
       title: 'College',
       i: [
         {
-          title: 'Down Payment',
+          title: 'Enrolling Students',
           i: [
             {
-              title: 'Step 5 Management',
-              href: '/dean/enrollment/management?step=5',
+              title: 'View Enrolling Students',
+              href: '/accounting/enrollment/enrolling',
               icon: 'eye',
             },
           ],
           icon: 'packageSearch',
         },
         {
-          title: 'Enrolling Students',
+          title: 'Down Payment Management',
           i: [
             {
-              title: 'View Enrolling Students',
-              href: '/dean/enrollment/enrolling',
+              title: 'View Down Payments',
+              href: '/accounting/college/downpayment',
               icon: 'eye',
+            },
+            {
+              title: 'Add Down Payment',
+              href: '/accounting/college/downpayment',
+              icon: 'add',
             },
           ],
           icon: 'packageSearch',
@@ -823,24 +828,8 @@ export const dashboardConfig: DashboardConfig = {
           ],
           icon: 'packageSearch',
         },
-        {
-          title: 'Recent Records',
-          i: [
-            {
-              title: 'Enrollment Records',
-              href: '/dean/enrollment/record/enrollment',
-              icon: 'eye',
-            },
-          ],
-          icon: 'packageSearch',
-        },
       ],
       icon: 'packageSearch',
-    },
-    {
-      title: 'Grades Report',
-      href: '/dean/report/grade',
-      icon: 'filePenLine',
     },
     {
       title: 'School & Policies',
