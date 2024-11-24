@@ -31,9 +31,8 @@ export const updateProfileBySessionIdAction = async (data: any) => {
     }
 
     const checkedR = await checkSessionRole(session, data);
-    if (!checkedR.profile || checkedR.error) return { error: 'Profile not found.', status: 404 };
 
-    return { message: 'Profile has been updated. ', status: 201 };
+    return checkedR;
   });
 };
 
@@ -62,7 +61,7 @@ const checkSessionRole = async (session: any, data: any): Promise<any> => {
       default:
         return { error: 'Forbidden.', status: 403 };
     }
-    return { profile: JSON.parse(JSON.stringify(profile)), status: 200 };
+    return { userId: session.user._id.toString(), role: session.user.role, ...profile };
   });
 };
 

@@ -7,7 +7,6 @@ export const useUpdateProfileByAdminMutation = () => {
     mutationFn: async (data) => updateProfileByAdminAction(data),
     onSuccess: (data) => {
       if (!data.error) {
-        console.log('data', data);
         queryClient.invalidateQueries({ queryKey: ['AllProfilesByRoles', data.role] });
         queryClient.invalidateQueries({ queryKey: ['ProfileBySessionId'] });
         queryClient.invalidateQueries({ queryKey: ['ProfileByParamsUserId', data.userId] });

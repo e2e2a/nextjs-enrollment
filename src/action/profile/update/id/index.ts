@@ -60,7 +60,7 @@ const checkSessionRole = async (data: any): Promise<any> => {
         return { error: 'Forbidden.', status: 403 };
     }
     if (profile && profile.error) return { error: 'error', status: profile.status };
-    return { userId: u._id.toString(), ...profile };
+    return { userId: u._id.toString(), role: u.role, ...profile };
   });
 };
 

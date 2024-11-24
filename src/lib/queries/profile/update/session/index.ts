@@ -9,7 +9,7 @@ export const useUpdateProfileMutation = () => {
       if (!data.error) {
         queryClient.invalidateQueries({ queryKey: ['AllProfilesByRoles', data.role] });
         queryClient.invalidateQueries({ queryKey: ['ProfileBySessionId'] });
-        queryClient.invalidateQueries({ queryKey: ['ProfileByParamsUserId', data.id] });
+        queryClient.invalidateQueries({ queryKey: ['ProfileByParamsUserId', data.userId] });
       }
     },
   });
