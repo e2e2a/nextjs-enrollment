@@ -47,7 +47,10 @@ const Page = () => {
       {!isPageLoading && !isPageError && data.enrollment && (
         <>
           <div className='flex w-full items-center justify-center py-5 md:py-5'>
-            <h1 className='text-sm sm:text-xl md:text-3xl font-bold uppercase text-red animate-wiggle-pause flex gap-1 items-center justify-center'><Icons.warning className=' h-10 w-10'/>Do Not Share This Link!</h1>
+            <h1 className='text-sm sm:text-xl md:text-3xl font-bold uppercase text-red animate-wiggle-pause flex gap-1 items-center justify-center'>
+              <Icons.warning className=' h-10 w-10' />
+              Do Not Share This Link!
+            </h1>
           </div>
           <div className=' pb-10 px-10 '>
             <div className='bg-white min-h-[86vh] px-5 rounded-xl'>
