@@ -1,6 +1,6 @@
 'use server';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import { getVerificationTokenByUserId } from '@/services/token';
+import { getVerificationTokenByParentId, getVerificationTokenByUserId } from '@/services/token';
 import { getUserById } from '@/services/user';
 import { checkAuth } from '@/utils/actions/session';
 import jwt from 'jsonwebtoken';
@@ -65,7 +65,7 @@ export const checkParentToken = async (token: string) => {
     }) as jwt.JwtPayload;
     if (!decodedToken) return { error: 'Invalid token', status: 400 };
 
-    const existingToken = await getVerificationTokenByUserId(decodedToken.parentId);
+    const existingToken = await getVerificationTokenByParentId(decodedToken.parentId);
     if (!existingToken) return { error: 'Token not found', status: 404 };
     const hasExpired = new Date(existingToken.expires) < new Date();
     if (hasExpired) return { error: 'Token has expired', status: 400 };

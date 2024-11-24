@@ -56,6 +56,12 @@ module.exports = {
 
       },
       keyframes: {
+        wiggleWithPause: {
+          '0%, 90%': { transform: 'rotate(0deg)' }, // Idle state
+          '10%, 30%': { transform: 'rotate(-6deg)' },
+          '20%, 40%': { transform: 'rotate(6deg)' },
+          '50%, 100%': { transform: 'rotate(0deg)' }, // Back to idle
+        },
         wiggle: {
           '0%, 100%': { transform: 'rotate(-3deg)' },
           '50%': { transform: 'rotate(3deg)' },
@@ -78,6 +84,7 @@ module.exports = {
         },
       },
       animation: {
+        'wiggle-pause': 'wiggleWithPause 6s ease-in-out infinite',
         wiggle: 'wiggle 1s ease-in-out infinite',
         'fadeOut': 'fadeOut 0.1s ease-in-out',
         'fadeIn': 'fadeIn 0.1s ease-in-out',
