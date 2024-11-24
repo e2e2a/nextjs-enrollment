@@ -23,6 +23,6 @@
     },
     "downlevelIteration": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/lib/supabaseClient.js", "src/seeders/room.js", "src/seeders/admin.js", "src/seeders/student.js", "src/seeders/subject.js", "src/seeders/teacher.js", "src/seeders/schoolYear.js", "src/seeders/enrollingStudent.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/lib/supabaseClient.js", "src/seeders/index.js"],
   "exclude": ["node_modules"]
 }

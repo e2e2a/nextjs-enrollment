@@ -7,13 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seedAdmin": "ts-node src/seeders/admin.js",
-    "seedStudent": "ts-node src/seeders/student.js",
-    "seedStudentEnrollment": "ts-node src/seeders/enrollingStudent.js",
-    "seedTeacher": "ts-node src/seeders/teacher.js",
-    "seedRoom": "ts-node src/seeders/room.js",
-    "seedSubject": "ts-node src/seeders/subject.js",
-    "seedSY": "ts-node src/seeders/schoolYear.js"
+    "seed": "ts-node src/seeders/index.js"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.4.1",

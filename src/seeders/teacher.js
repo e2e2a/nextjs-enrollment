@@ -44,7 +44,7 @@ const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 const createTeacherUsers = async () => {
   // const conn = await mongoose.connect('mongodb+srv://marzvelasco73019:F3AcEj0UXbkwn1lX@school.zcndgqd.mongodb.net/godoy?retryWrites=true&w=majority&appName=school');
-  const conn = await mongoose.connect('mongodb://localhost:27017/mydbaseeeesd');
+  const conn = await mongoose.connect('mongodb://localhost:27017/mydbaseeeesd123');
   const password = 'qweqwe';
   const hashedPassword = await bcrypt.hash(password, 10);
   for (let i = 0; i < 100; i++) {
@@ -78,4 +78,4 @@ const createTeacherUsers = async () => {
   mongoose.connection.close();
 };
 
-createTeacherUsers();
+module.exports = createTeacherUsers;
