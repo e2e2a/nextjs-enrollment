@@ -762,6 +762,22 @@ export const dashboardConfig: DashboardConfig = {
           icon: 'userSearch',
         },
         {
+          title: 'Role Accounting',
+          i: [
+            {
+              title: 'Accountings Management',
+              href: '/admin/users/accountings',
+              icon: 'eye',
+            },
+            {
+              title: 'Add Accounting',
+              href: '/admin/users/accountings/add',
+              icon: 'add',
+            },
+          ],
+          icon: 'userSearch',
+        },
+        {
           title: 'Role Student',
           i: [
             {

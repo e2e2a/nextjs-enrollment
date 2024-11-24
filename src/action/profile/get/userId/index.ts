@@ -6,9 +6,9 @@ import { getSingleProfileResponse } from '@/types';
 import { getTeacherProfileByUserId } from '@/services/teacherProfile';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getAdminProfileByUserId } from '@/services/adminProfile';
-import { verifyADMIN } from '../../../../utils/actions/session/roles/admin';
 import { getUserById } from '@/services/user';
 import { checkAuth } from '@/utils/actions/session';
+import { getAccountingProfileByUserId } from '@/services/accountingProfile';
 
 /**
  * only admin roles
@@ -57,6 +57,9 @@ const checkSeachRole = async (user: any, id: any) => {
         break;
       case 'ADMIN':
         profile = await getAdminProfileByUserId(u._id);
+        break;
+      case 'ACCOUNTING':
+        profile = await getAccountingProfileByUserId(u._id);
         break;
       default:
         return { error: 'Forbidden.', status: 403 };

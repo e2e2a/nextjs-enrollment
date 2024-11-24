@@ -2,7 +2,8 @@
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { SignupValidator } from '@/lib/validators/auth/signUp';
-import { AdminProfileUpdateValidator, DeanProfileExtensionValidator, DeanProfileUpdateValidator, StudentProfileUpdateValidator, TeacherProfileUpdateValidator } from '@/lib/validators/profile/update';
+import { AccountingProfileUpdateValidator, AdminProfileUpdateValidator, DeanProfileExtensionValidator, DeanProfileUpdateValidator, StudentProfileUpdateValidator, TeacherProfileUpdateValidator } from '@/lib/validators/profile/update';
+import { createAccountingProfile } from '@/services/accountingProfile';
 import { createAdminProfile } from '@/services/adminProfile';
 import { getCoursesById } from '@/services/course';
 import { createDeanProfile } from '@/services/deanProfile';
@@ -74,6 +75,9 @@ const createProfile = async (data: any, userData: any) => {
         break;
       case 'ADMIN':
         profile = await createAdmin(data, userData);
+        break;
+      case 'ACCOUNTING':
+        profile = await createAccounting(data, userData);
         break;
       default:
         return { error: 'Forbidden.', status: 403 };
@@ -160,5 +164,20 @@ const createStudent = async (data: any, userData: any) => {
 
     await createStudentProfile({ userId: createdU._id, ...(data.configProfile === 'Yes' ? { ...profileParse!.data, isVerified: true } : { isVerified: false }) });
     return { success: true, status: 201 };
+  });
+};
+
+const createAccounting = async (data: any, userData: any) => {
+  return tryCatch(async () => {
+    let profileParse;
+    if (data.configProfile === 'Yes') {
+      profileParse = AccountingProfileUpdateValidator.safeParse(data);
+      if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
+    }
+    const createdU = await createUser({ email: userData.email, username: userData.username, role: data.role, emailVerified: new Date(Date.now()) }, userData.password);
+    if (!createdU) return { error: 'Error Creating User', status: 404 };
+
+    await createAccountingProfile({ userId: createdU._id, ...(data.configProfile === 'Yes' ? { ...profileParse!.data, isVerified: true } : { isVerified: false }) });
+    return { success: 'yesyes.', status: 201 };
   });
 };

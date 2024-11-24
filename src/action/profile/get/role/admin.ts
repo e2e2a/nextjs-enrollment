@@ -1,6 +1,7 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
+import { getAllAccountingProfile } from '@/services/accountingProfile';
 import { getAllAdminProfile } from '@/services/adminProfile';
 import { getAllDeanProfile } from '@/services/deanProfile';
 import { getAllStudentProfile } from '@/services/studentProfile';
@@ -46,6 +47,9 @@ const checkSearchRole = async (role: string) => {
         break;
       case 'TEACHER':
         profiles = await getAllTeacherProfile();
+        break;
+      case 'ACCOUNTING':
+        profiles = await getAllAccountingProfile();
         break;
       default:
         return { error: 'Invalid role', status: 403 };

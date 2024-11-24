@@ -1,7 +1,7 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import { AdminProfileUpdateValidator, DeanProfileUpdateValidator, StudentProfileUpdateValidator, TeacherProfileUpdateValidator } from '@/lib/validators/profile/update';
+import { AccountingProfileUpdateValidator, AdminProfileUpdateValidator, DeanProfileUpdateValidator, StudentProfileUpdateValidator, TeacherProfileUpdateValidator } from '@/lib/validators/profile/update';
 import { updateAdminProfileByUserId } from '@/services/adminProfile';
 import { updateDeanProfileByUserId } from '@/services/deanProfile';
 import { updateStudentProfileByUserId } from '@/services/studentProfile';
@@ -11,6 +11,7 @@ import { ref, uploadBytes } from 'firebase/storage';
 import { storage } from '@/firebase';
 import { StudentProfileExtension } from '@/lib/validators/profile/extension';
 import { getUserById } from '@/services/user';
+import { updateAccountingProfileByUserId } from '@/services/accountingProfile';
 
 /**
  * Update profile by session action
@@ -24,20 +25,18 @@ export const updateProfileByAdminAction = async (data: any) => {
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
     if (session && session.user.role !== 'ADMIN') return { error: 'Dont have permission.', status: 403 };
 
-    const checkedR = await checkSessionRole(session, data);
-    if (!checkedR.profile || checkedR.error) return { error: checkedR.error, status: checkedR.status };
+    const checkedR = await checkSessionRole(data);
 
-    return { message: 'Profile has been updated. ', status: 201 };
+    return checkedR;
   });
 };
 
 /**
  * check session roles
  *
- * @param {Object} session
  * @param {Object} data
  */
-const checkSessionRole = async (session: any, data: any): Promise<any> => {
+const checkSessionRole = async (data: any): Promise<any> => {
   return tryCatch(async () => {
     const u = await getUserById(data.userId);
     let profile;
@@ -54,11 +53,14 @@ const checkSessionRole = async (session: any, data: any): Promise<any> => {
       case 'ADMIN':
         profile = await updateAdminProfile(u._id, data);
         break;
+      case 'ACCOUNTING':
+        profile = await updateAccountProfile(u._id, data);
+        break;
       default:
         return { error: 'Forbidden.', status: 403 };
     }
-    if (profile && profile.error) return { error: profile.error, status: profile.status };
-    return { profile: JSON.parse(JSON.stringify(profile)), status: 200 };
+    if (profile && profile.error) return { error: 'error', status: profile.status };
+    return { userId: u._id.toString(), ...profile };
   });
 };
 
@@ -186,6 +188,24 @@ const updateAdminProfile = async (userId: string, data: any) => {
     if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
 
     const profile = await updateAdminProfileByUserId(userId, { ...profileParse.data, isVerified: true });
+    if (!profile) return { error: 'Something went wrong. ', status: 500 };
+
+    return { message: 'Profile has been update. ', status: 201 };
+  });
+};
+
+/**
+ * update accounting profile
+ *
+ * @param {String} userId
+ * @param {Object} data
+ */
+const updateAccountProfile = async (userId: string, data: any) => {
+  return tryCatch(async () => {
+    const profileParse = AccountingProfileUpdateValidator.safeParse(data);
+    if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
+
+    const profile = await updateAccountingProfileByUserId(userId, { ...profileParse.data, isVerified: true });
     if (!profile) return { error: 'Something went wrong. ', status: 500 };
 
     return { message: 'Profile has been update. ', status: 201 };

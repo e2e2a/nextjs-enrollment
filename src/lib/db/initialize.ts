@@ -21,6 +21,7 @@ import ReportGrade from '@/models/ReportGrade';
 import EnrollmentRecord from '@/models/EnrollmentRecord';
 import TeacherScheduleRecord from '@/models/TeacherScheduleRecord';
 import { Session } from '@/models/Sessions';
+import AccountingProfile from '@/models/AccountingProfile';
 
 type ModelName =
   | 'Session'
@@ -43,7 +44,8 @@ type ModelName =
   | 'EnrollmentSetup'
   | 'ReportGrade'
   | 'EnrollmentRecord'
-  | 'TeacherScheduleRecord';
+  | 'TeacherScheduleRecord'
+  | 'AccountingProfile';
 
 const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   Session,
@@ -67,6 +69,7 @@ const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   ReportGrade,
   EnrollmentRecord,
   TeacherScheduleRecord,
+  AccountingProfile,
 };
 let isInitialized = false;
 const initializeModel = async (modelNames: ModelName[]) => {
@@ -77,20 +80,8 @@ const initializeModel = async (modelNames: ModelName[]) => {
       throw new Error(`Unknown model: ${name}`);
     }
 
-    // Force model initialization by executing a dummy query
-    await model.countDocuments(); // Use countDocuments instead
-    // console.log(`${model.modelName} model initialized`);
+    await model.countDocuments();
   }
 };
 
 export default initializeModel;
-
-// import mongoose from 'mongoose';
-// const initializeModel = async() => {
-//   for (const model of Object.values(modelsMap)) {
-//     await model.findOne().exec();
-//   }
-//   console.log("All models initialized");
-// };
-
-// export default initializeModel;

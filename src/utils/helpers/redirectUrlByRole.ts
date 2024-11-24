@@ -13,6 +13,9 @@ export const redirectUrlByRole = (role: string) => {
     case 'STUDENT':
       redirect = '/';
       break;
+    case 'ACCOUNTING':
+      redirect = '/accounting';
+      break;
     default:
       return { error: 'Forbidden.', url: '', status: 403 };
   }

@@ -13,7 +13,7 @@ import { SelectInput } from './selectInput';
 import { profileSelectItems } from '@/constant/profile/selectItems';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import Image from 'next/image';
-import { TeacherProfileUpdateValidator } from '@/lib/validators/profile/update';
+import { AccountingProfileUpdateValidator } from '@/lib/validators/profile/update';
 import { useUpdateProfileByAdminMutation } from '@/lib/queries/profile/update/id';
 
 type IProps = {
@@ -26,8 +26,8 @@ const ProfileTab = ({ profile }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile.isVerified);
 
-  const form = useForm<z.infer<typeof TeacherProfileUpdateValidator>>({
-    resolver: zodResolver(TeacherProfileUpdateValidator),
+  const form = useForm<z.infer<typeof AccountingProfileUpdateValidator>>({
+    resolver: zodResolver(AccountingProfileUpdateValidator),
     defaultValues: { firstname: '', middlename: '', lastname: '', extensionName: '', contact: '', sex: '', civilStatus: '', birthday: new Date(Date.now()) },
   });
 
@@ -47,14 +47,17 @@ const ProfileTab = ({ profile }: IProps) => {
     form.setValue('birthday', new Date(profile.birthday));
   }, [form, profile, isNotEditable]);
 
-  const onSubmit: SubmitHandler<z.infer<typeof TeacherProfileUpdateValidator>> = async (data) => {
+  const onSubmit: SubmitHandler<z.infer<typeof AccountingProfileUpdateValidator>> = async (data) => {
     setIsPending(true);
     data.firstname = data.firstname.toLowerCase();
     data.lastname = data.lastname.toLowerCase();
     data.middlename = data.middlename?.toLowerCase();
 
-    const dataa = { ...data, userId: profile.userId._id };
-
+    const dataa = {
+      ...data,
+      userId: profile.userId._id,
+    };
+    
     mutation.mutate(dataa, {
       onSuccess: (res) => {
         switch (res.status) {
