@@ -2,7 +2,6 @@
 import { generateResetPasswordToken } from '@/services/resetPassword';
 import { getUserById, updateUserById, updateUserEmailVerifiedById } from '@/services/user';
 import { deleteVerificationTokenByid, getVerificationTokenByUserId } from '@/services/token';
-import { verificationCodeProcessResponse, verificationCodeResendResponse } from '@/types';
 import { createActiveIp, updateActiveIp } from '@/services/userIp';
 import { signIn } from '@/auth';
 import dbConnect from '@/lib/db/db';

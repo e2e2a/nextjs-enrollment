@@ -46,38 +46,6 @@ export const dashboardConfig: DashboardConfig = {
       href: '/courses',
       icon: 'libraryBig',
     },
-
-    // {
-    //   title: 'Subjects',
-    //   i: [
-    //     {
-    //       title: `Nursery`,
-    //       href: '/admin/subjects',
-    //       icon: 'eye',
-    //     },
-    //     {
-    //       title: `Kindergarten 1&2`,
-    //       href: '/admin/subjects',
-    //       icon: 'eye',
-    //     },
-    //     {
-    //       title: `Junior High School`,
-    //       href: '/admin/subjects',
-    //       icon: 'eye',
-    //     },
-    //     {
-    //       title: 'Senior High School',
-    //       href: '/admin/subjects/add',
-    //       icon: 'add',
-    //     },
-    //     {
-    //       title: 'College',
-    //       href: '/admin/subjects/add',
-    //       icon: 'add',
-    //     },
-    //   ],
-    //   icon: 'libraryBig',
-    // },
     {
       title: 'Enrollment',
       href: '/enrollment',
@@ -172,11 +140,6 @@ export const dashboardConfig: DashboardConfig = {
       href: '/documentation',
       icon: 'page',
     },
-    // {
-    //   title: 'Settings',
-    //   href: '/dashboard/settings',
-    //   icon: 'settings',
-    // },
   ],
   mainNavDean: [
     {
@@ -797,17 +760,6 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'usersRound',
     },
     // {
-    //   title: 'School Year',
-    //   i: [
-    //     {
-    //       title: 'School Year Management',
-    //       href: '/admin/schoolyear',
-    //       icon: 'eye',
-    //     },
-    //   ],
-    //   icon: 'calendarFold',
-    // },
-    // {
     //   title: 'Records',
     //   href: '/',
     //   icon: 'fileStack',
@@ -822,15 +774,100 @@ export const dashboardConfig: DashboardConfig = {
       href: '/',
       icon: 'page',
     },
-    // {
-    //   title: 'Billing',
-    //   href: '/dashboard/billing',
-    //   icon: 'billing',
-    // },
-    // {
-    //   title: 'Settings',
-    //   href: '/dashboard/settings',
-    //   icon: 'settings',
-    // },
+  ],
+  sidebarAccounting: [
+    {
+      title: 'College',
+      i: [
+        {
+          title: 'Down Payment',
+          i: [
+            {
+              title: 'Step 5 Management',
+              href: '/dean/enrollment/management?step=5',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Enrolling Students',
+          i: [
+            {
+              title: 'View Enrolling Students',
+              href: '/dean/enrollment/enrolling',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Enrolled Students',
+          i: [
+            {
+              title: 'View Enrolled Students',
+              href: '/dean/enrollment/enrolled',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Temporary Enrolled',
+          i: [
+            {
+              title: 'View Temporary Enrolled',
+              href: '/dean/enrollment/temporary',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Recent Records',
+          i: [
+            {
+              title: 'Enrollment Records',
+              href: '/dean/enrollment/record/enrollment',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Grades Report',
+      href: '/dean/report/grade',
+      icon: 'filePenLine',
+    },
+    {
+      title: 'School & Policies',
+      href: '/school/policies',
+      icon: 'school',
+    },
+    {
+      title: 'Documentation',
+      href: '/documentation',
+      icon: 'page',
+    },
+  ],
+  mainNavAccounting: [
+    {
+      title: 'Home',
+      href: '/accounting',
+      icon: 'home',
+    },
+    {
+      title: 'School & Policies',
+      href: '/school/policy',
+      icon: 'school',
+    },
+    {
+      title: 'Documentation',
+      href: '',
+      icon: 'page',
+    },
   ],
 };

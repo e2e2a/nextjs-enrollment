@@ -108,7 +108,17 @@ export type SidebarNavItemInstructor = {
   external?: boolean;
   icon?: keyof typeof Icons;
 };
+
 export type SidebarNavItemDean = {
+  title: string;
+  disabled?: boolean;
+  i?: SidebarNavItem[];
+  href?: string;
+  external?: boolean;
+  icon?: keyof typeof Icons;
+};
+
+export type SidebarNavItemAccounting = {
   title: string;
   disabled?: boolean;
   i?: SidebarNavItem[];
@@ -128,22 +138,15 @@ export type SiteConfig = {
   };
 };
 
-export type DocsConfig = {
-  mainNav: MainNavItem[];
-  sidebarNav: SidebarNavItem[];
-};
-
-export type MarketingConfig = {
-  mainNav: MainNavItem[];
-};
-
 export type DashboardConfig = {
   mainNav: MainNavItem[];
   mainNavInstructor: MainNavItem[];
   mainNavDean: MainNavItem[];
+  mainNavAccounting: MainNavItem[];
   sidebarNav: SidebarNavItem[];
   sidebarInstructor: SidebarNavItemInstructor[];
   sidebarDean: SidebarNavItemDean[];
+  sidebarAccounting: SidebarNavItemAccounting[];
 
   mainNavAdmin: MainNavItem[];
   sidebarAdmin: SidebarNavItemAdmin[];
@@ -165,29 +168,6 @@ export type IResponse = {
   limit?: boolean;
 };
 
-export type SignInResponse = {
-  token?: string;
-  role?: string;
-} & IResponse;
-
-export type SignUpResponse = {
-  token?: string;
-} & IResponse;
-
-export type checkTokenResponse = {
-  token?: IVerificationToken;
-} & IResponse;
-
-export type verificationCodeProcessResponse = {
-  token?: IResetPasswordToken;
-  redirect?: string;
-  role?: string;
-} & IResponse;
-
-export type verificationCodeResendResponse = {
-  verification?: IVerificationToken;
-} & IResponse;
-
 export type resetPasswordTokenResponse = {
   token?: IResetPasswordToken;
 } & IResponse;
@@ -196,30 +176,8 @@ export type recoveryResponse = {
   token?: string;
 } & IResponse;
 
-export type resetPasswordResponse = {
-  token?: string;
-} & IResponse;
-
-export type updateStudentProfileResponse = {
-  profile?: any;
-} & IResponse;
 export type getSingleProfileResponse = {
   profile?: any;
-} & IResponse;
-export type updateStudentProfilePhotoResponse = IResponse;
-export type testResponseaa = IResponse;
-
-type ICourse = {
-  _id: any;
-  courseCode: string;
-  name: string;
-  imageUrl?: string;
-  description: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
-export type getCourseResponse = {
-  courses?: ICourse[];
 } & IResponse;
 
 /**
@@ -322,10 +280,6 @@ export interface IStudentProfile {
   lastLogin?: Date;
   lastLogout?: Date;
 }
-export type getAllStudentProfileResponse = {
-  students?: IStudentProfile[];
-  role?: string;
-} & IResponse;
 
 export interface ITeacherProfile {
   _id: string;
@@ -349,16 +303,6 @@ export interface ITeacherProfile {
   updatedAt: Date;
 }
 
-export type getAllTeacherProfileResponse = {
-  teachers?: ITeacherProfile[];
-  role?: string;
-} & IResponse;
-
-export type getTeacherProfileResponse = {
-  teacher?: ITeacherProfile;
-  role?: string;
-} & IResponse;
-
 export interface IAdminProfile {
   _id: string;
   id: string;
@@ -380,16 +324,6 @@ export interface IAdminProfile {
   createdAt: Date;
   updatedAt: Date;
 }
-
-export type getAllAdminProfileResponse = {
-  admins?: IAdminProfile[];
-  role?: string;
-} & IResponse;
-
-export type getAdminProfileResponse = {
-  admin?: IAdminProfile;
-  role?: string;
-} & IResponse;
 
 export interface IDeanProfile {
   _id: string;
@@ -413,10 +347,6 @@ export interface IDeanProfile {
   createdAt: Date;
   updatedAt: Date;
 }
-export type getAllDeanProfileResponse = {
-  deans?: IDeanProfile[];
-  role?: string;
-} & IResponse;
 
 export interface IRoom {
   _id: string;
@@ -430,18 +360,6 @@ export interface IRoom {
   updatedAt: Date;
 }
 
-export type ISchoolYear = {
-  id?: any;
-  _id: any;
-  schoolYear: any;
-  isEnable: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-};
-export type getAllSchoolYearResponse = {
-  sy?: ISchoolYear[];
-} & IResponse;
-
 export type ICurriculum = {
   id?: any;
   _id: any;
@@ -450,12 +368,6 @@ export type ICurriculum = {
   createdAt: Date;
   updatedAt: Date;
 };
-export type getAllCurriculumsResponse = {
-  curriculums?: ICurriculum[];
-} & IResponse;
-export type getCurriculumsResponse = {
-  curriculum?: ICurriculum;
-} & IResponse;
 
 export type IStudentCurriculum = {
   id?: any;
@@ -466,24 +378,4 @@ export type IStudentCurriculum = {
   createdAt: Date;
   updatedAt: Date;
 };
-export type getAllStudentCurriculumsResponse = {
-  curriculums?: IStudentCurriculum[];
-} & IResponse;
-export type getStudentCurriculumsResponse = {
-  curriculum?: IStudentCurriculum;
-} & IResponse;
-export type ITeacherSchedule = {
-  id?: any;
-  _id: any;
-  category: any;
-  courseId: any;
-  profileId: any;
-  blockTypeId: any;
-  subjectId: any;
-  roomId: any;
-  days: any;
-  startTime: any;
-  endTime: any;
-  createdAt: Date;
-  updatedAt: Date;
-};
+
