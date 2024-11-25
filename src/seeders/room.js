@@ -1,4 +1,5 @@
 'use server';
+require('dotenv').config();
 const mongoose = require('mongoose');
 const { Schema, models, model } = mongoose;
 const schema = new Schema(
