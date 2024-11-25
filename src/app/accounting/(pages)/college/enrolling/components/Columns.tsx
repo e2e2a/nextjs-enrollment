@@ -1,19 +1,18 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DataTableDrawer } from '../Drawer';
 import ActionsCell from './ActionsCell';
 import { IEnrollment } from '@/types';
-import StudentPhoto from '../step1/StudentPhoto';
-import PSAFile from '../step1/PSAFile';
-import ReportCardFile from '../step1/ReportCardFile';
-import GoodMoralFile from '../step1/GoodMoralFile';
-import YearFilter from '../filters/YearFilter';
-import SemesterFilter from '../filters/SemesterFilter';
-import StudentStatusFilter from '../filters/StudentStatusFilter';
+// import PSAFile from '../../management/components/step1/PSAFile';
+// import ReportCardFile from '../../management/components/step1/ReportCardFile';
+// import GoodMoralFile from '../../management/components/step1/GoodMoralFile';
+import StudentPhoto from '../../components/StudentPhoto';
+import YearFilter from '../../components/filters/YearFilter';
+import SemesterFilter from '../../components/filters/SemesterFilter';
+import StudentStatusFilter from '../../components/filters/StudentStatusFilter';
 
-export const columns5: ColumnDef<IEnrollment>[] = [
+export const columns: ColumnDef<IEnrollment>[] = [
   {
     accessorFn: (row) => '#',
     id: '#',
@@ -41,19 +40,20 @@ export const columns5: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.profileId.firstname ?? ''} {user.profileId.middlename ?? ''} {user.profileId.lastname ?? ''} {user.profileId.extensionName ? user.profileId.extensionName + '.' : ''}
+          {user.profileId.firstname ?? ''} {user.profileId.middlename ?? ''} {user.profileId.lastname ?? ''} {user.profileId.extensionName ?? ''}
         </div>
       );
     },
     accessorFn: (row) => {
       const { lastname, firstname, middlename, extensionName } = row.profileId;
-      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`;
     },
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.profileId.firstname ?? ''} ${row.original.profileId.middlename ?? ''} ${row.original.profileId.lastname ?? ''} ${row.original.profileId.extensionName ?? ''}`.toLowerCase().trim();
+      const fullName = `${row.original.profileId.firstname ?? ''} ${row.original.profileId.middlename ?? ''} ${row.original.profileId.extensionName ?? ''}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
+
   {
     accessorFn: (row) => row.courseId.courseCode, // Use accessorFn for nested fields
     id: 'course code',
@@ -108,36 +108,36 @@ export const columns5: ColumnDef<IEnrollment>[] = [
       );
     },
   },
-  {
-    accessorFn: (row) => row.profileId.psaUrl,
-    accessorKey: 'psa file',
-    header: 'PSA file',
-    cell: ({ row }) => {
-      const user = row.original;
+  // {
+  //   accessorFn: (row) => row.profileId.psaUrl,
+  //   accessorKey: 'psa file',
+  //   header: 'PSA file',
+  //   cell: ({ row }) => {
+  //     const user = row.original;
 
-      return <PSAFile user={user} />;
-    },
-  },
-  {
-    accessorFn: (row) => row.profileId.goodMoralUrl,
-    accessorKey: 'good moral',
-    header: 'Good Moral',
-    cell: ({ row }) => {
-      const user = row.original;
+  //     return <PSAFile user={user} />;
+  //   },
+  // },
+  // {
+  //   accessorFn: (row) => row.profileId.goodMoralUrl,
+  //   accessorKey: 'good moral',
+  //   header: 'Good Moral',
+  //   cell: ({ row }) => {
+  //     const user = row.original;
 
-      return <GoodMoralFile user={user} />;
-    },
-  },
-  {
-    accessorFn: (row) => row.profileId.reportCardUrl,
-    accessorKey: 'Report Card',
-    header: 'Report Card',
-    cell: ({ row }) => {
-      const user = row.original;
+  //     return <GoodMoralFile user={user} />;
+  //   },
+  // },
+  // {
+  //   accessorFn: (row) => row.profileId.reportCardUrl,
+  //   accessorKey: 'Report Card',
+  //   header: 'Report Card',
+  //   cell: ({ row }) => {
+  //     const user = row.original;
 
-      return <ReportCardFile user={user} />;
-    },
-  },
+  //     return <ReportCardFile user={user} />;
+  //   },
+  // },
   {
     accessorFn: (row) => row.profileId.photoUrl,
     accessorKey: 'student photo',
@@ -149,6 +149,19 @@ export const columns5: ColumnDef<IEnrollment>[] = [
     },
   },
   {
+    accessorFn: (row) => row.blockTypeId?.section,
+    accessorKey: 'block type',
+    header: 'Block Type',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user.blockTypeId?.section && `block ${user.blockTypeId?.section}`}
+        </div>
+      );
+    },
+  },
+  {
     accessorFn: (row) => row.profileId.studentType,
     accessorKey: 'student type',
     header: 'Student Type',
@@ -157,19 +170,6 @@ export const columns5: ColumnDef<IEnrollment>[] = [
       return (
         <div key={cell.id} className=' uppercase'>
           {user?.profileId.studentType}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.blockTypeId?.section,
-    accessorKey: 'block type',
-    header: 'Block Type',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {user?.blockTypeId?.section ? `block ${user.blockTypeId?.section}` : 'N/A'}
         </div>
       );
     },
@@ -201,14 +201,14 @@ export const columns5: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.profileId.payment,
-    accessorKey: 'payment status',
-    header: 'Payment Status',
+    accessorFn: (row) => row.enrollStatus,
+    accessorKey: 'enrollment status',
+    header: 'Enrollment Status',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.profileId.payment ? <span className='text-green-500'>TRUE</span> : <span className='text-red'>FALSE</span>}
+        <div key={cell.id} className=' capitalize'>
+          {user.enrollStatus?.toLowerCase() === 'enrolled' ? <span className='text-green-500'>{user.enrollStatus}</span> : <span className='text-gren-500'>{user.enrollStatus}</span>}
         </div>
       );
     },
@@ -219,18 +219,7 @@ export const columns5: ColumnDef<IEnrollment>[] = [
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
       const formatted = date.toLocaleDateString();
-      // @example for formatted date ex. January 1, 2015
-      // const options: Intl.DateTimeFormatOptions = {
-      //   year: "numeric",
-      //   month: "short",
-      //   day: "numeric",
-      // };
 
-      // const formattedDate = date.toLocaleDateString("en-US", options);
-
-      // // Manually reformat the string to "Jul 20, 2024"
-      // const [month, day, year] = formattedDate.split(' ');
-      // const formatted = `${month} ${day}, ${year}`;
       return <div className='font-medium'>{formatted}</div>;
     },
   },

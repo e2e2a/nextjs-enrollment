@@ -19,7 +19,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.teacherId.firstname}, {user.teacherId.middlename} {user.teacherId.lastname} {user.teacherId.extensionName ? user.teacherId.extensionName + '.' : ''}
+          {user.teacherId.firstname} {user.teacherId.middlename} {user.teacherId.lastname} {user.teacherId.extensionName ? user.teacherId.extensionName + '.' : ''}
         </div>
       );
     },
