@@ -17,7 +17,6 @@ export const getEnrollmentByCategoryAction = async (category: string) => {
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
 
     const enrollments = await getEnrollmentByCategory(category);
-
     return { enrollment: JSON.parse(JSON.stringify(enrollments)), status: 200 };
   });
 };

@@ -47,6 +47,8 @@ const SignInForm = () => {
                 window.location.href = '/instructor';
               } else if (res.role === 'DEAN') {
                 window.location.href = '/dean';
+              } else if (res.role === 'ACCOUNTING') {
+                window.location.href = '/accounting';
               }
               return;
             }

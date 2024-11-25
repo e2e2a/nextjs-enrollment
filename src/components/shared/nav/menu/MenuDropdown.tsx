@@ -5,9 +5,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import Content from './Content';
 import { dashboardConfig } from '@/constant/dashboard';
 import ContentAdmin from './ContentAdmin';
+
 interface IProps {
   session: any;
 }
+
 export function MenuDropdown({ session }: IProps) {
   return (
     <TooltipProvider delayDuration={10}>
@@ -22,18 +24,13 @@ export function MenuDropdown({ session }: IProps) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align='center' className='bg-white px-0 lg:z-20 md:z-50 mr-5 lg:hidden flex'>
             {/* <Content items={dashboardConfig.sidebarNav} /> */}
-            {session.role === 'ADMIN' ? (
-              <ContentAdmin items={dashboardConfig.sidebarAdmin} />
-            ) : session.role === 'STUDENT' ? (
-              <Content items={dashboardConfig.sidebarNav} />
-            ) : session.role === 'INSTRUCTOR' ? (
-              <Content items={dashboardConfig.sidebarInstructor} />
-            ) : session.role === 'DEAN' ? (
-              <Content items={dashboardConfig.sidebarDean} />
-            ) : null}
+            {session && session.role === 'ADMIN' && <ContentAdmin items={dashboardConfig.sidebarAdmin} />}
+            {session && session.role === 'STUDENT' && <Content items={dashboardConfig.sidebarNav} />}
+            {session && session.role === 'INSTRUCTOR' && <Content items={dashboardConfig.sidebarInstructor} />}
+            {session && session.role === 'DEAN' && <Content items={dashboardConfig.sidebarDean} />}
+            {session && session.role === 'ACCOUNTING' && <Content items={dashboardConfig.sidebarAccounting} />}
           </DropdownMenuContent>
         </DropdownMenu>
-
         <TooltipContent className='bg-white py-1 px-2 mt-2'>
           <p className='text-sm'>Menu</p>
         </TooltipContent>

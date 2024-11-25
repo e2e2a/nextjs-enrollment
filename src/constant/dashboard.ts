@@ -784,7 +784,7 @@ export const dashboardConfig: DashboardConfig = {
           i: [
             {
               title: 'View Enrolling Students',
-              href: '/accounting/enrollment/enrolling',
+              href: '/accounting/college/enrolling',
               icon: 'eye',
             },
           ],
@@ -811,7 +811,7 @@ export const dashboardConfig: DashboardConfig = {
           i: [
             {
               title: 'View Enrolled Students',
-              href: '/dean/enrollment/enrolled',
+              href: '/accounting/college/enrolled',
               icon: 'eye',
             },
           ],
@@ -822,7 +822,7 @@ export const dashboardConfig: DashboardConfig = {
           i: [
             {
               title: 'View Temporary Enrolled',
-              href: '/dean/enrollment/temporary',
+              href: '/accounting/college/temporary',
               icon: 'eye',
             },
           ],
