@@ -1,4 +1,5 @@
 'use server';
+require('dotenv').config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const { Schema, models, model } = mongoose;
@@ -149,7 +150,7 @@ const schemaEnrollment = new Schema(
 );
 const Enrollment = models.Enrollment || model('Enrollment', schemaEnrollment);
 const createStudentEnrollment = async () => {
-  const conn = await mongoose.connect('mongodb://localhost:27017/mydbaseeeesd');
+  const conn = await mongoose.connect(process.env.MONGODB_URI);
   // const conn = await mongoose.connect('mongodb+srv://marzvelasco73019:F3AcEj0UXbkwn1lX@school.zcndgqd.mongodb.net/godoy?retryWrites=true&w=majority&appName=school');
   const password = 'qweqwe';
   const courseId1 = '66ed5b5ff61463004fa34ba0';

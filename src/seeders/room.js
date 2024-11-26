@@ -1,5 +1,6 @@
-"use server"
-const mongoose = require("mongoose");
+'use server';
+require('dotenv').config();
+const mongoose = require('mongoose');
 const { Schema, models, model } = mongoose;
 const schema = new Schema(
   {
@@ -53,7 +54,6 @@ const schema = new Schema(
       type: Boolean,
       default: true,
     },
-    
   },
   {
     versionKey: false,
@@ -65,7 +65,7 @@ const Room = models.Room || model('Room', schema);
 
 const createRooms = async () => {
   try {
-    const conn = await mongoose.connect('mongodb+srv://reymond:mypassword123@Cluster0.pwuwd.mongodb.net/dcit?retryWrites=true&w=majority');
+    const conn = await mongoose.connect('mongodb://localhost:27017/mydbaseeeesd123');
 
     const rooms = [];
 
@@ -88,4 +88,4 @@ const createRooms = async () => {
   }
 };
 
-createRooms();
+module.exports = createRooms;
