@@ -1,7 +1,6 @@
 'use server';
 import { comparePassword } from '@/lib/helpers/hash/bcrypt';
 import rateLimit from '@/lib/helpers/limiter/rate-limit';
-import { sendVerificationEmail } from '@/lib/mail/mail';
 import { getUserByEmail } from '@/services/user';
 import { generateVerificationToken } from '@/services/token';
 import dbConnect from '@/lib/db/db';
@@ -11,6 +10,7 @@ import { tryCatch } from '@/lib/helpers/tryCatch';
 import { SigninValidator } from '@/lib/validators/auth/signIn';
 import { handleSignInAction } from '@/utils/actions/auth/signIn';
 import { checkingIp } from '@/utils/actions/userIp';
+import { sendEmail } from '@/lib/mail/mail';
 
 /**
  * Handles the user sign-in process.
@@ -81,6 +81,7 @@ const checkIp = async (user: any) => {
     if (!userIp || userIp.error || !userIp.success) {
       const verificationToken = await generateVerificationToken(user._id, 'Activation');
       console.log('userIpqqqq: ', verificationToken);
+      await sendEmail(user.email, user.username, 'Activation', 'auth', verificationToken.code, 'Activation');
       return { error: 'New Ip', token: verificationToken.token, status: 203 };
     }
     return { success: 'Old Ip', status: 200 };

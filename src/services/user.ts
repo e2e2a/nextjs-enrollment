@@ -10,7 +10,7 @@ export const createUser = async (data: any, password: string) => {
       ...data,
       password: hashedPassword,
     });
-    return JSON.parse(JSON.stringify(newUser));
+    return newUser;
   } catch (error) {
     console.log('error creating user', error);
     return null;

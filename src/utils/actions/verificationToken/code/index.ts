@@ -18,6 +18,6 @@ export const generateVerificationCode = async (userId: string) => {
   const activitionCode = await generateRandomString();
   const expireCode = new Date(new Date().getTime() + 5 * 60 * 1000);
 
-  const verificationToken = await Token.findOneAndUpdate(existingToken.id, { code: activitionCode, expiresCode: expireCode }, { new: true });
-  return JSON.parse(JSON.stringify(verificationToken));
+  const verificationToken = await Token.findByIdAndUpdate(existingToken._id, { code: activitionCode, expiresCode: expireCode }, { new: true });
+  return verificationToken;
 };

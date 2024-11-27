@@ -7,7 +7,6 @@ import { getTeacherProfileByUserId } from '@/services/teacherProfile';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getEnrollmentByProfileId } from '@/services/enrollment';
 import { generateViewGradeToken } from '@/services/token';
-import { sendVerificationEmail } from '@/lib/mail/mail';
 
 /**
  * handles update report grade by id

@@ -1,7 +1,7 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import { sendVerificationEmail } from '@/lib/mail/mail';
+import { sendEmail } from '@/lib/mail/mail';
 import { SignupValidator } from '@/lib/validators/auth/signUp';
 import { createStudentProfile } from '@/services/studentProfile';
 import { generateVerificationToken } from '@/services/token';
@@ -64,8 +64,7 @@ const creatingUser = async (email: string, username: string, password: string) =
 
     if (!verificationToken) return { error: 'Error creating verificationToken', status: 404 };
 
-    const send = await sendVerificationEmail(verificationToken.email, verificationToken.code, username, 'Confirm your Email');
-    // if (!send) return { error: 'Error sending verification email', status: 404 };
+    await sendEmail(email, username, 'Verify', 'auth', verificationToken.code, 'Registration');
     return { user: user, token: verificationToken.token };
   });
 };

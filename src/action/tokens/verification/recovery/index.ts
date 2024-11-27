@@ -1,5 +1,5 @@
 'use server';
-import { sendVerificationEmail } from '@/lib/mail/mail';
+import { sendEmail } from '@/lib/mail/mail';
 import { getUserByEmail } from '@/services/user';
 import { generateVerificationToken } from '@/services/token';
 import { recoveryResponse } from '@/types';
@@ -22,7 +22,7 @@ export const emailRecoveryAction = async (data: any): Promise<recoveryResponse> 
     if (!existingUser || !existingUser.emailVerified || !existingUser.password) return { error: 'Email does not exist!', status: 404 };
 
     const verificationToken = await generateVerificationToken(existingUser._id, 'Recovery');
-    await sendVerificationEmail(verificationToken.email, verificationToken.code, existingUser.firstname, 'Recovery Activation');
+    await sendEmail(verificationToken.email, existingUser.username, 'Recovery Activation', 'auth', verificationToken.code, 'Recovery Activation');
 
     return { message: 'Confirmation email sent!', token: verificationToken.token, status: 200 };
   });

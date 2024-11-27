@@ -87,7 +87,7 @@ const VerificationForm = () => {
         if (res.error) return makeToastError(res.error);
         setMessage('Verification completed!');
         setTypeMessage('success');
-        console.log('result: ', res)
+        console.log('result: ', res);
         if (!res.token) {
           if (res.redirect) {
             return (window.location.href = `${res.redirect}`);
@@ -113,12 +113,9 @@ const VerificationForm = () => {
           makeToastError(res.error);
           return;
         }
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 100);
         return;
       },
-      onSettled: () => {
+      onSettled: (res) => {
         setIsPending(false);
       },
     });

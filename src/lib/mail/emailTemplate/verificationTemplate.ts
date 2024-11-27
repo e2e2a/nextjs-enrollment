@@ -1,18 +1,27 @@
 'use server';
 export async function verificationTemplate(vericationCode: string, firstname: string, resendHeader: string) {
-  let content;
+  let contentHeader;
+  let contentFooter;
   let titleLabel;
   switch (resendHeader) {
-    case 'Confirm your Email':
-    case 'Resend Verification':
+    case 'Registration':
       titleLabel = 'Verification Code';
-      content =
-        'Thank you for joining My Media! To complete your registration, please verify your email address by entering the following verification code:';
+      contentHeader = 'Thank you for joining in DCIT INC.! To complete your registration, please verify your email address by entering the following verification code:';
+      contentFooter = 'If you did not sign up in DCIT INC., Please ignore this email.';
+    case 'Resend Verification':
+      titleLabel = 'Resend Verification Code';
+      contentHeader = 'We noticed you requested to resend your verification code. Please use the code below to verify your email address with DCIT INC.:';
+      contentFooter = 'If you did not request this verification code, please disregard this email.';
       break;
     case 'Recovery Activation':
-      titleLabel = 'Reset-Password Activation';
-      content =
-        'We received a request to reset your password for your Media account. If you did not request a password reset, please ignore this email. Otherwise, please enter the following verification code to reset your password:';
+      titleLabel = 'Password Reset Request';
+      contentHeader = 'You requested to reset your password for your DCIT INC. account. If this was not you, please ignore this email. Otherwise, use the verification code below to proceed with resetting your password:';
+      contentFooter = 'If you need further assistance, please contact the registrar office of DCIT INC.';
+      break;
+    case 'Activation':
+      titleLabel = 'New Device Activation';
+      contentHeader = 'We detected a login attempt or activity from a new device or location for your DCIT INC. account. If this was not you, please ignore this email. Otherwise, use the verification code below to activate your account on this device:';
+      contentFooter = 'If you need assistance or suspect unauthorized access, please contact the registrar office of DCIT INC.';
       break;
   }
   return `<!doctype html>
@@ -113,6 +122,13 @@ export async function verificationTemplate(vericationCode: string, firstname: st
   
               <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">This is preheader text. Some clients will show this text as a preview.</span>
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background: #ffffff; border: 1px solid #eaebed; border-radius: 16px; width: 100%;" width="100%">
+                <tr>
+                  <td style="font-family: Helvetica, sans-serif; font-size: 16px; vertical-align: top; box-sizing: border-box; padding: 15px;" valign="top">
+                    <div style="display: flex; align-items: center;">
+                      <img src="https://nextjs-enrollment.vercel.app/images/logo1.png" alt="Logo" style="width: 75px; height: 75px;" />
+                    </div>
+                  </td>
+                </tr>
                 <tr> 
                   <td class="wrapper" style="font-family: Helvetica, sans-serif; text-align: center; font-size: 16px; vertical-align: top; box-sizing: border-box; padding: 25px;" valign="top">
                       <p style="font-family: Helvetica, sans-serif; font-size: 32px; font-weight: 600; margin: 0;">
@@ -124,7 +140,7 @@ export async function verificationTemplate(vericationCode: string, firstname: st
                   <td class="wrapper" style="font-family: Helvetica, sans-serif; font-size: 16px; vertical-align: top; box-sizing: border-box; padding: 24px;" valign="top">
                     <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">Hi there ${firstname},</p>
                     <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
-                      ${content}
+                      ${contentHeader}
                     </p>
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn " style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-sizing: border-box; width: 100%; min-width: 100%;" width="100%">
                       <tbody>
@@ -145,7 +161,7 @@ export async function verificationTemplate(vericationCode: string, firstname: st
                         </tr>
                       </tbody>
                     </table>
-                    <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">If you did not sign up for My Media, please ignore this email.</p>
+                    <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">${contentFooter}</p>
                     <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">Good day, Have fun!</p>
                   </td>
                 </tr>
@@ -157,12 +173,12 @@ export async function verificationTemplate(vericationCode: string, firstname: st
                   <tr>
                     <td class="content-block" style="font-family: Helvetica, sans-serif; vertical-align: top; color: #9a9ea6; font-size: 16px; text-align: center;" valign="top" align="center">
                       <span class="apple-link" style="color: #9a9ea6; font-size: 16px; text-align: center;">
-                        Unkown Company, Estaka, Dipolog City
+                       DCIT INC., Minaog, Dipolog City
                       </span>
                       <br> 
                       Having problems? 
                       <a href="GMedia.onrender.com" style="text-decoration: underline; color: #9a9ea6; font-size: 16px; text-align: center;">
-                      email@email.com
+                      09123456789
                       </a>.
                     </td>
                   </tr>
