@@ -18,7 +18,7 @@ assignees: ''
 
 ### Description
 The application currently has a hardcoded database URI in the seeder script:  
-`const conn = await mongoose.connect('mongodb://localhost:27017/mydb');`.
+`const conn = await mongoose.connect(process.env.MONGODB_URI);`.
 
 This exposes the database credentials in the codebase, which can lead to potential security risks. The URI should instead be loaded from the environment variable `MONGODB_URI` defined in the `.env` file to securely store database credentials.
 
@@ -27,7 +27,7 @@ This exposes the database credentials in the codebase, which can lead to potenti
 ### Steps to Reproduce (For Bugs)
 1. Open the seeder script or the relevant file where the database connection is established.
 2. Locate the hardcoded URI:  
-   `const conn = await mongoose.connect('mongodb://localhost:27017/mydb');`
+   `const conn = await mongoose.connect(process.env.MONGODB_URI);`
 3. Notice that the database credentials are exposed in the code.
 
 **Expected behavior:**  
