@@ -14,9 +14,10 @@ const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const searchParams = useSearchParams();
   const token = searchParams.get('token') ?? '';
+  console.log('token: ', token);
 
   const { data, isLoading, error: isEnError } = useVGTokenQueryByParamsToken(token);
-
+  console.log('data', data)
   useEffect(() => {
     if (isEnError || !data) return;
 

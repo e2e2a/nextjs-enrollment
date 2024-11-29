@@ -1,28 +1,13 @@
 'use server';
-export async function verificationTemplate(vericationCode: string, firstname: string, resendHeader: string) {
+export async function parentsTemplate(verificationToken: string, studentName: string, parentName: string, resendHeader: string) {
   let contentHeader;
   let contentFooter;
   let titleLabel;
   switch (resendHeader) {
-    case 'Registration':
-      titleLabel = 'Verification Code';
-      contentHeader = 'Thank you for joining in DCIT INC.! To complete your registration, please verify your email address by entering the following verification code:';
-      contentFooter = 'If you did not sign up in DCIT INC., Please ignore this email.';
-    case 'Resend Verification':
-      titleLabel = 'Resend Verification Code';
-      contentHeader = 'We noticed you requested to resend your verification code. Please use the code below to verify your email address with DCIT INC.:';
-      contentFooter = 'If you did not request this verification code, please disregard this email.';
-      break;
-    case 'Recovery Activation':
-      titleLabel = 'Password Reset Request';
-      contentHeader = 'You requested to reset your password for your DCIT INC. account. If this was not you, please ignore this email. Otherwise, use the verification code below to proceed with resetting your password:';
-      contentFooter = 'If you need further assistance, please contact the registrar office of DCIT INC.';
-      break;
-    case 'Activation':
-      titleLabel = 'New Device Activation';
-      contentHeader = 'We detected a login attempt or activity from a new device or location for your DCIT INC. account. If this was not you, please ignore this email. Otherwise, use the verification code below to activate your account on this device:';
-      contentFooter = 'If you need assistance or suspect unauthorized access, please contact the registrar office of DCIT INC.';
-      break;
+    case 'View Grades':
+      titleLabel = 'View Grades';
+      contentHeader = `Dear Parent/Guardian, I hope this email finds you well. You can securely view the grades of your adult son or child ${studentName} by accessing the link below:`;
+      contentFooter = 'This email was sent to provide access for viewing grades. Please do not share this link with anyone for security purposes.';
   }
   return `<!doctype html>
   <html lang="en">
@@ -138,7 +123,7 @@ export async function verificationTemplate(vericationCode: string, firstname: st
                 </tr>
                 <tr>
                   <td class="wrapper" style="font-family: Helvetica, sans-serif; font-size: 16px; vertical-align: top; box-sizing: border-box; padding: 24px;" valign="top">
-                    <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px; text-transform: capitalize;">Hi there ${firstname},</p>
+                    <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px; text-transform: capitalize;">Hi there ${parentName},</p>
                     <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">
                       ${contentHeader}
                     </p>
@@ -149,10 +134,10 @@ export async function verificationTemplate(vericationCode: string, firstname: st
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: auto;">
                               <tbody>
                                 <tr>
-                                  <td style="font-family: Helvetica, sans-serif; font-size: 16px; vertical-align: top; border-radius: 4px; text-align: center; " valign="top" align="center" "> 
-                                    <p style="font-family: Helvetica, sans-serif; font-size: 32px; font-weight: 600; text-align: center; margin: 0; letter-spacing: 0.5em; gap: 10px">
-                                      ${vericationCode}
-                                    </p> 
+                                  <td style="font-family: Helvetica, sans-serif; font-size: 16px; vertical-align: top; border-radius: 4px; text-align: center;" valign="top" align="center">
+                                    <a href="https://nextjs-enrollment.vercel.app/view/grades?token=${verificationToken}" style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: 600; text-align: center; text-decoration: none; color: #ffffff; background-color: #007bff; padding: 10px 20px; border-radius: 4px; display: inline-block; margin: 0;">
+                                      View Grades
+                                    </a>
                                   </td>
                                 </tr>
                               </tbody>
