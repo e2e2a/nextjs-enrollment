@@ -21,6 +21,7 @@ import { getTeacherScheduleRecordData } from './helpers/getTeacherScheduleRecord
 import { getEnrollmentRecordData } from './helpers/getEnrollmentRecordData';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { checkAuth } from '@/utils/actions/session';
+import ReportGradeRecord from '@/models/ReportGradeRecord';
 // import { verificationTemplate } from './emailTemplate/verificationTemplate';
 
 const sendEmailWithPDF = async (checkE: any) => {
@@ -117,6 +118,7 @@ const handleCategoryCollege = async (data: any) => {
     await EnrollmentRecord.insertMany(enRecordData.data);
     await Enrollment.deleteMany({ category: 'College' });
 
+    await ReportGradeRecord.insertMany(tsRecordData.rg);
     await ReportGrade.deleteMany({ category: 'College' });
 
     if (data.deleteInstructor) {
@@ -129,6 +131,13 @@ const handleCategoryCollege = async (data: any) => {
     const enrollmentTertiary = { open: false, schoolYear: '', semester: '' };
     await updateEnrollmentSetupByName('GODOY', enrollmentTertiary);
 
-    return { success: true, message: `Category ${data.category}-${eSetup.enrollmentTertiary.semester}-${eSetup.enrollmentTertiary.schoolYear} has been ended.`, category: data.category, deleteInstructor: data.deleteInstructor, courses: courses, status: 201 };
+    return {
+      success: true,
+      message: `Category ${data.category}-${eSetup.enrollmentTertiary.semester}-${eSetup.enrollmentTertiary.schoolYear} has been ended.`,
+      category: data.category,
+      deleteInstructor: data.deleteInstructor,
+      courses: JSON.parse(JSON.stringify(courses)),
+      status: 201,
+    };
   });
 };

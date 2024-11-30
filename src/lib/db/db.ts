@@ -27,6 +27,7 @@ const modelsToInitialize = [
   'EnrollmentRecord',
   'TeacherScheduleRecord',
   'AccountingProfile',
+  'ReportGradeRecord',
 ];
 let cached = global.mongoose;
 

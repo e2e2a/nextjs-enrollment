@@ -129,13 +129,26 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row.type,
+    id: 'type',
+    header: 'Type',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user?.schoolYear ?? ''}
+        </div>
+      );
+    },
+  },
+  {
     accessorFn: (row) => row.statusInDean,
     id: 'Approved By Dean',
     header: 'Approved By Dean',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
+        <div key={cell.id} className='font-bold uppercase'>
           {user.statusInDean && user.statusInDean === 'Pending' && <span className='text-blue-500'>{user.statusInDean}</span>}
           {user.statusInDean && user.statusInDean === 'Approved' && <span className='text-green-500'>{user.statusInDean}</span>}
           {user.statusInDean && user.statusInDean === 'Declined' && <span className='text-red'>{user.statusInDean}</span>}

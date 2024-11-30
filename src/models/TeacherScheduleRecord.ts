@@ -5,7 +5,6 @@ export interface ITeacherScheduleRecord extends Document {
   schoolYear: string;
   profileId: mongoose.Schema.Types.ObjectId;
   course: string;
-  courseCode: string;
   schedule?: any;
   blockType?: any;
   subject?: any;
