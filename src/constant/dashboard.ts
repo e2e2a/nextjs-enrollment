@@ -791,15 +791,31 @@ export const dashboardConfig: DashboardConfig = {
           icon: 'packageSearch',
         },
         {
-          title: 'Down Payment Management',
+          title: 'Down Payments',
           i: [
             {
-              title: 'View Down Payments',
+              title: 'Management',
+              i: [
+                {
+                  title: `View Down Payments`,
+                  href: '/accounting/downpayment/management',
+                  icon: 'eye',
+                },
+                {
+                  title: 'Add/Set Down Payment',
+                  href: '/accounting/downpayment/management/add',
+                  icon: 'add',
+                },
+              ],
+              icon: 'eye',
+            },
+            {
+              title: `View Student's Down Payments`,
               href: '/accounting/college/downpayment',
               icon: 'eye',
             },
             {
-              title: 'Add Down Payment',
+              title: `Add Student's Down Payment`,
               href: '/accounting/college/downpayment',
               icon: 'add',
             },

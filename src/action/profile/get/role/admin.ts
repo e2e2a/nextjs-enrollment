@@ -6,7 +6,7 @@ import { getAllAdminProfile } from '@/services/adminProfile';
 import { getAllDeanProfile } from '@/services/deanProfile';
 import { getAllStudentProfile } from '@/services/studentProfile';
 import { getAllTeacherProfile } from '@/services/teacherProfile';
-import { verifyADMIN } from '@/utils/actions/session/roles/admin';
+import { checkAuth } from '@/utils/actions/session';
 
 /**
  * only admin roles
@@ -17,13 +17,14 @@ import { verifyADMIN } from '@/utils/actions/session/roles/admin';
 export const getAllUserByRoleAction = async (role: string) => {
   return tryCatch(async () => {
     await dbConnect();
-    const session = await verifyADMIN();
+    const session = await checkAuth();
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
+    if (session.user.role !== 'ADMIN') return { error: 'Not Authorized.', status: 403 };
 
     const checkedSearchRole = await checkSearchRole(role);
     if (checkedSearchRole && checkedSearchRole.error) return { error: checkedSearchRole.error, status: checkedSearchRole.status };
 
-    return { profiles: JSON.parse(JSON.stringify(checkedSearchRole.profiles)), status: 200 };
+    return { profiles: checkedSearchRole.profiles, status: 200 };
   });
 };
 
