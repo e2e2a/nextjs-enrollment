@@ -28,45 +28,21 @@ const schema = new Schema<ITeacherScheduleRecord>(
     },
     // this sectionId will be used to compare which section and subject to compare with students
     blockType: {
-      year: {
-        type: String,
-      },
-      semester: {
-        type: String,
-      },
-      section: {
-        type: String,
-      },
+      year: { type: String },
+      semester: { type: String },
+      section: { type: String },
     },
     subject: {
-      fixedRateAmount: {
-        type: String,
-      },
-      preReq: {
-        type: String,
-      },
-      category: {
-        type: String,
-      },
-      subjectCode: {
-        type: String,
-      },
-      name: {
-        type: String,
-      },
-      lec: {
-        type: String,
-      },
-      lab: {
-        type: String,
-      },
-      unit: {
-        type: String,
-      },
+      fixedRateAmount: { type: String },
+      preReq: { type: String },
+      category: { type: String },
+      subjectCode: { type: String },
+      name: { type: String },
+      lec: { type: String },
+      lab: { type: String },
+      unit: { type: String },
     },
-    room: {
-      roomName: { type: String },
-    },
+    room: { roomName: { type: String } },
     days: {
       type: [String],
       default: [],

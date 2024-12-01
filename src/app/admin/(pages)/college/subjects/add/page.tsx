@@ -19,7 +19,6 @@ const Page = () => {
     resolver: zodResolver(SubjectValidator),
     defaultValues: {
       category: 'College',
-      fixedRateAmount: '0.00',
       preReq: '',
       subjectCode: '',
       name: '',
@@ -66,7 +65,6 @@ const Page = () => {
           <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
             <CardContent className='w-full '>
               <div className='flex flex-col gap-4'>
-                <Input name={'fixedRateAmount'} type={'text'} form={formCollege} label={'Rate Amount:'} classNameInput={'capitalize'} />
                 <Input name={'preReq'} type={'text'} form={formCollege} label={'Pre. Req.:'} classNameInput={'capitalize'} />
                 <Input name={'subjectCode'} type={'text'} form={formCollege} label={'Subject Code:'} classNameInput={'capitalize'} />
                 <Input name={'name'} type={'text'} form={formCollege} label={'Descriptive Title:'} classNameInput={'capitalize'} />

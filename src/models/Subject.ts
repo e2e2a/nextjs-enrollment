@@ -12,32 +12,14 @@ export interface ISubject extends Document {
 }
 const schema = new Schema<ISubject>(
   {
-    //example cases is that this subject has a price
-    fixedRateAmount: {
-      type: String,
-    },
-    preReq: {
-      type: String,
-    },
-    category: {
-      type: String,
-    },
-    subjectCode: {
-      type: String,
-    },
-    // I considered descriptive title in subject is name
-    name: {
-      type: String,
-    },
-    lec: {
-      type: String,
-    },
-    lab: {
-      type: String,
-    },
-    unit: {
-      type: String,
-    },
+    fixedRateAmount: { type: String },
+    preReq: { type: String },
+    category: { type: String },
+    subjectCode: { type: String },
+    name: { type: String },
+    lec: { type: String },
+    lab: { type: String },
+    unit: { type: String },
   },
   {
     versionKey: false,
