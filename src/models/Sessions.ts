@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema, model, models } from "mongoose";
+import mongoose, { Document, Schema, model, models } from 'mongoose';
 
 interface ISession extends Document {
   sessionToken: string; // Unique session token
@@ -7,17 +7,13 @@ interface ISession extends Document {
 }
 
 const sessionSchema = new Schema<ISession>({
-  sessionToken: {
-    type: String,
-  },
+  sessionToken: { type: String },
   userId: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
   },
-  expires: {
-    type: Date,
-  },
+  expires: { type: Date },
 });
 
 // Export the Session model
-export const Session = models.Session || model("Session", sessionSchema);
+export const Session = models.Session || model('Session', sessionSchema);

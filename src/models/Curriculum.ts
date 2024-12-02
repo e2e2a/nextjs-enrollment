@@ -16,14 +16,10 @@ const curriculumSchema = new Schema(
       type: String,
       required: true,
     },
-    order: {
-      type: Number,
-    },
+    order: { type: Number },
     subjectsFormat: [
       {
-        order: {
-          type: Number,
-        },
+        order: { type: Number },
         subjectId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Subject',

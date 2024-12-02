@@ -13,9 +13,7 @@ const schema = new Schema<IRoom>(
       type: String,
       enum: ['primary', 'secondary', 'tertiary'],
     },
-    roomName: {
-      type: String,
-    },
+    roomName: { type: String },
     roomType: {
       type: String,
       enum: [
@@ -59,7 +57,6 @@ const schema = new Schema<IRoom>(
       type: Boolean,
       default: true,
     },
-    
   },
   {
     versionKey: false,
