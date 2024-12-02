@@ -104,13 +104,19 @@ const fourthGrade = Number('asdasd');
 
 // console.log('example', a ?? b)
 
-const funct1 = async () => {
-  let a = [];
-  await funct2(a);
-  return a;
-};
-const funct2 = async (a) => {
-  a.push({ name: 'hello word' });
-};
+// const funct1 = async () => {
+//   let a = [];
+//   await funct2(a);
+//   return a;
+// };
+// const funct2 = async (a) => {
+//   a.push({ name: 'hello word' });
+// };
 
-funct1().then((a) => console.log('a', a));
+// funct1().then((a) => console.log('a', a));
+let number = 123.43;
+
+// Round the number to 2 decimal places
+let roundedNumber = number.toFixed(2);
+
+console.log(roundedNumber);  // Output: "123.46"

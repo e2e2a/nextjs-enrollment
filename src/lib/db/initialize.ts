@@ -23,6 +23,7 @@ import TeacherScheduleRecord from '@/models/TeacherScheduleRecord';
 import { Session } from '@/models/Sessions';
 import AccountingProfile from '@/models/AccountingProfile';
 import ReportGradeRecord from '@/models/ReportGradeRecord';
+import DownPayment from '@/models/DownPayment';
 
 type ModelName =
   | 'Session'
@@ -47,7 +48,8 @@ type ModelName =
   | 'EnrollmentRecord'
   | 'TeacherScheduleRecord'
   | 'AccountingProfile'
-  | 'ReportGradeRecord';
+  | 'ReportGradeRecord'
+  | 'DownPayment';
 
 const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   Session,
@@ -72,7 +74,8 @@ const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   EnrollmentRecord,
   TeacherScheduleRecord,
   AccountingProfile,
-  ReportGradeRecord
+  ReportGradeRecord,
+  DownPayment
 };
 let isInitialized = false;
 const initializeModel = async (modelNames: ModelName[]) => {
