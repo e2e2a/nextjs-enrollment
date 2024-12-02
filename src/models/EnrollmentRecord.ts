@@ -72,74 +72,31 @@ const schema = new Schema<IEnrollmentRecord>(
     studentSubjects: [
       {
         subject: {
-          fixedRateAmount: {
-            type: String,
-          },
-          preReq: {
-            type: String,
-          },
-          category: {
-            type: String,
-          },
-          subjectCode: {
-            type: String,
-          },
-          name: {
-            type: String,
-          },
-          lec: {
-            type: String,
-          },
-          lab: {
-            type: String,
-          },
-          unit: {
-            type: String,
-          },
+          fixedRateAmount: { type: String },
+          preReq: { type: String },
+          category: { type: String },
+          subjectCode: { type: String },
+          name: { type: String },
+          lec: { type: String },
+          lab: { type: String },
+          unit: { type: String },
         },
         teacher: {
-          firstname: {
-            type: String,
-          },
-          middlename: {
-            type: String,
-          },
-          lastname: {
-            type: String,
-          },
-          extensionName: {
-            type: String,
-          },
-          sex: {
-            type: String,
-          },
+          firstname: { type: String },
+          middlename: { type: String },
+          lastname: { type: String },
+          extensionName: { type: String },
+          sex: { type: String },
         },
         blockType: {
-          year: {
-            type: String,
-          },
-          semester: {
-            type: String,
-          },
-          section: {
-            type: String,
-          },
+          year: { type: String },
+          semester: { type: String },
+          section: { type: String },
         },
-        days: {
-          type: [String],
-          default: [],
-        },
-        startTime: {
-          type: String,
-        },
-        endTime: {
-          type: String,
-        },
-        room: {
-          roomName: {
-            type: String,
-          },
-        },
+        days: { type: [String], default: [] },
+        startTime: { type: String },
+        endTime: { type: String },
+        room: { roomName: { type: String } },
         status: {
           type: String,
           enum: ['Approved', 'Suggested', 'Declined', 'Pending', 'Dropped'],
@@ -164,7 +121,7 @@ const schema = new Schema<IEnrollmentRecord>(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'StudentProfile',
         },
-        // new field added 17-11-24
+
         firstGrade: { type: String, default: 'INC' },
         secondGrade: { type: String, default: 'INC' },
         thirdGrade: { type: String, default: 'INC' },
