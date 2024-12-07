@@ -8,29 +8,14 @@ export interface IStudentCurriculum extends Document {
 }
 const curriculumSchema = new Schema(
   {
-    schoolYear: {
-      type: String,
-      required: true,
-    },
-    year: {
-      type: String,
-      required: true,
-    },
-    semester: {
-      type: String,
-      required: true,
-    },
-    order: {
-      type: Number,
-    },
+    schoolYear: { type: String },
+    year: { type: String },
+    semester: { type: String },
+    order: { type: Number },
     subjectsFormat: [
       {
-        order: {
-          type: Number,
-        },
-        grade: {
-          type: String,
-        },
+        order: { type: Number },
+        grade: { type: String },
         subjectId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Subject',

@@ -16,9 +16,7 @@ const schema = new Schema<IUser>(
     },
     ips: [
       {
-        address: {
-          type: String,
-        },
+        address: { type: String },
       },
       { versionKey: false, timestamps: true },
     ],

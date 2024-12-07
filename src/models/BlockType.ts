@@ -15,18 +15,10 @@ const schema = new Schema<IBlockType>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Course',
     },
-    category: {
-      type: String,
-    },
-    semester: {
-      type: String,
-    },
-    year: {
-      type: String,
-    },
-    section: {
-      type: String,
-    },
+    category: { type: String },
+    semester: { type: String },
+    year: { type: String },
+    section: { type: String },
     blockSubjects: [
       {
         teacherScheduleId: {

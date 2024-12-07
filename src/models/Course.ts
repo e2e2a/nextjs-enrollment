@@ -11,17 +11,8 @@ export interface ICourse extends Document {
 }
 const schema = new Schema<ICourse>(
   {
-    // sectionId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Section',
-    // },
-    category: {
-      type: String,
-    },
-    //change this title to Department
-    courseCode: {
-      type: String,
-    },
+    category: { type: String },
+    courseCode: { type: String },
     /**
      * @todo
      * grade will be used in jhs
@@ -29,21 +20,11 @@ const schema = new Schema<ICourse>(
      * no coursecode
      * no courseType
      */
-    grade: {
-      type: String,
-    },
-    name: {
-      type: String,
-    },
-    courseType: {
-      type: String,
-    },
-    imageUrl: {
-      type: String,
-    },
-    description: {
-      type: String,
-    },
+    grade: { type: String },
+    name: { type: String },
+    courseType: { type: String },
+    imageUrl: { type: String },
+    description: { type: String },
   },
   {
     versionKey: false,
