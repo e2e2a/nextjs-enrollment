@@ -4,7 +4,7 @@ import { PulseLoader } from 'react-spinners';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { handleChange, handlePaste } from '@/utils/views/hook/verification/VerificationInputEvents';
+import { handleChange, handlePaste } from '@/utils/views/hook/verification/VerificationInputHandlers';
 import { calculateRemainingTime, formatTime } from '@/lib/utils';
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
