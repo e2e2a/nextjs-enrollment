@@ -791,34 +791,28 @@ export const dashboardConfig: DashboardConfig = {
           icon: 'packageSearch',
         },
         {
-          title: 'Down Payments',
+          title: 'Tuition Fee',
           i: [
             {
-              title: 'Management',
-              i: [
-                {
-                  title: `View Down Payments`,
-                  href: '/accounting/downpayment/management',
-                  icon: 'eye',
-                },
-                {
-                  title: 'Add/Set Down Payment',
-                  href: '/accounting/downpayment/management/add',
-                  icon: 'add',
-                },
-              ],
+              title: `View Courses Tuition Fee`,
+              href: '/accounting/college/tuition',
               icon: 'eye',
             },
             {
-              title: `View Student's Down Payments`,
-              href: '/accounting/college/downpayment',
-              icon: 'eye',
-            },
-            {
-              title: `Add Student's Down Payment`,
-              href: '/accounting/college/downpayment',
+              title: 'Create Course Tuition Fee',
+              href: '/accounting/college/tuition/add',
               icon: 'add',
             },
+            // {
+            //   title: `View Student's Down Payments`,
+            //   href: '/accounting/college/downpayment',
+            //   icon: 'eye',
+            // },
+            // {
+            //   title: `Add Student's Down Payment`,
+            //   href: '/accounting/college/downpayment',
+            //   icon: 'add',
+            // },
           ],
           icon: 'packageSearch',
         },
