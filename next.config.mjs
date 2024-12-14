@@ -43,18 +43,18 @@ const nextConfig = {
           destination: '/maintenance',
           permanent: false,
         },
-        {
-          source: '/(.*)',
-          has: [
-            {
-              type: 'header',
-              key: 'x-forwarded-proto',
-              value: 'http',
-            },
-          ],
-          destination: 'https://www.mondrey.dev/:path*',
-          permanent: true,
-        },
+        // {
+        //   source: '/(.*)',
+        //   has: [
+        //     {
+        //       type: 'header',
+        //       key: 'x-forwarded-proto',
+        //       value: 'http',
+        //     },
+        //   ],
+        //   destination: 'https://www.mondrey.dev/:path*',
+        //   permanent: true,
+        // },
       ];
     }
 

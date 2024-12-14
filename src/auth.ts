@@ -12,6 +12,17 @@ const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
 // const clientPromise = dbConnect().then((mongoose) => mongoose.connection.getClient());
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  cookies: {
+    sessionToken: {
+      name: `__Secure-next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true,
+      },
+    },
+  },
   pages: {
     signIn: '/sign-in',
     error: '/auth',
