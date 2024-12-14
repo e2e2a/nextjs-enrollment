@@ -7,8 +7,8 @@ export default {
   secret: process.env.NEXTAUTH_SECRET!,
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_CLIENT_ID! as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET! as string,
       // profile: async (_profile) => {
       //   console.log('_profile', _profile)
       //   return {

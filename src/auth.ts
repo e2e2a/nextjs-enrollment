@@ -32,7 +32,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   callbacks: {
     async signIn({ user, account, profile }) {
       try {
-        // await dbConnect();
+        await dbConnect();
         if (account?.provider === 'google') {
           const existingUser = await getUserByEmail(user.email!);
           if (existingUser) {
