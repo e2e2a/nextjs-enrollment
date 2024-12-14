@@ -1,11 +1,11 @@
-import { signOut } from '@/auth';
+// import { signOut } from '@/auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
  
 
   try {
-    await signOut();
+    // await signOut();
     return NextResponse.json({ message: 'User signed out' });
   } catch (error) {
     console.log(error);

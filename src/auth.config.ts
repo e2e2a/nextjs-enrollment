@@ -9,6 +9,11 @@ export default {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID! as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET! as string,
+      authorization: {
+        params: {
+          redirect_uri: "https://mondrey.dev/api/auth/callback/google",
+        },
+      },
       // profile: async (_profile) => {
       //   console.log('_profile', _profile)
       //   return {
