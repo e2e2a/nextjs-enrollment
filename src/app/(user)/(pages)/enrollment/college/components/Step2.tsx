@@ -66,7 +66,7 @@ const Step2 = ({ enrollment }: IProps) => {
                   </a>
                   , or check out our FAQ section for common inquiries, if you want to stop enrolling please contact us{' '}
                   <Link href={''} className='hover:underline hover:text-blue-600 text-blue-500'>
-                    jay.abandog@gmail.com{' '}
+                    e2e2a@mondrey.dev{' '}
                   </Link>
                   or visit our office for assistance.
                 </span>

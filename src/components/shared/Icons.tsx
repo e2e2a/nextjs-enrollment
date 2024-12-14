@@ -1,4 +1,5 @@
 import {
+  PhilippinePeso,
   Ban,
   FilePenLine,
   Star,
@@ -60,6 +61,7 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
+  PhilippinePeso: PhilippinePeso,
   ban: Ban,
   filePenLine: FilePenLine,
   star: Star,

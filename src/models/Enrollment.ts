@@ -18,7 +18,7 @@ export interface IEnrollment extends Document {
   studentType?: string;
   scholarType: 'TWSP' | 'STEP' | 'PESFA' | 'UAQTEA' | 'None';
   studentSubjects: Number;
-
+  payment: boolean;
   rejectedRemark: string;
 }
 
@@ -109,6 +109,7 @@ const schema = new Schema<IEnrollment>(
         averageTotal: { type: String, default: '' },
       },
     ],
+    payment: { type: Boolean },
     rejectedRemark: { type: String },
   },
   {

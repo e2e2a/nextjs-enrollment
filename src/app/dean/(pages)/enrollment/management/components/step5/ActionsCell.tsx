@@ -80,7 +80,7 @@ const ActionsCell3 = ({ user }: IProps) => {
                     View Subjects
                   </div>
                 </Link>
-                <Button
+                {/* <Button
                   type='button'
                   disabled={isPending}
                   onClick={(e) => actionFormSubmit(e, 'Approved')}
@@ -89,7 +89,7 @@ const ActionsCell3 = ({ user }: IProps) => {
                 >
                   <Icons.check className='h-4 w-4' />
                   Complete Current Step
-                </Button>
+                </Button> */}
                 <Button
                   disabled={isPending}
                   type='button'

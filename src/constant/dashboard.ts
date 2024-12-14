@@ -13,17 +13,10 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'libraryBig',
     },
     {
-      title: 'Enrollment',
-      href: '/enrollment',
-      icon: 'graduationCap',
+      title: 'Receipts',
+      href: '/receipts',
+      icon: 'PhilippinePeso',
     },
-    // {
-    //   title: 'Classes',
-    //   href: '/prospectus',
-    //   icon: 'fileBadge',
-    //   // disabled: true,
-    // },
-
     {
       title: 'Schedules',
       href: '/schedules',
@@ -36,11 +29,6 @@ export const dashboardConfig: DashboardConfig = {
     },
   ],
   sidebarNav: [
-    // {
-    //   title: 'Home',
-    //   href: '/',
-    //   icon: 'home',
-    // },
     {
       title: 'Courses',
       href: '/courses',
@@ -60,6 +48,11 @@ export const dashboardConfig: DashboardConfig = {
       title: 'Records',
       href: '/record',
       icon: 'fileStack',
+    },
+    {
+      title: 'Receipts',
+      href: '/receipts',
+      icon: 'PhilippinePeso',
     },
     {
       title: 'School & Policies',

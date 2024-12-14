@@ -103,7 +103,7 @@ const ActionsCell3 = ({ user }: IProps) => {
                 </Link>
                 <DialogStep6Button isPending={isPending} form={form} user={user} setIsOpen={setIsOpen} isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} actionFormSubmit={actionFormSubmit} />
 
-                <Button
+                {/* <Button
                   disabled={isPending}
                   type='button'
                   size={'sm'}
@@ -112,7 +112,7 @@ const ActionsCell3 = ({ user }: IProps) => {
                 >
                   <Icons.rotateCcw className='h-4 w-4' />
                   Undo last Step
-                </Button>
+                </Button> */}
               </CommandGroup>
             </CommandList>
           </Command>
