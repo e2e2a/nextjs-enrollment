@@ -13,14 +13,14 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'libraryBig',
     },
     {
-      title: 'Receipts',
-      href: '/receipts',
-      icon: 'PhilippinePeso',
-    },
-    {
       title: 'Schedules',
       href: '/schedules',
       icon: 'hourglass',
+    },
+    {
+      title: 'Receipts',
+      href: '/receipts',
+      icon: 'PhilippinePeso',
     },
     {
       title: 'Records',

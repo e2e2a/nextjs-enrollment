@@ -9,6 +9,7 @@ export const useStudentReceiptMutation = () => {
       if (!data.error) {
         queryClient.invalidateQueries({ queryKey: ['StudentReceiptByUserId', data.userId] });
         queryClient.invalidateQueries({ queryKey: ['EnrollmentBySessionId', data.userId] });
+        queryClient.invalidateQueries({ queryKey: ['StudentReceiptByCategory', data.category] });
       }
     },
   });

@@ -12,7 +12,20 @@ export interface IStudentReceipt extends Document {
     value: number;
   };
   status: string; // Status of the transaction (e.g., 'COMPLETED', 'PENDING', 'FAILED')
-  paymentMethod: string;
+  payment_source: {
+    paypal: {
+      email_address: string;
+      account_id: string;
+      account_status: string;
+      name: {
+        given_name: string;
+        surname: string;
+      };
+      address: {
+        country_code: string;
+      };
+    };
+  };
   createTime: Date;
   updateTime?: Date;
   payer: {
@@ -47,16 +60,17 @@ export interface IStudentReceipt extends Document {
     update_time: Date;
   };
   taxes: {
-    fee: string,
-    fixed: string,
-    amount: string
-  },
+    fee: string;
+    fixed: string;
+    amount: string;
+  };
   type: string;
   captureTime?: Date;
   errorDetails?: {
     message: string;
     code: string;
   };
+  paymentMethod: string;
   schoolYear: string;
 }
 
@@ -72,7 +86,21 @@ const schema = new Schema<IStudentReceipt>(
       value: { type: Number, required: true },
     },
     status: { type: String, required: true },
-    paymentMethod: { type: String, default: 'PayPal' },
+    paymentMethod: { type: String },
+    payment_source: {
+      paypal: {
+        email_address: { type: String},
+        account_id: { type: String},
+        account_status: { type: String},
+        name: {
+          given_name: { type: String},
+          surname: { type: String},
+        },
+        address: {
+          country_code: { type: String},
+        },
+      },
+    },
     createTime: { type: Date, required: true },
     updateTime: { type: Date },
     payer: {
@@ -109,7 +137,7 @@ const schema = new Schema<IStudentReceipt>(
     taxes: {
       fee: { type: String },
       fixed: { type: String },
-      amount:{ type: String }
+      amount: { type: String },
     },
     type: { type: String, required: true }, // Type of payment (e.g., 'DownPayment', 'FullPayment')
     captureTime: { type: Date },

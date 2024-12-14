@@ -22,6 +22,7 @@ const Step5 = ({ enrollment }: IProps) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
   const [downPayment, setDownPayment] = useState(0);
+  const dp = useRef(0);
   const totalPaymentRef = useRef(0);
   const totalTransactionFee = useRef(0);
   const paymentMethod = useRef('');
@@ -42,6 +43,7 @@ const Step5 = ({ enrollment }: IProps) => {
 
     if (pData && srData && pData.profile && tfData && tfData.tFee) {
       setDownPayment(tfData.tFee.downPayment);
+      dp.current = tfData?.tFee?.downPayment;
       const fee = Number(tfData.tFee.downPayment) * 0.039;
       totalTransactionFee.current = parseFloat(fee.toFixed(2));
       const totalPayment = Number(tfData.tFee.downPayment) + Number(fee) + 15;
@@ -86,9 +88,7 @@ const Step5 = ({ enrollment }: IProps) => {
   };
 
   const createOrder = (data: any, actions: any) => {
-    console.log('create', data);
     paymentMethod.current = data.paymentSource;
-    console.log('actions', actions);
     const payment = totalPaymentRef.current;
     return actions.order.create({
       intent: 'CAPTURE', // Add intent: 'CAPTURE'
@@ -102,9 +102,9 @@ const Step5 = ({ enrollment }: IProps) => {
           },
         },
       ],
-      payment_source: {
-        card: {},
-      },
+      // payment_source: {
+      //   paypal: {},
+      // },
       application_context: {
         // locale: 'en-US',
         // brand_name: 'asd',
@@ -122,23 +122,20 @@ const Step5 = ({ enrollment }: IProps) => {
   const mutation = useStudentReceiptMutation();
   const onApprove = async (data: any, actions: any) => {
     try {
-      console.log('data', data);
       const details = await actions.order.capture();
-      const card = details.payer.payment_source.card;
-      console.log('details', details);
       if (details.status === 'COMPLETED' || details.status === 'ON_HOLD' || details.status === 'PENDING') {
         const receipt = {
           captureId: details.purchase_units[0].payments.captures[0].id,
           studentId: pData?.profile._id,
           category: 'College',
-          orderID: details.id, // PayPal order ID
-          transactionId: details.id, // Transaction ID (same as orderID)
+          orderID: details.id,
+          transactionId: details.id,
           amount: {
             currency_code: details.purchase_units[0].amount.currency_code,
             value: parseFloat(details.purchase_units[0].amount.value),
           },
           status: details.status, // Transaction status (COMPLETED)
-          paymentMethod: paymentMethod,
+          paymentMethod: paymentMethod.current,
           createTime: new Date(details.create_time),
           updateTime: new Date(details.update_time),
           payer: {
@@ -150,7 +147,7 @@ const Step5 = ({ enrollment }: IProps) => {
           taxes: {
             fee: totalTransactionFee.current,
             fixed: 15,
-            amount: tfData?.tFee?.downPayment,
+            amount: dp.current,
           },
           paymentIntent: details.intent, // Payment intent (CAPTURE)
           // payments: details.payment
@@ -175,7 +172,7 @@ const Step5 = ({ enrollment }: IProps) => {
         });
       }
     } catch (error) {
-      console.error('Error capturing order:', error);
+      // console.error('Error capturing order:', error);
       alert('Payment could not be completed. Please try again.');
     }
   };
@@ -289,7 +286,7 @@ const Step5 = ({ enrollment }: IProps) => {
                             makeToastError('PayPal error');
                           }}
                           onCancel={() => {
-                            makeToastError('Your transaction was cancelled due to incomplete verification');
+                            makeToastError('Your transaction was cancelled.');
                           }}
                         />
                       </PayPalScriptProvider>

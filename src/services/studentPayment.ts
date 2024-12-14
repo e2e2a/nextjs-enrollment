@@ -22,6 +22,16 @@ export const getStudentReceiptByStudentId = async (studentId: any) => {
   }
 };
 
+export const getStudentReceiptByCategory = async (category: any) => {
+  try {
+    const sr = await StudentReceipt.find({ category }).populate('studentId').exec();
+    return sr;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
 export const getStudentReceiptById = async (id: any) => {
   try {
     const sr = await StudentReceipt.findById(id).populate('studentId').exec();

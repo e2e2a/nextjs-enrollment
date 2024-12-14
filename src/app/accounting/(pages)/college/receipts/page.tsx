@@ -3,15 +3,15 @@ import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useStudentReceiptQueryByUserId } from '@/lib/queries/studentReceipt/get/userId';
 import { useSession } from 'next-auth/react';
+import { useStudentReceiptQueryByCategory } from '@/lib/queries/studentReceipt/get/category';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
 
   const { data: s } = useSession();
-  const { data, isLoading, error } = useStudentReceiptQueryByUserId(s?.user?.id as string);
+  const { data, isLoading, error } = useStudentReceiptQueryByCategory('College');
 
   useEffect(() => {
     if (error || !data) return setIsError(true);
@@ -34,7 +34,7 @@ const Page = () => {
           ) : (
             <div className=''>
               <div className='flex items-center py-4 text-black w-full justify-center'>
-                <h1 className='sm:text-3xl text-xl font-bold '>Your Payment Receipts</h1>
+                <h1 className='sm:text-3xl text-xl font-bold '>Payments Receipts</h1>
               </div>
               <DataTable columns={columns} data={data.studentReceipt} />
             </div>

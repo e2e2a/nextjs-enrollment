@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DataTableDrawer } from '../Drawer';
 import ActionsCell from './ActionsCell';
@@ -208,7 +208,7 @@ export const columns5: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.profileId.payment ? <span className='text-green-500'>TRUE</span> : <span className='text-red'>FALSE</span>}
+          {user.payment ? <span className='text-green-500'>TRUE</span> : <span className='text-red'>FALSE</span>}
         </div>
       );
     },
@@ -219,18 +219,7 @@ export const columns5: ColumnDef<IEnrollment>[] = [
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
       const formatted = date.toLocaleDateString();
-      // @example for formatted date ex. January 1, 2015
-      // const options: Intl.DateTimeFormatOptions = {
-      //   year: "numeric",
-      //   month: "short",
-      //   day: "numeric",
-      // };
 
-      // const formattedDate = date.toLocaleDateString("en-US", options);
-
-      // // Manually reformat the string to "Jul 20, 2024"
-      // const [month, day, year] = formattedDate.split(' ');
-      // const formatted = `${month} ${day}, ${year}`;
       return <div className='font-medium'>{formatted}</div>;
     },
   },

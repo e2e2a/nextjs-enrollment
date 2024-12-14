@@ -205,6 +205,7 @@ export type IEnrollment = {
   studentType?: string;
   scholarType?: string;
   studentSubjects: any;
+  payment: boolean,
   createdAt: Date;
   updatedAt: Date;
 };

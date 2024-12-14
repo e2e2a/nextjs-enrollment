@@ -15,7 +15,7 @@ export const getAllStudentReceiptByIdAction = async (id: string) => {
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
-    if (session && session.user.role !== 'STUDENT') return { error: 'Forbidden', status: 403 };
+
     const a = await checkRole(session.user, id);
 
     return a;
