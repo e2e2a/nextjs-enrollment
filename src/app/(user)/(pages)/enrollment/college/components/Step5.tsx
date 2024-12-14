@@ -158,21 +158,21 @@ const Step5 = ({ enrollment }: IProps) => {
           captureTime: new Date(details.update_time),
         };
 
-        // mutation.mutate(receipt, {
-        //   onSuccess: (res: any) => {
-        //     switch (res.status) {
-        //       case 200:
-        //       case 201:
-        //       case 203:
-        //         makeToastSucess(res.message);
-        //         return;
-        //       default:
-        //         makeToastError(res.error);
-        //         return;
-        //     }
-        //   },
-        //   onSettled: () => {},
-        // });
+        mutation.mutate(receipt, {
+          onSuccess: (res: any) => {
+            switch (res.status) {
+              case 200:
+              case 201:
+              case 203:
+                makeToastSucess(res.message);
+                return;
+              default:
+                makeToastError(res.error);
+                return;
+            }
+          },
+          onSettled: () => {},
+        });
       }
     } catch (error) {
       console.error('Error capturing order:', error);
@@ -208,8 +208,8 @@ const Step5 = ({ enrollment }: IProps) => {
                 </span>
                 {displayPayment ? (
                   <span className='text-sm mt-4 px-5 sm:px-10 w-full text-justify leading-relaxed'>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To proceed with your payment, you can use PayPal, a credit card, or a debit card. If you don&apos;t have access to these options, we kindly ask you to visit the school cashier&apos;s office at DCIT. Our friendly
-                    staff will assist you with the payment process and ensure you receive any necessary documentation. For additional guidance or questions, please refer to our documentation, which can be accessed via{' '}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To proceed with your payment, you can use PayPal, a credit card, or a debit card. If you don&apos;t have access to these options, we kindly ask you to visit the school cashier&apos;s office at DCIT. Our
+                    friendly staff will assist you with the payment process and ensure you receive any necessary documentation. For additional guidance or questions, please refer to our documentation, which can be accessed via{' '}
                     <a href='/documentation' className='text-blue-600 underline hover:text-blue-800'>
                       this link
                     </a>
