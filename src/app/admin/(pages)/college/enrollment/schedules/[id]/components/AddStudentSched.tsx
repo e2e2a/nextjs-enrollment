@@ -123,7 +123,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
         <DialogHeader>
           <DialogTitle className='flex flex-col space-y-1 sm:text-center'>
             <span>Add New Student Subjects</span>
-            <span className='capitalize'>Course: {student.courseId.name}</span>
+            <span className='capitalize'>Course: {student.courseId?.name}</span>
             <span className='text-sm font-bold uppercase'>
               {student.profileId.firstname} {student.profileId.middlename ?? ''} {student.profileId.lastname} {student.profileId.extensionName ? student.profileId.extensionName + '.' : ''}
             </span>
@@ -154,7 +154,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                               <span>
                                 Instructor: {selectedItem.profileId.firstname} {selectedItem.profileId.middlename} {selectedItem.profileId.lastname}
                               </span>
-                              <span>Title: {selectedItem.subjectId.name}</span>
+                              <span>Title: {selectedItem?.subjectId?.name}</span>
                               <span>Code: {selectedItem.subjectId.subjectCode}</span>
                             </div>
                             <span className='text-red cursor-pointer py-1 mr-5' onClick={() => handleRemove(selectedItem._id)}>
@@ -198,7 +198,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                     b.blockSubjects
                                       .filter((s: any) => !enrolledTeacherScheduleIds.has(s.teacherScheduleId._id))
                                       .map((s: any, index: any) => (
-                                        <CommandItem className='border w-full block mb-3 bg-gray-300' key={s._id} value={s.teacherScheduleId.subjectId.name}>
+                                        <CommandItem className='border w-full block mb-3 bg-gray-300' key={s._id} value={s?.teacherScheduleId?.subjectId?.name}>
                                           <div className='grid sm:grid-cols-2 grid-cols-1 w-full'>
                                             <div className='flex flex-col text-xs sm:text-sm order-2 sm:order-1'>
                                               <span className=' font-semibold border-1 sm:border-0'>
@@ -206,12 +206,12 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                 {s.teacherScheduleId.profileId?.extensionName ? s.teacherScheduleId.profileId.extensionName : ''}
                                               </span>
                                               <span className=' font-semibold'>
-                                                Department: <span className='uppercase'>{s.teacherScheduleId.courseId.name}</span>
+                                                Department: <span className='uppercase'>{s?.teacherScheduleId?.courseId?.name}</span>
                                               </span>
                                               <span className=' font-semibold'>
                                                 Subject Code: <span className='uppercase'>{s.teacherScheduleId.subjectId.subjectCode}</span>
                                               </span>
-                                              <span className=' text-wrap font-medium'>Title: {s.teacherScheduleId.subjectId.name}</span>
+                                              <span className=' text-wrap font-medium'>Title: {s?.teacherScheduleId?.subjectId?.name}</span>
                                               <span className=''>Pre Req.: EMPTY</span>
                                               <span className=''>Days: {s.teacherScheduleId.days.join(', ')}</span>
                                               <span className=''>Lec: {s.teacherScheduleId.subjectId.lec}</span>

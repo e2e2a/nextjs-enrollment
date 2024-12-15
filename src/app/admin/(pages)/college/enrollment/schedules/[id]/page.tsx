@@ -61,7 +61,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{data.enrollment.courseId.name}</span>
+                      Department: <span className='font-normal'>{data?.enrollment?.courseId?.name}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start '>

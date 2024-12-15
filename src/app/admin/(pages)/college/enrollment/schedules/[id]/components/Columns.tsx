@@ -46,14 +46,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.name,
+    accessorFn: (row) => row.teacherScheduleId.subjectId?.name,
     id: 'Descriptive Title',
     header: 'Descriptive Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId.subjectId.name}
+          {user?.teacherScheduleId?.subjectId?.name}
         </div>
       );
     },
