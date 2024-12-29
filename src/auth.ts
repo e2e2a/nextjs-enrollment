@@ -10,19 +10,30 @@ import { createStudentProfileProvider } from './services/studentProfile';
 import { createAccount } from './services/account';
 const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
 // const clientPromise = dbConnect().then((mongoose) => mongoose.connection.getClient());
+const isInProductionMode = process.env.NEXT_PUBLIC_NODE_ENV === 'production';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   cookies: {
     sessionToken: {
-      name: `__Secure-next-auth.session-token`,
+      name: isInProductionMode ? '__Secure-next-auth.session-token' : 'next-auth.session-token',
       options: {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        secure: true,
+        secure: isInProductionMode,
+      },
+    },
+    pkceCodeVerifier: {
+      name: 'next-auth.pkce.code_verifier',
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: isInProductionMode,
       },
     },
   },
+  debug: isInProductionMode,
   pages: {
     signIn: '/sign-in',
     error: '/auth',
