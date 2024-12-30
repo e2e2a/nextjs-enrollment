@@ -20,7 +20,7 @@ import Input from './Input';
 import { StudentProfileExtension } from '@/lib/validators/profile/extension';
 import { SelectCourse } from './SelectCourse';
 import InputDisabled from './InputDisabled';
-import { useCreateEnrollmentByCategoryMutation } from '@/lib/queries/enrollment/create';
+import { useCreateEnrollmentForNewStudentByCategoryMutation } from '@/lib/queries/enrollment/create/newStudent';
 
 type IProps = {
   search: any;
@@ -133,7 +133,7 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
   const handleRemoveFile = () => setFilePreview(null);
   const handleRemoveFileGoodMoral = () => setFileGoodMoralPreview(null);
   const handleRemoveFileTOR = () => setFileTORPreview(null);
-  const mutation = useCreateEnrollmentByCategoryMutation();
+  const mutation = useCreateEnrollmentForNewStudentByCategoryMutation();
   const deleteMutation = useEnrollmentDeleteMutation();
   const form = useForm<z.infer<typeof StudentProfileExtension>>({
     resolver: zodResolver(StudentProfileExtension),

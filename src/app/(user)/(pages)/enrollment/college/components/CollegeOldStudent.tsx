@@ -11,18 +11,19 @@ import { useSession } from 'next-auth/react';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import Image from 'next/image';
 import Input from './Input';
-import { EnrollmentContinuingFormValidator } from '@/lib/validators/StudentValidator';
-import { useEnrollmentContinuingStep0Mutation } from '@/lib/queries/student';
+import { EnrollmentOldStudentFormValidator } from '@/lib/validators/enrollment/create/oldStudent';
+import { useCreateEnrollmentForOldStudentByCategoryMutation } from '@/lib/queries/enrollment/create/oldStudent';
+
 type IProps = {
   profile: any;
   enrollmentSetup: any;
 };
-const ContinuingCollegeStudent = ({ profile, enrollmentSetup }: IProps) => {
+const CollegeOldStudent = ({ profile, enrollmentSetup }: IProps) => {
   const { data: s } = useSession();
-  const mutation = useEnrollmentContinuingStep0Mutation();
+  const mutation = useCreateEnrollmentForOldStudentByCategoryMutation();
 
-  const form = useForm<z.infer<typeof EnrollmentContinuingFormValidator>>({
-    resolver: zodResolver(EnrollmentContinuingFormValidator),
+  const form = useForm<z.infer<typeof EnrollmentOldStudentFormValidator>>({
+    resolver: zodResolver(EnrollmentOldStudentFormValidator),
     defaultValues: {
       studentStatus: '',
       studentYear: '',
@@ -65,12 +66,13 @@ const ContinuingCollegeStudent = ({ profile, enrollmentSetup }: IProps) => {
     }
   }, [profile, form, enrollmentSetup]);
 
-  const onSubmit: SubmitHandler<z.infer<typeof EnrollmentContinuingFormValidator>> = async (data) => {
+  const onSubmit: SubmitHandler<z.infer<typeof EnrollmentOldStudentFormValidator>> = async (data) => {
     data.studentYear = data.studentYear.toLowerCase();
     data.studentSemester = data.studentSemester.toLowerCase();
     data.schoolYear = data.schoolYear.toLowerCase();
     const dataa = {
       ...data,
+      category: 'College',
       userId: s?.user.id,
     };
     console.log(dataa);
@@ -158,4 +160,4 @@ const ContinuingCollegeStudent = ({ profile, enrollmentSetup }: IProps) => {
   );
 };
 
-export default ContinuingCollegeStudent;
+export default CollegeOldStudent;
