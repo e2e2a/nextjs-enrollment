@@ -16,7 +16,7 @@ import { getEnrollmentSetupByName } from '@/services/EnrollmentSetup';
  *
  * @param {object} data
  */
-export const createEnrollmentByCategoryAction = async (data: any) => {
+export const createEnrollmentForNewStudentByCategoryAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
     const session = await checkAuth();

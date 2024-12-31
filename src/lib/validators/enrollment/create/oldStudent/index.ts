@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { parse, isValid, isBefore, differenceInYears } from 'date-fns';
 
-export const EnrollmentContinuingFormValidator = z
+export const EnrollmentOldStudentFormValidator = z
   .object({
     studentStatus: z.string().min(1, { message: 'Student Status is required...' }),
     studentYear: z.string().min(1, { message: 'Student Year is required...' }),

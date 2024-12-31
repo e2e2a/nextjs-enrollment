@@ -1,10 +1,10 @@
-import { createEnrollmentByCategoryAction } from '@/action/enrollment/create';
+import { createEnrollmentForNewStudentByCategoryAction } from '@/action/enrollment/create/newStudent';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export const useCreateEnrollmentByCategoryMutation = () => {
+export const useCreateEnrollmentForNewStudentByCategoryMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
-    mutationFn: async (data) => createEnrollmentByCategoryAction(data),
+    mutationFn: async (data) => createEnrollmentForNewStudentByCategoryAction(data),
     onSuccess: (data) => {
       if (!data.error) {
         // @todo this query must have the id to be identified which of the authenticated student will be invalidated
