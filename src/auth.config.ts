@@ -2,6 +2,7 @@ import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { getUserByEmail } from './services/user';
 import GoogleProvider from 'next-auth/providers/google';
+const isInProductionMode = process.env.NEXT_PUBLIC_NODE_ENV === 'production';
 
 export default {
   secret: process.env.NEXTAUTH_SECRET!,
@@ -11,7 +12,7 @@ export default {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET! as string,
       authorization: {
         params: {
-          redirect_uri: "https://mondrey.dev/api/auth/callback/google",
+          redirect_uri: `${isInProductionMode ? 'https://mondrey.dev/api/auth/callback/google' : 'http://localhost:3000/api/auth/callback/google'}`,
         },
       },
       // profile: async (_profile) => {
@@ -30,7 +31,7 @@ export default {
       async authorize(credentials) {
         const user = await getUserByEmail(credentials.email as string);
         if (!user) return null;
-        
+
         return user;
       },
     }),
