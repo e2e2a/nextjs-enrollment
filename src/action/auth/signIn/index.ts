@@ -49,8 +49,8 @@ const checkUser = async (data: any) => {
     const isMatch = await comparePassword(data.password, existingUser.password as string);
     if (!isMatch) return { error: 'Incorrect email or password.', status: 403 };
 
-    const checkedIp = await checkIp(existingUser);
-    if (checkedIp && checkedIp.error) return { error: 'Confirming Email', token: checkedIp.token, status: 203 };
+    // const checkedIp = await checkIp(existingUser);
+    // if (checkedIp && checkedIp.error) return { error: 'Confirming Email', token: checkedIp.token, status: 203 };
     return { success: 'yesyes', user: existingUser, status: 201 };
   });
 };
