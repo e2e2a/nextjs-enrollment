@@ -20,6 +20,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     if (s && data) {
       const filteredSchedules = s?.teacherSchedules?.filter((schedule: any) => schedule.blockTypeId === null || !schedule.blockTypeId);
+      console.log('filteredSchedules',filteredSchedules)
       setTeachersSchedules(filteredSchedules);
       setIsPageLoading(false);
     }

@@ -4,13 +4,17 @@ import { ColumnDef, flexRender, SortingState, VisibilityState, ColumnFiltersStat
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Icons } from '@/components/shared/Icons';
+import SearchBy from './SearchBy';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData;
+  data: TData[];
 }
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+  const [searchBy, setSearchBy] = useState('name');
   useEffect(() => {
     if (!data) {
       return;
@@ -41,16 +45,17 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     <div>
       {/* Filters */}
       <div className='flex items-center justify-between w-full '>
-        {/* <div className='flex items-center  py-4 text-black'>
+        <div className='flex items-center  py-4 text-black'>
           <Input
-            placeholder='Search by Descriptive Title...'
-            value={(table.getColumn('Descriptive Title')?.getFilterValue() as string) ?? ''}
+            placeholder={`${searchBy === 'name' ? 'Search by Fullname...' : 'Search by Email...'}`}
+            value={(table.getColumn(searchBy)?.getFilterValue() as string) ?? ''}
             onChange={(event) => {
-              table.getColumn('Descriptive Title')?.setFilterValue(event.target.value);
+              table.getColumn(searchBy)?.setFilterValue(event.target.value);
             }}
             className='max-w-sm'
           />
-        </div> */}
+          <SearchBy setSearchBy={setSearchBy} />
+        </div>
 
         {/* Column visibility */}
         <DropdownMenu>

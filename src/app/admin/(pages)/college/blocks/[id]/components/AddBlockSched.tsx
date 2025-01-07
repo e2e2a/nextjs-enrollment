@@ -108,7 +108,12 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                             <span className='border rounded-full border-gray-600 px-1.5'>{index + 1}</span>
                           </div>{' '}
                           <span>
-                            Instructor: {selectedItem.profileId.firstname} {selectedItem.profileId.middlename ?? ''} {selectedItem.profileId.lastname} {selectedItem.profileId.extensionName ?? ''}
+                            Instructor:{' '}
+                            {selectedItem?.userId?.role === 'TEACHER' && (
+                              <span className=''>
+                                {selectedItem?.profileId?.firstname} {selectedItem.profileId.middlename ?? ''} {selectedItem.profileId?.lastname} {selectedItem.profileId.extensionName ?? ''}
+                              </span>
+                            )}
                           </span>
                           <span>Subject Code: {selectedItem.subjectId.subjectCode}</span>
                           <span>Descriptive Title: {selectedItem.subjectId.name}</span>
@@ -147,7 +152,9 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                         <div className='grid sm:grid-cols-2 grid-cols-1 w-full'>
                           <div className='flex flex-col text-xs sm:text-sm order-2 sm:order-1'>
                             <span className=' font-semibold'>
-                              Instructor: {s.profileId.firstname} {s.profileId?.middlename ?? ''} {s.profileId.lastname} {s.profileId?.extensionName ?? ''}
+                              Instructor: 
+                              {s?.userId?.role === 'TEACHER' && <span>{s.profileId?.firstname} {s.profileId?.middlename ?? ''} {s.profileId.lastname} {s.profileId?.extensionName ?? ''}</span> }
+                              {s?.userId?.role === 'DEAN' && <span>{s.deanId?.firstname} {s.deanId?.middlename ?? ''} {s.deanId.lastname} {s.deanId?.extensionName ?? ''}</span> }
                             </span>
                             <span className=' font-semibold'>
                               Subject Code: <span className='uppercase'>{s.subjectId.subjectCode}</span>

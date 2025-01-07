@@ -4,6 +4,7 @@ export interface ITeacherScheduleRecord extends Document {
   category: string;
   schoolYear: string;
   profileId: mongoose.Schema.Types.ObjectId;
+  deanId: mongoose.Schema.Types.ObjectId;
   course: string;
   schedule?: any;
   blockType?: any;
@@ -21,6 +22,10 @@ const schema = new Schema<ITeacherScheduleRecord>(
     profileId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'TeacherProfile',
+    },
+    deanId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'DeanProfile',
     },
     course: {
       name: { type: String },

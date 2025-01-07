@@ -61,7 +61,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: 'Documentation',
-      href: '/documentation',
+      href: '/',
       icon: 'page',
     },
     // {
@@ -95,16 +95,6 @@ export const dashboardConfig: DashboardConfig = {
       title: 'Records',
       href: '/instructor/record',
       icon: 'fileStack',
-    },
-    {
-      title: 'School & Policies',
-      href: '/school/policy',
-      icon: 'school',
-    },
-    {
-      title: 'Documentation',
-      href: '',
-      icon: 'page',
     },
   ],
   sidebarInstructor: [
@@ -140,11 +130,16 @@ export const dashboardConfig: DashboardConfig = {
       href: '/dean',
       icon: 'home',
     },
-    // {
-    //   title: 'Schedules',
-    //   href: '/dean/schedules',
-    //   icon: 'hourglass',
-    // },
+    {
+      title: 'Teaching Load',
+      href: '/dean/schedules',
+      icon: 'hourglass',
+    },
+    {
+      title: 'Department Schedule',
+      href: '/dean/schedules/department',
+      icon: 'CalendarDays',
+    },
     {
       title: 'Blocks',
       href: '/dean/blocks',
@@ -155,16 +150,6 @@ export const dashboardConfig: DashboardConfig = {
       href: '/dean/report/grade',
       icon: 'filePenLine',
     },
-    {
-      title: 'School & Policies',
-      href: '/school/policy',
-      icon: 'school',
-    },
-    {
-      title: 'Documentation',
-      href: '',
-      icon: 'page',
-    },
   ],
   sidebarDean: [
     {
@@ -173,9 +158,14 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'packageSearch',
     },
     {
-      title: 'Class Load',
+      title: 'Teaching Load',
       href: '/dean/schedules',
       icon: 'hourglass',
+    },
+    {
+      title: 'Department Schedule',
+      href: '/dean/schedules/department',
+      icon: 'CalendarDays',
     },
     {
       title: 'Enrollment',
@@ -280,7 +270,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: 'Documentation',
-      href: '/documentation',
+      href: '/',
       icon: 'page',
     },
     // {

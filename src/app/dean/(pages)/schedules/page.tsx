@@ -2,29 +2,31 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-import { useTeacherScheduleQueryByCategory } from '@/lib/queries/teacherSchedule/get/category';
+import { useSession } from 'next-auth/react';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
+import { useTeacherScheduleQueryByProfileId } from '@/lib/queries/teacherSchedule/get/all/profileId';
 import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
+  const { data: session } = useSession();
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
-  const { data, isLoading, error: isEnError } = useTeacherScheduleQueryByCategory('College');
+  const { data, isLoading, error: isEnError } = useProfileQueryBySessionId();
+  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryByProfileId({ id: data?.profile?._id });
 
   useEffect(() => {
+    if (tsError || !ts) return;
     if (isEnError || !data) return;
-    if (pError || !pData) return;
 
-    if (data && pData) {
-      if (data.teacherSchedules) {
+    if (ts && data) {
+      if (ts.error) {
         setIsPageLoading(false);
-      } else if (data.error) {
         setIsError(true);
-        setIsPageLoading(false);
+        return;
       }
+      setIsPageLoading(false);
     }
-  }, [data, isEnError, pData, pError]);
+  }, [ts, tsError, data, isEnError]);
 
   return (
     <>
@@ -36,22 +38,23 @@ const Page = () => {
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {isError ? (
             <div className=''>404</div>
-          ) : (
-            data && (
-              <div className=''>
-                <div className='mb-3 text-center w-full'>
-                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Schedule Management</h1>
+          ) : data && data.profile ? (
+            <>
+              <div className='flex items-center py-4 text-black w-full text-center flex-col'>
+                <div>
+                  <h1 className='sm:text-lg text-xl font-bold uppercase'>Instructor Schedules</h1>
                 </div>
-                <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1 mb-10'>
-                  <div className='justify-between items-start flex w-full'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{pData?.profile.courseId.name}</span>
-                    </span>
-                  </div>
+                <div className=''>
+                  <h1 className='sm:text-sm text-lg font-bold capitalize'>
+                    {data.profile.firstname} {data.profile.middlename ?? ''} {data.profile.lastname} {data.profile.extensionName ? data.profile.extensionName + '.' : ''}
+                  </h1>
                 </div>
-                <DataTable columns={columns} data={data?.teacherSchedules as any[]} />
               </div>
-            )
+              <div className='w-full flex justify-end items-center'></div>
+              <DataTable columns={columns} data={ts?.teacherSchedules} />
+            </>
+          ) : (
+            <div className=''>404</div>
           )}
         </div>
       )}

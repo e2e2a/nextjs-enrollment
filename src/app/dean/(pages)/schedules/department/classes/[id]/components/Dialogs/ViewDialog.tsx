@@ -6,9 +6,8 @@ import { Icons } from '@/components/shared/Icons';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
-import UpdateAlert from '../Alerts/UpdateAlert';
 import { useUpdateGradeReportMutation } from '@/lib/queries/reportGrade/update/id';
-import DeleteAlert from '../Alerts/DeleteAlert';
+import AlertDialogPage from '../alert/AlertDialogPage';
 
 interface IProps {
   data: any;
@@ -31,30 +30,20 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
     const initialGrades = reportGrades.reportedGrade.map((s: any) => ({
       profileId: s.profileId._id,
       grade: s.grade,
-      error: false, // for error messages
     }));
     setGrades(initialGrades);
-  }, [data, reportGrades]);
+  }, [reportGrades]);
 
   const handleGradeChange = (index: any, profileId: any, value: any) => {
-    value = value.trim();
-    let error = false;
-    if (isNaN(value) && String(value).toLowerCase() !== 'inc') error = true;
     const updatedGrades = [...grades];
-    updatedGrades[index] = { profileId, grade: value, error };
+    updatedGrades[index] = { profileId, grade: value };
     setGrades(updatedGrades);
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     setIsUploading(true);
-    const g = await grades.filter((g: any) => g.error === true);
-    if (g.length > 0) {
-      makeToastError('Only Number/INC are allowed');
-      setIsAlertOpen(false);
-      setIsUploading(false);
-      return;
-    }
+
     const dataa = {
       category: 'College',
       request: 'Update',
@@ -152,36 +141,8 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
             </div>
             {!reportGrades.evaluated && (
               <div className='flex justify-end w-full'>
-                <Button
-                  type='button'
-                  onClick={() => {
-                    setIsDisabled(!isDisabled);
-                  }}
-                  disabled={isUploading}
-                  variant='outline'
-                  size={'sm'}
-                  className={`focus-visible:ring-0 flex mb-2 bg-transparent ${isDisabled ? 'bg-blue-500' : 'bg-red'} px-2 py-0 gap-x-1 justify-center text-neutral-50 font-medium`}
-                >
-                  <div className=' text-white text-[15px] font-medium flex gap-1 items-center'>
-                    {isUploading ? (
-                      <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' />
-                    ) : (
-                      <>
-                        {isDisabled ? (
-                          <>
-                            <Icons.squarePen className='h-4 w-4' /> Edit
-                          </>
-                        ) : (
-                          <>
-                            <Icons.ban className='h-4 w-4' /> Cancel
-                          </>
-                        )}
-                      </>
-                    )}
-                  </div>
-                </Button>
-                {isDisabled && <DeleteAlert isUploading={isUploading} setIsOpen={setIsOpen} reportGrades={reportGrades} />}
-                {!isDisabled && <UpdateAlert isUploading={isUploading} isAlertOpen={isAlertOpen} setIsAlertOpen={setIsAlertOpen} handleSubmit={handleSubmit} />}
+                <AlertDialogPage request='Approve' user={reportGrades} isPending={isUploading} setIsPending={setIsUploading} />
+                <AlertDialogPage request='Reject' user={reportGrades} isPending={isUploading} setIsPending={setIsUploading} />
               </div>
             )}
 
@@ -207,13 +168,12 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
                     <tr key={index}>
                       <td className='px-6 py-4 whitespace-nowrap'>{index + 1}</td>
                       <td className='px-6 py-4 whitespace-nowrap capitalize'>
-                        {s.profileId.firstname} {s.profileId?.middlename ?? ''} {s.profileId?.lastname} {s.profileId?.extensionName ? s.profileId?.extensionName + '.' : ''}
+                        {s.profileId.firstname} {s.profileId?.middlename} {s.profileId?.lastname} {s.profileId?.extensionName ? s.profileId?.extensionName + '.' : ''}
                       </td>
                       <td className='px-6 py-4 whitespace-nowrap uppercase'>{reportGrades.teacherScheduleId?.courseId?.courseCode}</td>
                       <td className='px-6 py-4 whitespace-nowrap'>{s.profileId?.sex}</td>
-                      <td className='px-6 py-4 whitespace-nowrap flex flex-col justify-center items-center w-full'>
+                      <td className='px-6 py-4 whitespace-nowrap text-center'>
                         {isDisabled ? s.grade : <Input className='w-20 text-sm text-center border-2 border-blue-400' onChange={(e) => handleGradeChange(index, s.profileId._id, e.target.value)} placeholder='' value={grades[index]?.grade} />}
-                        <div className=''>{grades && grades[index]?.error && <p className='text-xs text-red'>Only Number/INC are allowed</p>}</div>
                       </td>
                     </tr>
                   );

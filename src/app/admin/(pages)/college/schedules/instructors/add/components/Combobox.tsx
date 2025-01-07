@@ -15,9 +15,10 @@ interface IProps {
   selectItems: any;
   placeholder: string;
   setTeacherId?: React.Dispatch<React.SetStateAction<string>>;
+  setRole?: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export function Combobox({ form, name, label, selectItems, placeholder, setTeacherId }: IProps) {
+export function Combobox({ form, name, label, selectItems, placeholder, setTeacherId, setRole }: IProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
   const getFullName = (item: any) => {
@@ -33,7 +34,7 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
             <div className='relative bg-slate-50 rounded-lg'>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger id={name} asChild className='w-full pt-10 pb-4 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'>
-                  <Button variant='outline' role='combobox' aria-expanded={open} className='w-full justify-between font-normal'>
+                  <Button variant='outline' role='combobox' aria-expanded={open} className='w-full justify-between font-normal capitalize'>
                     {value
                       ? (() => {
                           const selectedItem = selectItems.find((item: any) => getFullName(item) === field.value);
@@ -67,6 +68,9 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
                                 if (setTeacherId) {
                                   setTeacherId(item._id);
                                 }
+                                if (setRole) {
+                                  setRole(item.userId.role);
+                                }
                                 field.onChange(currentValue);
                                 setOpen(false);
                               }}
@@ -76,10 +80,13 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
                                 <div className=''>
                                   <Image className='h-9 w-9' src={item.imageUrl ? item.imageUrl : '/icons/profile-placeholder.svg'} alt={item.firstname} width={10} height={10} />
                                 </div>
-                                <div className='flex flex-col'>
+                                <div className='flex flex-col capitalize'>
                                   {item.extensionName ? `${item.firstname} ${item.middlename} ${item.lastname} ${item.extensionName}` : `${item.firstname} ${item.middlename} ${item.lastname}`}
                                   <div className=''>
                                     <span>Age: {item.age}</span>
+                                  </div>
+                                  <div className=''>
+                                    <span>Role: {item.userId.role}</span>
                                   </div>
                                 </div>
                               </div>

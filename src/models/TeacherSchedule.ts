@@ -3,6 +3,7 @@ import mongoose, { Schema, models, model } from 'mongoose';
 export interface ITeacherSchedule extends Document {
   category: string;
   profileId: mongoose.Schema.Types.ObjectId;
+  deanId: mongoose.Schema.Types.ObjectId;
   courseId: mongoose.Schema.Types.ObjectId;
   schedule?: any;
   blockTypeId?: any;
@@ -18,6 +19,10 @@ const schema = new Schema<ITeacherSchedule>(
     profileId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'TeacherProfile',
+    },
+    deanId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'DeanProfile',
     },
     courseId: {
       type: mongoose.Schema.Types.ObjectId,
