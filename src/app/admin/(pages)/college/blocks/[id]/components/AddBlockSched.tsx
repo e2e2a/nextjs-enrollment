@@ -153,8 +153,8 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                           <div className='flex flex-col text-xs sm:text-sm order-2 sm:order-1'>
                             <span className=' font-semibold'>
                               Instructor: 
-                              {s?.userId?.role === 'TEACHER' && <span>{s.profileId?.firstname} {s.profileId?.middlename ?? ''} {s.profileId.lastname} {s.profileId?.extensionName ?? ''}</span> }
-                              {s?.userId?.role === 'DEAN' && <span>{s.deanId?.firstname} {s.deanId?.middlename ?? ''} {s.deanId.lastname} {s.deanId?.extensionName ?? ''}</span> }
+                              {s?.profileId && <span>{s.profileId?.firstname} {s.profileId?.middlename ?? ''} {s.profileId.lastname} {s.profileId?.extensionName ?? ''}</span> }
+                              {s?.deanId && <span>{s.deanId?.firstname} {s.deanId?.middlename ?? ''} {s.deanId.lastname} {s.deanId?.extensionName ?? ''}</span> }
                             </span>
                             <span className=' font-semibold'>
                               Subject Code: <span className='uppercase'>{s.subjectId.subjectCode}</span>

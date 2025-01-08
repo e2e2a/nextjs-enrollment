@@ -45,7 +45,6 @@ const AddStudentSched = ({ student, b }: IProps) => {
 
     setSchedules(filteredSchedules);
   }, [b, studentCourse, studentYear, studentSemester, studentBlockType]);
-
   const [isEnabled, setIsEnabled] = React.useState(false);
   const [selectedItems, setSelectedItems] = React.useState<{ teacherScheduleId: string }[]>([]);
 
@@ -142,7 +141,13 @@ const AddStudentSched = ({ student, b }: IProps) => {
                   Add list:
                   <div className='flex flex-col'>
                     {selectedItems.map((item, index) => {
-                      const selectedItem = b.find((i: any) => i._id === item.teacherScheduleId);
+                      let selectedItem = null;
+                      for (const schedule of schedules) {
+                        if (Array.isArray(schedule.blockSubjects)) {
+                          selectedItem = schedule.blockSubjects.find((blockSubject: any) => blockSubject.teacherScheduleId._id === item.teacherScheduleId);
+                          if (selectedItem) break; // Stop iterating if a match is found
+                        }
+                      }
                       if (selectedItem) {
                         return (
                           <div key={`${selectedItem._id}`} className='text-green-500 flex gap-3'>
@@ -151,11 +156,13 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                 <span className='border rounded-full border-gray-600 px-1.5'>{index + 1}</span>
                               </div>{' '}
                               {/* Numbering starts from 1 */}
-                              <span>
-                                Instructor: {selectedItem.profileId.firstname} {selectedItem.profileId.middlename} {selectedItem.profileId.lastname}
+                              <span className='uppercase'>
+                                Instructor:
+                                {selectedItem && selectedItem.profileId && `${selectedItem?.profileId?.firstname} ${selectedItem?.profileId?.middlename} ${selectedItem?.profileId?.lastname} ${selectedItem?.profileId?.extensionName}`}
+                                {selectedItem && selectedItem.deanId && `${selectedItem?.deanId?.firstname} ${selectedItem?.deanId?.middlename} ${selectedItem?.deanId?.lastname} ${selectedItem?.profileId?.extensionName}`}
                               </span>
                               <span>Title: {selectedItem?.subjectId?.name}</span>
-                              <span>Code: {selectedItem.subjectId.subjectCode}</span>
+                              <span>Code: {selectedItem.subjectId?.subjectCode}</span>
                             </div>
                             <span className='text-red cursor-pointer py-1 mr-5' onClick={() => handleRemove(selectedItem._id)}>
                               <Icons.trash className='h-3 w-3' />
@@ -202,8 +209,15 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                           <div className='grid sm:grid-cols-2 grid-cols-1 w-full'>
                                             <div className='flex flex-col text-xs sm:text-sm order-2 sm:order-1'>
                                               <span className=' font-semibold border-1 sm:border-0'>
-                                                Instructor: {s.teacherScheduleId.profileId.firstname} {s.teacherScheduleId.profileId.middlename} {s.teacherScheduleId.profileId.lastname}{' '}
-                                                {s.teacherScheduleId.profileId?.extensionName ? s.teacherScheduleId.profileId.extensionName : ''}
+                                                Instructor:{' '}
+                                                {s.teacherScheduleId &&
+                                                  s.teacherScheduleId.profileId &&
+                                                  `${s.teacherScheduleId?.profileId?.firstname} ${s.teacherScheduleId?.profileId?.middlename} ${s.teacherScheduleId?.profileId?.lastname}${' '}
+                                                ${s.teacherScheduleId.profileId?.extensionName ? s.teacherScheduleId.profileId.extensionName : ''}`}
+                                                {s.teacherScheduleId &&
+                                                  s.teacherScheduleId.deanId &&
+                                                  `${s.teacherScheduleId?.deanId?.firstname} ${s.teacherScheduleId?.deanId?.middlename} ${s.teacherScheduleId?.deanId?.lastname}${' '}
+                                                ${s.teacherScheduleId.deanId?.extensionName ? s.teacherScheduleId.deanId.extensionName : ''}`}
                                               </span>
                                               <span className=' font-semibold'>
                                                 Department: <span className='uppercase'>{s?.teacherScheduleId?.courseId?.name}</span>

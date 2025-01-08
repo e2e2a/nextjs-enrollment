@@ -160,22 +160,34 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original;
+      const user = row.original.teacherScheduleId;
       return (
         <div key={cell.id} className='capitalize'>
-          {user.teacherScheduleId.profileId.firstname} {user.teacherScheduleId.profileId.middlename ?? ''} {user.teacherScheduleId.profileId.lastname} {user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName + '.' : ''}
+          {user.deanId && (
+            <span>
+              {user.deanId?.firstname ?? ''} {user.deanId?.middlename ?? ''} {user.deanId?.lastname ?? ''} {user.deanId?.extensionName ? user.deanId?.extensionName + '.' : ''}
+            </span>
+          )}
+          {user.profileId && (
+            <span>
+              {user.profileId?.firstname ?? ''} {user.profileId?.middlename ?? ''} {user.profileId?.lastname ?? ''} {user.profileId?.extensionName ? user.profileId?.extensionName + '.' : ''}
+            </span>
+          )}
         </div>
       );
     },
-    accessorFn: (row) => `${row.teacherScheduleId.profileId.firstname ?? ''} ${row.teacherScheduleId.profileId.middlename ?? ''} ${row.teacherScheduleId.profileId.lastname ?? ''} ${row.teacherScheduleId.profileId.extensionName ?? ''}`.trim(),
+    accessorFn: (row) =>
+      `
+    ${row.teacherScheduleId?.profileId && `${row.teacherScheduleId?.profileId?.firstname} ${row.teacherScheduleId?.profileId?.middlename ?? ''} ${row.teacherScheduleId?.profileId?.lastname} ${row.teacherScheduleId?.profileId?.extensionName ?? ''}`}
+    ${row.teacherScheduleId?.deanId && `${row.teacherScheduleId?.deanId?.firstname} ${row.teacherScheduleId?.deanId?.middlename ?? ''} ${row.teacherScheduleId?.deanId?.lastname} ${row.teacherScheduleId?.deanId?.extensionName ?? ''}`}
+    `.trim(),
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user.teacherScheduleId.profileId.firstname ?? ''} ${user.teacherScheduleId.profileId.middlename ?? ''} ${user.teacherScheduleId.profileId.lastname ?? ''} ${
-        user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName : ''
-      }`
+      const fullName = `${user.teacherScheduleId?.profileId?.firstname ?? ''} ${user.teacherScheduleId?.profileId?.middlename ?? ''} ${user.teacherScheduleId?.profileId?.lastname ?? ''} ${user.teacherScheduleId?.profileId?.extensionName ?? ''}`
         .toLowerCase()
         .trim();
-      return fullName.includes(filterValue.toLowerCase());
+      const deanName = `${user.teacherScheduleId?.deanId?.firstname ?? ''} ${user.teacherScheduleId?.deanId?.middlename ?? ''} ${user.teacherScheduleId?.deanId?.lastname ?? ''} ${user.teacherScheduleId?.deanId?.extensionName ?? ''}`.toLowerCase().trim();
+      return fullName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },
   },
   {

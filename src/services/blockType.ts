@@ -18,7 +18,7 @@ export const getBlockTypeByCategory = async (category: string) => {
       .populate('courseId')
       .populate({
         path: 'blockSubjects.teacherScheduleId',
-        populate: [{ path: 'profileId' }, { path: 'subjectId' }, { path: 'blockTypeId' }, { path: 'courseId' }],
+        populate: [{ path: 'profileId' }, { path: 'deanId' }, { path: 'subjectId' }, { path: 'blockTypeId' }, { path: 'courseId' }],
       })
       .exec();
     return p;
@@ -33,7 +33,7 @@ export const getBlockTypeByCourseId = async (courseId: string) => {
       .populate('courseId')
       .populate({
         path: 'blockSubjects.teacherScheduleId',
-        populate: [{ path: 'profileId' }, { path: 'subjectId' }, { path: 'blockTypeId' }, { path: 'courseId' }],
+        populate: [{ path: 'profileId' }, { path: 'deanId' }, { path: 'subjectId' }, { path: 'blockTypeId' }, { path: 'courseId' }],
       })
       .exec();
     return p;
@@ -49,7 +49,7 @@ export const getBlockTypeById = async (id: any) => {
       // .populate('blockSubjects.teacherScheduleId')
       .populate({
         path: 'blockSubjects.teacherScheduleId',
-        populate: [{ path: 'profileId' }, { path: 'subjectId' }, { path: 'blockTypeId' }, { path: 'roomId' }, { path: 'courseId' }],
+        populate: [{ path: 'profileId' }, { path: 'deanId' }, { path: 'subjectId' }, { path: 'blockTypeId' }, { path: 'roomId' }, { path: 'courseId' }],
       })
       .exec();
     return p;

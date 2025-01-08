@@ -19,7 +19,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (sError || !s) return;
 
     if (s && data) {
-      const filteredSchedules = s?.teacherSchedules?.filter((schedule: any) => schedule.blockTypeId === null || !schedule.blockTypeId);
+      const filteredSchedules = s?.teacherSchedules?.filter((schedule: any) => (schedule.blockTypeId === null || !schedule.blockTypeId) && schedule.profileId);
       setTeachersSchedules(filteredSchedules);
       setIsPageLoading(false);
     }
