@@ -33,33 +33,33 @@ const nextConfig = {
   //   optimisticClientCache: true,
   // },
 
-  async redirects() {
-    const isInMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === '1';
+  // async redirects() {
+  //   const isInMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === '1';
 
-    if (isInMaintenanceMode) {
-      return [
-        {
-          source: '/((?!maintenance).*)',
-          destination: '/maintenance',
-          permanent: false,
-        },
-        // {
-        //   source: '/(.*)',
-        //   has: [
-        //     {
-        //       type: 'header',
-        //       key: 'x-forwarded-proto',
-        //       value: 'http',
-        //     },
-        //   ],
-        //   destination: 'https://www.mondrey.dev/:path*',
-        //   permanent: true,
-        // },
-      ];
-    }
+  //   if (isInMaintenanceMode) {
+  //     return [
+  //       {
+  //         source: '/((?!maintenance).*)',
+  //         destination: '/maintenance',
+  //         permanent: false,
+  //       },
+  //       // {
+  //       //   source: '/(.*)',
+  //       //   has: [
+  //       //     {
+  //       //       type: 'header',
+  //       //       key: 'x-forwarded-proto',
+  //       //       value: 'http',
+  //       //     },
+  //       //   ],
+  //       //   destination: 'https://www.mondrey.dev/:path*',
+  //       //   permanent: true,
+  //       // },
+  //     ];
+  //   }
 
-    return [];
-  },
+  //   return [];
+  // },
   // pageExtensions: ['ts', 'tsx'],
   images: {
     remotePatterns: [

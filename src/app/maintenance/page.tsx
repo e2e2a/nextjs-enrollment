@@ -9,21 +9,8 @@ interface MaintenancePageProps {
 }
 
 export default function MaintenancePage({ children }: MaintenancePageProps) {
-  const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE !== '1';
+  const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === '1';
   const router = useRouter();
-
-  useEffect(() => {
-    const originalWarn = console.warn;
-    console.warn = (...args) => {
-      if (typeof args[0] === 'string' && args[0].includes('was preloaded using link preload but not used')) {
-        return;
-      }
-      originalWarn(...args);
-    };
-    if (!isMaintenanceMode) {
-      router.push('/sign-in');
-    }
-  }, []);
 
   // Render maintenance page if in maintenance mode
   if (isMaintenanceMode) {
