@@ -8,8 +8,10 @@ import { MongoClient } from 'mongodb';
 import Account from './models/Account';
 import { createStudentProfileProvider } from './services/studentProfile';
 import { createAccount } from './services/account';
-const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
+import clientPromise from './lib/db/clientPromise';
+// const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
 // const clientPromise = dbConnect().then((mongoose) => mongoose.connection.getClient());
+
 const isInProductionMode = process.env.NEXT_PUBLIC_NODE_ENV === 'production';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
