@@ -11,8 +11,8 @@ const Page = () => {
   const { data, isLoading, error: isEnError } = useTeacherScheduleRecordQueryByCategory('College');
 
   useEffect(() => {
+    console.log('data', data)
     if (isEnError || !data) return;
-
     if (data) {
       if (data.teacherScheduleRecords) {
         setIsPageLoading(false);

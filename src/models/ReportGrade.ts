@@ -4,6 +4,7 @@ export interface IReportGrade extends Document {
   category: string;
   userId: mongoose.Schema.Types.ObjectId;
   teacherId: mongoose.Schema.Types.ObjectId;
+  deanId: mongoose.Schema.Types.ObjectId;
   teacherScheduleId: mongoose.Schema.Types.ObjectId;
   type: string;
   reportedGrade: any;
@@ -24,6 +25,10 @@ const schema = new Schema<IReportGrade>(
     teacherId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'TeacherProfile',
+    },
+    deanId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'DeanProfile',
     },
     teacherScheduleId: {
       type: mongoose.Schema.Types.ObjectId,

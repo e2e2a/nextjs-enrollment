@@ -128,13 +128,31 @@ const handleTeacher = async (user: any, data: any, e: any, message: string) => {
 const handleDean = async (user: any, data: any, e: any, message: string) => {
   return tryCatch(async () => {
     const p = await getDeanProfileByUserId(user._id);
-    if (e.teacherScheduleId.courseId._id.toString() !== p.courseId._id.toString()) return { error: 'Forbiddenaa.', status: 403 };
-    if (e.evaluated === true) return { error: 'The reported grade has already been evaluated.', status: 401 };
-    if (e.statusInDean === data.statusInDean) return { error: `Reported grades has already been ${data.statusInDean}`, status: 403 };
-    e.statusInDean = data.statusInDean;
-    await e.save();
-
-    return { message: `Grades in ${message} has been ${data.statusInDean}.`, teacherId: e.teacherId._id.toString(), category: data.category, id: e._id.toString(), status: 201 };
+    let id = p._id;
+    if (e.deanId?._id.toString() === p._id.toString() && data.request) {
+      switch (data.request) {
+        case 'Update':
+          e.reportedGrade = data.reportedGrade;
+          await e.save();
+          return { message: `Grades in ${message} has been updated.`, teacherId: p._id.toString(), category: data.category, id: e._id.toString(), status: 201 };
+        case 'Trash':
+          if (e.statusInDean === 'Approved') return { error: `Cannot Delete Reported Grade Once it's Approved`, status: 403 };
+          e.isTrash = true;
+          await e.save();
+          return { message: `Reported Grades has been deleted.`, teacherId: p._id.toString(), category: data.category, id: e._id.toString(), status: 201 };
+        default:
+          return { error: 'Invalid request.', status: 403 };
+      }
+    } else {
+      if (e.teacherScheduleId.courseId._id.toString() !== p.courseId._id.toString()) return { error: 'Forbiddenaa.', status: 403 };
+      if (e.evaluated === true) return { error: 'The reported grade has already been evaluated.', status: 401 };
+      if (e.statusInDean === data.statusInDean) return { error: `Reported grades has already been ${data.statusInDean}`, status: 403 };
+      e.statusInDean = data.statusInDean;
+      await e.save();
+      if (e.teacherId) id = e.teacherId._id;
+      if (e.deanId) id = e.deanId._id;
+    }
+    return { message: `Grades in ${message} has been ${data.statusInDean}.`, teacherId: id.toString(), category: data.category, id: e._id.toString(), status: 201 };
   });
 };
 
@@ -148,6 +166,7 @@ const handleDean = async (user: any, data: any, e: any, message: string) => {
  */
 const handleAdmin = async (user: any, data: any, e: any, message: string) => {
   return tryCatch(async () => {
+    let id;
     for (const rg of e.reportedGrade) {
       const se = await getEnrollmentByProfileId(rg.profileId._id);
       if (se && se.studentSubjects.length > 0) {
@@ -181,15 +200,33 @@ const handleAdmin = async (user: any, data: any, e: any, message: string) => {
         const verificationToken = await generateViewGradeToken(se.userId._id, 'View Grades');
         if (!verificationToken) return { error: 'Error creating verificationToken', status: verificationToken.status };
         if (se.profileId.FathersEmail)
-          await sendViewGradeEmail(se.profileId.FathersEmail, `${se.profileId.firstname.toUpperCase()} ${se.profileId.lastname.toUpperCase()}`, `${se.profileId.FathersFirstName} ${se.profileId.FathersLastName}`, 'View Grades', 'View Grades', verificationToken.token, 'View Grades');
+          await sendViewGradeEmail(
+            se.profileId.FathersEmail,
+            `${se.profileId.firstname.toUpperCase()} ${se.profileId.lastname.toUpperCase()}`,
+            `${se.profileId.FathersFirstName} ${se.profileId.FathersLastName}`,
+            'View Grades',
+            'View Grades',
+            verificationToken.token,
+            'View Grades'
+          );
         if (se.profileId.MothersEmail)
-          await sendViewGradeEmail(se.profileId.MothersEmail, `${se.profileId.firstname.toUpperCase()} ${se.profileId.lastname.toUpperCase()}`, `${se.profileId.MothersFirstName} ${se.profileId.MothersLastName}`, 'View Grades', 'View Grades', verificationToken.token, 'View Grades');
+          await sendViewGradeEmail(
+            se.profileId.MothersEmail,
+            `${se.profileId.firstname.toUpperCase()} ${se.profileId.lastname.toUpperCase()}`,
+            `${se.profileId.MothersFirstName} ${se.profileId.MothersLastName}`,
+            'View Grades',
+            'View Grades',
+            verificationToken.token,
+            'View Grades'
+          );
       }
     }
     e.evaluated = true;
     await e.save();
+    if (e.teacherId) id = e.teacherId._id;
+    if (e.deanId) id = e.deanId._id;
 
-    return { message: `Reported Grades in ${message} has been Evaluated.`, teacherId: e.teacherId._id.toString(), teacherScheduleId: e.teacherScheduleId._id.toString(), category: data.category, id: e._id.toString(), status: 201 };
+    return { message: `Reported Grades in ${message} has been Evaluated.`, teacherId: id.toString(), teacherScheduleId: e.teacherScheduleId._id.toString(), category: data.category, id: e._id.toString(), status: 201 };
   });
 };
 

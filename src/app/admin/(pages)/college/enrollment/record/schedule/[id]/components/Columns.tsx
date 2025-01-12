@@ -46,14 +46,66 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.grade,
-    id: 'grade',
-    header: 'Grade',
+    accessorFn: (row) => row.firstGrade,
+    id: 'prelim',
+    header: 'Prelim',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase font-bold'>
-          {user.grade}
+        <div key={cell.id} className='uppercase'>
+          {user?.firstGrade || 'N/A'}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.secondGrade,
+    id: 'midterm',
+    header: 'Midterm',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.secondGrade || 'N/A'}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.thirdGrade,
+    id: 'semi-final',
+    header: 'Semi-final',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.thirdGrade || 'N/A'}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.fourthGrade,
+    id: 'final',
+    header: 'Final',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.fourthGrade || 'N/A'}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.averageTotal,
+    id: 'averageTotal',
+    header: 'Average Total',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.averageTotal || 'N/A'}
         </div>
       );
     },

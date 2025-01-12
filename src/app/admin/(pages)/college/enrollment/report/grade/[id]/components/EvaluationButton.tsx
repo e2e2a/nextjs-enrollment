@@ -51,14 +51,14 @@ const EvaluationButton = ({ user }: IProps) => {
           <AlertDialogTrigger asChild>
             <div className='flex justify-start sm:justify-center w-full'>
               <Button type='button' disabled={isPending} size={'sm'} className='w-auto focus-visible:ring-0 mb-2 bg-transparent flex justify-start bg-green-500 px-2 py-0 gap-x-1 text-neutral-50 font-medium'>
-                <span className=' text-[15px] font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Evaluate Grades'}</span>
+                <span className=' text-[15px] font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Approved Grades'}</span>
               </Button>
             </div>
           </AlertDialogTrigger>
           <AlertDialogContent className='bg-white text-black'>
             <AlertDialogHeader>
-              <AlertDialogTitle>Evaluate Report Grade</AlertDialogTitle>
-              <AlertDialogDescription className=' py-5'>&nbsp;&nbsp;&nbsp;&nbsp;Are you sure you want to Evaluate this report?</AlertDialogDescription>
+              <AlertDialogTitle>Approved Report Grade</AlertDialogTitle>
+              <AlertDialogDescription className=' py-5'>&nbsp;&nbsp;&nbsp;&nbsp;Are you sure you want to Approved this report?</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>

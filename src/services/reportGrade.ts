@@ -18,6 +18,7 @@ export const getReportGradeByCategory = async (category: string) => {
     const rg = await ReportGrade.find({ category, statusInDean: { $ne: 'Rejected' }, isTrash: { $ne: true } })
       .populate('userId')
       .populate('teacherId')
+      .populate('deanId')
       .populate('teacherScheduleId')
       .populate({
         path: 'teacherScheduleId',
@@ -41,10 +42,34 @@ export const getReportGradeByTeacherId = async (teacherId: string) => {
     const rg = await ReportGrade.find({ teacherId, statusInDean: { $ne: 'Rejected' }, isTrash: { $ne: true } })
       .populate('userId')
       .populate('teacherId')
+      .populate('deanId')
       .populate('teacherScheduleId')
       .populate({
         path: 'teacherScheduleId',
         populate: [{ path: 'profileId' }, { path: 'blockTypeId' }, { path: 'courseId' }, { path: 'roomId' }, { path: 'subjectId' }],
+      })
+      .populate({
+        path: 'reportedGrade.profileId',
+        populate: [{ path: 'courseId' }, { path: 'userId' }],
+      })
+      .exec();
+
+    return rg;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const getReportGradeByDeanId = async (deanId: string) => {
+  try {
+    const rg = await ReportGrade.find({ deanId, statusInDean: { $ne: 'Rejected' }, isTrash: { $ne: true } })
+      .populate('userId')
+      .populate('deanId')
+      .populate('teacherScheduleId')
+      .populate({
+        path: 'teacherScheduleId',
+        populate: [{ path: 'deanId' }, { path: 'blockTypeId' }, { path: 'courseId' }, { path: 'roomId' }, { path: 'subjectId' }],
       })
       .populate({
         path: 'reportedGrade.profileId',
@@ -64,6 +89,7 @@ export const getReportGradeById = async (id: any) => {
     const rg = await ReportGrade.findById(id)
       .populate('userId')
       .populate('teacherId')
+      .populate('deanId')
       .populate('teacherScheduleId')
       .populate({
         path: 'teacherScheduleId',

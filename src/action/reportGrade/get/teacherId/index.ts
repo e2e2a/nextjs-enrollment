@@ -2,7 +2,7 @@
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
-import { getReportGradeByTeacherId } from '@/services/reportGrade';
+import { getReportGradeByDeanId, getReportGradeByTeacherId } from '@/services/reportGrade';
 import { getTeacherProfileByUserId } from '@/services/teacherProfile';
 import { checkAuth } from '@/utils/actions/session';
 
@@ -29,7 +29,11 @@ const checkRole = async (user: any, teacherId: string) => {
     switch (user.role) {
       case 'DEAN':
         const d = await getDeanProfileByUserId(user._id);
-        rp = await getReportGradeByTeacherId(teacherId);
+        if (d._id.toString() === teacherId) {
+          rp = await getReportGradeByDeanId(teacherId);
+        } else {
+          rp = await getReportGradeByTeacherId(teacherId);
+        }
         const isValid = rp.find((r) => r.teacherScheduleId.courseId._id.toString() === d.courseId._id.toString());
         if (!isValid) return { error: 'Forbidden', status: 403 };
         break;
@@ -39,7 +43,7 @@ const checkRole = async (user: any, teacherId: string) => {
         rp = await getReportGradeByTeacherId(t._id);
         break;
       case 'ADMIN':
-        rp = await getReportGradeByTeacherId(teacherId);
+        rp = await getReportGradeByTeacherId(teacherId) || await getReportGradeByDeanId(teacherId);
         break;
       default:
         return { error: 'Forbidden', status: 403 };

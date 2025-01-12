@@ -45,22 +45,27 @@ async function dbConnect() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
-      serverSelectionTimeoutMS: 15000,
+      serverSelectionTimeoutMS: 40000,
     };
 
     cached.promise = mongoose
       .connect(MONGODB_URI, opts)
       .then(async (mongoose) => {
-        await initializeModel(modelsToInitialize);
-        const dbStats = await mongoose.connection.db.command({ ping: 1 });
-        /**
-         * @test
-         * @return ping
-         */
-        // console.log('Ping result:', dbStats);  // Log the ping result
-        // const end = Date.now();
-        // console.log(`Ping took ${end - start} ms`);
-        return mongoose;
+        try {
+          await initializeModel(modelsToInitialize);
+          const dbStats = await mongoose.connection.db.command({ ping: 1 });
+          /**
+           * @test
+           * @return ping
+           */
+          // console.log('Ping result:', dbStats);  // Log the ping result
+          // const end = Date.now();
+          // console.log(`Ping took ${end - start} ms`);
+          return mongoose;
+        } catch (err) {
+          console.error('Error during model initialization or ping:', err);
+          throw err;
+        }
       })
       .catch((err) => {
         console.log('err', err);

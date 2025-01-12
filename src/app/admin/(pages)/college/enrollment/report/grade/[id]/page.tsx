@@ -40,9 +40,18 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <div className='justify-between items-start flex w-full'>
                     <span className='text-sm sm:text-[17px] text-start font-bold capitalize'>
                       Instructor:{' '}
-                      <span className='font-normal'>
-                        {data?.reportedGrades.teacherId.firstname} {data?.reportedGrades.teacherId.middlename ?? ''} {data?.reportedGrades.teacherId.lastname} {data?.reportedGrades.teacherId.extensionName ? data?.reportedGrades.teacherId.extensionName + '.' : ''}
-                      </span>
+                      {data.reportedGrades?.teacherId && (
+                        <span className='font-normal'>
+                          {data?.reportedGrades?.teacherId?.firstname} {data?.reportedGrades?.teacherId?.middlename ?? ''} {data?.reportedGrades?.teacherId?.lastname}{' '}
+                          {data?.reportedGrades?.teacherId?.extensionName ? data?.reportedGrades?.teacherId?.extensionName + '.' : ''}
+                        </span>
+                      )}
+                      {data.reportedGrades?.deanId && (
+                        <span className='font-normal'>
+                          {data?.reportedGrades?.deanId?.firstname} {data?.reportedGrades?.deanId?.middlename ?? ''} {data?.reportedGrades?.deanId?.lastname}{' '}
+                          {data?.reportedGrades?.deanId?.extensionName ? data?.reportedGrades?.deanId?.extensionName + '.' : ''}
+                        </span>
+                      )}
                     </span>
                   </div>
                   <div className='flex w-full justify-start text-start sm:justify-end'>
