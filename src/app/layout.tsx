@@ -14,7 +14,11 @@ export const metadata: Metadata = {
   title: 'Dipolog City Institute of Technology, INC.',
   description: 'Welcome, Your trusted enrollment management system for Dipolog City Institute of Technology. Sign in to explore and manage your academic journey!',
   keywords: 'Dipolog City, dipolog city institute of technology, Enrollment, DCIT, DCIT.INC, Enroll DCIT, Enrollment Management System, Technology',
-  icons: { icon: '/favicon-32x32.png' },
+  icons: {
+    icon: '/favicon-48x48.png', // Point to your 48x48 favicon
+    shortcut: '/favicon.ico',
+    apple: '/favicon-48x48.png', // For Apple devices
+  },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
