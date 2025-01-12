@@ -8,11 +8,21 @@ import { MongoClient } from 'mongodb';
 import Account from './models/Account';
 import { createStudentProfileProvider } from './services/studentProfile';
 import { createAccount } from './services/account';
-import clientPromise from './lib/db/clientPromise';
+import { clientPromise } from './lib/db/clientPromise';
 // const clientPromise = MongoClient.connect(process.env.MONGODB_URI!);
 // const clientPromise = dbConnect().then((mongoose) => mongoose.connection.getClient());
 
 const isInProductionMode = process.env.NEXT_PUBLIC_NODE_ENV === 'production';
+
+let adapter;
+
+try {
+  adapter = MongoDBAdapter(clientPromise);
+} catch (error) {
+  console.error('Error initializing MongoDBAdapter:', error);
+  // Provide fallback behavior if needed
+  adapter = null; // Or throw the error to fail fast
+}
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   cookies: {
