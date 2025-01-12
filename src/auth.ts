@@ -14,6 +14,17 @@ import clientPromise from './lib/db/clientPromise';
 
 const isInProductionMode = process.env.NEXT_PUBLIC_NODE_ENV === 'production';
 
+let adapter;
+
+try {
+  adapter = MongoDBAdapter(clientPromise);
+} catch (error) {
+  console.error('Error initializing MongoDBAdapter:', error);
+  // Provide fallback behavior if needed
+  adapter = null; // Or throw the error to fail fast
+}
+
+
 export const { auth, handlers, signIn, signOut } = NextAuth({
   cookies: {
     sessionToken: {
