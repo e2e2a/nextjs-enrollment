@@ -295,11 +295,11 @@ export const dashboardConfig: DashboardConfig = {
     //   href: '/enrollment',
     //   icon: 'graduationCap',
     // },
-    // {
-    //   title: 'Records',
-    //   href: '/records',
-    //   icon: 'fileStack',
-    // },
+    {
+      title: 'School & Policies',
+      href: '/school',
+      icon: 'school',
+    },
     {
       title: 'Documentation',
       href: '',

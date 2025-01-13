@@ -4,31 +4,61 @@ import { Icons } from '../../Icons';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useEffect, useState } from 'react';
 import Content from './Content';
-const notifications = [
-  {
-    title: 'Your call has been confirmed.',
-    type: 'fresh',
-    description: '1 hour ago',
-  },
-  {
-    title: 'Your call has been confirmed.',
-    type: 'fresh',
-    description: '1 hour ago',
-  },
-  {
-    title: 'Your call has been confirmed.',
-    type: 'old',
-    description: '1 hour ago',
-  },
-];
-export function NotificationDropdown({ session }: any) {
-  const isLoading = !session?.imageUrl;
-  const [fresh, setFresh] = useState(0);
-  useEffect(() => {
-    const freshCount = notifications.filter((notification) => notification.type === 'fresh').length;
-    setFresh(freshCount);
-  }, [fresh]);
+import { useNotificationQueryBySessionId } from '@/lib/queries/notification/get/session';
+import Loader from '../../Loader';
 
+// const notifications = [
+//   {
+//     title: 'Your call has been confirmed.',
+//     type: 'fresh',
+//     description: '1 hour ago',
+//   },
+//   {
+//     title: 'Your call has been confirmed.',
+//     type: 'fresh',
+//     description: '1 hour ago',
+//   },
+//   {
+//     title: 'Your call has been confirmed.',
+//     type: 'old',
+//     description: '1 hour ago',
+//   },
+// ];
+
+interface IProps {
+  session: any;
+}
+export function NotificationDropdown({ session }: IProps) {
+  const [fresh, setFresh] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(8);
+  const [hideButton, setHideButton] = useState(false);
+  const { data, isLoading, error } = useNotificationQueryBySessionId(session?.user?.id, visibleCount);
+
+  const handleShowMore = () => {
+    setVisibleCount((prevCount) => {
+      const newCount = prevCount + 5;
+      // setCurrentNotifications(notifications.slice(0, newCount));
+      return newCount;
+    });
+  };
+  useEffect(() => {
+    if (error || !data) return;
+
+    if (data) {
+      if (data.notifications) {
+        const freshCount = data.notifications.filter((notification: any) => notification.type === 'FRESH').length;
+        setNotifications(data?.notifications)
+        setFresh(freshCount);
+        setIsPageLoading(false);
+      }
+      if(data.error && data.type === 'show more'){
+        setHideButton(true)
+      }
+    }
+  }, [data, error]);
+  console.log('data',data)
   return (
     <TooltipProvider delayDuration={10}>
       <Tooltip>
@@ -43,7 +73,7 @@ export function NotificationDropdown({ session }: any) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align='center' className='bg-white px-0 lg:z-20 md:z-50 mr-5'>
             {/* <UserAvatarTabs /> */}
-            <Content notifications={notifications} />
+            {isPageLoading ? <Loader /> : <Content notifications={notifications} hideButton={hideButton} handleShowMore={handleShowMore} />}
           </DropdownMenuContent>
         </DropdownMenu>
         {/* <audio id='audio_tag' ref={audioRef} src={'/ring2.mp3'} /> */}
