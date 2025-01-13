@@ -1,10 +1,11 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { getEnrollmentSetupByName } from '@/services/EnrollmentSetup';
-import { createReportGrade, getReportGradeByTeacherId } from '@/services/reportGrade';
+import { createReportGrade, getReportGradeByDeanId, getReportGradeByTeacherId } from '@/services/reportGrade';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { checkAuth } from '@/utils/actions/session';
 import { getTeacherProfileByUserId } from '@/services/teacherProfile';
+import { getDeanProfileByUserId } from '@/services/deanProfile';
 
 /**
  * handles create report grade
@@ -17,7 +18,7 @@ export const createReportGradeAction = async (data: any) => {
 
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-    if (session && session.user.role !== 'TEACHER') return { error: 'Forbidden', status: 403 };
+    if (session.user.role !== 'TEACHER' && session.user.role !== 'DEAN') return { error: 'Forbidden', status: 403 };
 
     const category = await checkCategory(session.user, data);
 
@@ -59,17 +60,35 @@ const handleCollege = async (user: any, data: any) => {
     const a = await checkType(data.type, ESetup.enrollmentTertiary);
     if (a && a.error) return { error: a.error, status: a.status };
 
-    const p = await getTeacherProfileByUserId(user._id);
-
-    const b = await getReportGradeByTeacherId(p._id);
-    if (b && b.length > 0) {
-      const e = b.filter((e) => e.teacherScheduleId._id.toString() === data.teacherScheduleId && e.type === data.type);
-      if (e && e.length > 0) {
-        return { error: `You have already report a grade in ${a.message}`, status: 409 };
-      }
+    let p;
+    let b;
+    switch (user.role) {
+      case 'TEACHER':
+        p = await getTeacherProfileByUserId(user._id);
+        b = await getReportGradeByTeacherId(p._id);
+        if (b && b.length > 0) {
+          const e = b.filter((e) => e.teacherScheduleId._id.toString() === data.teacherScheduleId && e.type === data.type);
+          if (e && e.length > 0) {
+            return { error: `You have already report a grade in ${a.message}`, status: 409 };
+          }
+        }
+      case 'DEAN':
+        p = await getDeanProfileByUserId(user._id);
+        b = await getReportGradeByDeanId(p._id);
+        if (b && b.length > 0) {
+          const e = b.filter((e) => e.deanId._id.toString() === data.teacherScheduleId && e.type === data.type);
+          if (e && e.length > 0) {
+            return { error: `You have already report a grade in ${a.message}`, status: 409 };
+          }
+        }
+        break;
+      default:
+        return { error: 'Forbidden', status: 403 };
     }
+    console.log(p)
 
-    data.teacherId = p._id;
+    if (user.role === 'TEACHER') data.teacherId = p._id;
+    if (user.role === 'DEAN') data.deanId = p._id;
     data.statusInDean = 'Pending';
     data.evaluated = false;
     data.schoolYear = ESetup.enrollmentTertiary.schoolYear;

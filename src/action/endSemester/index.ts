@@ -128,7 +128,7 @@ const handleCategoryCollege = async (data: any) => {
 
     await StudentProfile.updateMany({ courseId: { $in: courseIds }, enrollStatus: 'Enrolled' }, { $set: { studentStatus: 'Continue', enrollStatus: '' } }, { new: true });
 
-    const enrollmentTertiary = { open: false, schoolYear: '', semester: '' };
+    const enrollmentTertiary = { enrollmentTertiary: { open: false, schoolYear: '', semester: '' } };
     await updateEnrollmentSetupByName('GODOY', enrollmentTertiary);
 
     return {

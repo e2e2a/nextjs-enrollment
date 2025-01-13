@@ -1,4 +1,5 @@
 import {
+  CalendarDays,
   PhilippinePeso,
   Ban,
   FilePenLine,
@@ -61,6 +62,7 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
+  CalendarDays,
   PhilippinePeso: PhilippinePeso,
   ban: Ban,
   filePenLine: FilePenLine,

@@ -2,26 +2,32 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
+import AddGrades from './components/AddGrades';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/id';
 import { useEnrollmentQueryByTeacherScheduleId } from '@/lib/queries/enrollment/get/teacherSchedule';
 import { useReportGradeQueryByTeacherId } from '@/lib/queries/reportGrade/get/teacherId';
-import ViewGrades from './components/ViewGrades';
+import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
 
+  const { data, isLoading, error: isEnError } = useProfileQueryBySessionId();
+  const { data: rgData, isLoading: rpLoading, error: rgError } = useReportGradeQueryByTeacherId(data?.profile?._id as string);
   const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryById(params.id, 'College');
-  const { data: rgData, isLoading: rpLoading, error: rgError } = useReportGradeQueryByTeacherId(ts?.teacherSchedule.profileId?._id as string);
   const { data: s, isLoading: sLoading, error: sError } = useEnrollmentQueryByTeacherScheduleId({ id: ts?.teacherSchedule?._id, category: 'College' });
+  const { data: esData, isLoading: esLoading, isError: esError } = useEnrollmentSetupQuery();
 
   useEffect(() => {
     if (tsError || !ts) return;
+    if (isEnError || !data) return;
     if (sError || !s) return;
+    if (esError || !esData) return;
     if (rgError || !rgData) return;
 
-    if (ts && s && rgData) {
+    if (ts && data && s) {
       if (ts.teacherSchedule) {
         if (s.students) {
           setIsPageLoading(false);
@@ -34,7 +40,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         setIsPageLoading(false);
       }
     }
-  }, [ts, tsError, s, sError, rgData, rgError]);
+  }, [ts, tsError, data, isEnError, s, sError, esData, esError, rgData, rgError]);
 
   return (
     <>
@@ -46,9 +52,9 @@ const Page = ({ params }: { params: { id: string } }) => {
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {isError ? (
             <div className=''>404</div>
-          ) : ts && ts.teacherSchedule ? (
+          ) : data && data.profile ? (
             <>
-              <div className='flex items-center py-4 text-black w-full text-center flex-col'>
+              <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
                 <div className='mb-3'>
                   <h1 className='text-lg sm:text-2xl font-bold uppercase'>Instructor&apos;s Students</h1>
                 </div>
@@ -57,7 +63,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Fullname:{' '}
                       <span className='font-normal'>
-                        {ts?.teacherSchedule?.profileId.firstname} {ts?.teacherSchedule?.profileId.middlename ?? ''} {ts?.teacherSchedule?.profileId.lastname} {ts?.teacherSchedule?.profileId.extensionName ? ts?.teacherSchedule?.profileId.extensionName + '.' : ''}
+                        {ts?.teacherSchedule?.deanId?.firstname} {ts?.teacherSchedule?.deanId?.middlename ?? ''} {ts?.teacherSchedule?.deanId?.lastname}{' '}
+                        {ts?.teacherSchedule?.deanId?.extensionName ? ts?.teacherSchedule?.deanId?.extensionName + '.' : ''}
                       </span>
                     </span>
                   </div>
@@ -101,11 +108,15 @@ const Page = ({ params }: { params: { id: string } }) => {
               </div>
               {ts?.teacherSchedule?.courseId && (
                 <>
-                  {' '}
                   <div className='w-full flex justify-start items-center'>
-                    <div className='flex flex-col'>{rgData.reportGrades && <ViewGrades data={s.students} teacher={ts?.teacherSchedule} type={'firstGrade'} reportGrades={rgData?.reportGrades} />}</div>
+                    <div className='flex flex-col'>
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.firstGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'firstGrade'} reportGrades={rgData?.reportGrades} />}
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.secondGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'secondGrade'} reportGrades={rgData?.reportGrades} />}
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.thirdGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'thirdGrade'} reportGrades={rgData?.reportGrades} />}
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.fourthGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'fourthGrade'} reportGrades={rgData?.reportGrades} />}
+                    </div>
                   </div>
-                  <DataTable columns={columns} data={s?.students} />
+                  <DataTable columns={columns} data={s.students} />{' '}
                 </>
               )}
             </>

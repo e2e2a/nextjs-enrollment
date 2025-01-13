@@ -12,7 +12,7 @@ interface IProps {
 
 const SearchBy = ({ setSearchBy }: IProps) => {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('name');
+  const [value, setValue] = React.useState('Fullname');
   return (
     <Popover open={open} onOpenChange={setOpen}>
       {/* <PopoverTrigger asChild className='w-full pt-14 pb-8 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'> */}
@@ -47,7 +47,7 @@ const SearchBy = ({ setSearchBy }: IProps) => {
                   setOpen(false);
                 }}
               >
-                <Check className={cn('mr-2 h-4 w-4', value === 'descriptive title' ? 'opacity-100' : 'opacity-0')} />
+                <Check className={cn('mr-2 h-4 w-4', value === 'Descriptive Title' ? 'opacity-100' : 'opacity-0')} />
                 Descriptive Title
               </CommandItem>
             </CommandGroup>

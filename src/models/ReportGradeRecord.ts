@@ -3,6 +3,7 @@ import mongoose, { Schema, models, model } from 'mongoose';
 export interface IReportGradeRecord extends Document {
   category: string;
   teacherId: mongoose.Schema.Types.ObjectId;
+  deanId: mongoose.Schema.Types.ObjectId;
   course: string;
   blockType?: any;
   subject?: any;
@@ -25,6 +26,10 @@ const schema = new Schema<IReportGradeRecord>(
     teacherId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'TeacherProfile',
+    },
+    deanId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'DeanProfile',
     },
     course: {
       name: { type: String },

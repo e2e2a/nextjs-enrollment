@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import React from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Icons } from '@/components/shared/Icons';
@@ -12,10 +12,9 @@ interface IProps {
 
 const SearchBy = ({ setSearchBy }: IProps) => {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('name');
+  const [value, setValue] = React.useState('Descriptive Title');
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      {/* <PopoverTrigger asChild className='w-full pt-14 pb-8 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'> */}
       <PopoverTrigger asChild className='cursor-pointer'>
         <Icons.ellipsis />
       </PopoverTrigger>
@@ -23,32 +22,32 @@ const SearchBy = ({ setSearchBy }: IProps) => {
         <Command className='w-full'>
           <CommandList className='w-full max-h-[200px]'>
             <CommandGroup className='w-full'>
-              <div className='text-sm mb-1'>Search By</div>
+              <div className='text-sm mb-1 text-center'>Search By</div>
               <CommandItem
                 key={0}
-                value={'name'}
+                value={'Descriptive Title'}
                 className='w-auto'
                 onSelect={(currentValue) => {
-                  setValue(currentValue);
                   setSearchBy(currentValue);
+                  setValue(currentValue);
                   setOpen(false);
                 }}
               >
-                <Check className={cn('mr-2 h-4 w-4', value === 'name' ? 'opacity-100' : 'opacity-0')} />
-                Name
+                <Check className={cn('mr-2 h-4 w-4', value === 'Descriptive Title' ? 'opacity-100' : 'opacity-0')} />
+                Descriptive Title
               </CommandItem>
               <CommandItem
                 key={1}
-                value={'email'}
+                value={'course code'}
                 className='w-auto'
                 onSelect={(currentValue) => {
-                  setSearchBy(currentValue);
                   setValue(currentValue);
+                  setSearchBy(currentValue);
                   setOpen(false);
                 }}
               >
-                <Check className={cn('mr-2 h-4 w-4', value === 'email' ? 'opacity-100' : 'opacity-0')} />
-                Email
+                <Check className={cn('mr-2 h-4 w-4', value === 'course code' ? 'opacity-100' : 'opacity-0')} />
+                Course Code
               </CommandItem>
             </CommandGroup>
           </CommandList>

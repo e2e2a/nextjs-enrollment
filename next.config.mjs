@@ -6,9 +6,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const nextConfig = {
-  //   compiler: {
-  //     removeConsole: true,
-  //   },
+  // compiler: {
+  //   removeConsole: true,
+  // },
   // Customize Webpack configuration
   // webpack: (config, { isServer }) => {
   //   // Example: Aliases

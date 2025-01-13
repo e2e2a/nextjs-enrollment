@@ -27,7 +27,7 @@ export const getEnrollmentById = async (id: any) => {
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
-        populate: [{ path: 'profileId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
+        populate: [{ path: 'profileId' }, { path: 'deanId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
       })
       .populate({
         path: 'studentSubjects.profileId',
@@ -50,7 +50,7 @@ export const getEnrollmentByUserId = async (userId: string) => {
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
-        populate: [{ path: 'profileId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
+        populate: [{ path: 'profileId' }, { path: 'deanId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
       })
       .populate({
         path: 'studentSubjects.profileId',
@@ -74,7 +74,7 @@ export const getEnrollmentByProfileId = async (profileId: string) => {
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
-        populate: [{ path: 'profileId' }, { path: 'subjectId' }, { path: 'courseId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
+        populate: [{ path: 'profileId' }, { path: 'deanId' }, { path: 'subjectId' }, { path: 'courseId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
       })
       .populate({
         path: 'studentSubjects.profileId',
@@ -97,7 +97,7 @@ export const getEnrollmentQueryStepByCategory = async (data: any) => {
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
-        populate: [{ path: 'profileId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
+        populate: [{ path: 'profileId' }, { path: 'deanId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
       })
       .populate({
         path: 'studentSubjects.profileId',
@@ -123,7 +123,7 @@ export const getEnrollmentByCategory = async (category: string) => {
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
-        populate: [{ path: 'profileId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
+        populate: [{ path: 'profileId' }, { path: 'deanId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
       })
       .populate({
         path: 'studentSubjects.profileId',
@@ -149,7 +149,7 @@ export const getAllEnrollmentByTeacherScheduleId = async (teacherScheduleId: any
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
-        populate: [{ path: 'profileId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
+        populate: [{ path: 'profileId' }, { path: 'deanId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
       })
       .populate({
         path: 'studentSubjects.profileId',

@@ -1,7 +1,7 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import { getAllTeacherScheduleByProfileId } from '@/services/teacherSchedule';
+import { getAllTeacherScheduleByDeanId, getAllTeacherScheduleByProfileId } from '@/services/teacherSchedule';
 import { checkAuth } from '@/utils/actions/session';
 
 /**
@@ -16,7 +16,18 @@ export const getTeacherScheduleByProfileIdAction = async (data: any) => {
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
 
-    const t = await getAllTeacherScheduleByProfileId(data.id);
+    let t;
+    switch (session.user.role) {
+      case 'TEACHER':
+        t = await getAllTeacherScheduleByProfileId(data.id);
+        break;
+      case 'DEAN':
+        t = await getAllTeacherScheduleByDeanId(data.id);
+        break;
+      default:
+        return { error: 'Forbidden', status: 403 };
+    }
+
     return { teacherSchedules: JSON.parse(JSON.stringify(t)), status: 200 };
   });
 };

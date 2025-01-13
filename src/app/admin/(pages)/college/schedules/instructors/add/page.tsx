@@ -36,6 +36,7 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
   const [rooms, setRooms] = useState([{}]);
   const [teacherId, setTeacherId] = useState('');
+  const [role, setRole] = useState('');
   const [roomId, setRoomId] = useState('');
   const [showLink, setShowLink] = useState(false);
   const [instructorLink, setInstructorLink] = useState('');
@@ -43,29 +44,30 @@ const Page = () => {
   const [teachers, setTeachers] = useState<any[]>([]);
   const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
   const { data: tData, isLoading, isError } = useAllProfileQueryByUserRoles('TEACHER');
+  const { data: dData, isError: dError } = useAllProfileQueryByUserRoles('DEAN');
   const { data: sData, isLoading: sLoading, isError: sError } = useSubjectQueryByCategory('College');
   const { data: rData, isLoading: rLoading, error: rError } = useAllRoomQueryByEduLevel('tertiary');
 
   useEffect(() => {
-    if (sError || isError || rError) return; //500
-  }, [sError, isError, rError]);
-
-  useEffect(() => {
-    if (!tData || !rData || !sData) return; //500
+    if (sError || dError || isError || rError) return;
+    if (!tData || !dData || !rData || !sData) return;
     if (rData && tData && sData) {
       if (rData.rooms) {
         const filteredRooms = rData.rooms.filter((room: any) => room.educationLevel === 'tertiary');
         setRooms(filteredRooms);
       }
-      if (tData.profiles) {
-        setTeachers(tData.profiles);
-      }
-      if (sData.subjects) {
-      }
+      setTeachers(
+        [...(tData?.profiles || []), ...(dData?.profiles || [])].sort((a, b) => {
+          const fullNameA = `${a.firstname} ${a.lastname}`.toLowerCase();
+          const fullNameB = `${b.firstname} ${b.lastname}`.toLowerCase();
+          return fullNameA.localeCompare(fullNameB);
+        })
+      );
+
       setLoading(false);
       return;
     }
-  }, [rData, tData, sData]);
+  }, [rData, tData, dData, sData, dError, sError, isError, rError]);
 
   const mutation = useCreateTeacherScheduleByCategoryMutation();
   const { data } = useSession();
@@ -90,10 +92,7 @@ const Page = () => {
     data.roomId = roomId;
     data.teacherId = teacherId;
 
-    const dataa = {
-      ...data,
-      category: 'College',
-    };
+    const dataa = { ...data, role, category: 'College' };
     mutation.mutate(dataa, {
       onSuccess: (res) => {
         switch (res.status) {
@@ -163,7 +162,7 @@ const Page = () => {
               <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
                 <CardContent className='w-full '>
                   <div className='flex flex-col gap-4'>
-                    <Combobox name={'teacherId'} selectItems={teachers} form={formCollege} label={'Select Instructor:'} placeholder={'Select Instructor'} setTeacherId={setTeacherId} />
+                    <Combobox name={'teacherId'} selectItems={teachers} form={formCollege} label={'Select Instructor:'} placeholder={'Select Instructor'} setTeacherId={setTeacherId} setRole={setRole} />
                     <ComboboxSubjects name={'subjectId'} selectItems={sData!.subjects} form={formCollege} label={'Select Subject:'} placeholder={'Select Subject'} />
                     <ComboboxRoom name={'roomId'} selectItems={rooms} form={formCollege} label={'Select Room:'} placeholder={'Select Room'} setRoomId={setRoomId} />
                     <ComboboxDays name={'days'} selectItems={daysOfWeek} form={formCollege} label={'Select Day/s:'} placeholder={'Select Day/s'} selectedItems={selectedItems} setSelectedItems={setSelectedItems} />

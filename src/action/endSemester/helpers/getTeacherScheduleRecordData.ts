@@ -9,12 +9,14 @@ export const getTeacherScheduleRecordData = async (filteredSchedule: any, filter
     const reportedGrades = await getReportGradeByCategory('College');
     for (const sched of filteredSchedule) {
       let filteredReportGrades = [];
-      if (sched.blockTypeId || sched.blockTypeId !== undefined || sched.blockTypeId !== null) {
+      const isValidBlockType = sched.blockTypeId || sched.blockTypeId !== undefined || sched.blockTypeId !== null;
+      if (isValidBlockType && sched.courseId) {
         filteredReportGrades = reportedGrades.filter((rg) => rg.teacherScheduleId._id.toString() === sched._id.toString());
         const processedScheduleRecord = {
           category: sched.category,
           schoolYear: eSetup.schoolYear,
-          profileId: sched.profileId,
+          ...(sched.profileId && { profileId: sched.profileId }),
+          ...(sched.deanId && { deanId: sched.deanId }),
           course: { ...sched.courseId },
           blockType: { ...sched.blockTypeId },
           subject: { ...sched.subjectId },
@@ -28,7 +30,8 @@ export const getTeacherScheduleRecordData = async (filteredSchedule: any, filter
           const processRG = {
             category: rg.category,
             schoolYear: eSetup.schoolYear,
-            teacherId: sched.profileId,
+            ...(sched?.profileId && { teacherId: sched.profileId }),
+            ...(sched?.deanId && { teacherId: sched.deanId }),
             course: { ...sched.courseId },
             blockType: { ...sched.blockTypeId },
             subject: { ...sched.subjectId },
@@ -64,7 +67,7 @@ export const getTeacherScheduleRecordData = async (filteredSchedule: any, filter
             }
           }
         }
-        teacherSchededRecord.push(processedScheduleRecord);
+        if (processedScheduleRecord.studentsInClass > 0) teacherSchededRecord.push(processedScheduleRecord); // ignore if there is no students in teacher schedule
       }
     }
     if (teacherSchededRecord.length === 0) return { error: 'No datas find of ts Records', status: 404 };

@@ -1,6 +1,7 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
+import { getTeacherScheduleRecordBycategory } from '@/services/teacherScheduleRecord';
 import { checkAuth } from '@/utils/actions/session';
 
 /**
@@ -15,7 +16,7 @@ export const getTeacherScheduleRecordByCategoryAction = async (category: string)
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
     // check roles
     // admin/dean
-    const tsRecords = await getTeacherScheduleRecordByCategoryAction(category);
+    const tsRecords = await getTeacherScheduleRecordBycategory(category);
     return { teacherScheduleRecords: JSON.parse(JSON.stringify(tsRecords)), status: 200 };
   });
 };

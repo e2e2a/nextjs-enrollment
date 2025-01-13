@@ -19,17 +19,29 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.teacherId.firstname} {user.teacherId.middlename ?? ''} {user.teacherId.lastname} {user.teacherId.extensionName ? user.teacherId.extensionName + '.' : ''}
+          {user.teacherId && (
+            <span>
+              {user.teacherId.firstname} {user.teacherId.middlename ?? ''} {user.teacherId.lastname} {user.teacherId.extensionName ? user.teacherId.extensionName + '.' : ''}
+            </span>
+          )}
+          {user.deanId && (
+            <span>
+              {user.deanId.firstname} {user.deanId.middlename ?? ''} {user.deanId.lastname} {user.deanId.extensionName ? user.deanId.extensionName + '.' : ''}
+            </span>
+          )}
         </div>
       );
     },
-    accessorFn: (row) => {
-      const { lastname, firstname, middlename, extensionName } = row.teacherId;
-      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
-    },
+    accessorFn: (row) =>
+      `
+    ${row.teacherId && `${row.teacherId?.firstname} ${row.teacherId?.middlename ?? ''} ${row.teacherId?.lastname} ${row.teacherId?.extensionName ?? ''}`}
+    ${row.deanId && `${row.deanId?.firstname} ${row.deanId?.middlename ?? ''} ${row.deanId?.lastname} ${row.deanId?.extensionName ?? ''}`}
+    `.trim(),
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.teacherId.firstname ?? ''} ${row.original.teacherId.middlename ?? ''} ${row.original.teacherId.lastname ?? ''} ${row.original.teacherId.extensionName ?? ''}`.toLowerCase().trim();
-      return fullName.includes(filterValue.toLowerCase());
+      const user = row.original;
+      const fullName = `${user.teacherId?.firstname ?? ''} ${user.teacherId?.middlename ?? ''} ${user.teacherId?.lastname ?? ''} ${user.teacherId?.extensionName ?? ''}`.toLowerCase().trim();
+      const deanName = `${user.deanId?.firstname ?? ''} ${user.deanId?.middlename ?? ''} ${user.deanId?.lastname ?? ''} ${user.deanId?.extensionName ?? ''}`.toLowerCase().trim();
+      return fullName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },
   },
   {

@@ -42,10 +42,18 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <div className='justify-between items-center flex w-full'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Instructor:{' '}
-                      <span className='font-normal'>
-                        {data?.teacherScheduleRecord.profileId.firstname} {data?.teacherScheduleRecord.profileId.middlename ?? ''} {data?.teacherScheduleRecord.profileId.lastname}{' '}
-                        {data?.teacherScheduleRecord.profileId.extensionName ? data?.teacherScheduleRecord.profileId.extensionName + '.' : ''}
-                      </span>
+                      {data?.teacherScheduleRecord?.profileId && (
+                        <span className='font-normal'>
+                          {data?.teacherScheduleRecord?.profileId?.firstname} {data?.teacherScheduleRecord?.profileId?.middlename ?? ''} {data?.teacherScheduleRecord?.profileId?.lastname}{' '}
+                          {data?.teacherScheduleRecord?.profileId?.extensionName ? data?.teacherScheduleRecord?.profileId?.extensionName + '.' : ''}
+                        </span>
+                      )}
+                      {data?.teacherScheduleRecord?.deanId && (
+                        <span className='font-normal'>
+                          {data?.teacherScheduleRecord?.deanId?.firstname} {data?.teacherScheduleRecord?.deanId?.middlename ?? ''} {data?.teacherScheduleRecord?.deanId?.lastname}{' '}
+                          {data?.teacherScheduleRecord?.deanId?.extensionName ? data?.teacherScheduleRecord?.deanId?.extensionName + '.' : ''}
+                        </span>
+                      )}
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>

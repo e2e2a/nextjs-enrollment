@@ -2,9 +2,10 @@
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { TeacherScheduleCollegeValidator } from '@/lib/validators/teacherSchedule/create/college';
+import { getDeanProfileById } from '@/services/deanProfile';
 import { getRoomById } from '@/services/room';
 import { getTeacherProfileById } from '@/services/teacherProfile';
-import { createTeacherSchedule, getAllTeacherScheduleByProfileId, getAllTeacherScheduleByScheduleRoomId } from '@/services/teacherSchedule';
+import { createTeacherSchedule, getAllTeacherScheduleByDeanId, getAllTeacherScheduleByProfileId, getAllTeacherScheduleByScheduleRoomId } from '@/services/teacherSchedule';
 import mongoose from 'mongoose';
 
 /**
@@ -56,23 +57,40 @@ const handlesCollege = (data: any) => {
     const tsParse = TeacherScheduleCollegeValidator.safeParse(data);
     if (!tsParse.success) return { error: 'Invalid fields!', status: 400 };
 
-    const teacher = await getTeacherProfileById(data.teacherId);
-    if (!teacher) return { error: 'There is no Teacher found.', status: 404 };
-
-    const room = await getRoomById(data.roomId);
-    if (!room) return { error: 'There is no Room found.', status: 404 };
-
-    const teacherS = await getAllTeacherScheduleByProfileId(teacher._id);
+    let teacher;
+    let teacherS;
+    switch (data.role) {
+      case 'TEACHER':
+        teacher = await getTeacherProfileById(data.teacherId);
+        if (!teacher) return { error: 'There is no Instructor found.', status: 404 };
+        teacherS = await getAllTeacherScheduleByProfileId(teacher._id);
+        break;
+      case 'DEAN':
+        teacher = await getDeanProfileById(data.teacherId);
+        if (!teacher) return { error: 'There is no Instructor found.', status: 404 };
+        teacherS = await getAllTeacherScheduleByDeanId(teacher._id);
+        break;
+      default:
+        return { error: 'Forbidden', status: 400 };
+    }
 
     if (teacherS && teacherS.length > 0) {
       const tsConflict = await checkTeacherScheduleConflict(teacherS, data, teacher);
       if (tsConflict && tsConflict.error) return tsConflict;
     }
 
+    const room = await getRoomById(data.roomId);
+    if (!room) return { error: 'There is no Room found.', status: 404 };
+
     const roomConflict = await checkSchedulesInRooms(data);
     if (roomConflict && roomConflict.error) return roomConflict;
 
-    const createdSched = await createTeacherSchedule({ profileId: teacher._id, category: data.category, ...tsParse.data });
+    const createdSched = await createTeacherSchedule({
+      ...(data.role === 'TEACHER' ? { profileId: teacher._id } : {}),
+      ...(data.role === 'DEAN' ? { deanId: teacher._id } : {}),
+      category: data.category,
+      ...tsParse.data,
+    });
     if (!createdSched) return { error: 'Something went wrong.', status: 500 };
     return { success: true, message: 'Schedule has been added to instructor.', category: data.category, status: 201 };
   });

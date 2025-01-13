@@ -8,8 +8,9 @@ export const getEnrollmentRecordData = async (filterEnrolledEnrollments: any) =>
   return tryCatch(async () => {
     let enrollmentRecords = [];
     for (const enrollment of filterEnrolledEnrollments) {
+      const { _id, ...rest } = enrollment;
       const processedRecord = {
-        ...enrollment,
+        ...rest,
         category: 'College',
         profileId: enrollment.profileId._id,
         course: enrollment.courseId.name,
@@ -25,7 +26,8 @@ export const getEnrollmentRecordData = async (filterEnrolledEnrollments: any) =>
         const processedSubjectRecord = {
           ...ss,
           subject: { ...ss.teacherScheduleId?.subjectId },
-          teacher: { ...ss.teacherScheduleId.profileId },
+          ...(ss.teacherScheduleId?.profileId && { teacher: { ...ss.teacherScheduleId.profileId } }),
+          ...(ss.teacherScheduleId?.deanId && { teacher: { ...ss.teacherScheduleId.deanId } }),
           blockType: { ...ss.teacherScheduleId.blockTypeId },
           days: ss.teacherScheduleId.days,
           startTime: ss.teacherScheduleId.startTime,
