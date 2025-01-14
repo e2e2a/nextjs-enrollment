@@ -166,6 +166,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
   },
   //we cant remove this adapter
-  adapter: MongoDBAdapter(clientPromise),
+  adapter: MongoDBAdapter(clientPromise()),
   ...authConfig,
 });
