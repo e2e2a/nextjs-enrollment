@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { BellRing, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface IProps {
   // notifications: Array<{ title: string; description: string }>;
@@ -14,14 +15,37 @@ interface IProps {
   notifications: Array<any>;
 }
 const Content = ({ hideButton, handleShowMore, notifications, ...props }: IProps) => {
+  const updateViewportDimensions = () => {
+    const root = document.documentElement;
+    root.style.setProperty('--viewport-width', `${window.innerWidth}px`);
+    root.style.setProperty('--viewport-height', `${window.innerHeight}px`);
+  };
+
+  useEffect(() => {
+    // Update dimensions on component mount
+    updateViewportDimensions();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', updateViewportDimensions);
+
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener('resize', updateViewportDimensions);
+    };
+  }, []);
   return (
-    <Card className={cn(' w-[308px] sm:w-[338px] border-0 p-0')} {...props}>
+    <Card className={cn(' w-[308px] sm:w-[338px] pb-3 mb-3 border-0 p-0')} {...props}>
       <CardHeader>
         <CardTitle>Notifications</CardTitle>
         <CardDescription>You&apos;re notification.</CardDescription>
       </CardHeader>
-      <CardContent className='grid gap-4 pb-0 px-3 max-h-72 overflow-y-auto'>
-        <div className='mb-12'>
+      <CardContent
+        className={`grid gap-4 px-3 max-h-full overflow-y-auto overflow-x-hidden`}
+        style={{
+          maxHeight: `calc(var(--viewport-height) - 170px)`, // Inline style for dynamic max-height
+        }}
+      >
+        <div className='mb-5'>
           {notifications.map((notification, index) => (
             <div key={index} className='mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0'>
               <span className='flex h-2 w-2 translate-y-1 rounded-full bg-sky-500' />
@@ -35,6 +59,15 @@ const Content = ({ hideButton, handleShowMore, notifications, ...props }: IProps
               </div>
             </div>
           ))}
+          {!hideButton && (
+            <div className='flex items-center space-x-4'>
+              <Skeleton className='h-12 w-12 rounded-full' />
+              <div className='space-y-2'>
+                <Skeleton className='h-4 w-[250px]' />
+                <Skeleton className='h-4 w-[200px]' />
+              </div>
+            </div>
+          )}
           {hideButton && (
             <div className='mb-4 flex justify-center pb-4 last:mb-0 last:pb-0'>
               <span className='text-sm text-muted-foreground text-justify'>No more notification found.</span>

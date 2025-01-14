@@ -6,11 +6,11 @@ import { useQuery } from '@tanstack/react-query';
  *
  * @returns {UseMutationResult} Mutation object with status, error, and mutate methods.
  */
-export const useNotificationQueryBySessionId = (userId: string, get: number) => {
+export const useNotificationQueryBySessionId = (userId: string, type: string, number?: number) => {
   return useQuery<any, Error>({
-    queryKey: ['NotificationBySessionId', `${userId}-${get}`],
-    queryFn: () => getNotificationBySessionIdAction(get),
-    enabled: !!userId || !!get,
+    queryKey: ['NotificationBySessionId', `${userId}-${type}-${number}`],
+    queryFn: () => getNotificationBySessionIdAction(type, number),
+    enabled: !!userId || !!type || !!number,
     retry: 0,
     refetchOnWindowFocus: false,
   });

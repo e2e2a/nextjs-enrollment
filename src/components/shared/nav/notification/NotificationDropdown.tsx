@@ -34,7 +34,8 @@ export function NotificationDropdown({ session }: IProps) {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(8);
   const [hideButton, setHideButton] = useState(false);
-  const { data, isLoading, error } = useNotificationQueryBySessionId(session?.user?.id, visibleCount);
+  const { data, isLoading, error } = useNotificationQueryBySessionId(session?.user?.id, 'FRESH');
+  const { data: oldData, error: oldError } = useNotificationQueryBySessionId(session?.user?.id, 'OLD', visibleCount);
 
   const handleShowMore = () => {
     setVisibleCount((prevCount) => {
@@ -59,6 +60,24 @@ export function NotificationDropdown({ session }: IProps) {
     }
   }, [data, error]);
   console.log('data',data)
+  const updateViewportDimensions = () => {
+      const root = document.documentElement;
+      root.style.setProperty('--viewport-width', `${window.innerWidth}px`);
+      root.style.setProperty('--viewport-height', `${window.innerHeight}px`);
+    };
+  
+    useEffect(() => {
+      // Update dimensions on component mount
+      updateViewportDimensions();
+  
+      // Add event listener for window resize
+      window.addEventListener('resize', updateViewportDimensions);
+  
+      // Cleanup listener on component unmount
+      return () => {
+        window.removeEventListener('resize', updateViewportDimensions);
+      };
+    }, []);
   return (
     <TooltipProvider delayDuration={10}>
       <Tooltip>
@@ -71,9 +90,13 @@ export function NotificationDropdown({ session }: IProps) {
               </div>
             </TooltipTrigger>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='center' className='bg-white px-0 lg:z-20 md:z-50 mr-5'>
+          <DropdownMenuContent align='center' className='bg-white px-0 lg:z-20 md:z-50 mr-5' style={{
+          maxHeight: `calc(var(--viewport-height) - 70px)`, // Inline style for dynamic max-height
+        }}>
             {/* <UserAvatarTabs /> */}
+            <div className="">
             {isPageLoading ? <Loader /> : <Content notifications={notifications} hideButton={hideButton} handleShowMore={handleShowMore} />}
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
         {/* <audio id='audio_tag' ref={audioRef} src={'/ring2.mp3'} /> */}

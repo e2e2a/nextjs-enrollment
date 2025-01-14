@@ -13,25 +13,36 @@ import TeacherProfile from '@/models/TeacherProfile';
 import DeanProfile from '@/models/DeanProfile';
 import AdminProfile from '@/models/AdminProfile';
 import AccountingProfile from '@/models/AccountingProfile';
-import { getNotificationByUserId } from '@/services/notification';
+import { getFreshNotificationByUserId, getNotificationByUserId, getOldNotificationByUserId } from '@/services/notification';
 
 /**
  * Any authenticated role
  * handles query profile by session id
  *
  */
-export const getNotificationBySessionIdAction = async (get: number): Promise<getSingleProfileResponse> => {
+export const getNotificationBySessionIdAction = async (type: string, get?: number): Promise<getSingleProfileResponse> => {
   return tryCatch(async () => {
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
 
-    const notifications = await getNotificationByUserId(session.user._id, get);
+    // const notifications = await getNotificationByUserId(session.user._id, get);
+    let notifications;
+    switch (type) {
+      case 'FRESH':
+        notifications = await getFreshNotificationByUserId(session.user._id);
+        break;
+      case 'OLD':
+        notifications = await getOldNotificationByUserId(session.user._id, get);
+        break;
+      default:
+        return { error: 'Forbidden', status: 403 };
+    }
 
-    const toProfile = await getToProfile(session);
+    // const toProfile = await getToProfile(session);
     if (notifications.length > 0) {
       for (let notif of notifications) {
-        notif.to = { ...notif.to, ...toProfile.profile };
+        // notif.to = { ...notif.to, ...toProfile.profile };
         if (notif.from) {
           const fromProfile = await getToProfile(session);
           notif.from = { ...notif.from, ...fromProfile.profile };
@@ -40,9 +51,11 @@ export const getNotificationBySessionIdAction = async (get: number): Promise<get
         }
       }
     }
-    if(get > 10) {
-        const a = get - 5
+    if (type === 'OLD' && get) {
+      if (get > 10) {
+        const a = get - 5;
         if (a > notifications.length) return { error: 'No more notification found', type: 'show more', status: 404 };
+      }
     }
     return { notifications: JSON.parse(JSON.stringify(notifications)), status: 200 };
     // if (!checkedR.profile || checkedR.error) return { error: 'Profile not found.', status: 404 };

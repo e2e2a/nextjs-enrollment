@@ -12,9 +12,29 @@ export const createNotification = async (data: any) => {
   }
 };
 
-export const getNotificationByUserId = async (userId: string, get:number) => {
+export const getNotificationByUserId = async (userId: string, get?:number) => {
   try {
-    const notifications = await Notification.find({ to: userId }).populate('to').populate('from').limit(get).lean();
+    const notifications = await Notification.find({ to: userId }).populate('to').populate('from').limit(get || 0).lean();
+    return notifications;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const getFreshNotificationByUserId = async (userId: string) => {
+  try {
+    const notifications = await Notification.find({ to: userId, type: 'FRESH' }).sort({ createdAt: -1 }).populate('to').populate('from').lean();
+    return notifications;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const getOldNotificationByUserId = async (userId: string, get?:number) => {
+  try {
+    const notifications = await Notification.find({ to: userId, type: 'OLD' }).sort({ createdAt: -1 }).populate('to').populate('from').limit(get || 0).lean();
     return notifications;
   } catch (error) {
     console.log(error);
