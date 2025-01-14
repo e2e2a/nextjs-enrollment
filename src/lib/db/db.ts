@@ -50,7 +50,8 @@ async function dbConnect() {
     const opts = {
       bufferCommands: false,
       serverSelectionTimeoutMS: 55000,
-      maxPoolSize: 1,
+      maxPoolSize: 100,
+      maxPoolSize: 10,
     };
 
     cached.promise =
