@@ -73,14 +73,21 @@ const Content = ({ hideButton, handleShowMore, notifications, ...props }: IProps
               <span className='text-sm text-muted-foreground text-justify'>No more notification found.</span>
             </div>
           )}
+          {!hideButton && (
+            <div className='flex justify-center items-center'>
+              <Button variant={'ghost'} className='p-0 m-0 text-sm hover:text-blue-500' onClick={handleShowMore}>
+                Show Old Notifications
+              </Button>
+            </div>
+          )}
         </div>
       </CardContent>
       <CardFooter className='py-1 m-0 w-full flex items-center justify-center'>
-        {!hideButton && (
+        {/* {!hideButton && (
           <Button variant={'ghost'} className='p-0 m-0 text-sm hover:text-blue-500' onClick={handleShowMore}>
-            Show More
+            Show Old Notifications
           </Button>
-        )}
+        )} */}
         {/* <Link href={'/'} className=' p-0 w-auto text-sm hover:underline text-blue-600 tracking-wide'>
            See all notifications
         </Link> */}
