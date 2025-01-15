@@ -2,32 +2,90 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Icons } from '../../Icons';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Content from './Content';
-const notifications = [
-  {
-    title: 'Your call has been confirmed.',
-    type: 'fresh',
-    description: '1 hour ago',
-  },
-  {
-    title: 'Your call has been confirmed.',
-    type: 'fresh',
-    description: '1 hour ago',
-  },
-  {
-    title: 'Your call has been confirmed.',
-    type: 'old',
-    description: '1 hour ago',
-  },
-];
-export function NotificationDropdown({ session }: any) {
-  const isLoading = !session?.imageUrl;
+import { useNotificationQueryBySessionId } from '@/lib/queries/notification/get/session';
+import Loader from '../../Loader';
+
+interface IProps {
+  session: any;
+}
+
+export function NotificationDropdown({ session }: IProps) {
   const [fresh, setFresh] = useState(0);
+  const [oldNotifications, setOldNotifications] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(0);
+  const [hideButton, setHideButton] = useState(false);
+  const [showNotifSkeleton, setShowNotifSkeleton] = useState(false);
+  const [showOldNotif, setShowOldNotif] = useState(false);
+  const [showNoMoreNotif, setShowNoMoreNotif] = useState(false);
+  const { data, isLoading, error } = useNotificationQueryBySessionId(session?.user?.id, 'FRESH');
+  const { data: oldData, error: oldError } = useNotificationQueryBySessionId(session?.user?.id, 'OLD', visibleCount);
+  const showNoMoreNotifRef = useRef(false);
+  
+
   useEffect(() => {
-    const freshCount = notifications.filter((notification) => notification.type === 'fresh').length;
-    setFresh(freshCount);
-  }, [fresh]);
+    if (error || !data) return;
+    if (oldError || !oldData) return;
+
+    if (data) {
+      if (data?.notifications) {
+        setNotifications(data?.notifications)
+        setFresh(data?.notifications?.length);
+      }
+    }
+
+    if(!showNoMoreNotif && visibleCount > 0){
+      if(oldData && oldData?.notifications){
+        if(oldData.error && oldData.type === 'show more'){
+          showNoMoreNotifRef.current = true;
+          setShowNoMoreNotif(true)
+          setShowNotifSkeleton(false)
+        }
+        setOldNotifications(oldData?.notifications)
+        setShowNotifSkeleton(false)
+      }
+    }
+    setIsPageLoading(false);
+  }, [data, error, oldData, oldError, showNoMoreNotif]);
+
+  const handleShowMore = () => {
+    setHideButton(true)
+    if(!showNoMoreNotifRef.current){
+      setShowNotifSkeleton(true)
+    }else{
+      setShowNotifSkeleton(false)
+    }
+    setTimeout(() => {
+      setShowOldNotif(true)
+      setVisibleCount((prevCount) => {
+        const newCount = prevCount + 6;
+        // setCurrentNotifications(notifications.slice(0, newCount));
+        return newCount;
+      });
+    }, 2000);
+  };
+
+  const updateViewportDimensions = () => {
+      const root = document.documentElement;
+      root.style.setProperty('--viewport-width', `${window.innerWidth}px`);
+      root.style.setProperty('--viewport-height', `${window.innerHeight}px`);
+    };
+  
+  useEffect(() => {
+    // Update dimensions on component mount
+    updateViewportDimensions();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', updateViewportDimensions);
+
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener('resize', updateViewportDimensions);
+    };
+  }, []);
 
   return (
     <TooltipProvider delayDuration={10}>
@@ -41,9 +99,13 @@ export function NotificationDropdown({ session }: any) {
               </div>
             </TooltipTrigger>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='center' className='bg-white px-0 lg:z-20 md:z-50 mr-5'>
+          <DropdownMenuContent align='center' className='bg-white px-0 lg:z-20 md:z-50 mr-5' style={{
+          maxHeight: `calc(var(--viewport-height) - 70px)`, // Inline style for dynamic max-height
+        }}>
             {/* <UserAvatarTabs /> */}
-            <Content notifications={notifications} />
+            <div className="">
+            {isPageLoading ? <Loader /> : <Content showNoMoreNotif={showNoMoreNotif} showNotifSkeleton={showNotifSkeleton} showOldNotif={showOldNotif} oldNotifications={oldNotifications} notifications={notifications} hideButton={hideButton} handleShowMore={handleShowMore} />}
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
         {/* <audio id='audio_tag' ref={audioRef} src={'/ring2.mp3'} /> */}

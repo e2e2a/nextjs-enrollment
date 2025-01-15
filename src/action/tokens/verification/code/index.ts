@@ -12,6 +12,7 @@ import { checkAuth } from '@/utils/actions/session';
 import { checkToken } from '@/utils/actions/verificationToken';
 import { checkingIp } from '@/utils/actions/userIp';
 import { redirectUrlByRole } from '@/utils/helpers/redirectUrlByRole';
+import { createNotification } from '@/services/notification';
 
 /**
  * Performs submitting verification code(6-digit)
@@ -81,6 +82,7 @@ const checkTokenType = async (user: any, token: any, url: string) => {
     case 'Verify':
       const resultVerify = await handleVerify(user, token);
       if (resultVerify && resultVerify.error) return { error: resultVerify.error, status: resultVerify.status };
+      await createNotification({to: user._id, title: 'Welcome and explore our website!', link: '/' })
       return { redirect: '/sign-in', status: 201 };
     default:
       return { error: 'Invalid request type', status: 400 };

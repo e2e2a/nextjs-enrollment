@@ -2,10 +2,14 @@
 import React from 'react';
 import { NotificationDropdown } from './NotificationDropdown';
 
-export const Notification = () => {
+interface IProps {
+  session: any;
+}
+
+export const Notification = ({ session }: IProps) => {
   return (
     <div>
-      <NotificationDropdown />
+      <NotificationDropdown session={session} />
     </div>
   );
 };

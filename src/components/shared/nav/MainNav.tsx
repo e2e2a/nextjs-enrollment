@@ -57,7 +57,7 @@ export function MainNav({ session, items, profile }: MainNavProps) {
       ) : null}
       <div className='flex items-center gap-2'>
         <Menu classname={'lg:hidden flex'} session={session} />
-        <Notification />
+        <Notification session={session} />
         <UserAccountNav session={session} profile={profile} />
       </div>
     </div>
