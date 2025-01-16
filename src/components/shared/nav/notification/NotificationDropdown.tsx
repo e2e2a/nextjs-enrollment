@@ -21,59 +21,81 @@ export function NotificationDropdown({ session }: IProps) {
   const [showNotifSkeleton, setShowNotifSkeleton] = useState(false);
   const [showOldNotif, setShowOldNotif] = useState(false);
   const [showNoMoreNotif, setShowNoMoreNotif] = useState(false);
+
   const { data, isLoading, error } = useNotificationQueryBySessionId(session?.user?.id, 'FRESH');
   const { data: oldData, error: oldError } = useNotificationQueryBySessionId(session?.user?.id, 'OLD', visibleCount);
+
   const showNoMoreNotifRef = useRef(false);
-  
-
-  useEffect(() => {
-    if (error || !data) return;
-    if (oldError || !oldData) return;
-
-    if (data) {
-      if (data?.notifications) {
-        setNotifications(data?.notifications)
-        setFresh(data?.notifications?.length);
-      }
-    }
-
-    if(!showNoMoreNotif && visibleCount > 0){
-      if(oldData && oldData?.notifications){
-        if(oldData.error && oldData.type === 'show more'){
-          showNoMoreNotifRef.current = true;
-          setShowNoMoreNotif(true)
-          setShowNotifSkeleton(false)
-        }
-        setOldNotifications(oldData?.notifications)
-        setShowNotifSkeleton(false)
-      }
-    }
-    setIsPageLoading(false);
-  }, [data, error, oldData, oldError, showNoMoreNotif]);
+  const showClickShowMoreRef = useRef(false);
 
   const handleShowMore = () => {
-    setHideButton(true)
-    if(!showNoMoreNotifRef.current){
-      setShowNotifSkeleton(true)
-    }else{
-      setShowNotifSkeleton(false)
+    setHideButton(true);
+    showClickShowMoreRef.current = true;
+    if (!showNoMoreNotifRef.current) {
+      setShowNotifSkeleton(true);
+    } else {
+      setShowNotifSkeleton(false);
     }
     setTimeout(() => {
-      setShowOldNotif(true)
+      setShowOldNotif(true);
       setVisibleCount((prevCount) => {
         const newCount = prevCount + 6;
-        // setCurrentNotifications(notifications.slice(0, newCount));
         return newCount;
       });
     }, 2000);
   };
 
+  const handleShowMoreScroll = () => {
+    if (!showClickShowMoreRef.current) return;
+
+    if (!showNoMoreNotifRef.current) {
+      setShowNotifSkeleton(true);
+    } else {
+      setShowNotifSkeleton(false);
+      return;
+    }
+    setTimeout(() => {
+      setShowOldNotif(true);
+      setVisibleCount((prevCount) => {
+        const newCount = prevCount + 6;
+        return newCount;
+      });
+    }, 2000);
+  };
+
+  useEffect(() => {
+    if (error || !data) return;
+    if (oldError || !oldData) return;
+    if (data) {
+      if (data?.notifications) {
+        setNotifications(data?.notifications);
+        setFresh(data?.notifications?.length);
+      }
+    }
+    if (!showNoMoreNotif && (visibleCount > 0 || data?.notifications?.length === 0)) {
+      if (data?.notifications?.length === 0 && !hideButton) {
+        setVisibleCount(6);
+        setShowOldNotif(true);
+      }
+      if (oldData && oldData?.notifications) {
+        if (oldData.error && oldData.type === 'show more') {
+          showNoMoreNotifRef.current = true;
+          setShowNoMoreNotif(true);
+          setShowNotifSkeleton(false);
+        }
+        setOldNotifications(oldData?.notifications);
+        setShowNotifSkeleton(false);
+      }
+    }
+    setIsPageLoading(false);
+  }, [data, error, oldData, oldError, showNoMoreNotif, visibleCount, hideButton]);
+
   const updateViewportDimensions = () => {
-      const root = document.documentElement;
-      root.style.setProperty('--viewport-width', `${window.innerWidth}px`);
-      root.style.setProperty('--viewport-height', `${window.innerHeight}px`);
-    };
-  
+    const root = document.documentElement;
+    root.style.setProperty('--viewport-width', `${window.innerWidth}px`);
+    root.style.setProperty('--viewport-height', `${window.innerHeight}px`);
+  };
+
   useEffect(() => {
     // Update dimensions on component mount
     updateViewportDimensions();
@@ -99,12 +121,29 @@ export function NotificationDropdown({ session }: IProps) {
               </div>
             </TooltipTrigger>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='center' className='bg-white px-0 lg:z-20 md:z-50 mr-5' style={{
-          maxHeight: `calc(var(--viewport-height) - 70px)`, // Inline style for dynamic max-height
-        }}>
+          <DropdownMenuContent
+            align='center'
+            className='bg-white px-0 lg:z-20 md:z-50 mr-5'
+            style={{
+              maxHeight: `calc(var(--viewport-height) - 70px)`, // Inline style for dynamic max-height
+            }}
+          >
             {/* <UserAvatarTabs /> */}
-            <div className="">
-            {isPageLoading ? <Loader /> : <Content showNoMoreNotif={showNoMoreNotif} showNotifSkeleton={showNotifSkeleton} showOldNotif={showOldNotif} oldNotifications={oldNotifications} notifications={notifications} hideButton={hideButton} handleShowMore={handleShowMore} />}
+            <div className=''>
+              {isPageLoading ? (
+                <Loader />
+              ) : (
+                <Content
+                  showNoMoreNotif={showNoMoreNotif}
+                  showNotifSkeleton={showNotifSkeleton}
+                  showOldNotif={showOldNotif}
+                  oldNotifications={oldNotifications}
+                  notifications={notifications}
+                  hideButton={hideButton}
+                  handleShowMoreScroll={handleShowMoreScroll}
+                  handleShowMore={handleShowMore}
+                />
+              )}
             </div>
           </DropdownMenuContent>
         </DropdownMenu>

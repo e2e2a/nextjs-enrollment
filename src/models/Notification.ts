@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, models, model } from 'mongoose';
 
 export interface INotification extends Document {
   to: mongoose.Schema.Types.ObjectId;
@@ -8,7 +8,7 @@ export interface INotification extends Document {
   type: 'FRESH' | 'OLD';
 }
 
-const notificationSchema = new Schema<INotification>(
+const schema = new Schema<INotification>(
   {
     to: {
       type: mongoose.Schema.Types.ObjectId,
@@ -25,4 +25,5 @@ const notificationSchema = new Schema<INotification>(
   { timestamps: true }
 );
 
-export const Notification = mongoose.models.Notification || mongoose.model('Notification', notificationSchema);
+const Notification = models.Notification || model<INotification>('Notification', schema);
+export default Notification;

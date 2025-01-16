@@ -1,6 +1,5 @@
 'use server';
-import { Notification } from '@/models/Notifcation';
-import mongoose from 'mongoose';
+import Notification from '@/models/Notification';
 
 export const createNotification = async (data: any) => {
   try {
@@ -12,9 +11,13 @@ export const createNotification = async (data: any) => {
   }
 };
 
-export const getNotificationByUserId = async (userId: string, get?:number) => {
+export const getNotificationByUserId = async (userId: string, get?: number) => {
   try {
-    const notifications = await Notification.find({ to: userId }).populate('to').populate('from').limit(get || 0).lean();
+    const notifications = await Notification.find({ to: userId })
+      .populate('to')
+      .populate('from')
+      .limit(get || 0)
+      .lean();
     return notifications;
   } catch (error) {
     console.log(error);
@@ -32,9 +35,14 @@ export const getFreshNotificationByUserId = async (userId: string) => {
   }
 };
 
-export const getOldNotificationByUserId = async (userId: string, get?:number) => {
+export const getOldNotificationByUserId = async (userId: string, get?: number) => {
   try {
-    const notifications = await Notification.find({ to: userId, type: 'OLD' }).sort({ createdAt: -1 }).populate('from').limit(get || 0).lean();
+    if(!get || get === 0) return []
+    const notifications = await Notification.find({ to: userId, type: 'OLD' })
+      .sort({ createdAt: -1 })
+      .populate('from')
+      .limit(get)
+      .lean();
     return notifications;
   } catch (error) {
     console.log(error);

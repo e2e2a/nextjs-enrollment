@@ -7,6 +7,9 @@ import { BellRing, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Badge } from '@/components/ui/badge';
+import { useUpdateNotificationBySessionIdMutation } from '@/lib/queries/notification/update/session';
+import { makeToastError } from '@/lib/toast/makeToast';
 
 interface IProps {
   // notifications: Array<{ title: string; description: string }>;
@@ -14,30 +17,36 @@ interface IProps {
   showNotifSkeleton: boolean;
   hideButton: boolean;
   showOldNotif: boolean;
+  handleShowMoreScroll: () => void;
   handleShowMore: () => void;
   oldNotifications: Array<any>;
   notifications: Array<any>;
 }
-const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton, handleShowMore, showOldNotif, oldNotifications, notifications, ...props }: IProps) => {
-  const updateViewportDimensions = () => {
-    const root = document.documentElement;
-    root.style.setProperty('--viewport-width', `${window.innerWidth}px`);
-    root.style.setProperty('--viewport-height', `${window.innerHeight}px`);
+const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton,handleShowMoreScroll, handleShowMore, showOldNotif, oldNotifications, notifications, ...props }: IProps) => {
+  const [isDisabled, setIsDisabled] = useState(false);
+  const mutation = useUpdateNotificationBySessionIdMutation();
+  const handleClick = (type: string) => {
+    setIsDisabled(true);
+
+    const data = { type: type };
+
+    mutation.mutate(data, {
+      onSuccess: (res: any) => {
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            return;
+          default:
+            makeToastError(res.error);
+            return;
+        }
+      },
+      onSettled: () => {
+        setIsDisabled(false);
+      },
+    });
   };
-
-  useEffect(() => {
-    // Update dimensions on component mount
-    updateViewportDimensions();
-
-    // Add event listener for window resize
-    window.addEventListener('resize', updateViewportDimensions);
-
-    // Cleanup listener on component unmount
-    return () => {
-      window.removeEventListener('resize', updateViewportDimensions);
-    };
-  }, []);
-
   const contentRef = useRef<HTMLDivElement>(null); // Reference to the scroll container
 
   // Handle scroll event
@@ -46,11 +55,10 @@ const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton, handleShowMor
     if (!content) return;
 
     // Check if the scroll is at the bottom
-    const isAtBottom =
-      content.scrollTop + content.clientHeight >= content.scrollHeight - 10; // Allow slight buffer
+    const isAtBottom = content.scrollTop + content.clientHeight >= content.scrollHeight - 10; // Allow slight buffer
 
     if (isAtBottom && !showNoMoreNotif) {
-      handleShowMore();
+      handleShowMoreScroll();
     }
   };
 
@@ -70,20 +78,24 @@ const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton, handleShowMor
     };
   }, []);
   return (
-    <Card className={cn(' w-[308px] sm:w-[338px] pb-3 mb-3 border-0 p-0')} {...props}>
+    <Card className={cn(' shadow-none border-none w-[308px] sm:w-[338px] pb-3 mb-3 border-0 p-0')} {...props}>
       <CardHeader>
         <CardTitle>Notifications</CardTitle>
-        <CardDescription>You&apos;re notification.</CardDescription>
+        <CardDescription>
+          <button type='button' onClick={() => handleClick('mark all as read')} disabled={isDisabled}>
+            <Badge className='bg-neutral-100 hover:bg-blue-500 hover:text-white cursor-pointer'>Mark all as read</Badge>
+          </button>
+        </CardDescription>
       </CardHeader>
       <CardContent
         ref={contentRef}
-        className={`grid gap-4 px-3 max-h-[320px] overflow-y-auto overflow-x-hidden`}
+        className={`grid gap-4 px-3 border-none max-h-[320px] overflow-y-auto overflow-x-hidden`}
         // style={{
         //   maxHeight: `calc(var(--viewport-height) - 170px)`, // Inline style for dynamic max-height
         // }}
       >
         <div className='mb-5'>
-          {notifications.length > 0 && <div className="  font-semibold text-sm font-sans mb-4">New Notification</div>}
+          {notifications.length > 0 && <div className='  font-semibold text-sm font-sans mb-4'>New Notification</div>}
           {notifications.map((notification, index) => (
             <div key={index} className='mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0'>
               <span className='flex h-2 w-2 translate-y-1 rounded-full bg-sky-500' />
@@ -98,20 +110,21 @@ const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton, handleShowMor
             </div>
           ))}
 
-          {oldNotifications.length > 0 && <div className="  font-semibold text-sm font-sans mb-4">Old Notification</div>}
-          {oldNotifications.length > 0 && showOldNotif && oldNotifications.map((notification, index) => (
-            <div key={index} className='mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0'>
-              <span className='flex h-2 w-2 translate-y-1 rounded-full bg-sky-500' />
-              <div className='flex flex-col space-y-1  w-[250px] sm:w-[250px] '>
-                <Link href={notification.link} className='text-sm font-medium leading-none text-justify'>
-                  {notification.title}
-                </Link>
-                <Link href={notification.link} className='text-sm text-muted-foreground text-justify'>
-                  - {notification.from?.type ? notification.from.type : `${notification.from.firstname} ${notification.from.lastname}`}
-                </Link>
+          {oldNotifications.length > 0 && <div className='  font-semibold text-sm font-sans mb-4'>Old Notification</div>}
+          {oldNotifications.length > 0 &&
+            oldNotifications.map((notification, index) => (
+              <div key={index} className='mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0'>
+                <span className='flex h-2 w-2 translate-y-1 rounded-full bg-none' />
+                <div className='flex flex-col space-y-1 w-[250px] sm:w-[250px] '>
+                  <Link href={notification.link} className='text-sm font-medium leading-none text-justify'>
+                    {notification.title}
+                  </Link>
+                  <Link href={notification.link} className='text-sm text-muted-foreground text-justify'>
+                    - {notification.from?.type ? notification.from.type : `${notification.from.firstname} ${notification.from.lastname}`}
+                  </Link>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
           {showNotifSkeleton && (
             <div className='flex items-center space-x-4 px-5'>
               {/* <Skeleton className='h-12 w-12 rounded-full' /> */}
@@ -128,7 +141,7 @@ const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton, handleShowMor
           )}
           {!hideButton && (
             <div className='flex justify-center items-center'>
-              <Button variant={'ghost'} className='p-0 m-0 text-sm hover:text-blue-500' onClick={handleShowMore}>
+              <Button type='submit' variant={'ghost'} className='p-0 m-0 text-sm hover:text-blue-500' onClick={() => handleShowMore()}>
                 Show Old Notifications
               </Button>
             </div>
