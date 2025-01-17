@@ -22,8 +22,8 @@ export function NotificationDropdown({ session }: IProps) {
   const [showOldNotif, setShowOldNotif] = useState(false);
   const [showNoMoreNotif, setShowNoMoreNotif] = useState(false);
 
-  const { data, isLoading, error } = useNotificationQueryBySessionId(session?.user?.id, 'FRESH');
-  const { data: oldData, error: oldError } = useNotificationQueryBySessionId(session?.user?.id, 'OLD', visibleCount);
+  const { data, isLoading, error } = useNotificationQueryBySessionId(session?.id, 'FRESH');
+  const { data: oldData, error: oldError } = useNotificationQueryBySessionId(session?.id, 'OLD', visibleCount);
 
   const showNoMoreNotifRef = useRef(false);
   const showClickShowMoreRef = useRef(false);

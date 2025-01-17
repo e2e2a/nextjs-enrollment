@@ -4,6 +4,7 @@ import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getSingleProfileResponse } from '@/types';
 import { checkAuth } from '@/utils/actions/session';
 import Notification from '@/models/Notification';
+import mongoose from 'mongoose';
 
 /**
  * Any authenticated role
@@ -19,7 +20,11 @@ export const updateNotificationBySessionIdAction = async (data: any, get?: numbe
     let updated;
     switch (data.type.toLowerCase()) {
       case 'mark all as read':
-        updated = await Notification.findOneAndUpdate({ to: session.user._id, type: 'FRESH' }, { type: 'OLD' }).exec();
+        updated = await Notification.updateMany({ to: session.user._id, type: 'FRESH' }, { $set: { type: 'OLD' } }).exec();
+        break;
+      case 'single':
+        if (!data.notifId || !mongoose.Types.ObjectId.isValid(data.notifId)) return { error: 'Invalid data', status: 400 };
+        updated = await Notification.findOneAndUpdate({ _id: data.notifId, to: session.user._id, type: 'FRESH' }, { $set: { type: 'OLD' } }).exec();
         break;
       default:
         return { error: 'Forbidden', status: 403 };

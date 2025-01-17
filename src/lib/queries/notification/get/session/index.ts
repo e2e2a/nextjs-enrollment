@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
  */
 export const useNotificationQueryBySessionId = (userId: string, type: string, number?: number) => {
   return useQuery<any, Error>({
-    queryKey: ['NotificationBySessionId', `${userId}-${type}-${number}`],
+    queryKey: ['NotificationBySessionId', userId, type, number || 0],
     queryFn: () => getNotificationBySessionIdAction(type, number),
     enabled: !!userId || !!type || !!number,
     retry: 0,

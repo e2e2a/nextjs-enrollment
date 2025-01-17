@@ -12,7 +12,6 @@ import { useUpdateNotificationBySessionIdMutation } from '@/lib/queries/notifica
 import { makeToastError } from '@/lib/toast/makeToast';
 
 interface IProps {
-  // notifications: Array<{ title: string; description: string }>;
   showNoMoreNotif: boolean;
   showNotifSkeleton: boolean;
   hideButton: boolean;
@@ -22,13 +21,13 @@ interface IProps {
   oldNotifications: Array<any>;
   notifications: Array<any>;
 }
-const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton,handleShowMoreScroll, handleShowMore, showOldNotif, oldNotifications, notifications, ...props }: IProps) => {
+const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton, handleShowMoreScroll, handleShowMore, showOldNotif, oldNotifications, notifications, ...props }: IProps) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const mutation = useUpdateNotificationBySessionIdMutation();
-  const handleClick = (type: string) => {
+  const handleClick = (type: string, notifId?: string) => {
     setIsDisabled(true);
 
-    const data = { type: type };
+    const data = { type: type, ...(type === 'single' && { notifId }) };
 
     mutation.mutate(data, {
       onSuccess: (res: any) => {
@@ -47,15 +46,13 @@ const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton,handleShowMore
       },
     });
   };
-  const contentRef = useRef<HTMLDivElement>(null); // Reference to the scroll container
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  // Handle scroll event
   const handleScroll = () => {
     const content = contentRef.current;
     if (!content) return;
 
-    // Check if the scroll is at the bottom
-    const isAtBottom = content.scrollTop + content.clientHeight >= content.scrollHeight - 10; // Allow slight buffer
+    const isAtBottom = content.scrollTop + content.clientHeight >= content.scrollHeight - 10;
 
     if (isAtBottom && !showNoMoreNotif) {
       handleShowMoreScroll();
@@ -87,26 +84,22 @@ const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton,handleShowMore
           </button>
         </CardDescription>
       </CardHeader>
-      <CardContent
-        ref={contentRef}
-        className={`grid gap-4 px-3 border-none max-h-[320px] overflow-y-auto overflow-x-hidden`}
-        // style={{
-        //   maxHeight: `calc(var(--viewport-height) - 170px)`, // Inline style for dynamic max-height
-        // }}
-      >
+      <CardContent ref={contentRef} className={`grid gap-4 px-3 border-none max-h-[320px] overflow-y-auto overflow-x-hidden`}>
         <div className='mb-5'>
           {notifications.length > 0 && <div className='  font-semibold text-sm font-sans mb-4'>New Notification</div>}
           {notifications.map((notification, index) => (
             <div key={index} className='mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0'>
               <span className='flex h-2 w-2 translate-y-1 rounded-full bg-sky-500' />
-              <div className='flex flex-col space-y-1  w-[250px] sm:w-[250px] '>
-                <Link href={notification.link} className='text-sm font-medium leading-none text-justify'>
-                  {notification.title}
-                </Link>
-                <Link href={notification.link} className='text-sm text-muted-foreground text-justify'>
-                  - {notification.from?.type ? notification.from.type : `${notification.from.firstname} ${notification.from.lastname}`}
-                </Link>
-              </div>
+              <button type='submit' onClick={() => handleClick('single', notification._id)}>
+                <div className='flex flex-col space-y-1  w-[250px] sm:w-[250px] '>
+                  <Link href={notification.link} className='text-sm font-medium leading-none text-justify'>
+                    {notification.title}
+                  </Link>
+                  <Link href={notification.link} className='text-sm text-muted-foreground text-justify'>
+                    - {notification.from?.type ? notification.from.type : `${notification.from.firstname} ${notification.from.lastname}`}
+                  </Link>
+                </div>
+              </button>
             </div>
           ))}
 
@@ -148,16 +141,16 @@ const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton,handleShowMore
           )}
         </div>
       </CardContent>
-      <CardFooter className='py-1 m-0 w-full flex items-center justify-center'>
-        {/* {!hideButton && (
-          <Button variant={'ghost'} className='p-0 m-0 text-sm hover:text-blue-500' onClick={handleShowMore}>
-            Show Old Notifications
-          </Button>
-        )} */}
-        {/* <Link href={'/'} className=' p-0 w-auto text-sm hover:underline text-blue-600 tracking-wide'>
-           See all notifications
-        </Link> */}
-      </CardFooter>
+      {/* <CardFooter className='py-1 m-0 w-full flex items-center justify-center'>
+      {!hideButton && (
+        <Button variant={'ghost'} className='p-0 m-0 text-sm hover:text-blue-500' onClick={handleShowMore}>
+          Show Old Notifications
+        </Button>
+      )} 
+       <Link href={'/'} className=' p-0 w-auto text-sm hover:underline text-blue-600 tracking-wide'>
+          See all notifications
+      </Link> 
+    </CardFooter> */}
     </Card>
   );
 };
