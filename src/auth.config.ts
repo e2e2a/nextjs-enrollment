@@ -12,7 +12,7 @@ export default {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET! as string,
       authorization: {
         params: {
-          redirect_uri: `${isInProductionMode ? 'https://mondrey.dev/api/auth/callback/google' : 'http://localhost:3000/api/auth/callback/google'}`,
+          redirect_uri: `${isInProductionMode ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback/google` : `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback/google`}`,
         },
       },
       // profile: async (_profile) => {
