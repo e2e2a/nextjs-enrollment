@@ -14,7 +14,12 @@ export const getVerificationTokenByToken = async (token: string) => {
 
 export const getVerificationTokenByUserId = async (userId: string) => {
   try {
-    const verificationToken = await Token.findOne({ userId }).populate('userId').exec();
+    const verificationToken = await Token.findOne({ userId })
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .exec();
     return JSON.parse(JSON.stringify(verificationToken));
   } catch (error) {
     return null;

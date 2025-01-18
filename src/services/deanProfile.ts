@@ -17,7 +17,13 @@ export const createDeanProfile = async (data: any) => {
 
 export const getAllDeanProfile = async () => {
   try {
-    const DProfile = await DeanProfile.find().populate('userId').populate('courseId').exec();
+    const DProfile = await DeanProfile.find()
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .populate('courseId')
+      .exec();
     return DProfile;
   } catch (error) {
     return [];
@@ -26,7 +32,13 @@ export const getAllDeanProfile = async () => {
 
 export const getDeanProfileById = async (id: any) => {
   try {
-    const DProfile = await DeanProfile.findById(id).populate('userId').populate('courseId').exec();
+    const DProfile = await DeanProfile.findById(id)
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .populate('courseId')
+      .exec();
     return DProfile;
   } catch (error) {
     return null;
@@ -35,7 +47,13 @@ export const getDeanProfileById = async (id: any) => {
 
 export const getDeanProfileByUserId = async (userId: any) => {
   try {
-    const DProfile = await DeanProfile.findOne({ userId }).populate('userId').populate('courseId').exec();
+    const DProfile = await DeanProfile.findOne({ userId })
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .populate('courseId')
+      .exec();
     return DProfile;
   } catch (error) {
     return null;

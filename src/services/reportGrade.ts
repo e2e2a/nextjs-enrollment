@@ -16,7 +16,10 @@ export const createReportGrade = async (data: any) => {
 export const getReportGradeByCategory = async (category: string) => {
   try {
     const rg = await ReportGrade.find({ category, statusInDean: { $ne: 'Rejected' }, isTrash: { $ne: true } })
-      .populate('userId')
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
       .populate('teacherId')
       .populate('deanId')
       .populate('teacherScheduleId')
@@ -26,7 +29,7 @@ export const getReportGradeByCategory = async (category: string) => {
       })
       .populate({
         path: 'reportedGrade.profileId',
-        populate: [{ path: 'courseId' }, { path: 'userId' }],
+        populate: [{ path: 'courseId' }, { path: 'userId', select: '-password' }],
       })
       .exec();
 
@@ -40,7 +43,10 @@ export const getReportGradeByCategory = async (category: string) => {
 export const getReportGradeByTeacherId = async (teacherId: string) => {
   try {
     const rg = await ReportGrade.find({ teacherId, statusInDean: { $ne: 'Rejected' }, isTrash: { $ne: true } })
-      .populate('userId')
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
       .populate('teacherId')
       .populate('deanId')
       .populate('teacherScheduleId')
@@ -50,7 +56,7 @@ export const getReportGradeByTeacherId = async (teacherId: string) => {
       })
       .populate({
         path: 'reportedGrade.profileId',
-        populate: [{ path: 'courseId' }, { path: 'userId' }],
+        populate: [{ path: 'courseId' }, { path: 'userId', select: '-password' }],
       })
       .exec();
 
@@ -64,7 +70,10 @@ export const getReportGradeByTeacherId = async (teacherId: string) => {
 export const getReportGradeByDeanId = async (deanId: string) => {
   try {
     const rg = await ReportGrade.find({ deanId, statusInDean: { $ne: 'Rejected' }, isTrash: { $ne: true } })
-      .populate('userId')
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
       .populate('deanId')
       .populate('teacherScheduleId')
       .populate({
@@ -73,7 +82,7 @@ export const getReportGradeByDeanId = async (deanId: string) => {
       })
       .populate({
         path: 'reportedGrade.profileId',
-        populate: [{ path: 'courseId' }, { path: 'userId' }],
+        populate: [{ path: 'courseId' }, { path: 'userId', select: '-password' }],
       })
       .exec();
 
@@ -87,7 +96,10 @@ export const getReportGradeByDeanId = async (deanId: string) => {
 export const getReportGradeById = async (id: any) => {
   try {
     const rg = await ReportGrade.findById(id)
-      .populate('userId')
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
       .populate('teacherId')
       .populate('deanId')
       .populate('teacherScheduleId')
@@ -97,7 +109,7 @@ export const getReportGradeById = async (id: any) => {
       })
       .populate({
         path: 'reportedGrade.profileId',
-        populate: [{ path: 'courseId' }, { path: 'userId' }],
+        populate: [{ path: 'courseId' }, { path: 'userId', select: '-password' }],
       })
       .exec();
     return rg;

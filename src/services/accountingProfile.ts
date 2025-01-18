@@ -13,7 +13,12 @@ export const createAccountingProfile = async (data: any) => {
 
 export const getAccountingProfileByUserId = async (userId: any) => {
   try {
-    const AProfile = await AccountingProfile.findOne({ userId }).populate('userId').exec();
+    const AProfile = await AccountingProfile.findOne({ userId })
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .exec();
     return AProfile;
   } catch (error) {
     return null;
@@ -22,7 +27,12 @@ export const getAccountingProfileByUserId = async (userId: any) => {
 
 export const getAllAccountingProfile = async () => {
   try {
-    const AccProfile = await AccountingProfile.find().populate('userId').exec();
+    const AccProfile = await AccountingProfile.find()
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .exec();
     return AccProfile;
   } catch (error) {
     return null;

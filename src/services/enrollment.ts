@@ -21,7 +21,10 @@ export const createEnrollment = async (data: any) => {
 export const getEnrollmentById = async (id: any) => {
   try {
     const e = await Enrollment.findById(id)
-      .populate('userId')
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
       .populate('courseId')
       .populate('profileId')
       .populate('blockTypeId')
@@ -31,7 +34,7 @@ export const getEnrollmentById = async (id: any) => {
       })
       .populate({
         path: 'studentSubjects.profileId',
-        populate: [{ path: 'userId' }],
+        populate: [{ path: 'userId', select: '-password' }],
       })
       .exec();
     return e;
@@ -44,7 +47,10 @@ export const getEnrollmentById = async (id: any) => {
 export const getEnrollmentByUserId = async (userId: string) => {
   try {
     const enrollment = await Enrollment.findOne({ userId, enrollStatus: { $ne: 'Rejected' } })
-      .populate('userId')
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
       .populate('courseId')
       .populate('profileId')
       .populate('blockTypeId')
@@ -54,7 +60,7 @@ export const getEnrollmentByUserId = async (userId: string) => {
       })
       .populate({
         path: 'studentSubjects.profileId',
-        populate: [{ path: 'userId' }],
+        populate: [{ path: 'userId', select: '-password' }],
       })
       .exec();
     // console.log('i am exec...', enrollment);
@@ -68,7 +74,10 @@ export const getEnrollmentByUserId = async (userId: string) => {
 export const getEnrollmentByProfileId = async (profileId: string) => {
   try {
     const enrollment = await Enrollment.findOne({ profileId, enrollStatus: { $ne: 'Rejected' } })
-      .populate('userId')
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
       .populate('courseId')
       .populate('profileId')
       .populate('blockTypeId')
@@ -78,7 +87,7 @@ export const getEnrollmentByProfileId = async (profileId: string) => {
       })
       .populate({
         path: 'studentSubjects.profileId',
-        populate: [{ path: 'userId' }],
+        populate: [{ path: 'userId', select: '-password' }],
       })
       .exec();
     return enrollment;
@@ -91,7 +100,10 @@ export const getEnrollmentByProfileId = async (profileId: string) => {
 export const getEnrollmentQueryStepByCategory = async (data: any) => {
   try {
     const enrollment = await Enrollment.find({ category: data.category, step: data.step, enrollStatus: { $ne: 'Rejected' } })
-      .populate('userId')
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
       .populate('courseId')
       .populate('profileId')
       .populate('blockTypeId')
@@ -101,7 +113,7 @@ export const getEnrollmentQueryStepByCategory = async (data: any) => {
       })
       .populate({
         path: 'studentSubjects.profileId',
-        populate: [{ path: 'userId' }],
+        populate: [{ path: 'userId', select: '-password' }],
       })
       .exec();
     return enrollment;
@@ -114,11 +126,14 @@ export const getEnrollmentQueryStepByCategory = async (data: any) => {
 export const getEnrollmentByCategory = async (category: string) => {
   try {
     const enrollment = await Enrollment.find({ enrollStatus: { $ne: 'Rejected' } })
-      .populate('userId')
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
       .populate('courseId')
       .populate({
         path: 'profileId',
-        populate: [{ path: 'courseId' }, { path: 'userId' }],
+        populate: [{ path: 'courseId' }, { path: 'userId', select: '-password' }],
       })
       .populate('blockTypeId')
       .populate({
@@ -127,7 +142,7 @@ export const getEnrollmentByCategory = async (category: string) => {
       })
       .populate({
         path: 'studentSubjects.profileId',
-        populate: [{ path: 'userId' }, { path: 'courseId' }],
+        populate: [{ path: 'userId', select: '-password' }, { path: 'courseId' }],
       })
       .lean()
       .exec();
@@ -143,7 +158,10 @@ export const getEnrollmentByCategory = async (category: string) => {
 export const getAllEnrollmentByTeacherScheduleId = async (teacherScheduleId: any) => {
   try {
     const enrollment = await Enrollment.find({ enrollStatus: { $ne: 'Rejected' }, 'studentSubjects.teacherScheduleId': teacherScheduleId })
-      .populate('userId')
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
       .populate('courseId')
       .populate('profileId')
       .populate('blockTypeId')
@@ -153,7 +171,7 @@ export const getAllEnrollmentByTeacherScheduleId = async (teacherScheduleId: any
       })
       .populate({
         path: 'studentSubjects.profileId',
-        populate: [{ path: 'userId' }, { path: 'courseId' }],
+        populate: [{ path: 'userId', select: '-password' }, { path: 'courseId' }],
       })
       .exec();
     return enrollment;

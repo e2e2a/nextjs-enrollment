@@ -17,7 +17,12 @@ export const createAdminProfile = async (data: any) => {
 
 export const getAllAdminProfile = async () => {
   try {
-    const AProfile = await AdminProfile.find().populate('userId').exec();
+    const AProfile = await AdminProfile.find()
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .exec();
     return AProfile;
   } catch (error) {
     return [];
@@ -26,7 +31,12 @@ export const getAllAdminProfile = async () => {
 
 export const getAdminProfileById = async (id: any) => {
   try {
-    const AProfile = await AdminProfile.findById(id).populate('userId').exec();
+    const AProfile = await AdminProfile.findById(id)
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .exec();
     return AProfile;
   } catch (error) {
     return null;
@@ -35,7 +45,12 @@ export const getAdminProfileById = async (id: any) => {
 
 export const getAdminProfileByUserId = async (userId: any) => {
   try {
-    const AProfile = await AdminProfile.findOne({ userId }).populate('userId').exec();
+    const AProfile = await AdminProfile.findOne({ userId })
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .exec();
     return AProfile;
   } catch (error) {
     return null;

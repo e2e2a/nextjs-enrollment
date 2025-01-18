@@ -15,7 +15,12 @@ export const createTeacherProfile = async (data: any) => {
 
 export const getAllTeacherProfile = async () => {
   try {
-    const TProfile = await TeacherProfile.find().populate('userId').exec();
+    const TProfile = await TeacherProfile.find()
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .exec();
     return TProfile;
   } catch (error) {
     return null;
@@ -24,7 +29,12 @@ export const getAllTeacherProfile = async () => {
 
 export const getTeacherProfileById = async (id: any) => {
   try {
-    const TProfile = await TeacherProfile.findById(id).populate('userId').exec();
+    const TProfile = await TeacherProfile.findById(id)
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .exec();
     return TProfile;
   } catch (error) {
     return null;
@@ -33,7 +43,12 @@ export const getTeacherProfileById = async (id: any) => {
 
 export const getTeacherProfileByUserId = async (userId: any) => {
   try {
-    const TProfile = await TeacherProfile.findOne({ userId }).populate('userId').exec();
+    const TProfile = await TeacherProfile.findOne({ userId })
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .exec();
     return TProfile;
   } catch (error) {
     return null;

@@ -1,6 +1,6 @@
-"use server"
-import { tryCatch } from "@/lib/helpers/tryCatch";
-import { ResetPassword } from "@/models/ResetPasswords";
+'use server';
+import { tryCatch } from '@/lib/helpers/tryCatch';
+import { ResetPassword } from '@/models/ResetPasswords';
 import jwt from 'jsonwebtoken';
 
 export const checkRPToken = async (token: string) => {
@@ -9,7 +9,10 @@ export const checkRPToken = async (token: string) => {
       algorithms: ['HS256'],
     }) as jwt.JwtPayload;
 
-    const existingToken = await ResetPassword.findOne({ userId: decodedToken.userId }).populate('userId');
+    const existingToken = await ResetPassword.findOne({ userId: decodedToken.userId }).populate({
+      path: 'userId',
+      select: '-password',
+    });
     if (!existingToken) return { error: 'Please ensure the token you provided.', status: 404 };
 
     return { token: existingToken, status: 200 };
