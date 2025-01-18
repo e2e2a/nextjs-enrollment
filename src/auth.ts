@@ -8,28 +8,7 @@ import { MongoClient } from 'mongodb';
 import Account from './models/Account';
 import { createStudentProfileProvider } from './services/studentProfile';
 import { createAccount } from './services/account';
-
-const client = new MongoClient(process.env.MONGODB_URI!, {
-  connectTimeoutMS: 59999, // Connection timeout in milliseconds
-  socketTimeoutMS: 360000, // Socket timeout in milliseconds
-  maxPoolSize: 100, // Maximum number of connections in the pool
-  minPoolSize: 10, // Minimum number of connections in the pool
-  waitQueueTimeoutMS: 5000, // How long to wait for a connection from the pool
-  retryWrites: true,
-});
-
-const clientPromise = async (): Promise<MongoClient> => {
-  try {
-    const dbclient = await client.connect();
-    console.log('running')
-    return dbclient;
-  } catch (err: any) {
-    console.error('MongoDB connection error:', err);
-    // Throw a new error to match the expected return type
-    // throw new Error('Failed to connect to MongoDB');
-    return err;
-  }
-};
+import clientPromise from './lib/db/clientPromise';
 
 const isInProductionMode = process.env.NEXT_PUBLIC_NODE_ENV === 'production';
 
@@ -175,14 +154,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
   },
   //we cant remove this adapter
-  adapter: MongoDBAdapter(() => {
-    try {
-      console.log('connected')
-      return clientPromise();
-    } catch (error: any) {
-      console.log('error occured')
-      return error;
-    }
-  }),
+  adapter: MongoDBAdapter(clientPromise()),
   ...authConfig,
 });
