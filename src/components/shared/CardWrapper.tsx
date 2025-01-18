@@ -2,7 +2,6 @@
 import React, { ReactNode } from 'react';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import Header from './auth/Header';
-import SocialFooter from './auth/SocialFooter';
 import BackButton from './auth/BackButton';
 
 interface CardWrapperProps {
@@ -24,7 +23,6 @@ const CardWrapper = ({
   backButtonHref,
   backButtonLabel,
   onResendCode,
-  showSocial,
   className,
 }: CardWrapperProps) => {
   return (
@@ -33,11 +31,6 @@ const CardWrapper = ({
         <Header label={headerLabel} header={header}/>
       </CardHeader>
       <CardContent>{children}</CardContent>
-      {showSocial && (
-        <CardFooter>
-          <SocialFooter />
-        </CardFooter>
-      )}
       {backButtonLabel ? (
         <CardFooter>
           <BackButton label={backButtonLabel} href={backButtonHref} onResendCode={onResendCode} />
