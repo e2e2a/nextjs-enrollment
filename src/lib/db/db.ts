@@ -42,14 +42,20 @@ async function dbConnect() {
     return cached.conn;
   }
 
+  if (!MONGODB_URI) {
+    throw new Error('Please define the MONGODB_URI environment variable');
+  }
+
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
       serverSelectionTimeoutMS: 55000,
+      maxPoolSize: 100,
+      maxPoolSize: 10,
     };
 
-    cached.promise = mongoose
-      .connect(MONGODB_URI, opts)
+    cached.promise =
+    mongoose.connect(MONGODB_URI, opts)
       .then(async (mongoose) => {
         try {
           await initializeModel(modelsToInitialize);

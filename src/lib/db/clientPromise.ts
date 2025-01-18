@@ -26,19 +26,4 @@ const clientPromise = async (): Promise<MongoClient> => {
   }
 };
 
-const connectWithRetry = async (retries = 5, delay = 5000) => {
-  try {
-    const a = await clientPromise();
-    if (!a || a === null) throw new Error('error a is null');
-  } catch (error) {
-    if (retries > 0) {
-      console.log(`Retrying MongoDB connection... (${retries} retries left)`);
-      setTimeout(() => connectWithRetry(retries - 1, delay), delay);
-    } else {
-      console.log('MongoDB connection failed after multiple retries:', error);
-      return error;
-      // process.exit(1); // Exit if the retries are exhausted
-    }
-  }
-};
 export default clientPromise;
