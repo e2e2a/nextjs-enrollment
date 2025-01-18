@@ -78,7 +78,7 @@ export const StudentProfileExtension = z
           path: ['MothersEmail'],
         });
       }
-      const isValidEmail = /^(\+63|0)9\d{9}$/.test(value.MothersEmail || '');
+      const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.MothersEmail || '');
       if (!isValidEmail) {
         ctx.addIssue({
           code: 'custom',
