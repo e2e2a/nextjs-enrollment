@@ -8,7 +8,10 @@ export const checkingIp = async (user: any) => {
   return tryCatch(async () => {
     const ip = await getIpAddress();
     if (!ip) return { errorIp: 'User has no IP address' };
-    const existingActiveIp = await UserIp.findOne({ userId: user._id }).populate('userId');
+    const existingActiveIp = await UserIp.findOne({ userId: user._id }).populate({
+      path: 'userId',
+      select: '-password',
+    });
     if (!existingActiveIp) {
       await createActiveIp(user._id);
       return { error: 'Created Ip.', ip: ip };

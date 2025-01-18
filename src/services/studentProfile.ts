@@ -29,7 +29,13 @@ export const createStudentProfile = async (data: any) => {
 
 export const getAllStudentProfile = async () => {
   try {
-    const studentProfile = await StudentProfile.find().populate('userId').populate('courseId').exec();
+    const studentProfile = await StudentProfile.find()
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .populate('courseId')
+      .exec();
     return studentProfile;
   } catch (error) {
     console.log(error);
@@ -39,7 +45,13 @@ export const getAllStudentProfile = async () => {
 
 export const getStudentProfileById = async (id: any) => {
   try {
-    const studentProfile = await StudentProfile.findById(id).populate('userId').populate('courseId').exec();
+    const studentProfile = await StudentProfile.findById(id)
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .populate('courseId')
+      .exec();
     return studentProfile;
   } catch (error) {
     console.log(error);
@@ -49,7 +61,13 @@ export const getStudentProfileById = async (id: any) => {
 
 export const getStudentProfileByUserId = async (userId: any) => {
   try {
-    const studentProfile = await StudentProfile.findOne({ userId }).populate('userId').populate('courseId').exec();
+    const studentProfile = await StudentProfile.findOne({ userId })
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .populate('courseId')
+      .exec();
     return studentProfile;
   } catch (error) {
     return null;

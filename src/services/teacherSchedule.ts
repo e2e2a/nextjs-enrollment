@@ -26,7 +26,7 @@ export const getAllTeacherScheduleByScheduleRoomId = async (roomId: any) => {
 export const getAllTeacherScheduleByProfileId = async (profileId: any) => {
   try {
     const ts = await TeacherSchedule.find({ profileId })
-      .populate({ path: 'profileId', populate: [{ path: 'userId' }] })
+      .populate({ path: 'profileId', populate: [{ path: 'userId', select: '-password' }] })
       .populate('courseId')
       .populate('blockTypeId')
       .populate('subjectId')
@@ -41,7 +41,7 @@ export const getAllTeacherScheduleByProfileId = async (profileId: any) => {
 export const getAllTeacherScheduleByDeanId = async (deanId: any) => {
   try {
     const ts = await TeacherSchedule.find({ deanId })
-      .populate({ path: 'deanId', populate: [{ path: 'userId' }] })
+      .populate({ path: 'deanId', populate: [{ path: 'userId', select: '-password' }] })
       .populate('courseId')
       .populate('blockTypeId')
       .populate('subjectId')
