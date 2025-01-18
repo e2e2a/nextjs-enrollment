@@ -82,7 +82,7 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'home',
     },
     {
-      title: 'Schedules',
+      title: 'Teaching Load',
       href: '/instructor/schedules',
       icon: 'hourglass',
     },
@@ -99,7 +99,7 @@ export const dashboardConfig: DashboardConfig = {
   ],
   sidebarInstructor: [
     {
-      title: 'Schedules',
+      title: 'Teaching Load',
       href: '/instructor/schedules',
       icon: 'hourglass',
     },
@@ -136,7 +136,7 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'hourglass',
     },
     {
-      title: 'Department Schedule',
+      title: 'Department Load',
       href: '/dean/schedules/department',
       icon: 'CalendarDays',
     },
@@ -163,7 +163,7 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'hourglass',
     },
     {
-      title: 'Department Schedule',
+      title: 'Department Load',
       href: '/dean/schedules/department',
       icon: 'CalendarDays',
     },
@@ -290,11 +290,6 @@ export const dashboardConfig: DashboardConfig = {
       href: '/admin/dashboard',
       icon: 'layoutDashboard',
     },
-    // {
-    //   title: 'Enrollment',
-    //   href: '/enrollment',
-    //   icon: 'graduationCap',
-    // },
     {
       title: 'School & Policies',
       href: '/school',
@@ -307,43 +302,6 @@ export const dashboardConfig: DashboardConfig = {
     },
   ],
   sidebarAdmin: [
-    // {
-    //   title: 'Educational Categories',
-    //   i: [
-    //     // {
-    //     //   title: 'Nursery',
-    //     //   href: '/admin/courses/categories?category=Nursery',
-    //     //   icon: 'eye',
-    //     // },
-    //     // {
-    //     //   title: 'Kindergarten 1&2',
-    //     //   href: '/admin/courses/categories?category=Kindergarten 1&2',
-    //     //   icon: 'eye',
-    //     // },
-    //     // {
-    //     //   title: 'Junior High School',
-    //     //   href: '/admin/courses/categories?category=Junior High School',
-    //     //   icon: 'eye',
-    //     // },
-    //     // {
-    //     //   title: 'Senior High School',
-    //     //   href: '/admin/courses/categories?category=Senior High School',
-    //     //   icon: 'eye',
-    //     // },
-    //     // {
-    //     //   title: 'Tesda',
-    //     //   href: '/admin/courses/categories?category=Tesda',
-    //     //   icon: 'eye',
-    //     // },
-    //     // {
-    //     //   title: 'College',
-    //     //   // href: '/admin/courses/categories?category=College',
-    //     //   icon: 'eye',
-    //     // },
-
-    //   ],
-    //   icon: 'bookOpenText',
-    // },
     {
       title: 'Dashboard',
       href: '/admin/dashboard',
