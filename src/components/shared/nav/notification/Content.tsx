@@ -73,7 +73,7 @@ const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton, handleShowMor
         content.removeEventListener('scroll', handleScroll);
       }
     };
-  }, []);
+  }, [handleScroll]);
   return (
     <Card className={cn(' shadow-none border-none w-[308px] sm:w-[338px] pb-3 mb-3 border-0 p-0')} {...props}>
       <CardHeader>
