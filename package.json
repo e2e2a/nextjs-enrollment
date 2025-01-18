@@ -53,6 +53,7 @@
     "framer-motion": "^11.11.8",
     "i": "^0.3.7",
     "jsonwebtoken": "^8.5.1",
+    "logrocket": "^9.0.2",
     "lucide-react": "^0.468.0",
     "mongodb": "^6.7.0",
     "mongoose": "^8.5.1",

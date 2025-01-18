@@ -8,6 +8,7 @@ import MessageListener from '@/lib/MessageListener';
 import { LoadingProvider } from '@/components/shared/nav/logout/LoadingContext';
 import Warning from '@/components/shared/Warning';
 import MaintenancePage from './maintenance/page';
+import LogRocketProvider from '@/components/providers/LogRocketProvider';
 const inter = Inter({ subsets: ['latin'], display: 'swap', preload: false });
 
 export const metadata: Metadata = {
@@ -29,17 +30,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       {/* <body className={`custom-scrollbar-body ${inter.className}`} > */}
       <body className={inter.className}>
         <div className=''>
-          <Warning />
-          <MaintenancePage>
-            <LoadingProvider>
-              <Providers session={session}>
-                {/* <MessageListener> */}
-                {children}
-                <Toaster position='top-center' reverseOrder={false} />
-                {/* </MessageListener> */}
-              </Providers>
-            </LoadingProvider>
-          </MaintenancePage>
+          <LogRocketProvider>
+            <Warning />
+            <MaintenancePage>
+              <LoadingProvider>
+                <Providers session={session}>
+                  {/* <MessageListener> */}
+                  {children}
+                  <Toaster position='top-center' reverseOrder={false} />
+                  {/* </MessageListener> */}
+                </Providers>
+              </LoadingProvider>
+            </MaintenancePage>
+          </LogRocketProvider>
         </div>
       </body>
     </html>
