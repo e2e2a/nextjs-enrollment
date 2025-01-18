@@ -8,14 +8,16 @@ import { MongoClient } from 'mongodb';
 import Account from './models/Account';
 import { createStudentProfileProvider } from './services/studentProfile';
 import { createAccount } from './services/account';
+
 const client = new MongoClient(process.env.MONGODB_URI!, {
   connectTimeoutMS: 59999, // Connection timeout in milliseconds
   socketTimeoutMS: 360000, // Socket timeout in milliseconds
-  maxPoolSize: 10, // Maximum number of connections in the pool
-  minPoolSize: 1, // Minimum number of connections in the pool
+  maxPoolSize: 100, // Maximum number of connections in the pool
+  minPoolSize: 10, // Minimum number of connections in the pool
   waitQueueTimeoutMS: 5000, // How long to wait for a connection from the pool
   retryWrites: true,
 });
+
 const clientPromise = async (): Promise<MongoClient> => {
   try {
     const dbclient = await client.connect();
@@ -28,6 +30,7 @@ const clientPromise = async (): Promise<MongoClient> => {
     return err;
   }
 };
+
 const isInProductionMode = process.env.NEXT_PUBLIC_NODE_ENV === 'production';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
