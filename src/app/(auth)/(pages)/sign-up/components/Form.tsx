@@ -10,6 +10,7 @@ import { SignupValidator } from '@/lib/validators/auth/signUp';
 import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
 import { useSignUpMutation } from '@/lib/queries/auth/signUp';
+import SocialFooter from '@/components/shared/auth/SocialFooter';
 
 const SignUpForm = () => {
   const [isPending, setIsPending] = useState(false);
@@ -35,7 +36,7 @@ const SignUpForm = () => {
           case 200:
           case 201:
           case 203:
-            console.log('res',res)
+            console.log('res', res);
             setTypeMessage('success');
             setMessage(res?.message);
             if (!res.token) {
@@ -50,13 +51,11 @@ const SignUpForm = () => {
             return;
         }
       },
-      onSettled: () => {
-        
-      },
+      onSettled: () => {},
     });
   };
   return (
-    <CardWrapper header={'Sign Up'} className={''} headerLabel='Create an Account' backButtonHref='/sign-in' backButtonLabel='Already have an account?' showSocial>
+    <CardWrapper header={'Sign Up'} className={''} headerLabel='Create an Account' backButtonHref='/sign-in' backButtonLabel='Already have an account?'>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
           <div className='space-y-4'>
@@ -119,6 +118,9 @@ const SignUpForm = () => {
           </Button>
         </form>
       </Form>
+      <div className='mt-5'>
+        <SocialFooter isPending={isPending} setIsPending={setIsPending} />
+      </div>
     </CardWrapper>
   );
 };

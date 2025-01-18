@@ -11,6 +11,7 @@ import CardWrapper from '@/components/shared/CardWrapper';
 import { FormMessageDisplay } from '@/components/shared/FormMessageDisplay';
 import { useSignInMutation } from '@/lib/queries/auth/signIn';
 import { SigninValidator } from '@/lib/validators/auth/signIn';
+import SocialFooter from '@/components/shared/auth/SocialFooter';
 
 const SignInForm = () => {
   const [message, setMessage] = useState<string | undefined>('');
@@ -64,7 +65,7 @@ const SignInForm = () => {
     });
   };
   return (
-    <CardWrapper header={'Sign In'} headerLabel='Welcome Back' backButtonHref='/sign-up' backButtonLabel="Don't have an account?" showSocial>
+    <CardWrapper header={'Sign In'} headerLabel='Welcome Back' backButtonHref='/sign-up' backButtonLabel="Don't have an account?">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} method='POST' className='space-y-6'>
           <div className='space-y-4'>
@@ -106,6 +107,9 @@ const SignInForm = () => {
           </Button>
         </form>
       </Form>
+      <div className='mt-5'>
+        <SocialFooter isPending={isPending} setIsPending={setIsPending} />
+      </div>
     </CardWrapper>
   );
 };
