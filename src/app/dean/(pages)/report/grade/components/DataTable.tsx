@@ -5,6 +5,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import PdfButton from './print/PdfButton';
+import ExcelButton from './print/ExcelButton';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -54,24 +56,15 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           />
         </div>
 
-        {/* Column visibility */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='outline' className='ml-auto'>
-              Columns
+              Options
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='bg-neutral-50'>
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem key={column.id} className='capitalize' checked={column.getIsVisible()} onCheckedChange={(value) => column.toggleVisibility(!!value)}>
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
+            <ExcelButton />
+            <PdfButton />
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
