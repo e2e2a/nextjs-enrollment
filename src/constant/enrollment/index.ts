@@ -91,6 +91,7 @@ export const studentYearData = [
     title: '5th year',
   },
 ];
+
 export const studentSemesterData = [
   {
     title: '1st semester',
@@ -100,5 +101,24 @@ export const studentSemesterData = [
   },
   {
     title: 'summer',
+  },
+];
+
+export const gradeTypeData = [
+  {
+    title: 'Prelim',
+    value: 'firstGrade',
+  },
+  {
+    title: 'Midterm',
+    value: 'secondGrade',
+  },
+  {
+    title: 'Semi-final',
+    value: 'thirdGrade',
+  },
+  {
+    title: 'Final',
+    value: 'fourthGrade',
   },
 ];

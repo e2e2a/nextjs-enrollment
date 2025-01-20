@@ -64,7 +64,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='bg-neutral-50'>
             <ExcelButton />
-            <PdfButton />
+            <PdfButton data={data} />
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

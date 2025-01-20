@@ -72,6 +72,7 @@ const handleCollege = async (user: any, data: any) => {
             return { error: `You have already report a grade in ${a.message}`, status: 409 };
           }
         }
+        break;
       case 'DEAN':
         p = await getDeanProfileByUserId(user._id);
         b = await getReportGradeByDeanId(p._id);
@@ -85,7 +86,6 @@ const handleCollege = async (user: any, data: any) => {
       default:
         return { error: 'Forbidden', status: 403 };
     }
-    console.log(p)
 
     if (user.role === 'TEACHER') data.teacherId = p._id;
     if (user.role === 'DEAN') data.deanId = p._id;

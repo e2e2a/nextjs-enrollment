@@ -169,6 +169,19 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row.schoolYear,
+    id: 'schoolyear',
+    header: 'School Year',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user?.schoolYear}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: 'createdAt',
     header: 'CreatedAt',
     cell: ({ row }) => {
