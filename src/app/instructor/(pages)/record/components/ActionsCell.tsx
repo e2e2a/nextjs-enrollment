@@ -36,8 +36,6 @@ const ActionsCell = ({ user }: IProps) => {
                     View Students in Class
                   </Link>
                 </Button>
-
-                {/* <DataTableDrawer user={user} />*/}
               </CommandGroup>
             </CommandList>
           </Command>

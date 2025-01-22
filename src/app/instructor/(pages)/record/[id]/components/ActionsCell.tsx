@@ -1,5 +1,5 @@
 import React from 'react';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Command, CommandGroup, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Icons } from '@/components/shared/Icons';
 import { useState } from 'react';
@@ -47,7 +47,6 @@ const ActionsCell = ({ user }: IProps) => {
                   <Icons.close className='h-4 w-4' />
                   Delete Room
                 </Button>
-                {/* <DataTableDrawer user={user} /> */}
               </CommandGroup>
             </CommandList>
           </Command>

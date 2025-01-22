@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Command, CommandGroup, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Icons } from '@/components/shared/Icons';
 import { useState } from 'react';
@@ -9,10 +9,11 @@ import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
 import { useRemoveTeacherScheduleCollegeMutation } from '@/lib/queries';
 import { makeToastSucess } from '@/lib/toast/makeToast';
-// import { DialogStep1Button } from './Dialog';
+
 type IProps = {
   user: any;
 };
+
 const ActionsCell = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -22,6 +23,7 @@ const ActionsCell = ({ user }: IProps) => {
       teacherScheduleId: user._id,
       profileId: user.profileId._id,
     };
+
     mutation.mutate(data, {
       onSuccess: (res: any) => {
         switch (res.status) {

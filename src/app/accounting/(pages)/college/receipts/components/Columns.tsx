@@ -5,22 +5,8 @@ import { Button } from '@/components/ui/button';
 import ActionsCell from './ActionsCell';
 
 export const columns: ColumnDef<any>[] = [
-  // {
-  //   accessorFn: (row) => row.imageUrl,
-  //   accessorKey: 'course image',
-  //   header: 'Course Image',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className='flex justify-center items-center'>
-  //         {user.imageUrl ? <Image className='w-20 h-12 border rounded-md shadow-sm drop-shadow-sm' src={`${user.imageUrl}`} alt={`${user.courseCode}`} width={100} priority height={100} /> : <div className='flex justify-center items-center'>No Photo</div>}
-  //       </div>
-  //     );
-  //   },
-  // },
-
   {
-    accessorFn: (row) => row.orderID, // Use accessorFn for nested fields
+    accessorFn: (row) => row.orderID,
     id: 'orderID',
     header: 'Order #',
     cell: ({ cell, row }) => {
@@ -109,16 +95,6 @@ export const columns: ColumnDef<any>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: 'createdAt',
-  //   header: 'CreatedAt',
-  //   cell: ({ row }) => {
-  //     const date = new Date(row.getValue('createdAt'));
-  //     const formatted = date.toLocaleDateString();
-
-  //     return <div className='font-medium'>{formatted}</div>;
-  //   },
-  // },
   {
     id: 'actions',
     header: 'Actions',

@@ -2,7 +2,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
-import ActionsCell from './ActionsCell';
 
 export const columns: ColumnDef<any>[] = [
   {
