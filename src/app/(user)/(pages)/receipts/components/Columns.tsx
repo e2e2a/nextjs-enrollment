@@ -3,23 +3,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ActionsCell from './ActionsCell';
-import Image from 'next/image';
 
 export const columns: ColumnDef<any>[] = [
-  // {
-  //   accessorFn: (row) => row.imageUrl,
-  //   accessorKey: 'course image',
-  //   header: 'Course Image',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className='flex justify-center items-center'>
-  //         {user.imageUrl ? <Image className='w-20 h-12 border rounded-md shadow-sm drop-shadow-sm' src={`${user.imageUrl}`} alt={`${user.courseCode}`} width={100} priority height={100} /> : <div className='flex justify-center items-center'>No Photo</div>}
-  //       </div>
-  //     );
-  //   },
-  // },
-
   {
     accessorFn: (row) => row.orderID, // Use accessorFn for nested fields
     id: 'orderID',

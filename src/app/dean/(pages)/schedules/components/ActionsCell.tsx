@@ -1,5 +1,5 @@
 import React from 'react';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Command, CommandGroup, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Icons } from '@/components/shared/Icons';
 import { useState } from 'react';
@@ -10,6 +10,7 @@ import Link from 'next/link';
 type IProps = {
   user: any;
 };
+
 const ActionsCell = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   return (

@@ -66,7 +66,6 @@ const ActionsCell = ({ user }: IProps) => {
                     </Link>
                   </Button>
                 )}
-                {/* <DataTableDrawer user={user} /> */}
               </CommandGroup>
             </CommandList>
           </Command>

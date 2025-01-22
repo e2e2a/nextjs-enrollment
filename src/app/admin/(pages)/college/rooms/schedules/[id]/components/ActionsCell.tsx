@@ -5,10 +5,11 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useRemoveStudentScheduleMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-// import { DialogStep1Button } from './Dialog';
+
 type IProps = {
   user: any;
 };
+
 const ActionsCell = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const mutation = useRemoveStudentScheduleMutation();
@@ -26,7 +27,6 @@ const ActionsCell = ({ user }: IProps) => {
           case 200:
           case 201:
           case 203:
-            // return (window.location.href = '/');
             makeToastSucess(res.message);
             return;
           default:

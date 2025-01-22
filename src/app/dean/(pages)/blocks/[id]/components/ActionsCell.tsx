@@ -9,6 +9,7 @@ import { makeToastSucess } from '@/lib/toast/makeToast';
 type IProps = {
   user: any;
 };
+
 const ActionsCell = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const mutation = useRemoveCourseBlockScheduleMutation();
