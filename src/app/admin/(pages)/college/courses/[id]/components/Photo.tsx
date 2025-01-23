@@ -33,13 +33,12 @@ const Photo = ({ handleSelectedFile, handleClick, fileInputRef, imagePreview, ph
           </div>
           <input type='file' ref={fileInputRef} style={{ display: 'none' }} accept='image/png' onChange={(e) => handleSelectedFile(e.target.files)} />
 
-          {/* Span that triggers the file input */}
           <Button type='button' onClick={handleClick} disabled={isUploading} className='items-center flex justify-center pl-1'>
             <span className='cursor-pointer  text-blue-600 gap-0 md:gap-2 rounded-md flex items-center'>
               <div className='bg-slate-100 rounded-full'>
                 <Icons.add className='h-6 w-6' />
               </div>
-              <div className=''>Upload photo</div>
+              <div className=''>Upload new photo</div>
             </span>
           </Button>
         </div>
