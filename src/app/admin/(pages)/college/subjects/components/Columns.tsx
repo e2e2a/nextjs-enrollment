@@ -6,19 +6,19 @@ import ActionsCell from './ActionsCell';
 import { ISubject } from '@/types';
 
 export const columns: ColumnDef<ISubject>[] = [
-  {
-    accessorFn: (row) => row.fixedRateAmount,
-    id: 'rate amount.',
-    header: 'Rate Amount.',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {user.fixedRateAmount}
-        </div>
-      );
-    },
-  },
+  // {
+  //   accessorFn: (row) => row.fixedRateAmount,
+  //   id: 'rate amount.',
+  //   header: 'Rate Amount.',
+  //   cell: ({ cell, row }) => {
+  //     const user = row.original;
+  //     return (
+  //       <div key={cell.id} className=' uppercase'>
+  //         {user.fixedRateAmount}
+  //       </div>
+  //     );
+  //   },
+  // },
   {
     accessorFn: (row) => row.subjectCode,
     accessorKey: 'subjectCode',
