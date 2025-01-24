@@ -73,7 +73,7 @@ export const checkPhotoAndStore = async (formData: any, data: any, id: string) =
         await uploadBytes(storageRef, image, { contentType: image.type });
         const url = await getDownloadURL(storageRef);
         cc.imageUrl = url;
-        await cc.save();
+        await cc.save(); 
       }
     }
 
