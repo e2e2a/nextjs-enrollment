@@ -1,10 +1,11 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ColumnDef, flexRender, SortingState, VisibilityState, ColumnFiltersState, getCoreRowModel, getSortedRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import SearchBy from './SearchBy';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -12,12 +13,12 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  // console.log(data)
   useEffect(() => {
     if (!data) {
       return;
     }
   }, [data]);
+  const [searchBy, setSearchBy] = useState('name');
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -45,13 +46,14 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
       <div className='flex items-center justify-between w-full '>
         <div className='flex items-center  py-4 text-black'>
           <Input
-            placeholder='Search by name...'
-            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+            placeholder={`${searchBy === 'name' ? 'Search by Room Name...' : 'Search by Room Type...'}`}
+            value={(table.getColumn(searchBy)?.getFilterValue() as string) ?? ''}
             onChange={(event) => {
-              table.getColumn('name')?.setFilterValue(event.target.value);
+              table.getColumn(searchBy)?.setFilterValue(event.target.value);
             }}
             className='max-w-sm'
           />
+          <SearchBy setSearchBy={setSearchBy} />
         </div>
 
         {/* Column visibility */}

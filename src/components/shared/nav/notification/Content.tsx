@@ -1,7 +1,6 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-// import { Switch } from '@/components/ui/switch';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BellRing, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -24,9 +23,10 @@ interface IProps {
 const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton, handleShowMoreScroll, handleShowMore, showOldNotif, oldNotifications, notifications, ...props }: IProps) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const mutation = useUpdateNotificationBySessionIdMutation();
+
   const handleClick = (type: string, notifId?: string) => {
     setIsDisabled(true);
-
+    if (type === 'mark all as read' && notifications.length === 0) return;
     const data = { type: type, ...(type === 'single' && { notifId }) };
 
     mutation.mutate(data, {
@@ -48,7 +48,7 @@ const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton, handleShowMor
   };
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     const content = contentRef.current;
     if (!content) return;
 
@@ -57,17 +57,15 @@ const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton, handleShowMor
     if (isAtBottom && !showNoMoreNotif) {
       handleShowMoreScroll();
     }
-  };
+  }, [showNoMoreNotif, handleShowMoreScroll]);
 
   useEffect(() => {
     const content = contentRef.current;
 
     if (content) {
-      // Add scroll event listener
       content.addEventListener('scroll', handleScroll);
     }
 
-    // Cleanup event listener on unmount
     return () => {
       if (content) {
         content.removeEventListener('scroll', handleScroll);
@@ -120,7 +118,6 @@ const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton, handleShowMor
             ))}
           {showNotifSkeleton && (
             <div className='flex items-center space-x-4 px-5'>
-              {/* <Skeleton className='h-12 w-12 rounded-full' /> */}
               <div className='space-y-2'>
                 <Skeleton className='h-4 w-[250px]' />
                 <Skeleton className='h-4 w-[150px]' />
@@ -141,16 +138,6 @@ const Content = ({ showNoMoreNotif, showNotifSkeleton, hideButton, handleShowMor
           )}
         </div>
       </CardContent>
-      {/* <CardFooter className='py-1 m-0 w-full flex items-center justify-center'>
-      {!hideButton && (
-        <Button variant={'ghost'} className='p-0 m-0 text-sm hover:text-blue-500' onClick={handleShowMore}>
-          Show Old Notifications
-        </Button>
-      )} 
-       <Link href={'/'} className=' p-0 w-auto text-sm hover:underline text-blue-600 tracking-wide'>
-          See all notifications
-      </Link> 
-    </CardFooter> */}
     </Card>
   );
 };

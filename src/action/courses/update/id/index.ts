@@ -7,6 +7,7 @@ import Course from '@/models/Course';
 import { getCourseByCourseCode, getCourseByName, getCoursesById } from '@/services/course';
 import { verifyADMIN } from '@/utils/actions/session/roles/admin';
 import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { Types } from 'mongoose';
 
 /**
  * only admin roles
@@ -55,6 +56,9 @@ const checkCategory = async (user: any, data: any) => {
  */
 export const checkPhotoAndStore = async (formData: any, data: any, id: string) => {
   return tryCatch(async () => {
+    const isValidObjectId = Types.ObjectId.isValid(data.id);
+    if (!isValidObjectId) return { error: `Not valid.`, status: 400 };
+
     const cc = await Course.findByIdAndUpdate(id, { ...data });
     if (!cc) return { message: 'Something went wrong.', status: 500 };
 
@@ -62,11 +66,9 @@ export const checkPhotoAndStore = async (formData: any, data: any, id: string) =
       const image = formData.get('image') as File;
       if (image && image.name) {
         if (cc.imageUrl) {
-          // Extract the path of the old image from the URL
-          const oldImagePath = cc.imageUrl.replace(/.*\/o\/(.+?)\?.*/, '$1'); // Decode Firebase Storage URL
+          const oldImagePath = cc.imageUrl.replace(/.*\/o\/(.+?)\?.*/, '$1');
           const oldImageRef = ref(storage, decodeURIComponent(oldImagePath));
 
-          // Delete the old image
           await deleteObject(oldImageRef);
         }
         const storageRef = ref(storage, `courses/${cc._id}/${image.name}`);

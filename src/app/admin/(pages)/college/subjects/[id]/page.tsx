@@ -11,6 +11,7 @@ import Input from './components/Input';
 import { SubjectValidator } from '@/lib/validators/subject/create';
 import { useSubjectQueryById } from '@/lib/queries/subjects/get/id';
 import { useUpdateSubjectByIdMutation } from '@/lib/queries/subjects/update/id';
+import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isNotEditable, setIsNotEditable] = useState(false);
@@ -78,38 +79,49 @@ const Page = ({ params }: { params: { id: string } }) => {
     });
   };
   return (
-    <div className='border py-5 bg-white rounded-xl'>
-      <Card className='border-0 bg-transparent'>
-        <CardHeader className='space-y-3'>
-          <CardTitle className='text-lg xs:text-2xl sm:text-3xl text-center w-full uppercase'>Add a New Subject!</CardTitle>
-          <CardDescription className='text-xs sm:text-sm'>
-            &nbsp;&nbsp;&nbsp;&nbsp;Easily add a new subject by filling out the required details below. Each subject you add will contribute to the growth and diversity of our educational offerings, enriching the learning experiences of students. Let&apos;s
-            work together to create an engaging and comprehensive academic environment!
-          </CardDescription>
-        </CardHeader>
-        <Form {...formCollege}>
-          <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
-            <CardContent className='w-full '>
-              <div className='flex flex-col gap-4'>
-                <Input name={'preReq'} type={'text'} form={formCollege} label={'Pre. Req.:'} classNameInput={'capitalize'} />
-                <Input name={'subjectCode'} type={'text'} form={formCollege} label={'Subject Code:'} classNameInput={'capitalize'} />
-                <Input name={'name'} type={'text'} form={formCollege} label={'Descriptive Title:'} classNameInput={'capitalize'} />
-                <Input name={'lec'} type={'text'} form={formCollege} label={'Lec:'} classNameInput={'capitalize'} />
-                <Input name={'lab'} type={'text'} form={formCollege} label={'Lab:'} classNameInput={'capitalize'} />
-                <Input name={'unit'} type={'text'} form={formCollege} label={'Unit:'} classNameInput={'capitalize'} />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <div className='flex w-full justify-center md:justify-end items-center mt-4'>
-                <Button type='submit' disabled={isNotEditable} variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-semibold'>
-                  Submit
-                </Button>
-              </div>
-            </CardFooter>
-          </form>
-        </Form>
-      </Card>
-    </div>
+    <>
+      {!isPageLoading ? (
+        <LoaderPage />
+      ) : (
+        <>
+          {isError && <div className=''>404</div>}
+          {subjectData && !isError && !subjectData.error && (
+            <div className='border py-5 bg-white rounded-xl'>
+              <Card className='border-0 bg-transparent'>
+                <CardHeader className='space-y-3'>
+                  <CardTitle className='text-lg xs:text-2xl sm:text-3xl text-center w-full uppercase'>Add a New Subject!</CardTitle>
+                  <CardDescription className='text-xs sm:text-sm'>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Easily add a new subject by filling out the required details below. Each subject you add will contribute to the growth and diversity of our educational offerings, enriching the learning experiences of students.
+                    Let&apos;s work together to create an engaging and comprehensive academic environment!
+                  </CardDescription>
+                </CardHeader>
+                <Form {...formCollege}>
+                  <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
+                    <CardContent className='w-full '>
+                      <div className='flex flex-col gap-4'>
+                        <Input name={'preReq'} type={'text'} form={formCollege} label={'Pre. Req.:'} classNameInput={'capitalize'} />
+                        <Input name={'subjectCode'} type={'text'} form={formCollege} label={'Subject Code:'} classNameInput={'capitalize'} />
+                        <Input name={'name'} type={'text'} form={formCollege} label={'Descriptive Title:'} classNameInput={'capitalize'} />
+                        <Input name={'lec'} type={'text'} form={formCollege} label={'Lec:'} classNameInput={'capitalize'} />
+                        <Input name={'lab'} type={'text'} form={formCollege} label={'Lab:'} classNameInput={'capitalize'} />
+                        <Input name={'unit'} type={'text'} form={formCollege} label={'Unit:'} classNameInput={'capitalize'} />
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <div className='flex w-full justify-center md:justify-end items-center mt-4'>
+                        <Button type='submit' disabled={isNotEditable} variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-semibold'>
+                          Submit
+                        </Button>
+                      </div>
+                    </CardFooter>
+                  </form>
+                </Form>
+              </Card>
+            </div>
+          )}
+        </>
+      )}
+    </>
   );
 };
 

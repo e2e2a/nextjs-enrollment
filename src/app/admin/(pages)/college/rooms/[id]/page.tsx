@@ -14,6 +14,7 @@ import { RoomValidator } from '@/lib/validators/room/create';
 import Image from 'next/image';
 import { useRoomQueryById } from '@/lib/queries/rooms/get/id';
 import { useUpdateRoomByIdMutation } from '@/lib/queries/rooms/update/id';
+import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -83,10 +84,12 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   return (
     <>
-      {!isPageLoading && (
+      {!isPageLoading ? (
+        <LoaderPage />
+      ) : (
         <>
           {isError && <div className=''>404</div>}
-          {roomData && !isError && (
+          {roomData && !isError && !roomData.error && (
             <div className='border-0 bg-white rounded-xl min-h-[87vh]'>
               <Card className='border-0 py-5 bg-transparent'>
                 <CardHeader className='space-y-3'>
