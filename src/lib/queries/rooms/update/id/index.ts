@@ -7,6 +7,7 @@ export const useUpdateRoomByIdMutation = () => {
     mutationFn: async (data) => updateRoomByIdAction(data),
     onSuccess: (data) => {
       if (!data.error) {
+        queryClient.invalidateQueries({ queryKey: ['RoomById', data.id] });
         queryClient.invalidateQueries({ queryKey: ['RoomsByEduLevel', data.level] });
       }
     },
