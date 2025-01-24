@@ -10,7 +10,6 @@ import Photo from './components/Photo';
 import Input from './components/Input';
 import TextareaField from './components/Textarea';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import CourseToast from '@/lib/toast/CourseToast';
 import Image from 'next/image';
 import { CourseValidatorInCollege } from '@/lib/validators/course/create/college';
 import { useCourseQueryById } from '@/lib/queries/courses/get/id';

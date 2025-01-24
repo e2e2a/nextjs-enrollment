@@ -2,7 +2,6 @@
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getCoursesById } from '@/services/course';
-import { getAllTeacherSchedule } from '@/services/teacherSchedule';
 import { checkAuth } from '@/utils/actions/session';
 
 /**
