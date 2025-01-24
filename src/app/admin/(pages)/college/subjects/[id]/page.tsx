@@ -49,29 +49,27 @@ const Page = ({ params }: { params: { id: string } }) => {
   });
 
   useEffect(() => {
-    formCollege.setValue('preReq', subjectData?.subject?.courseCode);
-    formCollege.setValue('subjectCode', subjectData?.subject?.name);
+    formCollege.setValue('preReq', subjectData?.subject?.preReq);
+    formCollege.setValue('subjectCode', subjectData?.subject?.subjectCode);
     formCollege.setValue('name', subjectData?.subject?.name);
-    formCollege.setValue('lec', subjectData?.subject?.name);
-    formCollege.setValue('lab', subjectData?.subject?.description);
+    formCollege.setValue('lec', subjectData?.subject?.lec);
+    formCollege.setValue('lab', subjectData?.subject?.lab);
+    formCollege.setValue('unit', subjectData?.subject?.unit);
   }, [formCollege, subjectData]);
 
   const onSubmit: SubmitHandler<z.infer<typeof SubjectValidator>> = async (data) => {
     setIsNotEditable(true);
     data.subjectCode = data.subjectCode.toLowerCase();
-    const dataa = { ...data, id: subjectData?.subject?._id, category: 'College'}
+    const dataa = { ...data, id: subjectData?.subject?._id, category: 'College' };
     mutation.mutate(dataa, {
       onSuccess: (res) => {
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            formCollege.reset();
-            makeToastSucess('Subject has been updated.');
-            return;
+            return makeToastSucess('Subject has been updated.');
           default:
             return makeToastError(res.error);
-            return;
         }
       },
       onSettled: () => {

@@ -7,7 +7,7 @@ import { getSubjectBySubjectCode } from '@/services/subject';
 import { verifyADMIN } from '@/utils/actions/session/roles/admin';
 
 /**
- * handles create subject by category
+ * handles create update by id
  *
  * @param {Object} data
  */
@@ -18,10 +18,16 @@ export const updateSubjectByIdAction = async (data: any) => {
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
 
     const a = await checkCategory(session.user, data);
-    return a
+    return a;
   });
 };
 
+/**
+ * handles check request by category
+ *
+ * @param {Object} data
+ * @param {Object} user
+ */
 const checkCategory = async (user: any, data: any) => {
   return tryCatch(async () => {
     let category;
@@ -37,21 +43,28 @@ const checkCategory = async (user: any, data: any) => {
   });
 };
 
+/**
+ * handles college category
+ *
+ * @param {Object} data
+ * @param {Object} user
+ */
 const categoryCollege = async (user: any, data: any) => {
-    return tryCatch(async () => {
-        const subjectParse = SubjectValidator.safeParse(data);
-        if (!subjectParse.success) return { error: 'Invalid fields!', status: 400 };
+  return tryCatch(async () => {
+    const subjectParse = SubjectValidator.safeParse(data);
+    if (!subjectParse.success) return { error: 'Invalid fields!', status: 400 };
 
-        const subject = await Subject.findById(data.id);
+    const subject = await Subject.findById(data.id);
+    if (!subject) return { error: 'Subject not found!', status: 404 };
 
-        if(subject.subjectCode !== data.subjectCode) {
-            const sConflict = await getSubjectBySubjectCode(data.subjectCode);
-            if (sConflict) return { error: 'Subject Code already Exists.', status: 409 };
-        }
+    if (subject.subjectCode !== data.subjectCode) {
+      const sConflict = await getSubjectBySubjectCode(data.subjectCode);
+      if (sConflict) return { error: 'Subject Code already Exists.', status: 409 };
+    }
 
-        const createdSubject = await Subject.findByIdAndUpdate(data.id, { ...data });
-        if (!createdSubject) return { error: 'Something went wrong.', status: 500 };
+    const updated = await Subject.findByIdAndUpdate(data.id, { ...subjectParse.data });
+    if (!updated) return { error: 'Something went wrong.', status: 500 };
 
-        return { message: 'Subject updated successfully.', category: data.category, status: 201 };
-    });
-}
+    return { message: 'Subject updated successfully.', id: data.id, category: data.category, status: 201 };
+  });
+};

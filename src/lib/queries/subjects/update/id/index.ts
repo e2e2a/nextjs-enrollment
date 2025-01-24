@@ -7,6 +7,7 @@ export const useUpdateSubjectByIdMutation = () => {
     mutationFn: async (data) => updateSubjectByIdAction(data),
     onSuccess: (data) => {
       if (!data.error) {
+        queryClient.invalidateQueries({ queryKey: ['SubjectById', data.id] });
         queryClient.invalidateQueries({ queryKey: ['SubjectByCategory', data.category] });
       }
     },
