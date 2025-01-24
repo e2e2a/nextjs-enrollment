@@ -20,9 +20,9 @@ export const updateCourseByIdAction = async (data: any) => {
     const session = await verifyADMIN();
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
 
-    const a = await checkCategory(session.user, data)
+    const a = await checkCategory(session.user, data);
 
-    return a
+    return a;
   });
 };
 
@@ -77,13 +77,11 @@ export const checkPhotoAndStore = async (formData: any, data: any, id: string) =
       }
     }
 
-    // await createCurriculum({ category: data.category, courseId: cc._id });
-
-    return { success: true, message: 'New Course has been added.', category: data.category, status: 201 };
+    return { success: true, message: 'New Course has been added.', id: id, category: data.category, status: 201 };
   });
 };
 
-const categoryCollege = async (user: any, data: any)=>{
+const categoryCollege = async (user: any, data: any) => {
   return tryCatch(async () => {
     const { formData, ...remainData } = data;
     const courseParse = CourseValidatorInCollege.safeParse(remainData);
@@ -106,4 +104,4 @@ const categoryCollege = async (user: any, data: any)=>{
 
     return a;
   });
-}
+};
