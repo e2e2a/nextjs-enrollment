@@ -5,6 +5,7 @@ import { SubjectValidator } from '@/lib/validators/subject/create';
 import Subject from '@/models/Subject';
 import { getSubjectBySubjectCode } from '@/services/subject';
 import { verifyADMIN } from '@/utils/actions/session/roles/admin';
+import { Types } from 'mongoose';
 
 /**
  * handles create update by id
@@ -51,6 +52,9 @@ const checkCategory = async (user: any, data: any) => {
  */
 const categoryCollege = async (user: any, data: any) => {
   return tryCatch(async () => {
+    const isValidObjectId = Types.ObjectId.isValid(data.id);
+    if (!isValidObjectId) return { error: `Not valid.`, status: 400 };
+
     const subjectParse = SubjectValidator.safeParse(data);
     if (!subjectParse.success) return { error: 'Invalid fields!', status: 400 };
 

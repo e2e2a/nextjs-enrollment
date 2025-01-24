@@ -14,6 +14,7 @@ import Image from 'next/image';
 import { CourseValidatorInCollege } from '@/lib/validators/course/create/college';
 import { useCourseQueryById } from '@/lib/queries/courses/get/id';
 import { useUpdateCourseByIdMutation } from '@/lib/queries/courses/update/id';
+import LoaderPage from '@/components/shared/LoaderPage';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -103,27 +104,24 @@ const Page = ({ params }: { params: { id: string } }) => {
           case 200:
           case 201:
           case 203:
-            if (res.message) makeToastSucess(res.message);
-            return;
+            return makeToastSucess(res.message);
           default:
-            if (res.error) return makeToastError(res.error);
-            return;
+            return makeToastError(res.error);
         }
       },
       onSettled: () => {
         setIsUploading(false);
-        // form.reset();
-        // setImageFile(null);
-        // setImagePreview(null);
       },
     });
   };
   return (
     <>
-      {!isPageLoading && (
+      {!isPageLoading ? (
+        <LoaderPage />
+      ) : (
         <>
           {isError && <div className=''>404</div>}
-          {courseData && !isError && (
+          {courseData && !isError && !courseData.error && (
             <div className='border py-5 bg-white rounded-xl'>
               <Card className='border-0 bg-transparent'>
                 <CardHeader className='space-y-3'>
