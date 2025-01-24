@@ -7,7 +7,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import Photo from './components/Photo';
-import { useSession } from 'next-auth/react';
 import Input from './components/Input';
 import TextareaField from './components/Textarea';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
@@ -23,8 +22,7 @@ const Page = () => {
   const [photoError, setPhotoError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mutation = useCreateCourseMutation();
-  const { data } = useSession();
-  const session = data?.user;
+
   const form = useForm<z.infer<typeof CourseValidatorInCollege>>({
     resolver: zodResolver(CourseValidatorInCollege),
     defaultValues: {
@@ -34,6 +32,7 @@ const Page = () => {
       description: '',
     },
   });
+
   const handleSelectedFile = (files: FileList | null) => {
     if (files && files?.length > 0) {
       if (files[0].size < 1000000) {
@@ -77,13 +76,9 @@ const Page = () => {
             case 200:
             case 201:
             case 203:
-              console.log('res', res);
-              // CourseToast(data.courseCode, imagePreview!);
-              if (res.message) makeToastSucess(res.message);
-              return;
+              return makeToastSucess(res.message);
             default:
-              if (res.error) return makeToastError(res.error);
-              return;
+              return makeToastError(res.error);
           }
         },
         onSettled: () => {
@@ -108,7 +103,7 @@ const Page = () => {
           <form method='post' onSubmit={form.handleSubmit(onSubmit)}>
             {/* <CardContent className='w-full space-y-2' onSubmit={form.handleSubmit(onSubmit)}> */}
             <CardContent className='w-full space-y-2'>
-              <Photo session={session} handleSelectedFile={handleSelectedFile} handleClick={handleClick} fileInputRef={fileInputRef} imagePreview={imagePreview} photoError={photoError} isUploading={isUploading} />
+              <Photo handleSelectedFile={handleSelectedFile} handleClick={handleClick} fileInputRef={fileInputRef} imagePreview={imagePreview} photoError={photoError} isUploading={isUploading} />
 
               <div className='flex flex-col gap-4'>
                 {/* <SelectInput name={'category'} selectItems={selectType.courseType} form={form} label={'Select Course Category:'} placeholder={'Select Course Category'} /> */}
