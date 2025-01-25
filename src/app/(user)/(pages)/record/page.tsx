@@ -6,7 +6,6 @@ import { useEnrollmentRecordQueryByProfileId } from '@/lib/queries/enrollmentRec
 import CategoryTable from './components/CategoryTable';
 
 const Page = () => {
-  const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data: pData, isLoading: pload, error } = useProfileQueryBySessionId();
   const { data, isLoading, error: isEnError } = useEnrollmentRecordQueryByProfileId(pData?.profile?._id as string);
@@ -16,9 +15,7 @@ const Page = () => {
     if (error || !pData) return;
 
     if (data && pData) {
-      if (data.enrollmentRecord && pData.profile) {
-        setIsPageLoading(false);
-      }
+      setIsPageLoading(false);
     }
   }, [data, isEnError, pData, error]);
 
@@ -30,9 +27,9 @@ const Page = () => {
         </div>
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
-          {isError ? (
-            <div className=''>404</div>
-          ) : (
+          {((data?.error && data?.status === 404) || (pData?.error && pData?.status === 404)) && <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>404</div>}
+          {((data?.error && data?.status > 500) || (pData?.error && pData?.status > 500)) && <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>Something Went Wrong</div>}
+          {data?.enrollmentRecord && pData?.profile && !pData?.error && !data?.error && (
             <div className=''>
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-semibold tracking-tight '>Enrollment Records</h1>

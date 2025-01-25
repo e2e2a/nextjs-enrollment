@@ -7,19 +7,15 @@ import { useStudentReceiptQueryByUserId } from '@/lib/queries/studentReceipt/get
 import { useSession } from 'next-auth/react';
 
 const Page = () => {
-  const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
 
   const { data: s } = useSession();
   const { data, isLoading, error } = useStudentReceiptQueryByUserId(s?.user?.id as string);
 
   useEffect(() => {
-    if (error || !data) return setIsError(true);
+    if (error || !data) return;
     if (data) {
-      setIsError(false);
-      if (data.studentReceipt) {
-        setIsPageLoading(false);
-      }
+      setIsPageLoading(false);
     }
   }, [data, error]);
 
@@ -29,9 +25,9 @@ const Page = () => {
         <LoaderPage />
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
-          {isError ? (
-            <div className=''>404</div>
-          ) : (
+          {data?.error && data?.status === 404 && <div className=''>404</div>}
+          {data?.error && data?.status > 500 && <div className=''>Something Went Wrong</div>}
+          {data?.studentReceipt && !data.error && (
             <div className=''>
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-bold '>Your Payment Receipts</h1>

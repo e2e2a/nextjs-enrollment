@@ -35,7 +35,7 @@ const Page = () => {
 
   const handleSelectedFile = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 1000000) {
+      if (files[0].size < 10000000) {
         setPhotoError('');
         const file = files[0];
         setImageFile(file);
@@ -107,7 +107,7 @@ const Page = () => {
 
               <div className='flex flex-col gap-4'>
                 {/* <SelectInput name={'category'} selectItems={selectType.courseType} form={form} label={'Select Course Category:'} placeholder={'Select Course Category'} /> */}
-                <Input name={'courseCode'} type={'text'} form={form} label={'Course Initialism:'} classNameInput={'uppercase'} />
+                <Input name={'courseCode'} type={'text'} form={form} label={'Course Acronym:'} classNameInput={'uppercase'} />
                 <Input name={'name'} type={'text'} form={form} label={'Course Name:'} classNameInput={'capitalize'} />
                 <TextareaField name={'description'} form={form} label={'Description:'} classNameInput={'capitalize'} />
               </div>

@@ -16,7 +16,6 @@ const CategoryTable = ({ data }: IProps) => {
     if (data === undefined || data === null) return setIsPageLoading(true);
     if (data && data.length > 0) {
       const college = data.filter((e: any) => e.category === 'College');
-      console.log('college', college);
       setCategoryCollege(college);
       return setIsPageLoading(false);
     } else {
