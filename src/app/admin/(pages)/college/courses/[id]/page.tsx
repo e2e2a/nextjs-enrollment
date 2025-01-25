@@ -26,8 +26,9 @@ const Page = ({ params }: { params: { id: string } }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mutation = useUpdateCourseByIdMutation();
   const { data: courseData, error } = useCourseQueryById(params.id);
+
   useEffect(() => {
-    if (error || !courseData) return setIsError(true);
+    if (error || !courseData) return;
     if (courseData) {
       if (courseData.course) {
         setIsError(false);
@@ -116,7 +117,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   };
   return (
     <>
-      {!isPageLoading ? (
+      {isPageLoading ? (
         <LoaderPage />
       ) : (
         <>
