@@ -76,14 +76,15 @@ const updateStudentProfile = async (userId: string, data: any) => {
     const fileGoodMoral = data.formData.has('fileGoodMoral') ? (data.formData.get('fileGoodMoral') as File) : null;
     const fileTOR = data.formData.has('fileTOR') ? (data.formData.get('fileTOR') as File) : null;
     const photo = data.formData.has('photo') ? (data.formData.get('photo') as File) : null;
+    const fileCOC = data.formData.has('fileCOC') ? (data.formData.get('fileCOC') as File) : null;
 
-    const checked = await checkFilesAndValidate({ filePsa, fileGoodMoral, fileTOR, photo }, data);
+    const checked = await checkFilesAndValidate({ filePsa, fileGoodMoral, fileTOR, photo, fileCOC }, data);
     if (checked && checked.error) return { error: checked.error, status: checked.status };
 
     const profile = await updateStudentProfileByUserId(userId, checked.pData);
     if (!profile) return { error: 'Something went wrong. ', status: 500 };
 
-    await uploadFileOrPhoto(profile, { filePsa, fileGoodMoral, fileTOR, photo });
+    await uploadFileOrPhoto(profile, { filePsa, fileGoodMoral, fileTOR, photo, fileCOC });
 
     return { message: 'Profile has been update. ', status: 201 };
   });
@@ -112,6 +113,12 @@ const uploadFileOrPhoto = async (profile: any, files: any) => {
       uploads.push(uploadBytes(storageRefFileTOR, files.fileTOR, { contentType: files.fileTOR.type }));
     }
 
+    if (files.fileCOC && files.fileCOC.name) {
+      console.log('run here');
+      const storageRefFileCOC = ref(storage, `enrollment/coc/${profile._id}/${files.fileCOC.name}`);
+      uploads.push(uploadBytes(storageRefFileCOC, files.fileCOC, { contentType: files.fileCOC.type }));
+    }
+
     await Promise.all(uploads);
     return { success: 'yesyes', status: 201 };
   });
@@ -135,6 +142,7 @@ const checkFilesAndValidate = async (files: any, data: any) => {
             photoUrl: files.photo?.name,
             goodMoralUrl: files.fileGoodMoral?.name,
             reportCardUrl: files.fileTOR?.name,
+            cocUrl: files.fileCOC?.name,
           }
         : {}),
       isVerified: true,
