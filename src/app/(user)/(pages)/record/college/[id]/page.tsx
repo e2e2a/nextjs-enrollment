@@ -6,7 +6,6 @@ import LoaderPage from '@/components/shared/LoaderPage';
 import { useEnrollmentRecordQueryById } from '@/lib/queries/enrollmentRecord/get/id';
 
 const Page = ({ params }: { params: { id: string } }) => {
-  const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [schedule, setSchedule] = useState([]);
   const { data, isLoading, error: isEnError } = useEnrollmentRecordQueryById(params.id);
@@ -17,11 +16,8 @@ const Page = ({ params }: { params: { id: string } }) => {
       if (data.enrollmentRecord) {
         const filteredSchedules = data.enrollmentRecord?.studentSubjects?.filter((ss: any) => ss.status === 'Approved');
         setSchedule(filteredSchedules);
-        setIsPageLoading(false);
-      } else if (data.error) {
-        setIsError(true);
-        setIsPageLoading(false);
       }
+      setIsPageLoading(false);
     }
   }, [data, isEnError]);
 
@@ -33,9 +29,10 @@ const Page = ({ params }: { params: { id: string } }) => {
         </div>
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
-          {isError ? (
-            <div className=''>404</div>
-          ) : (
+          <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>404</div>
+          {data?.error && data?.status === 404 && <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>404</div>}
+          {data?.error && data?.status > 500 && <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>Something Went Wrong</div>}
+          {data?.enrollmentRecord && !data?.error && (
             <div className=''>
               <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
                 <div className='mb-3'>

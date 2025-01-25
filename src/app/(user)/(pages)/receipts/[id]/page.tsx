@@ -1,23 +1,17 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useSession } from 'next-auth/react';
 import { useStudentReceiptQueryById } from '@/lib/queries/studentReceipt/get/id';
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-const Page = ({ params }: { params: { id: string } }) => {
-  const [isError, setIsError] = useState(false);
-  const [isPageLoading, setIsPageLoading] = useState(true);
 
-  const { data: s } = useSession();
-  const { data, isLoading, error } = useStudentReceiptQueryById(params.id);
+const Page = ({ params }: { params: { id: string } }) => {
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const { data, error } = useStudentReceiptQueryById(params.id);
 
   useEffect(() => {
-    if (error || !data) return setIsError(true);
+    if (error || !data) return;
     if (data) {
-      setIsError(false);
-      if (data.studentReceipt) {
-        setIsPageLoading(false);
-      }
+      setIsPageLoading(false);
     }
   }, [data, error]);
 
@@ -27,9 +21,9 @@ const Page = ({ params }: { params: { id: string } }) => {
         <LoaderPage />
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
-          {isError ? (
-            <div className=''>404</div>
-          ) : (
+          {data?.error && data?.status === 404 && <div className=''>404</div>}
+          {data?.error && data?.status > 500 && <div className=''>Something Went Wrong</div>}
+          {data?.studentReceipt && !data.error && (
             <div className=''>
               <div className='flex py-4 text-black w-full justify-between px-5 sm:px-10'>
                 <div className='flex flex-col'>
