@@ -11,6 +11,7 @@ import SemesterFilter from '../../management/components/filters/SemesterFilter';
 import YearFilter from '../../management/components/filters/YearFilter';
 import ReportCardFile from '../../management/components/step1/ReportCardFile';
 import GoodMoralFile from '../../management/components/step1/GoodMoralFile';
+import COCFile from '../../management/components/step1/COCFile';
 
 export const columns: ColumnDef<IEnrollment>[] = [
   {
@@ -114,8 +115,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
     header: 'PSA file',
     cell: ({ row }) => {
       const user = row.original;
-
-      return <PSAFile user={user} />;
+      return user.profileId.psaUrl ? <PSAFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
@@ -124,8 +124,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
     header: 'Good Moral',
     cell: ({ row }) => {
       const user = row.original;
-
-      return <GoodMoralFile user={user} />;
+      return user.profileId.goodMoralUrl ? <GoodMoralFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
@@ -134,8 +133,16 @@ export const columns: ColumnDef<IEnrollment>[] = [
     header: 'Report Card',
     cell: ({ row }) => {
       const user = row.original;
-
-      return <ReportCardFile user={user} />;
+      return user.profileId.reportCardUrl ? <ReportCardFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
+    },
+  },
+  {
+    accessorFn: (row) => row.profileId.cocUrl,
+    accessorKey: 'Certification of Completion',
+    header: 'Certification of Completion',
+    cell: ({ row }) => {
+      const user = row.original;
+      return user.profileId.cocUrl ? <COCFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
@@ -144,8 +151,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
     header: 'Student Photo',
     cell: ({ row }) => {
       const user = row.original;
-
-      return <StudentPhoto user={user} />;
+      return user.profileId.photoUrl ? <StudentPhoto user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {

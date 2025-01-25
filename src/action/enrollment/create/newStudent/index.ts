@@ -114,6 +114,7 @@ const validateData = async (user: any, files: any, profileId: string, courseId: 
       photoUrl: files.photo.name,
       goodMoralUrl: files.fileGoodMoral ? files.fileGoodMoral.name : null,
       reportCardUrl: files.fileTOR ? files.fileTOR.name : null,
+      cocUrl: files.fileCOC ? files.fileCOC.name : null,
     };
     const eData = {
       ...sameData,
@@ -140,12 +141,15 @@ const checkPhotoAndFile = async (data: any) => {
     const fileGoodMoral = data.formData.get('fileGoodMoral') as File;
     const fileTOR = data.formData.get('fileTOR') as File;
     const photo = data.formData.get('photo') as File;
+    const fileCOC = data.formData.get('fileCOC') as File;
     if (!photo.name || photo === null) return { error: 'At least one 2x2 photo must be provided.', status: 403 };
     if (!filePsa.name || filePsa === null) return { error: 'At least one 2x2 photo must be provided.', status: 403 };
 
-    if ((!fileGoodMoral || !fileGoodMoral.name) && (!fileTOR || !fileTOR.name)) return { error: 'At least one file or photo must be provided.', status: 403 };
+    if ((!fileGoodMoral || !fileGoodMoral.name) && (!fileTOR || !fileTOR.name)) {
+      if (!fileCOC || !fileCOC.name) return { error: 'At least one of TOR or Good Moral must be provided.', status: 403 };
+    }
 
-    return { success: 'yesyes', files: { filePsa, fileGoodMoral, fileTOR, photo }, status: 200 };
+    return { success: 'yesyes', files: { filePsa, fileGoodMoral, fileTOR, photo, fileCOC }, status: 200 };
   });
 };
 
@@ -173,6 +177,11 @@ const uploadFileOrPhoto = async (profile: any, files: any) => {
     if (files.fileTOR && files.fileTOR.name) {
       const storageRefFileTOR = ref(storage, `enrollment/reportCard/${profile._id}/${files.fileTOR.name}`);
       uploads.push(uploadBytes(storageRefFileTOR, files.fileTOR, { contentType: files.fileTOR.type }));
+    }
+
+    if (files.fileCOC && files.fileCOC.name) {
+      const storageRefFileCOC = ref(storage, `enrollment/coc/${profile._id}/${files.fileCOC.name}`);
+      uploads.push(uploadBytes(storageRefFileCOC, files.fileCOC, { contentType: files.fileCOC.type }));
     }
 
     await Promise.all(uploads);

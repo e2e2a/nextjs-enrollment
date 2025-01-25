@@ -27,6 +27,7 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
   const [filePreview, setFilePreview] = useState<File | null>(null);
   const [fileGoodMoralPreview, setFileGoodMoralPreview] = useState<File | null>(null);
   const [fileTORPreview, setFileTORPreview] = useState<File | null>(null);
+  const [fileCoCPreview, setFileCoCPreview] = useState<File | null>(null);
 
   const [isPending, setIsPending] = useState(false);
   const [isNotEditable, setIsNotEditable] = useState<boolean>(!!profile.isVerified);
@@ -139,6 +140,7 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
     if (photoPreview) formData.append('photo', photoPreview);
     if (fileGoodMoralPreview) formData.append('fileGoodMoral', fileGoodMoralPreview);
     if (fileTORPreview) formData.append('fileTOR', fileTORPreview);
+    if (fileCoCPreview) formData.append('fileCOC', fileCoCPreview);
 
     const isProfileValid = await formProfile.trigger();
     if (profile.enrollStatus === 'Enrolled' || profile.enrollStatus === 'Temporary Enrolled' || profile.enrollStatus === 'Pending') {
@@ -301,10 +303,12 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
                 filePreview={filePreview}
                 fileGoodMoralPreview={fileGoodMoralPreview}
                 fileTORPreview={fileTORPreview}
+                fileCoCPreview={fileCoCPreview}
                 setPhotoPreview={setPhotoPreview}
                 setFilePreview={setFilePreview}
                 setFileGoodMoralPreview={setFileGoodMoralPreview}
                 setFileTORPreview={setFileTORPreview}
+                setFileCoCPreview={setFileCoCPreview}
               />
             </Form>
           </div>

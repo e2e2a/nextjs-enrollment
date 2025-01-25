@@ -21,6 +21,7 @@ import { StudentProfileExtension } from '@/lib/validators/profile/extension';
 import { SelectCourse } from './SelectCourse';
 import InputDisabled from './InputDisabled';
 import { useCreateEnrollmentForNewStudentByCategoryMutation } from '@/lib/queries/enrollment/create/newStudent';
+import FileCerificationOfCompletion from './FileCertificationOfCompletion';
 
 type IProps = {
   search: any;
@@ -40,6 +41,10 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
   const [fileGoodMoralPreview, setFileGoodMoralPreview] = useState<File | null>(null);
   const [fileGoodMoralError, setFileGoodMoralError] = useState('');
   const fileGoodMoralInputRef = useRef<HTMLInputElement>(null);
+
+  const [fileCerificationOfCompletionPreview, setFileCerificationOfCompletionPreview] = useState<File | null>(null);
+  const [fileCerificationOfCompletionError, setFileCerificationOfCompletionError] = useState('');
+  const fileCerificationOfCompletionInputRef = useRef<HTMLInputElement>(null);
 
   const [fileTORPreview, setFileTORPreview] = useState<File | null>(null);
   const [fileTORError, setTORError] = useState('');
@@ -109,6 +114,23 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
       }
     }
   };
+
+  const handleSelectedFileCerificationOfCompletion = (files: FileList | null) => {
+    if (files && files?.length > 0) {
+      if (files[0].size < 10000000) {
+        if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
+          setFileCerificationOfCompletionError('');
+          const file = files[0];
+          setFileCerificationOfCompletionPreview(file);
+        } else {
+          makeToastError('Cerification of Completion Only allowed JPEG, PNG and PDF files.');
+        }
+      } else {
+        makeToastError('File size too large');
+      }
+    }
+  };
+
   const handleClickPhoto = () => {
     if (PhotoInputRef.current) {
       PhotoInputRef.current.click();
@@ -129,10 +151,16 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
       fileTORInputRef.current.click();
     }
   };
+  const handleClickFileCerificationOfCompletion = () => {
+    if (fileCerificationOfCompletionInputRef.current) {
+      fileCerificationOfCompletionInputRef.current.click();
+    }
+  };
   const handleRemovePhoto = () => setPhotoPreview(null);
   const handleRemoveFile = () => setFilePreview(null);
   const handleRemoveFileGoodMoral = () => setFileGoodMoralPreview(null);
   const handleRemoveFileTOR = () => setFileTORPreview(null);
+  const handleRemoveCerificationOfCompletion = () => setFileCerificationOfCompletionPreview(null);
   const mutation = useCreateEnrollmentForNewStudentByCategoryMutation();
   const deleteMutation = useEnrollmentDeleteMutation();
   const form = useForm<z.infer<typeof StudentProfileExtension>>({
@@ -170,7 +198,7 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
       setIsCourseError('Please select a course');
       return;
     }
-
+    setIsCourseError('');
     const isProfileValid = await form.trigger();
     if (!isProfileValid) return setIsPending(false);
 
@@ -180,23 +208,27 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
       setPhotoError('Student Photo is required.');
       return;
     }
+    setPhotoError('');
     formData.append('photo', photoPreview!);
     if (!filePreview) {
       setIsPending(false);
-      setPhotoError('Student Photo is required.');
+      setFileError('Student Photo is required.');
       return;
     }
+    setFileError('');
     formData.append('filePsa', filePreview);
     const isAnyFilePresent = fileGoodMoralPreview || fileTORPreview;
 
     if (!isAnyFilePresent) {
-      setFileGoodMoralError('Good Moral is required.');
-      setTORError('Report Card is required.');
-      setIsPending(false);
+      if (fileCerificationOfCompletionPreview) {
+        formData.append('fileCOC', fileCerificationOfCompletionPreview);
+      } else {
+        setFileGoodMoralError('Good Moral is required.');
+        setTORError('Report Card is required.');
+        setIsPending(false);
+        return;
+      }
     } else {
-      setFileGoodMoralError('');
-      setTORError('');
-
       if (fileGoodMoralPreview) {
         formData.append('fileGoodMoral', fileGoodMoralPreview);
       }
@@ -205,6 +237,8 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
         formData.append('fileTOR', fileTORPreview);
       }
     }
+    setFileGoodMoralError('');
+    setTORError('');
 
     const profileData = form.getValues();
     profileData.studentYear = profileData.studentYear.toLowerCase();
@@ -304,6 +338,18 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
                     fileTORError={fileTORError}
                     isUploading={isPending}
                   />
+                  <div className='w-full'>
+                    <p>Alternatives</p>
+                    <FileCerificationOfCompletion
+                      handleSelectedFileCerificationOfCompletion={handleSelectedFileCerificationOfCompletion}
+                      handleRemoveCerificationOfCompletion={handleRemoveCerificationOfCompletion}
+                      handleClickFileCerificationOfCompletion={handleClickFileCerificationOfCompletion}
+                      fileCerificationOfCompletionInputRef={fileCerificationOfCompletionInputRef}
+                      fileCerificationOfCompletionPreview={fileCerificationOfCompletionPreview}
+                      fileCerificationOfCompletionError={fileCerificationOfCompletionError}
+                      isUploading={isPending}
+                    />
+                  </div>
                 </div>
                 <div className='mt-4'>
                   <h1 className='font-semibold text-[14px] sm:text-[16px] uppercase'>Educational Background</h1>

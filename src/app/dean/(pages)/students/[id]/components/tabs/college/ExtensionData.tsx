@@ -14,6 +14,8 @@ import EditStudentPhoto from '../../edit/EditStudentPhoto';
 import Link from 'next/link';
 import { useEnrollmentQueryByProfileId } from '@/lib/queries/enrollment/get/profileId';
 import LoaderPage from '@/components/shared/LoaderPage';
+import CoCFile from '../../CoCFile';
+import EditCoC from '../../edit/EditCoC';
 
 type Iprops = {
   form: any;
@@ -23,13 +25,15 @@ type Iprops = {
   filePreview: any;
   fileGoodMoralPreview: any;
   fileTORPreview: any;
+  fileCoCPreview: any;
   setPhotoPreview: React.Dispatch<React.SetStateAction<File | null>>;
   setFilePreview: React.Dispatch<React.SetStateAction<File | null>>;
   setFileGoodMoralPreview: React.Dispatch<React.SetStateAction<File | null>>;
   setFileTORPreview: React.Dispatch<React.SetStateAction<File | null>>;
+  setFileCoCPreview: React.Dispatch<React.SetStateAction<File | null>>;
 };
 
-const ExtensionData = ({ form, profile, isNotEditable, photoPreview, filePreview, fileGoodMoralPreview, fileTORPreview, setPhotoPreview, setFilePreview, setFileGoodMoralPreview, setFileTORPreview }: Iprops) => {
+const ExtensionData = ({ form, profile, isNotEditable, photoPreview, filePreview, fileGoodMoralPreview, fileTORPreview, fileCoCPreview, setPhotoPreview, setFilePreview, setFileGoodMoralPreview, setFileTORPreview, setFileCoCPreview }: Iprops) => {
   const [photoError, setPhotoError] = useState('');
   const PhotoInputRef = useRef<HTMLInputElement>(null);
 
@@ -41,6 +45,9 @@ const ExtensionData = ({ form, profile, isNotEditable, photoPreview, filePreview
 
   const [fileTORError, setTORError] = useState('');
   const fileTORInputRef = useRef<HTMLInputElement>(null);
+
+  const [fileCoCError, setFileCoCError] = useState('');
+  const fileCoCInputRef = useRef<HTMLInputElement>(null);
 
   const [isUploading, setIsUploading] = useState(false);
   // const mutation = useStudentProfileMutation();
@@ -105,6 +112,21 @@ const ExtensionData = ({ form, profile, isNotEditable, photoPreview, filePreview
       }
     }
   };
+  const handleSelectedFileCoC = (files: FileList | null) => {
+    if (files && files?.length > 0) {
+      if (files[0].size < 5000000) {
+        if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
+          setFileCoCError('');
+          const file = files[0];
+          setFileCoCPreview(file);
+        } else {
+          makeToastError('Certification of Completion Only allowed JPEG, PNG and PDF files.');
+        }
+      } else {
+        makeToastError('File size too large');
+      }
+    }
+  };
   const handleClickPhoto = () => {
     if (PhotoInputRef.current) {
       PhotoInputRef.current.click();
@@ -125,10 +147,16 @@ const ExtensionData = ({ form, profile, isNotEditable, photoPreview, filePreview
       fileTORInputRef.current.click();
     }
   };
+  const handleClickFileCoC = () => {
+    if (fileCoCInputRef.current) {
+      fileCoCInputRef.current.click();
+    }
+  };
   const handleRemovePhoto = () => setPhotoPreview(null);
   const handleRemoveFile = () => setFilePreview(null);
   const handleRemoveFileGoodMoral = () => setFileGoodMoralPreview(null);
   const handleRemoveFileTOR = () => setFileTORPreview(null);
+  const handleRemoveFileCoC = () => setFileCoCPreview(null);
 
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
   const hasEnrollment = profile && (profile.enrollStatus === 'Enrolled' || profile.enrollStatus === 'Pending' || profile.enrollStatus === 'Temporary Enrolled');
@@ -197,6 +225,12 @@ const ExtensionData = ({ form, profile, isNotEditable, photoPreview, filePreview
                   <div className=''>Report Card (Form 138)/Informative copy of TOR</div>
                   <ReportCardFile user={profile} />
                 </div>
+                {profile?.cocUrl && (
+                  <div className='grid grid-cols-1'>
+                    <div className=''>Certification of Completion</div>
+                    <CoCFile user={profile} />
+                  </div>
+                )}
               </div>
             </>
           ) : (
@@ -224,6 +258,15 @@ const ExtensionData = ({ form, profile, isNotEditable, photoPreview, filePreview
                   fileTORInputRef={fileTORInputRef}
                   fileTORPreview={fileTORPreview}
                   fileTORError={fileTORError}
+                  isUploading={isUploading}
+                />
+                <EditCoC
+                  handleSelectedFileCoC={handleSelectedFileCoC}
+                  handleRemoveFileCoC={handleRemoveFileCoC}
+                  handleClickFileCoC={handleClickFileCoC}
+                  fileCoCInputRef={fileCoCInputRef}
+                  fileCoCPreview={fileCoCPreview}
+                  fileCoCError={fileCoCError}
                   isUploading={isUploading}
                 />
               </div>

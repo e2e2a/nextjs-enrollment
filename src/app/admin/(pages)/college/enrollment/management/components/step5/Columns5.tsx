@@ -12,6 +12,7 @@ import GoodMoralFile from '../step1/GoodMoralFile';
 import YearFilter from '../filters/YearFilter';
 import SemesterFilter from '../filters/SemesterFilter';
 import StudentStatusFilter from '../filters/StudentStatusFilter';
+import COCFile from '../step1/COCFile';
 
 export const columns5: ColumnDef<IEnrollment>[] = [
   {
@@ -115,8 +116,7 @@ export const columns5: ColumnDef<IEnrollment>[] = [
     header: 'PSA file',
     cell: ({ row }) => {
       const user = row.original;
-
-      return <PSAFile user={user} />;
+      return user.profileId.psaUrl ? <PSAFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
@@ -125,8 +125,7 @@ export const columns5: ColumnDef<IEnrollment>[] = [
     header: 'Good Moral',
     cell: ({ row }) => {
       const user = row.original;
-
-      return <GoodMoralFile user={user} />;
+      return user.profileId.goodMoralUrl ? <GoodMoralFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
@@ -135,8 +134,16 @@ export const columns5: ColumnDef<IEnrollment>[] = [
     header: 'Report Card',
     cell: ({ row }) => {
       const user = row.original;
-
-      return <ReportCardFile user={user} />;
+      return user.profileId.reportCardUrl ? <ReportCardFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
+    },
+  },
+  {
+    accessorFn: (row) => row.profileId.cocUrl,
+    accessorKey: 'Certification of Completion',
+    header: 'Certification of Completion',
+    cell: ({ row }) => {
+      const user = row.original;
+      return user.profileId.cocUrl ? <COCFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
@@ -145,8 +152,7 @@ export const columns5: ColumnDef<IEnrollment>[] = [
     header: 'Student Photo',
     cell: ({ row }) => {
       const user = row.original;
-
-      return <StudentPhoto user={user} />;
+      return user.profileId.photoUrl ? <StudentPhoto user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
