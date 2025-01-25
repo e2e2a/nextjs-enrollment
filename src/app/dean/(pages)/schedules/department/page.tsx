@@ -18,11 +18,11 @@ const Page = () => {
 
     if (data && pData) {
       if (data.teacherSchedules) {
-        setIsPageLoading(false);
+        setIsError(false);
       } else if (data.error) {
         setIsError(true);
-        setIsPageLoading(false);
       }
+      setIsPageLoading(false);
     }
   }, [data, isEnError, pData, pError]);
 

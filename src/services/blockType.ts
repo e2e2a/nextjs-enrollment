@@ -54,7 +54,6 @@ export const getBlockTypeById = async (id: any) => {
       .exec();
     return p;
   } catch (error) {
-    console.log(error);
     return null;
   }
 };

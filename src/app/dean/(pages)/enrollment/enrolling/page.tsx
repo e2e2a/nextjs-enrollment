@@ -23,11 +23,11 @@ const Page = () => {
       if (data.students && pData.profile) {
         const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment.enrollStatus === 'Pending');
         setEnrolledStudents(filteredEnrollment);
-        setIsPageLoading(false);
+        setIsError(false)
       } else if (data.error) {
         setIsError(true);
-        setIsPageLoading(false);
       }
+      setIsPageLoading(false);
     }
   }, [data, isEnError, pData, pError]);
 

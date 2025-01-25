@@ -17,7 +17,7 @@ const Page = () => {
     if (error || !pData) return;
 
     if (data && pData) {
-      if (pData.profile) {
+      if (pData.profile && data.reportedGrades) {
         setIsPageLoading(false);
       }
     }

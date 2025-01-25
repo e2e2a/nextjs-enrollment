@@ -14,9 +14,7 @@ const Page = () => {
     if (isEnError || !data) return;
 
     if (data) {
-      if (data.teacherScheduleRecords) {
-        setIsPageLoading(false);
-      }
+      setIsPageLoading(false);
     }
   }, [data, isEnError]);
 
@@ -28,9 +26,9 @@ const Page = () => {
         </div>
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
-          {isError ? (
-            <div className=''>404</div>
-          ) : (
+          {data?.error && data?.status === 404 && <div className=''>404</div>}
+          {data?.error && data?.status > 500 && <div className=''>Something Went Wrong</div>}
+          {data?.teacherScheduleRecords && !data.error && (
             <div className=''>
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-semibold tracking-tight '>Schedule&apos;s Records</h1>

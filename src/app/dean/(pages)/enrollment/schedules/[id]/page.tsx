@@ -15,7 +15,6 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data, isLoading, error: isEnError } = useEnrollmentQueryById(params.id);
   const { data: b, isLoading: bLoading, error: bError } = useBlockCourseQueryByCategory('College');
   const { data: ESetup, isLoading: ESetupLoading, error: ESetupError } = useEnrollmentSetupQuery();
-  // const { data: b, isLoading: bLoading, error: bError } = useTeacherScheduleCollegeQuery();
 
   useEffect(() => {
     if (bError || !b) return;
@@ -25,7 +24,6 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (b && data && ESetup) {
       if (data.enrollment && b.blockTypes && ESetup.enrollmentSetup) {
         const filteredSchedules = b?.blockTypes?.filter((block: any) => block.courseId._id === data?.enrollment?.courseId._id);
-        // const filteredSchedules = b?.teacherSchedules?.filter((schedule: any) => schedule.blockTypeId !== null || schedule.blockTypeId);
         setSchedules(filteredSchedules);
         setIsPageLoading(false);
       }

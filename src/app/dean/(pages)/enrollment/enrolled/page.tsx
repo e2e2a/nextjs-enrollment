@@ -13,7 +13,7 @@ const Page = () => {
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
 
   const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
-  const { data, isLoading, error: isEnError } = useAllEnrollmentQueryByCourseId(pData?.profile?.courseId._id);
+  const { data, isLoading, error: isEnError } = useAllEnrollmentQueryByCourseId(pData?.profile?.courseId?._id);
 
   useEffect(() => {
     if (isEnError || !data) return;
@@ -23,11 +23,11 @@ const Page = () => {
       if (data.students && pData.profile) {
         const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled');
         setEnrolledStudents(filteredEnrollment);
-        setIsPageLoading(false);
+        setIsError(false);
       } else if (data.error) {
         setIsError(true);
-        setIsPageLoading(false);
       }
+      setIsPageLoading(false);
     }
   }, [data, isEnError, pData, pError]);
 
@@ -49,7 +49,7 @@ const Page = () => {
               <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
                 <div className='justify-between items-start flex w-full'>
                   <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                    Department: <span className='font-normal'>{pData?.profile.courseId.name}</span>
+                    Department: <span className='font-normal'>{pData?.profile?.courseId?.name}</span>
                   </span>
                 </div>
               </div>
