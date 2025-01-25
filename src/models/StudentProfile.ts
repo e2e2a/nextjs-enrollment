@@ -32,6 +32,7 @@ export interface IProfile extends Document {
   psaUrl: string;
   goodMoralUrl: string;
   reportCardUrl: string;
+  cocUrl: string;
 
   primarySchoolName: string;
   primarySchoolYear: string;
@@ -116,6 +117,7 @@ const schema = new Schema<IProfile>(
     goodMoralUrl: { type: String },
     reportCardUrl: { type: String },
     photoUrl: { type: String },
+    cocUrl: { type: String },
 
     primarySchoolName: { type: String },
     primarySchoolYear: { type: String },
