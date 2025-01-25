@@ -70,7 +70,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           case 203:
             setValue('');
             formCollege.reset();
-            makeToastSucess('New Room has been added.');
+            makeToastSucess('Room has been updated.');
             return;
           default:
             return makeToastError(res.error);
