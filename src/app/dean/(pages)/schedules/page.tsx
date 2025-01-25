@@ -20,9 +20,9 @@ const Page = () => {
 
     if (ts && data) {
       if (ts.error) {
-        setIsPageLoading(false);
         setIsError(true);
-        return;
+      }else{
+        setIsError(false)
       }
       setIsPageLoading(false);
     }

@@ -19,8 +19,10 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (sError || !s) return;
 
     if (s && data) {
-      const filteredSchedules = s?.teacherSchedules?.filter((schedule: any) => (schedule.blockTypeId === null || !schedule.blockTypeId) && schedule.profileId);
-      setTeachersSchedules(filteredSchedules);
+      if (s?.teacherSchedules && data?.blockType) {
+        const filteredSchedules = s?.teacherSchedules?.filter((schedule: any) => (schedule.blockTypeId === null || !schedule.blockTypeId) && schedule.profileId);
+        setTeachersSchedules(filteredSchedules);
+      }
       setIsPageLoading(false);
     }
   }, [s, sError, data, isEnError]);

@@ -12,13 +12,14 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     if (isEnError || !data) return;
+
     if (data) {
       if (data.teacherScheduleRecord) {
-        setIsPageLoading(false);
+        setIsError(false);
       } else if (data.error) {
         setIsError(true);
-        setIsPageLoading(false);
       }
+      setIsPageLoading(false);
     }
   }, [data, isEnError]);
 

@@ -22,8 +22,8 @@ const Page = () => {
       if (data.enrollmentRecords && pData.profile) {
         const filteredEnrollment = data?.enrollmentRecords?.filter((enrollment: any) => enrollment.course === pData?.profile.courseId.name && enrollment.courseCode === pData?.profile.courseId.courseCode);
         setFilteredEnrollments(filteredEnrollment);
-        setIsPageLoading(false);
       }
+      setIsPageLoading(false);
     }
   }, [data, isEnError, pData, pError]);
 

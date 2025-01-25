@@ -13,15 +13,16 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     if (isEnError || !data) return;
+
     if (data) {
       if (data.enrollmentRecord) {
         const filteredSchedules = data.enrollmentRecord?.studentSubjects?.filter((ss: any) => ss.status === 'Approved');
         setSchedule(filteredSchedules);
-        setIsPageLoading(false);
+        setIsError(false);
       } else if (data.error) {
         setIsError(true);
-        setIsPageLoading(false);
       }
+      setIsPageLoading(false);
     }
   }, [data, isEnError]);
 
