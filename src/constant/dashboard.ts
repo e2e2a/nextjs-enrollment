@@ -307,309 +307,496 @@ export const dashboardConfig: DashboardConfig = {
       href: '/admin/dashboard',
       icon: 'layoutDashboard',
     },
+    // {
+    //   title: 'Secondary Education',
+    //   i: [
+    //     {
+    //       title: 'Junior High School',
+    //       i: [
+    //         {
+    //           title: 'Sections',
+    //           i: [
+    //             {
+    //               title: 'Section Management',
+    //               href: '/admin/courses/blocks',
+    //               icon: 'eye',
+    //             },
+    //             {
+    //               title: 'Add Section',
+    //               href: '/admin/courses/blocks/add',
+    //               icon: 'add',
+    //             },
+    //           ],
+    //           icon: 'packageSearch',
+    //         },
+    //         {
+    //           title: 'Level Management',
+    //           href: '/admin/courses/blocks',
+    //           icon: 'eye',
+    //         },
+    //         {
+    //           title: 'Add Level',
+    //           href: '/admin/courses/blocks/add',
+    //           icon: 'add',
+    //         },
+    //       ],
+    //       icon: 'bookOpenText',
+    //     },
+    //     {
+    //       title: 'Senior High School',
+    //       i: [
+    //         {
+    //           title: 'Sections',
+    //           i: [
+    //             {
+    //               title: 'Section Management',
+    //               href: '/admin/courses/blocks',
+    //               icon: 'eye',
+    //             },
+    //             {
+    //               title: 'Add Section',
+    //               href: '/admin/courses/blocks/add',
+    //               icon: 'add',
+    //             },
+    //           ],
+    //           icon: 'packageSearch',
+    //         },
+    //         {
+    //           title: 'Strand/Tracks Management',
+    //           href: '/admin/courses/blocks',
+    //           icon: 'eye',
+    //         },
+    //         {
+    //           title: 'Add Strand/Tracks',
+    //           href: '/admin/courses/blocks/add',
+    //           icon: 'add',
+    //         },
+    //       ],
+    //       icon: 'bookOpenText',
+    //     },
+    //   ],
+    //   icon: 'packageSearch',
+    // },
+    // {
+    //   title: 'Vocational Education',
+    //   i: [
+    //     {
+    //       title: 'Tesda',
+    //       i: [
+    //         {
+    //           title: 'Blocks',
+    //           i: [
+    //             {
+    //               title: 'Block Management',
+    //               href: '/admin/courses/blocks',
+    //               icon: 'eye',
+    //             },
+    //             {
+    //               title: 'Add Block',
+    //               href: '/admin/courses/blocks/add',
+    //               icon: 'add',
+    //             },
+    //           ],
+    //           icon: 'packageSearch',
+    //         },
+    //         {
+    //           title: 'Course Management',
+    //           href: '/admin/courses/blocks',
+    //           icon: 'eye',
+    //         },
+    //         {
+    //           title: 'Add Course',
+    //           href: '/admin/courses/blocks/add',
+    //           icon: 'add',
+    //         },
+    //       ],
+    //       icon: 'bookOpenText',
+    //     },
+    //   ],
+    //   icon: 'packageSearch',
+    // },
+    // {
+    //   title: 'Tertiary Education',
+    //   i: [
+    //     {
+    //       title: 'College',
+    //       i: [
+    //         {
+    //           title: 'Blocks',
+    //           i: [
+    //             {
+    //               title: 'Blocks Management',
+    //               href: '/admin/college/blocks',
+    //               icon: 'eye',
+    //             },
+    //             {
+    //               title: 'Add Block',
+    //               href: '/admin/college/blocks/add',
+    //               icon: 'add',
+    //             },
+    //           ],
+    //           icon: 'packageSearch',
+    //         },
+    //         {
+    //           title: 'Courses',
+    //           i: [
+    //             {
+    //               title: 'Courses Management',
+    //               href: '/admin/college/courses',
+    //               icon: 'eye',
+    //             },
+    //             {
+    //               title: 'Add Course',
+    //               href: '/admin/college/courses/add',
+    //               icon: 'add',
+    //             },
+    //           ],
+    //           icon: 'packageSearch',
+    //         },
+    //         {
+    //           title: 'Curriculums',
+    //           i: [
+    //             {
+    //               title: 'Curriculum Management',
+    //               href: '/admin/college/curriculums',
+    //               icon: 'eye',
+    //             },
+    //             {
+    //               title: 'Student Curriculum Mng.',
+    //               href: '/admin/college/curriculums/students',
+    //               icon: 'eye',
+    //             },
+    //           ],
+    //           icon: 'packageSearch',
+    //         },
+    //         {
+    //           title: 'Enrollment',
+    //           i: [
+    //             {
+    //               title: 'Enrollment Process',
+    //               i: [
+    //                 {
+    //                   title: 'Step 1 Management',
+    //                   href: '/admin/college/enrollment/management?step=1',
+    //                   icon: 'eye',
+    //                 },
+    //                 {
+    //                   title: 'Step 2 Management',
+    //                   href: '/admin/college/enrollment/management?step=2',
+    //                   icon: 'eye',
+    //                 },
+    //                 {
+    //                   title: 'Step 3 Management',
+    //                   href: '/admin/college/enrollment/management?step=3',
+    //                   icon: 'eye',
+    //                 },
+    //                 {
+    //                   title: 'Step 4 Management',
+    //                   href: '/admin/college/enrollment/management?step=4',
+    //                   icon: 'eye',
+    //                 },
+    //                 {
+    //                   title: 'Step 5 Management',
+    //                   href: '/admin/college/enrollment/management?step=5',
+    //                   icon: 'eye',
+    //                 },
+    //                 {
+    //                   title: 'Step 6 Management',
+    //                   href: '/admin/college/enrollment/management?step=6',
+    //                   icon: 'eye',
+    //                 },
+    //               ],
+    //               icon: 'packageSearch',
+    //             },
+    //             {
+    //               title: 'Enrolled Students',
+    //               i: [
+    //                 {
+    //                   title: 'View Enrolled Students',
+    //                   href: '/admin/college/enrollment/enrolled',
+    //                   icon: 'eye',
+    //                 },
+    //               ],
+    //               icon: 'packageSearch',
+    //             },
+    //             {
+    //               title: 'Temporary',
+    //               i: [
+    //                 {
+    //                   title: 'View Temporary Enrolled',
+    //                   href: '/admin/college/enrollment/temporary',
+    //                   icon: 'eye',
+    //                 },
+    //               ],
+    //               icon: 'packageSearch',
+    //             },
+    //             {
+    //               title: 'Reported Grades',
+    //               i: [
+    //                 {
+    //                   title: 'All Grades Report',
+    //                   href: '/admin/college/enrollment/report/grade',
+    //                   icon: 'eye',
+    //                 },
+    //               ],
+    //               icon: 'packageSearch',
+    //             },
+    //             {
+    //               title: 'Recent Records',
+    //               i: [
+    //                 {
+    //                   title: 'Enrollment Records',
+    //                   href: '/admin/college/enrollment/record/enrollment',
+    //                   icon: 'eye',
+    //                 },
+    //                 {
+    //                   title: 'Instructor Sched. Records',
+    //                   href: '/admin/college/enrollment/record/schedule',
+    //                   icon: 'eye',
+    //                 },
+    //               ],
+    //               icon: 'packageSearch',
+    //             },
+    //           ],
+    //           icon: 'packageSearch',
+    //         },
+    //         {
+    //           title: 'Instructors',
+    //           i: [
+    //             {
+    //               title: 'Instructors Management',
+    //               href: '/admin/college/schedules/instructors',
+    //               icon: 'eye',
+    //             },
+    //             {
+    //               title: 'Add Instructor Schedule',
+    //               href: '/admin/college/schedules/instructors/add',
+    //               icon: 'add',
+    //             },
+    //           ],
+    //           icon: 'packageSearch',
+    //         },
+    //         {
+    //           title: 'Subjects',
+    //           i: [
+    //             {
+    //               title: 'Subjects Management',
+    //               href: '/admin/college/subjects',
+    //               icon: 'eye',
+    //             },
+    //             {
+    //               title: 'Add Subject',
+    //               href: '/admin/college/subjects/add',
+    //               icon: 'add',
+    //             },
+    //           ],
+    //           icon: 'packageSearch',
+    //         },
+    //         {
+    //           title: 'Rooms',
+    //           i: [
+    //             {
+    //               title: 'Rooms Management',
+    //               href: '/admin/college/rooms',
+    //               icon: 'eye',
+    //             },
+    //             {
+    //               title: 'Add Room',
+    //               href: '/admin/college/rooms/add',
+    //               icon: 'add',
+    //             },
+    //           ],
+    //           icon: 'packageSearch',
+    //         },
+    //       ],
+    //       icon: 'bookOpenText',
+    //     },
+    //   ],
+    //   icon: 'packageSearch',
+    // },
     {
-      title: 'Secondary Education',
+      title: 'Blocks',
       i: [
         {
-          title: 'Junior High School',
-          i: [
-            {
-              title: 'Sections',
-              i: [
-                {
-                  title: 'Section Management',
-                  href: '/admin/courses/blocks',
-                  icon: 'eye',
-                },
-                {
-                  title: 'Add Section',
-                  href: '/admin/courses/blocks/add',
-                  icon: 'add',
-                },
-              ],
-              icon: 'packageSearch',
-            },
-            {
-              title: 'Level Management',
-              href: '/admin/courses/blocks',
-              icon: 'eye',
-            },
-            {
-              title: 'Add Level',
-              href: '/admin/courses/blocks/add',
-              icon: 'add',
-            },
-          ],
-          icon: 'bookOpenText',
+          title: 'Blocks Management',
+          href: '/admin/college/blocks',
+          icon: 'eye',
         },
         {
-          title: 'Senior High School',
-          i: [
-            {
-              title: 'Sections',
-              i: [
-                {
-                  title: 'Section Management',
-                  href: '/admin/courses/blocks',
-                  icon: 'eye',
-                },
-                {
-                  title: 'Add Section',
-                  href: '/admin/courses/blocks/add',
-                  icon: 'add',
-                },
-              ],
-              icon: 'packageSearch',
-            },
-            {
-              title: 'Strand/Tracks Management',
-              href: '/admin/courses/blocks',
-              icon: 'eye',
-            },
-            {
-              title: 'Add Strand/Tracks',
-              href: '/admin/courses/blocks/add',
-              icon: 'add',
-            },
-          ],
-          icon: 'bookOpenText',
+          title: 'Add Block',
+          href: '/admin/college/blocks/add',
+          icon: 'add',
         },
       ],
       icon: 'packageSearch',
     },
     {
-      title: 'Vocational Education',
+      title: 'Courses',
       i: [
         {
-          title: 'Tesda',
-          i: [
-            {
-              title: 'Blocks',
-              i: [
-                {
-                  title: 'Block Management',
-                  href: '/admin/courses/blocks',
-                  icon: 'eye',
-                },
-                {
-                  title: 'Add Block',
-                  href: '/admin/courses/blocks/add',
-                  icon: 'add',
-                },
-              ],
-              icon: 'packageSearch',
-            },
-            {
-              title: 'Course Management',
-              href: '/admin/courses/blocks',
-              icon: 'eye',
-            },
-            {
-              title: 'Add Course',
-              href: '/admin/courses/blocks/add',
-              icon: 'add',
-            },
-          ],
-          icon: 'bookOpenText',
+          title: 'Courses Management',
+          href: '/admin/college/courses',
+          icon: 'eye',
+        },
+        {
+          title: 'Add Course',
+          href: '/admin/college/courses/add',
+          icon: 'add',
         },
       ],
       icon: 'packageSearch',
     },
     {
-      title: 'Tertiary Education',
+      title: 'Curriculums',
       i: [
         {
-          title: 'College',
+          title: 'Curriculum Management',
+          href: '/admin/college/curriculums',
+          icon: 'eye',
+        },
+        {
+          title: 'Student Curriculum Mng.',
+          href: '/admin/college/curriculums/students',
+          icon: 'eye',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Enrollment',
+      i: [
+        {
+          title: 'Enrollment Process',
           i: [
             {
-              title: 'Blocks',
-              i: [
-                {
-                  title: 'Blocks Management',
-                  href: '/admin/college/blocks',
-                  icon: 'eye',
-                },
-                {
-                  title: 'Add Block',
-                  href: '/admin/college/blocks/add',
-                  icon: 'add',
-                },
-              ],
-              icon: 'packageSearch',
+              title: 'Step 1 Management',
+              href: '/admin/college/enrollment/management?step=1',
+              icon: 'eye',
             },
             {
-              title: 'Courses',
-              i: [
-                {
-                  title: 'Courses Management',
-                  href: '/admin/college/courses',
-                  icon: 'eye',
-                },
-                {
-                  title: 'Add Course',
-                  href: '/admin/college/courses/add',
-                  icon: 'add',
-                },
-              ],
-              icon: 'packageSearch',
+              title: 'Step 2 Management',
+              href: '/admin/college/enrollment/management?step=2',
+              icon: 'eye',
             },
             {
-              title: 'Curriculums',
-              i: [
-                {
-                  title: 'Curriculum Management',
-                  href: '/admin/college/curriculums',
-                  icon: 'eye',
-                },
-                {
-                  title: 'Student Curriculum Mng.',
-                  href: '/admin/college/curriculums/students',
-                  icon: 'eye',
-                },
-              ],
-              icon: 'packageSearch',
+              title: 'Step 3 Management',
+              href: '/admin/college/enrollment/management?step=3',
+              icon: 'eye',
             },
             {
-              title: 'Enrollment',
-              i: [
-                {
-                  title: 'Enrollment Process',
-                  i: [
-                    {
-                      title: 'Step 1 Management',
-                      href: '/admin/college/enrollment/management?step=1',
-                      icon: 'eye',
-                    },
-                    {
-                      title: 'Step 2 Management',
-                      href: '/admin/college/enrollment/management?step=2',
-                      icon: 'eye',
-                    },
-                    {
-                      title: 'Step 3 Management',
-                      href: '/admin/college/enrollment/management?step=3',
-                      icon: 'eye',
-                    },
-                    {
-                      title: 'Step 4 Management',
-                      href: '/admin/college/enrollment/management?step=4',
-                      icon: 'eye',
-                    },
-                    {
-                      title: 'Step 5 Management',
-                      href: '/admin/college/enrollment/management?step=5',
-                      icon: 'eye',
-                    },
-                    {
-                      title: 'Step 6 Management',
-                      href: '/admin/college/enrollment/management?step=6',
-                      icon: 'eye',
-                    },
-                  ],
-                  icon: 'packageSearch',
-                },
-                {
-                  title: 'Enrolled Students',
-                  i: [
-                    {
-                      title: 'View Enrolled Students',
-                      href: '/admin/college/enrollment/enrolled',
-                      icon: 'eye',
-                    },
-                  ],
-                  icon: 'packageSearch',
-                },
-                {
-                  title: 'Temporary',
-                  i: [
-                    {
-                      title: 'View Temporary Enrolled',
-                      href: '/admin/college/enrollment/temporary',
-                      icon: 'eye',
-                    },
-                  ],
-                  icon: 'packageSearch',
-                },
-                {
-                  title: 'Reported Grades',
-                  i: [
-                    {
-                      title: 'All Grades Report',
-                      href: '/admin/college/enrollment/report/grade',
-                      icon: 'eye',
-                    },
-                  ],
-                  icon: 'packageSearch',
-                },
-                {
-                  title: 'Recent Records',
-                  i: [
-                    {
-                      title: 'Enrollment Records',
-                      href: '/admin/college/enrollment/record/enrollment',
-                      icon: 'eye',
-                    },
-                    {
-                      title: 'Instructor Sched. Records',
-                      href: '/admin/college/enrollment/record/schedule',
-                      icon: 'eye',
-                    },
-                  ],
-                  icon: 'packageSearch',
-                },
-              ],
-              icon: 'packageSearch',
+              title: 'Step 4 Management',
+              href: '/admin/college/enrollment/management?step=4',
+              icon: 'eye',
             },
             {
-              title: 'Instructors',
-              i: [
-                {
-                  title: 'Instructors Management',
-                  href: '/admin/college/schedules/instructors',
-                  icon: 'eye',
-                },
-                {
-                  title: 'Add Instructor Schedule',
-                  href: '/admin/college/schedules/instructors/add',
-                  icon: 'add',
-                },
-              ],
-              icon: 'packageSearch',
+              title: 'Step 5 Management',
+              href: '/admin/college/enrollment/management?step=5',
+              icon: 'eye',
             },
             {
-              title: 'Subjects',
-              i: [
-                {
-                  title: 'Subjects Management',
-                  href: '/admin/college/subjects',
-                  icon: 'eye',
-                },
-                {
-                  title: 'Add Subject',
-                  href: '/admin/college/subjects/add',
-                  icon: 'add',
-                },
-              ],
-              icon: 'packageSearch',
-            },
-            {
-              title: 'Rooms',
-              i: [
-                {
-                  title: 'Rooms Management',
-                  href: '/admin/college/rooms',
-                  icon: 'eye',
-                },
-                {
-                  title: 'Add Room',
-                  href: '/admin/college/rooms/add',
-                  icon: 'add',
-                },
-              ],
-              icon: 'packageSearch',
+              title: 'Step 6 Management',
+              href: '/admin/college/enrollment/management?step=6',
+              icon: 'eye',
             },
           ],
-          icon: 'bookOpenText',
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Enrolled Students',
+          i: [
+            {
+              title: 'View Enrolled Students',
+              href: '/admin/college/enrollment/enrolled',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Temporary',
+          i: [
+            {
+              title: 'View Temporary Enrolled',
+              href: '/admin/college/enrollment/temporary',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Reported Grades',
+          i: [
+            {
+              title: 'All Grades Report',
+              href: '/admin/college/enrollment/report/grade',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Recent Records',
+          i: [
+            {
+              title: 'Enrollment Records',
+              href: '/admin/college/enrollment/record/enrollment',
+              icon: 'eye',
+            },
+            {
+              title: 'Instructor Sched. Records',
+              href: '/admin/college/enrollment/record/schedule',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Instructors',
+      i: [
+        {
+          title: 'Instructors Management',
+          href: '/admin/college/schedules/instructors',
+          icon: 'eye',
+        },
+        {
+          title: 'Add Instructor Schedule',
+          href: '/admin/college/schedules/instructors/add',
+          icon: 'add',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Subjects',
+      i: [
+        {
+          title: 'Subjects Management',
+          href: '/admin/college/subjects',
+          icon: 'eye',
+        },
+        {
+          title: 'Add Subject',
+          href: '/admin/college/subjects/add',
+          icon: 'add',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Rooms',
+      i: [
+        {
+          title: 'Rooms Management',
+          href: '/admin/college/rooms',
+          icon: 'eye',
+        },
+        {
+          title: 'Add Room',
+          href: '/admin/college/rooms/add',
+          icon: 'add',
         },
       ],
       icon: 'packageSearch',
