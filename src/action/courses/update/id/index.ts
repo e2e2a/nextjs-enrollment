@@ -56,7 +56,7 @@ const checkCategory = async (user: any, data: any) => {
  */
 export const checkPhotoAndStore = async (formData: any, data: any, id: string) => {
   return tryCatch(async () => {
-    const isValidObjectId = Types.ObjectId.isValid(data.id);
+    const isValidObjectId = Types.ObjectId.isValid(id);
     if (!isValidObjectId) return { error: `Not valid.`, status: 400 };
 
     const cc = await Course.findByIdAndUpdate(id, { ...data });
