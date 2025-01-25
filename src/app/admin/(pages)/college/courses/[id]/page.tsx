@@ -85,7 +85,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       fileInputRef.current.click();
     }
   };
-  console.log('courses', courseData)
+
   const onSubmit: SubmitHandler<z.infer<typeof CourseValidatorInCollege>> = async (data) => {
     setIsUploading(true);
     const formData = new FormData();

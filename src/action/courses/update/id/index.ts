@@ -79,7 +79,7 @@ export const checkPhotoAndStore = async (formData: any, data: any, id: string) =
       }
     }
 
-    return { success: true, message: 'New Course has been added.', id: id, category: data.category, status: 201 };
+    return { success: true, message: 'Course has been updated.', id: id, category: data.category, status: 201 };
   });
 };
 
