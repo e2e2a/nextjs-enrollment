@@ -31,7 +31,7 @@ const Home = () => {
               <h1 className='text-[15px] xs:text-lg sm:text-2xl font-semibold capitalize'>
                 Welcome,{' '}
                 <span className=''>
-                  {pData?.profile.firstname} {pData?.profile.lastname}
+                  {pData?.profile?.firstname} {pData?.profile?.lastname}
                 </span>
               </h1>
               <p className='text-sm sm:text-[15px] font-normal text-muted-foreground'>

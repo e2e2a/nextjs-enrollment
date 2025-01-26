@@ -13,7 +13,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
 
   const { data, isLoading, error } = useStudentCurriculumQueryById(params.id);
-  const { data: sData, isLoading: sLoading, error: sError } = useCurriculumQueryByCourseId(data?.curriculum?.courseId._id ?? 'a');
+  const { data: sData, isLoading: sLoading, error: sError } = useCurriculumQueryByCourseId(data?.curriculum?.courseId?._id ?? 'a');
 
   useEffect(() => {
     if (error || !data) return;
@@ -35,7 +35,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
             <div className='flex flex-col items-center py-4 text-black w-full text-center'>
               <h1 className='sm:text-2xl text-xl font-bold w-full uppercase text-center'>
-                {data?.curriculum?.studentId.lastname}, {data?.curriculum?.studentId.firstname} {data?.curriculum?.studentId.extensionName && data?.curriculum?.studentId.extensionName + '.'} {data?.curriculum?.studentId.middlename ?? ''}{' '}
+                {data?.curriculum?.studentId?.lastname}, {data?.curriculum?.studentId?.firstname} {data?.curriculum?.studentId?.extensionName && data?.curriculum?.studentId.extensionName + '.'} {data?.curriculum?.studentId?.middlename ?? ''}{' '}
               </h1>
               <h1 className='sm:text-3xl text-xl font-bold w-full uppercase text-center'>{data?.curriculum?.courseId?.name}</h1>
             </div>

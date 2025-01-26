@@ -58,8 +58,8 @@ const Page = () => {
       }
       setTeachers(
         [...(tData?.profiles || []), ...(dData?.profiles || [])].sort((a, b) => {
-          const fullNameA = `${a.firstname} ${a.lastname}`.toLowerCase();
-          const fullNameB = `${b.firstname} ${b.lastname}`.toLowerCase();
+          const fullNameA = `${a?.firstname} ${a?.lastname}`.toLowerCase();
+          const fullNameB = `${b?.firstname} ${b?.lastname}`.toLowerCase();
           return fullNameA.localeCompare(fullNameB);
         })
       );
@@ -104,11 +104,11 @@ const Page = () => {
             setInstructorLink('');
             setSelectedItems([]);
             formCollege.reset();
-            makeToastSucess(res.message);
+            makeToastSucess(res?.message);
             return;
           default:
-            if (res.error) {
-              makeToastError(res.error);
+            if (res?.error) {
+              makeToastError(res?.error);
               setShowLink(true);
             }
             if (res.errorRoomLink) setRoomLink(res.errorRoomLink);

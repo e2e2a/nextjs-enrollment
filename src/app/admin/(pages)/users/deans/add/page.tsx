@@ -72,10 +72,10 @@ const Page = () => {
     const userData = formUser.getValues();
     const profileData = formProfile.getValues();
     const categoryData = formCategory.getValues();
-    profileData.firstname = profileData.firstname.toLowerCase();
-    profileData.lastname = profileData.lastname.toLowerCase();
-    profileData.middlename = profileData.middlename?.toLowerCase();
-    if (profileData.extensionName) profileData.extensionName = profileData.extensionName.toLowerCase();
+    profileData.firstname = profileData?.firstname.toLowerCase();
+    profileData.lastname = profileData?.lastname.toLowerCase();
+    profileData.middlename = profileData?.middlename?.toLowerCase();
+    if (profileData.extensionName) profileData.extensionName = profileData?.extensionName.toLowerCase();
     
     const data = { ...userData, ...profileData, ...categoryData, role: 'DEAN', configProfile: configProfile };
 

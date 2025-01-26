@@ -9,6 +9,7 @@ import { LoadingProvider } from '@/components/shared/nav/logout/LoadingContext';
 import Warning from '@/components/shared/Warning';
 import MaintenancePage from './maintenance/page';
 import LogRocketProvider from '@/components/providers/LogRocketProvider';
+import NextAuthProvider from '@/lib/NextAuthProvider';
 const inter = Inter({ subsets: ['latin'], display: 'swap', preload: false });
 
 export const metadata: Metadata = {
@@ -35,10 +36,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <MaintenancePage>
               <LoadingProvider>
                 <Providers session={session}>
-                  {/* <MessageListener> */}
-                  {children}
-                  <Toaster position='top-center' reverseOrder={false} />
-                  {/* </MessageListener> */}
+                  <NextAuthProvider session={session}>
+                    {/* <MessageListener> */}
+                    {children}
+                    <Toaster position='top-center' reverseOrder={false} />
+                    {/* </MessageListener> */}
+                  </NextAuthProvider>
                 </Providers>
               </LoadingProvider>
             </MaintenancePage>

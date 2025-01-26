@@ -20,7 +20,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='capitalize'>
-          {user.lastname && user.firstname ? `${user.firstname} ${user.middlename ?? ''} ${user.lastname} ${user.extensionName ? user.extensionName + '.' : ''}` : 'Unknown'}
+          {user?.lastname && user?.firstname ? `${user?.firstname} ${user?.middlename ?? ''} ${user.lastname} ${user?.extensionName ? user.extensionName + '.' : ''}` : 'Unknown'}
         </div>
       );
     },
@@ -30,7 +30,7 @@ export const columns: ColumnDef<any>[] = [
     },
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${row.original.firstname ?? ''} ${row.original.middlename ?? ''} ${row.original.lastname ?? ''} ${row.original.extensionName ?? ''}`.toLowerCase().trim();
+      const fullName = `${row.original?.firstname ?? ''} ${row.original?.middlename ?? ''} ${row.original?.lastname ?? ''} ${row.original?.extensionName ?? ''}`.toLowerCase().trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },

@@ -56,19 +56,19 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='flex w-full justify-start text-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{data.reportedGrades.teacherScheduleId.courseId.name}</span>
+                      Department: <span className='font-normal'>{data?.reportedGrades?.teacherScheduleId?.courseId?.name}</span>
                     </span>
                   </div>
                   <div className='justify-between items-center flex w-full'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Descriptive Title: <span className='font-normal'>{data.reportedGrades.teacherScheduleId.subjectId.name}</span>
+                      Descriptive Title: <span className='font-normal'>{data?.reportedGrades?.teacherScheduleId.subjectId?.name}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Time:{' '}
                       <span className='font-normal'>
-                        {data.reportedGrades.teacherScheduleId.startTime} - {data.reportedGrades.teacherScheduleId.endTime}
+                        {data.reportedGrades.teacherScheduleId.startTime} - {data?.reportedGrades?.teacherScheduleId?.endTime}
                       </span>
                     </span>
                   </div>
@@ -76,13 +76,13 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Year:{' '}
                       <span className='font-normal'>
-                        {data.reportedGrades.teacherScheduleId?.blockTypeId?.year} - {data.reportedGrades.teacherScheduleId?.blockTypeId?.semester}
+                        {data?.reportedGrades.teacherScheduleId?.blockTypeId?.year} - {data?.reportedGrades?.teacherScheduleId?.blockTypeId?.semester}
                       </span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Block: <span className='font-normal'>{data.reportedGrades.teacherScheduleId?.blockTypeId?.section}</span>
+                      Block: <span className='font-normal'>{data?.reportedGrades?.teacherScheduleId?.blockTypeId?.section}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start'>
