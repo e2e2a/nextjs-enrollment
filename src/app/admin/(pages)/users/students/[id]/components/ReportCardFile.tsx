@@ -65,7 +65,7 @@ const ReportCardFile = ({ user }: { user: any }) => {
                       <span className='font-medium sm:text-lg text-xs'>
                         Student:{' '}
                         <span className=' capitalize sm:text-lg text-xs'>
-                          {user.firstname} {user?.middlename && user?.middlename[0] + '.'} {user.lastname} {user.extensionName ? user.extensionName + '.' : ''}
+                          {user?.firstname} {user?.middlename && user?.middlename[0] + '.'} {user?.lastname} {user?.extensionName ? user?.extensionName + '.' : ''}
                         </span>
                       </span>
                     </div>
@@ -85,7 +85,7 @@ const ReportCardFile = ({ user }: { user: any }) => {
                   fileUrl.includes('.pdf') ? (
                     <iframe src={fileUrl} width='100%' height='400px' className='border-0' title='PDF Preview' />
                   ) : (
-                    <Image src={fileUrl} alt={user.firstname || 'nothing to say'} width={600} priority height={600} className='object-contain' />
+                    <Image src={fileUrl} alt={user?.firstname || 'nothing to say'} width={600} priority height={600} className='object-contain' />
                   )
                 ) : (
                   <div className='items-center justify-center text-red'>No Report Card</div>

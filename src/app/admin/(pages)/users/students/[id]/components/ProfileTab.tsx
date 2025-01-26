@@ -87,9 +87,9 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
     if (!isProfileValid) return setIsPending(false);
 
     const profileData = formProfile.getValues();
-    profileData.firstname = profileData.firstname.toLowerCase();
-    profileData.lastname = profileData.lastname.toLowerCase();
-    profileData.middlename = profileData.middlename?.toLowerCase();
+    profileData.firstname = profileData?.firstname.toLowerCase();
+    profileData.lastname = profileData?.lastname.toLowerCase();
+    profileData.middlename = profileData?.middlename?.toLowerCase();
 
     const data = {
       ...profileData,

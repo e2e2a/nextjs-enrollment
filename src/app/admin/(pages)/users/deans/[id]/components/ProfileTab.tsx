@@ -37,25 +37,25 @@ const ProfileTab = ({ profile }: IProps) => {
   };
 
   useEffect(() => {
-    form.setValue('firstname', profile.firstname);
-    form.setValue('middlename', profile.middlename);
-    form.setValue('lastname', profile.lastname);
-    form.setValue('extensionName', profile.extensionName);
-    form.setValue('contact', profile.contact);
-    form.setValue('sex', profile.sex);
-    form.setValue('civilStatus', profile.civilStatus);
-    form.setValue('birthday', new Date(profile.birthday));
+    form.setValue('firstname', profile?.firstname);
+    form.setValue('middlename', profile?.middlename);
+    form.setValue('lastname', profile?.lastname);
+    form.setValue('extensionName', profile?.extensionName);
+    form.setValue('contact', profile?.contact);
+    form.setValue('sex', profile?.sex);
+    form.setValue('civilStatus', profile?.civilStatus);
+    form.setValue('birthday', new Date(profile?.birthday));
   }, [form, profile, isNotEditable]);
 
   const onSubmit: SubmitHandler<z.infer<typeof DeanProfileUpdateValidator>> = async (data) => {
     setIsPending(true);
-    data.firstname = data.firstname.toLowerCase();
-    data.lastname = data.lastname.toLowerCase();
-    data.middlename = data.middlename?.toLowerCase();
+    data.firstname = data?.firstname.toLowerCase();
+    data.lastname = data?.lastname.toLowerCase();
+    data.middlename = data?.middlename?.toLowerCase();
 
     const dataa = {
       ...data,
-      userId: profile.userId._id,
+      userId: profile?.userId?._id,
     };
     
     mutation.mutate(dataa, {

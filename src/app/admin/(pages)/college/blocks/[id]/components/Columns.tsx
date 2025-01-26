@@ -176,12 +176,12 @@ export const columns: ColumnDef<any>[] = [
         <div key={cell.id} className='capitalize'>
           {user.deanId && (
             <span>
-              {user.deanId?.firstname ?? ''} {user.deanId?.middlename ?? ''} {user.deanId?.lastname ?? ''} {user.deanId?.extensionName ? user.deanId?.extensionName + '.' : ''}
+              {user?.deanId?.firstname ?? ''} {user?.deanId?.middlename ?? ''} {user?.deanId?.lastname ?? ''} {user?.deanId?.extensionName ? user.deanId?.extensionName + '.' : ''}
             </span>
           )}
           {user.profileId && (
             <span>
-              {user.profileId?.firstname ?? ''} {user.profileId?.middlename ?? ''} {user.profileId?.lastname ?? ''} {user.profileId?.extensionName ? user.profileId?.extensionName + '.' : ''}
+              {user?.profileId?.firstname ?? ''} {user?.profileId?.middlename ?? ''} {user?.profileId?.lastname ?? ''} {user?.profileId?.extensionName ? user.profileId?.extensionName + '.' : ''}
             </span>
           )}
         </div>

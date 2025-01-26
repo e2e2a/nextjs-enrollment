@@ -55,7 +55,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Fullname:{' '}
                       <span className='font-normal'>
-                        {data.enrollment.profileId.firstname} {data.enrollment.profileId.middlename ?? ''} {data.enrollment.profileId.lastname} {data.enrollment.profileId.extensionName ? data.enrollment.profileId.extensionName + '.' : ''}
+                        {data.enrollment?.profileId?.firstname} {data?.enrollment?.profileId?.middlename ?? ''} {data?.enrollment?.profileId?.lastname} {data.enrollment?.profileId?.extensionName ? data.enrollment?.profileId?.extensionName + '.' : ''}
                       </span>
                     </span>
                   </div>
@@ -68,27 +68,27 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Year:{' '}
                       <span className='font-normal'>
-                        {data.enrollment.studentYear} - {data.enrollment.studentSemester}
+                        {data?.enrollment?.studentYear} - {data?.enrollment?.studentSemester}
                       </span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Block: <span className='font-normal'>{data?.enrollment?.blockTypeId?.section ? data.enrollment.blockTypeId?.section : 'N/A'}</span>
+                      Block: <span className='font-normal'>{data?.enrollment?.blockTypeId?.section ? data?.enrollment?.blockTypeId?.section : 'N/A'}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Enrollment Status:
-                      {data.enrollment.enrollStatus === 'Pending' && <span className='font-normal text-blue-500'>{data.enrollment.enrollStatus}</span>}
-                      {data.enrollment.enrollStatus === 'Enrolled' && <span className='font-normal text-green-500'>{data.enrollment.enrollStatus}</span>}
-                      {data.enrollment.enrollStatus === 'Temporary Enrolled' && <span className='font-normal text-orange-500'>{data.enrollment.enrollStatus}</span>}
-                      {data.enrollment.enrollStatus === 'Rejected' && <span className='font-normal text-red'>{data.enrollment.enrollStatus}</span>}
+                      {data?.enrollment?.enrollStatus === 'Pending' && <span className='font-normal text-blue-500'>{data?.enrollment?.enrollStatus}</span>}
+                      {data?.enrollment?.enrollStatus === 'Enrolled' && <span className='font-normal text-green-500'>{data?.enrollment?.enrollStatus}</span>}
+                      {data?.enrollment?.enrollStatus === 'Temporary Enrolled' && <span className='font-normal text-orange-500'>{data?.enrollment?.enrollStatus}</span>}
+                      {data?.enrollment?.enrollStatus === 'Rejected' && <span className='font-normal text-red'>{data?.enrollment?.enrollStatus}</span>}
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Student Type: <span className='font-normal'>{data?.enrollment?.studentType ? data.enrollment.studentType : 'N/A'}</span>
+                      Student Type: <span className='font-normal'>{data?.enrollment?.studentType ? data?.enrollment?.studentType : 'N/A'}</span>
                     </span>
                   </div>
                 </div>

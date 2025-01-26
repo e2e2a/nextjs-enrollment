@@ -36,21 +36,21 @@ const ProfileTab = ({ profile }: IProps) => {
   };
 
   useEffect(() => {
-    form.setValue('firstname', profile.firstname);
-    form.setValue('middlename', profile.middlename);
-    form.setValue('lastname', profile.lastname);
-    form.setValue('extensionName', profile.extensionName);
-    form.setValue('contact', profile.contact);
-    form.setValue('sex', profile.sex);
-    form.setValue('civilStatus', profile.civilStatus);
-    form.setValue('birthday', new Date(profile?.birthday ? profile.birthday : Date.now()));
+    form.setValue('firstname', profile?.firstname);
+    form.setValue('middlename', profile?.middlename);
+    form.setValue('lastname', profile?.lastname);
+    form.setValue('extensionName', profile?.extensionName);
+    form.setValue('contact', profile?.contact);
+    form.setValue('sex', profile?.sex);
+    form.setValue('civilStatus', profile?.civilStatus);
+    form.setValue('birthday', new Date(profile?.birthday ? profile?.birthday : Date.now()));
   }, [form, profile, isNotEditable]);
 
   const onSubmit: SubmitHandler<z.infer<typeof AdminProfileUpdateValidator>> = async (data) => {
     setIsPending(true);
-    data.firstname = data.firstname.toLowerCase();
-    data.lastname = data.lastname.toLowerCase();
-    data.middlename = data.middlename?.toLowerCase();
+    data.firstname = data?.firstname.toLowerCase();
+    data.lastname = data?.lastname.toLowerCase();
+    data.middlename = data?.middlename?.toLowerCase();
 
     mutation.mutate(data, {
       onSuccess: (res) => {
@@ -100,12 +100,12 @@ const ProfileTab = ({ profile }: IProps) => {
               <Input isNotEditable={isNotEditable} name={'lastname'} type={'text'} form={form} label={'Lastname:'} classNameInput={'capitalize'} />
               <Input isNotEditable={isNotEditable} name={'extensionName'} type={'text'} form={form} label={'Suffix:'} classNameInput={'capitalize'} />
               <Input isNotEditable={isNotEditable} name={'contact'} type={'text'} form={form} label={'Contact No:'} />
-              <SelectInput isNotEditable={isNotEditable} name={'sex'} form={form} label={'Sex:'} classNameInput={'capitalize'} selectItems={profileSelectItems.sex} placeholder='Select gender' profile={profile} />
-              <SelectInput isNotEditable={isNotEditable} name={'civilStatus'} form={form} label={'Civil Status:'} classNameInput={'capitalize'} selectItems={profileSelectItems.civilStatus} placeholder='Select civil status' profile={profile} />
+              <SelectInput isNotEditable={isNotEditable} name={'sex'} form={form} label={'Sex:'} classNameInput={'capitalize'} selectItems={profileSelectItems?.sex} placeholder='Select gender' profile={profile} />
+              <SelectInput isNotEditable={isNotEditable} name={'civilStatus'} form={form} label={'Civil Status:'} classNameInput={'capitalize'} selectItems={profileSelectItems?.civilStatus} placeholder='Select civil status' profile={profile} />
               <BirthdayInput isNotEditable={isNotEditable} name={'birthday'} form={form} label={'Birthday:'} classNameInput={'capitalize'} />
               {isNotEditable && (
                 <div className='flex gap-2 px-2'>
-                  <label>Age: </label> {profile.age}
+                  <label>Age: </label> {profile?.age}
                 </div>
               )}
             </div>

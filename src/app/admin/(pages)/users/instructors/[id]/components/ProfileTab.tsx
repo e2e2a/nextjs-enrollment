@@ -49,9 +49,9 @@ const ProfileTab = ({ profile }: IProps) => {
 
   const onSubmit: SubmitHandler<z.infer<typeof TeacherProfileUpdateValidator>> = async (data) => {
     setIsPending(true);
-    data.firstname = data.firstname.toLowerCase();
-    data.lastname = data.lastname.toLowerCase();
-    data.middlename = data.middlename?.toLowerCase();
+    data.firstname = data?.firstname.toLowerCase();
+    data.lastname = data?.lastname.toLowerCase();
+    data.middlename = data?.middlename?.toLowerCase();
 
     const dataa = { ...data, userId: profile.userId._id };
 
