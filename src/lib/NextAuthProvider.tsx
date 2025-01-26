@@ -20,7 +20,7 @@ export default function NextAuthProvider({ children, session }: IProps) {
 
     // Check if the token is expired
     if (session && session.expires) {
-      if (!session?.user?.role || !session?.user?.id || !session?.user?.email || !session?.user?.name) {
+      if (!session?.user?.role || !session?.user?.id || !session?.user?.email) {
         setLoading(true);
         const dataa = {
           userId: session?.user?.id,
