@@ -1,6 +1,6 @@
 'use client';
 import { useEffect } from 'react';
-import { SessionProvider, signOut } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { useSignOutMutation } from './queries/auth/signOut';
 import { makeToastError } from './toast/makeToast';
 import { useLoading } from '@/components/shared/nav/logout/LoadingContext';
@@ -26,7 +26,7 @@ export default function NextAuthProvider({ children, session }: IProps) {
           userId: session?.user?.id,
         };
         mutation.mutate(dataa, {
-          onSuccess: async(res: any) => {
+          onSuccess: async (res: any) => {
             switch (res.status) {
               case 200:
               case 201:
@@ -45,6 +45,6 @@ export default function NextAuthProvider({ children, session }: IProps) {
         });
       }
     }
-  }, [session]);
+  }, [session, setLoading]);
   return <div className=''>{children}</div>;
 }
