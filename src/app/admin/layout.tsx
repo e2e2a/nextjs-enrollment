@@ -10,7 +10,7 @@ const AdminRootLayout = async ({ children }: { children: ReactNode }) => {
     return redirect('/sign-in');
   }
 
-  if (sessionData.user.role !== 'ADMIN') {
+  if (sessionData?.user?.role !== 'ADMIN') {
     return redirect('/sign-in');
   }
 

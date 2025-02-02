@@ -14,6 +14,9 @@ export const useUpdateEnrollmentStepMutation = () => {
 
         if (data.prevStep) queryClient.invalidateQueries({ queryKey: ['EnrollmentStepByCategory', `${data.category}-${data.prevStep}`] });
         if (data.nextStep) queryClient.invalidateQueries({ queryKey: ['EnrollmentStepByCategory', `${data.category}-${data.prevStep}`] });
+        queryClient.invalidateQueries({ queryKey: ['NotificationBySessionId'] });
+        queryClient.invalidateQueries({ queryKey: ['NotificationBySessionId', data.userId, 'FRESH', 0] }); // @todo broadcast
+        queryClient.invalidateQueries({ queryKey: ['NotificationBySessionId', data.userId, 'OLD', 0] }); // @todo broadcast
       }
     },
   });
