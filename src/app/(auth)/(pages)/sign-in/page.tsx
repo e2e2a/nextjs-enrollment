@@ -10,7 +10,7 @@ const SignInPage = () => {
         <div className='flex flex-col items-center mt-5 mb-10'>
           <Image src={'/images/logo1.png'} alt='nothing to say' width={100} height={100} priority className='rounded-full w-auto' />
           <h1 className='md:text-lg text-[18px] lg:text-3xl text-center font-bold uppercase text-neutral-50 tracking-wide'>Dipolog City Institute of Technology, INC.</h1>
-          <h1 className='md:text-2xl text-[18px] text-center font-bold uppercase text-green-400 tracking-wide'>Enrollment MANAGEMENT SYSTEM</h1>
+          <h1 className='md:text-lg text-[18px] lg:text-3xl text-center font-bold uppercase text-neutral-50 tracking-wide'>ENROLLMENT MANAGEMENT SYSTEM</h1>
         </div>
       </div>
       <div className='absolute top-56 pb-12'>
