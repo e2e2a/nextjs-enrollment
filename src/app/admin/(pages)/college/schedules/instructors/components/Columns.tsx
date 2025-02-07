@@ -33,7 +33,7 @@ export const columns: ColumnDef<ITeacherProfile>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='capitalize'>
-          {user.lastname && user.firstname ? `${user.firstname} ${user.middlename} ${user.lastname} ${user.extensionName ? user.extensionName + '.' : ''}` : 'Unknown'}
+          {user?.lastname && user?.firstname ? `${user?.firstname ?? ''} ${user?.middlename ?? ''} ${user?.lastname ?? ''} ${user?.extensionName ? user.extensionName + '.' : ''}` : 'Unknown'}
         </div>
       );
     },
