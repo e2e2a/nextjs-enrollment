@@ -10,6 +10,7 @@ import Warning from '@/components/shared/Warning';
 import MaintenancePage from './maintenance/page';
 import LogRocketProvider from '@/components/providers/LogRocketProvider';
 import NextAuthProvider from '@/lib/NextAuthProvider';
+import StatusIndicator from '@/components/shared/StatusIndicator';
 const inter = Inter({ subsets: ['latin'], display: 'swap', preload: false });
 
 export const metadata: Metadata = {
@@ -31,6 +32,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       {/* <body className={`custom-scrollbar-body ${inter.className}`} > */}
       <body className={inter.className}>
         <div className=''>
+          <StatusIndicator />
           <LogRocketProvider>
             <Warning />
             <MaintenancePage>
