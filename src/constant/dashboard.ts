@@ -908,17 +908,6 @@ export const dashboardConfig: DashboardConfig = {
       title: 'College',
       i: [
         {
-          title: 'Enrolling Students',
-          i: [
-            {
-              title: 'View Enrolling Students',
-              href: '/accounting/college/enrolling',
-              icon: 'eye',
-            },
-          ],
-          icon: 'packageSearch',
-        },
-        {
           title: 'Tuition Fee',
           i: [
             {
@@ -945,6 +934,29 @@ export const dashboardConfig: DashboardConfig = {
           icon: 'packageSearch',
         },
         {
+          title: 'Students Receipts',
+          i: [
+            {
+              title: 'View Students Students',
+              href: '/accounting/college/receipts',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Enrolling Students',
+          i: [
+            {
+              title: 'View Enrolling Students',
+              href: '/accounting/college/enrolling',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+
+        {
           title: 'Enrolled Students',
           i: [
             {
@@ -955,6 +967,7 @@ export const dashboardConfig: DashboardConfig = {
           ],
           icon: 'packageSearch',
         },
+
         {
           title: 'Temporary Enrolled',
           i: [

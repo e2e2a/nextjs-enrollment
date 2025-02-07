@@ -56,7 +56,7 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
 
   const handleSelectedPhoto = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 10000000) {
+      if (files[0].size < 50000000) {
         if (files[0].type === 'image/jpeg' || files[0].type === 'image/png') {
           setPhotoError('');
           const file = files[0];
@@ -71,7 +71,7 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
   };
   const handleSelectedFile = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 10000000) {
+      if (files[0].size < 50000000) {
         if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
           setFileError('');
           const file = files[0];
@@ -86,7 +86,7 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
   };
   const handleSelectedFileGoodMoral = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 10000000) {
+      if (files[0].size < 50000000) {
         if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
           setFileGoodMoralError('');
           const file = files[0];
@@ -101,7 +101,7 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
   };
   const handleSelectedFileTOR = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 10000000) {
+      if (files[0].size < 50000000) {
         if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
           setTORError('');
           const file = files[0];
@@ -117,7 +117,7 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
 
   const handleSelectedFileCerificationOfCompletion = (files: FileList | null) => {
     if (files && files?.length > 0) {
-      if (files[0].size < 10000000) {
+      if (files[0].size < 50000000) {
         if (files[0].type === 'image/jpeg' || files[0].type === 'image/png' || files[0].type === 'application/pdf') {
           setFileCerificationOfCompletionError('');
           const file = files[0];
