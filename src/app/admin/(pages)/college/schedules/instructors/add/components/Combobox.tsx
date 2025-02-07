@@ -22,7 +22,7 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
   const getFullName = (item: any) => {
-    return item.extensionName ? `${item.firstname} ${item.middlename} ${item.lastname} ${item.extensionName}` : `${item.firstname} ${item.middlename} ${item.lastname}`;
+    return item.extensionName ? `${item?.firstname ?? ''} ${item?.middlename ?? ''} ${item.lastname ?? ''} ${item?.extensionName ?? ''}` : `${item?.firstname ?? ''} ${item?.middlename ?? ''} ${item?.lastname ?? ''}`;
   };
   return (
     <FormField
