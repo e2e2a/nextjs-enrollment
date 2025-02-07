@@ -58,16 +58,17 @@ const Page = () => {
       }
       if (tData && tData.profiles) {
         const filteredTeacherProfiles = tData.profiles.filter((p: any) => p.isVerified);
+        const filteredDeanProfiles = dData.profiles.filter((p: any) => p.isVerified);
 
         setTeachers(
-          [...(filteredTeacherProfiles || []), ...(dData?.profiles || [])].sort((a, b) => {
+          [...(filteredTeacherProfiles || []), ...(filteredDeanProfiles || [])].sort((a, b) => {
             const fullNameA = `${a?.firstname} ${a?.lastname}`.toLowerCase();
             const fullNameB = `${b?.firstname} ${b?.lastname}`.toLowerCase();
             return fullNameA.localeCompare(fullNameB);
           })
         );
-      } else{
-        setTeachers([])
+      } else {
+        setTeachers([]);
       }
       setLoading(false);
       return;

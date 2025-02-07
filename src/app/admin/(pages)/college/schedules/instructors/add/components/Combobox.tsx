@@ -40,8 +40,8 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
                           const selectedItem = selectItems.find((item: any) => getFullName(item) === field.value);
                           if (selectedItem) {
                             const fullName = selectedItem.extensionName
-                              ? `${selectedItem.firstname} ${selectedItem.middlename} ${selectedItem.lastname} ${selectedItem.extensionName}`
-                              : `${selectedItem.firstname} ${selectedItem.middlename} ${selectedItem.lastname}`;
+                              ? `${selectedItem?.firstname ?? ''} ${selectedItem?.middlename ?? ''} ${selectedItem?.lastname} ${selectedItem?.extensionName ?? ''}`
+                              : `${selectedItem?.firstname ?? ''} ${selectedItem?.middlename ?? ''} ${selectedItem?.lastname ?? ''}`;
                             return `${fullName}`;
                           }
                           return placeholder;
