@@ -56,14 +56,19 @@ const Page = () => {
         const filteredRooms = rData.rooms.filter((room: any) => room.educationLevel === 'tertiary');
         setRooms(filteredRooms);
       }
-      setTeachers(
-        [...(tData?.profiles || []), ...(dData?.profiles || [])].sort((a, b) => {
-          const fullNameA = `${a?.firstname} ${a?.lastname}`.toLowerCase();
-          const fullNameB = `${b?.firstname} ${b?.lastname}`.toLowerCase();
-          return fullNameA.localeCompare(fullNameB);
-        })
-      );
+      if (tData && tData.profiles) {
+        const filteredTeacherProfiles = tData.profiles.filter((p: any) => p.isVerified);
 
+        setTeachers(
+          [...(filteredTeacherProfiles || []), ...(dData?.profiles || [])].sort((a, b) => {
+            const fullNameA = `${a?.firstname} ${a?.lastname}`.toLowerCase();
+            const fullNameB = `${b?.firstname} ${b?.lastname}`.toLowerCase();
+            return fullNameA.localeCompare(fullNameB);
+          })
+        );
+      } else{
+        setTeachers([])
+      }
       setLoading(false);
       return;
     }
