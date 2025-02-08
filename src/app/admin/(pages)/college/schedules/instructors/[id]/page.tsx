@@ -13,7 +13,8 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data, isLoading, error: isEnError } = useProfileQueryByParamsUserId(params.id);
-  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryByProfileId({ id: data?.profile?._id });
+  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryByProfileId({ id: data?.profile?._id, role: data?.profile?.userId.role });
+  console.log('id',  ts)
   const { data: s, isLoading: sLoading, error: sError } = useSubjectQueryByCategory('College');
   const { data: r, isLoading: rLoading, error: rError } = useAllRoomQueryByEduLevel('tertiary');
 

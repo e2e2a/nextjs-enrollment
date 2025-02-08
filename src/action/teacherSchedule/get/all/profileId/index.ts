@@ -12,7 +12,7 @@ import { checkAuth } from '@/utils/actions/session';
 export const getTeacherScheduleByProfileIdAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
-
+    console.log('id', data);
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
 
@@ -24,10 +24,14 @@ export const getTeacherScheduleByProfileIdAction = async (data: any) => {
       case 'DEAN':
         t = await getAllTeacherScheduleByDeanId(data.id);
         break;
+      case 'ADMIN':
+        if (data.role === 'TEACHER') t = await getAllTeacherScheduleByProfileId(data.id);
+        if (data.role === 'DEAN') t = await getAllTeacherScheduleByDeanId(data.id);
+        break;
       default:
         return { error: 'Forbidden', status: 403 };
     }
-
+  
     return { teacherSchedules: JSON.parse(JSON.stringify(t)), status: 200 };
   });
 };
