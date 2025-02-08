@@ -1,8 +1,7 @@
 'use client';
 import { useOnlineStatus } from './UseOnlineStatus';
 import { useEffect, useState } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Button } from '../ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Link from 'next/link';
 
 export default function StatusIndicator() {

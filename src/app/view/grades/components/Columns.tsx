@@ -162,15 +162,15 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='capitalize'>
-          {user.teacherScheduleId.profileId.firstname} {user.teacherScheduleId.profileId.middlename ?? ''} {user.teacherScheduleId.profileId.lastname} {user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName + '.' : ''}
+          {user.teacherScheduleId?.profileId?.firstname} {user.teacherScheduleId?.profileId?.middlename ?? ''} {user.teacherScheduleId?.profileId?.lastname} {user.teacherScheduleId?.profileId?.extensionName ? user.teacherScheduleId?.profileId?.extensionName + '.' : ''}
         </div>
       );
     },
-    accessorFn: (row) => `${row.teacherScheduleId.profileId.firstname ?? ''} ${row.teacherScheduleId.profileId.middlename ?? ''} ${row.teacherScheduleId.profileId.lastname ?? ''} ${row.teacherScheduleId.profileId.extensionName ?? ''}`.trim(),
+    accessorFn: (row) => `${row.teacherScheduleId?.profileId?.firstname ?? ''} ${row.teacherScheduleId?.profileId?.middlename ?? ''} ${row.teacherScheduleId?.profileId?.lastname ?? ''} ${row.teacherScheduleId?.profileId?.extensionName ?? ''}`.trim(),
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user.teacherScheduleId.profileId.firstname ?? ''} ${user.teacherScheduleId.profileId.middlename ?? ''} ${user.teacherScheduleId.profileId.lastname ?? ''} ${
-        user.teacherScheduleId.profileId.extensionName ? user.teacherScheduleId.profileId.extensionName : ''
+      const fullName = `${user.teacherScheduleId?.profileId?.firstname ?? ''} ${user.teacherScheduleId?.profileId?.middlename ?? ''} ${user.teacherScheduleId?.profileId?.lastname ?? ''} ${
+        user.teacherScheduleId?.profileId?.extensionName ? user.teacherScheduleId?.profileId?.extensionName : ''
       }`
         .toLowerCase()
         .trim();
