@@ -46,7 +46,7 @@ const Page = () => {
                 </div>
                 <div className=''>
                   <h1 className='sm:text-sm text-lg font-bold capitalize'>
-                    {data.profile.firstname} {data.profile.middlename ?? ''} {data.profile.lastname} {data.profile.extensionName ? data.profile.extensionName + '.' : ''}
+                    {data?.profile?.firstname} {data.profile.middlename ?? ''} {data?.profile?.lastname} {data?.profile?.extensionName ? data?.profile?.extensionName + '.' : ''}
                   </h1>
                 </div>
               </div>

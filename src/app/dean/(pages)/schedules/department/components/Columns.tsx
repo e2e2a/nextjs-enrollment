@@ -32,7 +32,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.profileId.firstname ?? ''} {user.profileId.middlename ?? ''} {user.profileId.lastname ?? ''} {user.profileId.extensionName ? user.profileId.extensionName + '.' : ''}
+          {user.profileId?.firstname ?? ''} {user.profileId?.middlename ?? ''} {user.profileId?.lastname ?? ''} {user.profileId?.extensionName ? user.profileId.extensionName + '.' : ''}
         </div>
       );
     },
@@ -41,19 +41,19 @@ export const columns: ColumnDef<any>[] = [
       return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
     },
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.profileId.firstname ?? ''} ${row.original.profileId.middlename ?? ''} ${row.original.profileId.lastname ?? ''} ${row.original.profileId.extensionName ?? ''}`.toLowerCase().trim();
+      const fullName = `${row.original.profileId?.firstname ?? ''} ${row.original.profileId?.middlename ?? ''} ${row.original.profileId?.lastname ?? ''} ${row.original.profileId?.extensionName ?? ''}`.toLowerCase().trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
   {
-    accessorFn: (row) => row.courseId.courseCode,
+    accessorFn: (row) => row.courseId?.courseCode,
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.courseId.courseCode}
+          {user?.courseId?.courseCode}
         </div>
       );
     },
@@ -79,7 +79,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.blockTypeId.year}
+          {user.blockTypeId?.year}
         </div>
       );
     },
@@ -92,7 +92,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.blockTypeId.semester}
+          {user.blockTypeId?.semester}
         </div>
       );
     },
@@ -105,7 +105,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.subjectId.subjectCode}
+          {user?.subjectId?.subjectCode}
         </div>
       );
     },
@@ -118,7 +118,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.subjectId.name}
+          {user.subjectId?.name}
         </div>
       );
     },
@@ -131,7 +131,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.days.join(', ')}
+          {user.days?.join(', ')}
         </div>
       );
     },
@@ -144,7 +144,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.startTime}
+          {user?.startTime}
         </div>
       );
     },
@@ -157,7 +157,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.endTime}
+          {user?.endTime}
         </div>
       );
     },
@@ -170,7 +170,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.roomId.roomName}
+          {user.roomId?.roomName}
         </div>
       );
     },
