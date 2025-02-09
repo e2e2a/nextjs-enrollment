@@ -11,7 +11,6 @@ type IProps = {
 };
 
 export default function NextAuthProvider({ children, session }: IProps) {
-  console.log('sessions:', session);
   const mutation = useSignOutMutation();
   const { setLoading } = useLoading();
   useEffect(() => {
@@ -45,6 +44,6 @@ export default function NextAuthProvider({ children, session }: IProps) {
         });
       }
     }
-  }, [session, setLoading]);
+  }, [session, setLoading, mutation]);
   return <div className=''>{children}</div>;
 }

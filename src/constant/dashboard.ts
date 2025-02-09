@@ -259,15 +259,15 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'packageSearch',
     },
     {
-      title: 'Instructors',
+      title: 'Instructors Schedules',
       i: [
         {
-          title: 'Instructors Management',
+          title: 'Instructors Schedule Management',
           href: '/dean/schedules/instructors',
           icon: 'eye',
         },
         {
-          title: 'Add Instructor Schedule',
+          title: 'Add Instructor Schedules',
           href: '/dean/schedules/instructors/add',
           icon: 'add',
         },
