@@ -19,7 +19,6 @@ export const updateStudentCurriculumLayerAction = async (data: any) => {
     if (session && session.user.role !== 'ADMIN' && session.user.role !== 'DEAN') return { error: 'Forbidden.', status: 403 };
 
     const a = await updateLayer(data);
-
     return a;
   });
 };
@@ -31,12 +30,12 @@ export const updateStudentCurriculumLayerAction = async (data: any) => {
  */
 const updateLayer = async (data: any) => {
   return tryCatch(async () => {
-    const { id, year, semester, order, schoolYear } = data;
+    const { CId, year, semester, order, schoolYear } = data;
 
     const a = await checkConflicts(data);
     if (a && a.error) return { error: a.error, status: a.status };
 
-    await StudentCurriculum.findByIdAndUpdate(id, { $push: { curriculum: { order, year, semester, schoolYear } } }, { new: true });
+    const p = await StudentCurriculum.findByIdAndUpdate(CId, { $push: { curriculum: { order, year, semester, schoolYear } } }, { new: true });
     return a;
   });
 };
@@ -48,10 +47,10 @@ const updateLayer = async (data: any) => {
  */
 const checkConflicts = async (data: any) => {
   return tryCatch(async () => {
-    const isValidObjectId = mongoose.Types.ObjectId.isValid(data.id);
-    if (!isValidObjectId) return { error: `Forbidden.`, status: 403 };
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(data.CId);
+    if (!isValidObjectId) return { error: `Forbiddena.`, status: 403 };
 
-    const c = await getStudentCurriculumById(data.id);
+    const c = await getStudentCurriculumById(data.CId);
     if (!c) return { error: 'Invalid id for Curriculom', status: 404 };
 
     if (c.curriculum && c.curriculum.length > 0) {
