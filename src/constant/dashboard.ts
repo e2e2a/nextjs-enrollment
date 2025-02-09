@@ -259,6 +259,22 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'packageSearch',
     },
     {
+      title: 'Instructors',
+      i: [
+        {
+          title: 'Instructors Management',
+          href: '/dean/schedules/instructors',
+          icon: 'eye',
+        },
+        {
+          title: 'Add Instructor Schedule',
+          href: '/dean/schedules/instructors/add',
+          icon: 'add',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
       title: 'Grades Report',
       href: '/dean/report/grade',
       icon: 'filePenLine',

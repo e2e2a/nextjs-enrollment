@@ -19,7 +19,7 @@ export const getAllUserByRoleAction = async (role: string) => {
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
-    if (session.user.role !== 'ADMIN') return { error: 'Not Authorized.', status: 403 };
+    // if (session.user.role !== 'ADMIN') return { error: 'Not Authorized.', status: 403 };
 
     const checkedSearchRole = await checkSearchRole(role);
     if (checkedSearchRole && checkedSearchRole.error) return { error: checkedSearchRole.error, status: checkedSearchRole.status };

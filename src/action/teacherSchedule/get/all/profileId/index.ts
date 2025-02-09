@@ -12,7 +12,6 @@ import { checkAuth } from '@/utils/actions/session';
 export const getTeacherScheduleByProfileIdAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
-    console.log('id', data);
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
 

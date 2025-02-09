@@ -2,10 +2,11 @@
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { TeacherScheduleCollegeValidator } from '@/lib/validators/teacherSchedule/create/college';
-import { getDeanProfileById } from '@/services/deanProfile';
+import { getDeanProfileById, getDeanProfileByUserId } from '@/services/deanProfile';
 import { getRoomById } from '@/services/room';
 import { getTeacherProfileById } from '@/services/teacherProfile';
 import { createTeacherSchedule, getAllTeacherScheduleByDeanId, getAllTeacherScheduleByProfileId, getAllTeacherScheduleByScheduleRoomId } from '@/services/teacherSchedule';
+import { checkAuth } from '@/utils/actions/session';
 import mongoose from 'mongoose';
 
 /**
@@ -16,8 +17,9 @@ import mongoose from 'mongoose';
 export const createTeacherScheduleAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
-
-    const category = await checkCategory(data);
+    const session = await checkAuth();
+    if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
+    const category = await checkCategory(data, session?.user);
 
     return category;
   });
@@ -28,12 +30,12 @@ export const createTeacherScheduleAction = async (data: any) => {
  *
  * @param {object} data
  */
-const checkCategory = async (data: any) => {
+const checkCategory = async (data: any, user: any) => {
   return tryCatch(async () => {
     let a;
     switch (data.category) {
       case 'College':
-        a = await handlesCollege(data);
+        a = await handlesCollege(data, user);
         break;
       default:
         return { error: 'Invalid category.', status: 400 };
@@ -48,7 +50,7 @@ const checkCategory = async (data: any) => {
  *
  * @param {object} data
  */
-const handlesCollege = (data: any) => {
+const handlesCollege = (data: any, user: any) => {
   return tryCatch(async () => {
     const isValidTeacherId = mongoose.Types.ObjectId.isValid(data.teacherId);
     const isValidRoomId = mongoose.Types.ObjectId.isValid(data.roomId);
@@ -84,11 +86,16 @@ const handlesCollege = (data: any) => {
 
     const roomConflict = await checkSchedulesInRooms(data);
     if (roomConflict && roomConflict.error) return roomConflict;
-
+    let courseId
+    if(user.role === 'DEAN'){
+      const a = await getDeanProfileByUserId(user._id)
+      courseId = a.courseId._id
+    }
     const createdSched = await createTeacherSchedule({
       ...(data.role === 'TEACHER' ? { profileId: teacher._id } : {}),
       ...(data.role === 'DEAN' ? { deanId: teacher._id } : {}),
       category: data.category,
+      ...(user.role === 'DEAN' ? {courseId: courseId}: {}),
       ...tsParse.data,
     });
     if (!createdSched) return { error: 'Something went wrong.', status: 500 };
