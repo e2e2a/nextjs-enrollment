@@ -12,9 +12,12 @@ type IProps = {
   imagePreview: any;
   photoError: string;
   isUploading: boolean;
+  link: string;
 };
 
-const Photo = ({ handleSelectedFile, handleClick, fileInputRef, imagePreview, photoError, isUploading }: IProps) => {
+const Photo = ({ handleSelectedFile, handleClick, fileInputRef, imagePreview, photoError, isUploading, link }: IProps) => {
+
+  console.log('imagePreview', imagePreview || link || '/icons/course-photo-placeholder.svg');
   return (
     <div>
       <div className={`text-center w-full flex flex-col items-center justify-center ${photoError ? '' : 'mb-4'}`}>
@@ -26,7 +29,7 @@ const Photo = ({ handleSelectedFile, handleClick, fileInputRef, imagePreview, ph
           <div className={`flex flex-col h-[200px] w-[200px] relative select-none border shadow-md drop-shadow-md border-gray-200 rounded-full`}>
             <Avatar className='w-full h-full '>
               <div>
-                <AvatarImage className={cn('rounded-full  items-end flex', imagePreview ? '' : 'scale-90')} alt='Picture' src={imagePreview ? imagePreview : '/icons/course-photo-placeholder.svg'} onDragStart={(e) => e.preventDefault()} />
+                <AvatarImage className={cn('rounded-full  items-end flex', imagePreview ? '' : 'scale-90')} alt='Picture' src={imagePreview || link || '/icons/course-photo-placeholder.svg'} onDragStart={(e) => e.preventDefault()} />
                 <AvatarFallback className={cn('rounded-full bg-gray-300 bg-opacity-50 flex items-center justify-center')} />
               </div>
             </Avatar>

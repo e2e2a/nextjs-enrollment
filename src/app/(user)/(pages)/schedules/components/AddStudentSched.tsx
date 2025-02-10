@@ -156,8 +156,8 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                     {selectedItem && selectedItem.profileId && `${selectedItem?.profileId?.firstname} ${selectedItem?.profileId?.middlename} ${selectedItem?.profileId?.lastname} ${selectedItem?.profileId?.extensionName}`}
                                     {selectedItem && selectedItem.deanId && `${selectedItem?.deanId?.firstname} ${selectedItem?.deanId?.middlename} ${selectedItem?.deanId?.lastname} ${selectedItem?.profileId?.extensionName}`}
                                   </span>
-                                  <span>Title: {selectedItem?.subjectId?.name}</span>
-                                  <span>Code: {selectedItem?.subjectId?.subjectCode}</span>
+                                  <span>Descriptive Title: {selectedItem?.subjectId?.name}</span>
+                                  <span>Subject Code: {selectedItem?.subjectId?.subjectCode}</span>
                                 </div>
                                 <span className='text-red cursor-pointer py-1 mr-5' onClick={() => handleRemove(selectedItem._id)}>
                                   <Icons.trash className='h-3 w-3' />
@@ -193,14 +193,14 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                 const section = (b.section ?? '').toLowerCase();
                                 const studentType = (studentBlockType ?? '').toLowerCase();
                                 if (section === studentType) {
-                                  const enrolledTeacherScheduleIds = new Set(student.studentSubjects.map((sched: any) => sched.teacherScheduleId._id));
+                                  const enrolledTeacherScheduleIds = new Set(student.studentSubjects.map((sched: any) => sched?.teacherScheduleId?._id));
                                   return (
-                                    <div className='' key={b._id}>
+                                    <div className='' key={b?._id}>
                                       {b.blockSubjects.length > 0 ? (
                                         b.blockSubjects
-                                          .filter((s: any) => !enrolledTeacherScheduleIds.has(s.teacherScheduleId._id))
+                                          .filter((s: any) => !enrolledTeacherScheduleIds.has(s?.teacherScheduleId?._id))
                                           .map((s: any, index: any) => (
-                                            <CommandItem className='border w-full block' key={s._id} value={s.teacherScheduleId.subjectId.name}>
+                                            <CommandItem className='border w-full block' key={s._id} value={s?.teacherScheduleId?.subjectId?.name}>
                                               <div className='flex w-full'>
                                                 {/* @todo create a design for mobile */}
                                                 <div className='min-w-[80px] justify-center flex items-center'>
@@ -233,30 +233,30 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                     Instructor:
                                                     {s.teacherScheduleId &&
                                                       s.teacherScheduleId.profileId &&
-                                                      `${s.teacherScheduleId?.profileId?.firstname} ${s.teacherScheduleId?.profileId?.middlename} ${s.teacherScheduleId?.profileId?.lastname}${' '}
-                                                      ${s.teacherScheduleId.profileId?.extensionName ? s.teacherScheduleId.profileId.extensionName : ''}`}
+                                                      `${s?.teacherScheduleId?.profileId?.firstname} ${s?.teacherScheduleId?.profileId?.middlename} ${s.teacherScheduleId?.profileId?.lastname}${' '}
+                                                      ${s?.teacherScheduleId.profileId?.extensionName ? s?.teacherScheduleId?.profileId?.extensionName : ''}`}
                                                     {s.teacherScheduleId &&
                                                       s.teacherScheduleId.deanId &&
-                                                      `${s.teacherScheduleId?.deanId?.firstname} ${s.teacherScheduleId?.deanId?.middlename} ${s.teacherScheduleId?.deanId?.lastname}${' '}
-                                                      ${s.teacherScheduleId.deanId?.extensionName ? s.teacherScheduleId.deanId.extensionName : ''}`}
+                                                      `${s?.teacherScheduleId?.deanId?.firstname} ${s?.teacherScheduleId?.deanId?.middlename} ${s?.teacherScheduleId?.deanId?.lastname}${' '}
+                                                      ${s?.teacherScheduleId.deanId?.extensionName ? s?.teacherScheduleId?.deanId?.extensionName : ''}`}
                                                   </span>
                                                   <span className=' font-semibold'>
-                                                    Course Code: <span className='uppercase'>{s.teacherScheduleId.courseId.courseCode}</span>
+                                                    Course Code: <span className=''>{s?.teacherScheduleId?.courseId?.courseCode}</span>
                                                   </span>
                                                   <span className=' font-semibold'>
-                                                    Subject Code: <span className='uppercase'>{s.teacherScheduleId.subjectId.subjectCode}</span>
+                                                    Subject Code: <span className=''>{s?.teacherScheduleId?.subjectId?.subjectCode}</span>
                                                   </span>
-                                                  <span className=' text-wrap font-medium'>Title: {s.teacherScheduleId.subjectId.name}</span>
-                                                  <span className=''>Pre Req.: EMPTY</span>
-                                                  <span className=''>Days: {s.teacherScheduleId.days.join(', ')}</span>
-                                                  <span className=''>Lec: {s.teacherScheduleId.subjectId.lec}</span>
-                                                  <span className=''>Lab: {s.teacherScheduleId.subjectId.lab}</span>
-                                                  <span className=''>Unit: {s.teacherScheduleId.subjectId.unit}</span>
+                                                  <span className=' text-wrap font-medium'>Title: {s?.teacherScheduleId?.subjectId?.name}</span>
+                                                  <span className=''>Pre Req.: {s?.teacherScheduleId?.subjectId?.preReq}</span>
+                                                  <span className=''>Days: {s?.teacherScheduleId?.days.join(', ')}</span>
+                                                  <span className=''>Lec: {s?.teacherScheduleId?.subjectId?.lec}</span>
+                                                  <span className=''>Lab: {s?.teacherScheduleId?.subjectId?.lab}</span>
+                                                  <span className=''>Unit: {s?.teacherScheduleId?.subjectId?.unit}</span>
                                                   <span className=''>
-                                                    Room: <span className='uppercase'>{s.teacherScheduleId.roomId.roomName}</span>
+                                                    Room: <span className=''>{s?.teacherScheduleId?.roomId?.roomName}</span>
                                                   </span>
                                                   <span className=''>
-                                                    Block: <span className='uppercase'>Block {s.teacherScheduleId?.blockTypeId?.section}</span>
+                                                    Block: <span className=''>Block {s?.teacherScheduleId?.blockTypeId?.section}</span>
                                                   </span>
                                                 </div>
                                               </div>

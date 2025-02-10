@@ -64,7 +64,7 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
   };
 
   const isSelected = (teacherScheduleId: string) => {
-    return selectedItems.some((item) => item.teacherScheduleId === teacherScheduleId);
+    return selectedItems.some((item) => item?.teacherScheduleId === teacherScheduleId);
   };
 
   return (
@@ -99,30 +99,30 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
               </div>
               <div className='flex w-full flex-col max-h-32 overflow-y-auto '>
                 {selectedItems.map((item, index) => {
-                  const selectedItem = s.find((i: any) => i._id === item.teacherScheduleId);
+                  const selectedItem = s.find((i: any) => i._id === item?.teacherScheduleId);
                   if (selectedItem) {
                     return (
-                      <div key={`${selectedItem._id}`} className='text-green-500 flex gap-3 w-full justify-between'>
+                      <div key={`${selectedItem?._id}`} className='text-green-500 flex gap-3 w-full justify-between'>
                         <div className='flex flex-col text-sm'>
                           <div className=''>
                             <span className='border rounded-full border-gray-600 px-1.5'>{index + 1}</span>
                           </div>{' '}
                           <span>
-                            Instructor: {selectedItem.profileId.firstname} {selectedItem.profileId.middlename ?? ''} {selectedItem.profileId.lastname}
+                            Instructor: {selectedItem?.profileId?.firstname ?? ''} {selectedItem?.profileId?.middlename ?? ''} {selectedItem.profileId.lastname ?? ''}
                           </span>
-                          <span>Subject Code: {selectedItem.subjectId.subjectCode}</span>
-                          <span>Descriptive Title: {selectedItem.subjectId.name}</span>
+                          <span>Subject Code: {selectedItem?.subjectId?.subjectCode}</span>
+                          <span>Descriptive Title: {selectedItem?.subjectId?.name}</span>
                           <span className=''>
                             Time:{' '}
                             <span className='uppercase'>
-                              {selectedItem.startTime} - {selectedItem.endTime}
+                              {selectedItem?.startTime} - {selectedItem?.endTime}
                             </span>
                           </span>
                           <span className=''>
-                            Room: <span className='uppercase'>{selectedItem.roomId.roomName}</span>
+                            Room: <span className=''>{selectedItem?.roomId?.roomName}</span>
                           </span>
                         </div>
-                        <div className='text-red flex justify-end cursor-pointer py-1 mr-5' onClick={() => handleSelect(selectedItem._id)}>
+                        <div className='text-red flex justify-end cursor-pointer py-1 mr-5' onClick={() => handleSelect(selectedItem?._id)}>
                           <Icons.trash className='h-3 w-3' />
                         </div>
                       </div>
@@ -143,16 +143,16 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                 <div className='overflow-x-auto w-full '>
                   <div className=' bg-white border border-gray-300'>
                     {s.map((s: any, index: any) => (
-                      <CommandItem className='border w-full block mb-3 bg-gray-300' key={s._id} value={s.subjectId.name}>
+                      <CommandItem className='border w-full block mb-3 bg-gray-300' key={s?._id} value={s?.subjectId?.name}>
                         <div className='grid sm:grid-cols-2 grid-cols-1 w-full'>
                           <div className='flex flex-col text-xs sm:text-sm order-2 sm:order-1'>
                             <span className=' font-semibold'>
-                              Instructor: {s.profileId.firstname} {s.profileId.middlename ?? ''} {s.profileId.lastname} {s.profileId.extensionName ? s.profileId.extensionName + '.' : ''}
+                              Instructor: {s?.profileId?.firstname} {s?.profileId?.middlename ?? ''} {s?.profileId?.lastname} {s?.profileId?.extensionName ? s?.profileId?.extensionName + '.' : ''}
                             </span>
                             <span className=' font-semibold'>
-                              Subject Code: <span className='uppercase'>{s.subjectId.subjectCode}</span>
+                              Subject Code: <span className=''>{s?.subjectId?.subjectCode}</span>
                             </span>
-                            <span className=' text-wrap font-semibold'>Descriptive Title: {s.subjectId.name}</span>
+                            <span className=' text-wrap font-semibold'>Descriptive Title: {s?.subjectId?.name}</span>
                             <span className=''>Pre Req.: {s.subjectId.preReq}</span>
                             <span className=''>Days: {s.days.join(', ')}</span>
                             <span className=''>Lec: {s.subjectId.lec}</span>
@@ -165,7 +165,7 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                               </span>
                             </span>
                             <span className=''>
-                              Room: <span className='uppercase'>{s.roomId.roomName}</span>
+                              Room: <span className=''>{s?.roomId?.roomName}</span>
                             </span>
                           </div>
                           <div className='justify-end sm:items-center flex items-end order-1 '>

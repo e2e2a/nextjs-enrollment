@@ -53,7 +53,6 @@ const Page = ({ params }: { params: { id: string } }) => {
   });
 
   useEffect(() => {
-    setImagePreview(courseData?.course?.imageUrl);
     form.setValue('courseCode', courseData?.course?.courseCode);
     form.setValue('name', courseData?.course?.name);
     form.setValue('description', courseData?.course?.description);
@@ -92,8 +91,6 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (imageFile) {
       formData.append('image', imageFile);
     }
-    data.courseCode = data?.courseCode.toLowerCase();
-    data.name = data?.name.toLowerCase();
     const dataa = {
       ...data,
       id: courseData?.course?._id,
@@ -133,11 +130,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                 <Form {...form}>
                   <form method='post' onSubmit={form.handleSubmit(onSubmit)}>
                     <CardContent className='w-full space-y-2'>
-                      <Photo handleSelectedFile={handleSelectedFile} handleClick={handleClick} fileInputRef={fileInputRef} imagePreview={imagePreview} photoError={photoError} isUploading={isUploading} />
+                      <Photo handleSelectedFile={handleSelectedFile} handleClick={handleClick} fileInputRef={fileInputRef} link={courseData?.course?.imageUrl} imagePreview={imagePreview} photoError={photoError} isUploading={isUploading} />
 
                       <div className='flex flex-col gap-4'>
-                        <Input name={'courseCode'} type={'text'} form={form} label={'Course Initialism:'} classNameInput={'uppercase'} />
-                        <Input name={'name'} type={'text'} form={form} label={'Course Name:'} classNameInput={'capitalize'} />
+                        <Input name={'courseCode'} type={'text'} form={form} label={'Course Initialism:'} classNameInput={''} />
+                        <Input name={'name'} type={'text'} form={form} label={'Course Name:'} classNameInput={''} />
                         <TextareaField name={'description'} form={form} label={'Description:'} classNameInput={'capitalize'} />
                       </div>
                     </CardContent>

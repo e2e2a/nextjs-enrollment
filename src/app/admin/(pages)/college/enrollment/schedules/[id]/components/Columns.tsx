@@ -25,34 +25,34 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          Block {user.teacherScheduleId?.blockTypeId?.section}
+        <div key={cell.id} className=''>
+          {user.teacherScheduleId?.blockTypeId?.section}
         </div>
       );
     },
   },
 
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.subjectCode,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.subjectCode,
     id: 'subject code',
     header: 'Subject Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId.subjectId.subjectCode}
+        <div key={cell.id} className=''>
+          {user.teacherScheduleId?.subjectId?.subjectCode}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId?.name,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.name,
     id: 'Descriptive Title',
     header: 'Descriptive Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
+        <div key={cell.id} className=''>
           {user?.teacherScheduleId?.subjectId?.name}
         </div>
       );
@@ -60,14 +60,14 @@ export const columns: ColumnDef<any>[] = [
   },
 
   {
-    accessorFn: (row) => row.teacherScheduleId.days,
+    accessorFn: (row) => row.teacherScheduleId?.days,
     id: 'days',
     header: 'Days',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.days.join(', ')}
+          {user?.teacherScheduleId?.days.join(', ')}
         </div>
       );
     },
@@ -93,59 +93,59 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId.subjectId.lab}
+          {user?.teacherScheduleId?.subjectId?.lab}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.unit,
+    accessorFn: (row) => row?.teacherScheduleId?.subjectId?.unit,
     id: 'unit',
     header: 'Unit',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId.subjectId.unit}
+          {user.teacherScheduleId?.subjectId?.unit}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.startTime,
+    accessorFn: (row) => row.teacherScheduleId?.startTime,
     id: 'start time',
     header: 'Start Time',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.startTime}
+          {user.teacherScheduleId?.startTime}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.endTime,
+    accessorFn: (row) => row.teacherScheduleId?.endTime,
     id: 'end time',
     header: 'End Time',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.endTime}
+          {user.teacherScheduleId?.endTime}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.roomId.roomName,
+    accessorFn: (row) => row.teacherScheduleId?.roomId?.roomName,
     id: 'room',
     header: 'Room',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.roomId.roomName}
+        <div key={cell.id} className=''>
+          {user?.teacherScheduleId?.roomId?.roomName}
         </div>
       );
     },

@@ -18,14 +18,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.subjectCode,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.subjectCode,
     id: 'code',
     header: 'Subject Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user?.teacherScheduleId?.subjectId.subjectCode}
+        <div key={cell.id} className=''>
+          {user?.teacherScheduleId?.subjectId?.subjectCode}
         </div>
       );
     },
@@ -43,7 +43,7 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='capitalize'>
+        <div key={cell.id} className=''>
           {user?.teacherScheduleId?.subjectId.name}
         </div>
       );
@@ -56,14 +56,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.preReq,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.preReq,
     id: 'pre req.',
     header: 'Pre Req.',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user?.teacherScheduleId?.subjectId.preReq}
+        <div key={cell.id} className=''>
+          {user?.teacherScheduleId?.subjectId?.preReq ?? ''}
         </div>
       );
     },

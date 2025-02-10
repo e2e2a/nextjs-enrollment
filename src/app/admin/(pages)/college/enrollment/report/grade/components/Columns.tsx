@@ -46,14 +46,14 @@ export const columns: ColumnDef<any>[] = [
   },
 
   {
-    accessorFn: (row) => row.teacherScheduleId.courseId.courseCode,
+    accessorFn: (row) => row.teacherScheduleId?.courseId?.courseCode,
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId.courseId.courseCode}
+        <div key={cell.id} className=''>
+          {user?.teacherScheduleId?.courseId?.courseCode}
         </div>
       );
     },
@@ -65,34 +65,34 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId?.blockTypeId?.section && 'BLOCK' + ' ' + user.teacherScheduleId?.blockTypeId?.section}
+        <div key={cell.id} className=''>
+          {user?.teacherScheduleId?.blockTypeId?.section}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.subjectCode,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.subjectCode,
     id: 'subject code',
     header: 'Subject Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId.subjectId.subjectCode}
+        <div key={cell.id} className=' '>
+          {user?.teacherScheduleId?.subjectId?.subjectCode}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.name,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.name,
     id: 'descriptive title',
     header: 'Descriptive Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId.subjectId.name}
+        <div key={cell.id} className=''>
+          {user.teacherScheduleId?.subjectId?.name}
         </div>
       );
     },
@@ -104,7 +104,7 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
+        <div key={cell.id} className=''>
           {user.teacherScheduleId?.blockTypeId?.year}
         </div>
       );

@@ -24,21 +24,21 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          Block {user.teacherScheduleId?.blockTypeId?.section}
+          {user.teacherScheduleId?.blockTypeId?.section}
         </div>
       );
     },
   },
 
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.subjectCode,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.subjectCode,
     id: 'subject code',
     header: 'Subject Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId.subjectId.subjectCode}
+        <div key={cell.id} className=''>
+          {user?.teacherScheduleId?.subjectId?.subjectCode}
         </div>
       );
     },
@@ -50,8 +50,8 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId.subjectId.name}
+        <div key={cell.id} className=''>
+          {user?.teacherScheduleId?.subjectId?.name}
         </div>
       );
     },
@@ -64,7 +64,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId.subjectId.lec}
+          {user?.teacherScheduleId?.subjectId?.lec}
         </div>
       );
     },
@@ -77,7 +77,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId.subjectId.lab}
+          {user?.teacherScheduleId?.subjectId?.lab}
         </div>
       );
     },
@@ -90,60 +90,60 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId.subjectId.unit}
+          {user?.teacherScheduleId?.subjectId?.unit}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.days,
+    accessorFn: (row) => row.teacherScheduleId?.days,
     id: 'days',
     header: 'Days',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.days.join(', ')}
+          {user?.teacherScheduleId?.days.join(', ')}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.startTime,
+    accessorFn: (row) => row.teacherScheduleId?.startTime,
     id: 'start time',
     header: 'Start Time',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.startTime}
+          {user?.teacherScheduleId?.startTime}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.endTime,
+    accessorFn: (row) => row.teacherScheduleId?.endTime,
     id: 'end time',
     header: 'End Time',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.endTime}
+          {user?.teacherScheduleId?.endTime}
         </div>
       );
     },
   },
 
   {
-    accessorFn: (row) => row.teacherScheduleId.roomId.roomName,
+    accessorFn: (row) => row.teacherScheduleId?.roomId?.roomName,
     id: 'room name',
     header: 'Room Name',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.roomId.roomName}
+        <div key={cell.id} className=''>
+          {user?.teacherScheduleId?.roomId?.roomName}
         </div>
       );
     },
@@ -162,7 +162,8 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='capitalize'>
-          {user.teacherScheduleId?.profileId?.firstname} {user.teacherScheduleId?.profileId?.middlename ?? ''} {user.teacherScheduleId?.profileId?.lastname} {user.teacherScheduleId?.profileId?.extensionName ? user.teacherScheduleId?.profileId?.extensionName + '.' : ''}
+          {user.teacherScheduleId?.profileId?.firstname ?? ''} {user.teacherScheduleId?.profileId?.middlename ?? ''} {user.teacherScheduleId?.profileId?.lastname ?? ''}{' '}
+          {user.teacherScheduleId?.profileId?.extensionName ? user.teacherScheduleId?.profileId?.extensionName + '.' : ''}
         </div>
       );
     },
@@ -178,7 +179,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.firstGrade,
+    accessorFn: (row) => row?.firstGrade,
     id: 'prelim',
     header: 'Prelim',
     cell: ({ cell, row }) => {
@@ -191,7 +192,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.secondGrade,
+    accessorFn: (row) => row?.secondGrade,
     id: 'midterm',
     header: 'Midterm',
     cell: ({ cell, row }) => {
@@ -204,7 +205,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.thirdGrade,
+    accessorFn: (row) => row?.thirdGrade,
     id: 'semi-final',
     header: 'Semi-final',
     cell: ({ cell, row }) => {
@@ -217,7 +218,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.fourthGrade,
+    accessorFn: (row) => row?.fourthGrade,
     id: 'final',
     header: 'Final',
     cell: ({ cell, row }) => {
@@ -230,7 +231,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.averageTotal,
+    accessorFn: (row) => row?.averageTotal,
     id: 'averageTotal',
     header: 'Average Total',
     cell: ({ cell, row }) => {

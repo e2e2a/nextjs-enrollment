@@ -15,6 +15,7 @@ const Page = () => {
 
   useEffect(() => {
     if (isEnError || !data) return;
+    if (pError || !pData) return;
 
     if (data && pData) {
       if (data.teacherSchedules) {
@@ -26,7 +27,7 @@ const Page = () => {
         setIsPageLoading(false);
       }
     }
-  }, [data, isEnError]);
+  }, [data, pData, isEnError, pError]);
 
   return (
     <>

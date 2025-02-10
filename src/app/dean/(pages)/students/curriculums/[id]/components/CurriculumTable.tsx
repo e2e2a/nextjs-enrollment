@@ -22,13 +22,13 @@ const CurriculumTable = ({ data, s }: IProps) => {
             <div className=''>
               <div className='flex flex-col text-center'>
                 <span className=' font-bold text-sm sm:text-lg'>
-                  {item.year} - {item.semester}
+                  {item?.year} - {item?.semester}
                 </span>
-                <span className=' uppercase font-bold text-sm '>{item.schoolYear}</span>
+                <span className=' uppercase font-bold text-sm '>{item?.schoolYear}</span>
               </div>
             </div>
             <div className='w-full items-center flex flex-col sm:flex-row sm:justify-between mb-2'>
-              <span className='text-[8px] sm:text-sm'>Order: {item.order}</span>
+              <span className='text-[8px] sm:text-sm'>Order: {item?.order}</span>
 
               <span className=' font-bold text-lg'>
                 <ActionsCell curriculum={item} s={s} isEnableGrade={isEnableGrade} curriculumIdToEnableGrade={curriculumIdToEnableGrade} setCurriculumIdToEnableGrade={setCurriculumIdToEnableGrade} setIsDisableGrade={setIsDisableGrade} />
@@ -52,7 +52,7 @@ const CurriculumTable = ({ data, s }: IProps) => {
                     item.subjectsFormat.map((subject: any, idx: any) => (
                       <tr key={idx}>
                         <td className='px-4 py-2 border text-center'>
-                          {isEnableGrade && curriculumIdToEnableGrade === item._id ? (
+                          {isEnableGrade && curriculumIdToEnableGrade === item?._id ? (
                             <div className=''>
                               <Input className={'py-5 px-5'} />
                             </div>
@@ -60,12 +60,12 @@ const CurriculumTable = ({ data, s }: IProps) => {
                             subject.grade
                           )}
                         </td>
-                        <td className='px-4 py-2 border text-center'>{subject.subjectId.subjectCode}</td>
-                        <td className='px-4 py-2 border text-center'>{subject.subjectId.name}</td>
-                        <td className='px-4 py-2 border text-center'>{subject.subjectId.preReq}</td>
-                        <td className='px-4 py-2 border text-center'>{subject.subjectId.lec}</td>
-                        <td className='px-4 py-2 border text-center'>{subject.subjectId.lab}</td>
-                        <td className='px-4 py-2 border text-center'>{subject.subjectId.unit}</td>
+                        <td className='px-4 py-2 border text-center'>{subject?.subjectId?.subjectCode}</td>
+                        <td className='px-4 py-2 border text-center'>{subject?.subjectId?.name}</td>
+                        <td className='px-4 py-2 border text-center'>{subject?.subjectId?.preReq}</td>
+                        <td className='px-4 py-2 border text-center'>{subject?.subjectId?.lec}</td>
+                        <td className='px-4 py-2 border text-center'>{subject?.subjectId?.lab}</td>
+                        <td className='px-4 py-2 border text-center'>{subject?.subjectId?.unit}</td>
                       </tr>
                     ))
                   ) : (

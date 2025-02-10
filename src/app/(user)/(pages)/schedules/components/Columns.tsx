@@ -32,40 +32,40 @@ export const columns: ColumnDef<any>[] = [
   },
 
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.subjectCode,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.subjectCode,
     id: 'subject code',
     header: 'Subject Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId.subjectId.subjectCode}
+        <div key={cell.id} className=''>
+          {user.teacherScheduleId?.subjectId?.subjectCode}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.name,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.name,
     id: 'Descriptive Title',
     header: 'Descriptive Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId.subjectId.name}
+        <div key={cell.id} className=''>
+          {user.teacherScheduleId?.subjectId?.name}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.lec,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.lec,
     id: 'lec',
     header: 'Lec',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId.subjectId.lec}
+          {user.teacherScheduleId?.subjectId?.lec}
         </div>
       );
     },
@@ -78,26 +78,26 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId.subjectId.lab}
+          {user.teacherScheduleId?.subjectId?.lab}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.unit,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.unit,
     id: 'unit',
     header: 'Unit',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId.subjectId.unit}
+          {user.teacherScheduleId?.subjectId?.unit}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.days,
+    accessorFn: (row) => row.teacherScheduleId?.days,
     id: 'days',
     header: 'Days',
     cell: ({ cell, row }) => {

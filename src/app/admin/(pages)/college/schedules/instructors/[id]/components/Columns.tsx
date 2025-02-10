@@ -23,8 +23,8 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.courseId?.courseCode ? user.courseId.courseCode : <span className='text-red uppercase text-xs'>not assigned</span>}
+        <div key={cell.id} className=''>
+          {user.courseId?.courseCode ? user?.courseId?.courseCode : <span className='text-red uppercase text-xs'>not assigned</span>}
         </div>
       );
     },
@@ -36,8 +36,8 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.blockTypeId?.section ? <span className='text-xs'>Block {user.blockTypeId?.section}</span> : <span className='text-xs text-red'>N/A</span>}
+        <div key={cell.id} className=''>
+          {user?.blockTypeId?.section ? <span className='text-xs'>{user?.blockTypeId?.section}</span> : <span className='text-xs text-red'>N/A</span>}
         </div>
       );
     },
@@ -50,7 +50,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.blockTypeId?.year ? user.blockTypeId?.year : <span className='text-xs text-red'>N/A</span>}
+          {user?.blockTypeId?.year ? user?.blockTypeId?.year : <span className='text-xs text-red'>N/A</span>}
         </div>
       );
     },
@@ -62,34 +62,34 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.blockTypeId?.semester ? user.blockTypeId?.semester : <span className='text-xs text-red'>N/A</span>}
+        <div key={cell.id} className=''>
+          {user?.blockTypeId?.semester ? user?.blockTypeId?.semester : <span className='text-xs text-red'>N/A</span>}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.subjectId.subjectCode,
+    accessorFn: (row) => row.subjectId?.subjectCode,
     id: 'subject code',
     header: 'Subject Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.subjectId.subjectCode}
+        <div key={cell.id} className=''>
+          {user?.subjectId?.subjectCode}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.subjectId.name,
+    accessorFn: (row) => row.subjectId?.name,
     id: 'subject title',
     header: 'Subject Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.subjectId.name}
+        <div key={cell.id} className=''>
+          {user?.subjectId?.name}
         </div>
       );
     },
@@ -102,7 +102,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.days.join(', ')}
+          {user?.days.join(', ')}
         </div>
       );
     },
@@ -115,7 +115,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.startTime}
+          {user?.startTime}
         </div>
       );
     },
@@ -128,32 +128,11 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.endTime}
+          {user?.endTime}
         </div>
       );
     },
   },
-  // {
-  //   accessorKey: 'Descriptive Title',
-  //   header: ({ column }) => {
-  //     return (
-  //       <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-  //         Descriptive Title
-  //         <ArrowUpDown className='ml-2 h-4 w-4' />
-  //       </Button>
-  //     );
-  //   },
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return <div key={cell.id}>{user.subjectId.name}</div>;
-  //   },
-  //   accessorFn: (row) => `${row.subjectId.name}`,
-  //   filterFn: (row, columnId, filterValue) => {
-  //     const user = row.original;
-  //     const fullName = `${user.subjectId.name}`.toLowerCase();
-  //     return fullName.includes(filterValue.toLowerCase());
-  //   },
-  // },
   {
     id: 'actions',
     header: 'Actions',
