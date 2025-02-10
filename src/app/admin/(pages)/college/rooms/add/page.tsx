@@ -29,8 +29,6 @@ const Page = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof RoomValidator>> = async (data) => {
-    data.roomName = data.roomName.toLowerCase();
-
     mutation.mutate(data, {
       onSuccess: (res) => {
         switch (res.status) {
@@ -67,7 +65,7 @@ const Page = () => {
           <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
             <CardContent className='w-full'>
               <div className='flex flex-col gap-4'>
-                <Input name={'roomName'} type={'text'} form={formCollege} label={'Room Name:'} classNameInput={'uppercase'} />
+                <Input name={'roomName'} type={'text'} form={formCollege} label={'Room Name:'} classNameInput={''} />
                 <Combobox name={'roomType'} selectItems={roomType} form={formCollege} label={'Select Room Type:'} placeholder={'Select Room Type'} value={value} setValue={setValue} />
                 <Input name={'floorLocation'} type={'text'} form={formCollege} label={'Floor Location: Optional*'} classNameInput={''} />
               </div>

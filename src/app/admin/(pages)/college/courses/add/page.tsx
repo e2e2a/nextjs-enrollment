@@ -63,8 +63,6 @@ const Page = () => {
       setIsUploading(true);
       const formData = new FormData();
       formData.append('image', imageFile);
-      data.courseCode = data.courseCode.toLowerCase();
-      data.name = data.name.toLowerCase();
       const dataa = {
         ...data,
         formData: formData,
@@ -107,8 +105,8 @@ const Page = () => {
 
               <div className='flex flex-col gap-4'>
                 {/* <SelectInput name={'category'} selectItems={selectType.courseType} form={form} label={'Select Course Category:'} placeholder={'Select Course Category'} /> */}
-                <Input name={'courseCode'} type={'text'} form={form} label={'Course Acronym:'} classNameInput={'uppercase'} />
-                <Input name={'name'} type={'text'} form={form} label={'Course Name:'} classNameInput={'capitalize'} />
+                <Input name={'courseCode'} type={'text'} form={form} label={'Course Acronym:'} classNameInput={''} />
+                <Input name={'name'} type={'text'} form={form} label={'Course Name:'} classNameInput={''} />
                 <TextareaField name={'description'} form={form} label={'Description:'} classNameInput={'capitalize'} />
               </div>
             </CardContent>

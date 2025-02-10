@@ -174,12 +174,12 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                           </Button>
                                         )}
                                       </div>
-                                      <span className='w-[150px] '>{item.subjectId.subjectCode}</span>
-                                      <span className='w-[150px] text-wrap'>{item.subjectId.name}</span>
-                                      <span className='w-[150px] flex justify-center'>EMPTY</span>
-                                      <span className='w-[150px] flex justify-center'>{item.subjectId.lec}</span>
-                                      <span className='w-[150px] flex justify-center'>{item.subjectId.lab}</span>
-                                      <span className='w-[150px] flex justify-center'>{item.subjectId.unit}</span>
+                                      <span className='w-[150px]'>{item?.subjectId?.subjectCode}</span>
+                                      <span className='w-[150px] text-wrap'>{item?.subjectId?.name}</span>
+                                      <span className='w-[150px] flex justify-center'>{item?.subjectId?.preReq}</span>
+                                      <span className='w-[150px] flex justify-center'>{item?.subjectId?.lec}</span>
+                                      <span className='w-[150px] flex justify-center'>{item?.subjectId?.lab}</span>
+                                      <span className='w-[150px] flex justify-center'>{item?.subjectId?.unit}</span>
                                     </div>
                                   </CommandItem>
                                 ))}
@@ -208,12 +208,12 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                         </Button>
                                       )}
                                     </div>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Subject Code: {item.subjectId.subjectCode}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {item.subjectId.name}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3 uppercase'>Pre Req.: {item.subjectId.preReq}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lec: {item.subjectId.lec}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lab: {item.subjectId.lab}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Unit: {item.subjectId.unit}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Subject Code: {item?.subjectId?.subjectCode}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {item?.subjectId?.name}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Pre Req.: {item?.subjectId?.preReq}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lec: {item?.subjectId?.lec}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lab: {item?.subjectId?.lab}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Unit: {item?.subjectId?.unit}</span>
                                   </div>
                                 </CommandItem>
                               ))}

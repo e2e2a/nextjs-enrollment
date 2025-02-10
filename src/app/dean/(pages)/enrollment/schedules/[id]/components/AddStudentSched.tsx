@@ -124,11 +124,11 @@ const AddStudentSched = ({ student, b }: IProps) => {
         <DialogHeader>
           <DialogTitle className='flex flex-col space-y-1 sm:text-center'>
             <span>Add New Student Subjects</span>
-            <span className='capitalize'>Course: {student.courseId.name}</span>
+            <span className=''>Course: {student?.courseId?.name}</span>
             <span className='text-sm font-bold uppercase'>
-              {student?.profileId?.firstname} {student?.profileId?.middlename ?? ''} {student?.profileId?.lastname} {student?.profileId?.extensionName ? student.profileId.extensionName + '.' : ''}
+              {student?.profileId?.firstname ?? ''} {student?.profileId?.middlename ?? ''} {student?.profileId?.lastname ?? ''} {student?.profileId?.extensionName ? student?.profileId?.extensionName + '.' : ''}
             </span>
-            <span className='text-sm font-bold capitalize'>Block: {student?.blockTypeId?.section ? student?.blockTypeId?.section : 'N/A'}</span>
+            <span className='text-sm font-bold'>Block: {student?.blockTypeId?.section ? student?.blockTypeId?.section : 'N/A'}</span>
           </DialogTitle>
           <DialogDescription>Select subjects to add in the table.</DialogDescription>
         </DialogHeader>
@@ -143,7 +143,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                   Add list:
                   <div className='flex flex-col'>
                     {selectedItems.map((item, index) => {
-                      const selectedItem = b.find((i: any) => i._id === item.teacherScheduleId);
+                      const selectedItem = b.find((i: any) => i._id === item?.teacherScheduleId);
                       if (selectedItem) {
                         return (
                           <div key={`${selectedItem._id}`} className='text-green-500 flex gap-3'>
@@ -153,10 +153,10 @@ const AddStudentSched = ({ student, b }: IProps) => {
                               </div>{' '}
                               {/* Numbering starts from 1 */}
                               <span>
-                                Instructor: {selectedItem?.profileId?.firstname} {selectedItem.profileId?.middlename ?? ''} {selectedItem.profileId?.lastname}
+                                Instructor: {selectedItem?.profileId?.firstname ?? ''} {selectedItem.profileId?.middlename ?? ''} {selectedItem.profileId?.lastname ?? ''}
                               </span>
-                              <span>Title: {selectedItem.subjectId.name}</span>
-                              <span>Code: {selectedItem.subjectId.subjectCode}</span>
+                              <span>Title: {selectedItem?.subjectId?.name}</span>
+                              <span>Code: {selectedItem?.subjectId?.subjectCode}</span>
                             </div>
                             <span className='text-red cursor-pointer py-1 mr-5' onClick={() => handleRemove(selectedItem._id)}>
                               <Icons.trash className='h-3 w-3' />
@@ -207,29 +207,29 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                 {s.teacherScheduleId?.profileId?.extensionName ? s.teacherScheduleId?.profileId?.extensionName + '.' : ''}
                                               </span>
                                               <span className=' font-semibold'>
-                                                Department: <span className='uppercase'>{s.teacherScheduleId.courseId.name}</span>
+                                                Department: <span className=''>{s?.teacherScheduleId?.courseId?.name}</span>
                                               </span>
                                               <span className=' font-semibold'>
-                                                Subject Code: <span className='uppercase'>{s.teacherScheduleId.subjectId.subjectCode}</span>
+                                                Subject Code: <span className=''>{s?.teacherScheduleId?.subjectId?.subjectCode}</span>
                                               </span>
-                                              <span className=' text-wrap font-medium'>Title: {s.teacherScheduleId.subjectId.name}</span>
-                                              <span className=''>Pre Req.: EMPTY</span>
-                                              <span className=''>Days: {s.teacherScheduleId.days.join(', ')}</span>
-                                              <span className=''>Lec: {s.teacherScheduleId.subjectId.lec}</span>
-                                              <span className=''>Lab: {s.teacherScheduleId.subjectId.lab}</span>
-                                              <span className=''>Unit: {s.teacherScheduleId.subjectId.unit}</span>
+                                              <span className=' text-wrap font-medium'>Title: {s?.teacherScheduleId?.subjectId?.name}</span>
+                                              <span className=''>Pre Req.: {s?.teacherScheduleId?.subjectId?.preReq}</span>
+                                              <span className=''>Days: {s?.teacherScheduleId?.days.join(', ')}</span>
+                                              <span className=''>Lec: {s?.teacherScheduleId?.subjectId?.lec}</span>
+                                              <span className=''>Lab: {s?.teacherScheduleId?.subjectId?.lab}</span>
+                                              <span className=''>Unit: {s?.teacherScheduleId?.subjectId?.unit}</span>
                                               <span className=''>
-                                                Room: <span className='uppercase'>{s.teacherScheduleId.roomId.roomName}</span>
+                                                Room: <span className=''>{s?.teacherScheduleId?.roomId?.roomName}</span>
                                               </span>
                                               <span className=''>
-                                                Block: <span className='uppercase'>Block {s.teacherScheduleId?.blockTypeId?.section}</span>
+                                                Block: <span className=''>{s?.teacherScheduleId?.blockTypeId?.section}</span>
                                               </span>
                                             </div>
                                             <div className='justify-end sm:items-center flex items-end order-1 '>
                                               {isSelected(s.teacherScheduleId._id) ? (
                                                 <Button
                                                   disabled={isEnabled}
-                                                  onClick={() => handleSelect(s.teacherScheduleId._id)}
+                                                  onClick={() => handleSelect(s?.teacherScheduleId?._id)}
                                                   type='button'
                                                   size={'sm'}
                                                   className={'focus-visible:ring-0 flex bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
@@ -240,7 +240,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                 <div className='flex flex-row'>
                                                   <Button
                                                     onClick={() => {
-                                                      handleSelect(s.teacherScheduleId._id);
+                                                      handleSelect(s?.teacherScheduleId?._id);
                                                     }}
                                                     type='button'
                                                     size={'sm'}
@@ -249,7 +249,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                     <Icons.add className='h-4 w-4' />
                                                     <span className='sm:flex text-xs sm:text-sm'>Add</span>
                                                   </Button>
-                                                  {student.step > 3 && <SuggestDialog isPending={isPending} isOpen={isOpen} setIsOpen={setIsOpen} teacherScheduleId={s.teacherScheduleId._id} actionFormSubmit={actionFormSubmit} />}
+                                                  {student?.step > 3 && <SuggestDialog isPending={isPending} isOpen={isOpen} setIsOpen={setIsOpen} teacherScheduleId={s.teacherScheduleId._id} actionFormSubmit={actionFormSubmit} />}
                                                 </div>
                                               )}
                                             </div>

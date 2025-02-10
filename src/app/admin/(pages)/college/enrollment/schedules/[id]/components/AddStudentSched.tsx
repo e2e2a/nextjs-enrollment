@@ -220,29 +220,29 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                 ${s.teacherScheduleId.deanId?.extensionName ? s.teacherScheduleId.deanId.extensionName : ''}`}
                                               </span>
                                               <span className=' font-semibold'>
-                                                Department: <span className='uppercase'>{s?.teacherScheduleId?.courseId?.name}</span>
+                                                Department: <span className=''>{s?.teacherScheduleId?.courseId?.name}</span>
                                               </span>
                                               <span className=' font-semibold'>
-                                                Subject Code: <span className='uppercase'>{s.teacherScheduleId.subjectId.subjectCode}</span>
+                                                Subject Code: <span className=''>{s?.teacherScheduleId?.subjectId?.subjectCode}</span>
                                               </span>
                                               <span className=' text-wrap font-medium'>Title: {s?.teacherScheduleId?.subjectId?.name}</span>
-                                              <span className=''>Pre Req.: EMPTY</span>
-                                              <span className=''>Days: {s.teacherScheduleId.days.join(', ')}</span>
-                                              <span className=''>Lec: {s.teacherScheduleId.subjectId.lec}</span>
-                                              <span className=''>Lab: {s.teacherScheduleId.subjectId.lab}</span>
-                                              <span className=''>Unit: {s.teacherScheduleId.subjectId.unit}</span>
+                                              <span className=''>Pre Req.: {s?.teacherScheduleId?.subjectId?.preReq}</span>
+                                              <span className=''>Days: {s?.teacherScheduleId?.days.join(', ')}</span>
+                                              <span className=''>Lec: {s?.teacherScheduleId?.subjectId?.lec}</span>
+                                              <span className=''>Lab: {s?.teacherScheduleId?.subjectId?.lab}</span>
+                                              <span className=''>Unit: {s?.teacherScheduleId?.subjectId?.unit}</span>
                                               <span className=''>
-                                                Room: <span className='uppercase'>{s.teacherScheduleId.roomId.roomName}</span>
+                                                Room: <span className=''>{s?.teacherScheduleId?.roomId?.roomName}</span>
                                               </span>
                                               <span className=''>
-                                                Block: <span className='uppercase'>Block {s.teacherScheduleId?.blockTypeId?.section}</span>
+                                                Block: <span className=''>Block {s?.teacherScheduleId?.blockTypeId?.section}</span>
                                               </span>
                                             </div>
                                             <div className='justify-end sm:items-center flex items-end order-1 '>
-                                              {isSelected(s.teacherScheduleId._id) ? (
+                                              {isSelected(s?.teacherScheduleId?._id) ? (
                                                 <Button
                                                   disabled={isEnabled}
-                                                  onClick={() => handleSelect(s.teacherScheduleId._id)}
+                                                  onClick={() => handleSelect(s?.teacherScheduleId?._id)}
                                                   type='button'
                                                   size={'sm'}
                                                   className={'focus-visible:ring-0 flex bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
@@ -253,7 +253,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                 <div className='flex flex-row'>
                                                   <Button
                                                     onClick={() => {
-                                                      handleSelect(s.teacherScheduleId._id);
+                                                      handleSelect(s?.teacherScheduleId?._id);
                                                     }}
                                                     type='button'
                                                     size={'sm'}

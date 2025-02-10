@@ -40,8 +40,6 @@ const Page = () => {
 
   const onSubmit: SubmitHandler<z.infer<typeof BlockValidatorInCollege>> = async (data) => {
     setIsNotEditable(true);
-    data.courseCode = data.courseCode.toLowerCase();
-    data.section = data.section.toLowerCase();
 
     mutation.mutate(data, {
       onSuccess: (res) => {
@@ -80,7 +78,7 @@ const Page = () => {
                 <SelectInput name={'courseCode'} selectItems={course} form={formCollege} label={'Select Course:'} placeholder={'Select course'} />
                 <SelectInput name={'year'} selectItems={studentYearData} form={formCollege} label={'Select Block Year:'} placeholder={'Select block year'} />
                 <SelectInput name={'semester'} selectItems={studentSemesterData} form={formCollege} label={'Select Block Semester:'} placeholder={'Select block semester'} />
-                <Input name={'section'} type={'text'} form={formCollege} label={'Block type:'} classNameInput={'capitalize'} />
+                <Input name={'section'} type={'text'} form={formCollege} label={'Block type:'} classNameInput={''} />
                 <TextareaField name={'description'} type={'text'} form={formCollege} label={'Description'} classNameInput={'capitalize'} />
               </div>
             </CardContent>

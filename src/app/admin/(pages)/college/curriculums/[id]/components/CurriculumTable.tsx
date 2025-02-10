@@ -14,9 +14,9 @@ const CurriculumTable = ({ data, s }: IProps) => {
         data.curriculum.map((item: any, index: any) => (
           <div key={index} className='mb-20'>
             <div className='w-full items-center flex justify-between mb-2'>
-              <span className='text-[8px] sm:text-sm'>Order: {item.order}</span>
+              <span className='text-[8px] sm:text-sm'>Order: {item?.order}</span>
               <span className=' font-bold text-sm sm:text-lg capitalize'>
-                {item.year} - {item.semester}
+                {item?.year} - {item?.semester}
               </span>
               <span className=' font-bold text-lg'>
                 <AddFormSubject curriculum={item} s={s} />
@@ -38,12 +38,12 @@ const CurriculumTable = ({ data, s }: IProps) => {
                   {item.subjectsFormat && item.subjectsFormat.length > 0 ? (
                     item.subjectsFormat.map((subject: any, idx: any) => (
                       <tr key={idx}>
-                        <td className='px-4 py-2 border text-center'>{subject.subjectId.subjectCode}</td>
-                        <td className='px-4 py-2 border text-center'>{subject.subjectId.name}</td>
-                        <td className='px-4 py-2 border text-center'>{subject.subjectId.preReq}</td>
-                        <td className='px-4 py-2 border text-center'>{subject.subjectId.lec}</td>
-                        <td className='px-4 py-2 border text-center'>{subject.subjectId.lab}</td>
-                        <td className='px-4 py-2 border text-center'>{subject.subjectId.unit}</td>
+                        <td className='px-4 py-2 border text-center'>{subject?.subjectId?.subjectCode}</td>
+                        <td className='px-4 py-2 border text-center'>{subject?.subjectId?.name}</td>
+                        <td className='px-4 py-2 border text-center'>{subject?.subjectId?.preReq}</td>
+                        <td className='px-4 py-2 border text-center'>{subject?.subjectId?.lec}</td>
+                        <td className='px-4 py-2 border text-center'>{subject?.subjectId?.lab}</td>
+                        <td className='px-4 py-2 border text-center'>{subject?.subjectId?.unit}</td>
                       </tr>
                     ))
                   ) : (

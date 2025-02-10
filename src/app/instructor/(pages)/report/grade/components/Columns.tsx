@@ -19,7 +19,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.teacherId.firstname} {user.teacherId.middlename} {user.teacherId.lastname} {user.teacherId.extensionName ? user.teacherId.extensionName + '.' : ''}
+          {user.teacherId.firstname ?? ''} {user.teacherId.middlename ?? ''} {user?.teacherId?.lastname ?? ''} {user.teacherId.extensionName ? user.teacherId.extensionName + '.' : ''}
         </div>
       );
     },
@@ -34,14 +34,14 @@ export const columns: ColumnDef<any>[] = [
   },
 
   {
-    accessorFn: (row) => row.teacherScheduleId.courseId.courseCode,
+    accessorFn: (row) => row.teacherScheduleId?.courseId?.courseCode,
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId.courseId.courseCode}
+        <div key={cell.id} className=''>
+          {user?.teacherScheduleId?.courseId?.courseCode}
         </div>
       );
     },
@@ -53,34 +53,34 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId?.blockTypeId?.section && 'BLOCK' + ' ' + user.teacherScheduleId?.blockTypeId?.section}
+        <div key={cell.id} className=''>
+          {user?.teacherScheduleId?.blockTypeId?.section ?? 'N/A'}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.subjectCode,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.subjectCode,
     id: 'subject code',
     header: 'Subject Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId.subjectId.subjectCode}
+        <div key={cell.id} className=''>
+          {user?.teacherScheduleId?.subjectId?.subjectCode}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.name,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.name,
     id: 'descriptive title',
     header: 'Descriptive Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId.subjectId.name}
+        <div key={cell.id} className=''>
+          {user?.teacherScheduleId?.subjectId?.name}
         </div>
       );
     },
@@ -93,7 +93,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId?.blockTypeId?.year}
+          {user?.teacherScheduleId?.blockTypeId?.year}
         </div>
       );
     },
@@ -106,7 +106,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId?.blockTypeId?.semester}
+          {user?.teacherScheduleId?.blockTypeId?.semester}
         </div>
       );
     },
@@ -129,29 +129,29 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.statusInDean,
+    accessorFn: (row) => row?.statusInDean,
     id: 'Approved By Dean',
     header: 'Approved By Dean',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.statusInDean && user.statusInDean === 'Pending' && <span className='text-blue-500'>{user.statusInDean}</span>}
-          {user.statusInDean && user.statusInDean === 'Approved' && <span className='text-green-500'>{user.statusInDean}</span>}
-          {user.statusInDean && user.statusInDean === 'Declined' && <span className='text-red'>{user.statusInDean}</span>}
+          {user?.statusInDean && user?.statusInDean === 'Pending' && <span className='text-blue-500'>{user.statusInDean}</span>}
+          {user?.statusInDean && user?.statusInDean === 'Approved' && <span className='text-green-500'>{user.statusInDean}</span>}
+          {user?.statusInDean && user?.statusInDean === 'Declined' && <span className='text-red'>{user.statusInDean}</span>}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.evaluated,
+    accessorFn: (row) => row?.evaluated,
     id: 'Verify',
     header: 'Verify',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase font-bold'>
-          {user.evaluated ? <span className='text-green-500'>Verified</span> : <span className='text-red'>Not Verified</span>}
+          {user?.evaluated ? <span className='text-green-500'>Verified</span> : <span className='text-red'>Not Verified</span>}
         </div>
       );
     },

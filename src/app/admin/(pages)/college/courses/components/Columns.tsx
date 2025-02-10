@@ -7,14 +7,14 @@ import Image from 'next/image';
 
 export const columns: ColumnDef<any>[] = [
   {
-    accessorFn: (row) => row.imageUrl,
+    accessorFn: (row) => row?.imageUrl,
     accessorKey: 'course image',
     header: 'Course Image',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='flex justify-center items-center'>
-          {user.imageUrl ? <Image className='w-20 h-12 border rounded-md shadow-sm drop-shadow-sm' src={`${user.imageUrl}`} alt={`${user.courseCode}`} width={100} priority height={100} /> : <div className='flex justify-center items-center'>No Photo</div>}
+          {user?.imageUrl ? <Image className='w-20 h-12 border rounded-md shadow-sm drop-shadow-sm' src={`${user?.imageUrl}`} alt={`${user?.courseCode}`} width={100} priority height={100} /> : <div className='flex justify-center items-center'>No Photo</div>}
         </div>
       );
     },
@@ -32,8 +32,8 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' capitalize'>
-          {user.name}
+        <div key={cell.id} className=''>
+          {user?.name}
         </div>
       );
     },
@@ -48,14 +48,14 @@ export const columns: ColumnDef<any>[] = [
   },
 
   {
-    accessorFn: (row) => row.courseCode, // Use accessorFn for nested fields
+    accessorFn: (row) => row?.courseCode, // Use accessorFn for nested fields
     id: 'course Code',
     header: 'Course',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.courseCode}
+        <div key={cell.id} className=''>
+          {user?.courseCode}
         </div>
       );
     },

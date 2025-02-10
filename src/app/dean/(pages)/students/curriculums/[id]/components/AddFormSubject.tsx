@@ -174,12 +174,12 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                           </Button>
                                         )}
                                       </div>
-                                      <span className='w-[150px] '>{item.subjectId.subjectCode}</span>
-                                      <span className='w-[150px] text-wrap'>{item.subjectId.name}</span>
-                                      <span className='w-[150px] flex justify-center'>EMPTY</span>
-                                      <span className='w-[150px] flex justify-center'>{item.subjectId.lec}</span>
-                                      <span className='w-[150px] flex justify-center'>{item.subjectId.lab}</span>
-                                      <span className='w-[150px] flex justify-center'>{item.subjectId.unit}</span>
+                                      <span className='w-[150px] '>{item?.subjectId?.subjectCode}</span>
+                                      <span className='w-[150px] text-wrap'>{item?.subjectId?.name}</span>
+                                      <span className='w-[150px] flex justify-center'>{item?.subjectId?.preReq}</span>
+                                      <span className='w-[150px] flex justify-center'>{item?.subjectId?.lec}</span>
+                                      <span className='w-[150px] flex justify-center'>{item?.subjectId?.lab}</span>
+                                      <span className='w-[150px] flex justify-center'>{item?.subjectId?.unit}</span>
                                     </div>
                                   </CommandItem>
                                 ))}
@@ -187,17 +187,17 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                             </div>
                             <div className='flex flex-col gap-y-6 lg:hidden'>
                               {subjects.map((item: any, index: any) => (
-                                <CommandItem className='border w-full block' key={item.subjectId._id} value={item.subjectId.name}>
+                                <CommandItem className='border w-full block' key={item?.subjectId?._id} value={item?.subjectId?.name}>
                                   <div className='flex flex-col w-full '>
                                     <div className='flex items-center justify-end bg-gray-200 border border-neutral-50'>
-                                      {selectedItems.includes(item.subjectId._id) ? (
-                                        <Button onClick={() => handleSelect(item.subjectId._id)} type='button' size={'sm'} className={'focus-visible:ring-0 flex bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}>
+                                      {selectedItems.includes(item?.subjectId?._id) ? (
+                                        <Button onClick={() => handleSelect(item?.subjectId?._id)} type='button' size={'sm'} className={'focus-visible:ring-0 flex bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}>
                                           <Icons.trash className='h-4 w-4' />
                                           <span className='sm:flex hidden text-xs sm:text-sm'>Remove</span>
                                         </Button>
                                       ) : (
                                         <Button
-                                          onClick={() => handleSelect(item.subjectId._id)}
+                                          onClick={() => handleSelect(item?.subjectId?._id)}
                                           disabled={isPending}
                                           type='button'
                                           size={'sm'}
@@ -208,12 +208,12 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                         </Button>
                                       )}
                                     </div>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Subject Code: {item.subjectId.subjectCode}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {item.subjectId.name}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3 uppercase'>Pre Req.: {item.subjectId.preReq}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lec: {item.subjectId.lec}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lab: {item.subjectId.lab}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Unit: {item.subjectId.unit}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Subject Code: {item?.subjectId?.subjectCode}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {item?.subjectId?.name}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Pre Req.: {item?.subjectId?.preReq}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lec: {item?.subjectId?.lec}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lab: {item?.subjectId?.lab}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Unit: {item?.subjectId?.unit}</span>
                                   </div>
                                 </CommandItem>
                               ))}

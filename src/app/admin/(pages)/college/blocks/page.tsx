@@ -9,7 +9,7 @@ import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/category
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error } = useBlockCourseQueryByCategory('College');
+  const { data, error } = useBlockCourseQueryByCategory('College');
 
   useEffect(() => {
     if (error || !data) return setIsError(true);

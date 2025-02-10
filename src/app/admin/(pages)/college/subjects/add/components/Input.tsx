@@ -20,7 +20,7 @@ const Input = ({ name, type, form, label, classNameInput }: IProps) => {
               <input
                 type={type}
                 id={name}
-                className={`capitalize block rounded-xl px-5 pb-2 pt-7 w-full text-sm bg-slate-50 border border-gray-200 appearance-nonefocus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom`}
+                className={` block rounded-xl px-5 pb-2 pt-7 w-full text-sm bg-slate-50 border border-gray-200 appearance-nonefocus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom`}
                 onDragStart={(e) => e.preventDefault()}
                 placeholder=''
                 {...field}

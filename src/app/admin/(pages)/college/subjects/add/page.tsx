@@ -30,7 +30,6 @@ const Page = () => {
 
   const onSubmit: SubmitHandler<z.infer<typeof SubjectValidator>> = async (data) => {
     setIsNotEditable(true);
-    data.subjectCode = data.subjectCode.toLowerCase();
 
     mutation.mutate(data, {
       onSuccess: (res) => {
@@ -65,9 +64,9 @@ const Page = () => {
           <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
             <CardContent className='w-full '>
               <div className='flex flex-col gap-4'>
-                <Input name={'preReq'} type={'text'} form={formCollege} label={'Pre. Req.:'} classNameInput={'capitalize'} />
-                <Input name={'subjectCode'} type={'text'} form={formCollege} label={'Subject Code:'} classNameInput={'capitalize'} />
-                <Input name={'name'} type={'text'} form={formCollege} label={'Descriptive Title:'} classNameInput={'capitalize'} />
+                <Input name={'preReq'} type={'text'} form={formCollege} label={'Pre. Req.:'} classNameInput={''} />
+                <Input name={'subjectCode'} type={'text'} form={formCollege} label={'Subject Code:'} classNameInput={''} />
+                <Input name={'name'} type={'text'} form={formCollege} label={'Descriptive Title:'} classNameInput={''} />
                 <Input name={'lec'} type={'text'} form={formCollege} label={'Lec:'} classNameInput={'capitalize'} />
                 <Input name={'lab'} type={'text'} form={formCollege} label={'Lab:'} classNameInput={'capitalize'} />
                 <Input name={'unit'} type={'text'} form={formCollege} label={'Unit:'} classNameInput={'capitalize'} />

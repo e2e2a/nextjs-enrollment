@@ -20,14 +20,14 @@ export const columns: ColumnDef<ISubject>[] = [
   //   },
   // },
   {
-    accessorFn: (row) => row.subjectCode,
-    accessorKey: 'subjectCode',
-    header: 'subjectCode',
+    accessorFn: (row) => row?.subjectCode,
+    accessorKey: 'Subject Code',
+    header: 'Subject Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='flex justify-center items-center uppercase'>
-          {user.subjectCode}
+        <div key={cell.id} className='flex justify-center items-center'>
+          {user?.subjectCode}
         </div>
       );
     },
@@ -45,8 +45,8 @@ export const columns: ColumnDef<ISubject>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' capitalize'>
-          {user.name}
+        <div key={cell.id} className=''>
+          {user?.name}
         </div>
       );
     },
@@ -61,14 +61,14 @@ export const columns: ColumnDef<ISubject>[] = [
   },
 
   {
-    accessorFn: (row) => row.preReq,
+    accessorFn: (row) => row?.preReq,
     id: 'pre req.',
     header: 'Pre Req.',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.preReq}
+          {user?.preReq}
         </div>
       );
     },
@@ -81,7 +81,7 @@ export const columns: ColumnDef<ISubject>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.lec}
+          {user?.lec}
         </div>
       );
     },
@@ -94,7 +94,7 @@ export const columns: ColumnDef<ISubject>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.lab}
+          {user?.lab}
         </div>
       );
     },
@@ -107,7 +107,7 @@ export const columns: ColumnDef<ISubject>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.unit}
+          {user?.unit}
         </div>
       );
     },
@@ -131,25 +131,4 @@ export const columns: ColumnDef<ISubject>[] = [
       return <ActionsCell user={user} />;
     },
   },
-  // {
-  //   id: 'actions',
-  //   header: 'Actions',
-  //   cell: ({ row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div className=''>
-  //         <div className='flex justify-center items-center w-full gap-1'>
-  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-green-500 px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
-  //             Make an appointment
-  //             <Icons.check className='h-4 w-4' />
-  //           </Button>
-  //           <Button role='combobox' size={'sm'} className={'w-auto focus-visible:ring-0 flex bg-red px-2 py-0 gap-x-1 text-neutral-50 font-medium'}>
-  //             Reject
-  //             <Icons.close className='h-4 w-4' />
-  //           </Button>
-  //         </div>
-  //       </div>
-  //     );
-  //   },
-  // },
 ];

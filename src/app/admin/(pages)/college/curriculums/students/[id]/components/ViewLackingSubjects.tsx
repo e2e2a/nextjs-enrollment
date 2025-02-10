@@ -79,12 +79,12 @@ const ViewLackingSubjects = ({ c, sData }: IProps) => {
                       <tbody>
                         {subjects.map((subject: any, index) => (
                           <tr key={index}>
-                            <td className='px-4 py-2 border text-center'>{subject.subjectId.subjectCode}</td>
-                            <td className='px-4 py-2 border text-center'>{subject.subjectId.name}</td>
-                            <td className='px-4 py-2 border text-center'>{subject.subjectId.preReq}</td>
-                            <td className='px-4 py-2 border text-center'>{subject.subjectId.lec}</td>
-                            <td className='px-4 py-2 border text-center'>{subject.subjectId.lab}</td>
-                            <td className='px-4 py-2 border text-center'>{subject.subjectId.unit}</td>
+                            <td className='px-4 py-2 border text-center'>{subject?.subjectId?.subjectCode}</td>
+                            <td className='px-4 py-2 border text-center'>{subject?.subjectId?.name}</td>
+                            <td className='px-4 py-2 border text-center'>{subject?.subjectId?.preReq}</td>
+                            <td className='px-4 py-2 border text-center'>{subject?.subjectId?.lec}</td>
+                            <td className='px-4 py-2 border text-center'>{subject?.subjectId?.lab}</td>
+                            <td className='px-4 py-2 border text-center'>{subject?.subjectId?.unit}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -93,18 +93,12 @@ const ViewLackingSubjects = ({ c, sData }: IProps) => {
                   <div className='flex flex-col gap-y-6 lg:hidden'>
                     {subjects.map((subject: any, index) => (
                       <div className='flex flex-col w-full' key={index}>
-                        {/* <div className='flex items-center justify-end bg-gray-200'>
-                          <Button size={'sm'} className='text-xs p-1 bg-green-600 text-white'>
-                            <Icons.add className='w-4 h-4' /> Add
-                          </Button>
-                        </div> */}
-
-                        <div className='bg-gray-200 border border-neutral-50 pl-3'>Subject Code: {subject.subjectId.subjectCode}</div>
-                        <div className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {subject.subjectId.name}</div>
-                        <div className='bg-gray-200 border border-neutral-50 pl-3'>Pre Req.: {subject.subjectId.preReq}</div>
-                        <div className='bg-gray-200 border border-neutral-50 pl-3'>lec: {subject.subjectId.lec}</div>
-                        <div className='bg-gray-200 border border-neutral-50 pl-3'>lab: {subject.subjectId.lab}</div>
-                        <div className='bg-gray-200 border border-neutral-50 pl-3'>unit: {subject.subjectId.lab}</div>
+                        <div className='bg-gray-200 border border-neutral-50 pl-3'>Subject Code: {subject?.subjectId?.subjectCode}</div>
+                        <div className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {subject?.subjectId?.name}</div>
+                        <div className='bg-gray-200 border border-neutral-50 pl-3'>Pre Req.: {subject?.subjectId?.preReq}</div>
+                        <div className='bg-gray-200 border border-neutral-50 pl-3'>lec: {subject?.subjectId?.lec}</div>
+                        <div className='bg-gray-200 border border-neutral-50 pl-3'>lab: {subject?.subjectId?.lab}</div>
+                        <div className='bg-gray-200 border border-neutral-50 pl-3'>unit: {subject?.subjectId?.lab}</div>
                       </div>
                     ))}
                   </div>
