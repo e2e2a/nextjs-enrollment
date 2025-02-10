@@ -174,32 +174,32 @@ export const dashboardConfig: DashboardConfig = {
           title: 'Enrollment Process',
           i: [
             {
-              title: 'Step 1 Management',
+              title: 'Step 1 Verify Enrollee Information',
               href: '/dean/enrollment/management?step=1',
               icon: 'eye',
             },
             {
-              title: 'Step 2 Management',
+              title: 'Step 2 Evaluate the Student',
               href: '/dean/enrollment/management?step=2',
               icon: 'eye',
             },
             {
-              title: 'Step 3 Management',
+              title: 'Step 3 Add Subjects of Enrollee',
               href: '/dean/enrollment/management?step=3',
               icon: 'eye',
             },
             {
-              title: 'Step 4 Management',
+              title: 'Step 4 Approval of Add/Drop Subject Request',
               href: '/dean/enrollment/management?step=4',
               icon: 'eye',
             },
             {
-              title: 'Step 5 Management',
+              title: 'Step 5 Student Payment',
               href: '/dean/enrollment/management?step=5',
               icon: 'eye',
             },
             {
-              title: 'Step 6 Management',
+              title: 'Step 6 Finalizing Student Enrollment',
               href: '/dean/enrollment/management?step=6',
               icon: 'eye',
             },
@@ -685,32 +685,32 @@ export const dashboardConfig: DashboardConfig = {
           title: 'Enrollment Process',
           i: [
             {
-              title: 'Step 1 Management',
+              title: 'Step 1 Verify Enrollee Information',
               href: '/admin/college/enrollment/management?step=1',
               icon: 'eye',
             },
             {
-              title: 'Step 2 Management',
+              title: 'Step 2 Evaluate the Student',
               href: '/admin/college/enrollment/management?step=2',
               icon: 'eye',
             },
             {
-              title: 'Step 3 Management',
+              title: 'Step 3 Add Subjects of Enrollee',
               href: '/admin/college/enrollment/management?step=3',
               icon: 'eye',
             },
             {
-              title: 'Step 4 Management',
+              title: 'Step 4 Approval of Add/Drop Subject Request',
               href: '/admin/college/enrollment/management?step=4',
               icon: 'eye',
             },
             {
-              title: 'Step 5 Management',
+              title: 'Step 5 Student Payment',
               href: '/admin/college/enrollment/management?step=5',
               icon: 'eye',
             },
             {
-              title: 'Step 6 Management',
+              title: 'Step 6 Finalizing Student Enrollment',
               href: '/admin/college/enrollment/management?step=6',
               icon: 'eye',
             },

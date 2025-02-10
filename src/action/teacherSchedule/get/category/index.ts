@@ -41,9 +41,9 @@ const checkSessionRole = async (user: any, category: string) => {
         break;
       case 'DEAN':
         const dean = await getDeanProfileByUserId(user._id);
-        // const filteredDean = sched.filter((s: any) => s.courseId && s.courseId._id.toString() === dean.courseId._id.toString());
-        // ts = filteredDean;
-        ts = sched;
+        const filteredDean = sched.filter((s: any) => !s.courseId || s.courseId._id.toString() === dean.courseId._id.toString());
+        ts = filteredDean;
+        // ts = sched;
         break;
       case 'STUDENT':
         const stud = await getStudentProfileByUserId(user._id);
