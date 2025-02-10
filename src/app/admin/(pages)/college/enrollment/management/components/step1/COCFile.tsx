@@ -14,7 +14,7 @@ const COCFile = ({ user }: { user: any }) => {
   useEffect(() => {
     const fetchFileUrl = async () => {
       if (navigator.onLine && user && user.profileId.cocUrl) {
-        const filePath = `enrollment/coc/${user.profileId._id}/${user.profileId.cocUrl}`;
+        const filePath = `enrollment/coc/${user?.profileId?._id}/${user?.profileId?.cocUrl}`;
         const fileRef = ref(storage, filePath);
 
         const url = await getDownloadURL(fileRef);
@@ -82,7 +82,7 @@ const COCFile = ({ user }: { user: any }) => {
                   fileUrl.includes('.pdf') ? (
                     <iframe src={fileUrl} width='100%' height='400px' className='border-0' title='PDF Preview' />
                   ) : (
-                    <Image src={fileUrl} alt={user.profileId.firstname || 'nothing to say'} width={600} priority height={600} className='object-contain' />
+                    <Image src={fileUrl} alt={user.profileId.firstname || 'nothing to say'} width={600} priority height={600} quality={80} className='object-contain' />
                   )
                 ) : (
                   <div className='items-center justify-center text-red'>No COC</div>
