@@ -22,6 +22,7 @@ import { SelectCourse } from './SelectCourse';
 import InputDisabled from './InputDisabled';
 import { useCreateEnrollmentForNewStudentByCategoryMutation } from '@/lib/queries/enrollment/create/newStudent';
 import FileCerificationOfCompletion from './FileCertificationOfCompletion';
+import Compressor from 'compressorjs';
 
 type IProps = {
   search: any;
@@ -189,7 +190,24 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
       MothersEmail: '',
     },
   });
+  const compressImage = (file: File): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      if (!file) return resolve(file); // If file is null, return as is
 
+      new Compressor(file, {
+        quality: 0.7, // Adjust quality (0.1 - 1)
+        maxWidth: 1080, // Resize width
+        maxHeight: 1080, // Resize height
+        success(result) {
+          resolve(result as File); // Return compressed file
+        },
+        error(err) {
+          console.error('Compression Error:', err);
+          resolve(file); // Return original file if compression fails
+        },
+      });
+    });
+  };
   const onSubmit = async (e: any) => {
     e.preventDefault();
     setIsPending(true);
@@ -209,19 +227,23 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
       return;
     }
     setPhotoError('');
-    formData.append('photo', photoPreview!);
+    const compressedPhoto = await compressImage(photoPreview);
+    formData.append('photo', compressedPhoto);
+
     if (!filePreview) {
       setIsPending(false);
       setFileError('Student Photo is required.');
       return;
     }
     setFileError('');
-    formData.append('filePsa', filePreview);
+    const compressedFilePreview = await compressImage(filePreview);
+    formData.append('filePsa', compressedFilePreview);
     const isAnyFilePresent = fileGoodMoralPreview || fileTORPreview;
 
     if (!isAnyFilePresent) {
       if (fileCerificationOfCompletionPreview) {
-        formData.append('fileCOC', fileCerificationOfCompletionPreview);
+        const compressedCOC = await compressImage(fileCerificationOfCompletionPreview);
+        formData.append('fileCOC', compressedCOC);
       } else {
         setFileGoodMoralError('Good Moral is required.');
         setTORError('Report Card is required.');
@@ -230,11 +252,13 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
       }
     } else {
       if (fileGoodMoralPreview) {
-        formData.append('fileGoodMoral', fileGoodMoralPreview);
+        const compressedGoodMoral = await compressImage(fileGoodMoralPreview);
+        formData.append('fileGoodMoral', compressedGoodMoral);
       }
 
       if (fileTORPreview) {
-        formData.append('fileTOR', fileTORPreview);
+        const compressedTOR = await compressImage(fileTORPreview);
+        formData.append('fileTOR', compressedTOR);
       }
     }
     setFileGoodMoralError('');
