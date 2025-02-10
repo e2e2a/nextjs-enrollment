@@ -144,14 +144,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.statusInDean,
-    id: 'Evaluated',
-    header: 'Evaluated',
+    accessorFn: (row) => row.evaluated,
+    id: 'Verify',
+    header: 'Verify',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase font-bold'>
-          {user.evaluated ? <span className='text-green-500'>True</span> : <span className='text-blue-500'>False</span>}
+          {user.evaluated ? <span className='text-green-500'>Verified</span> : <span className='text-red'>Not Verified</span>}
         </div>
       );
     },

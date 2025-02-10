@@ -86,7 +86,6 @@ const handleCollege = async (user: any, data: any) => {
       default:
         return { error: 'Forbidden', status: 403 };
     }
-    console.log('aaa');
 
     if (user.role === 'TEACHER') data.teacherId = p._id;
     if (user.role === 'DEAN') data.deanId = p._id;
