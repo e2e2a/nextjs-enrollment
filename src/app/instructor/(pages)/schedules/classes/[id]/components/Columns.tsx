@@ -28,33 +28,37 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original;
+      const user = row.original?.profileId;
+
+      const formattedName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',') // Remove space before commas
+        .replace(/(\S),/g, '$1,') // Ensure proper comma placement
+        .replace(/,(\S)/g, ', $1') // Add space after commas
+        .trim();
+
       return (
-        <div key={cell.id} className=' capitalize'>
-          {user.profileId.firstname ?? ''} {user.profileId.middlename ?? ''} {user.profileId.lastname ?? ''} {user.profileId.extensionName ? user.profileId.extensionName + '.' : ''}
+        <div key={cell.id} className='capitalize'>
+          {formattedName}
         </div>
       );
     },
+
     accessorFn: (row) => {
-      const { lastname, firstname, middlename, extensionName } = row.profileId;
-      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+      const user = row.profileId;
+      return `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/(\S),/g, '$1,').replace(/,(\S)/g, ', $1').trim();
     },
+
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.profileId.firstname ?? ''} ${row.original.profileId.middlename ?? ''} ${row.original.profileId.lastname ?? ''} ${row.original.profileId.extensionName ?? ''}`.toLowerCase().trim();
+      const user = row.original?.profileId;
+
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim()
+        .toLowerCase();
+
       return fullName.includes(filterValue.toLowerCase());
-    },
-  },
-  {
-    accessorFn: (row) => row.profileId.sex,
-    id: 'Gender',
-    header: 'Gender',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=' uppercase'>
-          {user.profileId.sex}
-        </div>
-      );
     },
   },
   {

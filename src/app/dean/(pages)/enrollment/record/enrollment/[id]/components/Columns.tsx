@@ -18,41 +18,41 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.blockType.section,
+    accessorFn: (row) => row.blockType?.section,
     id: 'block type',
     header: 'Block Type',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          Block {user.blockType.section}
+          {user?.blockType?.section ?? 'N/A'}
         </div>
       );
     },
   },
 
   {
-    accessorFn: (row) => row.subject.subjectCode,
+    accessorFn: (row) => row.subject?.subjectCode,
     id: 'subject code',
     header: 'Subject Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.subject.subjectCode}
+        <div key={cell.id} className=''>
+          {user?.subject?.subjectCode}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.subject.name,
+    accessorFn: (row) => row.subject?.name,
     id: 'Descriptive Title',
     header: 'Descriptive Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.subject.name}
+        <div key={cell.id} className=''>
+          {user?.subject?.name}
         </div>
       );
     },
@@ -65,26 +65,26 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.subject.lec}
+          {user?.subject?.lec}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.subject.lab,
+    accessorFn: (row) => row?.subject?.lab,
     id: 'lab',
     header: 'Lab',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.subject.lab}
+          {user?.subject?.lab}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.subject.unit,
+    accessorFn: (row) => row.subject?.unit,
     id: 'unit',
     header: 'Unit',
     cell: ({ cell, row }) => {
@@ -97,53 +97,53 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.days,
+    accessorFn: (row) => row?.days,
     id: 'days',
     header: 'Days',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.days.join(', ')}
+          {user?.days.join(', ')}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.startTime,
+    accessorFn: (row) => row?.startTime,
     id: 'start time',
     header: 'Start Time',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.startTime}
+          {user?.startTime}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.endTime,
+    accessorFn: (row) => row?.endTime,
     id: 'end time',
     header: 'End Time',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.endTime}
+          {user?.endTime}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.roomId.roomName,
+    accessorFn: (row) => row.roomId?.roomName,
     id: 'room name',
     header: 'Room Name',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='uppercase'>
-          {user.room.roomName}
+        <div key={cell.id} className=''>
+          {user?.room?.roomName}
         </div>
       );
     },
@@ -159,22 +159,45 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original;
+      const user = row.original.teacher;
+      if (!user) return <div key={cell.id}>Unknown</div>;
+
+      const name = `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',') // Fix spaces before commas
+        .replace(/,(\S)/g, ', $1') // Ensure proper comma spacing
+        .replace(/\s+/g, ' ') // Remove extra spaces
+        .trim();
+
       return (
         <div key={cell.id} className='capitalize'>
-          {user.teacher.firstname} {user.teacher.middlename ?? ''} {user.teacher.lastname} {user.teacher.extensionName ? user.teacher.extensionName + '.' : ''}
+          {name}
         </div>
       );
     },
-    accessorFn: (row) => `${row.teacher.firstname} ${row.teacher.middlename ?? ''} ${row.teacher.lastname} ${row.teacher.extensionName ?? ''}`.trim(),
+
+    accessorFn: (row) => {
+      const user = row.teacher;
+      if (!user) return '';
+
+      return `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim();
+    },
+
     filterFn: (row, columnId, filterValue) => {
-      const user = row.original;
-      const fullName = `${user.teacher.firstname} ${user.teacher.middlename ?? ''} ${user.teacher.lastname} ${user.teacher.extensionName ?? ''}`.toLowerCase().trim();
+      const user = row.original.teacher;
+      if (!user) return false;
+
+      const fullName = `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
+
       return fullName.includes(filterValue.toLowerCase());
     },
   },
   {
-    accessorFn: (row) => row.firstGrade,
+    accessorFn: (row) => row?.firstGrade,
     id: 'prelim',
     header: 'Prelim',
     cell: ({ cell, row }) => {
@@ -187,7 +210,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.secondGrade,
+    accessorFn: (row) => row?.secondGrade,
     id: 'midterm',
     header: 'Midterm',
     cell: ({ cell, row }) => {
@@ -200,7 +223,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.thirdGrade,
+    accessorFn: (row) => row?.thirdGrade,
     id: 'semi-final',
     header: 'Semi-final',
     cell: ({ cell, row }) => {
@@ -213,7 +236,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.fourthGrade,
+    accessorFn: (row) => row?.fourthGrade,
     id: 'final',
     header: 'Final',
     cell: ({ cell, row }) => {
@@ -226,7 +249,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.averageTotal,
+    accessorFn: (row) => row?.averageTotal,
     id: 'averageTotal',
     header: 'Average Total',
     cell: ({ cell, row }) => {
@@ -245,7 +268,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase font-bold'>
-          {user.status?.toLowerCase() === 'approved' ? (
+          {user?.status?.toLowerCase() === 'approved' ? (
             <span className='text-green-500 text-xs'>{user.status}</span>
           ) : user.status?.toLowerCase() === 'pending' ? (
             <span className='text-blue-500 text-xs'>{user.status}</span>
@@ -265,7 +288,7 @@ export const columns: ColumnDef<any>[] = [
   //  * uncomment this action and do some request drop subject
   //  */
   {
-    accessorFn: (row) => row.request,
+    accessorFn: (row) => row?.request,
     id: 'requesting',
     header: 'Requesting',
     cell: ({ cell, row }) => {
@@ -291,7 +314,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.requestStatusInDean === 'Approved' ? (
+          {user?.requestStatusInDean === 'Approved' ? (
             <span className='text-green-500 text-xs'>{user.requestStatusInDean}</span>
           ) : user.requestStatusInDean === 'Pending' ? (
             <span className='text-blue-500 text-xs'>{user.requestStatusInDean}</span>
@@ -311,7 +334,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.requestStatusInRegistrar === 'Approved' ? (
+          {user?.requestStatusInRegistrar === 'Approved' ? (
             <span className='text-green-500 text-xs'>{user.requestStatusInRegistrar}</span>
           ) : user.requestStatusInRegistrar === 'Pending' ? (
             <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
@@ -331,7 +354,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase font-bold'>
-          {user.requestStatus?.toLowerCase() === 'approved' ? (
+          {user?.requestStatus?.toLowerCase() === 'approved' ? (
             <span className='text-green-500 text-xs'>{user.requestStatus}</span>
           ) : user.requestStatus?.toLowerCase() === 'pending' ? (
             <span className='text-blue-500 text-xs'>{user.requestStatus}</span>

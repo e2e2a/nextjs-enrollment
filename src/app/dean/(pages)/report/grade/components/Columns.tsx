@@ -17,35 +17,55 @@ export const columns: ColumnDef<any>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original;
+
+      const formatName = (person: any) =>
+        `${person?.lastname ? person.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim();
+
+      const teacherName = user?.teacherId ? formatName(user?.teacherId) : '';
+      const deanName = user?.deanId ? formatName(user?.deanId) : '';
+
       return (
-        <div key={cell.id} className=' capitalize'>
-          {user?.teacherId && (
-            <span>
-              {user?.teacherId.firstname ?? ''} {user?.teacherId?.middlename ?? ''} {user?.teacherId?.lastname ?? ''} {user?.teacherId?.extensionName ? user?.teacherId?.extensionName + '.' : ''}
-            </span>
-          )}
-          {user.deanId && (
-            <span>
-              {user?.deanId?.firstname ?? ''} {user?.deanId?.middlename ?? ''} {user?.deanId?.lastname ?? ''} {user?.deanId?.extensionName ? user?.deanId?.extensionName + '.' : ''}
-            </span>
-          )}
+        <div key={cell.id} className='capitalize'>
+          {teacherName && <span>{teacherName}</span>}
+          {deanName && <span>{deanName}</span>}
         </div>
       );
     },
-    accessorFn: (row) =>
-      `
-    ${row.teacherId && `${row.teacherId?.firstname} ${row.teacherId?.middlename ?? ''} ${row.teacherId?.lastname} ${row.teacherId?.extensionName ?? ''}`}
-    ${row.deanId && `${row.deanId?.firstname} ${row.deanId?.middlename ?? ''} ${row.deanId?.lastname} ${row.deanId?.extensionName ?? ''}`}
-    `.trim(),
+
+    accessorFn: (row) => {
+      const formatName = (person: any) =>
+        `${person?.lastname ? person.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',')
+          .replace(/,(\S)/g, ', $1')
+          .replace(/\s+/g, ' ')
+          .toLowerCase()
+          .trim();
+
+      const teacherName = row.teacherId ? formatName(row.teacherId) : '';
+      const deanName = row.deanId ? formatName(row.deanId) : '';
+
+      return `${teacherName} ${deanName}`.trim();
+    },
+
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user.teacherId?.firstname ?? ''} ${user.teacherId?.middlename ?? ''} ${user.teacherId?.lastname ?? ''} ${user.teacherId?.extensionName ?? ''}`.toLowerCase().trim();
-      const deanName = `${user.deanId?.firstname ?? ''} ${user.deanId?.middlename ?? ''} ${user.deanId?.lastname ?? ''} ${user.deanId?.extensionName ?? ''}`.toLowerCase().trim();
-      return fullName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
+
+      const formatNameForSearch = (person: any) =>
+        `${person?.lastname ? person.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',')
+          .replace(/,(\S)/g, ', $1')
+          .replace(/\s+/g, ' ')
+          .toLowerCase()
+          .trim();
+
+      const teacherName = user.teacherId ? formatNameForSearch(user.teacherId) : '';
+      const deanName = user.deanId ? formatNameForSearch(user.deanId) : '';
+
+      return teacherName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.courseId.courseCode,
+    accessorFn: (row) => row.teacherScheduleId?.courseId?.courseCode,
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
@@ -155,7 +175,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.evaluated,
+    accessorFn: (row) => row?.evaluated,
     id: 'Verify',
     header: 'Verify',
     cell: ({ cell, row }) => {

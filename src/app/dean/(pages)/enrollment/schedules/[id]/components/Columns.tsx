@@ -161,18 +161,56 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original;
+      const user = row.original.teacherScheduleId;
+      const instructor = user?.profileId;
+      const dean = user?.deanId;
+
+      const formatName = (person: any) =>
+        `${person?.lastname ? person.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim();
+
+      const instructorName = instructor ? formatName(instructor) : '';
+      const deanName = dean ? formatName(dean) : '';
+
       return (
         <div key={cell.id} className='capitalize'>
-          {user.teacherScheduleId?.profileId?.firstname ?? ''} {user.teacherScheduleId?.profileId?.middlename ?? ''} {user.teacherScheduleId?.profileId?.lastname ?? ''} {user.teacherScheduleId?.profileId?.extensionName ? user.teacherScheduleId?.profileId?.extensionName : ''}
+          {instructorName && <span>{instructorName}</span>}
+          {deanName && <span> | {deanName}</span>}
         </div>
       );
     },
-    accessorFn: (row) => `${row.teacherScheduleId?.profileId?.firstname ?? ''} ${row.teacherScheduleId?.profileId?.middlename ?? ''} ${row.teacherScheduleId?.profileId?.lastname ?? ''} ${row.teacherScheduleId?.profileId?.extensionName ?? ''}`.trim(),
+
+    accessorFn: (row) => {
+      const user = row.teacherScheduleId;
+
+      const formatName = (person: any) =>
+        `${person?.lastname ? person.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',')
+          .replace(/,(\S)/g, ', $1')
+          .replace(/\s+/g, ' ')
+          .toLowerCase()
+          .trim();
+
+      const instructorName = user?.profileId ? formatName(user.profileId) : '';
+      const deanName = user?.deanId ? formatName(user.deanId) : '';
+
+      return `${instructorName} ${deanName}`.trim();
+    },
+
     filterFn: (row, columnId, filterValue) => {
-      const user = row.original;
-      const fullName = `${user.teacherScheduleId?.profileId?.firstname ?? ''} ${user.teacherScheduleId?.profileId?.middlename ?? ''} ${user.teacherScheduleId?.profileId?.lastname} ${user.teacherScheduleId?.profileId?.extensionName ?? ''}`.toLowerCase().trim();
-      return fullName.includes(filterValue.toLowerCase());
+      const user = row.original.teacherScheduleId;
+
+      const formatNameForSearch = (person: any) =>
+        `${person?.lastname ? person.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''} ${person?.extensionName ? ', ' + person.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',')
+          .replace(/,(\S)/g, ', $1')
+          .replace(/\s+/g, ' ')
+          .toLowerCase()
+          .trim();
+
+      const instructorName = user?.profileId ? formatNameForSearch(user.profileId) : '';
+      const deanName = user?.deanId ? formatNameForSearch(user.deanId) : '';
+
+      return instructorName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },
   },
   {

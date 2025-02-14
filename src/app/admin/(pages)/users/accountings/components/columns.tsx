@@ -19,51 +19,54 @@ export const columns: ColumnDef<IAdminProfile>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original;
+      const name = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName : ''}`.replace(/\s+,/g, ',').replace(/(\S),/g, '$1,').replace(/,(\S)/g, ', $1').trim();
       return (
         <div key={cell.id} className='capitalize'>
-          {user.lastname && user.firstname ? `${user.firstname} ${user.middlename ?? ''} ${user.lastname} ${user.extensionName ? user.extensionName + '.' : ''}` : 'Unknown'}
+          {name || 'Unknown'}
         </div>
       );
     },
-    accessorFn: (row) => {
-      const { lastname, firstname, middlename, extensionName } = row;
-      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
-    },
+    accessorFn: (row) => `${row?.lastname ? row?.lastname + ',' : ''} ${row?.firstname ?? ''} ${row?.middlename ?? ''}${row?.extensionName ? ', ' + row?.extensionName : ''}`.trim(),
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${row.original.firstname ?? ''} ${row.original.middlename ?? ''} ${row.original.lastname ?? ''} ${row.original.extensionName ?? ''}`.toLowerCase().trim();
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
   {
-    accessorFn: (row) => row.userId.username,
+    accessorFn: (row) => row.userId?.username,
     id: 'username',
     header: 'Username',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.userId.username}
+          {user?.userId?.username}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.userId.email,
+    accessorFn: (row) => row.userId?.email,
     id: 'email',
     header: 'Email',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' '>
-          {user.userId.email}
+          {user?.userId?.email}
         </div>
       );
     },
   },
   {
     accessorKey: 'emailVerified',
-    accessorFn: (row) => row.userId.emailVerified,
+    accessorFn: (row) => row.userId?.emailVerified,
     // header: 'Email Verified',
     header: ({ column }) => (
       <EmailVerifiedFilter
@@ -79,7 +82,7 @@ export const columns: ColumnDef<IAdminProfile>[] = [
       return <div className='font-medium'>{formatted}</div>;
     },
     filterFn: (row, columnId, filterValue) => {
-      const emailVerified = row.original.userId.emailVerified;
+      const emailVerified = row.original.userId?.emailVerified;
       if (filterValue === 'Not Verified') {
         return !emailVerified;
       } else if (filterValue === 'Verified') {
@@ -90,14 +93,14 @@ export const columns: ColumnDef<IAdminProfile>[] = [
     },
   },
   {
-    accessorFn: (row) => row.userId.role,
+    accessorFn: (row) => row.userId?.role,
     id: 'role',
     header: 'Role',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.userId.role}
+          {user?.userId?.role}
         </div>
       );
     },

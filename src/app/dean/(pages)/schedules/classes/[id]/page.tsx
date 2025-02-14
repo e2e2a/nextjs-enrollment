@@ -63,23 +63,23 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Fullname:{' '}
                       <span className='font-normal'>
-                        {ts?.teacherSchedule?.deanId?.firstname} {ts?.teacherSchedule?.deanId?.middlename ?? ''} {ts?.teacherSchedule?.deanId?.lastname}{' '}
+                        {ts?.teacherSchedule?.deanId?.firstname ?? ''} {ts?.teacherSchedule?.deanId?.middlename ?? ''} {ts?.teacherSchedule?.deanId?.lastname ?? ''}{' '}
                         {ts?.teacherSchedule?.deanId?.extensionName ? ts?.teacherSchedule?.deanId?.extensionName + '.' : ''}
                       </span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                    <span className='text-sm sm:text-[17px] font-bold'>
                       Department: <span className='font-normal'>{ts?.teacherSchedule?.courseId?.name}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start '>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                    <span className='text-sm sm:text-[17px] font-bold'>
                       SUBJECT: <span className='font-normal'>{ts?.teacherSchedule?.subjectId?.name}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                    <span className='text-sm sm:text-[17px] font-bold'>
                       Block: <span className='font-normal'>{ts?.teacherSchedule?.blockTypeId?.section ? ts?.teacherSchedule?.blockTypeId?.section : 'N/A'}</span>
                     </span>
                   </div>
@@ -100,8 +100,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                     </span>
                   </div>
                   <div className='flex w-full justify-start'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Room: <span className='font-normal'>{ts?.teacherSchedule?.roomId.roomName}</span>
+                    <span className='text-sm sm:text-[17px] font-bold'>
+                      Room: <span className='font-normal'>{ts?.teacherSchedule?.roomId?.roomName}</span>
                     </span>
                   </div>
                 </div>

@@ -37,7 +37,7 @@ const PSAFile = ({ user }: { user: any }) => {
 
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `${user.profileId.firstname} ${user.profileId?.middlename && user.profileId?.middlename[0] + '.'} ${user.profileId.lastname} ${user.profileId.extensionName ? user.profileId.extensionName : ''}.png`);
+        link.setAttribute('download', `${user?.profileId?.firstname} ${user?.profileId?.middlename && user?.profileId?.middlename[0] + '.'} ${user?.profileId?.lastname} ${user?.profileId?.extensionName ? user?.profileId?.extensionName : ''}.png`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

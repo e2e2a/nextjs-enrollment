@@ -18,44 +18,57 @@ export const columns: ColumnDef<any>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original;
+      const name =
+        user?.lastname && user?.firstname
+          ? `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim()
+          : 'Unknown';
+
       return (
         <div key={cell.id} className='capitalize'>
-          {user?.lastname && user?.firstname ? `${user?.firstname} ${user?.middlename ?? ''} ${user?.lastname} ${user?.extensionName ? user?.extensionName + '.' : ''}` : 'Unknown'}
+          {name}
         </div>
       );
     },
+
     accessorFn: (row) => {
       const { lastname, firstname, middlename, extensionName } = row;
-      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+      return `${lastname ? lastname + ',' : ''} ${firstname ?? ''} ${middlename ?? ''}${extensionName ? ', ' + extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim();
     },
+
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${row.original?.firstname ?? ''} ${row.original?.middlename ?? ''} ${row.original?.lastname ?? ''} ${row.original?.extensionName ?? ''}`.toLowerCase().trim();
+      const fullName = `${user?.lastname ? user.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
+
       return fullName.includes(filterValue.toLowerCase());
     },
   },
   {
-    accessorFn: (row) => row.userId.username,
+    accessorFn: (row) => row.userId?.username,
     id: 'username',
     header: 'Username',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.userId.username}
+          {user?.userId?.username}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.userId.email,
+    accessorFn: (row) => row.userId?.email,
     id: 'email',
     header: 'Email',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' '>
-          {user.userId.email}
+          {user?.userId?.email}
         </div>
       );
     },
@@ -89,14 +102,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.userId.role,
+    accessorFn: (row) => row.userId?.role,
     id: 'role',
     header: 'Role',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.userId.role}
+          {user?.userId?.role}
         </div>
       );
     },

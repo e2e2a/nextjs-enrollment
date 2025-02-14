@@ -159,16 +159,26 @@ export const columns: ColumnDef<any>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original;
+      const name = `${user?.teacher?.lastname ? user?.teacher?.lastname + ',' : ''} ${user?.teacher?.firstname ?? ''} ${user?.teacher?.middlename ?? ''}${user?.teacher?.extensionName ? ', ' + user?.teacher?.extensionName : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim();
       return (
         <div key={cell.id} className='capitalize'>
-          {user.teacher.firstname} {user.teacher.middlename ?? ''} {user.teacher.lastname} {user.teacher.extensionName ? user.teacher.extensionName : ''}
+          {name}
         </div>
       );
     },
-    accessorFn: (row) => `${row.teacher.firstname ?? ''} ${row.teacher.middlename ?? ''} ${row.teacher.lastname ?? ''} ${row.teacher.extensionName ?? ''}`.trim(),
+    accessorFn: (row) => `${row.teacher?.lastname ? row?.teacher?.lastname + ',' : ''} ${row.teacher.firstname ?? ''} ${row.teacher.middlename ?? ''}${row.teacher?.extensionName ? ', ' + row?.teacher?.extensionName : ''}`.trim(),
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user.teacher.firstname ?? ''} ${user.teacher.middlename ?? ''} ${user.teacher.lastname ?? ''} ${user.teacher.extensionName ?? ''}`.toLowerCase().trim();
+      const fullName = `${user.teacher?.lastname ? user?.teacher?.lastname + ',' : ''} ${user.teacher?.firstname ?? ''} ${user?.teacher?.middlename ?? ''}${user?.teacher?.extensionName ? ', ' + user?.teacher?.extensionName : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
       return fullName.includes(filterValue.toLowerCase());
     },
   },

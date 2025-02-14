@@ -38,7 +38,7 @@ const Page = () => {
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {isError ? (
             <div className=''>404</div>
-          ) : data && data.profile ? (
+          ) : data && data?.profile ? (
             <>
               <div className='flex items-center py-4 text-black w-full text-center flex-col'>
                 <div>
@@ -46,7 +46,7 @@ const Page = () => {
                 </div>
                 <div className=''>
                   <h1 className='sm:text-sm text-lg font-bold capitalize'>
-                    {data?.profile?.firstname} {data.profile.middlename ?? ''} {data?.profile?.lastname} {data?.profile?.extensionName ? data?.profile?.extensionName + '.' : ''}
+                    {data?.profile?.firstname ?? ''} {data?.profile?.middlename ?? ''} {data?.profile?.lastname ?? ''} {data?.profile?.extensionName ? data?.profile?.extensionName + '.' : ''}
                   </h1>
                 </div>
               </div>

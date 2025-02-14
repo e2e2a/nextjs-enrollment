@@ -29,20 +29,28 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original;
+      const user = row.original.studentId;
+      const name = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName : ''}`.replace(/\s+,/g, ',').replace(/(\S),/g, '$1,').replace(/,(\S)/g, ', $1').trim();
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.studentId.firstname ?? ''} {user.studentId.middlename ?? ''} {user.studentId.lastname ?? ''}
+          {name}
         </div>
       );
     },
     accessorFn: (row) => {
-      const { name } = row;
-      return `${name}`;
+      const user = row.studentId;
+      return `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').toLowerCase().trim();
     },
+
     filterFn: (row, columnId, filterValue) => {
-      const stud = row.original.studentId;
-      const fullName = `${stud.firstname ?? ''} ${stud.middlename ?? ''} ${stud.lastname ?? ''}`.toLowerCase();
+      const user = row.original.studentId;
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
+
       return fullName.includes(filterValue.toLowerCase());
     },
   },

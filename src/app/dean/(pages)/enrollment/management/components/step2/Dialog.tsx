@@ -74,7 +74,7 @@ export function DialogStep2Button({ isPending, user, form, isDialogOpen, setIsDi
             <span className='text-sm sm:text-[15px] font-normal'>
               Student Name:{' '}
               <span className='text-sm sm:text-[15px] font-medium capitalize'>
-                {user.profileId.firstname} {user.profileId.lastname}
+                {user?.profileId?.firstname ?? ''} {user?.profileId?.lastname ?? ''}
               </span>
             </span>
           </DialogTitle>

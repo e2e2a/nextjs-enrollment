@@ -40,25 +40,25 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Instructor:{' '}
                       <span className='font-normal'>
-                        {data?.reportedGrades.teacherId.firstname} {data?.reportedGrades.teacherId.middlename ?? ''} {data?.reportedGrades.teacherId.lastname} {data?.reportedGrades.teacherId.extensionName ? data?.reportedGrades.teacherId.extensionName + '.' : ''}
+                        {data?.reportedGrades?.teacherId?.firstname ?? ''} {data?.reportedGrades?.teacherId?.middlename ?? ''} {data?.reportedGrades?.teacherId?.lastname ?? ''} {data?.reportedGrades?.teacherId?.extensionName ? data?.reportedGrades?.teacherId?.extensionName + '.' : ''}
                       </span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{data.reportedGrades.teacherScheduleId.courseId.name}</span>
+                    <span className='text-sm sm:text-[17px] font-bold'>
+                      Department: <span className='font-normal'>{data?.reportedGrades?.teacherScheduleId?.courseId?.name}</span>
                     </span>
                   </div>
                   <div className='justify-between items-center flex w-full'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Descriptive Title: <span className='font-normal'>{data.reportedGrades.teacherScheduleId.subjectId.name}</span>
+                    <span className='text-sm sm:text-[17px] font-bold'>
+                      Descriptive Title: <span className='font-normal'>{data?.reportedGrades?.teacherScheduleId?.subjectId?.name}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Time:{' '}
                       <span className='font-normal'>
-                        {data.reportedGrades.teacherScheduleId.startTime} - {data.reportedGrades.teacherScheduleId.endTime}
+                        {data.reportedGrades.teacherScheduleId.startTime} - {data?.reportedGrades?.teacherScheduleId?.endTime}
                       </span>
                     </span>
                   </div>
@@ -66,13 +66,13 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Year:{' '}
                       <span className='font-normal'>
-                        {data.reportedGrades.teacherScheduleId?.blockTypeId?.year} - {data.reportedGrades.teacherScheduleId?.blockTypeId?.semester}
+                        {data?.reportedGrades?.teacherScheduleId?.blockTypeId?.year} - {data?.reportedGrades?.teacherScheduleId?.blockTypeId?.semester}
                       </span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Block: <span className='font-normal'>{data.reportedGrades.teacherScheduleId?.blockTypeId?.section}</span>
+                    <span className='text-sm sm:text-[17px] font-bold'>
+                      Block: <span className='font-normal'>{data.reportedGrades?.teacherScheduleId?.blockTypeId?.section}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start'>
@@ -97,12 +97,12 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <div className='flex w-full justify-start'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Evaluated:
-                      <span className='font-normal text-sm uppercase'> {data.reportedGrades.evaluated ? <span className=' text-green-500'>True</span> : <span className=' text-blue-500'>False</span>}</span>
+                      <span className='font-normal text-sm uppercase'> {data?.reportedGrades?.evaluated ? <span className=' text-green-500'>True</span> : <span className=' text-blue-500'>False</span>}</span>
                     </span>
                   </div>
                 </div>
               </div>
-              <DataTable columns={columns} data={data.reportedGrades.reportedGrade as any[]} rp={data.reportedGrades} />
+              <DataTable columns={columns} data={data?.reportedGrades?.reportedGrade as any[]} rp={data?.reportedGrades} />
             </div>
           )}
         </div>

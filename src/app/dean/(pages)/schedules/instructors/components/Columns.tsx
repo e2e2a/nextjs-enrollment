@@ -30,28 +30,61 @@ export const columns: ColumnDef<any>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original;
+      const dean = user?.deanId;
+      const instructor = user?.profileId;
+
+      const deanName = `${dean?.lastname ? dean?.lastname + ',' : ''} ${dean?.firstname ?? ''} ${dean?.middlename ?? ''}${dean?.extensionName ? ', ' + dean?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim();
+
+      const instructorName = `${instructor?.lastname ? instructor?.lastname + ',' : ''} ${instructor?.firstname ?? ''} ${instructor?.middlename ?? ''}${instructor?.extensionName ? ', ' + instructor?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim();
+
       return (
         <div key={cell.id} className='capitalize'>
-          {user.deanId && (
-            <span>
-              {user.deanId?.firstname ?? ''} {user.deanId?.middlename ?? ''} {user.deanId?.lastname ?? ''} {user.deanId?.extensionName ? user.deanId?.extensionName + '.' : ''}
-            </span>
-          )}
-          {user.profileId && (
-            <span>
-              {user.profileId?.firstname ?? ''} {user.profileId?.middlename ?? ''} {user.profileId?.lastname ?? ''} {user.profileId?.extensionName ? user.profileId?.extensionName + '.' : ''}
-            </span>
-          )}
+          {user.deanId && <span>{deanName}</span>}
+          {user.profileId && <span>{instructorName}</span>}
         </div>
       );
     },
+
     accessorFn: (row) => {
-      const { lastname, firstname, middlename, extensionName } = row.profileId;
-      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+      const formatName = (person: any) => {
+        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',')
+          .replace(/,(\S)/g, ', $1')
+          .replace(/\s+/g, ' ')
+          .toLowerCase()
+          .trim();
+      };
+
+      const instructorName = row.profileId ? formatName(row.profileId) : '';
+      const deanName = row.deanId ? formatName(row.deanId) : '';
+
+      return `${instructorName} ${deanName}`.trim();
     },
+
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.profileId?.firstname ?? ''} ${row.original.profileId?.middlename ?? ''} ${row.original.profileId?.lastname ?? ''} ${row.original.profileId?.extensionName ?? ''}`.toLowerCase().trim();
-      return fullName.includes(filterValue.toLowerCase());
+      const user = row.original;
+
+      const formatNameForSearch = (person: any) => {
+        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''} ${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',')
+          .replace(/,(\S)/g, ', $1')
+          .replace(/\s+/g, ' ')
+          .toLowerCase()
+          .trim();
+      };
+
+      const instructorName = user.profileId ? formatNameForSearch(user.profileId) : '';
+      const deanName = user.deanId ? formatNameForSearch(user.deanId) : '';
+
+      return instructorName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },
   },
   {
@@ -75,7 +108,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user?.blockTypeId?.section}
+          {user?.blockTypeId?.section ?? 'N/A'}
         </div>
       );
     },
@@ -178,7 +211,7 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='uppercase'>
+        <div key={cell.id} className=''>
           {user?.roomId?.roomName}
         </div>
       );

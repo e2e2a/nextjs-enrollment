@@ -16,19 +16,41 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original;
+      const user = row.original?.profileId;
+
+      const formattedName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim();
+
       return (
-        <div key={cell.id} className=' capitalize'>
-          {user.profileId.firstname ?? ''} {user.profileId.middlename ?? ''} {user.profileId.lastname ?? ''} {user.profileId.extensionName ? user.profileId.extensionName + '.' : ''}
+        <div key={cell.id} className='capitalize'>
+          {formattedName}
         </div>
       );
     },
+
     accessorFn: (row) => {
-      const { lastname, firstname, middlename, extensionName } = row.profileId;
-      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+      const user = row.profileId;
+      return `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
     },
+
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.profileId.firstname ?? ''} ${row.original.profileId.middlename ?? ''} ${row.original.profileId.lastname ?? ''} ${row.original.profileId.extensionName ?? ''}`.toLowerCase().trim();
+      const user = row.original?.profileId;
+
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
+
       return fullName.includes(filterValue.toLowerCase());
     },
   },
@@ -46,105 +68,105 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.course.courseCode,
+    accessorFn: (row) => row.course?.courseCode,
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.course.courseCode}
+        <div key={cell.id} className=''>
+          {user?.course?.courseCode}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.blockType,
+    accessorFn: (row) => row?.blockType,
     id: 'block',
     header: 'Block',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.blockType?.section && 'BLOCK' + ' ' + user.blockType.section}
+        <div key={cell.id} className=''>
+          {user?.blockType?.section ?? 'N/A'}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.subject.subjectCode,
+    accessorFn: (row) => row.subject?.subjectCode,
     id: 'subject code',
     header: 'Subject Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.subject?.subjectCode}
+        <div key={cell.id} className=''>
+          {user?.subject?.subjectCode}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.subject.name,
+    accessorFn: (row) => row?.subject?.name,
     id: 'descriptive title',
     header: 'Descriptive Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.subject.name}
+        <div key={cell.id} className=''>
+          {user?.subject?.name}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.blockType.year,
+    accessorFn: (row) => row.blockType?.year,
     id: 'year',
     header: 'Year',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.blockType.year}
+          {user?.blockType?.year}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.blockType.semester,
+    accessorFn: (row) => row.blockType?.semester,
     id: 'semester',
     header: 'Semester',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.blockType.semester}
+          {user.blockType?.semester}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.room.roomName,
+    accessorFn: (row) => row.room?.roomName,
     id: 'room name',
     header: 'Room Name',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.room.roomName}
+        <div key={cell.id} className=''>
+          {user?.room?.roomName}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.schoolYear,
+    accessorFn: (row) => row?.schoolYear,
     id: 'school year',
     header: 'School Year',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.schoolYear}
+          {user?.schoolYear}
         </div>
       );
     },

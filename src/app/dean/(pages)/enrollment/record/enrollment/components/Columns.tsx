@@ -16,19 +16,40 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original;
+      const user = row.original.profileId;
+      if (!user) return <div key={cell.id}>Unknown</div>;
+
+      const name = `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',') // Fix spaces before commas
+        .replace(/,(\S)/g, ', $1') // Ensure proper comma spacing
+        .replace(/\s+/g, ' ') // Remove extra spaces
+        .trim();
+
       return (
-        <div key={cell.id} className=' capitalize'>
-          {user.profileId.firstname ?? ''} {user.profileId.middlename ?? ''} {user.profileId.lastname ?? ''} {user.profileId.extensionName ? user.profileId.extensionName + '.' : ''}
+        <div key={cell.id} className='capitalize'>
+          {name}
         </div>
       );
     },
+
     accessorFn: (row) => {
-      const { lastname, firstname, middlename, extensionName } = row.profileId;
-      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+      const user = row.profileId;
+      if (!user) return '';
+
+      return `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim();
     },
+
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.profileId.firstname ?? ''} ${row.original.profileId.middlename ?? ''} ${row.original.profileId.lastname ?? ''} ${row.original.profileId.extensionName ?? ''}`.toLowerCase().trim();
+      const user = row.original.profileId;
+      if (!user) return false;
+
+      const fullName = `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
+
       return fullName.includes(filterValue.toLowerCase());
     },
   },
@@ -45,8 +66,8 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' capitalize'>
-          {user.course}
+        <div key={cell.id} className=''>
+          {user?.course}
         </div>
       );
     },
@@ -60,20 +81,20 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.blockType.section,
+    accessorFn: (row) => row.blockType?.section,
     id: 'block',
     header: 'Block',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.blockType?.section}
+        <div key={cell.id} className=''>
+          {user?.blockType?.section ?? 'N/A'}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.studentType,
+    accessorFn: (row) => row?.studentType,
     id: 'student type',
     header: 'Student Type',
     cell: ({ cell, row }) => {
@@ -93,7 +114,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.blockType?.year} - {user.blockType?.semester}
+          {user?.blockType?.year} - {user?.blockType?.semester}
         </div>
       );
     },
@@ -106,7 +127,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.schoolYear}
+          {user?.schoolYear}
         </div>
       );
     },

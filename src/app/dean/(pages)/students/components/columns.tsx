@@ -17,25 +17,46 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original.profileId;
+      const user = row.original?.profileId;
+
+      const formattedName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim();
+
       return (
         <div key={cell.id} className='capitalize'>
-          {user.lastname && user.firstname ? `${user.firstname} ${user.middlename} ${user.lastname} ${user.extensionName ? user.extensionName + '.' : ''}` : 'Unknown'}
+          {formattedName}
         </div>
       );
     },
+
     accessorFn: (row) => {
-      const { lastname, firstname, middlename, extensionName } = row.profileId;
-      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+      const user = row.profileId;
+      return `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
     },
+
     filterFn: (row, columnId, filterValue) => {
-      const user = row.original.profileId;
-      const fullName = `${user.firstname ?? ''} ${user.middlename ?? ''} ${user.lastname ?? ''} ${user.extensionName ?? ''}`.toLowerCase().trim();
+      const user = row.original?.profileId;
+
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
+
       return fullName.includes(filterValue.toLowerCase());
     },
   },
   {
-    accessorFn: (row) => row.userId.username,
+    accessorFn: (row) => row.userId?.username,
     id: 'username',
     header: 'Username',
     cell: ({ cell, row }) => {
@@ -48,21 +69,21 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.userId.email,
+    accessorFn: (row) => row.userId?.email,
     id: 'email',
     header: 'Email',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' '>
-          {user.userId.email}
+          {user?.userId?.email}
         </div>
       );
     },
   },
   {
     accessorKey: 'emailVerified',
-    accessorFn: (row) => row.userId.emailVerified,
+    accessorFn: (row) => row.userId?.emailVerified,
     // header: 'Email Verified',
     header: ({ column }) => (
       <EmailVerifiedFilter
@@ -78,7 +99,7 @@ export const columns: ColumnDef<any>[] = [
       return <div className='font-medium'>{formatted}</div>;
     },
     filterFn: (row, columnId, filterValue) => {
-      const emailVerified = row.original.userId.emailVerified;
+      const emailVerified = row.original?.userId?.emailVerified;
       if (filterValue === 'Not Verified') {
         return !emailVerified;
       } else if (filterValue === 'Verified') {
@@ -89,14 +110,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.userId.role,
+    accessorFn: (row) => row?.userId?.role,
     id: 'role',
     header: 'Role',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.userId.role}
+          {user?.userId?.role}
         </div>
       );
     },
@@ -115,7 +136,7 @@ export const columns: ColumnDef<any>[] = [
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
-      const user = row.original.profileId;
+      const user = row.original?.profileId;
 
       return <ActionsCell user={user} />;
     },

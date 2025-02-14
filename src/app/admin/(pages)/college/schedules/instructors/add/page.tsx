@@ -62,8 +62,8 @@ const Page = () => {
 
         setTeachers(
           [...(filteredTeacherProfiles || []), ...(filteredDeanProfiles || [])].sort((a, b) => {
-            const fullNameA = `${a?.firstname} ${a?.lastname}`.toLowerCase();
-            const fullNameB = `${b?.firstname} ${b?.lastname}`.toLowerCase();
+            const fullNameA = `${a?.firstname ?? ''} ${a?.lastname ?? ''}`.toLowerCase();
+            const fullNameB = `${b?.firstname ?? ''} ${b?.lastname ?? ''}`.toLowerCase();
             return fullNameA.localeCompare(fullNameB);
           })
         );

@@ -6,7 +6,7 @@ import ActionsCell from './ActionsCell';
 
 export const columns: ColumnDef<any>[] = [
   {
-    accessorFn: (row) => row.orderID, // Use accessorFn for nested fields
+    accessorFn: (row) => row.orderID,
     id: 'orderID',
     header: 'Order #',
     cell: ({ cell, row }) => {
@@ -32,7 +32,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.studentId.firstname ?? ''} {user.studentId.middlename ?? ''} {user.studentId.lastname ?? ''}
+          {user?.studentId?.lastname ? user?.studentId?.firstname + ',' : ''} {user?.studentId?.middlename ?? ''}{user?.studentId?.extensionName ? ', ' + user?.studentId?.extensionName : ''}
         </div>
       );
     },
@@ -42,7 +42,7 @@ export const columns: ColumnDef<any>[] = [
     },
     filterFn: (row, columnId, filterValue) => {
       const stud = row.original.studentId;
-      const fullName = `${stud.firstname ?? ''} ${stud.middlename ?? ''} ${stud.lastname ?? ''}`.toLowerCase();
+      const fullName = `${stud?.lastname ? stud?.lastname + ',' : ''} ${stud?.firstname ?? ''} ${stud?.middlename ?? ''}${stud?.extensionName ? ', ' + stud?.extensionName : ''}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
@@ -57,7 +57,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.type, // Use accessorFn for nested fields
+    accessorFn: (row) => row.type,
     id: 'type',
     header: 'Type',
     cell: ({ cell, row }) => {
@@ -70,7 +70,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.amount.value, // Use accessorFn for nested fields
+    accessorFn: (row) => row.amount.value,
     id: 'Amount',
     header: 'Amount',
     cell: ({ cell, row }) => {
@@ -83,7 +83,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.schoolYear, // Use accessorFn for nested fields
+    accessorFn: (row) => row.schoolYear,
     id: 'school year',
     header: 'School Year',
     cell: ({ cell, row }) => {
@@ -95,16 +95,6 @@ export const columns: ColumnDef<any>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: 'createdAt',
-  //   header: 'CreatedAt',
-  //   cell: ({ row }) => {
-  //     const date = new Date(row.getValue('createdAt'));
-  //     const formatted = date.toLocaleDateString();
-
-  //     return <div className='font-medium'>{formatted}</div>;
-  //   },
-  // },
   {
     id: 'actions',
     header: 'Actions',

@@ -39,7 +39,7 @@ const StudentPhoto = ({ user }: { user: any }) => {
 
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `${user.profileId.firstname} ${user.profileId?.middlename && user.profileId?.middlename[0] + '.'} ${user.profileId.lastname} ${user.profileId.extensionName ? user.profileId.extensionName : ''}.png`);
+        link.setAttribute('download', `${user?.profileId?.firstname} ${user?.profileId?.middlename && user?.profileId?.middlename[0] + '.'} ${user?.profileId?.lastname} ${user?.profileId?.extensionName ? user?.profileId?.extensionName : ''}.png`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -82,8 +82,7 @@ const StudentPhoto = ({ user }: { user: any }) => {
               </DialogHeader>
               {photoUrl ? (
                 <div className='overflow-y-auto max-h-[400px] '>
-                  {/* <Image src={user.photoUrl} alt={user.profileId.firstname || 'Image'} width={600} priority height={600} className='object-contain' /> */}
-                  <Image src={photoUrl} alt={user.profileId.firstname || 'nothing to say'} width={600} priority height={600} className='object-contain' />
+                  <Image src={photoUrl} alt={user.profileId?.firstname || 'nothing to say'} width={600} priority height={600} className='object-contain' />
                 </div>
               ) : (
                 <div className='items-center justify-center text-red'>No Student Photo</div>

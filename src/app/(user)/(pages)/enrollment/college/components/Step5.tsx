@@ -199,7 +199,7 @@ const Step5 = ({ enrollment }: IProps) => {
                 <span className='text-sm text-left sm:mt-10 mt-5 w-full px-5 sm:px-10'>
                   Dear{' '}
                   <span className='font-semibold capitalize'>
-                    <span className='capitalize'>{enrollment.profileId.firstname}</span> <span className='capitalize'>{enrollment.profileId.lastname}</span>
+                    <span className='capitalize'>{enrollment?.profileId?.firstname ?? ''}</span> <span className='capitalize'>{enrollment?.profileId?.lastname ?? ''}</span>
                   </span>
                   ,
                 </span>

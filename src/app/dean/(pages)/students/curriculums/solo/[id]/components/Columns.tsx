@@ -17,13 +17,40 @@ export const columns: ColumnDef<IStudentCurriculum>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original;
-      return <div key={cell.id}>{user.studentId.firstname && user.studentId.lastname ? `${user.studentId.firstname ?? ''} ${user.studentId.middlename ?? ''} ${user.studentId.lastname ?? ''} ${user.studentId.extensionName ?? ''}` : 'Unknown'}</div>;
+      const user = row.original?.studentId;
+
+      const formattedName =
+        user?.firstname && user?.lastname
+          ? `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/(\S),/g, '$1,').replace(/,(\S)/g, ', $1').trim()
+          : 'Unknown';
+
+      return (
+        <div key={cell.id} className='capitalize'>
+          {formattedName}
+        </div>
+      );
     },
-    accessorFn: (row) => `${row.studentId.firstname ?? ''} ${row.studentId.middlename ?? ''} ${row.studentId.lastname ?? ''} ${row.studentId.extensionName ?? ''}`.trim(),
+
+    accessorFn: (row) => {
+      const user = row.studentId;
+      return `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
+    },
+
     filterFn: (row, columnId, filterValue) => {
-      const user = row.original;
-      const fullName = `${user.studentId.firstname ?? ''} ${user.studentId.middlename ?? ''} ${user.studentId.lastname ?? ''} ${user.studentId.extensionName ?? ''}`.toLowerCase().trim();
+      const user = row.original?.studentId;
+
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
+
       return fullName.includes(filterValue.toLowerCase());
     },
   },
@@ -40,8 +67,8 @@ export const columns: ColumnDef<IStudentCurriculum>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' capitalize'>
-          {user.courseId.name}
+        <div key={cell.id} className=''>
+          {user?.courseId?.name}
         </div>
       );
     },
@@ -50,7 +77,7 @@ export const columns: ColumnDef<IStudentCurriculum>[] = [
       return `${name}`;
     },
     filterFn: (row, columnId, filterValue) => {
-      const name = `${row.original.courseId.name}`.toLowerCase();
+      const name = `${row.original?.courseId?.name}`.toLowerCase();
       return name.includes(filterValue.toLowerCase());
     },
   },

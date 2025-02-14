@@ -26,7 +26,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId?.blockTypeId?.section}
+          {user.teacherScheduleId?.blockTypeId?.section ?? 'N/A'}
         </div>
       );
     },
@@ -73,20 +73,20 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.lec,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.lec,
     id: 'lec',
     header: 'Lec',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId.subjectId.lec}
+          {user?.teacherScheduleId?.subjectId?.lec}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.lab,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.lab,
     id: 'lab',
     header: 'Lab',
     cell: ({ cell, row }) => {
@@ -106,7 +106,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId?.subjectId?.unit}
+          {user?.teacherScheduleId?.subjectId?.unit}
         </div>
       );
     },
@@ -119,7 +119,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId?.startTime}
+          {user?.teacherScheduleId?.startTime}
         </div>
       );
     },
@@ -132,7 +132,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId?.endTime}
+          {user?.teacherScheduleId?.endTime}
         </div>
       );
     },
@@ -162,33 +162,60 @@ export const columns: ColumnDef<any>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original.teacherScheduleId;
+
+      const formatName = (person: any) => {
+        if (!person) return '';
+        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',') // Fix spaces before commas
+          .replace(/,(\S)/g, ', $1') // Ensure proper comma spacing
+          .replace(/\s+/g, ' ') // Replace multiple spaces with a single space
+          .trim();
+      };
+
+      const instructorName = user.profileId ? formatName(user.profileId) : '';
+      const deanName = user.deanId ? formatName(user.deanId) : '';
+
       return (
         <div key={cell.id} className='capitalize'>
-          {user.deanId && (
-            <span>
-              {user.deanId?.firstname ?? ''} {user.deanId?.middlename ?? ''} {user.deanId?.lastname ?? ''} {user.deanId?.extensionName ? user.deanId?.extensionName + '.' : ''}
-            </span>
-          )}
-          {user.profileId && (
-            <span>
-              {user.profileId?.firstname ?? ''} {user.profileId?.middlename ?? ''} {user.profileId?.lastname ?? ''} {user.profileId?.extensionName ? user.profileId?.extensionName + '.' : ''}
-            </span>
-          )}
+          {deanName && <span>{deanName}</span>}
+          {instructorName && <span>{instructorName}</span>}
         </div>
       );
     },
-    accessorFn: (row) =>
-      `
-    ${row.teacherScheduleId?.profileId && `${row.teacherScheduleId?.profileId?.firstname} ${row.teacherScheduleId?.profileId?.middlename ?? ''} ${row.teacherScheduleId?.profileId?.lastname} ${row.teacherScheduleId?.profileId?.extensionName ?? ''}`}
-    ${row.teacherScheduleId?.deanId && `${row.teacherScheduleId?.deanId?.firstname} ${row.teacherScheduleId?.deanId?.middlename ?? ''} ${row.teacherScheduleId?.deanId?.lastname} ${row.teacherScheduleId?.deanId?.extensionName ?? ''}`}
-    `.trim(),
+
+    accessorFn: (row) => {
+      const formatName = (person: any) => {
+        if (!person) return '';
+        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',')
+          .replace(/,(\S)/g, ', $1')
+          .replace(/\s+/g, ' ')
+          .trim();
+      };
+
+      const instructorName = row.teacherScheduleId?.profileId ? formatName(row.teacherScheduleId.profileId) : '';
+      const deanName = row.teacherScheduleId?.deanId ? formatName(row.teacherScheduleId.deanId) : '';
+
+      return `${instructorName} ${deanName}`.trim();
+    },
+
     filterFn: (row, columnId, filterValue) => {
-      const user = row.original;
-      const fullName = `${user.teacherScheduleId?.profileId?.firstname ?? ''} ${user.teacherScheduleId?.profileId?.middlename ?? ''} ${user.teacherScheduleId?.profileId?.lastname ?? ''} ${user.teacherScheduleId?.profileId?.extensionName ?? ''}`
-        .toLowerCase()
-        .trim();
-      const deanName = `${user.teacherScheduleId?.deanId?.firstname ?? ''} ${user.teacherScheduleId?.deanId?.middlename ?? ''} ${user.teacherScheduleId?.deanId?.lastname ?? ''} ${user.teacherScheduleId?.deanId?.extensionName ?? ''}`.toLowerCase().trim();
-      return fullName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
+      const user = row.original.teacherScheduleId;
+
+      const formatNameForSearch = (person: any) => {
+        if (!person) return '';
+        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',')
+          .replace(/,(\S)/g, ', $1')
+          .replace(/\s+/g, ' ')
+          .toLowerCase()
+          .trim();
+      };
+
+      const instructorName = user.profileId ? formatNameForSearch(user.profileId) : '';
+      const deanName = user.deanId ? formatNameForSearch(user.deanId) : '';
+
+      return instructorName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },
   },
   {
