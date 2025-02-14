@@ -43,14 +43,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Fullname:{' '}
                       <span className='font-normal'>
-                        {data?.enrollmentRecord?.profileId?.firstname} {data?.enrollmentRecord?.profileId?.middlename ?? ''} {data?.enrollmentRecord?.profileId?.lastname}{' '}
+                        {data?.enrollmentRecord?.profileId?.firstname ?? ''} {data?.enrollmentRecord?.profileId?.middlename ?? ''} {data?.enrollmentRecord?.profileId?.lastname ?? ''}{' '}
                         {data?.enrollmentRecord?.profileId?.extensionName ? data?.enrollmentRecord?.profileId?.extensionName + '.' : ''}
                       </span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{data.enrollmentRecord.course}</span>
+                    <span className='text-sm sm:text-[17px] font-bold'>
+                      Department: <span className='font-normal'>{data?.enrollmentRecord?.course}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start '>
@@ -62,7 +62,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                    <span className='text-sm sm:text-[17px] font-bold'>
                       Block: <span className='font-normal'>{data.enrollmentRecord.blockType.section}</span>
                     </span>
                   </div>

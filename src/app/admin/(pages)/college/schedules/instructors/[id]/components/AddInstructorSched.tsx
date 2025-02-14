@@ -109,7 +109,7 @@ const AddInstructorSched = ({ teacher, r, s }: IProps) => {
           <DialogTitle className='flex flex-col space-y-1'>
             <span>Add New Instructor Schedule</span>
             <span className='text-sm font-bold capitalize'>
-              {teacher.firstname} {teacher.middlename ?? ''} {teacher.lastname} {teacher.extensionName ? teacher.extensionName + '.' : ''}
+              {teacher?.firstname ?? ''} {teacher?.middlename ?? ''} {teacher?.lastname ?? ''} {teacher.extensionName ? teacher.extensionName + '.' : ''}
             </span>
           </DialogTitle>
           <DialogDescription>Please fill the all the required fields.</DialogDescription>

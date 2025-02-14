@@ -59,11 +59,11 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Fullname:{' '}
                       <span className='font-normal'>
-                        {ts?.teacherSchedule?.profileId?.firstname} {ts?.teacherSchedule?.profileId?.middlename ?? ''} {ts?.teacherSchedule?.profileId?.lastname}{' '}
+                        {ts?.teacherSchedule?.profileId?.firstname ?? ''} {ts?.teacherSchedule?.profileId?.middlename ?? ''} {ts?.teacherSchedule?.profileId?.lastname ?? ''}{' '}
                         {ts?.teacherSchedule?.profileId?.extensionName ? ts?.teacherSchedule?.profileId?.extensionName + '.' : ''}
                       </span>
                     </span>
-                  </div>
+                  </div>zzzz
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Department: <span className='font-normal'>{ts?.teacherSchedule?.courseId?.name}</span>

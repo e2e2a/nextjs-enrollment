@@ -15,24 +15,46 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original;
+      const user = row.original?.student;
+
+      const formattedName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim();
+
       return (
-        <div key={cell.id} className=' capitalize'>
-          {user.student.firstname ?? ''} {user.student.middlename ?? ''} {user.student.lastname ?? ''} {user.student.extensionName ? user.student.extensionName + '.' : ''}
+        <div key={cell.id} className='capitalize'>
+          {formattedName}
         </div>
       );
     },
+
     accessorFn: (row) => {
-      const { lastname, firstname, middlename, extensionName } = row.student;
-      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+      const user = row.student;
+      return `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
     },
+
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.student.firstname ?? ''} ${row.original.student.middlename ?? ''} ${row.original.student.lastname ?? ''} ${row.original.student.extensionName ?? ''}`.toLowerCase().trim();
+      const user = row.original?.student;
+
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
+
       return fullName.includes(filterValue.toLowerCase());
     },
   },
   {
-    accessorFn: (row) => row.student.sex,
+    accessorFn: (row) => row?.student?.sex,
     id: 'gender',
     header: 'Gender',
     cell: ({ cell, row }) => {
@@ -45,7 +67,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.firstGrade,
+    accessorFn: (row) => row?.firstGrade,
     id: 'prelim',
     header: 'Prelim',
     cell: ({ cell, row }) => {
@@ -58,7 +80,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.secondGrade,
+    accessorFn: (row) => row?.secondGrade,
     id: 'midterm',
     header: 'Midterm',
     cell: ({ cell, row }) => {
@@ -71,7 +93,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.thirdGrade,
+    accessorFn: (row) => row?.thirdGrade,
     id: 'semi-final',
     header: 'Semi-final',
     cell: ({ cell, row }) => {
@@ -84,7 +106,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.fourthGrade,
+    accessorFn: (row) => row?.fourthGrade,
     id: 'final',
     header: 'Final',
     cell: ({ cell, row }) => {
@@ -97,7 +119,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.averageTotal,
+    accessorFn: (row) => row?.averageTotal,
     id: 'averageTotal',
     header: 'Average Total',
     cell: ({ cell, row }) => {

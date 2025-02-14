@@ -115,9 +115,9 @@ const AddStudentSched = ({ student, b }: IProps) => {
             <DialogHeader>
               <DialogTitle className='flex flex-col space-y-1 sm:text-center'>
                 <span>Add New Student Subjects</span>
-                <span className='capitalize'>Course: {student.courseId.name}</span>
+                <span className=''>Course: {student?.courseId?.name}</span>
                 <span className='text-sm font-bold uppercase'>
-                  {student.profileId.firstname} {student.profileId.middlename ?? ''} {student.profileId.lastname} {student.profileId.extensionName ? student.profileId.extensionName + '.' : ''}
+                  {student?.profileId?.firstname ?? ''} {student?.profileId?.middlename ?? ''} {student?.profileId?.lastname ?? ''} {student.profileId.extensionName ? student.profileId.extensionName + '.' : ''}
                 </span>
                 <span className='text-sm font-bold capitalize'>Block: {student?.blockTypeId?.section ? student?.blockTypeId?.section : 'N/A'}</span>
               </DialogTitle>
@@ -153,8 +153,8 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                   </div>{' '}
                                   <span>
                                     Instructor:
-                                    {selectedItem && selectedItem.profileId && `${selectedItem?.profileId?.firstname} ${selectedItem?.profileId?.middlename} ${selectedItem?.profileId?.lastname} ${selectedItem?.profileId?.extensionName}`}
-                                    {selectedItem && selectedItem.deanId && `${selectedItem?.deanId?.firstname} ${selectedItem?.deanId?.middlename} ${selectedItem?.deanId?.lastname} ${selectedItem?.profileId?.extensionName}`}
+                                    {selectedItem && selectedItem.profileId && `${selectedItem?.profileId?.firstname ?? ''} ${selectedItem?.profileId?.middlename ?? ''} ${selectedItem?.profileId?.lastname ?? ''} ${selectedItem?.profileId?.extensionName ?? ''}`}
+                                    {selectedItem && selectedItem.deanId && `${selectedItem?.deanId?.firstname ?? ''} ${selectedItem?.deanId?.middlename ?? ''} ${selectedItem?.deanId?.lastname ?? ''} ${selectedItem?.profileId?.extensionName ?? ''}`}
                                   </span>
                                   <span>Descriptive Title: {selectedItem?.subjectId?.name}</span>
                                   <span>Subject Code: {selectedItem?.subjectId?.subjectCode}</span>
@@ -233,11 +233,11 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                     Instructor:
                                                     {s.teacherScheduleId &&
                                                       s.teacherScheduleId.profileId &&
-                                                      `${s?.teacherScheduleId?.profileId?.firstname} ${s?.teacherScheduleId?.profileId?.middlename} ${s.teacherScheduleId?.profileId?.lastname}${' '}
+                                                      `${s?.teacherScheduleId?.profileId?.firstname ?? ''} ${s?.teacherScheduleId?.profileId?.middlename ?? ''} ${s.teacherScheduleId?.profileId?.lastname ?? ''}${' '}
                                                       ${s?.teacherScheduleId.profileId?.extensionName ? s?.teacherScheduleId?.profileId?.extensionName : ''}`}
                                                     {s.teacherScheduleId &&
                                                       s.teacherScheduleId.deanId &&
-                                                      `${s?.teacherScheduleId?.deanId?.firstname} ${s?.teacherScheduleId?.deanId?.middlename} ${s?.teacherScheduleId?.deanId?.lastname}${' '}
+                                                      `${s?.teacherScheduleId?.deanId?.firstname ?? ''} ${s?.teacherScheduleId?.deanId?.middlename ?? ''} ${s?.teacherScheduleId?.deanId?.lastname ?? ''}${' '}
                                                       ${s?.teacherScheduleId.deanId?.extensionName ? s?.teacherScheduleId?.deanId?.extensionName : ''}`}
                                                   </span>
                                                   <span className=' font-semibold'>

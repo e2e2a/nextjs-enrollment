@@ -16,19 +16,41 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original;
+      const user = row.original?.teacherId;
+
+      const formattedName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim();
+
       return (
-        <div key={cell.id} className=' capitalize'>
-          {user.teacherId.firstname ?? ''} {user.teacherId.middlename ?? ''} {user?.teacherId?.lastname ?? ''} {user.teacherId.extensionName ? user.teacherId.extensionName + '.' : ''}
+        <div key={cell.id} className='capitalize'>
+          {formattedName}
         </div>
       );
     },
+
     accessorFn: (row) => {
-      const { lastname, firstname, middlename, extensionName } = row.teacherId;
-      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+      const user = row.teacherId;
+      return `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
     },
+
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.teacherId.firstname ?? ''} ${row.original.teacherId.middlename ?? ''} ${row.original.teacherId.lastname ?? ''} ${row.original.teacherId.extensionName ?? ''}`.toLowerCase().trim();
+      const user = row.original?.teacherId;
+
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
+
       return fullName.includes(filterValue.toLowerCase());
     },
   },

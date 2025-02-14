@@ -28,17 +28,33 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original;
+      const user = row.original.profileId;
+      const name = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/(\S),/g, '$1,').replace(/,(\S)/g, ', $1').trim();
       return (
         <div key={cell.id} className='capitalize'>
-          {user.profileId?.firstname} {user.profileId?.middlename ?? ''} {user.profileId?.lastname} {user.profileId?.extensionName ? `${user.profileId.extensionName}. ` : ''}
+          {name}
         </div>
       );
     },
-    accessorFn: (row) => `${row.profileId.firstname ?? ''} ${row.profileId.middlename ?? ''} ${row.profileId.lastname ?? ''} ${row.profileId.extensionName ?? ''}`.trim(),
+
+    accessorFn: (row) => {
+      const user = row.profileId;
+      return `${user?.lastname ? user.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''} ${user?.extensionName ? ', ' + user.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',') // Fix spaces before commas
+        .replace(/,(\S)/g, ', $1') // Ensure proper comma spacing
+        .replace(/\s+/g, ' ') // Remove extra spaces
+        .trim();
+    },
+
     filterFn: (row, columnId, filterValue) => {
-      const user = row.original;
-      const fullName = `${user.profileId.firstname ?? ''} ${user.profileId.middlename ?? ''} ${user.profileId.lastname ?? ''} ${user.profileId.extensionName ?? ''}`.toLowerCase().trim();
+      const user = row.original.profileId;
+      const fullName = `${user?.lastname ? user.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''} ${user?.extensionName ? ', ' + user.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
+
       return fullName.includes(filterValue.toLowerCase());
     },
   },

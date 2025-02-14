@@ -24,51 +24,64 @@ export const columns: ColumnDef<ITeacherProfile>[] = [
     header: ({ column }) => {
       return (
         <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Name
+          FullName
           <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       );
     },
     cell: ({ cell, row }) => {
       const user = row.original;
+      const name =
+        user?.lastname && user?.firstname
+          ? `${user?.lastname ? user.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim()
+          : 'Unknown';
+
       return (
         <div key={cell.id} className='capitalize'>
-          {user?.lastname && user?.firstname ? `${user?.firstname ?? ''} ${user?.middlename ?? ''} ${user?.lastname ?? ''} ${user?.extensionName ? user.extensionName + '.' : ''}` : 'Unknown'}
+          {name}
         </div>
       );
     },
+
     accessorFn: (row) => {
       const { lastname, firstname, middlename, extensionName } = row;
-      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+      return `${lastname ? lastname + ',' : ''} ${firstname ?? ''} ${middlename ?? ''}${extensionName ? ', ' + extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim();
     },
+
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${row.original.firstname ?? ''} ${row.original.middlename ?? ''} ${row.original.lastname ?? ''} ${row.original.extensionName ?? ''}`.toLowerCase().trim();
+      const fullName = `${user?.lastname ? user.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
+
       return fullName.includes(filterValue.toLowerCase());
     },
   },
   {
-    accessorFn: (row) => row.sex,
+    accessorFn: (row) => row?.sex,
     id: 'sex',
     header: 'Sex',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.sex}
+          {user?.sex}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.userId.email,
+    accessorFn: (row) => row.userId?.email,
     id: 'email',
     header: 'Email',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.userId.email}
+          {user?.userId?.email}
         </div>
       );
     },
@@ -81,7 +94,7 @@ export const columns: ColumnDef<ITeacherProfile>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.isVerified ? <span className='text-green-500'>TRUE</span> : <span className='text-red'>FALSE</span>}
+          {user?.isVerified ? <span className='text-green-500'>TRUE</span> : <span className='text-red'>FALSE</span>}
         </div>
       );
     },

@@ -136,8 +136,8 @@ const AddStudentSched = ({ student, b }: IProps) => {
         <div className='overflow-auto w-full bg-slate-50 rounded-lg'>
           <div className=''>
             {selectedItems.length > 0 && (
-              <div className='flex justify-between'>
-                <span className=''>
+              <div className='flex justify-end'>
+                {/*<span className=''>
                   Add list:
                   <div className='flex flex-col'>
                     {selectedItems.map((item, index) => {
@@ -145,21 +145,22 @@ const AddStudentSched = ({ student, b }: IProps) => {
                       for (const schedule of schedules) {
                         if (Array.isArray(schedule.blockSubjects)) {
                           selectedItem = schedule.blockSubjects.find((blockSubject: any) => blockSubject.teacherScheduleId._id === item.teacherScheduleId);
-                          if (selectedItem) break; // Stop iterating if a match is found
+                          if (selectedItem) break;
                         }
                       }
                       if (selectedItem) {
+                        const teacher = selectedItem?.teacherScheduleId?.profileId
+                        const dean = selectedItem?.teacherScheduleId?.deanId
                         return (
                           <div key={`${selectedItem._id}`} className='text-green-500 flex gap-3'>
                             <div className='flex flex-col text-sm'>
                               <div className=''>
                                 <span className='border rounded-full border-gray-600 px-1.5'>{index + 1}</span>
                               </div>{' '}
-                              {/* Numbering starts from 1 */}
                               <span className='uppercase'>
                                 Instructor:
-                                {selectedItem && selectedItem.profileId && `${selectedItem?.profileId?.firstname} ${selectedItem?.profileId?.middlename} ${selectedItem?.profileId?.lastname} ${selectedItem?.profileId?.extensionName}`}
-                                {selectedItem && selectedItem.deanId && `${selectedItem?.deanId?.firstname} ${selectedItem?.deanId?.middlename} ${selectedItem?.deanId?.lastname} ${selectedItem?.profileId?.extensionName}`}
+                                {selectedItem && teacher && `${teacher?.firstname ?? ''} ${teacher?.middlename} ${teacher?.lastname} ${teacher?.extensionName}`}
+                                {selectedItem && selectedItem?.deanId && `${selectedItem?.deanId?.firstname} ${selectedItem?.deanId?.middlename} ${selectedItem?.deanId?.lastname} ${selectedItem?.profileId?.extensionName}`}
                               </span>
                               <span>Title: {selectedItem?.subjectId?.name}</span>
                               <span>Code: {selectedItem.subjectId?.subjectCode}</span>
@@ -172,8 +173,8 @@ const AddStudentSched = ({ student, b }: IProps) => {
                       }
                       return null;
                     })}
-                  </div>
-                </span>
+                  </div> 
+                </span>*/}
                 <Button type='submit' disabled={isEnabled} className='bg-blue-600 text-neutral-50' size={'sm'} onClick={() => actionFormSubmit('Add')} variant='secondary'>
                   Save
                 </Button>

@@ -161,32 +161,53 @@ export const columns: ColumnDef<any>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original.teacherScheduleId;
+      const deanName = `${user.deanId?.lastname ? user.deanId?.lastname + ',' : ''} ${user.deanId?.firstname ?? ''} ${user.deanId?.middlename ?? ''}${user.deanId?.extensionName ? ', ' + user.deanId?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim();
+      const teacherName = `${user.profileId?.lastname ? user.profileId?.lastname + ',' : ''}${user.profileId?.firstname ?? ''} ${user.profileId?.middlename ?? ''}${user.profileId?.extensionName ? ', ' + user.profileId?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim();
       return (
         <div key={cell.id} className='capitalize'>
-          {user.deanId && (
-            <span>
-              {user.deanId?.firstname ?? ''} {user.deanId?.middlename ?? ''} {user.deanId?.lastname ?? ''} {user.deanId?.extensionName ? user.deanId?.extensionName + '.' : ''}
-            </span>
-          )}
-          {user.profileId && (
-            <span>
-              {user.profileId?.firstname ?? ''} {user.profileId?.middlename ?? ''} {user.profileId?.lastname ?? ''} {user.profileId?.extensionName ? user.profileId?.extensionName + '.' : ''}
-            </span>
-          )}
+          {user.deanId && <span>{deanName}</span>}
+          {user.profileId && <span>{teacherName}</span>}
         </div>
       );
     },
     accessorFn: (row) =>
       `
-    ${row.teacherScheduleId?.profileId && `${row.teacherScheduleId?.profileId?.firstname} ${row.teacherScheduleId?.profileId?.middlename ?? ''} ${row.teacherScheduleId?.profileId?.lastname} ${row.teacherScheduleId?.profileId?.extensionName ?? ''}`}
-    ${row.teacherScheduleId?.deanId && `${row.teacherScheduleId?.deanId?.firstname} ${row.teacherScheduleId?.deanId?.middlename ?? ''} ${row.teacherScheduleId?.deanId?.lastname} ${row.teacherScheduleId?.deanId?.extensionName ?? ''}`}
+    ${
+      row.teacherScheduleId?.profileId &&
+      `${row.teacherScheduleId?.profileId?.lastname ? row.teacherScheduleId?.profileId?.lastname + ',' : ''} ${row.teacherScheduleId?.profileId?.firstname ?? ''} ${row.teacherScheduleId?.profileId?.middlename} ${
+        row.teacherScheduleId?.profileId?.extensionName ?? ''
+      }`
+    }
+    ${
+      row.teacherScheduleId?.deanId &&
+      `${row.teacherScheduleId?.deanId?.lastname ? row.teacherScheduleId?.deanId?.lastname + ',' : ''} ${row.teacherScheduleId?.deanId?.firstname ?? ''} ${row.teacherScheduleId?.deanId?.middlename} ${row.teacherScheduleId?.deanId?.extensionName ?? ''}`
+    }
     `.trim(),
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user.teacherScheduleId?.profileId?.firstname ?? ''} ${user.teacherScheduleId?.profileId?.middlename ?? ''} ${user.teacherScheduleId?.profileId?.lastname ?? ''} ${user.teacherScheduleId?.profileId?.extensionName ?? ''}`
+      const teacher = user.teacherScheduleId?.profileId;
+      const dean = user.teacherScheduleId?.deanId;
+
+      const fullName = `${teacher?.lastname ? teacher?.lastname + ',' : ''} ${teacher?.middlename ?? ''} ${teacher?.firstname ?? ''}${teacher?.extensionName ? ', ' + teacher?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
         .toLowerCase()
         .trim();
-      const deanName = `${user.teacherScheduleId?.deanId?.firstname ?? ''} ${user.teacherScheduleId?.deanId?.middlename ?? ''} ${user.teacherScheduleId?.deanId?.lastname ?? ''} ${user.teacherScheduleId?.deanId?.extensionName ?? ''}`.toLowerCase().trim();
+      const deanName = `${dean?.lastname ? dean?.lastname + ',' : ''} ${dean?.middlename ?? ''} ${dean?.firstname ?? ''}${dean?.extensionName ? ', ' + dean?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
       return fullName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },
   },

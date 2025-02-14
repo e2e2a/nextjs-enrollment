@@ -44,14 +44,14 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user?.teacherScheduleId?.subjectId.name}
+          {user?.teacherScheduleId?.subjectId?.name}
         </div>
       );
     },
-    accessorFn: (row) => `${row.teacherScheduleId.subjectId.name}`,
+    accessorFn: (row) => `${row.teacherScheduleId.subjectId?.name}`,
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const descriptiveTitle = `${user.teacherScheduleId.subjectId.name}`.toLowerCase();
+      const descriptiveTitle = `${user?.teacherScheduleId?.subjectId?.name}`.toLowerCase();
       return descriptiveTitle.includes(filterValue.toLowerCase());
     },
   },
@@ -76,85 +76,85 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.teacherScheduleId?.subjectId.lec}
+          {user?.teacherScheduleId?.subjectId?.lec}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.lab,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.lab,
     id: 'lab',
     header: 'Lab',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.teacherScheduleId?.subjectId.lab}
+          {user?.teacherScheduleId?.subjectId?.lab}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.unit,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.unit,
     id: 'unit',
     header: 'Unit',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.teacherScheduleId?.subjectId.unit}
+          {user?.teacherScheduleId?.subjectId?.unit}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.days,
+    accessorFn: (row) => row?.teacherScheduleId?.days,
     id: 'days',
     header: 'Days',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.days.join(', ')}
+          {user?.teacherScheduleId?.days.join(', ')}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.startTime,
+    accessorFn: (row) => row.teacherScheduleId?.startTime,
     id: 'start time',
     header: 'Start Time',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.startTime}
+          {user?.teacherScheduleId?.startTime}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.endTime,
+    accessorFn: (row) => row?.teacherScheduleId?.endTime,
     id: 'end time',
     header: 'End Time',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.endTime}
+          {user?.teacherScheduleId?.endTime}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.roomId.roomName,
+    accessorFn: (row) => row.teacherScheduleId?.roomId?.roomName,
     id: 'room name',
     header: 'Room Name',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.roomId.roomName}
+        <div key={cell.id} className=''>
+          {user?.teacherScheduleId?.roomId?.roomName}
         </div>
       );
     },
@@ -172,33 +172,57 @@ export const columns: ColumnDef<any>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original.teacherScheduleId;
+      const dean = user?.deanId;
+      const instructor = user?.profileId;
+      const deanName = `${dean?.lastname ? dean?.lastname + ',' : ''} ${dean?.firstname ?? ''} ${dean?.middlename ?? ''}${dean?.extensionName ? ', ' + dean?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim();
+      const instructorName = `${instructor?.lastname ? instructor?.lastname + ',' : ''} ${instructor?.firstname ?? ''} ${instructor?.middlename ?? ''}${instructor?.extensionName ? ', ' + instructor?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim();
       return (
         <div key={cell.id} className='capitalize'>
-          {user.deanId && (
-            <span>
-              {user?.deanId?.firstname ?? ''} {user?.deanId?.middlename ?? ''} {user?.deanId?.lastname ?? ''} {user?.deanId?.extensionName ? user.deanId?.extensionName + '.' : ''}
-            </span>
-          )}
-          {user.profileId && (
-            <span>
-              {user?.profileId?.firstname ?? ''} {user?.profileId?.middlename ?? ''} {user?.profileId?.lastname ?? ''} {user?.profileId?.extensionName ? user.profileId?.extensionName + '.' : ''}
-            </span>
-          )}
+          {user.deanId && <span>{deanName}</span>}
+          {user.profileId && <span>{instructorName}</span>}
         </div>
       );
     },
-    accessorFn: (row) =>
-      `
-    ${row.teacherScheduleId?.profileId && `${row.teacherScheduleId?.profileId?.firstname} ${row.teacherScheduleId?.profileId?.middlename ?? ''} ${row.teacherScheduleId?.profileId?.lastname} ${row.teacherScheduleId?.profileId?.extensionName ?? ''}`}
-    ${row.teacherScheduleId?.deanId && `${row.teacherScheduleId?.deanId?.firstname} ${row.teacherScheduleId?.deanId?.middlename ?? ''} ${row.teacherScheduleId?.deanId?.lastname} ${row.teacherScheduleId?.deanId?.extensionName ?? ''}`}
-    `.trim(),
+    accessorFn: (row) => {
+      const formatName = (person: any) => {
+        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',')
+          .replace(/,(\S)/g, ', $1')
+          .replace(/\s+/g, ' ')
+          .toLowerCase()
+          .trim();
+      };
+
+      const instructorName = row.teacherScheduleId?.profileId ? formatName(row?.teacherScheduleId?.profileId) : '';
+      const deanName = row.teacherScheduleId?.deanId ? formatName(row?.teacherScheduleId?.deanId) : '';
+
+      return `${instructorName} ${deanName}`.trim();
+    },
+
     filterFn: (row, columnId, filterValue) => {
-      const user = row.original;
-      const fullName = `${user.teacherScheduleId?.profileId?.firstname ?? ''} ${user.teacherScheduleId?.profileId?.middlename ?? ''} ${user.teacherScheduleId?.profileId?.lastname ?? ''} ${user.teacherScheduleId?.profileId?.extensionName ?? ''}`
-        .toLowerCase()
-        .trim();
-      const deanName = `${user.teacherScheduleId?.deanId?.firstname ?? ''} ${user.teacherScheduleId?.deanId?.middlename ?? ''} ${user.teacherScheduleId?.deanId?.lastname ?? ''} ${user.teacherScheduleId?.deanId?.extensionName ?? ''}`.toLowerCase().trim();
-      return fullName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
+      const user = row.original.teacherScheduleId;
+
+      const formatNameForSearch = (person: any) => {
+        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''} ${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',')
+          .replace(/,(\S)/g, ', $1')
+          .replace(/\s+/g, ' ')
+          .toLowerCase()
+          .trim();
+      };
+
+      const instructorName = user.profileId ? formatNameForSearch(user.profileId) : '';
+      const deanName = user.deanId ? formatNameForSearch(user.deanId) : '';
+
+      return instructorName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },
   },
   {

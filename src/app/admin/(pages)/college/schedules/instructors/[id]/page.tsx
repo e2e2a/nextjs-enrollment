@@ -47,12 +47,12 @@ const Page = ({ params }: { params: { id: string } }) => {
                 </div>
                 <div className=''>
                   <h1 className='sm:text-sm text-lg font-bold capitalize'>
-                    {data?.profile?.firstname} {data?.profile?.middlename ?? ''} {data?.profile?.lastname} {data?.profile?.extensionName ? data?.profile?.extensionName + '.' : ''}
+                    {data?.profile?.firstname ?? ''} {data?.profile?.middlename ?? ''} {data?.profile?.lastname ?? ''} {data?.profile?.extensionName ? data?.profile?.extensionName + '.' : ''}
                   </h1>
                 </div>
               </div>
               <div className='w-full flex justify-end items-center'>
-                <AddInstructorSched teacher={data.profile} s={s?.subjects} r={r?.rooms} />
+                <AddInstructorSched teacher={data?.profile} s={s?.subjects} r={r?.rooms} />
               </div>
               <DataTable columns={columns} data={ts?.teacherSchedules} />
             </>

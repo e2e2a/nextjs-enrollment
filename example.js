@@ -120,3 +120,6 @@ let number = 123.43;
 let roundedNumber = number.toFixed(2);
 
 console.log(roundedNumber);  // Output: "123.46"
+const name = 'asd'
+
+console.log('message:', name + ',')

@@ -17,31 +17,60 @@ export const columns: ColumnDef<any>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original;
+
+      const formatName = (person: any) => {
+        if (!person) return '';
+        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',') // Fix spaces before commas
+          .replace(/,(\S)/g, ', $1') // Ensure proper comma spacing
+          .replace(/\s+/g, ' ') // Replace multiple spaces with a single space
+          .trim();
+      };
+
+      const teacherName = user.teacherId ? formatName(user.teacherId) : '';
+      const deanName = user.deanId ? formatName(user.deanId) : '';
+
       return (
-        <div key={cell.id} className=' capitalize'>
-          {user.teacherId && (
-            <span>
-              {user.teacherId.firstname} {user.teacherId.middlename ?? ''} {user.teacherId.lastname} {user.teacherId.extensionName ? user.teacherId.extensionName + '.' : ''}
-            </span>
-          )}
-          {user.deanId && (
-            <span>
-              {user.deanId.firstname} {user.deanId.middlename ?? ''} {user.deanId.lastname} {user.deanId.extensionName ? user.deanId.extensionName + '.' : ''}
-            </span>
-          )}
+        <div key={cell.id} className='capitalize'>
+          {deanName && <span>{deanName}</span>}
+          {teacherName && <span>{teacherName}</span>}
         </div>
       );
     },
-    accessorFn: (row) =>
-      `
-    ${row.profileId && `${row.profileId?.firstname} ${row.profileId?.middlename ?? ''} ${row.profileId?.lastname} ${row.profileId?.extensionName ?? ''}`}
-    ${row.deanId && `${row.deanId?.firstname} ${row.deanId?.middlename ?? ''} ${row.deanId?.lastname} ${row.deanId?.extensionName ?? ''}`}
-    `.trim(),
+
+    accessorFn: (row) => {
+      const formatName = (person: any) => {
+        if (!person) return '';
+        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',')
+          .replace(/,(\S)/g, ', $1')
+          .replace(/\s+/g, ' ')
+          .trim();
+      };
+
+      const teacherName = row.teacherId ? formatName(row.teacherId) : '';
+      const deanName = row.deanId ? formatName(row.deanId) : '';
+
+      return `${teacherName} ${deanName}`.trim();
+    },
+
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user.profileId?.firstname ?? ''} ${user.profileId?.middlename ?? ''} ${user.profileId?.lastname ?? ''} ${user.profileId?.extensionName ?? ''}`.toLowerCase().trim();
-      const deanName = `${user.deanId?.firstname ?? ''} ${user.deanId?.middlename ?? ''} ${user.deanId?.lastname ?? ''} ${user.deanId?.extensionName ?? ''}`.toLowerCase().trim();
-      return fullName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
+
+      const formatNameForSearch = (person: any) => {
+        if (!person) return '';
+        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',')
+          .replace(/,(\S)/g, ', $1')
+          .replace(/\s+/g, ' ')
+          .toLowerCase()
+          .trim();
+      };
+
+      const teacherName = user?.teacherId ? formatNameForSearch(user.teacherId) : '';
+      const deanName = user?.deanId ? formatNameForSearch(user.deanId) : '';
+
+      return teacherName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },
   },
 
@@ -92,7 +121,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId?.subjectId?.name}
+          {user?.teacherScheduleId?.subjectId?.name}
         </div>
       );
     },
@@ -105,7 +134,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId?.blockTypeId?.year}
+          {user?.teacherScheduleId?.blockTypeId?.year}
         </div>
       );
     },
@@ -118,7 +147,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.teacherScheduleId?.blockTypeId?.semester}
+          {user?.teacherScheduleId?.blockTypeId?.semester}
         </div>
       );
     },
@@ -161,9 +190,9 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='font-bold uppercase'>
-          {user.statusInDean && user.statusInDean === 'Pending' && <span className='text-blue-500'>{user.statusInDean}</span>}
-          {user.statusInDean && user.statusInDean === 'Approved' && <span className='text-green-500'>{user.statusInDean}</span>}
-          {user.statusInDean && user.statusInDean === 'Declined' && <span className='text-red'>{user.statusInDean}</span>}
+          {user?.statusInDean && user.statusInDean === 'Pending' && <span className='text-blue-500'>{user.statusInDean}</span>}
+          {user?.statusInDean && user.statusInDean === 'Approved' && <span className='text-green-500'>{user.statusInDean}</span>}
+          {user?.statusInDean && user.statusInDean === 'Declined' && <span className='text-red'>{user.statusInDean}</span>}
         </div>
       );
     },
@@ -176,7 +205,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase font-bold'>
-          {user.evaluated ? <span className='text-green-500'>Verified</span> : <span className='text-red'>Not Verified</span>}
+          {user?.evaluated ? <span className='text-green-500'>Verified</span> : <span className='text-red'>Not Verified</span>}
         </div>
       );
     },

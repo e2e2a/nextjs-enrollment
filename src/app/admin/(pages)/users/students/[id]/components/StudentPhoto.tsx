@@ -39,7 +39,7 @@ const StudentPhoto = ({ user }: { user: any }) => {
 
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `${user.firstname} ${user?.middlename && user?.middlename[0] + '.'} ${user.lastname} ${user.extensionName ? user.extensionName : ''}.png`);
+        link.setAttribute('download', `${user?.firstname ?? ''} ${user?.middlename && user?.middlename[0] + '.'} ${user?.lastname ?? ''} ${user?.extensionName ? user.extensionName : ''}.png`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -67,7 +67,7 @@ const StudentPhoto = ({ user }: { user: any }) => {
                       <span className='font-medium sm:text-lg text-xs'>
                         Student:{' '}
                         <span className=' capitalize sm:text-lg text-xs'>
-                          {user.firstname} {user?.middlename && user?.middlename[0] + '.'} {user.lastname} {user.extensionName ? user.extensionName + '.' : ''}
+                          {user?.firstname ?? ''} {user?.middlename && user?.middlename[0] + '.'} {user?.lastname ?? ''} {user?.extensionName ? user.extensionName + '.' : ''}
                         </span>
                       </span>
                     </div>
@@ -82,7 +82,7 @@ const StudentPhoto = ({ user }: { user: any }) => {
               </DialogHeader>
               {photoUrl ? (
                 <div className='overflow-y-auto max-h-[400px] '>
-                  <Image src={photoUrl} alt={user.firstname || 'nothing to say'} width={600} priority height={600} className='object-contain' />
+                  <Image src={photoUrl} alt={user?.firstname || 'nothing to say'} width={600} priority height={600} className='object-contain' />
                 </div>
               ) : (
                 <div className='items-center justify-center text-red'>No Student Photo</div>

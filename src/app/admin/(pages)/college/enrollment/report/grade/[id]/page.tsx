@@ -42,25 +42,25 @@ const Page = ({ params }: { params: { id: string } }) => {
                       Instructor:{' '}
                       {data.reportedGrades?.teacherId && (
                         <span className='font-normal'>
-                          {data?.reportedGrades?.teacherId?.firstname} {data?.reportedGrades?.teacherId?.middlename ?? ''} {data?.reportedGrades?.teacherId?.lastname}{' '}
+                          {data?.reportedGrades?.teacherId?.firstname ?? ''} {data?.reportedGrades?.teacherId?.middlename ?? ''} {data?.reportedGrades?.teacherId?.lastname ?? ''}{' '}
                           {data?.reportedGrades?.teacherId?.extensionName ? data?.reportedGrades?.teacherId?.extensionName + '.' : ''}
                         </span>
                       )}
                       {data.reportedGrades?.deanId && (
                         <span className='font-normal'>
-                          {data?.reportedGrades?.deanId?.firstname} {data?.reportedGrades?.deanId?.middlename ?? ''} {data?.reportedGrades?.deanId?.lastname}{' '}
+                          {data?.reportedGrades?.deanId?.firstname ?? ''} {data?.reportedGrades?.deanId?.middlename ?? ''} {data?.reportedGrades?.deanId?.lastname ?? ''}{' '}
                           {data?.reportedGrades?.deanId?.extensionName ? data?.reportedGrades?.deanId?.extensionName + '.' : ''}
                         </span>
                       )}
                     </span>
                   </div>
                   <div className='flex w-full justify-start text-start sm:justify-end'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                    <span className='text-sm sm:text-[17px] font-bold'>
                       Department: <span className='font-normal'>{data?.reportedGrades?.teacherScheduleId?.courseId?.name}</span>
                     </span>
                   </div>
                   <div className='justify-between items-center flex w-full'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                    <span className='text-sm sm:text-[17px] font-bold'>
                       Descriptive Title: <span className='font-normal'>{data?.reportedGrades?.teacherScheduleId.subjectId?.name}</span>
                     </span>
                   </div>

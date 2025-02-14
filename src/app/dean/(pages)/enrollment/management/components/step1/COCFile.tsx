@@ -35,7 +35,7 @@ const COCFile = ({ user }: { user: any }) => {
 
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `${user.profileId?.firstname} ${user.profileId?.middlename && user.profileId?.middlename[0] + '.'} ${user.profileId.lastname} ${user.profileId.extensionName ? user.profileId.extensionName : ''}.png`);
+        link.setAttribute('download', `${user?.profileId?.firstname ?? ''} ${user?.profileId?.middlename && user?.profileId?.middlename[0] + '.'} ${user?.profileId?.lastname ?? ''} ${user?.profileId?.extensionName ? user?.profileId?.extensionName : ''}.png`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -62,7 +62,7 @@ const COCFile = ({ user }: { user: any }) => {
                       <span className='font-medium sm:text-lg text-xs'>
                         Student:{' '}
                         <span className=' capitalize sm:text-lg text-xs'>
-                          {user.profileId.firstname} {user.profileId?.middlename && user.profileId?.middlename[0] + '.'} {user.profileId.lastname} {user.profileId.extensionName ? user.profileId.extensionName + '.' : ''}
+                          {user?.profileId?.firstname ?? ''} {user?.profileId?.middlename && user?.profileId?.middlename[0] + '.'} {user?.profileId?.lastname ?? ''} {user?.profileId?.extensionName ? user?.profileId?.extensionName + '.' : ''}
                         </span>
                       </span>
                     </div>
@@ -82,7 +82,7 @@ const COCFile = ({ user }: { user: any }) => {
                   fileUrl.includes('.pdf') ? (
                     <iframe src={fileUrl} width='100%' height='400px' className='border-0' title='PDF Preview' />
                   ) : (
-                    <Image src={fileUrl} alt={user.profileId.firstname || 'nothing to say'} width={600} priority height={600} quality={80} className='object-contain' />
+                    <Image src={fileUrl} alt={user?.profileId?.firstname || 'nothing to say'} width={600} priority height={600} quality={80} className='object-contain' />
                   )
                 ) : (
                   <div className='items-center justify-center text-red'>No COC</div>

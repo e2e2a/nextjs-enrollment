@@ -38,38 +38,55 @@ export const columns4: ColumnDef<IEnrollment>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original;
+      const user = row.original.profileId;
+
+      const formattedName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim();
+
       return (
-        <div key={cell.id} className=' capitalize'>
-          {user.profileId.firstname ?? ''} {user.profileId.middlename ?? ''} {user.profileId.lastname ?? ''} {user.profileId.extensionName ? user.profileId.extensionName + '.' : ''}
+        <div key={cell.id} className='capitalize'>
+          {formattedName}
         </div>
       );
     },
+
     accessorFn: (row) => {
-      const { lastname, firstname, middlename, extensionName } = row.profileId;
-      return `${firstname ?? ''} ${middlename ?? ''} ${lastname ?? ''} ${extensionName ?? ''}`.trim();
+      const user = row.profileId;
+      return `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').toLowerCase().trim();
     },
+
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.profileId.firstname ?? ''} ${row.original.profileId.middlename ?? ''} ${row.original.profileId.lastname ?? ''} ${row.original.profileId.extensionName ?? ''}`.toLowerCase().trim();
+      const user = row.original.profileId;
+
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim()
+        .toLowerCase();
+
       return fullName.includes(filterValue.toLowerCase());
     },
   },
 
   {
-    accessorFn: (row) => row.courseId.courseCode,
+    accessorFn: (row) => row.courseId?.courseCode,
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.courseId.courseCode}
+        <div key={cell.id} className=''>
+          {user?.courseId?.courseCode}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.studentYear,
+    accessorFn: (row) => row?.studentYear,
     accessorKey: 'student year',
     header: ({ column }) => (
       <YearFilter
@@ -80,7 +97,7 @@ export const columns4: ColumnDef<IEnrollment>[] = [
     ),
   },
   {
-    accessorFn: (row) => row.studentSemester,
+    accessorFn: (row) => row?.studentSemester,
     accessorKey: 'student semester',
     header: ({ column }) => (
       <SemesterFilter
@@ -91,7 +108,7 @@ export const columns4: ColumnDef<IEnrollment>[] = [
     ),
   },
   {
-    accessorFn: (row) => row.studentStatus,
+    accessorFn: (row) => row?.studentStatus,
     accessorKey: 'student status',
     header: ({ column }) => (
       <StudentStatusFilter
@@ -110,21 +127,21 @@ export const columns4: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.profileId.psaUrl,
+    accessorFn: (row) => row?.profileId?.psaUrl,
     accessorKey: 'psa file',
     header: 'PSA file',
     cell: ({ row }) => {
       const user = row.original;
-      return user.profileId.psaUrl ? <PSAFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
+      return user?.profileId?.psaUrl ? <PSAFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
-    accessorFn: (row) => row.profileId.goodMoralUrl,
+    accessorFn: (row) => row.profileId?.goodMoralUrl,
     accessorKey: 'good moral',
     header: 'Good Moral',
     cell: ({ row }) => {
       const user = row.original;
-      return user.profileId.goodMoralUrl ? <GoodMoralFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
+      return user?.profileId?.goodMoralUrl ? <GoodMoralFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
@@ -137,32 +154,32 @@ export const columns4: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.profileId.cocUrl,
+    accessorFn: (row) => row.profileId?.cocUrl,
     accessorKey: 'Certification of Completion',
     header: 'Certification of Completion',
     cell: ({ row }) => {
       const user = row.original;
-      return user.profileId.cocUrl ? <COCFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
+      return user?.profileId?.cocUrl ? <COCFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
-    accessorFn: (row) => row.profileId.photoUrl,
+    accessorFn: (row) => row.profileId?.photoUrl,
     accessorKey: 'student photo',
     header: 'Student Photo',
     cell: ({ row }) => {
       const user = row.original;
-      return user.profileId.photoUrl ? <StudentPhoto user={user} /> : <span className=' text-red font-medium'>N/A</span>;
+      return user?.profileId?.photoUrl ? <StudentPhoto user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
-    accessorFn: (row) => row.profileId.studentType,
+    accessorFn: (row) => row.profileId?.studentType,
     accessorKey: 'student type',
     header: 'Student Type',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.profileId.studentType}
+          {user?.profileId?.studentType}
         </div>
       );
     },
@@ -174,40 +191,40 @@ export const columns4: ColumnDef<IEnrollment>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user?.blockTypeId?.section ? `block ${user.blockTypeId?.section}` : 'N/A'}
+        <div key={cell.id} className=''>
+          {user?.blockTypeId?.section ? `${user.blockTypeId?.section}` : 'N/A'}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.schoolYear,
+    accessorFn: (row) => row?.schoolYear,
     accessorKey: 'school year',
     header: 'School Year',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.schoolYear}
+          {user?.schoolYear}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.studentSubjects.length,
+    accessorFn: (row) => row.studentSubjects?.length,
     accessorKey: 'Subjects Count',
     header: 'Subjects Count',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' '>
-          {user.studentSubjects.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green-500'>{user.studentSubjects.length}</span>}
+          {user?.studentSubjects?.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green-500'>{user.studentSubjects.length}</span>}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.studentSubjects.request,
+    accessorFn: (row) => row.studentSubjects?.request,
     accessorKey: 'request add',
     header: 'Request Add',
     cell: ({ cell, row }) => {
@@ -215,13 +232,13 @@ export const columns4: ColumnDef<IEnrollment>[] = [
       const requestAdd = user.studentSubjects.filter((s: any) => s.request === 'add');
       return (
         <div key={cell.id} className=' text-green-500'>
-          {requestAdd.length}
+          {requestAdd?.length}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.studentSubjects.request,
+    accessorFn: (row) => row.studentSubjects?.request,
     accessorKey: 'request drop',
     header: 'Request Drop',
     cell: ({ cell, row }) => {
@@ -229,7 +246,7 @@ export const columns4: ColumnDef<IEnrollment>[] = [
       const requestDrop = user.studentSubjects.filter((s: any) => s.request === 'drop');
       return (
         <div key={cell.id} className='text-red '>
-          {requestDrop.length}
+          {requestDrop?.length}
         </div>
       );
     },

@@ -130,7 +130,7 @@ const ProfileDropdown = ({ session, profile }: IProps) => {
           <div className='flex flex-col w-full'>
             {profile?.firstname && profile?.lastname ? (
               <h1 className='text-center h3-bold md:h1-semibold w-full capitalize'>
-                {profile.firstname} {profile.lastname}
+                {profile.firstname ?? ''} {profile.lastname ?? ''}
               </h1>
             ) : null}
             <Username profile={profile} />

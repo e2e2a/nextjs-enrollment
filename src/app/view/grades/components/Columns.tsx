@@ -23,7 +23,7 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
+        <div key={cell.id} className=''>
           {user.teacherScheduleId?.blockTypeId?.section}
         </div>
       );
@@ -44,7 +44,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.name,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.name,
     id: 'Descriptive Title',
     header: 'Descriptive Title',
     cell: ({ cell, row }) => {
@@ -57,7 +57,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.lec,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.lec,
     id: 'lec',
     header: 'Lec',
     cell: ({ cell, row }) => {
@@ -70,7 +70,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.lab,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.lab,
     id: 'lab',
     header: 'Lab',
     cell: ({ cell, row }) => {
@@ -83,7 +83,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.unit,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.unit,
     id: 'unit',
     header: 'Unit',
     cell: ({ cell, row }) => {
@@ -159,22 +159,41 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original;
+      const user = row.original?.teacherScheduleId?.profileId;
+
+      const formattedName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim();
+
       return (
         <div key={cell.id} className='capitalize'>
-          {user.teacherScheduleId?.profileId?.firstname ?? ''} {user.teacherScheduleId?.profileId?.middlename ?? ''} {user.teacherScheduleId?.profileId?.lastname ?? ''}{' '}
-          {user.teacherScheduleId?.profileId?.extensionName ? user.teacherScheduleId?.profileId?.extensionName + '.' : ''}
+          {formattedName}
         </div>
       );
     },
-    accessorFn: (row) => `${row.teacherScheduleId?.profileId?.firstname ?? ''} ${row.teacherScheduleId?.profileId?.middlename ?? ''} ${row.teacherScheduleId?.profileId?.lastname ?? ''} ${row.teacherScheduleId?.profileId?.extensionName ?? ''}`.trim(),
-    filterFn: (row, columnId, filterValue) => {
-      const user = row.original;
-      const fullName = `${user.teacherScheduleId?.profileId?.firstname ?? ''} ${user.teacherScheduleId?.profileId?.middlename ?? ''} ${user.teacherScheduleId?.profileId?.lastname ?? ''} ${
-        user.teacherScheduleId?.profileId?.extensionName ? user.teacherScheduleId?.profileId?.extensionName : ''
-      }`
+
+    accessorFn: (row) => {
+      const user = row.teacherScheduleId?.profileId;
+      return `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
         .toLowerCase()
         .trim();
+    },
+
+    filterFn: (row, columnId, filterValue) => {
+      const user = row.original?.teacherScheduleId?.profileId;
+
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
+
       return fullName.includes(filterValue.toLowerCase());
     },
   },
