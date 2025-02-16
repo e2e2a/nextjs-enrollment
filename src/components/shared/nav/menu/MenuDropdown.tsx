@@ -26,9 +26,9 @@ export function MenuDropdown({ session }: IProps) {
             {/* <Content items={dashboardConfig.sidebarNav} /> */}
             {session && session.role === 'ADMIN' && <ContentAdmin items={dashboardConfig.sidebarAdmin} />}
             {session && session.role === 'STUDENT' && <Content items={dashboardConfig.sidebarNav} />}
-            {session && session.role === 'INSTRUCTOR' && <Content items={dashboardConfig.sidebarInstructor} />}
-            {session && session.role === 'DEAN' && <Content items={dashboardConfig.sidebarDean} />}
-            {session && session.role === 'ACCOUNTING' && <Content items={dashboardConfig.sidebarAccounting} />}
+            {session && session.role === 'TEACHER' && <Content items={dashboardConfig.sidebarInstructor} />}
+            {session && session.role === 'DEAN' && <ContentAdmin items={dashboardConfig.sidebarDean} />}
+            {session && session.role === 'ACCOUNTING' && <ContentAdmin items={dashboardConfig.sidebarAccounting} />}
           </DropdownMenuContent>
         </DropdownMenu>
         <TooltipContent className='bg-white py-1 px-2 mt-2'>
