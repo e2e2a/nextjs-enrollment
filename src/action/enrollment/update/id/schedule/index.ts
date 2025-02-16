@@ -263,8 +263,10 @@ const requestDropStudentSubjectCollege = async (data: any, e: any) => {
     const enrollmentToUpdate = await e.studentSubjects.find((sched: any) => sched.teacherScheduleId._id.toString() === data.teacherScheduleId);
     if (!enrollmentToUpdate) return { error: 'No student subject found.', status: 403 };
     if (enrollmentToUpdate.request === 'drop') return { error: 'Subject is already added.', status: 409 };
+    if (!data.reason) return { error: 'Please fill up your valid reason.', status: 400 };
 
     enrollmentToUpdate.request = 'drop';
+    enrollmentToUpdate.reason = data.reason;
     enrollmentToUpdate.requestStatusInDean = 'Pending';
     enrollmentToUpdate.requestStatusInRegistrar = 'Pending';
     enrollmentToUpdate.requestStatus = 'Pending';

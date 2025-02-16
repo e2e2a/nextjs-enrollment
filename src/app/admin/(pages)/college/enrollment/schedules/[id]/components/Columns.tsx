@@ -4,6 +4,7 @@ import ActionsCell from './ActionsCell';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
 import OptionsCell from './OptionsCell';
+import ViewReason from './ViewReason';
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -279,6 +280,24 @@ export const columns: ColumnDef<any>[] = [
             <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
           ) : user.requestStatusInRegistrar === 'Declined' ? (
             <span className='text-red text-xs'>{user.requestStatusInRegistrar}</span>
+          ) : (
+            <span className='text-gray-400 text-xs'>N/A</span>
+          )}
+        </div>
+      );
+    },
+  },
+  {
+    id: 'reason',
+    header: 'Reason',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' '>
+          {user.reason ? (
+            <>
+              <ViewReason user={user} />
+            </>
           ) : (
             <span className='text-gray-400 text-xs'>N/A</span>
           )}

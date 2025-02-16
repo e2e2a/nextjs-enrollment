@@ -4,6 +4,7 @@ import ActionsCell from './ActionsCell';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
 import OptionsCell from './OptionsCell';
+import ViewReason from './ViewReason';
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -26,7 +27,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user?.teacherScheduleId?.blockTypeId?.section}
+          {user.teacherScheduleId?.blockTypeId?.section ?? 'N/A'}
         </div>
       );
     },
@@ -40,7 +41,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user?.teacherScheduleId?.subjectId?.subjectCode}
+          {user.teacherScheduleId?.subjectId?.subjectCode}
         </div>
       );
     },
@@ -86,7 +87,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.lab,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.lab,
     id: 'lab',
     header: 'Lab',
     cell: ({ cell, row }) => {
@@ -99,7 +100,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId?.subjectId?.unit,
+    accessorFn: (row) => row?.teacherScheduleId?.subjectId?.unit,
     id: 'unit',
     header: 'Unit',
     cell: ({ cell, row }) => {
@@ -112,7 +113,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row?.teacherScheduleId?.startTime,
+    accessorFn: (row) => row.teacherScheduleId?.startTime,
     id: 'start time',
     header: 'Start Time',
     cell: ({ cell, row }) => {
@@ -162,36 +163,39 @@ export const columns: ColumnDef<any>[] = [
     },
     cell: ({ cell, row }) => {
       const user = row.original.teacherScheduleId;
-      const instructor = user?.profileId;
-      const dean = user?.deanId;
 
-      const formatName = (person: any) =>
-        `${person?.lastname ? person.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim();
+      const formatName = (person: any) => {
+        if (!person) return '';
+        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
+          .replace(/\s+,/g, ',') // Fix spaces before commas
+          .replace(/,(\S)/g, ', $1') // Ensure proper comma spacing
+          .replace(/\s+/g, ' ') // Replace multiple spaces with a single space
+          .trim();
+      };
 
-      const instructorName = instructor ? formatName(instructor) : '';
-      const deanName = dean ? formatName(dean) : '';
+      const instructorName = user.profileId ? formatName(user.profileId) : '';
+      const deanName = user.deanId ? formatName(user.deanId) : '';
 
       return (
         <div key={cell.id} className='capitalize'>
+          {deanName && <span>{deanName}</span>}
           {instructorName && <span>{instructorName}</span>}
-          {deanName && <span> | {deanName}</span>}
         </div>
       );
     },
 
     accessorFn: (row) => {
-      const user = row.teacherScheduleId;
-
-      const formatName = (person: any) =>
-        `${person?.lastname ? person.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person.extensionName + '.' : ''}`
+      const formatName = (person: any) => {
+        if (!person) return '';
+        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
           .replace(/\s+,/g, ',')
           .replace(/,(\S)/g, ', $1')
           .replace(/\s+/g, ' ')
-          .toLowerCase()
           .trim();
+      };
 
-      const instructorName = user?.profileId ? formatName(user.profileId) : '';
-      const deanName = user?.deanId ? formatName(user.deanId) : '';
+      const instructorName = row.teacherScheduleId?.profileId ? formatName(row.teacherScheduleId.profileId) : '';
+      const deanName = row.teacherScheduleId?.deanId ? formatName(row.teacherScheduleId.deanId) : '';
 
       return `${instructorName} ${deanName}`.trim();
     },
@@ -199,16 +203,18 @@ export const columns: ColumnDef<any>[] = [
     filterFn: (row, columnId, filterValue) => {
       const user = row.original.teacherScheduleId;
 
-      const formatNameForSearch = (person: any) =>
-        `${person?.lastname ? person.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''} ${person?.extensionName ? ', ' + person.extensionName + '.' : ''}`
+      const formatNameForSearch = (person: any) => {
+        if (!person) return '';
+        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
           .replace(/\s+,/g, ',')
           .replace(/,(\S)/g, ', $1')
           .replace(/\s+/g, ' ')
           .toLowerCase()
           .trim();
+      };
 
-      const instructorName = user?.profileId ? formatNameForSearch(user.profileId) : '';
-      const deanName = user?.deanId ? formatNameForSearch(user.deanId) : '';
+      const instructorName = user.profileId ? formatNameForSearch(user.profileId) : '';
+      const deanName = user.deanId ? formatNameForSearch(user.deanId) : '';
 
       return instructorName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },
@@ -222,7 +228,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row?.request,
+    accessorFn: (row) => row.teacherScheduleId.roomId.roomName,
     id: 'requesting',
     header: 'Requesting',
     cell: ({ cell, row }) => {
@@ -248,12 +254,12 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user?.requestStatusInDean === 'Approved' ? (
-            <span className='text-green-500 text-xs'>{user?.requestStatusInDean}</span>
+          {user.requestStatusInDean === 'Approved' ? (
+            <span className='text-green-500 text-xs'>{user.requestStatusInDean}</span>
           ) : user.requestStatusInDean === 'Pending' ? (
-            <span className='text-blue-500 text-xs'>{user?.requestStatusInDean}</span>
+            <span className='text-blue-500 text-xs'>{user.requestStatusInDean}</span>
           ) : user.requestStatusInDean === 'Declined' ? (
-            <span className='text-red text-xs'>{user?.requestStatusInDean}</span>
+            <span className='text-red text-xs'>{user.requestStatusInDean}</span>
           ) : (
             <span className='text-gray-400 text-xs'>N/A</span>
           )}
@@ -268,15 +274,98 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user?.requestStatusInRegistrar === 'Approved' ? (
-            <span className='text-green-500 text-xs'>{user?.requestStatusInRegistrar}</span>
+          {user.requestStatusInRegistrar === 'Approved' ? (
+            <span className='text-green-500 text-xs'>{user.requestStatusInRegistrar}</span>
           ) : user.requestStatusInRegistrar === 'Pending' ? (
-            <span className='text-blue-500 text-xs'>{user?.requestStatusInRegistrar}</span>
+            <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
           ) : user.requestStatusInRegistrar === 'Declined' ? (
-            <span className='text-red text-xs'>{user?.requestStatusInRegistrar}</span>
+            <span className='text-red text-xs'>{user.requestStatusInRegistrar}</span>
           ) : (
             <span className='text-gray-400 text-xs'>N/A</span>
           )}
+        </div>
+      );
+    },
+  },
+  {
+    id: 'reason',
+    header: 'Reason',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' '>
+          {user.reason ? (
+            <>
+              <ViewReason user={user} />
+            </>
+          ) : (
+            <span className='text-gray-400 text-xs'>N/A</span>
+          )}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.firstGrade,
+    id: 'prelim',
+    header: 'Prelim',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.firstGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.secondGrade,
+    id: 'midterm',
+    header: 'Midterm',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.secondGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.thirdGrade,
+    id: 'semi-final',
+    header: 'Semi-final',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.thirdGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.fourthGrade,
+    id: 'final',
+    header: 'Final',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.fourthGrade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.averageTotal,
+    id: 'averageTotal',
+    header: 'Average Total',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.averageTotal}
         </div>
       );
     },

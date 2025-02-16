@@ -84,6 +84,7 @@ const schema = new Schema<IEnrollment>(
           type: String,
           enum: ['add', 'drop', 'suggested'],
         },
+        reason: { type: String },
 
         requestStatusInDean: {
           type: String,

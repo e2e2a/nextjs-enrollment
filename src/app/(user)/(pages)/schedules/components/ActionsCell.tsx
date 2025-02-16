@@ -6,6 +6,7 @@ import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { useUpdateStudentEnrollmentScheduleMutation } from '@/lib/queries/enrollment/update/id/schedule';
+import { Textarea } from '@/components/ui/textarea';
 
 interface IProps {
   user: any;
@@ -17,12 +18,14 @@ const ActionsCell = ({ user }: IProps) => {
   const [inputValue, setInputValue] = useState('');
   const [errorInTypeInput, setErrorInTypeInput] = useState(false);
   const [inputValueType, setInputValueType] = useState('');
+  const [inputValueReason, setInputValueReason] = useState('');
+  const [errorInReason, setErrorInReason] = useState(false);
 
   const handleInputChange = (e: any) => {
     const value = e.target.value;
     setInputValue(value);
 
-    if (value.toLowerCase() === user.teacherScheduleId.subjectId.name.toLowerCase()) {
+    if (value.toLowerCase().trim() === user.teacherScheduleId.subjectId.name.toLowerCase().trim()) {
       setErrorInSUbjectInput(false);
     } else {
       setErrorInSUbjectInput(true);
@@ -32,34 +35,48 @@ const ActionsCell = ({ user }: IProps) => {
     const value = e.target.value;
     setInputValueType(value);
 
-    if (value.toLowerCase() === 'drop') {
+    if (value.toLowerCase().trim() === 'drop') {
       setErrorInTypeInput(false);
     } else {
       setErrorInTypeInput(true);
     }
   };
+  const handleInputChangeInReason = (e: any) => {
+    const value = e.target.value;
+    setInputValueReason(value);
+
+    if (!value) {
+      setErrorInReason(true);
+    } else {
+      setErrorInReason(false);
+    }
+  };
 
   const mutation = useUpdateStudentEnrollmentScheduleMutation();
 
-  const actionFormEnable = (request: string) => {
+  const actionFormEnable = (request: string, reason?: string) => {
     setIsUploading(true);
     if (request !== 'Suggested') {
-      if (inputValue.toLowerCase() !== user.teacherScheduleId.subjectId.name.toLowerCase()) {
+      if (inputValue.toLowerCase().trim() !== user.teacherScheduleId.subjectId.name.toLowerCase()) {
         setIsUploading(false);
         setErrorInSUbjectInput(true);
         return;
       }
-      if (inputValueType.toLowerCase() !== 'drop') {
+      if (inputValueType.toLowerCase().trim() !== 'drop') {
+        console.log('qwes')
+        if (!inputValueReason) return;
         setIsUploading(false);
         setErrorInSUbjectInput(true);
         return;
       }
     }
+    console.log('inputValueReason', inputValueReason)
     const data = {
       category: 'College',
       profileId: user.profileId._id,
       teacherScheduleId: user.teacherScheduleId._id,
       request,
+      ...(inputValueReason ? { reason: inputValueReason } : {}),
     };
 
     mutation.mutate(data, {
@@ -118,6 +135,20 @@ const ActionsCell = ({ user }: IProps) => {
                 <div className=''>
                   <Input type='text' name='type' className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none ring-0 focus:ring-1 focus:ring-red' value={inputValueType} onChange={handleInputChangeInType} placeholder='Enter subject name' />
                   {errorInTypeInput && <div className='text-red sm:text-sm px-2 text-xs'>The entered type does not match.</div>}
+                </div>
+              </div>
+              <div className='grid grid-cols-1 gap-y-1'>
+                <div className='text-[14px] text-muted-foreground'>Reason:</div>
+                <div className=''>
+                  <Textarea
+                    id={'reason'}
+                    value={inputValueReason} 
+                    onChange={handleInputChangeInReason}
+                    className={`block rounded-xl focus-visible:ring-0 px-5 pb-2 pt-7 w-full text-sm bg-slate-50 border border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-2 focus:border-black peer pl-4 align-text-bottom h-16`}
+                    onDragStart={(e) => e.preventDefault()}
+                    placeholder='Your valid reason'
+                  />
+                  {errorInReason && <div className='text-red sm:text-sm px-2 text-xs'>Reason is required.</div>}
                 </div>
               </div>
               <AlertDialogFooter>
