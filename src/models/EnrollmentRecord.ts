@@ -121,7 +121,7 @@ const schema = new Schema<IEnrollmentRecord>(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'StudentProfile',
         },
-
+        reason: { type: String },
         firstGrade: { type: String, default: 'INC' },
         secondGrade: { type: String, default: 'INC' },
         thirdGrade: { type: String, default: 'INC' },
