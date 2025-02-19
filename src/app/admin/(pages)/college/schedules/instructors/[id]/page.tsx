@@ -51,9 +51,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </h1>
                 </div>
               </div>
-              <div className='w-full flex justify-end items-center'>
+              {/* <div className='w-full flex justify-end items-center'>
                 <AddInstructorSched teacher={data?.profile} s={s?.subjects} r={r?.rooms} />
-              </div>
+              </div> */}
               <DataTable columns={columns} data={ts?.teacherSchedules} />
             </>
           ) : (

@@ -151,12 +151,12 @@ const Page = () => {
                   <div className='flex flex-col py-5 w-full sm:flex-row gap-5 items-center'>
                     <span className='text-red'>Schedule Conflict</span>
                     {instructorLink && (
-                      <Link href={`/admin/college/schedules/instructors/${instructorLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
+                      <Link href={`/dean/schedules/instructors/${instructorLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
                         See Instructor Schedule
                       </Link>
                     )}
                     {roomLink && (
-                      <Link href={`/admin/college/rooms/schedules/${roomLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
+                      <Link href={`/dean/rooms/schedules/${roomLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
                         See Room Schedule
                       </Link>
                     )}

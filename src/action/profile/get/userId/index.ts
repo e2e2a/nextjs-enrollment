@@ -37,7 +37,7 @@ export const getProfileByParamsUserIdAction = async (id: string): Promise<getSin
 const checkSeachRole = async (user: any, id: any) => {
   return tryCatch(async () => {
     const u = await getUserById(id);
-    if (user.role === 'DEAN' && u.role !== 'STUDENT') return { error: 'Dont have permission.', status: 403 };
+    if (user.role === 'DEAN' && u.role !== 'STUDENT' && u.role !== 'TEACHER') return { error: 'Dont have permission.', status: 403 };
     let profile;
     switch (u.role) {
       case 'STUDENT':

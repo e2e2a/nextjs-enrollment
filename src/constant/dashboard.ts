@@ -275,9 +275,41 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'packageSearch',
     },
     {
+      title: 'Subjects',
+      i: [
+        {
+          title: 'Subjects Management',
+          href: '/dean/subjects',
+          icon: 'eye',
+        },
+        {
+          title: 'Add Subject',
+          href: '/dean/subjects/add',
+          icon: 'add',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
       title: 'Grades Report',
       href: '/dean/report/grade',
       icon: 'filePenLine',
+    },
+    {
+      title: 'Rooms',
+      i: [
+        {
+          title: 'Rooms Management',
+          href: '/dean/rooms',
+          icon: 'eye',
+        },
+        // {
+        //   title: 'Add Room',
+        //   href: '/admin/college/rooms/add',
+        //   icon: 'add',
+        // },
+      ],
+      icon: 'packageSearch',
     },
     {
       title: 'School & Policies',
@@ -777,11 +809,11 @@ export const dashboardConfig: DashboardConfig = {
           href: '/admin/college/schedules/instructors',
           icon: 'eye',
         },
-        {
-          title: 'Add Instructor Schedule',
-          href: '/admin/college/schedules/instructors/add',
-          icon: 'add',
-        },
+        // {
+        //   title: 'Add Instructor Schedule',
+        //   href: '/admin/college/schedules/instructors/add',
+        //   icon: 'add',
+        // },
       ],
       icon: 'packageSearch',
     },
@@ -793,11 +825,11 @@ export const dashboardConfig: DashboardConfig = {
           href: '/admin/college/subjects',
           icon: 'eye',
         },
-        {
-          title: 'Add Subject',
-          href: '/admin/college/subjects/add',
-          icon: 'add',
-        },
+        // {
+        //   title: 'Add Subject',
+        //   href: '/admin/college/subjects/add',
+        //   icon: 'add',
+        // },
       ],
       icon: 'packageSearch',
     },

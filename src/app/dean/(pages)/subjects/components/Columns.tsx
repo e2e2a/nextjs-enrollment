@@ -3,8 +3,9 @@ import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ActionsCell from './ActionsCell';
+import { ISubject } from '@/types';
 
-export const columns: ColumnDef<any>[] = [
+export const columns: ColumnDef<ISubject>[] = [
   // {
   //   accessorFn: (row) => row.fixedRateAmount,
   //   id: 'rate amount.',
@@ -18,19 +19,6 @@ export const columns: ColumnDef<any>[] = [
   //     );
   //   },
   // },
-  {
-    accessorFn: (row) => row?.courseId?.name,
-    id: 'unit',
-    header: 'Unit/s',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=''>
-          {user?.courseId?.name ?? 'N/A'}
-        </div>
-      );
-    },
-  },
   {
     accessorFn: (row) => row?.subjectCode,
     accessorKey: 'Subject Code',

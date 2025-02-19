@@ -28,7 +28,7 @@ export const createNewSubject = async (data: any) => {
 
 export const getSubjectByCategory = async (category: string) => {
   try {
-    const subjects = await Subject.find({ category });
+    const subjects = await Subject.find({ category }).populate('courseId');
     return subjects;
   } catch (error) {
     console.log(error);

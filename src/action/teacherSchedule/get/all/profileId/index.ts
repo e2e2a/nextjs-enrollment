@@ -22,6 +22,7 @@ export const getTeacherScheduleByProfileIdAction = async (data: any) => {
         break;
       case 'DEAN':
         t = await getAllTeacherScheduleByDeanId(data.id);
+        if (data.role === 'TEACHER') t = await getAllTeacherScheduleByProfileId(data.id);
         break;
       case 'ADMIN':
         if (data.role === 'TEACHER') t = await getAllTeacherScheduleByProfileId(data.id);
