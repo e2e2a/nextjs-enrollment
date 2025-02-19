@@ -4,6 +4,7 @@ export interface ISubject extends Document {
   fixedRateAmount: string;
   preReq: string;
   category: string;
+  courseId?: mongoose.Schema.Types.ObjectId;
   subjectCode: string;
   name: string;
   lec?: string;
@@ -15,6 +16,7 @@ const schema = new Schema<ISubject>(
     fixedRateAmount: { type: String },
     preReq: { type: String },
     category: { type: String },
+    courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
     subjectCode: { type: String },
     name: { type: String },
     lec: { type: String },

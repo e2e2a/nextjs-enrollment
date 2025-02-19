@@ -30,6 +30,7 @@ export const getEnrollmentRecordData = async (filterEnrolledEnrollments: any) =>
           ...(ss.teacherScheduleId?.deanId && { teacher: { ...ss.teacherScheduleId.deanId } }),
           blockType: { ...ss.teacherScheduleId.blockTypeId },
           days: ss.teacherScheduleId.days,
+          reason: ss?.teacherScheduleId?.reason,
           startTime: ss.teacherScheduleId.startTime,
           endTime: ss.teacherScheduleId.endTime,
           room: { roomName: ss.teacherScheduleId.roomId.roomName },
