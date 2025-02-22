@@ -4,6 +4,7 @@ import { tryCatch } from '@/lib/helpers/tryCatch';
 import { SubjectValidator } from '@/lib/validators/subject/create';
 import Subject from '@/models/Subject';
 import { getSubjectBySubjectCode } from '@/services/subject';
+import { checkAuth } from '@/utils/actions/session';
 import { verifyADMIN } from '@/utils/actions/session/roles/admin';
 import { Types } from 'mongoose';
 
@@ -15,7 +16,7 @@ import { Types } from 'mongoose';
 export const updateSubjectByIdAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
-    const session = await verifyADMIN();
+    const session = await checkAuth();
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
 
     const a = await checkCategory(session.user, data);
