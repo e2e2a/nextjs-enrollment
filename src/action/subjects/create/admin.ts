@@ -17,7 +17,7 @@ export const createNewSubjectAction = async (data: any) => {
     const session = await verifyDEAN();
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
 
-    const p = await getDeanProfileByUserId(session.user._id);
+    const p = await getDeanProfileByUserId(session?.user?._id);
     if (!p) return { error: 'User Data was not found.', status: 404 };
 
     const subjectParse = SubjectValidator.safeParse(data);
@@ -28,7 +28,7 @@ export const createNewSubjectAction = async (data: any) => {
 
     const dataToCreate = {
       ...data,
-      courseId: p.courseId._id,
+      courseId: p?.courseId?._id || p?.courseId,
     };
 
     const createdSubject = await createNewSubject(dataToCreate);
