@@ -23,7 +23,7 @@ export const createNewSubjectAction = async (data: any) => {
     const subjectParse = SubjectValidator.safeParse(data);
     if (!subjectParse.success) return { error: 'Invalid fields!', status: 400 };
 
-    const sConflict = await getSubjectBySubjectCode(data.subjectCode);
+    const sConflict = await getSubjectBySubjectCode(data.subjectCode, p?.courseId?._id || p?.courseId);
     if (sConflict) return { error: 'Subject Code already Exists.', status: 409 };
 
     const dataToCreate = {

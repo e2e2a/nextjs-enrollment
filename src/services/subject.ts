@@ -44,9 +44,9 @@ export const getSubjectByCategory = async (category: string) => {
 //     return [];
 //   }
 // };
-export const getSubjectBySubjectCode = async (subjectCode: string) => {
+export const getSubjectBySubjectCode = async (subjectCode: string, courseId: string) => {
   try {
-    const subjects = await Subject.findOne({ subjectCode });
+    const subjects = await Subject.findOne({ subjectCode, courseId });
     return subjects;
   } catch (error) {
     console.log(error);
