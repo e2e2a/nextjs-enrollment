@@ -98,7 +98,7 @@ const Page = () => {
     data.roomId = roomId;
     data.teacherId = teacherId;
 
-    const dataa = { ...data, role, category: 'College' };
+    const dataa = { ...data, role: role || '', category: 'College' };
     mutation.mutate(dataa, {
       onSuccess: (res) => {
         switch (res.status) {
