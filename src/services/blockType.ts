@@ -57,6 +57,22 @@ export const getBlockTypeById = async (id: any) => {
     return null;
   }
 };
+
+export const getBlockTypeBySection = async (section: any) => {
+  try {
+    const p = await BlockType.findOne({ section })
+      .populate('courseId')
+      .populate({
+        path: 'blockSubjects.teacherScheduleId',
+        populate: [{ path: 'profileId' }, { path: 'deanId' }, { path: 'subjectId' }, { path: 'blockTypeId' }, { path: 'roomId' }, { path: 'courseId' }],
+      })
+      .exec();
+    return p;
+  } catch (error) {
+    return null;
+  }
+};
+
 export const getfilterBlockType = async (data: any) => {
   try {
     const { description, ...datas } = data;

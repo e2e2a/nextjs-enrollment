@@ -79,8 +79,8 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user?.preReq}
+        <div key={cell.id} className=''>
+          {user?.preReq ?? ''}
         </div>
       );
     },

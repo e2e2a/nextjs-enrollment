@@ -227,7 +227,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                 Subject Code: <span className=''>{s?.teacherScheduleId?.subjectId?.subjectCode}</span>
                                               </span>
                                               <span className=' text-wrap font-medium'>Title: {s?.teacherScheduleId?.subjectId?.name}</span>
-                                              <span className=''>Pre Req.: {s?.teacherScheduleId?.subjectId?.preReq}</span>
+                                              <span className=''>Pre Req.: {s?.teacherScheduleId?.subjectId?.preReq ?? ''}</span>
                                               <span className=''>Days: {s?.teacherScheduleId?.days.join(', ')}</span>
                                               <span className=''>Lec: {s?.teacherScheduleId?.subjectId?.lec}</span>
                                               <span className=''>Lab: {s?.teacherScheduleId?.subjectId?.lab}</span>

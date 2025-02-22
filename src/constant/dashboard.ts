@@ -158,6 +158,17 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'packageSearch',
     },
     {
+      title: 'Curriculums',
+      i: [
+        {
+          title: 'Curriculum Management',
+          href: '/dean/curriculums',
+          icon: 'eye',
+        }
+      ],
+      icon: 'packageSearch',
+    },
+    {
       title: 'Teaching Load',
       href: '/dean/schedules',
       icon: 'hourglass',
@@ -310,6 +321,11 @@ export const dashboardConfig: DashboardConfig = {
         // },
       ],
       icon: 'packageSearch',
+    },
+    {
+      title: 'Print Report',
+      href: '/dean/print',
+      icon: 'download',
     },
     {
       title: 'School & Policies',

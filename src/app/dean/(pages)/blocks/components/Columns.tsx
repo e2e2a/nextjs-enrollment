@@ -32,40 +32,40 @@ export const columns: ColumnDef<IBlockType>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='uppercase'>
-          block {user.section}
+        <div key={cell.id} className=''>
+          {user?.section}
         </div>
       );
     },
-    accessorFn: (row) => `${row.section}`,
+    accessorFn: (row) => `${row?.section}`,
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `block ${user.section}`.toLowerCase();
+      const fullName = `${user?.section}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
   {
-    accessorFn: (row) => row.courseId.courseCode,
+    accessorFn: (row) => row?.courseId?.courseCode,
     id: 'Course Code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.courseId.courseCode}
+        <div key={cell.id} className=''>
+          {user?.courseId?.courseCode}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.courseId.name,
+    accessorFn: (row) => row?.courseId?.name,
     id: 'course title',
     header: 'Course Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.courseId.name}
+        <div key={cell.id} className=''>
+          {user?.courseId?.name}
         </div>
       );
     },

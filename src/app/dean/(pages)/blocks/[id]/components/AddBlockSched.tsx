@@ -153,11 +153,11 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                               Subject Code: <span className=''>{s?.subjectId?.subjectCode}</span>
                             </span>
                             <span className=' text-wrap font-semibold'>Descriptive Title: {s?.subjectId?.name}</span>
-                            <span className=''>Pre Req.: {s.subjectId.preReq}</span>
-                            <span className=''>Days: {s.days.join(', ')}</span>
-                            <span className=''>Lec: {s.subjectId.lec}</span>
-                            <span className=''>Lab: {s.subjectId.lab}</span>
-                            <span className=''>Unit: {s.subjectId.unit}</span>
+                            <span className=''>Pre Req.: {s?.subjectId?.preReq}</span>
+                            <span className=''>Days: {s?.days.join(', ')}</span>
+                            <span className=''>Lec: {s?.subjectId?.lec}</span>
+                            <span className=''>Lab: {s?.subjectId?.lab}</span>
+                            <span className=''>Unit: {s?.subjectId?.unit}</span>
                             <span className=''>
                               Time:{' '}
                               <span className='uppercase'>
