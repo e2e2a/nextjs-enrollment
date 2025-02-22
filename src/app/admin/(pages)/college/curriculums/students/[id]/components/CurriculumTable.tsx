@@ -62,7 +62,7 @@ const CurriculumTable = ({ data, s }: IProps) => {
                         </td>
                         <td className='px-4 py-2 border text-center'>{subject?.subjectId?.subjectCode}</td>
                         <td className='px-4 py-2 border text-center'>{subject?.subjectId?.name}</td>
-                        <td className='px-4 py-2 border text-center'>{subject?.subjectId?.preReq}</td>
+                        <td className='px-4 py-2 border text-center'>{subject?.subjectId?.preReq ?? ''}</td>
                         <td className='px-4 py-2 border text-center'>{subject?.subjectId?.lec}</td>
                         <td className='px-4 py-2 border text-center'>{subject?.subjectId?.lab}</td>
                         <td className='px-4 py-2 border text-center'>{subject?.subjectId?.unit}</td>

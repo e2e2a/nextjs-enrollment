@@ -32,7 +32,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       {/* <body className={`custom-scrollbar-body ${inter.className}`} > */}
       <body className={inter.className}>
         <div className=''>
-          <StatusIndicator />
+          {/* <StatusIndicator /> */}
           <LogRocketProvider>
             <Warning />
             <MaintenancePage>

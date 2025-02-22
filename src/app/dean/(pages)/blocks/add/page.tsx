@@ -45,8 +45,6 @@ const Page = () => {
 
   const onSubmit: SubmitHandler<z.infer<typeof BlockValidatorInCollege>> = async (data) => {
     setIsNotEditable(true);
-    data.courseCode = data.courseCode.toLowerCase();
-    data.section = data.section.toLowerCase();
 
     mutation.mutate(data, {
       onSuccess: (res) => {

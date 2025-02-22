@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/components/shared/Icons';
@@ -10,8 +10,8 @@ import { z } from 'zod';
 import { CurriculumSubjectValidator } from '@/lib/validators/AdminValidator';
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { useUpdateStudentCurriculumLayerSubjectsMutation } from '@/lib/queries/studentCurriculum/update/subjectsFormat';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { useUpdateCurriculumLayerSubjectsMutation } from '@/lib/queries/curriculum/update/subjectsFormat';
 
 interface IProps {
   curriculum: any;
@@ -21,28 +21,21 @@ interface IProps {
 const AddFormSubject = ({ curriculum, s }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [subjects, setSubjects] = useState<any>({});
   const [selectedItems, setSelectedItems] = useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId._id) || []);
   const [initialStateSelect, setInitialStateSelect] = useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId._id) || []);
   const hasChanges = selectedItems.length !== initialStateSelect.length || selectedItems.some((item) => !initialStateSelect.includes(item)) || initialStateSelect.some((item) => !selectedItems.includes(item));
-  const mutation = useUpdateStudentCurriculumLayerSubjectsMutation();
+
+  const mutation = useUpdateCurriculumLayerSubjectsMutation();
 
   const form = useForm<z.infer<typeof CurriculumSubjectValidator>>({
     resolver: zodResolver(CurriculumSubjectValidator),
     defaultValues: { subjects: [''] },
   });
 
-  useEffect(() => {
-    if (s) {
-      const filteredSubject = s.filter((s: any) => s.year === curriculum.year && s.semester === curriculum.semester);
-      setSubjects(filteredSubject[0].subjectsFormat);
-      return;
-    }
-  }, [s, curriculum]);
-
   const handleSelect = (subjectId: string) => {
     setSelectedItems((prevSelected) => {
       const updatedSelection = prevSelected.includes(subjectId) ? prevSelected.filter((d) => d !== subjectId) : [...prevSelected, subjectId];
+      // Sort the selected days according to the standard day order
       return updatedSelection.sort((a, b) => subjectId.indexOf(a) - subjectId.indexOf(b));
     });
   };
@@ -54,13 +47,14 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
     });
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     form.setValue('subjects', selectedItems);
   }, [selectedItems, form]);
 
   const actionFormSubmit = (data: z.infer<typeof CurriculumSubjectValidator>) => {
     setIsPending(true);
-    const dataa = { ...data, id: curriculum._id };
+    const dataa = { ...data, category: 'College', id: curriculum._id };
+
     mutation.mutate(dataa, {
       onSuccess: (res: any) => {
         switch (res.status) {
@@ -80,11 +74,12 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
       },
     });
   };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button size={'sm'} className={'w-full group focus-visible:ring-0 flex my-1 text-black bg-transparent hover:bg-blue-600 px-2 py-0 gap-x-1 justify-start items-center hover:text-neutral-50 font-medium'}>
-          <Icons.squarePen className='h-4 w-4' />
+        <Button size={'sm'} className={'focus-visible:ring-0 flex mb-2 bg-transparent bg-blue-500 px-2 py-0 gap-x-1 justify-center text-neutral-50 font-medium'}>
+          <Icons.add className='h-4 w-4' />
           <span className='flex'>Edit Subjects</span>
         </Button>
       </DialogTrigger>
@@ -96,17 +91,17 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
           <DialogDescription className=''>Selection of subjects.</DialogDescription>
         </DialogHeader>
         <div className=''>
-          <div className={`flex  ${selectedItems.length === 0 ? 'w-full justify-end' : 'justify-between'}`}>
-            {selectedItems.length > 0 && subjects && Array.isArray(subjects) && (
+          <div className='flex justify-between'>
+            {selectedItems.length > 0 && (
               <span className=''>
                 Add list:
                 <div className='flex flex-col'>
                   {selectedItems.map((value) => {
-                    const selectedItem = subjects.find((item: any) => item.subjectId._id === value);
+                    const selectedItem = s.find((item: any) => item._id === value);
                     return selectedItem ? (
-                      <span key={selectedItem.subjectId._id} className='text-green-500 flex items-center gap-3'>
-                        • {selectedItem.subjectId.name}
-                        <span className='text-red cursor-pointer' onClick={() => handleRemove(selectedItem.subjectId._id)}>
+                      <span key={selectedItem._id} className='text-green-500 flex items-center gap-3'>
+                        • {selectedItem.name}
+                        <span className='text-red cursor-pointer' onClick={() => handleRemove(selectedItem._id)}>
                           <Icons.trash className='h-3 w-3' />
                         </span>
                       </span>
@@ -116,7 +111,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
               </span>
             )}
             {hasChanges && (
-              <Button type='submit' disabled={isPending} className='bg-blue-600 text-neutral-50' size={'sm'} onClick={form.handleSubmit(actionFormSubmit)} variant='secondary'>
+              <Button type='submit' className='bg-blue-600 text-neutral-50' disabled={isPending} size={'sm'} onClick={form.handleSubmit(actionFormSubmit)} variant='secondary'>
                 Save
               </Button>
             )}
@@ -147,13 +142,13 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                   <span className='w-[150px] flex justify-center'>Lab</span>
                                   <span className='w-[150px] flex justify-center'>Total Unit/s</span>
                                 </div>
-                                {subjects.map((item: any, index: any) => (
-                                  <CommandItem className='border w-full block' key={item.subjectId._id} value={item.subjectId.name}>
+                                {s.map((item: any, index: any) => (
+                                  <CommandItem className='border w-full block' key={item._id} value={item.name}>
                                     <div className='flex w-full'>
                                       <div className='sm:min-w-[140px] lg:min-w-[145px] justify-center flex items-center'>
-                                        {selectedItems.includes(item.subjectId._id) ? (
+                                        {selectedItems.includes(item._id) ? (
                                           <Button
-                                            onClick={() => handleSelect(item.subjectId._id)}
+                                            onClick={() => handleSelect(item._id)}
                                             disabled={isPending}
                                             type='button'
                                             size={'sm'}
@@ -163,7 +158,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                           </Button>
                                         ) : (
                                           <Button
-                                            onClick={() => handleSelect(item.subjectId._id)}
+                                            onClick={() => handleSelect(item._id)}
                                             disabled={isPending}
                                             type='button'
                                             size={'sm'}
@@ -174,30 +169,36 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                           </Button>
                                         )}
                                       </div>
-                                      <span className='w-[150px] '>{item?.subjectId?.subjectCode}</span>
-                                      <span className='w-[150px] text-wrap'>{item?.subjectId?.name}</span>
-                                      <span className='w-[150px] flex justify-center'>{item?.subjectId?.preReq ?? ''}</span>
-                                      <span className='w-[150px] flex justify-center'>{item?.subjectId?.lec}</span>
-                                      <span className='w-[150px] flex justify-center'>{item?.subjectId?.lab}</span>
-                                      <span className='w-[150px] flex justify-center'>{item?.subjectId?.unit}</span>
+                                      <span className='w-[150px] '>{item.subjectCode}</span>
+                                      <span className='w-[150px] text-wrap'>{item.name}</span>
+                                      <span className='w-[150px] flex justify-center'>{item.preReq}</span>
+                                      <span className='w-[150px] flex justify-center'>{item.lec}</span>
+                                      <span className='w-[150px] flex justify-center'>{item.lab}</span>
+                                      <span className='w-[150px] flex justify-center'>{item.unit}</span>
                                     </div>
                                   </CommandItem>
                                 ))}
                               </div>
                             </div>
                             <div className='flex flex-col gap-y-6 lg:hidden'>
-                              {subjects.map((item: any, index: any) => (
-                                <CommandItem className='border w-full block' key={item?.subjectId?._id} value={item?.subjectId?.name}>
+                              {s.map((item: any, index: any) => (
+                                <CommandItem className='border w-full block' key={item._id} value={item.name}>
                                   <div className='flex flex-col w-full '>
                                     <div className='flex items-center justify-end bg-gray-200 border border-neutral-50'>
-                                      {selectedItems.includes(item?.subjectId?._id) ? (
-                                        <Button onClick={() => handleSelect(item?.subjectId?._id)} type='button' size={'sm'} className={'focus-visible:ring-0 flex bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}>
+                                      {selectedItems.includes(item._id) ? (
+                                        <Button
+                                          onClick={() => handleSelect(item._id)}
+                                          disabled={isPending}
+                                          type='button'
+                                          size={'sm'}
+                                          className={'focus-visible:ring-0 flex bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
+                                        >
                                           <Icons.trash className='h-4 w-4' />
                                           <span className='sm:flex hidden text-xs sm:text-sm'>Remove</span>
                                         </Button>
                                       ) : (
                                         <Button
-                                          onClick={() => handleSelect(item?.subjectId?._id)}
+                                          onClick={() => handleSelect(item._id)}
                                           disabled={isPending}
                                           type='button'
                                           size={'sm'}
@@ -208,12 +209,12 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                         </Button>
                                       )}
                                     </div>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Subject Code: {item?.subjectId?.subjectCode}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {item?.subjectId?.name}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Pre Req.: {item?.subjectId?.preReq ?? ''}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lec: {item?.subjectId?.lec}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lab: {item?.subjectId?.lab}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Unit: {item?.subjectId?.unit}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Subject Code: {item.subjectCode}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {item.name}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3 uppercase'>Pre Req.: {item.preReq}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lec: {item.lec}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Lab: {item.lab}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Unit: {item.unit}</span>
                                   </div>
                                 </CommandItem>
                               ))}

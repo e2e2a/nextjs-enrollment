@@ -56,20 +56,20 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.preReq,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.preReq,
     id: 'pre req.',
     header: 'Pre Req.',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user?.teacherScheduleId?.subjectId?.preReq}
+          {user?.teacherScheduleId?.subjectId?.preReq ?? ''}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.lec,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.lec,
     id: 'lec',
     header: 'Lec',
     cell: ({ cell, row }) => {
@@ -82,7 +82,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.lab,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.lab,
     id: 'lab',
     header: 'Lab',
     cell: ({ cell, row }) => {

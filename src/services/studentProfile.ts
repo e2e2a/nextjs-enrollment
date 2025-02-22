@@ -100,3 +100,12 @@ export const updateStudentProfileByUserId = async (userId: string, data: any) =>
     return null;
   }
 };
+
+export const getStudentProfileByCourseId = async (courseId: string) => {
+  try {
+    const updatedProfile = await StudentProfile.find({ courseId });
+    return updatedProfile;
+  } catch (error) {
+    return [];
+  }
+};
