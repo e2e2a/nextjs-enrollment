@@ -136,7 +136,7 @@ export function DialogStep2Button({ isPending, user, form, isDialogOpen, setIsDi
                           <SelectGroup className='focus-visible:ring-0'>
                             {blocks.length > 0 ? (
                               blocks.map((item: any, index: any) => (
-                                <SelectItem value={item._id} key={index} className='capitalize'>
+                                <SelectItem value={item?._id} key={index} className='capitalize'>
                                   Block {item.section}
                                 </SelectItem>
                               ))

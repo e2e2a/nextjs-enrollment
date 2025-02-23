@@ -39,7 +39,7 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
 
     const data = {
       selectedItems,
-      blockTypeId: blockType.blockType._id,
+      blockTypeId: blockType?.blockType?._id,
     };
 
     mutation.mutate(data, {
@@ -99,7 +99,7 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
               </div>
               <div className='flex w-full flex-col max-h-32 overflow-y-auto '>
                 {selectedItems.map((item, index) => {
-                  const selectedItem = s.find((i: any) => i._id === item?.teacherScheduleId);
+                  const selectedItem = s.find((i: any) => i?._id === item?.teacherScheduleId);
                   if (selectedItem) {
                     return (
                       <div key={`${selectedItem?._id}`} className='text-green-500 flex gap-3 w-full justify-between'>
@@ -169,7 +169,7 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                             </span>
                           </div>
                           <div className='justify-end sm:items-center flex items-end order-1 '>
-                            {isSelected(s._id) ? (
+                            {isSelected(s?._id) ? (
                               <Button disabled={isEnabled} onClick={() => handleSelect(s._id)} type='button' size={'sm'} className={'focus-visible:ring-0 flex bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}>
                                 <Icons.trash className='h-4 w-4' />
                                 <span className='sm:flex text-xs sm:text-sm'>Remove</span>
@@ -177,7 +177,7 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                             ) : (
                               <Button
                                 onClick={() => {
-                                  handleSelect(s._id);
+                                  handleSelect(s?._id);
                                 }}
                                 type='button'
                                 size={'sm'}
