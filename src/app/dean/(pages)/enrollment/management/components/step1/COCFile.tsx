@@ -14,7 +14,7 @@ const COCFile = ({ user }: { user: any }) => {
   useEffect(() => {
     const fetchFileUrl = async () => {
       if (navigator.onLine && user && user.profileId.cocUrl) {
-        const filePath = `enrollment/coc/${user.profileId._id}/${user.profileId.cocUrl}`;
+        const filePath = `enrollment/coc/${user?.profileId?._id}/${user?.profileId?.cocUrl}`;
         const fileRef = ref(storage, filePath);
 
         const url = await getDownloadURL(fileRef);
