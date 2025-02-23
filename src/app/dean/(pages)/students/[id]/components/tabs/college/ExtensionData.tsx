@@ -160,7 +160,7 @@ const ExtensionData = ({ form, profile, isNotEditable, photoPreview, filePreview
 
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
   const hasEnrollment = profile && (profile.enrollStatus === 'Enrolled' || profile.enrollStatus === 'Pending' || profile.enrollStatus === 'Temporary Enrolled');
-  const { data, isLoading, error } = useEnrollmentQueryByProfileId(profile._id, !!hasEnrollment);
+  const { data, isLoading, error } = useEnrollmentQueryByProfileId(profile?._id, !!hasEnrollment);
 
   useEffect(() => {
     if (!hasEnrollment) return setIsPageLoading(false);

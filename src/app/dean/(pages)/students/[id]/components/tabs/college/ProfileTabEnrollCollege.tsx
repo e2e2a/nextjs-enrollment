@@ -160,7 +160,7 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
       ...extensionData,
       formData: formData,
       configuredExtension: true,
-      userId: profile?.userId._id,
+      userId: profile?.userId?._id,
     };
 
     mutation.mutate(data, {

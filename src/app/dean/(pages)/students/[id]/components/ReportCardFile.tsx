@@ -14,8 +14,8 @@ const ReportCardFile = ({ user }: { user: any }) => {
 
   useEffect(() => {
     const fetchFileUrl = async () => {
-      if (navigator.onLine && user && user.reportCardUrl) {
-        const filePath = `enrollment/reportCard/${user._id}/${user.reportCardUrl}`;
+      if (navigator.onLine && user && user?.reportCardUrl) {
+        const filePath = `enrollment/reportCard/${user?._id}/${user?.reportCardUrl}`;
         // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
         const fileRef = ref(storage, filePath);
 

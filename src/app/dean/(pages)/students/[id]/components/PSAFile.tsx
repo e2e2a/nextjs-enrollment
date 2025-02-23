@@ -15,7 +15,7 @@ const PSAFile = ({ user }: { user: any }) => {
   useEffect(() => {
     const fetchFileUrl = async () => {
       if (navigator.onLine && user && user.psaUrl) {
-        const filePath = `enrollment/psa/${user._id}/${user.psaUrl}`;
+        const filePath = `enrollment/psa/${user?._id}/${user.psaUrl}`;
         // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
         const fileRef = ref(storage, filePath);
 

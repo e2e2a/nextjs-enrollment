@@ -33,7 +33,7 @@ const AddForm = ({ c }: IProps) => {
     data.year = data.year.toLowerCase();
     data.semester = data.semester.toLowerCase();
 
-    const dataa = { ...data, category: 'College', id: c._id };
+    const dataa = { ...data, category: 'College', id: c?._id };
 
     mutation.mutate(dataa, {
       onSuccess: (res: any) => {

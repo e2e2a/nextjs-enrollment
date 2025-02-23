@@ -21,8 +21,8 @@ interface IProps {
 const AddFormSubject = ({ curriculum, s }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedItems, setSelectedItems] = useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId._id) || []);
-  const [initialStateSelect, setInitialStateSelect] = useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId._id) || []);
+  const [selectedItems, setSelectedItems] = useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s?.subjectId?._id) || []);
+  const [initialStateSelect, setInitialStateSelect] = useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s?.subjectId?._id) || []);
   const hasChanges = selectedItems.length !== initialStateSelect.length || selectedItems.some((item) => !initialStateSelect.includes(item)) || initialStateSelect.some((item) => !selectedItems.includes(item));
 
   const mutation = useUpdateCurriculumLayerSubjectsMutation();
@@ -53,7 +53,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
 
   const actionFormSubmit = (data: z.infer<typeof CurriculumSubjectValidator>) => {
     setIsPending(true);
-    const dataa = { ...data, category: 'College', id: curriculum._id };
+    const dataa = { ...data, category: 'College', id: curriculum?._id };
 
     mutation.mutate(dataa, {
       onSuccess: (res: any) => {
@@ -97,11 +97,11 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                 Add list:
                 <div className='flex flex-col'>
                   {selectedItems.map((value) => {
-                    const selectedItem = s.find((item: any) => item._id === value);
+                    const selectedItem = s.find((item: any) => item?._id === value);
                     return selectedItem ? (
-                      <span key={selectedItem._id} className='text-green-500 flex items-center gap-3'>
+                      <span key={selectedItem?._id} className='text-green-500 flex items-center gap-3'>
                         • {selectedItem.name}
-                        <span className='text-red cursor-pointer' onClick={() => handleRemove(selectedItem._id)}>
+                        <span className='text-red cursor-pointer' onClick={() => handleRemove(selectedItem?._id)}>
                           <Icons.trash className='h-3 w-3' />
                         </span>
                       </span>
@@ -143,12 +143,12 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                   <span className='w-[150px] flex justify-center'>Total Unit/s</span>
                                 </div>
                                 {s.map((item: any, index: any) => (
-                                  <CommandItem className='border w-full block' key={item._id} value={item.name}>
+                                  <CommandItem className='border w-full block' key={item?._id} value={item?.name}>
                                     <div className='flex w-full'>
                                       <div className='sm:min-w-[140px] lg:min-w-[145px] justify-center flex items-center'>
-                                        {selectedItems.includes(item._id) ? (
+                                        {selectedItems.includes(item?._id) ? (
                                           <Button
-                                            onClick={() => handleSelect(item._id)}
+                                            onClick={() => handleSelect(item?._id)}
                                             disabled={isPending}
                                             type='button'
                                             size={'sm'}
@@ -158,7 +158,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                           </Button>
                                         ) : (
                                           <Button
-                                            onClick={() => handleSelect(item._id)}
+                                            onClick={() => handleSelect(item?._id)}
                                             disabled={isPending}
                                             type='button'
                                             size={'sm'}
@@ -182,12 +182,12 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                             </div>
                             <div className='flex flex-col gap-y-6 lg:hidden'>
                               {s.map((item: any, index: any) => (
-                                <CommandItem className='border w-full block' key={item._id} value={item.name}>
+                                <CommandItem className='border w-full block' key={item?._id} value={item?.name}>
                                   <div className='flex flex-col w-full '>
                                     <div className='flex items-center justify-end bg-gray-200 border border-neutral-50'>
-                                      {selectedItems.includes(item._id) ? (
+                                      {selectedItems.includes(item?._id) ? (
                                         <Button
-                                          onClick={() => handleSelect(item._id)}
+                                          onClick={() => handleSelect(item?._id)}
                                           disabled={isPending}
                                           type='button'
                                           size={'sm'}
@@ -198,7 +198,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                         </Button>
                                       ) : (
                                         <Button
-                                          onClick={() => handleSelect(item._id)}
+                                          onClick={() => handleSelect(item?._id)}
                                           disabled={isPending}
                                           type='button'
                                           size={'sm'}
