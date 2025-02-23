@@ -38,7 +38,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             {/* <Button type='button' size={'sm'} className='bg-green-500 text-white flex gap-1 px-2'>
               <Icons.add className='w-4 h-4' /> Add New
             </Button> */}
-            <AddForm c={data?.curriculum} />
+            {/* <AddForm c={data?.curriculum} /> */}
           </div>
           <div className=''>
             <CurriculumTable data={data?.curriculum} s={sData?.subjects} />

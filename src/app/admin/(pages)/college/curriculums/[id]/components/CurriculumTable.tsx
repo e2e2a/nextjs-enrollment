@@ -18,9 +18,9 @@ const CurriculumTable = ({ data, s }: IProps) => {
               <span className=' font-bold text-sm sm:text-lg capitalize'>
                 {item?.year} - {item?.semester}
               </span>
-              <span className=' font-bold text-lg'>
+              {/* <span className=' font-bold text-lg'>
                 <AddFormSubject curriculum={item} s={s} />
-              </span>
+              </span> */}
             </div>
             <div className='overflow-x-auto'>
               <table className='min-w-full bg-white border'>

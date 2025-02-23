@@ -686,11 +686,11 @@ export const dashboardConfig: DashboardConfig = {
           href: '/admin/college/blocks',
           icon: 'eye',
         },
-        {
-          title: 'Add Block',
-          href: '/admin/college/blocks/add',
-          icon: 'add',
-        },
+        // {
+        //   title: 'Add Block',
+        //   href: '/admin/college/blocks/add',
+        //   icon: 'add',
+        // },
       ],
       icon: 'packageSearch',
     },
