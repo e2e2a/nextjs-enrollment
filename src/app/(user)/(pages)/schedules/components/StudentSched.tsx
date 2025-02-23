@@ -16,7 +16,7 @@ const StudentSched = ({ data }: IProps) => {
     if (bError || !b) return;
     if (b && data) {
       if (data && b.blockTypes) {
-        const filteredSchedules = b?.blockTypes?.filter((block: any) => block.courseId._id === data?.courseId._id);
+        const filteredSchedules = b?.blockTypes?.filter((block: any) => block?.courseId?._id === data?.courseId?._id);
         setSchedules(filteredSchedules);
         setIsPageLoading(false);
       }

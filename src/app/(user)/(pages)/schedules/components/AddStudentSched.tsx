@@ -146,7 +146,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                           console.log('selecteditem', selectedItem)
                           if (selectedItem) {
                             return (
-                              <div key={`${selectedItem._id}`} className='text-green-500 flex gap-3'>
+                              <div key={`${selectedItem?._id}`} className='text-green-500 flex gap-3'>
                                 <div className='flex flex-col text-sm'>
                                   <div className=''>
                                     <span className='border rounded-full border-gray-600 px-1.5'>{index + 1}</span>
@@ -159,7 +159,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                   <span>Descriptive Title: {selectedItem?.subjectId?.name}</span>
                                   <span>Subject Code: {selectedItem?.subjectId?.subjectCode}</span>
                                 </div>
-                                <span className='text-red cursor-pointer py-1 mr-5' onClick={() => handleRemove(selectedItem._id)}>
+                                <span className='text-red cursor-pointer py-1 mr-5' onClick={() => handleRemove(selectedItem?._id)}>
                                   <Icons.trash className='h-3 w-3' />
                                 </span>
                               </div>
@@ -200,14 +200,14 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                         b.blockSubjects
                                           .filter((s: any) => !enrolledTeacherScheduleIds.has(s?.teacherScheduleId?._id))
                                           .map((s: any, index: any) => (
-                                            <CommandItem className='border w-full block' key={s._id} value={s?.teacherScheduleId?.subjectId?.name}>
+                                            <CommandItem className='border w-full block' key={s?._id} value={s?.teacherScheduleId?.subjectId?.name}>
                                               <div className='flex w-full'>
                                                 {/* @todo create a design for mobile */}
                                                 <div className='min-w-[80px] justify-center flex items-center'>
-                                                  {isSelected(s.teacherScheduleId._id) ? (
+                                                  {isSelected(s?.teacherScheduleId?._id) ? (
                                                     <Button
                                                       disabled={isEnabled}
-                                                      onClick={() => handleSelect(s.teacherScheduleId._id)}
+                                                      onClick={() => handleSelect(s?.teacherScheduleId?._id)}
                                                       type='button'
                                                       size={'sm'}
                                                       className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}
@@ -217,7 +217,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                   ) : (
                                                     <Button
                                                       onClick={() => {
-                                                        handleSelect(s.teacherScheduleId._id);
+                                                        handleSelect(s?.teacherScheduleId?._id);
                                                       }}
                                                       type='button'
                                                       size={'sm'}

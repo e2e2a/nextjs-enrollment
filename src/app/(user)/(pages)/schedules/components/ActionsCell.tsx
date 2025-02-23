@@ -73,8 +73,8 @@ const ActionsCell = ({ user }: IProps) => {
     console.log('inputValueReason', inputValueReason)
     const data = {
       category: 'College',
-      profileId: user.profileId._id,
-      teacherScheduleId: user.teacherScheduleId._id,
+      profileId: user?.profileId?._id,
+      teacherScheduleId: user.teacherScheduleId?._id,
       request,
       ...(inputValueReason ? { reason: inputValueReason } : {}),
     };
