@@ -20,7 +20,7 @@ const StudentsByYear = ({ enrollments, blockTypes }: IProps) => {
             <div className={`grid grid-cols-1 md:grid-cols-${filteredBlocks.length} gap-4`}>
               {filteredBlocks.length > 0 ? (
                 filteredBlocks.map((b: any, i: any) => {
-                  const filteredEnrolment = enrollments.filter((e: any) => e.studentYear === y.year && e.blockTypeId?._id === b._id);
+                  const filteredEnrolment = enrollments.filter((e: any) => e.studentYear === y.year && e?.blockTypeId?._id === b?._id);
                   return (
                     <Card key={i}>
                       <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>

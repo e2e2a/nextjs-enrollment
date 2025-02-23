@@ -16,8 +16,8 @@ const StudentsByCourses = ({ enrollments, courses, blockTypes }: IProps) => {
     <>
       {courses.length > 0 &&
         courses.map((c: any, i: any) => {
-          const enrolledCourse = enrollments.filter((e: any) => e.courseId._id === c._id);
-          const filteredBlocks = blockTypes.filter((b: any) => b.courseId._id === c._id);
+          const enrolledCourse = enrollments.filter((e: any) => e?.courseId?._id === c?._id);
+          const filteredBlocks = blockTypes.filter((b: any) => b?.courseId?._id === c?._id);
           return (
             <div className='border-2 rounded-lg mt-10 p-3' key={i}>
               <h1 className='font-semibold capitalize text-lg w-full text-center mb-5'>{c.name}</h1>
