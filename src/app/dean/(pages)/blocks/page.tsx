@@ -23,7 +23,7 @@ const Page = () => {
 
     if (data && pData.profile) {
       if (data.blockTypes) {
-        const filteredBlocks = data?.blockTypes.filter((b: any) => b.courseId._id === pData.profile.courseId._id);
+        const filteredBlocks = data?.blockTypes.filter((b: any) => b?.courseId?._id === pData?.profile?.courseId?._id);
         setBlocks(filteredBlocks);
       }
       setIsPageLoading(false);
