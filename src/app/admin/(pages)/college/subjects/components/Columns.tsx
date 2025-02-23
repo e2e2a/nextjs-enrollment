@@ -20,8 +20,8 @@ export const columns: ColumnDef<any>[] = [
   // },
   {
     accessorFn: (row) => row?.courseId?.name,
-    id: 'unit',
-    header: 'Unit/s',
+    id: 'Deparment',
+    header: 'Deparment',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
