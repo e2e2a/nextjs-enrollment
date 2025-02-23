@@ -9,7 +9,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: 'Courses',
-      href: '/courses',
+      href: '/courses/college',
       icon: 'libraryBig',
     },
     {
@@ -31,7 +31,7 @@ export const dashboardConfig: DashboardConfig = {
   sidebarNav: [
     {
       title: 'Courses',
-      href: '/courses',
+      href: '/courses/college',
       icon: 'libraryBig',
     },
     {
