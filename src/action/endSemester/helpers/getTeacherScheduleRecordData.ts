@@ -67,7 +67,7 @@ export const getTeacherScheduleRecordData = async (filteredSchedule: any, filter
             }
           }
         }
-        if (processedScheduleRecord.studentsInClass > 0) teacherSchededRecord.push(processedScheduleRecord); // ignore if there is no students in teacher schedule
+        if (processedScheduleRecord.studentsInClass.length > 0) teacherSchededRecord.push(processedScheduleRecord); // ignore if there is no students in teacher schedule
       }
     }
     if (teacherSchededRecord.length === 0) return { error: 'No datas find of ts Records', status: 404 };
