@@ -37,7 +37,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user?.blockTypeId?.section ? <span className='text-xs'>{user?.blockTypeId?.section}</span> : <span className='text-xs text-red'>N/A</span>}
+          {user?.blockTypeId?.section ? <span className='text-xs'>{user?.blockTypeId?.section}</span> : <span className='text-xs text-red uppercase'>not assigned</span>}
         </div>
       );
     },
@@ -50,7 +50,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.blockTypeId?.year ? user?.blockTypeId?.year : <span className='text-xs text-red'>N/A</span>}
+          {user?.blockTypeId?.year ? user?.blockTypeId?.year : <span className='text-xs text-red'>not assigned</span>}
         </div>
       );
     },
@@ -63,7 +63,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user?.blockTypeId?.semester ? user?.blockTypeId?.semester : <span className='text-xs text-red'>N/A</span>}
+          {user?.blockTypeId?.semester ? user?.blockTypeId?.semester : <span className='text-xs text-red uppercase'>not assigned</span>}
         </div>
       );
     },

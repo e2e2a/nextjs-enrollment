@@ -1,8 +1,6 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import ActionsCell from './ActionsCell';
-import { Button } from '@/components/ui/button';
-import { ArrowUpDown } from 'lucide-react';
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -19,96 +17,27 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorKey: 'name',
-    header: ({ column }) => {
-      return (
-        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Instructor
-          <ArrowUpDown className='ml-2 h-4 w-4' />
-        </Button>
-      );
-    },
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      const dean = user?.deanId;
-      const instructor = user?.profileId;
-
-      const deanName = `${dean?.lastname ? dean?.lastname + ',' : ''} ${dean?.firstname ?? ''} ${dean?.middlename ?? ''}${dean?.extensionName ? ', ' + dean?.extensionName + '.' : ''}`
-        .replace(/\s+,/g, ',')
-        .replace(/(\S),/g, '$1,')
-        .replace(/,(\S)/g, ', $1')
-        .trim();
-
-      const instructorName = `${instructor?.lastname ? instructor?.lastname + ',' : ''} ${instructor?.firstname ?? ''} ${instructor?.middlename ?? ''}${instructor?.extensionName ? ', ' + instructor?.extensionName + '.' : ''}`
-        .replace(/\s+,/g, ',')
-        .replace(/(\S),/g, '$1,')
-        .replace(/,(\S)/g, ', $1')
-        .trim();
-
-      return (
-        <div key={cell.id} className='capitalize'>
-          {user.deanId && <span>{deanName}</span>}
-          {user.profileId && <span>{instructorName}</span>}
-        </div>
-      );
-    },
-
-    accessorFn: (row) => {
-      const formatName = (person: any) => {
-        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''}${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
-          .replace(/\s+,/g, ',')
-          .replace(/,(\S)/g, ', $1')
-          .replace(/\s+/g, ' ')
-          .toLowerCase()
-          .trim();
-      };
-
-      const instructorName = row.profileId ? formatName(row.profileId) : '';
-      const deanName = row.deanId ? formatName(row.deanId) : '';
-
-      return `${instructorName} ${deanName}`.trim();
-    },
-
-    filterFn: (row, columnId, filterValue) => {
-      const user = row.original;
-
-      const formatNameForSearch = (person: any) => {
-        return `${person?.lastname ? person?.lastname + ',' : ''} ${person?.firstname ?? ''} ${person?.middlename ?? ''} ${person?.extensionName ? ', ' + person?.extensionName + '.' : ''}`
-          .replace(/\s+,/g, ',')
-          .replace(/,(\S)/g, ', $1')
-          .replace(/\s+/g, ' ')
-          .toLowerCase()
-          .trim();
-      };
-
-      const instructorName = user.profileId ? formatNameForSearch(user.profileId) : '';
-      const deanName = user.deanId ? formatNameForSearch(user.deanId) : '';
-
-      return instructorName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
-    },
-  },
-  {
-    accessorFn: (row) => row.courseId?.courseCode,
+    accessorFn: (row) => row.courseId.courseCode,
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user?.courseId?.courseCode}
+          {user.courseId?.courseCode ? user?.courseId?.courseCode : <span className='text-red uppercase text-xs'>not assigned</span>}
         </div>
       );
     },
   },
   {
     accessorFn: (row) => row.blockTypeId?.section,
-    id: 'section',
-    header: 'Section',
+    id: 'block assign',
+    header: 'Block Assign',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user?.blockTypeId?.section ?? 'N/A'}
+          {user?.blockTypeId?.section ? <span className='text-xs'>{user?.blockTypeId?.section}</span> : <span className='text-xs text-red uppercase'>not assigned</span>}
         </div>
       );
     },
@@ -120,8 +49,8 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='uppercase'>
-          {user?.blockTypeId?.year}
+        <div key={cell.id} className=' uppercase'>
+          {user?.blockTypeId?.year ? user?.blockTypeId?.year : <span className='text-xs text-red'>not assigned</span>}
         </div>
       );
     },
@@ -133,8 +62,8 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='uppercase'>
-          {user?.blockTypeId?.semester}
+        <div key={cell.id} className=''>
+          {user?.blockTypeId?.semester ? user?.blockTypeId?.semester : <span className='text-xs text-red uppercase'>not assigned</span>}
         </div>
       );
     },
@@ -154,8 +83,8 @@ export const columns: ColumnDef<any>[] = [
   },
   {
     accessorFn: (row) => row.subjectId?.name,
-    id: 'descriptive title',
-    header: 'descriptive Title',
+    id: 'subject title',
+    header: 'Subject Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
@@ -166,7 +95,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row?.days,
+    accessorFn: (row) => row.days,
     id: 'days',
     header: 'Days',
     cell: ({ cell, row }) => {
@@ -179,7 +108,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row?.startTime,
+    accessorFn: (row) => row.startTime,
     id: 'start time',
     header: 'Start Time',
     cell: ({ cell, row }) => {
@@ -192,7 +121,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row?.endTime,
+    accessorFn: (row) => row.endTime,
     id: 'end time',
     header: 'End Time',
     cell: ({ cell, row }) => {
@@ -200,19 +129,6 @@ export const columns: ColumnDef<any>[] = [
       return (
         <div key={cell.id} className='uppercase'>
           {user?.endTime}
-        </div>
-      );
-    },
-  },
-  {
-    accessorFn: (row) => row.roomId?.roomName,
-    id: 'room name',
-    header: 'Room Name',
-    cell: ({ cell, row }) => {
-      const user = row.original;
-      return (
-        <div key={cell.id} className=''>
-          {user?.roomId?.roomName}
         </div>
       );
     },

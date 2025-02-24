@@ -45,7 +45,7 @@ const Page = () => {
                 <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1 mb-10'>
                   <div className='justify-between items-start flex w-full'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{pData?.profile.courseId.name}</span>
+                      Department: <span className='font-normal'>{pData?.profile?.courseId?.name}</span>
                     </span>
                   </div>
                 </div>
