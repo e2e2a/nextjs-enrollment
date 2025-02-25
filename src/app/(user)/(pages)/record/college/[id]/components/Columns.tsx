@@ -17,86 +17,86 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.blockType.section,
+    accessorFn: (row) => row.blockType?.section,
     id: 'block type',
     header: 'Block Type',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          Block {user.blockType.section}
+        <div key={cell.id} className=''>
+          {user?.blockType?.section}
         </div>
       );
     },
   },
 
   {
-    accessorFn: (row) => row.subject.subjectCode,
+    accessorFn: (row) => row.subject?.subjectCode,
     id: 'subject code',
     header: 'Subject Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
+        <div key={cell.id} className=''>
           {user.subject.subjectCode}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.subject.name,
+    accessorFn: (row) => row.subject?.name,
     id: 'Descriptive Title',
     header: 'Descriptive Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.subject.name}
+        <div key={cell.id} className=''>
+          {user?.subject?.name}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.subject.lec,
+    accessorFn: (row) => row.subject?.lec,
     id: 'lec',
     header: 'Lec',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.subject.lec}
+          {user?.subject?.lec}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.subject.lab,
+    accessorFn: (row) => row.subject?.lab,
     id: 'lab',
     header: 'Lab',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.subject.lab}
+          {user?.subject?.lab}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.subject.unit,
+    accessorFn: (row) => row.subject?.unit,
     id: 'unit',
     header: 'Unit',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.subject.unit}
+          {user?.subject?.unit}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.days,
+    accessorFn: (row) => row?.days,
     id: 'days',
     header: 'Days',
     cell: ({ cell, row }) => {
@@ -109,14 +109,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.startTime,
+    accessorFn: (row) => row?.startTime,
     id: 'start time',
     header: 'Start Time',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.startTime}
+          {user?.startTime}
         </div>
       );
     },
@@ -129,7 +129,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.endTime}
+          {user?.endTime}
         </div>
       );
     },
@@ -142,7 +142,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.room.roomName}
+          {user?.room?.roomName}
         </div>
       );
     },
@@ -183,7 +183,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.firstGrade,
+    accessorFn: (row) => row?.firstGrade,
     id: 'prelim',
     header: 'Prelim',
     cell: ({ cell, row }) => {
@@ -196,7 +196,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.secondGrade,
+    accessorFn: (row) => row?.secondGrade,
     id: 'midterm',
     header: 'Midterm',
     cell: ({ cell, row }) => {
@@ -209,7 +209,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.thirdGrade,
+    accessorFn: (row) => row?.thirdGrade,
     id: 'semi-final',
     header: 'Semi-final',
     cell: ({ cell, row }) => {
@@ -222,7 +222,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.fourthGrade,
+    accessorFn: (row) => row?.fourthGrade,
     id: 'final',
     header: 'Final',
     cell: ({ cell, row }) => {
@@ -235,7 +235,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.averageTotal,
+    accessorFn: (row) => row?.averageTotal,
     id: 'averageTotal',
     header: 'Average Total',
     cell: ({ cell, row }) => {

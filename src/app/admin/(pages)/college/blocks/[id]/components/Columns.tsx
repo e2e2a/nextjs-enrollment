@@ -69,7 +69,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.lec,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.lec,
     id: 'lec',
     header: 'Lec',
     cell: ({ cell, row }) => {
