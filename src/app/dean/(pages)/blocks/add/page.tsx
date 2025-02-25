@@ -35,7 +35,7 @@ const Page = () => {
     resolver: zodResolver(BlockValidatorInCollege),
     defaultValues: {
       category: 'College',
-      courseCode: `${pData?.profile?.courseId.courseCode}`,
+      courseCode: `123`,
       year: '',
       semester: '',
       section: '',

@@ -75,7 +75,7 @@ export const getBlockTypeBySection = async (section: any) => {
 
 export const getfilterBlockType = async (data: any) => {
   try {
-    const { description, ...datas } = data;
+    const { description, courseCode, ...datas } = data;
     const newB = await BlockType.findOne({ ...datas });
     return newB;
   } catch (error) {
