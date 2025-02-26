@@ -57,6 +57,7 @@ const CreateDialog = ({ teacher, data, type }: IProps) => {
       teacherScheduleId: teacher._id,
       type: type,
       reportedGrade: grades,
+      requestType: 'Class Report',
     };
 
     mutation.mutate(dataa, {
@@ -116,7 +117,7 @@ const CreateDialog = ({ teacher, data, type }: IProps) => {
             <div className=''>
               <div className='text-orange-500'>Reminder:</div>
               <div className=''>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Empty grades consider as <span className='text-red'>5.0</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Empty grades consider as <span className='text-red'>INC</span>
               </div>
             </div>
           </DialogDescription>
@@ -147,12 +148,12 @@ const CreateDialog = ({ teacher, data, type }: IProps) => {
                   <tr key={index}>
                     <td className='px-6 py-4 whitespace-nowrap'>{index + 1}</td>
                     <td className='px-6 py-4 whitespace-nowrap'>
-                      {s?.profileId?.firstname ?? ''} {s?.profileId?.middlename ?? ''} {s?.profileId?.lastname ?? ''} {s.profileId.extensionName ? s.profileId.extensionName + '.' : ''}
+                      {s?.profileId?.firstname ?? ''} {s?.profileId?.middlename ?? ''} {s?.profileId?.lastname ?? ''} {s?.profileId?.extensionName ? s.profileId.extensionName + '.' : ''}
                     </td>
                     <td className='px-6 py-4 whitespace-nowrap'>{s?.teacherScheduleId?.courseId?.courseCode}</td>
-                    <td className='px-6 py-4 whitespace-nowrap'>{s?.profileId?.sex}</td>
+                    <td className='px-6 py-4 whitespace-nowrap'>{s.profileId.sex}</td>
                     <td className='px-6 py-4 whitespace-nowrap flex flex-col justify-center items-center w-full'>
-                      <Input className='w-20 text-sm text-center border-2 border-blue-400' onChange={(e) => handleGradeChange(index, s?.profileId?._id, e.target.value)} placeholder='' value={s.grades} />
+                      <Input className='w-20 text-sm text-center border-2 border-blue-400' onChange={(e) => handleGradeChange(index, s.profileId._id, e.target.value)} placeholder='' value={s?.grades} />
                       <div className=''>{grades && grades[index]?.error && <p className='text-xs text-red'>Only Number/INC are allowed</p>}</div>
                     </td>
                   </tr>

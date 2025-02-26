@@ -31,7 +31,7 @@ export const columns: ColumnDef<any>[] = [
     },
 
     accessorFn: (row) => {
-      const user = row.profileId;
+      const user = row?.profileId;
       return `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
@@ -54,20 +54,20 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.profileId.sex,
+    accessorFn: (row) => row?.profileId?.sex,
     id: 'gender',
     header: 'Gender',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.profileId.sex}
+          {user?.profileId?.sex}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.grade,
+    accessorFn: (row) => row?.grade,
     id: 'grade',
     header: 'Grade',
     cell: ({ cell, row }) => {

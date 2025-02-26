@@ -7,6 +7,7 @@ export interface IReportGrade extends Document {
   deanId: mongoose.Schema.Types.ObjectId;
   teacherScheduleId: mongoose.Schema.Types.ObjectId;
   type: string;
+  requestType: string;
   reportedGrade: any;
   scholarType: string;
   statusInDean: 'Pending' | 'Approved' | 'Declined';
@@ -35,6 +36,7 @@ const schema = new Schema<IReportGrade>(
       ref: 'TeacherSchedule',
     },
     type: { type: String },
+    requestType: { type: String },
     reportedGrade: [
       {
         profileId: {

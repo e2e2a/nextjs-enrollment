@@ -4,13 +4,16 @@ import { ColumnDef, flexRender, SortingState, VisibilityState, ColumnFiltersStat
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import OptionsCell from './OptionsCell';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData;
+  teacher: any;
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, teacher }: DataTableProps<TData, TValue>) {
   useEffect(() => {
     if (!data) {
       return;
@@ -41,19 +44,18 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     <div>
       {/* Filters */}
       <div className='flex items-center justify-between w-full '>
-        {/* <div className='flex items-center  py-4 text-black'>
+        <div className='flex items-center  py-4 text-black'>
           <Input
-            placeholder='Search by Descriptive Title...'
-            value={(table.getColumn('Descriptive Title')?.getFilterValue() as string) ?? ''}
+            placeholder='Search by Student Full Name...'
+            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
             onChange={(event) => {
-              table.getColumn('Descriptive Title')?.setFilterValue(event.target.value);
+              table.getColumn('name')?.setFilterValue(event.target.value);
             }}
             className='max-w-sm'
           />
-        </div> */}
+        </div>
 
-        {/* Column visibility */}
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='outline' className='ml-auto'>
               Columns
@@ -71,7 +73,8 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                 );
               })}
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
+        <OptionsCell data={data as []} teacher={teacher} />
       </div>
 
       {/* Table */}

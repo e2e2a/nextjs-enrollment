@@ -12,6 +12,7 @@ export interface IReportGradeRecord extends Document {
   startTime?: any;
   endTime?: any;
   type: string;
+  requestType: string;
   reportedGrade: any;
   scholarType: string;
   statusInDean: 'Pending' | 'Approved' | 'Declined';
@@ -60,6 +61,7 @@ const schema = new Schema<IReportGradeRecord>(
     startTime: { type: String },
     endTime: { type: String },
     type: { type: String },
+    requestType: { type: String },
     reportedGrade: [
       {
         profileId: {

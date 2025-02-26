@@ -116,7 +116,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                       {esData && esData.enrollmentSetup?.enrollmentTertiary?.fourthGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'fourthGrade'} reportGrades={rgData?.reportGrades} />}
                     </div>
                   </div>
-                  <DataTable columns={columns} data={s.students} />{' '}
+                  <DataTable teacher={ts?.teacherSchedule} columns={columns} data={s.students} />{' '}
                 </>
               )}
             </>

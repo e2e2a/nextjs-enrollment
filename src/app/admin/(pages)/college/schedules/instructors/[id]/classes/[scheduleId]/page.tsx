@@ -95,7 +95,12 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
                       </span>
                     </span>
                   </div>
-                  <div className='flex w-full justify-start'>
+                  <div className='flex w-full justify-start '>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Days: <span className='font-normal'>{ts?.teacherScheduleId?.days}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Room: <span className='font-normal'>{ts?.teacherSchedule?.roomId.roomName}</span>
                     </span>

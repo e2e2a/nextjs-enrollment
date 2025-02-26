@@ -170,9 +170,9 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.type,
-    id: 'type',
-    header: 'Type',
+    accessorFn: (row) => row.schoolYear,
+    id: 'schoolYear',
+    header: 'School Year',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
@@ -183,22 +183,36 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.statusInDean,
+    accessorFn: (row) => row?.requestType,
+    id: 'requestType',
+    header: 'Request Type',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user?.requestType === 'Class Report' && user?.requestType}
+          {user?.requestType === 'Individual' && `${user?.requestType} Report`}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row?.statusInDean,
     id: 'Approved By Dean',
     header: 'Approved By Dean',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='font-bold uppercase'>
-          {user?.statusInDean && user.statusInDean === 'Pending' && <span className='text-blue-500'>{user.statusInDean}</span>}
-          {user?.statusInDean && user.statusInDean === 'Approved' && <span className='text-green-500'>{user.statusInDean}</span>}
-          {user?.statusInDean && user.statusInDean === 'Declined' && <span className='text-red'>{user.statusInDean}</span>}
+          {user?.statusInDean && user.statusInDean === 'Pending' && <span className='text-blue-500'>{user?.statusInDean}</span>}
+          {user?.statusInDean && user.statusInDean === 'Approved' && <span className='text-green-500'>{user?.statusInDean}</span>}
+          {user?.statusInDean && user.statusInDean === 'Declined' && <span className='text-red'>{user?.statusInDean}</span>}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.evaluated,
+    accessorFn: (row) => row?.evaluated,
     id: 'Verify',
     header: 'Verify',
     cell: ({ cell, row }) => {
