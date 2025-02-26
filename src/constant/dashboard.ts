@@ -286,6 +286,22 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'packageSearch',
     },
     {
+      title: 'Reported Grades',
+      i: [
+        {
+          title: 'Class Grades Report',
+          href: '/dean/report/grade',
+          icon: 'eye',
+        },
+        {
+          title: 'Individual Grades Report',
+          href: '/dean/report/grade/individual',
+          icon: 'eye',
+        },
+      ],
+      icon: 'filePenLine',
+    },
+    {
       title: 'Subjects',
       i: [
         {
@@ -300,11 +316,6 @@ export const dashboardConfig: DashboardConfig = {
         },
       ],
       icon: 'packageSearch',
-    },
-    {
-      title: 'Grades Report',
-      href: '/dean/report/grade',
-      icon: 'filePenLine',
     },
     {
       title: 'Rooms',
@@ -788,17 +799,6 @@ export const dashboardConfig: DashboardConfig = {
           icon: 'packageSearch',
         },
         {
-          title: 'Reported Grades',
-          i: [
-            {
-              title: 'All Grades Report',
-              href: '/admin/college/enrollment/report/grade',
-              icon: 'eye',
-            },
-          ],
-          icon: 'packageSearch',
-        },
-        {
           title: 'Recent Records',
           i: [
             {
@@ -830,6 +830,22 @@ export const dashboardConfig: DashboardConfig = {
         //   href: '/admin/college/schedules/instructors/add',
         //   icon: 'add',
         // },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Reported Grades',
+      i: [
+        {
+          title: 'Class Grades Report',
+          href: '/admin/college/enrollment/report/grade',
+          icon: 'eye',
+        },
+        {
+          title: 'Individual Grades Report',
+          href: '/admin/college/enrollment/report/grade/individual',
+          icon: 'eye',
+        },
       ],
       icon: 'packageSearch',
     },

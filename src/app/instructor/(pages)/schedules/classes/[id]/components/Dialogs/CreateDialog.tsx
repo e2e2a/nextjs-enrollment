@@ -57,6 +57,7 @@ const CreateDialog = ({ teacher, data, type }: IProps) => {
       teacherScheduleId: teacher._id,
       type: type,
       reportedGrade: grades,
+      requestType: 'Class Report',
     };
 
     mutation.mutate(dataa, {
@@ -116,7 +117,7 @@ const CreateDialog = ({ teacher, data, type }: IProps) => {
             <div className=''>
               <div className='text-orange-500'>Reminder:</div>
               <div className=''>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Empty grades consider as <span className='text-red'>5.0</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Empty grades consider as <span className='text-red'>INC</span>
               </div>
             </div>
           </DialogDescription>

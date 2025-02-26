@@ -99,9 +99,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                       </span>
                     </span>
                   </div>
-                  <div className='flex w-full justify-start'>
-                    <span className='text-sm sm:text-[17px] font-bold'>
-                      Room: <span className='font-normal'>{ts?.teacherSchedule?.roomId?.roomName}</span>
+                  <div className='flex w-full justify-start '>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Days: <span className='font-normal'>{ts?.teacherScheduleId?.days}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Room: <span className='font-normal'>{ts?.teacherSchedule?.roomId.roomName}</span>
                     </span>
                   </div>
                 </div>
@@ -116,7 +121,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                       {esData && esData.enrollmentSetup?.enrollmentTertiary?.fourthGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'fourthGrade'} reportGrades={rgData?.reportGrades} />}
                     </div>
                   </div>
-                  <DataTable columns={columns} data={s.students} />{' '}
+                  <DataTable teacher={ts?.teacherSchedule} columns={columns} data={s.students} />{' '}
                 </>
               )}
             </>

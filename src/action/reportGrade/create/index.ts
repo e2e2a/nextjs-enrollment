@@ -15,7 +15,6 @@ import { getDeanProfileByUserId } from '@/services/deanProfile';
 export const createReportGradeAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
-
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
     if (session.user.role !== 'TEACHER' && session.user.role !== 'DEAN') return { error: 'Forbidden', status: 403 };
@@ -57,7 +56,7 @@ const handleCollege = async (user: any, data: any) => {
   return tryCatch(async () => {
     const ESetup = await getEnrollmentSetupByName('GODOY');
 
-    const a = await checkType(data.type, ESetup.enrollmentTertiary);
+    const a = await checkType(data.type, data.requestType, ESetup.enrollmentTertiary);
     if (a && a.error) return { error: a.error, status: a.status };
 
     let p;
@@ -66,20 +65,61 @@ const handleCollege = async (user: any, data: any) => {
       case 'TEACHER':
         p = await getTeacherProfileByUserId(user._id);
         b = await getReportGradeByTeacherId(p._id);
-        if (b && b.length > 0) {
-          const e = b.filter((e) => e.teacherId._id.toString() === data.teacherScheduleId && e.type === data.type);
-          if (e && e.length > 0) {
-            return { error: `You have already report a grade in ${a.message}`, status: 409 };
+        if (data.requestType === 'Class Report') {
+          if (b && b.length > 0) {
+            const e = b.filter((e) => e.teacherScheduleId._id.toString() === data.teacherScheduleId && e.type === data.type && e.requestType === 'Class Report');
+            if (e && e.length > 0) {
+              return { error: `You have already report a grade in ${a.message}`, status: 409 };
+            }
           }
         }
+        if (data.requestType === 'Individual') {
+          if (b && b.length > 0) {
+            const e = b.filter((e) => e.teacherScheduleId._id.toString() === data.teacherScheduleId && e.type === data.type && e.requestType === 'Individual');
+
+            if (e && e.length > 0) {
+              console.log('e', e[0].reportedGrade);
+              for (const student of e[0].reportedGrade) {
+                console.log('student', student);
+
+                // Add null-check for student.profileId
+                if (student.profileId && student.profileId._id.toString() === data.reportedGrade[0].profileId) {
+                  return { error: `You have already reported a grade for this student in ${a.message}`, status: 409 };
+                }
+              }
+              return { error: `You have already reported a grade in ${a.message}`, status: 409 };
+            }
+          }
+        }
+
         break;
       case 'DEAN':
         p = await getDeanProfileByUserId(user._id);
         b = await getReportGradeByDeanId(p._id);
-        if (b && b.length > 0) {
-          const e = b.filter((e) => e.deanId._id.toString() === data.teacherScheduleId && e.type === data.type);
-          if (e && e.length > 0) {
-            return { error: `You have already report a grade in ${a.message}`, status: 409 };
+        if (data.requestType === 'Class Report') {
+          if (b && b.length > 0) {
+            const e = b.filter((e) => e.teacherScheduleId._id.toString() === data.teacherScheduleId && e.type === data.type && e.requestType === 'Class Report');
+            if (e && e.length > 0) {
+              return { error: `You have already report a grade in ${a.message}`, status: 409 };
+            }
+          }
+        }
+        if (data.requestType === 'Individual') {
+          if (b && b.length > 0) {
+            const e = b.filter((e) => e.teacherScheduleId._id.toString() === data.teacherScheduleId && e.type === data.type && e.requestType === 'Individual');
+
+            if (e && e.length > 0) {
+              console.log('e', e[0].reportedGrade);
+              for (const student of e[0].reportedGrade) {
+                console.log('student', student);
+
+                // Add null-check for student.profileId
+                if (student.profileId && student.profileId._id.toString() === data.reportedGrade[0].profileId) {
+                  return { error: `You have already reported a grade for this student in ${a.message}`, status: 409 };
+                }
+              }
+              return { error: `You have already reported a grade in ${a.message}`, status: 409 };
+            }
           }
         }
         break;
@@ -95,7 +135,9 @@ const handleCollege = async (user: any, data: any) => {
 
     data.reportedGrade.map((e: any) => {
       if (!e.grade || e.grade === undefined || e.grade === null) {
-        e.grade = 5.0;
+        e.grade = 'INC';
+      } else if (e.grade.toLowerCase() !== 'INC'.toLowerCase()) {
+        e.grade = Number(e.grade).toFixed(2);
       }
     });
 
@@ -109,27 +151,28 @@ const handleCollege = async (user: any, data: any) => {
  * check type && if its open to report a grade
  *
  * @param {string} type
+ * @param {requestType} type
  * @param {object} ESetup
  */
-const checkType = async (type: string, ESetup: any) => {
+const checkType = async (type: string, requestType: string, ESetup: any) => {
   return tryCatch(async () => {
     let message;
     switch (type) {
       case 'firstGrade':
         message = 'Prelim';
-        if (!ESetup.firstGrade.open) return { error: 'Reporting Grade for Prelim is closed.', status: 404 };
+        if (!ESetup.firstGrade.open && requestType === 'Class Report') return { error: 'Reporting Grade for Prelim is closed.', status: 404 };
         break;
       case 'secondGrade':
         message = 'Midterm';
-        if (!ESetup.secondGrade.open) return { error: 'Reporting Grade for Midterm is closed.', status: 404 };
+        if (!ESetup.secondGrade.open && requestType === 'Class Report') return { error: 'Reporting Grade for Midterm is closed.', status: 404 };
         break;
       case 'thirdGrade':
         message = 'Semi-final';
-        if (!ESetup.thirdGrade.open) return { error: 'Reporting Grade for Semi-final is closed.', status: 404 };
+        if (!ESetup.thirdGrade.open && requestType === 'Class Report') return { error: 'Reporting Grade for Semi-final is closed.', status: 404 };
         break;
       case 'fourthGrade':
         message = 'Final';
-        if (!ESetup.fourthGrade.open) return { error: 'Reporting Grade for Final is closed.', status: 404 };
+        if (!ESetup.fourthGrade.open && requestType === 'Class Report') return { error: 'Reporting Grade for Final is closed.', status: 404 };
         break;
       default:
         return { error: 'Forbidden.', status: 403 };

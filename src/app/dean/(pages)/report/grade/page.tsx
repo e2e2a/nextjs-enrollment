@@ -9,7 +9,7 @@ import { useReportGradeQueryByCategory } from '@/lib/queries/reportGrade/get/cat
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error: isEnError } = useReportGradeQueryByCategory('College');
+  const { data, isLoading, error: isEnError } = useReportGradeQueryByCategory('College', 'Class Report');
   const { data: pData, isLoading: pload, error } = useProfileQueryBySessionId();
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const Page = () => {
           ) : (
             <div className=''>
               <div className='flex items-center py-4 text-black w-full justify-center'>
-                <h1 className='sm:text-3xl text-xl font-bold '>Grades Report Management</h1>
+                <h1 className='sm:text-3xl text-xl font-bold '>Class Grades Report Management</h1>
               </div>
               <DataTable columns={columns} data={data.reportedGrades as any[]} />
             </div>

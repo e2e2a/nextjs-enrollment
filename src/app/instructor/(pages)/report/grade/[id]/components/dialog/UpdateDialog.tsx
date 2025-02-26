@@ -26,8 +26,8 @@ const UpdateDialog = ({ teacher, type, reportGrades }: IProps) => {
 
   useEffect(() => {
     const initialGrades = reportGrades?.reportedGrade.map((s: any) => ({
-      profileId: s.profileId._id,
-      grade: s.grade,
+      profileId: s?.profileId?._id,
+      grade: s?.grade,
     }));
     setGrades(initialGrades);
   }, [reportGrades]);

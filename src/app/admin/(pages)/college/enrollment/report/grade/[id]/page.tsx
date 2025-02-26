@@ -34,7 +34,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className=''>
               <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
                 <div className='mb-3'>
-                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Grade Reported Management</h1>
+                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Class Grade Reported Management</h1>
                 </div>
                 <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
                   <div className='justify-between items-start flex w-full'>
@@ -74,6 +74,17 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='flex w-full justify-start '>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Days: <span className='font-normal'>{data?.reportedGrades?.teacherScheduleId?.days}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Room:
+                      <span className='font-normal'>{data?.reportedGrades?.teacherScheduleId?.roomId?.roomName}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start '>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Year:{' '}
                       <span className='font-normal'>
                         {data?.reportedGrades.teacherScheduleId?.blockTypeId?.year} - {data?.reportedGrades?.teacherScheduleId?.blockTypeId?.semester}
@@ -87,6 +98,12 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='flex w-full justify-start'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Request Type:
+                      <span className='font-normal'>{data.reportedGrades.requestType}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Type:
                       <span className='font-normal'>
                         {' '}
@@ -98,16 +115,16 @@ const Page = ({ params }: { params: { id: string } }) => {
                       </span>
                     </span>
                   </div>
-                  <div className='flex w-full justify-start sm:justify-end'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Status:
-                      <span className='font-normal text-sm text-green-500 uppercase'> {data.reportedGrades.statusInDean}</span>
-                    </span>
-                  </div>
                   <div className='flex w-full justify-start'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Status:
+                      <span className='font-normal text-sm text-green-500 uppercase'> {data?.reportedGrades?.statusInDean}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Evaluated:
-                      <span className='font-normal text-sm uppercase'> {data.reportedGrades.evaluated ? <span className=' text-green-500'>True</span> : <span className=' text-blue-500'>False</span>}</span>
+                      <span className='font-normal text-sm text-blue-500 uppercase'> {data?.reportedGrades?.evaluated ? 'True' : 'False'}</span>
                     </span>
                   </div>
                 </div>

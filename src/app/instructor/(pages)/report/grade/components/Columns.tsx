@@ -151,6 +151,33 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row?.schoolYear,
+    id: 'schoolYear',
+    header: 'School Year',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user?.schoolYear}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row?.requestType,
+    id: 'requestType',
+    header: 'Request Type',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user?.requestType === 'Class Report' && user.requestType}
+          {user?.requestType === 'Individual' && `${user.requestType} Report`}
+        </div>
+      );
+    },
+  },
+  {
     accessorFn: (row) => row?.statusInDean,
     id: 'Approved By Dean',
     header: 'Approved By Dean',
