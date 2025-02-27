@@ -71,6 +71,33 @@ export const getEnrollmentByUserId = async (userId: string) => {
   }
 };
 
+export const getEnrollmentByCourseId = async (courseId: string) => {
+  try {
+    const enrollment = await Enrollment.find({ courseId, enrollStatus: { $ne: 'Rejected' } })
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .populate('courseId')
+      .populate('profileId')
+      .populate('blockTypeId')
+      .populate({
+        path: 'studentSubjects.teacherScheduleId',
+        populate: [{ path: 'profileId' }, { path: 'deanId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
+      })
+      .populate({
+        path: 'studentSubjects.profileId',
+        populate: [{ path: 'userId', select: '-password' }],
+      })
+      .exec();
+    // console.log('i am exec...', enrollment);
+    return enrollment;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
 export const getEnrollmentByProfileId = async (profileId: string) => {
   try {
     const enrollment = await Enrollment.findOne({ profileId, enrollStatus: { $ne: 'Rejected' } })

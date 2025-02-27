@@ -35,6 +35,16 @@ export const getSubjectByCategory = async (category: string) => {
     return [];
   }
 };
+
+export const getSubjectByCourseId = async (courseId: string) => {
+  try {
+    const subjects = await Subject.find({ courseId }).populate('courseId');
+    return subjects;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
 // export const getSubjectCategoryCollege = async () => {
 //   try {
 //     const subjects = await Subject.find({ category: 'College' });
@@ -48,6 +58,16 @@ export const getSubjectBySubjectCode = async (subjectCode: string, courseId: str
   try {
     const subjects = await Subject.findOne({ subjectCode, courseId });
     return subjects;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getSubjectById = async (id: string) => {
+  try {
+    const subject = await Subject.findById(id);
+    return subject;
   } catch (error) {
     console.log(error);
     return null;

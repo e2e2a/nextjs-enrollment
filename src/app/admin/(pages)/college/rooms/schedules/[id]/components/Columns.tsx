@@ -120,7 +120,7 @@ export const columns: ColumnDef<any>[] = [
   },
 
   {
-    accessorFn: (row) => row.days,
+    accessorFn: (row) => row?.days,
     id: 'days',
     header: 'Days',
     cell: ({ cell, row }) => {
@@ -133,7 +133,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.startTime,
+    accessorFn: (row) => row?.startTime,
     id: 'start time',
     header: 'Start Time',
     cell: ({ cell, row }) => {
@@ -146,7 +146,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.endTime,
+    accessorFn: (row) => row?.endTime,
     id: 'end time',
     header: 'End Time',
     cell: ({ cell, row }) => {

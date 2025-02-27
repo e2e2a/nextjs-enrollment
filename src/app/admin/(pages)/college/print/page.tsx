@@ -12,16 +12,21 @@ import { Form } from '@/components/ui/form';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { SelectInput } from './components/SelectInput';
 import { PrintReportValidatorInCollege } from '@/lib/validators/report';
-import { printSelectionOptions, printSelectionScope, exportTypeOption, printSelectionStudentType, studentYearData, studentSemesterData } from '../../../../constant/print/printOptions';
+import { printSelectionOptions, printSelectionScope, exportTypeOption, printSelectionStudentType, studentYearData, studentSemesterData } from '../../../../../constant/print/printOptions';
 import { useAllRoomQueryByEduLevel } from '@/lib/queries/rooms/get/all';
 import { Combobox } from './components/Combobox';
 import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 import { usePrintReportMutation } from '@/lib/queries/print';
 import { exportToExcel, exportToPDF } from './components/ExportUtils';
 import { useSubjectQueryByCategory } from '@/lib/queries/subjects/get/category';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 
 const Page = () => {
+  const [courseError, setCourseError] = useState(false);
+  const [subjects, setSubjects] = useState([]);
   const [studentId, setStudentId] = useState('');
+  const [courseId, setCourseId] = useState('');
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isUploaded, setIsUploaded] = useState(false);
   const [blocks, setBlocks] = useState<any>([]);
@@ -30,26 +35,37 @@ const Page = () => {
   const { data: roomData, error: roomError } = useAllRoomQueryByEduLevel('tertiary');
   const { data: sData, isError: sError } = useAllProfileQueryByUserRoles('STUDENT');
   const { data: subsData, isError: subError } = useSubjectQueryByCategory('College');
+  const { data: cData, error: cError } = useCourseQueryByCategory('College');
   const mutation = usePrintReportMutation();
 
   useEffect(() => {
     if (error || !data) return;
     if (pError || !pData) return;
+    if (subError || !subsData) return;
 
     if (data && pData.profile) {
       if (data.blockTypes) {
-        const filteredBlocks = data?.blockTypes.filter((b: any) => b.courseId._id === pData.profile.courseId._id);
-        setBlocks(filteredBlocks);
+        if (courseId) {
+          const filteredBlocks = data?.blockTypes.filter((b: any) => b?.courseId?._id === courseId);
+          setBlocks(filteredBlocks);
+        }
+      }
+      if (subsData.subjects) {
+        if (courseId) {
+          const filterSubjects = subsData?.subjects.filter((b: any) => b?.courseId?._id === courseId);
+          setSubjects(filterSubjects);
+        }
       }
       setIsPageLoading(false);
     }
-  }, [data, error, pData, pError]);
+  }, [data, error, pData, pError, courseId, subsData, subError]);
 
   useEffect(() => {
     if (roomError || !roomData) return;
-    if (sError || !sData) return;
+
     if (subError || !subsData) return;
-  }, [roomData, roomError, sData, sError, subsData, subError]);
+    if (cError || !cData) return;
+  }, [roomData, roomError, sData, sError, subsData, subError, cData, cError]);
 
   const formCollege = useForm<z.infer<typeof PrintReportValidatorInCollege>>({
     resolver: zodResolver(PrintReportValidatorInCollege),
@@ -76,15 +92,21 @@ const Page = () => {
 
   const onSubmit: SubmitHandler<z.infer<typeof PrintReportValidatorInCollege>> = async (data) => {
     setIsUploaded(true);
+    if (!courseId) {
+      setCourseError(true);
+      setIsUploaded(false);
+      return;
+    }
+    setCourseError(false);
     if (a === 'Students' && b === 'Individual') data.individualSelectionId = studentId;
-
-    mutation.mutate(data, {
+    const dataa = { ...data, courseId };
+    mutation.mutate(dataa, {
       onSuccess: async (res) => {
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            formCollege.reset();
+            // formCollege.reset();
             if (res.message) makeToastSucess(res.message);
             console.log('res', res);
             if (data.exportType === 'Pdf') await exportToPDF(res?.b?.dataToPrint, 'asd', data.printSelection, data.selectionScope);
@@ -113,13 +135,41 @@ const Page = () => {
               <div className='flex flex-col items-center justify-center py-4 text-black'>
                 <h1 className='text-lg sm:text-3xl font-bold'>Print Reports</h1>
               </div>
-              <div className='flex flex-col items-start justify-start py-4 text-black'>
-                <h1 className='text-lg sm:text-lglg font-bold'>Department: {pData?.profile?.courseId.name || ''}</h1>
-              </div>
+
               <Form {...formCollege}>
                 <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
                   <CardContent className='w-full '>
                     <div className='flex flex-col gap-4'>
+                      <div className='relative bg-slate-50 rounded-lg'>
+                        <Select onValueChange={(e) => setCourseId(e)} value={courseId}>
+                          <SelectTrigger id={'courseId'} className='w-full pt-10 pb-4 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4 capitalize'>
+                            <SelectValue placeholder={'Select Course'} />
+                          </SelectTrigger>
+                          <SelectContent className='bg-white border-gray-300'>
+                            <SelectGroup>
+                              {cData?.courses.length > 0 ? (
+                                cData?.courses.map((item: any, index: any) => (
+                                  <SelectItem value={item._id} key={index} className=''>
+                                    <div className=''>
+                                      <span className=''>
+                                        {item.courseCode} - {item.name}
+                                      </span>
+                                    </div>
+                                  </SelectItem>
+                                ))
+                              ) : (
+                                <div className=''>No Results.</div>
+                              )}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                        <label
+                          htmlFor={'courseId'}
+                          className={`pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5`}
+                        >
+                          Select Course
+                        </label>
+                      </div>
                       <SelectInput name={'printSelection'} selectItems={printSelectionOptions} form={formCollege} label={'Select to print:'} placeholder={'Select to print'} />
                       <SelectInput name={'selectionScope'} selectItems={printSelectionScope} form={formCollege} label={'Select scope:'} placeholder={'Select scope'} />
                       {a === 'Blocks' && b === 'Individual' && (
@@ -134,7 +184,7 @@ const Page = () => {
                       )}
                       {a === 'Subjects' && b === 'Individual' && (
                         <span className=''>
-                          <SelectInput name={'individualSelectionId'} selectItems={subsData?.subjects || []} form={formCollege} label={'Select Subject:'} placeholder={'Select Subject'} />
+                          <SelectInput name={'individualSelectionId'} selectItems={subjects || []} form={formCollege} label={'Select Subject:'} placeholder={'Select Subject'} />
                         </span>
                       )}
                       {a === 'Students' && b === 'Individual' && (
