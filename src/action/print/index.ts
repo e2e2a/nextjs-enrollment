@@ -1,12 +1,14 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import { PrintReportValidatorInCollege } from '@/lib/validators/report/dean';
+import { PrintReportValidatorInCollege } from '@/lib/validators/report';
+import { getAdminProfileByUserId } from '@/services/adminProfile';
 import { getBlockTypeByCourseId, getBlockTypeById, getBlockTypeBySection } from '@/services/blockType';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
-import { getEnrollmentByProfileId } from '@/services/enrollment';
+import { getEnrollmentByCourseId, getEnrollmentById, getEnrollmentByProfileId } from '@/services/enrollment';
 import { getAllRoomByEduLevel, getRoomById } from '@/services/room';
 import { getStudentProfileByCourseId } from '@/services/studentProfile';
+import { getSubjectByCourseId, getSubjectById } from '@/services/subject';
 import { getAllTeacherSchedule } from '@/services/teacherSchedule';
 import { checkAuth } from '@/utils/actions/session';
 
@@ -27,15 +29,7 @@ export const printReportAction = async (data: any) => {
     const parse = PrintReportValidatorInCollege.safeParse(data);
     if (!parse.success) return { error: 'Invalid fields!', status: 400 };
 
-    console.log('parse', parse);
     const b = await checkPrintScope(parse.data, a.courseId);
-    // const sConflict = await getSubjectBySubjectCode(data.subjectCode);
-    // if (sConflict) return { error: 'Subject Code already Exists.', status: 409 };
-
-    // const dataToCreate = {
-    //   ...data,
-    //   courseId: p.courseId._id,
-    // };
 
     return { message: 'test successful.', b, status: 200 };
   });
@@ -47,7 +41,9 @@ const checkAuthRole = async (data: any, user: any) => {
     let courseId;
     switch (user.role) {
       case 'ADMIN':
-        p = await getDeanProfileByUserId(user._id);
+        p = await getAdminProfileByUserId(user._id);
+        if(!data.courseId) return { error: 'Course was not found.', status: 404 };
+        courseId = data?.courseId;
         break;
       case 'DEAN':
         p = await getDeanProfileByUserId(user._id);
@@ -63,12 +59,24 @@ const checkAuthRole = async (data: any, user: any) => {
 
 const checkPrintScope = async (data: any, courseId: string) => {
   return tryCatch(async () => {
-    let dataToPrint;
+    let dataToPrint: any = [];
     switch (data.selectionScope) {
       case 'All':
         if (data.printSelection === 'Blocks') dataToPrint = await getBlockTypeByCourseId(courseId);
-        if (data.printSelection === 'Rooms') dataToPrint = await getAllRoomByEduLevel('Tertiary');
-        if (data.printSelection === 'Students') dataToPrint = await getStudentProfileByCourseId(courseId);
+        if (data.printSelection === 'Rooms') dataToPrint = await getAllRoomByEduLevel('tertiary');
+        if (data.printSelection === 'Subjects') dataToPrint = await getSubjectByCourseId(courseId);
+        if (data.printSelection === 'Students') {
+          if (data.studentType.toLowerCase() === 'regular') {
+            dataToPrint = await getEnrollmentByCourseId(courseId);
+            if (data.individualSelectionId) dataToPrint = dataToPrint.filter((a: any) => a.blockTypeId._id.toString() === data.individualSelectionId.toString());
+          } else {
+            dataToPrint = await getEnrollmentByCourseId(courseId);
+            if (data.year) {
+              dataToPrint = dataToPrint.filter((a: any) => a.studentYear === data.year);
+              if (data.semester) dataToPrint = dataToPrint.filter((a: any) => a.studentSemester === data.semester);
+            }
+          }
+        }
         break;
       case 'Individual':
         if (data.printSelection === 'Blocks') dataToPrint = await getBlockTypeBySection(data.individualSelectionId);
@@ -78,7 +86,12 @@ const checkPrintScope = async (data: any, courseId: string) => {
           const filteredTs = ts.filter((t) => t.roomId._id.toString() === room._id.toString());
           dataToPrint = { ...room.toObject(), schedules: filteredTs };
         }
+        if (data.printSelection === 'Subjects') {
+          const b = await getSubjectById(data.individualSelectionId);
+          dataToPrint = [b];
+        }
         if (data.printSelection === 'Students') dataToPrint = await getEnrollmentByProfileId(data.individualSelectionId);
+        console.log('dataToPrint', dataToPrint.length)
         break;
       default:
         return { error: 'Forbidden.', dataToPrint, status: 403 };

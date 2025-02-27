@@ -164,7 +164,7 @@ export const dashboardConfig: DashboardConfig = {
           title: 'Curriculum Management',
           href: '/dean/curriculums',
           icon: 'eye',
-        }
+        },
       ],
       icon: 'packageSearch',
     },
@@ -880,6 +880,11 @@ export const dashboardConfig: DashboardConfig = {
         },
       ],
       icon: 'packageSearch',
+    },
+    {
+      title: 'Print Report',
+      href: '/admin/college/print',
+      icon: 'download',
     },
     {
       title: 'Accounts',
