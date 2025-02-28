@@ -5,6 +5,7 @@ import { columns } from './components/Columns';
 import { ISubject } from '@/types';
 import { useSubjectQueryByCategory } from '@/lib/queries/subjects/get/category';
 import LoaderPage from '@/components/shared/LoaderPage';
+import OptionsExport from './components/OptionsExport';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
@@ -36,6 +37,7 @@ const Page = () => {
             <div className=''>404</div>
           ) : (
             <div className=''>
+              <OptionsExport data={subjects || []} />
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-bold '>Subjects Management</h1>
               </div>

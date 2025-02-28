@@ -29,42 +29,71 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original.profileId;
+      const user = row.original;
+      const dean = user?.deanId;
+      const instructor = user?.profileId;
 
-      const formattedName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
-        .replace(/\s+,/g, ',')
-        .replace(/(\S),/g, '$1,')
-        .replace(/,(\S)/g, ', $1')
-        .trim();
+      const formattedDeanName = dean
+        ? `${dean?.lastname ? dean?.lastname + ',' : ''} ${dean?.firstname ?? ''} ${dean?.middlename ?? ''}${dean?.extensionName ? ', ' + dean?.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/(\S),/g, '$1,').replace(/,(\S)/g, ', $1').trim()
+        : '';
+
+      const formattedInstructorName = instructor
+        ? `${instructor?.lastname ? instructor?.lastname + ',' : ''} ${instructor?.firstname ?? ''} ${instructor?.middlename ?? ''}${instructor?.extensionName ? ', ' + instructor?.extensionName + '.' : ''}`
+            .replace(/\s+,/g, ',')
+            .replace(/(\S),/g, '$1,')
+            .replace(/,(\S)/g, ', $1')
+            .trim()
+        : '';
 
       return (
         <div key={cell.id} className='capitalize'>
-          {formattedName}
+          {formattedDeanName && <span>{formattedDeanName}</span>}
+          {formattedDeanName && formattedInstructorName && <br />}
+          {formattedInstructorName && <span>{formattedInstructorName}</span>}
         </div>
       );
     },
 
     accessorFn: (row) => {
-      const user = row.profileId;
-      return `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
-        .replace(/\s+,/g, ',')
-        .replace(/,(\S)/g, ', $1')
-        .replace(/\s+/g, ' ')
-        .toLowerCase()
-        .trim();
+      const user = row.teacherScheduleId;
+      const instructor = user?.profileId;
+      const dean = user?.deanId;
+
+      const formattedInstructorName = instructor
+        ? `${instructor?.lastname ? instructor?.lastname + ',' : ''} ${instructor?.firstname ?? ''} ${instructor?.middlename ?? ''}${instructor?.extensionName ? ', ' + instructor?.extensionName + '.' : ''}`
+            .replace(/\s+,/g, ',')
+            .replace(/,(\S)/g, ', $1')
+            .replace(/\s+/g, ' ')
+            .toLowerCase()
+            .trim()
+        : '';
+
+      const formattedDeanName = dean
+        ? `${dean?.lastname ? dean?.lastname + ',' : ''} ${dean?.firstname ?? ''} ${dean?.middlename ?? ''}${dean?.extensionName ? ', ' + dean?.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').toLowerCase().trim()
+        : '';
+
+      return `${formattedInstructorName} ${formattedDeanName}`.trim();
     },
 
     filterFn: (row, columnId, filterValue) => {
-      const user = row.original.profileId;
+      const user = row.original;
+      const instructor = user?.profileId;
+      const dean = user?.deanId;
 
-      const formattedFullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
-        .replace(/\s+,/g, ',')
-        .replace(/,(\S)/g, ', $1')
-        .replace(/\s+/g, ' ')
-        .toLowerCase()
-        .trim();
+      const formattedInstructorName = instructor
+        ? `${instructor?.lastname ? instructor?.lastname + ',' : ''} ${instructor?.firstname ?? ''} ${instructor?.middlename ?? ''}${instructor?.extensionName ? ', ' + instructor?.extensionName + '.' : ''}`
+            .replace(/\s+,/g, ',')
+            .replace(/,(\S)/g, ', $1')
+            .replace(/\s+/g, ' ')
+            .toLowerCase()
+            .trim()
+        : '';
 
-      return formattedFullName.includes(filterValue.toLowerCase());
+      const formattedDeanName = dean
+        ? `${dean?.lastname ? dean?.lastname + ',' : ''} ${dean?.firstname ?? ''} ${dean?.middlename ?? ''}${dean?.extensionName ? ', ' + dean?.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').toLowerCase().trim()
+        : '';
+
+      return formattedInstructorName.includes(filterValue.toLowerCase()) || formattedDeanName.includes(filterValue.toLowerCase());
     },
   },
   {

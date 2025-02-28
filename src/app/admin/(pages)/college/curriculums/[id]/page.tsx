@@ -6,12 +6,15 @@ import CurriculumTable from './components/CurriculumTable';
 import { useSubjectQueryByCategory } from '@/lib/queries/subjects/get/category';
 import { useCurriculumQueryById } from '@/lib/queries/curriculum/get/id';
 import LoaderPage from '@/components/shared/LoaderPage';
+import { Button } from '@/components/ui/button';
+import { exportToPDF } from './components/ExportUtils';
+import { Icons } from '@/components/shared/Icons';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isPageError, setIsPageError] = useState(false);
-  const { data, isLoading, error: isEnError } = useCurriculumQueryById(params.id);
-  const { data: sData, isLoading: sLoading, error: sError } = useSubjectQueryByCategory('College');
+  const { data, error: isEnError } = useCurriculumQueryById(params.id);
+  const { data: sData, error: sError } = useSubjectQueryByCategory('College');
   useEffect(() => {
     if (isEnError || !data) return;
     if (sError || !sData) return;
@@ -30,18 +33,29 @@ const Page = ({ params }: { params: { id: string } }) => {
       ) : data && data.curriculum === null ? (
         <ErrorPage />
       ) : (
-        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
-          <div className='flex items-center py-4 text-black w-full text-center'>
-            <h1 className='sm:text-3xl text-xl font-bold w-full uppercase text-center'>{data?.curriculum?.courseId?.name}</h1>
+        <div className=''>
+          <div className='flex items-end justify-end pt-1 pb-3 text-black w-full text-center'>
+            <Button
+              type='button'
+              onClick={() => exportToPDF(data?.curriculum, 'curriculum')}
+              className='select-none focus-visible:ring-0 text-[15px] bg-none hover:bg-blue-500 text-black hover:text-neutral-100 tracking-normal font-medium font-poppins flex items-center justify-center'
+            >
+              <Icons.download className='h-4 w-4 mr-1' /> Download
+            </Button>
           </div>
-          <div className=' w-full flex items-center justify-center'>
-            {/* <Button type='button' size={'sm'} className='bg-green-500 text-white flex gap-1 px-2'>
+          <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
+            <div className='flex items-center py-4 text-black w-full text-center'>
+              <h1 className='sm:text-3xl text-xl font-bold w-full uppercase text-center'>{data?.curriculum?.courseId?.name}</h1>
+            </div>
+            <div className=' w-full flex items-center justify-center'>
+              {/* <Button type='button' size={'sm'} className='bg-green-500 text-white flex gap-1 px-2'>
               <Icons.add className='w-4 h-4' /> Add New
             </Button> */}
-            {/* <AddForm c={data?.curriculum} /> */}
-          </div>
-          <div className=''>
-            <CurriculumTable data={data?.curriculum} s={sData?.subjects} />
+              {/* <AddForm c={data?.curriculum} /> */}
+            </div>
+            <div className=''>
+              <CurriculumTable data={data?.curriculum} s={sData?.subjects} />
+            </div>
           </div>
         </div>
       )}

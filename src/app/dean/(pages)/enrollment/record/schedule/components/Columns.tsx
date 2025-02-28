@@ -16,41 +16,61 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ cell, row }) => {
-      const user = row.original.profileId;
+      const user = row.original;
       if (!user) return <div key={cell.id}>Unknown</div>;
 
-      const name = `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`
-        .replace(/\s+,/g, ',') // Fix spaces before commas
-        .replace(/,(\S)/g, ', $1') // Ensure proper comma spacing
-        .replace(/\s+/g, ' ') // Remove extra spaces
+      const deanName = `${user.deanId?.lastname ? user.deanId?.lastname + ',' : ''} ${user.deanId?.firstname ?? ''} ${user.deanId?.middlename ?? ''}${user.deanId?.extensionName ? ', ' + user.deanId?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
+        .trim();
+
+      const teacherName = `${user.profileId?.lastname ? user.profileId?.lastname + ',' : ''}${user.profileId?.firstname ?? ''} ${user.profileId?.middlename ?? ''}${user.profileId?.extensionName ? ', ' + user.profileId?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/(\S),/g, '$1,')
+        .replace(/,(\S)/g, ', $1')
         .trim();
 
       return (
         <div key={cell.id} className='capitalize'>
-          {name}
+          {user.deanId && <span>{deanName}</span>}
+          {user.profileId && <span>{teacherName}</span>}
         </div>
       );
     },
 
     accessorFn: (row) => {
-      const user = row.profileId;
+      const user = row;
       if (!user) return '';
 
-      return `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim();
+      return `
+        ${user.deanId ? `${user.deanId?.lastname ? user.deanId?.lastname + ',' : ''} ${user.deanId?.firstname ?? ''} ${user.deanId?.middlename ?? ''} ${user.deanId?.extensionName ?? ''}` : ''}
+        ${user.profileId ? `${user.profileId?.lastname ? user.profileId?.lastname + ',' : ''} ${user.profileId?.firstname ?? ''} ${user.profileId?.middlename ?? ''} ${user.profileId?.extensionName ?? ''}` : ''}`
+        .trim()
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ');
     },
 
     filterFn: (row, columnId, filterValue) => {
-      const user = row.original.profileId;
+      const user = row.original;
       if (!user) return false;
 
-      const fullName = `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`
+      const fullName = `${user.profileId?.lastname ? user.profileId?.lastname + ',' : ''} ${user.profileId?.firstname ?? ''} ${user.profileId?.middlename ?? ''}${user.profileId?.extensionName ? ', ' + user.profileId?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
         .replace(/\s+/g, ' ')
         .toLowerCase()
         .trim();
 
-      return fullName.includes(filterValue.toLowerCase());
+      const deanName = `${user.deanId?.lastname ? user.deanId?.lastname + ',' : ''} ${user.deanId?.firstname ?? ''} ${user.deanId?.middlename ?? ''}${user.deanId?.extensionName ? ', ' + user.deanId?.extensionName + '.' : ''}`
+        .replace(/\s+,/g, ',')
+        .replace(/,(\S)/g, ', $1')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim();
+
+      return fullName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },
   },
   {

@@ -8,14 +8,15 @@ import { useEnrollmentQueryByTeacherScheduleId } from '@/lib/queries/enrollment/
 import { useProfileQueryByParamsUserId } from '@/lib/queries/profile/get/userId';
 import { useReportGradeQueryByTeacherId } from '@/lib/queries/reportGrade/get/teacherId';
 import ViewGrades from './components/ViewGrades';
+import OptionsExport from './components/OptionsExport';
 
 const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error: isEnError } = useProfileQueryByParamsUserId(params.id);
-  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryById(params.scheduleId, 'College');
-  const { data: rgData, isLoading: rpLoading, error: rgError } = useReportGradeQueryByTeacherId(ts?.teacherSchedule.profileId?._id as string);
-  const { data: s, isLoading: sLoading, error: sError } = useEnrollmentQueryByTeacherScheduleId({ id: ts?.teacherSchedule?._id, category: 'College' });
+  const { data, error: isEnError } = useProfileQueryByParamsUserId(params.id);
+  const { data: ts, error: tsError } = useTeacherScheduleQueryById(params.scheduleId, 'College');
+  const { data: rgData, error: rgError } = useReportGradeQueryByTeacherId(ts?.teacherSchedule.profileId?._id as string);
+  const { data: s, error: sError } = useEnrollmentQueryByTeacherScheduleId({ id: ts?.teacherSchedule?._id, category: 'College' });
 
   useEffect(() => {
     if (tsError || !ts) return;
@@ -49,7 +50,8 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
           {isError ? (
             <div className=''>404</div>
           ) : data && data.profile ? (
-            <>
+            <div>
+              <OptionsExport data={ts?.teacherSchedule || []} students={s?.students} />
               <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
                 <div className='mb-3'>
                   <h1 className='text-lg sm:text-2xl font-bold uppercase'>Instructor&apos;s Students</h1>
@@ -63,7 +65,7 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
                         {ts?.teacherSchedule?.profileId?.extensionName ? ts?.teacherSchedule?.profileId?.extensionName + '.' : ''}
                       </span>
                     </span>
-                  </div>zzzz
+                  </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Department: <span className='font-normal'>{ts?.teacherSchedule?.courseId?.name}</span>
@@ -97,7 +99,7 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
                   </div>
                   <div className='flex w-full justify-start '>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Days: <span className='font-normal'>{ts?.teacherScheduleId?.days}</span>
+                      Days: <span className='font-normal'>{ts?.teacherSchedule?.days.join(', ')}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
@@ -111,12 +113,12 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
                 <>
                   {' '}
                   <div className='w-full flex justify-start items-center'>
-                    <div className='flex flex-col'>{rgData.reportGrades && <ViewGrades data={s.students} teacher={ts?.teacherSchedule} type={'firstGrade'} reportGrades={rgData?.reportGrades} />}</div>
+                    <div className='flex flex-col'>{rgData?.reportGrades && <ViewGrades data={s?.students} teacher={ts?.teacherSchedule} type={'firstGrade'} reportGrades={rgData?.reportGrades} />}</div>
                   </div>
-                  <DataTable columns={columns} data={s.students} />
+                  <DataTable columns={columns} data={s?.students} />
                 </>
               )}
-            </>
+            </div>
           ) : (
             <div className=''>404</div>
           )}

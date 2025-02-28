@@ -9,6 +9,7 @@ import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/i
 import { useEnrollmentQueryByTeacherScheduleId } from '@/lib/queries/enrollment/get/teacherSchedule';
 import { useReportGradeQueryByTeacherId } from '@/lib/queries/reportGrade/get/teacherId';
 import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
+import OptionsExport from './components/OptionsExport';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -54,6 +55,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className=''>404</div>
           ) : data && data.profile ? (
             <>
+              <OptionsExport data={ts?.teacherSchedule || []} students={s?.students} />
               <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
                 <div className='mb-3'>
                   <h1 className='text-lg sm:text-2xl font-bold uppercase'>Instructor&apos;s Students</h1>

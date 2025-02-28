@@ -258,11 +258,11 @@ export const dashboardConfig: DashboardConfig = {
               href: '/dean/enrollment/record/enrollment',
               icon: 'eye',
             },
-            // {
-            //   title: 'Instructor Sched. Records',
-            //   href: '/dean/enrollment/record/schedule',
-            //   icon: 'eye',
-            // },
+            {
+              title: 'Instructor Sched. Records',
+              href: '/dean/enrollment/record/schedule',
+              icon: 'eye',
+            },
           ],
           icon: 'packageSearch',
         },

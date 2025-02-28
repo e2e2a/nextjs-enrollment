@@ -83,8 +83,8 @@ export const columns: ColumnDef<any>[] = [
   },
   {
     accessorFn: (row) => row.subjectId?.name,
-    id: 'subject title',
-    header: 'Subject Title',
+    id: 'Descriptive Title',
+    header: 'Descriptive Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (

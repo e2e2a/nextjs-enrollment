@@ -14,7 +14,7 @@ export const getTeacherScheduleByProfileIdAction = async (data: any) => {
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-
+    if (!data.id) return { error: '', status: 403 };
     let t;
     switch (session.user.role) {
       case 'TEACHER':
@@ -31,7 +31,7 @@ export const getTeacherScheduleByProfileIdAction = async (data: any) => {
       default:
         return { error: 'Forbidden', status: 403 };
     }
-  
+
     return { teacherSchedules: JSON.parse(JSON.stringify(t)), status: 200 };
   });
 };

@@ -4,6 +4,7 @@ import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useReportGradeQueryById } from '@/lib/queries/reportGrade/get/id';
+import OptionsExport from './components/OptionsExport';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -31,6 +32,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className=''>404</div>
           ) : (
             <div className=''>
+              <OptionsExport data={data?.reportedGrades || []} />
               <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
                 <div className='mb-3'>
                   <h1 className='text-lg sm:text-2xl font-bold uppercase'>Grade Reported Management</h1>
@@ -40,7 +42,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Instructor:{' '}
                       <span className='font-normal'>
-                        {data?.reportedGrades?.teacherId?.firstname ?? ''} {data?.reportedGrades?.teacherId?.middlename ?? ''} {data?.reportedGrades?.teacherId?.lastname ?? ''} {data?.reportedGrades?.teacherId?.extensionName ? data?.reportedGrades?.teacherId?.extensionName + '.' : ''}
+                        {data?.reportedGrades?.teacherId?.firstname ?? ''} {data?.reportedGrades?.teacherId?.middlename ?? ''} {data?.reportedGrades?.teacherId?.lastname ?? ''}{' '}
+                        {data?.reportedGrades?.teacherId?.extensionName ? data?.reportedGrades?.teacherId?.extensionName + '.' : ''}
                       </span>
                     </span>
                   </div>
@@ -72,7 +75,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold'>
-                      Block: <span className='font-normal'>{data.reportedGrades?.teacherScheduleId?.blockTypeId?.section}</span>
+                      Block: <span className='font-normal'>{data?.reportedGrades?.teacherScheduleId?.blockTypeId?.section}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start'>
@@ -91,7 +94,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Status:
-                      <span className='font-normal text-sm text-green-500 uppercase'> {data.reportedGrades.statusInDean}</span>
+                      <span className='font-normal text-sm text-green-500 uppercase'> {data?.reportedGrades?.statusInDean}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start'>

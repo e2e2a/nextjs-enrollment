@@ -38,7 +38,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.subject.subjectCode}
+          {user?.subject?.subjectCode}
         </div>
       );
     },
@@ -70,7 +70,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.subject?.lab,
+    accessorFn: (row) => row?.subject?.lab,
     id: 'lab',
     header: 'Lab',
     cell: ({ cell, row }) => {
@@ -83,7 +83,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.subject?.unit,
+    accessorFn: (row) => row?.subject?.unit,
     id: 'unit',
     header: 'Unit',
     cell: ({ cell, row }) => {
@@ -103,7 +103,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.days.join(', ')}
+          {user?.days.join(', ')}
         </div>
       );
     },
@@ -122,7 +122,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.endTime,
+    accessorFn: (row) => row?.endTime,
     id: 'end time',
     header: 'End Time',
     cell: ({ cell, row }) => {
@@ -135,7 +135,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.roomId.roomName,
+    accessorFn: (row) => row?.room?.roomName,
     id: 'room name',
     header: 'Room Name',
     cell: ({ cell, row }) => {

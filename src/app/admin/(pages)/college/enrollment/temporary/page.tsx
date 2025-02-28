@@ -2,16 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
-
 import { IEnrollment } from '@/types';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useEnrollmentQueryByCategory } from '@/lib/queries/enrollment/get/category';
+import OptionsExport from './components/OptionsExport';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
-  const { data, isLoading, error: isEnError } = useEnrollmentQueryByCategory('College');
+  const { data, error: isEnError } = useEnrollmentQueryByCategory('College');
 
   useEffect(() => {
     if (isEnError || !data) return;
@@ -36,6 +36,7 @@ const Page = () => {
             <div className=''>404</div>
           ) : (
             <div className=''>
+              <OptionsExport data={enrolledStudents || []} />
               <div className='mb-3 text-center w-full'>
                 <h1 className='text-lg sm:text-2xl font-bold uppercase'>Temporary Enrolled Student Management</h1>
               </div>

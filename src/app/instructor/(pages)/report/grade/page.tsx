@@ -5,6 +5,7 @@ import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { useReportGradeQueryByTeacherId } from '@/lib/queries/reportGrade/get/teacherId';
+import OptionsExport from './components/OptionsExport';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
@@ -39,6 +40,7 @@ const Page = () => {
             <div className=''>404</div>
           ) : (
             <div className=''>
+              <OptionsExport data={data?.reportedGrades || []} />
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-bold '>Your Grades Report Management</h1>
               </div>

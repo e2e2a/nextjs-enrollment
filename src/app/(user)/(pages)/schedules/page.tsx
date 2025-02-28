@@ -11,14 +11,16 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useEnrollmentQueryBySessionId } from '@/lib/queries/enrollment/get/session';
 import { useTeacherScheduleQueryByCategory } from '@/lib/queries/teacherSchedule/get/category';
+import { Icons } from '@/components/shared/Icons';
+import { exportToPDF } from './components/ExportUtils';
 
 const Page = () => {
   const { data: session } = useSession();
   const [schedule, setSchedule] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error: isEnError } = useEnrollmentQueryBySessionId(session?.user.id!);
-  const { data: b, isLoading: bLoading, error: bError } = useTeacherScheduleQueryByCategory('College');
-  const { data: ESetup, isLoading: ESetupLoading, error: ESetupError } = useEnrollmentSetupQuery();
+  const { data, error: isEnError } = useEnrollmentQueryBySessionId(session?.user.id!);
+  const { data: b, error: bError } = useTeacherScheduleQueryByCategory('College');
+  const { data: ESetup, error: ESetupError } = useEnrollmentSetupQuery();
 
   useEffect(() => {
     if (bError || !b) return;
@@ -84,6 +86,16 @@ const Page = () => {
         </div>
       ) : data && data.enrollment ? (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
+          <div className='flex items-end justify-end pt-1 text-black w-full text-center'>
+            <Button
+              type='button'
+              onClick={() => exportToPDF(data?.enrollment, schedule, 'schedule')}
+              className='select-none focus-visible:ring-0 text-[15px] bg-none hover:bg-blue-500 text-black hover:text-neutral-100 tracking-normal font-medium font-poppins flex items-center justify-center'
+            >
+              {' '}
+              <Icons.download className='h-4 w-4 mr-1' /> Download
+            </Button>
+          </div>
           <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
             <div className='mb-3'>
               <h1 className='text-lg sm:text-2xl font-bold uppercase'>Student&apos;s Schedules</h1>
@@ -98,7 +110,8 @@ const Page = () => {
                 <span className='text-sm sm:text-[17px] font-bold capitalize'>
                   Fullname:{' '}
                   <span className='font-normal'>
-                    {data?.enrollment?.profileId?.firstname ?? ''} {data?.enrollment?.profileId?.middlename ?? ''} {data?.enrollment?.profileId?.lastname ?? ''} {data?.enrollment?.profileId?.extensionName ? data?.enrollment?.profileId?.extensionName + '.' : ''}
+                    {data?.enrollment?.profileId?.firstname ?? ''} {data?.enrollment?.profileId?.middlename ?? ''} {data?.enrollment?.profileId?.lastname ?? ''}{' '}
+                    {data?.enrollment?.profileId?.extensionName ? data?.enrollment?.profileId?.extensionName + '.' : ''}
                   </span>
                 </span>
               </div>
@@ -111,22 +124,22 @@ const Page = () => {
                 <span className='text-sm sm:text-[17px] font-bold capitalize'>
                   Year:{' '}
                   <span className='font-normal'>
-                    {data.enrollment.studentYear} - {data.enrollment.studentSemester}
+                    {data?.enrollment?.studentYear} - {data?.enrollment?.studentSemester}
                   </span>
                 </span>
               </div>
               <div className='flex w-full justify-start sm:justify-end'>
                 <span className='text-sm sm:text-[17px] font-bold'>
-                  Block: <span className='font-normal'>{data.enrollment?.blockTypeId?.section ? data.enrollment.blockTypeId?.section : 'N/A'}</span>
+                  Block: <span className='font-normal'>{data?.enrollment?.blockTypeId?.section ? data?.enrollment?.blockTypeId?.section : 'N/A'}</span>
                 </span>
               </div>
               <div className='flex w-full justify-start'>
                 <span className='text-sm sm:text-[17px] font-bold capitalize'>
                   Enrollment Status:
-                  {data.enrollment.enrollStatus === 'Pending' && <span className='font-normal text-blue-500'>{data.enrollment.enrollStatus}</span>}
-                  {data.enrollment.enrollStatus === 'Enrolled' && <span className='font-normal text-green-500'>{data.enrollment.enrollStatus}</span>}
-                  {data.enrollment.enrollStatus === 'Temporary Enrolled' && <span className='font-normal text-orange-500'>{data.enrollment.enrollStatus}</span>}
-                  {data.enrollment.enrollStatus === 'Rejected' && <span className='font-normal text-red'>{data.enrollment.enrollStatus}</span>}
+                  {data?.enrollment?.enrollStatus === 'Pending' && <span className='font-normal text-blue-500'>{data?.enrollment?.enrollStatus}</span>}
+                  {data?.enrollment?.enrollStatus === 'Enrolled' && <span className='font-normal text-green-500'>{data?.enrollment?.enrollStatus}</span>}
+                  {data?.enrollment?.enrollStatus === 'Temporary Enrolled' && <span className='font-normal text-orange-500'>{data?.enrollment?.enrollStatus}</span>}
+                  {data?.enrollment?.enrollStatus === 'Rejected' && <span className='font-normal text-red'>{data?.enrollment?.enrollStatus}</span>}
                 </span>
               </div>
             </div>
