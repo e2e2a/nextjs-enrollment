@@ -4,6 +4,9 @@ import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useTeacherScheduleRecordQueryById } from '@/lib/queries/teacherScheduleRecord/get/id';
+import { Button } from '@/components/ui/button';
+import { Icons } from '@/components/shared/Icons';
+import { exportToPDF } from './components/ExportUtils';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -34,6 +37,16 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className=''>404</div>
           ) : (
             <div className=''>
+              <div className='flex items-end justify-end pt-1 text-black w-full text-center'>
+                <Button
+                  type='button'
+                  onClick={() => exportToPDF(data?.teacherScheduleRecord, 'schedule')}
+                  className='select-none focus-visible:ring-0 text-[15px] bg-none hover:bg-blue-500 text-black hover:text-neutral-100 tracking-normal font-medium font-poppins flex items-center justify-center'
+                >
+                  {' '}
+                  <Icons.download className='h-4 w-4 mr-1' /> Download
+                </Button>
+              </div>
               <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
                 <div className='mb-3'>
                   <h1 className='text-lg sm:text-2xl font-bold uppercase'>Schedule Management</h1>
@@ -70,7 +83,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Time:{' '}
                       <span className='font-normal'>
-                        {data.teacherScheduleRecord.startTime} - {data?.teacherScheduleRecord?.endTime}
+                        {data?.teacherScheduleRecord?.startTime} - {data?.teacherScheduleRecord?.endTime}
                       </span>
                     </span>
                   </div>
@@ -78,7 +91,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Year:{' '}
                       <span className='font-normal'>
-                        {data.teacherScheduleRecord.blockType.year} - {data?.teacherScheduleRecord?.blockType?.semester}
+                        {data?.teacherScheduleRecord?.blockType?.year} - {data?.teacherScheduleRecord?.blockType?.semester}
                       </span>
                     </span>
                   </div>
@@ -89,7 +102,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                 </div>
               </div>
-              <DataTable columns={columns} data={data.teacherScheduleRecord.studentsInClass as any[]} />
+              <DataTable columns={columns} data={data?.teacherScheduleRecord?.studentsInClass as any[]} />
             </div>
           )}
         </div>

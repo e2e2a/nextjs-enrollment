@@ -9,6 +9,8 @@ import { Icons } from '@/components/shared/Icons';
 import Link from 'next/link';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/category';
+import OptionsExport from './components/OptionsExport';
+
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
@@ -41,6 +43,7 @@ const Page = () => {
 
           {data?.blockTypes && pData?.profile && !pData?.error && !data?.error && (
             <div className=''>
+              <OptionsExport data={blocks || []} />
               <div className='flex flex-col items-center justify-center py-4 text-black'>
                 <h1 className='text-lg sm:text-3xl font-bold capitalize'>{pData?.profile?.courseId.name}</h1>
                 <h1 className='text-lg sm:text-3xl font-semibold'>Blocks Management</h1>

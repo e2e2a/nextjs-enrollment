@@ -7,6 +7,7 @@ import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/i
 import { useEnrollmentQueryByTeacherScheduleId } from '@/lib/queries/enrollment/get/teacherSchedule';
 import { useReportGradeQueryByTeacherId } from '@/lib/queries/reportGrade/get/teacherId';
 import ViewGrades from './components/ViewGrades';
+import OptionsExport from './components/OptionsExport';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -47,7 +48,8 @@ const Page = ({ params }: { params: { id: string } }) => {
           {isError ? (
             <div className=''>404</div>
           ) : ts && ts.teacherSchedule ? (
-            <>
+            <div>
+              <OptionsExport data={ts?.teacherSchedule || []} students={s?.students} />
               <div className='flex items-center py-4 text-black w-full text-center flex-col'>
                 <div className='mb-3'>
                   <h1 className='text-lg sm:text-2xl font-bold uppercase'>Instructor&apos;s Students</h1>
@@ -57,7 +59,20 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Fullname:{' '}
                       <span className='font-normal'>
-                        {ts?.teacherSchedule?.profileId?.firstname ?? ''} {ts?.teacherSchedule?.profileId.middlename ?? ''} {ts?.teacherSchedule?.profileId?.lastname ?? ''} {ts?.teacherSchedule?.profileId?.extensionName ? ts?.teacherSchedule?.profileId.extensionName + '.' : ''}
+                        {ts?.teacherSchedule?.profileId && (
+                          <>
+                            {ts?.teacherSchedule?.profileId?.firstname ?? ''} {ts?.teacherSchedule?.profileId?.middlename ?? ''} {ts?.teacherSchedule?.profileId?.lastname ?? ''}
+                            {ts?.teacherSchedule?.profileId?.extensionName ? ' ' + ts?.teacherSchedule?.profileId.extensionName + '.' : ''}
+                            <br />
+                          </>
+                        )}
+
+                        {ts?.teacherSchedule?.deanId && (
+                          <>
+                            {ts?.teacherSchedule?.deanId?.firstname ?? ''} {ts?.teacherSchedule?.deanId?.middlename ?? ''} {ts?.teacherSchedule?.deanId?.lastname ?? ''}
+                            {ts?.teacherSchedule?.deanId?.extensionName ? ' ' + ts?.teacherSchedule?.deanId.extensionName + '.' : ''}
+                          </>
+                        )}
                       </span>
                     </span>
                   </div>
@@ -107,7 +122,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <DataTable columns={columns} data={s?.students} />
                 </>
               )}
-            </>
+            </div>
           ) : (
             <div className=''>404</div>
           )}

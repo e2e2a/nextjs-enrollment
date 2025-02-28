@@ -18,6 +18,7 @@ import { columns6 } from './components/step6/Columns6';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { useEnrollmentQueryStepByCategory } from '@/lib/queries/enrollment/get/step';
 import LoaderPage from '@/components/shared/LoaderPage';
+import OptionsExport from './components/OptionsExport';
 
 const Page = () => {
   const pathname = usePathname();
@@ -73,6 +74,7 @@ const Page = () => {
               <div className=''>404</div>
             ) : search === '1' ? (
               <div className=''>
+                <OptionsExport data={data?.enrollment || []} step={1} />
                 <div className='flex items-center py-4 text-black w-full justify-center'>
                   <h1 className='sm:text-3xl text-xl font-bold '>Step1: Verify Enrollee Information</h1>
                 </div>
@@ -87,6 +89,7 @@ const Page = () => {
               </div>
             ) : search === '2' ? (
               <div className=''>
+                <OptionsExport data={data?.enrollment || []} step={2} />
                 <div className='flex items-center py-4 text-black w-full justify-center'>
                   <h1 className='sm:text-3xl text-xl font-bold '>Step2: Evaluate the Student</h1>
                 </div>
@@ -101,6 +104,7 @@ const Page = () => {
               </div>
             ) : search === '3' ? (
               <div className=''>
+                <OptionsExport data={data?.enrollment || []} step={3} />
                 <div className='flex items-center py-4 text-black w-full justify-center'>
                   <h1 className='sm:text-3xl text-xl font-bold '>Step3: Add Subjects of Enrollee</h1>
                 </div>
@@ -115,6 +119,7 @@ const Page = () => {
               </div>
             ) : search === '4' ? (
               <div className=''>
+                <OptionsExport data={data?.enrollment || []} step={4} />
                 <div className='flex flex-col items-center py-4 text-black w-full justify-center'>
                   <h1 className='sm:text-3xl text-xl font-bold '>Step4: Approval of Add/Drop Subject Request</h1>
                   {/* <EnableADW enrollmentSetup={ESetup.enrollmentSetup} /> */}
@@ -130,6 +135,7 @@ const Page = () => {
               </div>
             ) : search === '5' ? (
               <div className=''>
+                <OptionsExport data={data?.enrollment || []} step={5} />
                 <div className='flex items-center py-4 text-black w-full justify-center'>
                   <h1 className='sm:text-3xl text-xl font-bold '>Step5: Student Payment</h1>
                 </div>
@@ -144,6 +150,7 @@ const Page = () => {
               </div>
             ) : search === '6' ? (
               <div className=''>
+                <OptionsExport data={enrolledStudents || []} step={6} />
                 <div className='flex items-center py-4 text-black w-full justify-center'>
                   <h1 className='sm:text-3xl text-xl font-bold '>Step6: Finalizing Student Enrollment</h1>
                 </div>

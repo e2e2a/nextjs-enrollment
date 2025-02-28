@@ -46,7 +46,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
       <div className='flex items-center justify-between w-full '>
         <div className='flex items-center  py-4 text-black'>
           <Input
-            placeholder='Search by name...'
+            placeholder={searchBy === 'Block Type' ? 'Search by Block Type...' : 'Search by Course Code...'}
             value={(table.getColumn(searchBy)?.getFilterValue() as string) ?? ''}
             onChange={(event) => {
               table.getColumn(searchBy)?.setFilterValue(event.target.value);

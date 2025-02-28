@@ -44,10 +44,10 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
       <div className='flex items-center justify-between w-full '>
         <div className='flex items-center  py-4 text-black'>
           <Input
-            placeholder='Search by name...'
-            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+            placeholder='Search by Descriptive Title...'
+            value={(table.getColumn('Descriptive Title')?.getFilterValue() as string) ?? ''}
             onChange={(event) => {
-              table.getColumn('name')?.setFilterValue(event.target.value);
+              table.getColumn('Descriptive Title')?.setFilterValue(event.target.value);
             }}
             className='max-w-sm'
           />

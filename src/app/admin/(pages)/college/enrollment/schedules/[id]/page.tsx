@@ -7,6 +7,9 @@ import AddStudentSched from './components/AddStudentSched';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/category';
 import { useEnrollmentQueryById } from '@/lib/queries/enrollment/get/id';
+import { Button } from '@/components/ui/button';
+import { exportToPDF } from './components/ExportUtils';
+import { Icons } from '@/components/shared/Icons';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -46,6 +49,16 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className=''>404</div>
           ) : data && data.enrollment ? (
             <>
+              <div className='flex items-end justify-end pt-1 text-black w-full text-center'>
+                <Button
+                  type='button'
+                  onClick={() => exportToPDF(data?.enrollment, data?.enrollment?.studentSubjects, 'schedule')}
+                  className='select-none focus-visible:ring-0 text-[15px] bg-none hover:bg-blue-500 text-black hover:text-neutral-100 tracking-normal font-medium font-poppins flex items-center justify-center'
+                >
+                  {' '}
+                  <Icons.download className='h-4 w-4 mr-1' /> Download
+                </Button>
+              </div>
               <div className='flex items-center py-4 text-black w-full text-center flex-col'>
                 <div className='mb-3'>
                   <h1 className='text-lg sm:text-2xl font-bold uppercase'>Student Subjects</h1>
@@ -55,7 +68,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Fullname:{' '}
                       <span className='font-normal'>
-                        {data.enrollment?.profileId?.firstname ?? ''} {data?.enrollment?.profileId?.middlename ?? ''} {data?.enrollment?.profileId?.lastname ?? ''} {data.enrollment?.profileId?.extensionName ? data.enrollment?.profileId?.extensionName + '.' : ''}
+                        {data?.enrollment?.profileId?.firstname ?? ''} {data?.enrollment?.profileId?.middlename ?? ''} {data?.enrollment?.profileId?.lastname ?? ''}{' '}
+                        {data.enrollment?.profileId?.extensionName ? data.enrollment?.profileId?.extensionName + '.' : ''}
                       </span>
                     </span>
                   </div>
@@ -98,7 +112,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <AddStudentSched student={data.enrollment} b={schedules} />
                 </div>
               )}
-              <DataTable columns={columns} data={data?.enrollment.studentSubjects} enrollmentSetup={ESetup.enrollmentSetup} enrollment={data.enrollment} />
+              <DataTable columns={columns} data={data?.enrollment?.studentSubjects} enrollmentSetup={ESetup?.enrollmentSetup} enrollment={data?.enrollment} />
             </>
           ) : (
             <div className=''>404</div>

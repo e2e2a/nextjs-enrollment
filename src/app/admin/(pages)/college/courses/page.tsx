@@ -4,6 +4,7 @@ import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
+import OptionsExport from './components/OptionsExport';
 
 interface ICourse {
   id: string;
@@ -42,6 +43,7 @@ const Page = () => {
             <div className=''>404</div>
           ) : (
             <div className=''>
+              <OptionsExport data={data?.courses || []} />
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-bold '>Courses Management</h1>
               </div>

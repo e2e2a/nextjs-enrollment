@@ -19,13 +19,13 @@ export const columns: ColumnDef<any>[] = [
   },
   {
     accessorFn: (row) => row.teacherScheduleId?.subjectId?.subjectCode,
-    id: 'code',
-    header: 'Code',
+    id: 'subjectCode',
+    header: 'Subject Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId?.subjectId?.subjectCode}
+          {user?.teacherScheduleId?.subjectId?.subjectCode}
         </div>
       );
     },

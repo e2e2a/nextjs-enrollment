@@ -2,7 +2,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import ActionsCell from './ActionsCell';
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -62,72 +61,72 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.student.sex}
+          {user?.student?.sex}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.firstGrade,
+    accessorFn: (row) => row?.firstGrade,
     id: 'prelim',
     header: 'Prelim',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user?.firstGrade || 'N/A'}
+          {user?.firstGrade || ''}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.secondGrade,
+    accessorFn: (row) => row?.secondGrade,
     id: 'midterm',
     header: 'Midterm',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user?.secondGrade || 'N/A'}
+          {user?.secondGrade || ''}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.thirdGrade,
+    accessorFn: (row) => row?.thirdGrade,
     id: 'semi-final',
     header: 'Semi-final',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user?.thirdGrade || 'N/A'}
+          {user?.thirdGrade || ''}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.fourthGrade,
+    accessorFn: (row) => row?.fourthGrade,
     id: 'final',
     header: 'Final',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user?.fourthGrade || 'N/A'}
+          {user?.fourthGrade || ''}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.averageTotal,
+    accessorFn: (row) => row?.averageTotal,
     id: 'averageTotal',
     header: 'Average Total',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user?.averageTotal || 'N/A'}
+          {user?.averageTotal || ''}
         </div>
       );
     },

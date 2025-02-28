@@ -6,14 +6,15 @@ import { IEnrollment } from '@/types';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { useAllEnrollmentQueryByCourseId } from '@/lib/queries/enrollment/get/courseId/dean';
+import OptionsExport from './components/OptionsExport';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
 
-  const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
-  const { data, isLoading, error: isEnError } = useAllEnrollmentQueryByCourseId(pData?.profile?.courseId?._id);
+  const { data: pData, error: pError } = useProfileQueryBySessionId();
+  const { data, error: isEnError } = useAllEnrollmentQueryByCourseId(pData?.profile?.courseId?._id);
 
   useEffect(() => {
     if (isEnError || !data) return;
@@ -43,6 +44,7 @@ const Page = () => {
             <div className=''>404</div>
           ) : (
             <div className=''>
+              <OptionsExport data={enrolledStudents || []} />
               <div className='mb-3 text-center w-full'>
                 <h1 className='text-lg sm:text-2xl font-bold uppercase'>Enrolled Student Management</h1>
               </div>

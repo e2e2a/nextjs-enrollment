@@ -32,80 +32,79 @@ export const columns: ColumnDef<IBlockType>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className='uppercase'>
-          block {user.section}
+        <div key={cell.id} className=''>
+          {user?.section}
         </div>
       );
     },
     accessorFn: (row) => `${row.section}`,
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `block ${user.section}`.toLowerCase();
+      const fullName = `${user?.section}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
   {
-    accessorFn: (row) => row.courseId.courseCode,
+    accessorFn: (row) => row.courseId?.courseCode,
     id: 'Course Code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.courseId.courseCode}
+        <div key={cell.id} className=''>
+          {user?.courseId?.courseCode}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.courseId.name,
+    accessorFn: (row) => row.courseId?.name,
     id: 'course title',
     header: 'Course Title',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {/* {Array.isArray(user.schedule) ? user.schedule.length : 0} */}
-          {user.courseId.name}
+          {user?.courseId?.name}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.year,
+    accessorFn: (row) => row?.year,
     id: 'year',
     header: 'Year',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.year}
+          {user?.year}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.semester,
+    accessorFn: (row) => row?.semester,
     id: 'semester',
     header: 'Semester',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.semester}
+          {user?.semester}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.blockSubjects.length,
+    accessorFn: (row) => row.blockSubjects?.length,
     id: 'schedules count',
     header: 'Schedules Count',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' '>
-          {user.blockSubjects.length === 0 ? <span className='text-red'>{user.blockSubjects.length}</span> : <span className='text-green-500'>{user.blockSubjects.length}</span>}
+          {user?.blockSubjects?.length === 0 ? <span className='text-red'>{user.blockSubjects.length}</span> : <span className='text-green-500'>{user?.blockSubjects?.length}</span>}
         </div>
       );
     },
@@ -119,13 +118,11 @@ export const columns: ColumnDef<IBlockType>[] = [
       return <div className='font-medium'>{formatted}</div>;
     },
   },
-
   {
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
       const user = row.original;
-
       return <ActionsCell user={user} />;
     },
   },

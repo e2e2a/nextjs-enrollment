@@ -4,6 +4,7 @@ import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useReportGradeQueryById } from '@/lib/queries/reportGrade/get/id';
+import OptionsExport from './components/OptionsExport';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -35,6 +36,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className=''>404</div>
           ) : (
             <div className=''>
+              <OptionsExport data={data?.reportedGrades || []} />
               <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
                 <div className='mb-3'>
                   <h1 className='text-lg sm:text-2xl font-bold uppercase'>Class Grade Reported Management</h1>

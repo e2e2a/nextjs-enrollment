@@ -8,13 +8,15 @@ import { useSubjectQueryByCategory } from '@/lib/queries/subjects/get/category';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useTeacherScheduleQueryByProfileId } from '@/lib/queries/teacherSchedule/get/all/profileId';
 import { useProfileQueryByParamsUserId } from '@/lib/queries/profile/get/userId';
+import { Button } from '@/components/ui/button';
+import { Icons } from '@/components/shared/Icons';
+import { exportToPDF } from './components/ExportUtils';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data, isLoading, error: isEnError } = useProfileQueryByParamsUserId(params.id);
   const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryByProfileId({ id: data?.profile?._id, role: data?.profile?.userId.role });
-  console.log('id',  ts)
   const { data: s, isLoading: sLoading, error: sError } = useSubjectQueryByCategory('College');
   const { data: r, isLoading: rLoading, error: rError } = useAllRoomQueryByEduLevel('tertiary');
 
@@ -23,7 +25,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (isEnError || !data) return;
     if (sError || !s) return;
     if (rError || !r) return;
-    
+
     if (ts && data && s && r) {
       setIsPageLoading(false);
     }
@@ -40,7 +42,17 @@ const Page = ({ params }: { params: { id: string } }) => {
           {isError ? (
             <div className=''>404</div>
           ) : data && data.profile ? (
-            <>
+            <div>
+              <div className='flex items-end justify-end pt-1 text-black w-full text-center'>
+                <Button
+                  type='button'
+                  onClick={() => exportToPDF(data, ts?.teacherSchedules, 'schedule')}
+                  className='select-none focus-visible:ring-0 text-[15px] bg-none hover:bg-blue-500 text-black hover:text-neutral-100 tracking-normal font-medium font-poppins flex items-center justify-center'
+                >
+                  {' '}
+                  <Icons.download className='h-4 w-4 mr-1' /> Download
+                </Button>
+              </div>
               <div className='flex items-center py-4 text-black w-full text-center flex-col'>
                 <div>
                   <h1 className='sm:text-lg text-xl font-bold uppercase'>Instructor Schedules</h1>
@@ -55,7 +67,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                 <AddInstructorSched teacher={data?.profile} s={s?.subjects} r={r?.rooms} />
               </div> */}
               <DataTable columns={columns} data={ts?.teacherSchedules} />
-            </>
+            </div>
           ) : (
             <div className=''>404</div>
           )}

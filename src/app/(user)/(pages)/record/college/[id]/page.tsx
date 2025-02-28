@@ -4,11 +4,14 @@ import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useEnrollmentRecordQueryById } from '@/lib/queries/enrollmentRecord/get/id';
+import { Button } from '@/components/ui/button';
+import { exportToPDF } from './components/ExportUtils';
+import { Icons } from '@/components/shared/Icons';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [schedule, setSchedule] = useState([]);
-  const { data, isLoading, error: isEnError } = useEnrollmentRecordQueryById(params.id);
+  const { data, error: isEnError } = useEnrollmentRecordQueryById(params.id);
 
   useEffect(() => {
     if (isEnError || !data) return;
@@ -29,12 +32,21 @@ const Page = ({ params }: { params: { id: string } }) => {
         </div>
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
-          <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>404</div>
           {data?.error && data?.status === 404 && <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>404</div>}
           {data?.error && data?.status > 500 && <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>Something Went Wrong</div>}
           {data?.enrollmentRecord && !data?.error && (
             <div className=''>
               <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
+                <div className='flex items-end justify-end pt-1 text-black w-full text-center'>
+                  <Button
+                    type='button'
+                    onClick={() => exportToPDF(data?.enrollmentRecord, schedule, 'schedule')}
+                    className='select-none focus-visible:ring-0 text-[15px] bg-none hover:bg-blue-500 text-black hover:text-neutral-100 tracking-normal font-medium font-poppins flex items-center justify-center'
+                  >
+                    {' '}
+                    <Icons.download className='h-4 w-4 mr-1' /> Download
+                  </Button>
+                </div>
                 <div className='mb-3'>
                   <h1 className='text-lg sm:text-2xl font-semibold uppercase tracking-tight'>Schedule Management Record</h1>
                 </div>
@@ -57,13 +69,18 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Year:{' '}
                       <span className='font-normal'>
-                        {data.enrollmentRecord.studentYear} - {data.enrollmentRecord.studentSemester}
+                        {data?.enrollmentRecord?.studentYear} - {data.enrollmentRecord?.studentSemester}
                       </span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold'>
-                      Block: <span className='font-normal'>{data.enrollmentRecord.blockType.section}</span>
+                      Block: <span className='font-normal'>{data?.enrollmentRecord?.blockType?.section}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start '>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      School Year: <span className='font-normal'>{data?.enrollmentRecord?.schoolYear}</span>
                     </span>
                   </div>
                 </div>

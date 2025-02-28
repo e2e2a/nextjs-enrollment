@@ -6,6 +6,7 @@ import AddBlockSched from './components/AddBlockSched';
 import { useBlockCourseQueryById } from '@/lib/queries/blocks/get/id';
 import { useTeacherScheduleQueryByCategory } from '@/lib/queries/teacherSchedule/get/category';
 import LoaderPage from '@/components/shared/LoaderPage';
+import OptionsExport from './components/OptionsExport';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
@@ -13,7 +14,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [teachersSchedules, setTeachersSchedules] = useState<any>([]);
   const { data, isLoading, error: isEnError } = useBlockCourseQueryById(params.id);
   const { data: s, isLoading: sLoading, error: sError } = useTeacherScheduleQueryByCategory('College');
-  
+
   useEffect(() => {
     if (isEnError || !data) return;
     if (sError || !s) return;
@@ -34,10 +35,11 @@ const Page = ({ params }: { params: { id: string } }) => {
           {isError ? (
             <div className=''>404</div>
           ) : data && data.blockType ? (
-            <>
+            <div>
+              <OptionsExport data={data} schedules={data?.blockType?.blockSubjects} />
               <div className='flex items-center py-4 text-black w-full text-center flex-col'>
                 <div className='justify-center items-center flex w-full'>
-                  <h1 className='sm:text-2xl text-lg font-bold uppercase'>Block Scheduling</h1>
+                  <h1 className='sm:text-2xl text-lg font-bold uppercase'>Block Schedule</h1>
                 </div>
                 <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
                   <div className='justify-between items-center flex w-full'>
@@ -59,22 +61,12 @@ const Page = ({ params }: { params: { id: string } }) => {
                     </span>
                   </div>
                 </div>
-                {/* <div>
-                  <h1 className='sm:text-2xl text-lg font-bold uppercase'>Block Scheduling</h1>
-                  <h1 className='sm:text-2xl text-lg font-bold uppercase'>{data.blockType.courseId.name}</h1>
-                  <h1 className='text-lg font-bold uppercase'>Block {data.blockType.section}</h1>
-                </div>
-                <div className=''>
-                  <h1 className='sm:text-sm text-lg font-bold'>
-                    {data.blockType.year} - {data.blockType.semester}
-                  </h1>
-                </div> */}
               </div>
               <div className='w-full flex justify-end items-center'>
                 <AddBlockSched blockType={data} s={teachersSchedules} />
               </div>
               <DataTable columns={columns} data={data?.blockType?.blockSubjects} />
-            </>
+            </div>
           ) : (
             <div className=''>404</div>
           )}

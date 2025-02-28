@@ -4,11 +4,11 @@ import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useReportGradeQueryByCategory } from '@/lib/queries/reportGrade/get/category';
+import OptionsExport from './components/OptionsExport';
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [teacherRG, setTeacherRG] = useState([]);
   // Query data based on the validated step parameter
   const { data, isLoading, error: isEnError } = useReportGradeQueryByCategory('College', 'Individual');
 
@@ -16,8 +16,6 @@ const Page = () => {
     if (isEnError || !data) return;
     if (data) {
       if (data.reportedGrades) {
-        const filteredRG = data?.reportedGrades.filter((rg: any) => rg.statusInDean === 'Approved');
-        setTeacherRG(filteredRG);
         setIsPageLoading(false);
       }
     }
@@ -35,10 +33,11 @@ const Page = () => {
             <div className=''>404</div>
           ) : (
             <div className=''>
+              <OptionsExport data={data?.reportedGrades || []} />
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-bold '>Individual Grades Report Management</h1>
               </div>
-              <DataTable columns={columns} data={teacherRG as any[]} />
+              <DataTable columns={columns} data={data.reportedGrades as any[]} />
             </div>
           )}
         </div>
