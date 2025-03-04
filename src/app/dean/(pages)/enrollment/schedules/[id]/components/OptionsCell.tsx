@@ -5,11 +5,10 @@ import { Icons } from '@/components/shared/Icons';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
-import { useRemoveStudentScheduleMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import Image from 'next/image';
 import { useUpdateStudentEnrollmentScheduleMutation } from '@/lib/queries/enrollment/update/id/schedule';
-// import { DialogStep1Button } from './Dialog';
+import { useRemoveStudentScheduleMutation } from '@/lib/queries/enrollment/remove';
 
 type IProps = {
   user: any;
@@ -29,12 +28,10 @@ const OptionsCell = ({ user }: IProps) => {
 
     mutation.mutate(data, {
       onSuccess: (res: any) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            // return (window.location.href = '/');
             makeToastSucess(message);
             return;
           default:
@@ -69,9 +66,7 @@ const OptionsCell = ({ user }: IProps) => {
             makeToastSucess(res.message);
             return;
           default:
-            if (res.error) {
-              makeToastError(res.error);
-            }
+            makeToastError(res.error);
             return;
         }
       },

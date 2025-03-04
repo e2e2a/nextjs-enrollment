@@ -13,7 +13,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [teachersSchedules, setTeachersSchedules] = useState<any>([]);
   const { data, isLoading, error: isEnError } = useBlockCourseQueryById(params.id);
-  const { data: s, isLoading: sLoading, error: sError } = useTeacherScheduleQueryByCategory('College');
+  const { data: s, error: sError } = useTeacherScheduleQueryByCategory('College');
 
   useEffect(() => {
     if (isEnError || !data) return;

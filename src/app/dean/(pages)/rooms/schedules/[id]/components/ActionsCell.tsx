@@ -3,8 +3,8 @@ import React from 'react';
 import { Icons } from '@/components/shared/Icons';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useRemoveStudentScheduleMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { useRemoveStudentScheduleMutation } from '@/lib/queries/enrollment/remove';
 
 type IProps = {
   user: any;
@@ -22,7 +22,6 @@ const ActionsCell = ({ user }: IProps) => {
 
     mutation.mutate(data, {
       onSuccess: (res: any) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
@@ -30,7 +29,7 @@ const ActionsCell = ({ user }: IProps) => {
             makeToastSucess(res.message);
             return;
           default:
-            makeToastError(res.error)
+            makeToastError(res.error);
             return;
         }
       },

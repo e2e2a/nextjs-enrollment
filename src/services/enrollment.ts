@@ -1,6 +1,6 @@
 'use server';
 import Enrollment from '@/models/Enrollment';
-import Course from '@/models/Course';
+
 export const createEnrollment = async (data: any) => {
   try {
     const newE = new Enrollment({

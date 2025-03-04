@@ -24,7 +24,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user?.courseId?.courseCode ? user.courseId?.courseCode : <span className="text-red uppercase text-xs">not assigned</span> }
+          {user?.courseId?.courseCode ? user.courseId?.courseCode : <span className='text-red uppercase text-xs'>not assigned</span>}
         </div>
       );
     },
@@ -37,7 +37,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-           {user?.blockTypeId?.section ? <span className="text-xs">{user?.blockTypeId?.section}</span> : <span className="text-xs text-red">N/A</span> }
+          {user?.blockTypeId?.section ? <span className='text-xs'>{user?.blockTypeId?.section}</span> : <span className='text-xs text-red'>N/A</span>}
         </div>
       );
     },
@@ -50,7 +50,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.blockTypeId?.year ? user?.blockTypeId?.year : <span className="text-xs text-red">N/A</span> }
+          {user?.blockTypeId?.year ? user?.blockTypeId?.year : <span className='text-xs text-red'>N/A</span>}
         </div>
       );
     },
@@ -63,7 +63,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.blockTypeId?.semester ? user?.blockTypeId?.semester : <span className="text-xs text-red">N/A</span> }
+          {user?.blockTypeId?.semester ? user?.blockTypeId?.semester : <span className='text-xs text-red'>N/A</span>}
         </div>
       );
     },
@@ -90,6 +90,19 @@ export const columns: ColumnDef<any>[] = [
       return (
         <div key={cell.id} className=''>
           {user?.subjectId?.name}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.subjectId?.preReq,
+    id: 'Pre Req.',
+    header: 'Pre Req.',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=''>
+          {user?.subjectId?.preReq ?? ''}
         </div>
       );
     },

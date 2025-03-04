@@ -3,14 +3,14 @@ import React from 'react';
 import { Icons } from '@/components/shared/Icons';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useRemoveCourseBlockScheduleMutation } from '@/lib/queries';
+import { useArchiveCourseBlockScheduleMutation } from '@/lib/queries/blocks/archive';
 
 type IProps = {
   user: any;
 };
 const ActionsCell = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
-  const mutation = useRemoveCourseBlockScheduleMutation();
+  const mutation = useArchiveCourseBlockScheduleMutation();
   const actionFormSubmit = () => {
     console.log('user submitted:', user.teacherScheduleId)
    const data = {

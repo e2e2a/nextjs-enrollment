@@ -9,6 +9,7 @@ export const useUpdateCourseBlockScheduleMutation = () => {
       if (!data.error) {
         queryClient.invalidateQueries({ queryKey: ['BlockTypeById', data.id] });
         queryClient.invalidateQueries({ queryKey: ['BlockTypeByCourseId', data.courseId] });
+        queryClient.invalidateQueries({ queryKey: ['TeacherScheduleByCategory', data.category] });
         if (data.ts && data.ts.length > 0) {
           for (const item of data.ts) {
             queryClient.invalidateQueries({ queryKey: ['useEnrollmentQueryByTeacherScheduleId', { id: item.teacherScheduleId, category: data.category }] }); // @todo broadcast

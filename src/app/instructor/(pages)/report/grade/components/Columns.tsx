@@ -108,6 +108,19 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.preReq,
+    id: 'Pre Req.',
+    header: 'Pre Req.',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=''>
+          {user?.teacherScheduleId?.subjectId?.preReq ?? ''}
+        </div>
+      );
+    },
+  },
+  {
     accessorFn: (row) => row.teacherScheduleId?.blockTypeId?.year,
     id: 'year',
     header: 'Year',

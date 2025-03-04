@@ -12,6 +12,8 @@ export interface ITeacherSchedule extends Document {
   days?: any;
   startTime?: any;
   endTime?: any;
+  archive?: boolean;
+  archiveBy?: mongoose.Schema.Types.ObjectId;
 }
 const schema = new Schema<ITeacherSchedule>(
   {
@@ -51,13 +53,11 @@ const schema = new Schema<ITeacherSchedule>(
     endTime: {
       type: String,
     },
-    /**
-     * @todo this model will be added 2
-     * 1. boolean represents its deleted or not.
-     * 2. string represents for remarks if its deleted
-     * @reminder
-     *  - update the TeacherScheduleRecord if we update here
-     */
+    archive: { type: Boolean, default: false },
+    archiveBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   {
     versionKey: false,

@@ -3,8 +3,8 @@ import React from 'react';
 import { Icons } from '@/components/shared/Icons';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useRemoveCourseBlockScheduleMutation } from '@/lib/queries';
-import { makeToastSucess } from '@/lib/toast/makeToast';
+import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { useArchiveCourseBlockScheduleMutation } from '@/lib/queries/blocks/archive';
 
 type IProps = {
   user: any;
@@ -12,9 +12,8 @@ type IProps = {
 
 const ActionsCell = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
-  const mutation = useRemoveCourseBlockScheduleMutation();
+  const mutation = useArchiveCourseBlockScheduleMutation();
   const actionFormSubmit = () => {
-    console.log('user submitted:', user.teacherScheduleId);
     const data = {
       teacherScheduleId: user.teacherScheduleId._id,
       blockTypeId: user.teacherScheduleId.blockTypeId._id,
@@ -29,7 +28,7 @@ const ActionsCell = ({ user }: IProps) => {
             makeToastSucess(res.message);
             return;
           default:
-            makeToastSucess(res.error);
+            makeToastError(res.error);
             return;
         }
       },

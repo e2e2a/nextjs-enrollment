@@ -104,7 +104,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user?.courseId?.courseCode}
+          {user.courseId?.courseCode ? user?.courseId?.courseCode : <span className='text-red uppercase text-xs'>not assigned</span>}
         </div>
       );
     },
@@ -117,7 +117,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user?.blockTypeId?.section ?? 'N/A'}
+          {user?.blockTypeId?.section ? user?.blockTypeId?.section : <span className='text-red uppercase text-xs'>not assigned</span>}
         </div>
       );
     },
@@ -130,7 +130,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user?.blockTypeId?.year}
+          {user?.blockTypeId?.year ? user?.blockTypeId?.year : <span className='text-red uppercase text-xs'>not assigned</span>}
         </div>
       );
     },
@@ -143,7 +143,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user?.blockTypeId?.semester}
+          {user?.blockTypeId?.semester ? user?.blockTypeId?.semester : <span className='text-red uppercase text-xs'>not assigned</span>}
         </div>
       );
     },
@@ -162,9 +162,15 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.subjectId?.name,
-    id: 'descriptive title',
-    header: 'Descriptive Title',
+    accessorKey: 'Descriptive Title',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Descriptive Title
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
@@ -172,6 +178,12 @@ export const columns: ColumnDef<any>[] = [
           {user?.subjectId?.name}
         </div>
       );
+    },
+    accessorFn: (row) => `${row.subjectId?.name}`,
+    filterFn: (row, columnId, filterValue) => {
+      const user = row.original;
+      const descriptiveTitle = `${user?.subjectId?.name}`.toLowerCase();
+      return descriptiveTitle.includes(filterValue.toLowerCase());
     },
   },
   {

@@ -341,6 +341,9 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
                   <InputDisabled label={`Semester`} type='text' disabled={true} value={enrollmentSetup.enrollmentTertiary.semester} />
                   <InputDisabled label={`School Year`} type='text' disabled={true} value={enrollmentSetup.enrollmentTertiary.schoolYear} />
                 </div>
+                <div className='mt-5'>
+                  <p className='text-muted-foreground text-red text-sm'>Note: Attach Files are Certified True Copy of Document</p>
+                </div>
                 <div className='grid grid-cols-1 xs:grid-cols-2 w-full gap-5'>
                   <FileBirth handleSelectedFile={handleSelectedFile} handleRemoveFile={handleRemoveFile} handleClick={handleClick} fileInputRef={fileInputRef} filePreview={filePreview} fileError={fileError} isUploading={isPending} />
                   <Photo handleSelectedPhoto={handleSelectedPhoto} handleRemovePhoto={handleRemovePhoto} handleClickPhoto={handleClickPhoto} PhotoInputRef={PhotoInputRef} photoPreview={photoPreview} photoError={photoError} isUploading={isPending} />
@@ -362,8 +365,15 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
                     fileTORError={fileTORError}
                     isUploading={isPending}
                   />
+
                   <div className='w-full'>
-                    <p>Alternatives</p>
+                    <p>
+                      Alternatives
+                      <span className='text-muted-foreground text-red'>
+                        {' '}
+                        *<span className='text-xs'>(For ALS graduate)</span>
+                      </span>
+                    </p>
                     <FileCerificationOfCompletion
                       handleSelectedFileCerificationOfCompletion={handleSelectedFileCerificationOfCompletion}
                       handleRemoveCerificationOfCompletion={handleRemoveCerificationOfCompletion}
