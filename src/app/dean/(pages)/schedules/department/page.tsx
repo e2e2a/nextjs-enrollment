@@ -40,7 +40,7 @@ const Page = () => {
             data && (
               <div className=''>
                 <div className='mb-3 text-center w-full'>
-                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Schedule Management</h1>
+                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Department Schedule Management</h1>
                 </div>
                 <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1 mb-10'>
                   <div className='justify-between items-start flex w-full'>

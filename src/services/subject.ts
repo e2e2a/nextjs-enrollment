@@ -28,7 +28,7 @@ export const createNewSubject = async (data: any) => {
 
 export const getSubjectByCategory = async (category: string) => {
   try {
-    const subjects = await Subject.find({ category }).populate('courseId');
+    const subjects = await Subject.find({ category, archive: { $ne: true } }).populate('courseId');
     return subjects;
   } catch (error) {
     console.log(error);
@@ -38,7 +38,7 @@ export const getSubjectByCategory = async (category: string) => {
 
 export const getSubjectByCourseId = async (courseId: string) => {
   try {
-    const subjects = await Subject.find({ courseId }).populate('courseId');
+    const subjects = await Subject.find({ courseId, archive: { $ne: true } }).populate('courseId');
     return subjects;
   } catch (error) {
     console.log(error);
@@ -56,7 +56,7 @@ export const getSubjectByCourseId = async (courseId: string) => {
 // };
 export const getSubjectBySubjectCode = async (subjectCode: string, courseId: string) => {
   try {
-    const subjects = await Subject.findOne({ subjectCode, courseId });
+    const subjects = await Subject.findOne({ subjectCode, courseId, archive: { $ne: true } });
     return subjects;
   } catch (error) {
     console.log(error);
@@ -66,7 +66,7 @@ export const getSubjectBySubjectCode = async (subjectCode: string, courseId: str
 
 export const getSubjectById = async (id: string) => {
   try {
-    const subject = await Subject.findById(id);
+    const subject = await Subject.findById(id).populate('courseId');
     return subject;
   } catch (error) {
     console.log(error);

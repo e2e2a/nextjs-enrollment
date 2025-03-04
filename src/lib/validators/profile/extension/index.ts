@@ -8,9 +8,9 @@ export const StudentProfileExtension = z
     primarySchoolYear: z.string().min(4, { message: 'School Year is required...' }).max(20, { message: 'School Year length too long.' }),
     secondarySchoolName: z.string().min(5, { message: 'School Name is required...' }).max(30, { message: 'School Name length too long.' }),
     secondarySchoolYear: z.string().min(4, { message: 'School Year is required...' }).max(20, { message: 'School Year length too long.' }),
-    seniorHighSchoolName: z.string().min(5, { message: 'School Name is required...' }).max(30, { message: 'School Name length too long.' }),
-    seniorHighSchoolYear: z.string().min(4, { message: 'School Year is required...' }).max(20, { message: 'School Year length too long.' }),
-    seniorHighSchoolStrand: z.string().min(3, { message: 'School Strand is required...' }).max(20, { message: 'School Strand length too long.' }),
+    seniorHighSchoolName: z.string().optional(),
+    seniorHighSchoolYear: z.string().optional(),
+    seniorHighSchoolStrand: z.string().optional(),
     FathersLastName: z.string().min(2, { message: `Father's Last Name is required...` }).max(20, { message: `Father's Last Name length too long.` }),
     FathersFirstName: z.string().min(2, { message: `Father's First Name is required...` }).max(20, { message: `Father's First Name length too long.` }),
     FathersMiddleName: z.string(),
@@ -23,6 +23,14 @@ export const StudentProfileExtension = z
     MothersEmail: z.string().optional(),
   })
   .superRefine((value, ctx) => {
+    if (value.seniorHighSchoolName !== 'n/a') {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Senior High School is required or can be n/a.',
+        path: ['seniorHighSchoolName'],
+      });
+    }
+
     if (value.FathersFirstName.toLowerCase() !== 'n/a' && value.FathersLastName.toLowerCase() !== 'n/a') {
       if (!value.FathersContact) {
         ctx.addIssue({

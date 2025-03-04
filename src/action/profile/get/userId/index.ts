@@ -37,17 +37,16 @@ export const getProfileByParamsUserIdAction = async (id: string): Promise<getSin
 const checkSeachRole = async (user: any, id: any) => {
   return tryCatch(async () => {
     const u = await getUserById(id);
+    if (!u) return;
     if (user.role === 'DEAN' && u.role !== 'STUDENT' && u.role !== 'TEACHER') return { error: 'Dont have permission.', status: 403 };
     let profile;
     switch (u.role) {
       case 'STUDENT':
         profile = await getStudentProfileByUserId(u._id);
-
         if (user.role === 'DEAN') {
           const d = await getDeanProfileByUserId(user._id);
-          if (d.courseId._id.toString() !== profile.courseId._id.toString()) return { error: 'Dont have permission.', status: 403 };
+          if (d?.courseId._id.toString() !== profile?.courseId._id.toString()) return { error: 'Dont have permission.', status: 403 };
         }
-
         break;
       case 'TEACHER':
         profile = await getTeacherProfileByUserId(u._id);
@@ -64,6 +63,7 @@ const checkSeachRole = async (user: any, id: any) => {
       default:
         return { error: 'Forbidden.', status: 403 };
     }
+    if (!profile) return { error: 'Information of user not found.', status: 404 };
     return { profile: JSON.parse(JSON.stringify(profile)), status: 200 };
   });
 };

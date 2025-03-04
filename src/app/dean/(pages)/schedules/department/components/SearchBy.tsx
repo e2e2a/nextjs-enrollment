@@ -35,11 +35,11 @@ const SearchBy = ({ setSearchBy }: IProps) => {
                 }}
               >
                 <Check className={cn('mr-2 h-4 w-4', value === 'name' ? 'opacity-100' : 'opacity-0')} />
-                Name
+                Instructor Name
               </CommandItem>
               <CommandItem
                 key={1}
-                value={'email'}
+                value={'Descriptive Title'}
                 className='w-auto'
                 onSelect={(currentValue) => {
                   setSearchBy(currentValue);
@@ -47,8 +47,8 @@ const SearchBy = ({ setSearchBy }: IProps) => {
                   setOpen(false);
                 }}
               >
-                <Check className={cn('mr-2 h-4 w-4', value === 'email' ? 'opacity-100' : 'opacity-0')} />
-                Email
+                <Check className={cn('mr-2 h-4 w-4', value === 'Descriptive Title' ? 'opacity-100' : 'opacity-0')} />
+                Descriptive Title
               </CommandItem>
             </CommandGroup>
           </CommandList>

@@ -23,7 +23,7 @@ export const exportToPDF = async (data: any, fileName: string) => {
   data.curriculum.forEach((curriculumItem: any) => {
     // Add Year and Semester Title
     doc.setFontSize(14);
-    doc.text(`${curriculumItem.year} Year - ${curriculumItem.semester} Semester`, 105, yOffset, { align: 'center' });
+    doc.text(`${curriculumItem.year} - ${curriculumItem.semester}`, 105, yOffset, { align: 'center' });
     yOffset += 5;
 
     // Define table headers

@@ -59,7 +59,6 @@ export const columns: ColumnDef<ISubject>[] = [
       return fullName.includes(filterValue.toLowerCase());
     },
   },
-
   {
     accessorFn: (row) => row?.preReq,
     id: 'pre req.',

@@ -225,13 +225,13 @@ export const columns: ColumnDef<any>[] = [
       return instructorName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },
   },
-  {
-    id: 'actions',
-    header: 'Actions',
-    cell: ({ row }) => {
-      const user = row.original;
+  // {
+  //   id: 'actions',
+  //   header: 'Actions',
+  //   cell: ({ row }) => {
+  //     const user = row.original;
 
-      return <ActionsCell user={user} />;
-    },
-  },
+  //     return <ActionsCell user={user} />;
+  //   },
+  // },
 ];

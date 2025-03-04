@@ -139,6 +139,19 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row.subject?.preReq,
+    id: 'Pre Req.',
+    header: 'Pre Req.',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=''>
+          {user?.subject?.preReq ?? ''}
+        </div>
+      );
+    },
+  },
+  {
     accessorFn: (row) => row.blockType?.year,
     id: 'year',
     header: 'Year',

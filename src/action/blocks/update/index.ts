@@ -51,7 +51,7 @@ const updateBlock = async (blockType: any, data: any) => {
 
     const result = await BlockType.bulkWrite(bulkOperations);
 
-    return { success: true, message: `Schedule added to Block ${blockType.section.toUpperCase()}.`, id: blockType._id.toString(), courseId: blockType.courseId._id.toString(), ts: data.selectedItems, status: 201 };
+    return { success: true, message: `Schedule added to Block ${blockType.section.toUpperCase()}.`, id: blockType?._id.toString(), category: blockType?.category, courseId: blockType.courseId._id.toString(), ts: data.selectedItems, status: 201 };
   });
 };
 

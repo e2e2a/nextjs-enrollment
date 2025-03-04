@@ -3,8 +3,8 @@ import React from 'react';
 import { Icons } from '@/components/shared/Icons';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useRemoveStudentScheduleMutation } from '@/lib/queries';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { useRemoveStudentScheduleMutation } from '@/lib/queries/enrollment/remove';
 
 type IProps = {
   user: any;

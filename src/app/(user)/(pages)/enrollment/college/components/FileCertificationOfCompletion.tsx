@@ -22,7 +22,7 @@ const FileCerificationOfCompletion = ({
 }: IProps) => {
   return (
     <div className='w-full items-center justify-center'>
-      <span className='text-xs sm:text-sm px-2'>Certification of Completion(ALS Graduate)</span>
+      <span className='text-xs sm:text-sm px-2'>Certification of Completion</span>
       {fileCerificationOfCompletionPreview ? (
         <span className='cursor-pointer pl-1 hover:underline text-blue-600 gap-0 md:gap-2 rounded-md flex items-center'>
           <div className='bg-slate-100 pl-1 rounded-full'>

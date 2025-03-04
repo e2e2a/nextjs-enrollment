@@ -10,6 +10,8 @@ export interface ISubject extends Document {
   lec?: string;
   lab?: string;
   unit?: string;
+  archive?: boolean;
+  archiveBy?: mongoose.Schema.Types.ObjectId;
 }
 const schema = new Schema<ISubject>(
   {
@@ -22,6 +24,11 @@ const schema = new Schema<ISubject>(
     lec: { type: String },
     lab: { type: String },
     unit: { type: String },
+    archive: { type: Boolean, default: false },
+    archiveBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   {
     versionKey: false,

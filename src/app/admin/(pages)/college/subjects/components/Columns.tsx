@@ -5,19 +5,6 @@ import { Button } from '@/components/ui/button';
 import ActionsCell from './ActionsCell';
 
 export const columns: ColumnDef<any>[] = [
-  // {
-  //   accessorFn: (row) => row.fixedRateAmount,
-  //   id: 'rate amount.',
-  //   header: 'Rate Amount.',
-  //   cell: ({ cell, row }) => {
-  //     const user = row.original;
-  //     return (
-  //       <div key={cell.id} className=' uppercase'>
-  //         {user.fixedRateAmount}
-  //       </div>
-  //     );
-  //   },
-  // },
   {
     accessorFn: (row) => row?.courseId?.name,
     id: 'Deparment',
@@ -71,7 +58,6 @@ export const columns: ColumnDef<any>[] = [
       return fullName.includes(filterValue.toLowerCase());
     },
   },
-
   {
     accessorFn: (row) => row?.preReq,
     id: 'pre req.',
@@ -134,13 +120,13 @@ export const columns: ColumnDef<any>[] = [
       return <div className='font-medium'>{formatted}</div>;
     },
   },
-  {
-    id: 'actions',
-    header: 'Actions',
-    cell: ({ row }) => {
-      const user = row.original;
+  // {
+  //   id: 'actions',
+  //   header: 'Actions',
+  //   cell: ({ row }) => {
+  //     const user = row.original;
 
-      return <ActionsCell user={user} />;
-    },
-  },
+  //     return <ActionsCell user={user} />;
+  //   },
+  // },
 ];

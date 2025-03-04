@@ -211,7 +211,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                     </div>
                                     <span className='bg-gray-200 border border-neutral-50 pl-3'>Subject Code: {item.subjectCode}</span>
                                     <span className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {item.name}</span>
-                                    <span className='bg-gray-200 border border-neutral-50 pl-3 uppercase'>Pre Req.: {item.preReq}</span>
+                                    <span className='bg-gray-200 border border-neutral-50 pl-3'>Pre Req.: {item.preReq}</span>
                                     <span className='bg-gray-200 border border-neutral-50 pl-3'>Lec: {item.lec}</span>
                                     <span className='bg-gray-200 border border-neutral-50 pl-3'>Lab: {item.lab}</span>
                                     <span className='bg-gray-200 border border-neutral-50 pl-3'>Unit: {item.unit}</span>

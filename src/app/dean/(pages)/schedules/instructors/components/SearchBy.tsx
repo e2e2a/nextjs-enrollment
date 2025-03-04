@@ -12,7 +12,7 @@ interface IProps {
 
 const SearchBy = ({ setSearchBy }: IProps) => {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('name');
+  const [value, setValue] = React.useState('Descriptive Title');
   return (
     <Popover open={open} onOpenChange={setOpen}>
       {/* <PopoverTrigger asChild className='w-full pt-14 pb-8 text-left text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 px-4'> */}
@@ -26,7 +26,7 @@ const SearchBy = ({ setSearchBy }: IProps) => {
               <div className='text-sm mb-1'>Search By</div>
               <CommandItem
                 key={0}
-                value={'name'}
+                value={'Descriptive Title'}
                 className='w-auto'
                 onSelect={(currentValue) => {
                   setValue(currentValue);
@@ -34,12 +34,12 @@ const SearchBy = ({ setSearchBy }: IProps) => {
                   setOpen(false);
                 }}
               >
-                <Check className={cn('mr-2 h-4 w-4', value === 'name' ? 'opacity-100' : 'opacity-0')} />
-                Name
+                <Check className={cn('mr-2 h-4 w-4', value === 'Descriptive Title' ? 'opacity-100' : 'opacity-0')} />
+                Descriptive Title
               </CommandItem>
               <CommandItem
                 key={1}
-                value={'email'}
+                value={'course code'}
                 className='w-auto'
                 onSelect={(currentValue) => {
                   setSearchBy(currentValue);
@@ -47,8 +47,8 @@ const SearchBy = ({ setSearchBy }: IProps) => {
                   setOpen(false);
                 }}
               >
-                <Check className={cn('mr-2 h-4 w-4', value === 'email' ? 'opacity-100' : 'opacity-0')} />
-                Email
+                <Check className={cn('mr-2 h-4 w-4', value === 'course code' ? 'opacity-100' : 'opacity-0')} />
+                Course Code
               </CommandItem>
             </CommandGroup>
           </CommandList>

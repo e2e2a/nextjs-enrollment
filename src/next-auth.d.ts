@@ -6,7 +6,7 @@ export type ExtendedUser = DefaultSession['user'] & {
   username: string;
   imageUrl: string;
   birthday: Date;
-  role: 'ADMIN' | 'STUDENT' | 'TEACHER' | 'DEAN' | 'ACCOUNTING';
+  role: 'ADMIN' | 'STUDENT' | 'TEACHER' | 'DEAN' | 'ACCOUNTING' | 'SUPER ADMIN';
   profileVerified: boolean;
 };
 
@@ -26,6 +26,6 @@ declare module 'next-auth/jwt' {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
   interface JWT {
     /** OpenID ID Token */
-    role: 'ADMIN' | 'STUDENT' | 'TEACHER' | 'DEAN' | 'ACCOUNTING';
+    role: 'ADMIN' | 'STUDENT' | 'TEACHER' | 'DEAN' | 'ACCOUNTING' | 'SUPER ADMIN';
   }
 }
