@@ -19,8 +19,8 @@ export const columns: ColumnDef<IRoom>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' capitalize'>
-          {user.roomName}
+        <div key={cell.id} className=''>
+          {user?.roomName}
         </div>
       );
     },
@@ -35,33 +35,33 @@ export const columns: ColumnDef<IRoom>[] = [
   },
 
   {
-    accessorFn: (row) => row.roomType,
+    accessorFn: (row) => row?.roomType,
     id: 'roomType',
     header: 'Room Type',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.roomType}
+          {user?.roomType}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.floorLocation,
+    accessorFn: (row) => row?.floorLocation,
     id: 'floorLocation',
     header: 'Floor Location',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
-        <div key={cell.id} className=' uppercase'>
-          {user.floorLocation ? user.floorLocation : 'N/A'}
+        <div key={cell.id} className=''>
+          {user?.floorLocation ? user?.floorLocation : 'N/A'}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.isRoomAvailable,
+    accessorFn: (row) => row?.isRoomAvailable,
     id: 'isRoomAvailable',
     header: 'isRoomAvailable',
     cell: ({ cell, row }) => {
