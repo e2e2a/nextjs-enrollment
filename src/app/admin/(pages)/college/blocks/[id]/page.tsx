@@ -62,9 +62,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                 </div>
               </div>
-              <div className='w-full flex justify-end items-center'>
+              {/* <div className='w-full flex justify-end items-center'>
                 <AddBlockSched blockType={data} s={teachersSchedules} />
-              </div>
+              </div> */}
               <DataTable columns={columns} data={data?.blockType?.blockSubjects} />
             </div>
           ) : (

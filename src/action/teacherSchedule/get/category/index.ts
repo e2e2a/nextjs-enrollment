@@ -3,7 +3,7 @@ import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
-import { getTeacherScheduleByCategory } from '@/services/teacherSchedule';
+import { getAllTeacherScheduleByCategory, getTeacherScheduleByCategory } from '@/services/teacherSchedule';
 import { checkAuth } from '@/utils/actions/session';
 
 /**
@@ -36,6 +36,9 @@ const checkSessionRole = async (user: any, category: string) => {
     let ts;
     const sched = await getTeacherScheduleByCategory(category);
     switch (user.role) {
+      case 'SUPER ADMIN':
+        ts = await getAllTeacherScheduleByCategory(category);
+        break;
       case 'ADMIN':
         ts = sched;
         break;

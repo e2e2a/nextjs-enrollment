@@ -17,6 +17,7 @@ const ActionsCell = ({ user }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState<boolean>(false);
   const mutation = useArchiveSubjectByIdMutation();
+
   const onSubmit = async () => {
     setIsPending(true);
     mutation.mutate(user?._id, {
@@ -37,6 +38,7 @@ const ActionsCell = ({ user }: IProps) => {
       },
     });
   };
+
   return (
     <div className=''>
       <Popover open={isOpen} onOpenChange={setIsOpen}>

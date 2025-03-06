@@ -96,6 +96,23 @@ export const getTeacherScheduleByCategory = async (category: string) => {
   }
 };
 
+export const getAllTeacherScheduleByCategory = async (category: string) => {
+  try {
+    const ts = await TeacherSchedule.find({ category })
+      .populate({ path: 'profileId', populate: [{ path: 'userId', select: '-password' }] })
+      .populate('deanId')
+      .populate('courseId')
+      .populate('blockTypeId')
+      .populate('subjectId')
+      .populate('roomId')
+      .populate('archiveBy')
+      .exec();
+    return ts;
+  } catch (error) {
+    return [];
+  }
+};
+
 export const getTeacherScheduleById = async (id: any) => {
   try {
     const TProfiles = await TeacherSchedule.findById(id)

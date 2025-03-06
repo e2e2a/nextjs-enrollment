@@ -14,6 +14,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogStep6Button } from './Dialog';
 import { z } from 'zod';
+import { RejectDialog } from '../RejectDialog';
+import { RejectedRemarkValidator } from '@/lib/validators/enrollment/update/college/rejectEnrollee';
 
 type IProps = {
   user: any;
@@ -24,11 +26,20 @@ const ActionsCell3 = ({ user }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const mutation = useUpdateEnrollmentStepMutation();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isRejectDialogOpen, setIsRejectDialogOpen] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof EnrollmentStatusValidator>>({
     resolver: zodResolver(EnrollmentStatusValidator),
     defaultValues: {
       enrollStatus: '',
+    },
+  });
+
+  const formReject = useForm<z.infer<typeof RejectedRemarkValidator>>({
+    resolver: zodResolver(RejectedRemarkValidator),
+    defaultValues: {
+      rejectedRemark:
+        'Thank you for your interest in joining our program. Unfortunately, we were unable to proceed with your application due to missing required information. Please feel free to reach out for more details, and we encourage you to apply again once all information is complete.',
     },
   });
 
@@ -39,23 +50,32 @@ const ActionsCell3 = ({ user }: IProps) => {
       const isValid = await form.trigger();
       if (!isValid) return setIsPending(false);
     }
+
+    if (request === 'Rejected') {
+      const isValid = await formReject.trigger();
+      if (!isValid) return setIsPending(false);
+    }
+
+    const parseRejectData = formReject.getValues();
     const parseData = form.getValues();
 
     const dataa = {
       category: 'College',
       step: 6,
-      EId: user?._id,
+      EId: user._id,
       request,
       ...(parseData ? parseData : {}),
+      ...(parseRejectData ? parseRejectData : {}),
     };
 
     mutation.mutate(dataa, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
+            setIsDialogOpen(false);
+            setIsRejectDialogOpen(false);
             makeToastSucess(res.message);
             return;
           default:
@@ -83,19 +103,19 @@ const ActionsCell3 = ({ user }: IProps) => {
           <Command>
             <CommandList>
               <CommandGroup className=''>
-                <Link href={`/dean/students/${user?.userId?._id}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
+                <Link href={`/admin/users/students/${user.userId._id}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
                   <div className='flex justify-center items-center text-sm font-medium gap-x-1'>
                     <Icons.eye className='h-4 w-4' />
                     View student profile
                   </div>
                 </Link>
-                <Link href={`/dean/students/curriculums/solo/${user?.profileId?._id}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
+                <Link href={`/admin/college/curriculums/students/solo/${user.profileId._id}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
                   <div className='flex justify-center items-center text-sm font-medium gap-x-1'>
                     <Icons.fileStack className='h-4 w-4' />
                     Apply Credits
                   </div>
                 </Link>
-                <Link href={`/dean/enrollment/schedules/${user?._id}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
+                <Link href={`/admin/college/enrollment/schedules/${user._id}`} className={'w-full rounded-md focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-2 gap-x-1 justify-start  hover:text-neutral-50 '}>
                   <div className='flex justify-center items-center text-sm font-medium gap-x-1'>
                     <Icons.fileStack className='h-4 w-4' />
                     View Subjects
@@ -113,6 +133,7 @@ const ActionsCell3 = ({ user }: IProps) => {
                   <Icons.rotateCcw className='h-4 w-4' />
                   Undo last Step
                 </Button> */}
+                {/* <RejectDialog isPending={isPending} form={formReject} user={user} setIsOpen={setIsOpen} isDialogOpen={isRejectDialogOpen} setIsDialogOpen={setIsRejectDialogOpen} actionFormSubmit={actionFormSubmit} /> */}
               </CommandGroup>
             </CommandList>
           </Command>

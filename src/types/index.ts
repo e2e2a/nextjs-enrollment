@@ -148,6 +148,8 @@ export type DashboardConfig = {
   sidebarDean: SidebarNavItemDean[];
   sidebarAccounting: SidebarNavItemAccounting[];
 
+  mainNavSuperAdmin: MainNavItem[];
+  sidebarSuperAdmin: SidebarNavItemAdmin[];
   mainNavAdmin: MainNavItem[];
   sidebarAdmin: SidebarNavItemAdmin[];
 };

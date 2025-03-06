@@ -8,23 +8,24 @@ export interface ICourse extends Document {
   courseType: string;
   imageUrl?: string;
   description: string;
+  archive?: boolean;
+  archiveBy?: mongoose.Schema.Types.ObjectId;
 }
+
 const schema = new Schema<ICourse>(
   {
     category: { type: String },
     courseCode: { type: String },
-    /**
-     * @todo
-     * grade will be used in jhs
-     * no name
-     * no coursecode
-     * no courseType
-     */
     grade: { type: String },
     name: { type: String },
     courseType: { type: String },
     imageUrl: { type: String },
     description: { type: String },
+    archive: { type: Boolean, default: false },
+    archiveBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'AdminProfile',
+    },
   },
   {
     versionKey: false,

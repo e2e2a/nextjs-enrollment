@@ -988,6 +988,396 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'page',
     },
   ],
+  mainNavSuperAdmin: [
+    {
+      title: 'Home',
+      href: '/admin',
+      icon: 'home',
+    },
+    {
+      title: 'Dashboard',
+      href: '/admin/dashboard',
+      icon: 'layoutDashboard',
+    },
+    {
+      title: 'School & Policies',
+      href: '/school',
+      icon: 'school',
+    },
+    {
+      title: 'Documentation',
+      href: '',
+      icon: 'page',
+    },
+  ],
+  sidebarSuperAdmin: [
+    // {
+    //   title: 'Dashboard',
+    //   href: '/admin/dashboard',
+    //   icon: 'layoutDashboard',
+    // },
+    {
+      title: 'Blocks',
+      i: [
+        {
+          title: 'Blocks Management',
+          href: '/superadmin/college/blocks',
+          icon: 'eye',
+        },
+        {
+          title: 'Archive Blocks Management',
+          href: '/superadmin/college/blocks/archive',
+          icon: 'eye',
+        },
+        // {
+        //   title: 'Add Block',
+        //   href: '/admin/college/blocks/add',
+        //   icon: 'add',
+        // },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Courses',
+      i: [
+        {
+          title: 'Courses Management',
+          href: '/superadmin/college/courses',
+          icon: 'eye',
+        },
+        {
+          title: 'Archive Courses Management',
+          href: '/superadmin/college/courses/archive',
+          icon: 'eye',
+        },
+        // {
+        //   title: 'Add Course',
+        //   href: '/admin/college/courses/add',
+        //   icon: 'add',
+        // },
+      ],
+      icon: 'packageSearch',
+    },
+    // {
+    //   title: 'Curriculums',
+    //   i: [
+    //     {
+    //       title: 'Curriculum Management',
+    //       href: '/admin/college/curriculums',
+    //       icon: 'eye',
+    //     },
+    //     {
+    //       title: 'Student Curriculum Mng.',
+    //       href: '/admin/college/curriculums/students',
+    //       icon: 'eye',
+    //     },
+    //   ],
+    //   icon: 'packageSearch',
+    // },
+    {
+      title: 'Enrollment',
+      i: [
+        // {
+        //   title: 'Enrollment Process',
+        //   i: [
+        //     {
+        //       title: 'Step 1 Verify Enrollee Information',
+        //       href: '/superadmin/college/enrollment/management?step=1',
+        //       icon: 'eye',
+        //     },
+        //     {
+        //       title: 'Step 2 Evaluate the Student',
+        //       href: '/superadmin/college/enrollment/management?step=2',
+        //       icon: 'eye',
+        //     },
+        //     {
+        //       title: 'Step 3 Add Subjects of Enrollee',
+        //       href: '/superadmin/college/enrollment/management?step=3',
+        //       icon: 'eye',
+        //     },
+        //     {
+        //       title: 'Step 4 Approval of Add/Drop Subject Request',
+        //       href: '/superadmin/college/enrollment/management?step=4',
+        //       icon: 'eye',
+        //     },
+        //     {
+        //       title: 'Step 5 Student Payment',
+        //       href: '/superadmin/college/enrollment/management?step=5',
+        //       icon: 'eye',
+        //     },
+        //     {
+        //       title: 'Step 6 Finalizing Student Enrollment',
+        //       href: '/superadmin/college/enrollment/management?step=6',
+        //       icon: 'eye',
+        //     },
+        //   ],
+        //   icon: 'packageSearch',
+        // },
+        {
+          title: 'Rejected Students',
+          i: [
+            {
+              title: 'View Rejected Students',
+              href: '/superadmin/college/enrollment/rejected',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Enrolling Students',
+          i: [
+            {
+              title: 'View Rejected Students',
+              href: '/superadmin/college/enrollment/enrolling',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Enrolled Students',
+          i: [
+            {
+              title: 'View Enrolled Students',
+              href: '/superadmin/college/enrollment/enrolled',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Temporary',
+          i: [
+            {
+              title: 'View Temporary Enrolled',
+              href: '/superadmin/college/enrollment/temporary',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Recent Records',
+          i: [
+            {
+              title: 'Enrollment Records',
+              href: '/superadmin/college/enrollment/record/enrollment',
+              icon: 'eye',
+            },
+            {
+              title: 'Instructor Sched. Records',
+              href: '/superadmin/college/enrollment/record/schedule',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Instructors Schedule',
+      i: [
+        {
+          title: 'Instructors Management',
+          href: '/superadmin/college/schedules/instructors',
+          icon: 'eye',
+        },
+        {
+          title: 'Archive Instructors Schedule Management',
+          href: '/superadmin/college/schedules/instructors/archive',
+          icon: 'eye',
+        },
+        // {
+        //   title: 'Add Instructor Schedule',
+        //   href: '/admin/college/schedules/instructors/add',
+        //   icon: 'add',
+        // },
+      ],
+      icon: 'packageSearch',
+    },
+    // {
+    //   title: 'Reported Grades',
+    //   i: [
+    //     {
+    //       title: 'Class Grades Report',
+    //       href: '/superadmin/college/enrollment/report/grade',
+    //       icon: 'eye',
+    //     },
+    //     {
+    //       title: 'Individual Grades Report',
+    //       href: '/superadmin/college/enrollment/report/grade/individual',
+    //       icon: 'eye',
+    //     },
+    //   ],
+    //   icon: 'packageSearch',
+    // },
+    {
+      title: 'Subjects',
+      i: [
+        {
+          title: 'Subjects Management',
+          href: '/superadmin/college/subjects',
+          icon: 'eye',
+        },
+        {
+          title: 'Archive Subjects Management',
+          href: '/superadmin/college/subjects/archive',
+          icon: 'eye',
+        },
+        // {
+        //   title: 'Add Subject',
+        //   href: '/superadmin/college/subjects/add',
+        //   icon: 'add',
+        // },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Rooms',
+      i: [
+        {
+          title: 'Rooms Management',
+          href: '/superadmin/college/rooms',
+          icon: 'eye',
+        },
+        {
+          title: 'Archive Rooms Management',
+          href: '/superadmin/college/rooms/archive',
+          icon: 'eye',
+        },
+        // {
+        //   title: 'Add Room',
+        //   href: '/superadmin/college/rooms/add',
+        //   icon: 'add',
+        // },
+      ],
+      icon: 'packageSearch',
+    },
+    // {
+    //   title: 'Print Report',
+    //   href: '/superadmin/college/print',
+    //   icon: 'download',
+    // },
+    {
+      title: 'Accounts',
+      i: [
+        {
+          title: 'Role Super Admins',
+          i: [
+            {
+              title: 'Admins Management',
+              href: '/superadmin/users/admins',
+              icon: 'eye',
+            },
+            {
+              title: 'Add Admin',
+              href: '/superadmin/users/admins/add',
+              icon: 'add',
+            },
+          ],
+          icon: 'userSearch',
+        },
+        {
+          title: 'Role Admins',
+          i: [
+            {
+              title: 'Admins Management',
+              href: '/superadmin/users/admins',
+              icon: 'eye',
+            },
+            {
+              title: 'Add Admin',
+              href: '/superadmin/users/admins/add',
+              icon: 'add',
+            },
+          ],
+          icon: 'userSearch',
+        },
+        {
+          title: 'Role Deans',
+          i: [
+            {
+              title: 'Deans Management',
+              href: '/superadmin/users/deans',
+              icon: 'eye',
+            },
+            {
+              title: 'Add Dean',
+              href: '/superadmin/users/deans/add',
+              icon: 'add',
+            },
+          ],
+          icon: 'userSearch',
+        },
+        {
+          title: 'Role Instructor',
+          i: [
+            {
+              title: 'Instructors Management',
+              href: '/superadmin/users/instructors',
+              icon: 'eye',
+            },
+            {
+              title: 'Add Instructor',
+              href: '/superadmin/users/instructors/add',
+              icon: 'add',
+            },
+          ],
+          icon: 'userSearch',
+        },
+        {
+          title: 'Role Accounting',
+          i: [
+            {
+              title: 'Accountings Management',
+              href: '/superadmin/users/accountings',
+              icon: 'eye',
+            },
+            {
+              title: 'Add Accounting',
+              href: '/superadmin/users/accountings/add',
+              icon: 'add',
+            },
+          ],
+          icon: 'userSearch',
+        },
+        {
+          title: 'Role Student',
+          i: [
+            {
+              title: 'Students Management',
+              href: '/superadmin/users/students',
+              icon: 'eye',
+            },
+            {
+              title: 'Add Student',
+              href: '/superadmin/users/students/add',
+              icon: 'add',
+            },
+          ],
+          icon: 'userSearch',
+        },
+      ],
+      icon: 'usersRound',
+    },
+    // {
+    //   title: 'Records',
+    //   href: '/',
+    //   icon: 'fileStack',
+    // },
+    {
+      title: 'School & Policies',
+      href: '/',
+      icon: 'school',
+    },
+    {
+      title: 'Documentation',
+      href: '/',
+      icon: 'page',
+    },
+  ],
   sidebarAccounting: [
     {
       title: 'College',

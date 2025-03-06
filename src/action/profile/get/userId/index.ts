@@ -21,7 +21,7 @@ export const getProfileByParamsUserIdAction = async (id: string): Promise<getSin
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
-    if (session && session.user.role !== 'ADMIN' && session.user.role !== 'DEAN') return { error: 'Forbidden.', status: 403 };
+    if (session && session.user.role !== 'ADMIN' && session.user.role !== 'DEAN' && session.user.role !== 'SUPER ADMIN') return { error: 'Forbidden.', status: 403 };
 
     const checkedR = await checkSeachRole(session.user, id);
     if (!checkedR.profile || checkedR.error) return { error: checkedR.error, status: 404 };

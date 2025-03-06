@@ -1,9 +1,10 @@
-"use client"
+'use client';
 import React from 'react';
 import { Icons } from '@/components/shared/Icons';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useArchiveCourseBlockScheduleMutation } from '@/lib/queries/blocks/archive';
+import { useArchiveCourseBlockScheduleMutation } from '@/lib/queries/blocks/archive/schedule';
+import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 
 type IProps = {
   user: any;
@@ -12,11 +13,11 @@ const ActionsCell = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const mutation = useArchiveCourseBlockScheduleMutation();
   const actionFormSubmit = () => {
-    console.log('user submitted:', user.teacherScheduleId)
-   const data = {
-    teacherScheduleId: user.teacherScheduleId._id,
-    blockTypeId: user.teacherScheduleId.blockTypeId._id
-   }
+    setIsPending(true);
+    const data = {
+      teacherScheduleId: user.teacherScheduleId._id,
+      blockTypeId: user.teacherScheduleId.blockTypeId._id,
+    };
 
     mutation.mutate(data, {
       onSuccess: (res: any) => {
@@ -26,12 +27,16 @@ const ActionsCell = ({ user }: IProps) => {
           case 201:
           case 203:
             // return (window.location.href = '/');
+            makeToastSucess(res.message);
             return;
           default:
+            makeToastError(res.error);
             return;
         }
       },
-      onSettled: () => {},
+      onSettled: () => {
+        setIsPending(false);
+      },
     });
   };
   return (

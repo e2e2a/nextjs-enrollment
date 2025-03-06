@@ -8,6 +8,7 @@ import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getAdminProfileByUserId } from '@/services/adminProfile';
 import { checkAuth } from '@/utils/actions/session';
 import { getAccountingProfileByUserId } from '@/services/accountingProfile';
+import { getSuperAdminProfileByUserId } from '@/services/superAdminProfile';
 
 /**
  * Any authenticated role
@@ -50,6 +51,9 @@ const checkRole = async (session: any): Promise<any> => {
         break;
       case 'ACCOUNTING':
         profile = await getAccountingProfileByUserId(session.user._id);
+        break;
+      case 'SUPER ADMIN':
+        profile = await getSuperAdminProfileByUserId(session.user._id);
         break;
       default:
         return { error: 'Forbidden.', status: 403 };

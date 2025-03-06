@@ -114,12 +114,15 @@ const fourthGrade = Number('asdasd');
 // };
 
 // funct1().then((a) => console.log('a', a));
-let number = 123.43;
+// let number = 123.43;
 
-// Round the number to 2 decimal places
-let roundedNumber = number.toFixed(2);
+// // Round the number to 2 decimal places
+// let roundedNumber = number.toFixed(2);
 
-console.log(roundedNumber);  // Output: "123.46"
-const name = 'asd'
+// console.log(roundedNumber);  // Output: "123.46"
+// const name = 'asd'
 
-console.log('message:', name + ',')
+// console.log('message:', name + ',')
+const role = 'SUPER ADMIN';
+
+console.log('role', role === 'SUPER ADMIN');

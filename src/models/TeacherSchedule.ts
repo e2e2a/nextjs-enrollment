@@ -56,7 +56,7 @@ const schema = new Schema<ITeacherSchedule>(
     archive: { type: Boolean, default: false },
     archiveBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'DeanProfile',
     },
   },
   {

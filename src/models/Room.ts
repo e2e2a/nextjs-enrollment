@@ -6,7 +6,10 @@ export interface IRoom extends Document {
   roomType?: string;
   floorLocation?: string;
   isRoomAvailable: boolean;
+  archive?: boolean;
+  archiveBy?: mongoose.Schema.Types.ObjectId;
 }
+
 const schema = new Schema<IRoom>(
   {
     educationLevel: {
@@ -56,6 +59,11 @@ const schema = new Schema<IRoom>(
     isRoomAvailable: {
       type: Boolean,
       default: true,
+    },
+    archive: { type: Boolean, default: false },
+    archiveBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'DeanProfile',
     },
   },
   {

@@ -14,6 +14,21 @@ export const createBlockType = async (data: any) => {
 
 export const getBlockTypeByCategory = async (category: string) => {
   try {
+    const p = await BlockType.find({ category, archive: { $ne: true } })
+      .populate('courseId')
+      .populate({
+        path: 'blockSubjects.teacherScheduleId',
+        populate: [{ path: 'profileId' }, { path: 'deanId' }, { path: 'subjectId' }, { path: 'blockTypeId' }, { path: 'courseId' }],
+      })
+      .exec();
+    return p;
+  } catch (error) {
+    return [];
+  }
+};
+
+export const getAllBlockTypeByCategory = async (category: string) => {
+  try {
     const p = await BlockType.find({ category })
       .populate('courseId')
       .populate({
@@ -29,7 +44,7 @@ export const getBlockTypeByCategory = async (category: string) => {
 
 export const getBlockTypeByCourseId = async (courseId: string) => {
   try {
-    const p = await BlockType.find({ courseId })
+    const p = await BlockType.find({ courseId, archive: { $ne: true } })
       .populate('courseId')
       .populate({
         path: 'blockSubjects.teacherScheduleId',
@@ -76,9 +91,10 @@ export const getBlockTypeBySection = async (section: any) => {
 export const getfilterBlockType = async (data: any) => {
   try {
     const { description, courseCode, ...datas } = data;
-    const newB = await BlockType.findOne({ ...datas });
-    return newB;
+    const b = await BlockType.findOne({ ...datas, archive: { $ne: true } });
+    return b;
   } catch (error) {
+    console.log('error', error);
     return [];
   }
 };

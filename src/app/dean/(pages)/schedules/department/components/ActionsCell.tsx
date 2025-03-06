@@ -85,7 +85,7 @@ const ActionsCell = ({ user }: IProps) => {
                   className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}
                 >
                   <Icons.trash className='h-4 w-4' />
-                  Remove
+                  Archive
                 </Button>
               </CommandGroup>
             </CommandList>

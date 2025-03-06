@@ -50,6 +50,8 @@ const SignInForm = () => {
                 window.location.href = '/dean';
               } else if (res.role === 'ACCOUNTING') {
                 window.location.href = '/accounting';
+              } else if (res.role === 'SUPER ADMIN') {
+                window.location.href = '/superadmin';
               }
               return;
             }
