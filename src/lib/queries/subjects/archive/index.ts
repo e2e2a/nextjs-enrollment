@@ -1,6 +1,10 @@
 import { archiveSubjectByIdAction } from '@/action/subjects/archive';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+/**
+ * Subject Archive mutation
+ * @returns Queries and mutations
+ */
 export const useArchiveSubjectByIdMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({

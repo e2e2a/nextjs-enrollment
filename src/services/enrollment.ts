@@ -152,7 +152,39 @@ export const getEnrollmentQueryStepByCategory = async (data: any) => {
 
 export const getEnrollmentByCategory = async (category: string) => {
   try {
-    const enrollment = await Enrollment.find({ enrollStatus: { $ne: 'Rejected' } })
+    const enrollment = await Enrollment.find({ category, enrollStatus: { $ne: 'Rejected' } })
+      .populate({
+        path: 'userId',
+        select: '-password',
+      })
+      .populate('courseId')
+      .populate({
+        path: 'profileId',
+        populate: [{ path: 'courseId' }, { path: 'userId', select: '-password' }],
+      })
+      .populate('blockTypeId')
+      .populate({
+        path: 'studentSubjects.teacherScheduleId',
+        populate: [{ path: 'profileId' }, { path: 'deanId' }, { path: 'courseId' }, { path: 'subjectId' }, { path: 'roomId' }, { path: 'blockTypeId' }],
+      })
+      .populate({
+        path: 'studentSubjects.profileId',
+        populate: [{ path: 'userId', select: '-password' }, { path: 'courseId' }],
+      })
+      .lean()
+      .exec();
+
+    const filteredEnrollment = enrollment.filter((en) => en.courseId.category === category);
+    return filteredEnrollment;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const getAllEnrollmentByCategory = async (category: string) => {
+  try {
+    const enrollment = await Enrollment.find({ category })
       .populate({
         path: 'userId',
         select: '-password',

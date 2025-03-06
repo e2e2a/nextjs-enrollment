@@ -15,7 +15,7 @@ import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { BlockValidatorInCollege } from '@/lib/validators/block/create/college';
-import { useCreateCourseBlockMutation } from '@/lib/queries/blocks/create/admin';
+import { useCreateCourseBlockMutation } from '@/lib/queries/blocks/create';
 
 const Page = () => {
   const [isNotEditable, setIsNotEditable] = useState<boolean>(false);

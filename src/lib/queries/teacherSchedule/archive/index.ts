@@ -2,7 +2,7 @@ import { archiveTeacherScheduleCollegeAction } from '@/action/teacherSchedule/ar
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
- * Admin Teacher Schedule Management
+ * Teacher Schedule Archive Management
  * @returns Queries and mutations
  */
 export const useArchiveTeacherScheduleCollegeMutation = () => {

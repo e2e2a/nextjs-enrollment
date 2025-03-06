@@ -4,7 +4,7 @@ import { Icons } from '@/components/shared/Icons';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { useArchiveCourseBlockScheduleMutation } from '@/lib/queries/blocks/archive';
+import { useArchiveCourseBlockScheduleMutation } from '@/lib/queries/blocks/archive/schedule';
 
 type IProps = {
   user: any;

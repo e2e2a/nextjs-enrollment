@@ -3,11 +3,10 @@ import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { PrintReportValidatorInCollege } from '@/lib/validators/report';
 import { getAdminProfileByUserId } from '@/services/adminProfile';
-import { getBlockTypeByCourseId, getBlockTypeById, getBlockTypeBySection } from '@/services/blockType';
+import { getBlockTypeByCourseId, getBlockTypeBySection } from '@/services/blockType';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
-import { getEnrollmentByCourseId, getEnrollmentById, getEnrollmentByProfileId } from '@/services/enrollment';
-import { getAllRoomByEduLevel, getRoomById } from '@/services/room';
-import { getStudentProfileByCourseId } from '@/services/studentProfile';
+import { getEnrollmentByCourseId, getEnrollmentByProfileId } from '@/services/enrollment';
+import { getRoomByEduLevel, getRoomById } from '@/services/room';
 import { getSubjectByCourseId, getSubjectById } from '@/services/subject';
 import { getAllTeacherSchedule } from '@/services/teacherSchedule';
 import { checkAuth } from '@/utils/actions/session';
@@ -63,7 +62,7 @@ const checkPrintScope = async (data: any, courseId: string) => {
     switch (data.selectionScope) {
       case 'All':
         if (data.printSelection === 'Blocks') dataToPrint = await getBlockTypeByCourseId(courseId);
-        if (data.printSelection === 'Rooms') dataToPrint = await getAllRoomByEduLevel('tertiary');
+        if (data.printSelection === 'Rooms') dataToPrint = await getRoomByEduLevel('tertiary');
         if (data.printSelection === 'Subjects') dataToPrint = await getSubjectByCourseId(courseId);
         if (data.printSelection === 'Students') {
           if (data.studentType.toLowerCase() === 'regular') {

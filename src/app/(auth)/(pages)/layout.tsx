@@ -15,6 +15,8 @@ const Layout = async ({ children }: { children: ReactNode }) => {
       return redirect('/dean');
     } else if (sessionData.user.role === 'ACCOUNTING') {
       return redirect('/accounting');
+    } else if (sessionData.user.role === 'SUPER ADMIN') {
+      return redirect('/superadmin');
     }
     // return redirect('/');
     return;

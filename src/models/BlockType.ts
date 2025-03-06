@@ -7,6 +7,8 @@ export interface IBlockType extends Document {
   year: string;
   section: string;
   blockSubjects: any;
+  archive?: boolean;
+  archiveBy?: mongoose.Schema.Types.ObjectId;
 }
 
 const schema = new Schema<IBlockType>(
@@ -27,6 +29,11 @@ const schema = new Schema<IBlockType>(
         },
       },
     ],
+    archive: { type: Boolean, default: false },
+    archiveBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'DeanProfile',
+    },
   },
   {
     versionKey: false,

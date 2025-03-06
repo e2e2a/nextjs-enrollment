@@ -58,13 +58,16 @@ export const handlesCollege = async (user: any, data: any) => {
 
 const handleReject = async (user: any, data: any, e: any) => {
   return tryCatch(async () => {
-    if (user.role !== 'ADMIN') return { error: 'Forbidden.', status: 403 };
+    if (user.role !== 'ADMIN' && user.role !== 'DEAN') return { error: 'Forbidden.', status: 403 };
 
     const rejectedCount = Number(e.rejectedCount ?? 0) + 1;
-    await updateStudentProfileById(e.profileId._id, { studentType: '', enrollStatus: '', rejectedCount });
+    await updateStudentProfileById(e.profileId._id, { enrollStatus: '', rejectedCount });
     await updateEnrollmentById(e._id, { enrollStatus: 'Rejected', rejectedRemark: data.rejectedRemark });
-
-    return { message: `Student Enrollment has been ${data.request}`, prevStep: e.step, userId: e.userId._id.toString(), courseId: e.courseId._id.toString(), profileId: e.profileId._id.toString(), status: 201 };
+    await createNotification({ to: e.userId._id, title: 'Your Enrollment has been Rejected!', link: '/enrollment/college' });
+    const nameRejected = `${e?.profileId?.lastname ? e?.profileId?.lastname + ',' : ''} ${e?.profileId?.firstname ?? ''} ${e?.profileId?.middlename ?? ''}${e?.profileId?.extensionName ? ', ' + e?.profileId?.extensionName : ''}`;
+    await CreateDeanAndAdminNotifications(`Student has been Rejected - ${nameRejected}.`, `Student has been Rejected - ${nameRejected}.`, e.courseId._id, `/`, `/`);
+    console.log('step', e?.step);
+    return { message: `Student Enrollment has been ${data.request}`, nextStep: e.step, prevStep: e.step, userId: e.userId._id.toString(), category: data?.category, courseId: e.courseId._id.toString(), profileId: e.profileId._id.toString(), status: 201 };
   });
 };
 
@@ -104,11 +107,6 @@ const handleStep1 = async (user: any, data: any, e: any) => {
       return { message: `Student Enrollment has been proceed in step ${newStep}`, nextStep: newStep, status: 201 };
     } else if (data.request === 'Undo') {
       return { error: 'Step 1 cannot be undo cuz its the first step.', message: '', status: 403 };
-    } else if (data.request === 'Rejected') {
-      await createNotification({ to: e.userId._id, title: 'Your Enrollment has been Rejected!', link: '/enrollment/college' });
-      const nameRejected = `${e?.profileId?.lastname ? e?.profileId?.lastname + ',' : ''} ${e?.profileId?.firstname ?? ''} ${e?.profileId?.middlename ?? ''}${e?.profileId?.extensionName ? ', ' + e?.profileId?.extensionName : ''}`;
-      await CreateDeanAndAdminNotifications(`Student has been Rejected - ${nameRejected}.`, `Student has been Rejected - ${nameRejected}.`, e.courseId._id, `/`, `/`);
-      return { success: true, message: '', status: 201 };
     } else {
       return { error: 'parang wala lang.', message: '123', status: 403 };
     }
@@ -155,11 +153,6 @@ const handleStep2 = async (user: any, data: any, e: any) => {
         `/dean/enrollment/management?step=${e.step}`
       );
       return { message: `Student Enrollment has been undo in step ${newStep}`, nextStep: newStep, status: 201 };
-    } else if (data.request === 'Rejected') {
-      await createNotification({ to: e.userId._id, title: 'Your Enrollment has been Rejected!', link: '/enrollment/college' });
-      const nameRejected = `${e?.profileId?.lastname ? e?.profileId?.lastname + ',' : ''} ${e?.profileId?.firstname ?? ''} ${e?.profileId?.middlename ?? ''}${e?.profileId?.extensionName ? ', ' + e?.profileId?.extensionName : ''}`;
-      await CreateDeanAndAdminNotifications(`Student has been Rejected - ${nameRejected}.`, `Student has been Rejected - ${nameRejected}.`, e.courseId._id, `/`, `/`);
-      return { success: true, message: '', status: 201 };
     } else {
       return { error: 'parang wala lang.', message: '123', status: 403 };
     }
@@ -201,11 +194,6 @@ const handleStep3 = async (user: any, data: any, e: any) => {
         `/dean/enrollment/management?step=${e.step}`
       );
       return { message: `Student Enrollment has been undo in step ${newStep}`, nextStep: newStep, status: 201 };
-    } else if (data.request === 'Rejected') {
-      await createNotification({ to: e.userId._id, title: 'Your Enrollment has been Rejected!', link: '/enrollment/college' });
-      const nameRejected = `${e?.profileId?.lastname ? e?.profileId?.lastname + ',' : ''} ${e?.profileId?.firstname ?? ''} ${e?.profileId?.middlename ?? ''}${e?.profileId?.extensionName ? ', ' + e?.profileId?.extensionName : ''}`;
-      await CreateDeanAndAdminNotifications(`Student has been Rejected - ${nameRejected}.`, `Student has been Rejected - ${nameRejected}.`, e.courseId._id, `/`, `/`);
-      return { success: true, message: '', status: 201 };
     } else {
       return { error: 'parang wala lang.', message: '123', status: 403 };
     }
@@ -240,11 +228,6 @@ const handleStep4 = async (user: any, data: any, e: any) => {
         `/dean/enrollment/management?step=${e.step}`
       );
       return { message: `Student Enrollment has been undo in step ${newStep}`, nextStep: newStep, status: 201 };
-    } else if (data.request === 'Rejected') {
-      await createNotification({ to: e.userId._id, title: 'Your Enrollment has been Rejected!', link: '/enrollment/college' });
-      const nameRejected = `${e?.profileId?.lastname ? e?.profileId?.lastname + ',' : ''} ${e?.profileId?.firstname ?? ''} ${e?.profileId?.middlename ?? ''}${e?.profileId?.extensionName ? ', ' + e?.profileId?.extensionName : ''}`;
-      await CreateDeanAndAdminNotifications(`Student has been Rejected - ${nameRejected}.`, `Student has been Rejected - ${nameRejected}.`, e.courseId._id, `/`, `/`);
-      return { success: true, message: '', status: 201 };
     } else {
       return { error: 'parang wala lang.', message: '123', status: 403 };
     }
@@ -283,11 +266,6 @@ const handleStep5 = async (user: any, data: any, e: any) => {
         `/dean/enrollment/management?step=${e.step}`
       );
       return { message: `Student Enrollment has been undo in step ${newStep}`, category: data.category, nextStep: newStep, status: 201 };
-    } else if (data.request === 'Rejected') {
-      await createNotification({ to: e.userId._id, title: 'Your Enrollment has been Rejected!', link: '/enrollment/college' });
-      const nameRejected = `${e?.profileId?.lastname ? e?.profileId?.lastname + ',' : ''} ${e?.profileId?.firstname ?? ''} ${e?.profileId?.middlename ?? ''}${e?.profileId?.extensionName ? ', ' + e?.profileId?.extensionName : ''}`;
-      await CreateDeanAndAdminNotifications(`Student has been Rejected - ${nameRejected}.`, `Student has been Rejected - ${nameRejected}.`, e.courseId._id, `/`, `/`);
-      return { success: true, message: '', category: data.category, status: 201 };
     } else {
       return { error: 'parang wala lang.', message: '123', status: 403 };
     }
@@ -325,11 +303,6 @@ const handleStep6 = async (user: any, data: any, e: any) => {
       await updateStudentProfileById(e.profileId._id, { payment: false });
       await updateEnrollmentById(e._id, { step: newStep });
       return { message: `Student Enrollment has been undo in step ${newStep}`, category: data.category, nextStep: newStep, status: 201 };
-    } else if (data.request === 'Rejected') {
-      await createNotification({ to: e.userId._id, title: 'Your Enrollment has been Rejected!', link: '/enrollment/college' });
-      const nameRejected = `${e?.profileId?.lastname ? e?.profileId?.lastname + ',' : ''} ${e?.profileId?.firstname ?? ''} ${e?.profileId?.middlename ?? ''}${e?.profileId?.extensionName ? ', ' + e?.profileId?.extensionName : ''}`;
-      await CreateDeanAndAdminNotifications(`Student has been Rejected - ${nameRejected}.`, `Student has been Rejected - ${nameRejected}.`, e.courseId._id, `/`, `/`);
-      return { success: true, message: '', category: data.category, status: 201 };
     } else {
       return { error: 'parang wala lang.', message: '123', status: 403 };
     }

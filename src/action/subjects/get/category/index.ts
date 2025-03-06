@@ -1,6 +1,7 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
+import Subject from '@/models/Subject';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getSubjectByCategory } from '@/services/subject';
 import { checkAuth } from '@/utils/actions/session';
@@ -20,6 +21,9 @@ export const getSubjectByCategoryAction = async (category: string) => {
     switch (session.user.role) {
       case 'ADMIN':
         subjects = await getSubjectByCategory(category);
+        break;
+      case 'SUPER ADMIN':
+        subjects = await Subject.find({ category }).populate('courseId').populate('archiveBy');
         break;
       case 'DEAN':
         const p = await getDeanProfileByUserId(session.user._id);

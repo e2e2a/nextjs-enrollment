@@ -13,6 +13,7 @@ export interface ISubject extends Document {
   archive?: boolean;
   archiveBy?: mongoose.Schema.Types.ObjectId;
 }
+
 const schema = new Schema<ISubject>(
   {
     fixedRateAmount: { type: String },
@@ -27,7 +28,7 @@ const schema = new Schema<ISubject>(
     archive: { type: Boolean, default: false },
     archiveBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'DeanProfile',
     },
   },
   {

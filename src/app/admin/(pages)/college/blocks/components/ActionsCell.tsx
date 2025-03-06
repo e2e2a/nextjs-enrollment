@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
-// import { DialogStep1Button } from './Dialog';
 
 type IProps = {
   user: any;
@@ -35,11 +34,6 @@ const ActionsCell = ({ user }: IProps) => {
                     View Blocks Schedule
                   </Link>
                 </Button>
-                <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start items-center hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
-                  <Icons.trash className='h-4 w-4' />
-                  Delete Blocks
-                </Button>
-                {/* <DataTableDrawer user={user} /> */}
               </CommandGroup>
             </CommandList>
           </Command>

@@ -22,11 +22,11 @@ export const archiveSubjectByIdAction = async (id: any) => {
 
     if (p?.courseId?._id.toString() !== subject?.courseId?._id.toString()) return { error: 'Forbidden', status: 403 };
 
-    const teacherSchedule = await TeacherSchedule.findOne({ subjectId: id }).populate('blockTypeId');
-    if (teacherSchedule) return { error: `Subject is used in Instructor Schedule.`, status: 404 };
+    const teacherSchedule = await TeacherSchedule.findOne({ subjectId: id });
+    if (teacherSchedule) return { error: `Subject must not used in Instructor Schedule to archive.`, status: 404 };
 
-    const updated = await Subject.findByIdAndUpdate(id, { archive: true, archiveBy: session?.user?._id });
+    const updated = await Subject.findByIdAndUpdate(id, { archive: true, archiveBy: p?._id });
     if (!updated) return { error: 'Something went wrong.', status: 500 };
-    return { message: 'Subject has been removed.', id: subject?._id.toString(), category: subject?.category, status: 201 };
+    return { message: 'Subject has been archived.', id: subject?._id.toString(), category: subject?.category, status: 201 };
   });
 };

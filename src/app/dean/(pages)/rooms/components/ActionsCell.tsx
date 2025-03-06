@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
+import { useArchiveRoomMutation } from '@/lib/queries/rooms/archive';
+import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 
 type IProps = {
   user: any;
@@ -14,6 +16,32 @@ type IProps = {
 const ActionsCell = ({ user }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState<boolean>(false);
+  const mutation = useArchiveRoomMutation();
+
+  const actionFormSubmit = () => {
+    setIsPending(true);
+    const data = { roomId: user._id };
+
+    mutation.mutate(data, {
+      onSuccess: (res: any) => {
+        switch (res.status) {
+          case 200:
+          case 201:
+          case 203:
+            setIsOpen(false);
+            makeToastSucess(res?.message);
+            return;
+          default:
+            makeToastError(res?.error);
+            return;
+        }
+      },
+      onSettled: () => {
+        setIsPending(false);
+      },
+    });
+  };
+
   return (
     <div className=''>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -30,10 +58,7 @@ const ActionsCell = ({ user }: IProps) => {
             <CommandList>
               <CommandGroup className=''>
                 <Button disabled={isPending} type='button' size={'sm'} className={'w-full group focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-0 gap-x-1 justify-start items-center hover:text-neutral-50 font-medium'}>
-                  <Link
-                    href={`${isPending ? '' : `/dean/rooms/schedules/${user._id}`}`}
-                    className={'w-full h-full group/item rounded-md focus-visible:ring-0 flex text-black bg-transparent gap-x-1 justify-start items-center group-hover:hover:text-neutral-50'}
-                  >
+                  <Link href={`${isPending ? '' : `/dean/rooms/schedules/${user._id}`}`} className={'w-full h-full group/item rounded-md focus-visible:ring-0 flex text-black bg-transparent gap-x-1 justify-start items-center group-hover:hover:text-neutral-50'}>
                     <Icons.eye className='h-4 w-4' />
                     View Room Schedule
                   </Link>
@@ -44,9 +69,15 @@ const ActionsCell = ({ user }: IProps) => {
                     Edit Room
                   </Link>
                 </Button>
-                <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
-                  <Icons.close className='h-4 w-4' />
-                  Delete Room
+                <Button
+                  disabled={isPending}
+                  type='button'
+                  onClick={() => actionFormSubmit()}
+                  size={'sm'}
+                  className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}
+                >
+                  <Icons.trash className='h-4 w-4' />
+                  Archive Room
                 </Button>
               </CommandGroup>
             </CommandList>

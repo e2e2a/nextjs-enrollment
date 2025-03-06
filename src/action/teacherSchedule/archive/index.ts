@@ -2,9 +2,8 @@
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getBlockTypeByCourseId } from '@/services/blockType';
-import { getDeanProfileById } from '@/services/deanProfile';
+import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getEnrollmentByCategory } from '@/services/enrollment';
-import { getTeacherProfileById } from '@/services/teacherProfile';
 import { getTeacherScheduleById, archivedTeacherScheduleById } from '@/services/teacherSchedule';
 import { checkAuth } from '@/utils/actions/session';
 import mongoose from 'mongoose';
@@ -19,34 +18,30 @@ export const archiveTeacherScheduleCollegeAction = async (data: any) => {
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
+    if (session.user?.role !== 'DEAN') return { error: 'Forbidden.', status: 403 };
 
-    const isValidProfileIdObjectId = mongoose.Types.ObjectId.isValid(data.profileId);
-    const isValidDeanIdObjectId = mongoose.Types.ObjectId.isValid(data.deanId);
-    if (!isValidProfileIdObjectId && !isValidDeanIdObjectId) return { error: `User information Not valid.`, status: 400 };
-
-    let p;
-    if (data.profileId) p = await getTeacherProfileById(data.profileId);
-    if (data.deanId) p = await getDeanProfileById(data.deanId);
+    const p = await getDeanProfileByUserId(session?.user?._id);
     if (!p) return { error: 'Invalid Profile Id.', status: 404 };
 
+    const isValidScheduleIdObjectId = mongoose.Types.ObjectId.isValid(data.teacherScheduleId);
+    if (!isValidScheduleIdObjectId) return { error: `Invalid Schedule Id.`, status: 400 };
     const t = await getTeacherScheduleById(data.teacherScheduleId);
-    if (!t) return { error: 'Invalid Schedule Id.', status: 404 };
+    if (!t) return { error: 'Instructor Schedule not found.', status: 404 };
 
     let b;
     if (t.courseId) b = await getBlockTypeByCourseId(t.courseId);
     const hasBlockTakenSchedule = b?.some((block) => block.blockSubjects.some((blockSubject: any) => blockSubject.teacherScheduleId._id.toString() === t._id.toString()));
-    if (hasBlockTakenSchedule) return { error: 'Blocks has already taken this Instructor Schedule.', status: 409 };
+    if (hasBlockTakenSchedule) return { error: 'Instructor Schedule must not used in Blocks to archive.', status: 409 };
 
     const e = await getEnrollmentByCategory(t.category);
     const hasStudentTakenSchedule = e.some((student) => student.studentSubjects.some((subject: any) => subject.teacherScheduleId._id.toString() === t._id.toString()));
 
-    if (hasStudentTakenSchedule) return { error: 'Student has already taken this Instructor Schedule.', status: 409 };
+    if (hasStudentTakenSchedule) return { error: 'Instructor Schedule must not used in Student to.', status: 409 };
 
-    const dataToUpdate = { archive: true, archiveBy: session.user._id };
-
+    const dataToUpdate = { archive: true, archiveBy: p?._id };
     const archivedT = await archivedTeacherScheduleById(t._id, dataToUpdate);
     if (!archivedT) return { error: 'Something went wrong.', status: 500 };
 
-    return { message: 'Schedule has been removed.', category: t?.category, status: 201 };
+    return { message: 'Schedule has been archived.', category: t?.category, status: 201 };
   });
 };
