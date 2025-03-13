@@ -16,7 +16,7 @@ const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isPageError, setIsPageError] = useState(false);
   const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
-  const { data, isLoading, error: isEnError } = useCurriculumQueryByCourseId(pData?.profile?.courseId?._id);
+  const { data, isLoading, error: isEnError } = useCurriculumQueryByCourseId(pData?.profile?.courseId?._id || 'e2e2a');
   const { data: sData, isLoading: sLoading, error: sError } = useSubjectQueryByCategory('College');
 
   useEffect(() => {

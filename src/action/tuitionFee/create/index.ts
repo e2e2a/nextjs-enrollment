@@ -49,6 +49,7 @@ const handleCategoryCollege = async (data: any) => {
       const nameOccurrences = data.regMiscRows.filter((row: any) => row.name === regOrMisc.name).length;
       if (nameOccurrences > 1) return { error: `Duplicate name found in REG/MISC: ${regOrMisc.name.toUpperCase()}`, status: '400' };
       if (!regex.test(regOrMisc.amount)) return { error: 'Invalid amount in Reg/Misc Fee', status: '400' };
+      regOrMisc.amount = Number(regOrMisc.amount).toFixed(2);
     }
 
     const dataToStore = {
@@ -57,6 +58,8 @@ const handleCategoryCollege = async (data: any) => {
       regOrMisc: data.regMiscRows,
       ratePerUnit: Number(parse.data.ratePerUnit).toFixed(2),
       ratePerLab: Number(parse.data.ratePerLab).toFixed(2),
+      departmentalFee: Number(parse.data.departmentalFee).toFixed(2),
+      ssgFee: Number(parse.data.ssgFee).toFixed(2),
       cwtsOrNstpFee: Number(parse.data.cwtsOrNstpFee).toFixed(2),
       downPayment: Number(parse.data.downPayment).toFixed(2),
     };

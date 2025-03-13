@@ -16,7 +16,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [schedules, setSchedules] = useState<any>([]);
 
-  const { data, isLoading, error: isEnError } = useEnrollmentQueryById(params.id);
+  const { data, isLoading, error: isEnError } = useEnrollmentQueryById(params.id || 'e2e2a');
   const { data: b, isLoading: bLoading, error: bError } = useBlockCourseQueryByCategory('College');
   const { data: ESetup, isLoading: ESetupLoading, error: ESetupError } = useEnrollmentSetupQuery();
 

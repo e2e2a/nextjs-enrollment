@@ -10,6 +10,14 @@ export const TuitionFeeValidator = z.object({
     .string()
     .regex(/^\d+(\.\d+)?$/, { message: 'Default Payment must be a valid number...' })
     .min(1, { message: 'Default Payment is required...' }),
+  departmentalFee: z
+    .string()
+    .regex(/^\d+(\.\d+)?$/, { message: 'Default Payment must be a valid number...' })
+    .min(1, { message: 'Default Payment is required...' }),
+  ssgFee: z
+    .string()
+    .regex(/^\d+(\.\d+)?$/, { message: 'Default Payment must be a valid number...' })
+    .min(1, { message: 'Default Payment is required...' }),
   cwtsOrNstpFee: z
     .string()
     .regex(/^\d+(\.\d+)?$/, { message: 'Default Payment must be a valid number...' })

@@ -1,4 +1,5 @@
 import {
+  Banknote,
   RefreshCcw,
   CalendarDays,
   PhilippinePeso,
@@ -63,6 +64,7 @@ import {
 export type Icon = typeof LucideIcon;
 
 export const Icons = {
+  Banknote,
   RefreshCcw,
   CalendarDays,
   PhilippinePeso: PhilippinePeso,

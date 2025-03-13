@@ -3,6 +3,7 @@ import mongoose, { Schema, models, model } from 'mongoose';
 export interface IProfile extends Document {
   userId: mongoose.Schema.Types.ObjectId;
   courseId: mongoose.Schema.Types.ObjectId;
+  scholarshipId: mongoose.Schema.Types.ObjectId;
   firstname?: string;
   middlename?: string;
   lastname: string;
@@ -74,10 +75,10 @@ const schema = new Schema<IProfile>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Course',
     },
-    // sectionId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Section',
-    // },
+    scholarshipId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Scholarship',
+    },
     firstname: { type: String },
     middlename: { type: String },
     lastname: { type: String },

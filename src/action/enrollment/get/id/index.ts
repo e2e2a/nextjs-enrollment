@@ -17,7 +17,7 @@ export const getEnrollmentByIdAction = async (id: any) => {
 
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-    if (session && session.user.role !== 'ADMIN' && session.user.role !== 'DEAN') return { error: 'Forbidden.', status: 403 };
+    if (session && session.user.role === 'STUDENT') return { error: 'Forbidden.', status: 403 };
 
     const isValidObjectId = mongoose.Types.ObjectId.isValid(id);
     if (!isValidObjectId) return { error: `Teacher Schedule ID ${id} is not valid.`, status: 404 };

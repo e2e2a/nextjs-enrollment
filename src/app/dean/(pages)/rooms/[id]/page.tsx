@@ -22,7 +22,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isPending, setIsPending] = useState(false);
   const [value, setValue] = React.useState('');
 
-  const { data: roomData, error } = useRoomQueryById(params.id);
+  const { data: roomData, error } = useRoomQueryById(params.id || 'e2e2a');
 
   useEffect(() => {
     if (error || !roomData) return;
@@ -92,7 +92,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className='border-0 bg-white rounded-xl min-h-[87vh]'>
               <Card className='border-0 py-5 bg-transparent'>
                 <CardHeader className='space-y-3'>
-                  <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Add a New Room</CardTitle>
+                  <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Edit Room</CardTitle>
                   <CardDescription className='text-xs sm:text-sm hidden'></CardDescription>
                   <div className='text-xs sm:text-sm'>
                     <div className=''>

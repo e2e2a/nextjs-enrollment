@@ -30,6 +30,8 @@ const modelsToInitialize = [
   'ReportGradeRecord',
   'TuitionFee',
   'SuperAdminProfile',
+  'Scholarship',
+  'StudentReceipt'
 ];
 let cached = global.mongoose;
 

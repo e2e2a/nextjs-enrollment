@@ -50,6 +50,11 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'fileStack',
     },
     {
+      title: 'Remaining Fees',
+      href: '/fee',
+      icon: 'billing',
+    },
+    {
       title: 'Receipts',
       href: '/receipts',
       icon: 'PhilippinePeso',
@@ -64,11 +69,6 @@ export const dashboardConfig: DashboardConfig = {
       href: '/',
       icon: 'page',
     },
-    // {
-    //   title: 'Billing',
-    //   href: '/dashboard/billing',
-    //   icon: 'billing',
-    // },
     // {
     //   title: 'Settings',
     //   href: '/dashboard/settings',
@@ -1379,80 +1379,108 @@ export const dashboardConfig: DashboardConfig = {
     },
   ],
   sidebarAccounting: [
+    // {
+    //   title: 'College',
+    //   i: [
+
+    //   ],
+    //   icon: 'packageSearch',
+    // },
     {
-      title: 'College',
+      title: 'Courses Fees',
       i: [
         {
-          title: 'Tuition Fee',
-          i: [
-            {
-              title: `View Courses Tuition Fee`,
-              href: '/accounting/college/tuition',
-              icon: 'eye',
-            },
-            {
-              title: 'Create Course Tuition Fee',
-              href: '/accounting/college/tuition/add',
-              icon: 'add',
-            },
-            // {
-            //   title: `View Student's Down Payments`,
-            //   href: '/accounting/college/downpayment',
-            //   icon: 'eye',
-            // },
-            // {
-            //   title: `Add Student's Down Payment`,
-            //   href: '/accounting/college/downpayment',
-            //   icon: 'add',
-            // },
-          ],
-          icon: 'packageSearch',
+          title: `View Courses Fees`,
+          href: '/accounting/college/tuition',
+          icon: 'eye',
         },
         {
-          title: 'Students Receipts',
-          i: [
-            {
-              title: 'View Students Students',
-              href: '/accounting/college/receipts',
-              icon: 'eye',
-            },
-          ],
-          icon: 'packageSearch',
+          title: 'Create Course Fee',
+          href: '/accounting/college/tuition/add',
+          icon: 'add',
         },
-        {
-          title: 'Enrolling Students',
-          i: [
-            {
-              title: 'View Enrolling Students',
-              href: '/accounting/college/enrolling',
-              icon: 'eye',
-            },
-          ],
-          icon: 'packageSearch',
-        },
+        // {
+        //   title: `View Student's Down Payments`,
+        //   href: '/accounting/college/downpayment',
+        //   icon: 'eye',
+        // },
+        // {
+        //   title: `Add Student's Down Payment`,
+        //   href: '/accounting/college/downpayment',
+        //   icon: 'add',
+        // },
+      ],
+      icon: 'packageSearch',
+    },
 
+    {
+      title: 'Enrolling Students',
+      i: [
         {
-          title: 'Enrolled Students',
-          i: [
-            {
-              title: 'View Enrolled Students',
-              href: '/accounting/college/enrolled',
-              icon: 'eye',
-            },
-          ],
-          icon: 'packageSearch',
+          title: 'View Enrolling Students',
+          href: '/accounting/college/enrolling',
+          icon: 'eye',
         },
+      ],
+      icon: 'packageSearch',
+    },
 
+    {
+      title: 'Enrolled Students',
+      i: [
         {
-          title: 'Temporary Enrolled',
-          i: [
-            {
-              title: 'View Temporary Enrolled',
-              href: '/accounting/college/temporary',
-              icon: 'eye',
-            },
-          ],
-          icon: 'packageSearch',
+          title: 'View Enrolled Students',
+          href: '/accounting/college/enrolled',
+          icon: 'eye',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Temporary Enrolled',
+      i: [
+        {
+          title: 'View Temporary Enrolled',
+          href: '/accounting/college/temporary',
+          icon: 'eye',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Students Balance',
+      i: [
+        {
+          title: 'View Students Balances',
+          href: '/accounting/college/balance',
+          icon: 'eye',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Students Receipts',
+      i: [
+        {
+          title: 'View Students Receipts',
+          href: '/accounting/college/receipts',
+          icon: 'eye',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Students Scholarships',
+      i: [
+        {
+          title: `View Student's Scholarships`,
+          href: '/accounting/college/scholarships',
+          icon: 'eye',
+        },
+        {
+          title: 'Add Student Scholarships',
+          href: '/accounting/college/scholarships/add',
+          icon: 'add',
         },
       ],
       icon: 'packageSearch',

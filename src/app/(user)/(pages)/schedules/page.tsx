@@ -92,7 +92,6 @@ const Page = () => {
               onClick={() => exportToPDF(data?.enrollment, schedule, 'schedule')}
               className='select-none focus-visible:ring-0 text-[15px] bg-none hover:bg-blue-500 text-black hover:text-neutral-100 tracking-normal font-medium font-poppins flex items-center justify-center'
             >
-              {' '}
               <Icons.download className='h-4 w-4 mr-1' /> Download
             </Button>
           </div>
@@ -173,8 +172,7 @@ const Page = () => {
               <span className='text-left sm:text-center w-full px-5 text-[16px]'>Explore our available courses and find the perfect fit for your academic journey. Click the link below to view detailed course offerings.</span>
               <Link href={'/courses'} className='hover:underline hover:text-blue-600 text-blue-500 space-y-2'>
                 <Button size={'sm'} type='button' className='w-auto flex gap-2'>
-                  {' '}
-                  View Available Course in Categories 👉{' '}
+                  View Available Course in Categories 👉
                 </Button>
               </Link>
             </CardContent>

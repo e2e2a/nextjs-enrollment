@@ -1,0 +1,286 @@
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useSession } from 'next-auth/react';
+import LoaderPage from '@/components/shared/LoaderPage';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'; // PayPal React SDK
+import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
+import { useCreateStudentReceiptMutation } from '@/lib/queries/studentReceipt/create';
+import { Icons } from '@/components/shared/Icons';
+import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+
+type IProps = {
+  enrollment: any;
+  tfData: any;
+  srData: any;
+  amountToPay: any;
+  type: string;
+  title: string;
+};
+
+const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title }: IProps) => {
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [discounted, setDiscounted] = useState(0.0);
+  const [isUploading, setIsUploading] = useState(false);
+  const [amountPayment, setAmountPayment] = useState(0.0);
+  const amountToPayDisplay = useRef(0);
+  const totalPaymentRef = useRef(0);
+  const totalTransactionFee = useRef(0);
+  const paymentMethod = useRef('');
+  const [displayPayment, setDisplayPayment] = useState(true);
+
+  const { data: esData, isError: esError } = useEnrollmentSetupQuery();
+
+  useEffect(() => {
+    if (!enrollment) return;
+    if (!tfData) return;
+    if (!srData) return;
+    if (!esData || esError) return;
+
+    if (srData && tfData) {
+      let totalAmountToPay = amountToPay;
+      if (type === 'fullPayment' && !enrollment?.profileId?.scholarshipId) totalAmountToPay = parseFloat((amountToPay - amountToPay * 0.1).toFixed(2));
+      setAmountPayment(totalAmountToPay);
+      setDiscounted(totalAmountToPay);
+      const fee = Number(totalAmountToPay) * 0.039;
+      totalTransactionFee.current = parseFloat(fee.toFixed(2));
+      const totalPayment = Number(totalAmountToPay) + Number(fee) + 15;
+      totalPaymentRef.current = parseFloat(totalPayment.toFixed(2));
+      //   totalPaymentRef.current = totalPayment;
+    }
+  }, [srData, tfData, esData, esError, enrollment, amountToPay, type]);
+
+  // Ensure that the amount is a string with two decimal places, except for certain currencies like JPY
+  const formattedAmount = (amount: number) => {
+    return amount ? amount.toFixed(2) : '0.00';
+  };
+
+  const createOrder = (data: any, actions: any) => {
+    paymentMethod.current = data.paymentSource;
+    const payment = totalPaymentRef.current;
+
+    return actions.order.create({
+      intent: 'CAPTURE',
+      purchase_units: [
+        {
+          // reference_id: 'e2e2a_1234',
+          description: 'e2e2a order-1234',
+          amount: {
+            currency_code: 'USD',
+            value: formattedAmount(payment),
+          },
+        },
+      ],
+      // payment_source: {
+      //   paypal: {},
+      // },
+      application_context: {
+        // locale: 'en-US',
+        // brand_name: 'asd',
+        // landing_page: 'billing',
+        // user_action: 'continue',
+        // supplementary_data: [
+        //   { name: 'risk_correlation_id', value: '9N8554567F903282T' },
+        //   { name: 'buyer_ipaddress', value: '109.20.212.116' },
+        //   { name: 'external_channel', value: 'WEB' },
+        // ],
+      },
+    });
+  };
+
+  const mutation = useCreateStudentReceiptMutation();
+  const onApprove = async (data: any, actions: any) => {
+    try {
+      const details = await actions.order.capture();
+      if (details.status === 'COMPLETED' || details.status === 'ON_HOLD' || details.status === 'PENDING') {
+        const receipt = {
+          captureId: details.purchase_units[0].payments.captures[0].id,
+          studentId: enrollment?.profileId?._id,
+          category: 'College',
+          orderID: details.id,
+          transactionId: details.id,
+          amount: {
+            currency_code: details.purchase_units[0].amount.currency_code,
+            value: parseFloat(details.purchase_units[0].amount.value),
+          },
+          status: details.status, // Transaction status (COMPLETED)
+          paymentMethod: paymentMethod.current,
+          createTime: new Date(details.create_time),
+          updateTime: new Date(details.update_time),
+          payer: {
+            id: details.payer.payer_id,
+            name: details.payer.name,
+            email: details.payer.email_address,
+            // address: details.purchase_units[0].address
+          },
+          taxes: {
+            fee: totalTransactionFee.current,
+            fixed: 15,
+            amount: type === 'fullPayment' && !enrollment?.profileId?.scholarshipId ? parseFloat((amountToPay - amountToPay * 0.1).toFixed(2)) : Number(amountToPay).toFixed(2),
+          },
+          paymentIntent: details.intent, // Payment intent (CAPTURE)
+          // payments: details.payment
+          type: type,
+          captureTime: new Date(details.update_time),
+        };
+
+        mutation.mutate(receipt, {
+          onSuccess: (res: any) => {
+            switch (res.status) {
+              case 200:
+              case 201:
+              case 203:
+                setIsOpen(false);
+                makeToastSucess(res.message);
+                return;
+              default:
+                makeToastError(res.error);
+                return;
+            }
+          },
+          onSettled: () => {},
+        });
+      }
+    } catch (error) {
+      console.log('error: ', error);
+      alert('Payment could not be completed. Please try again.');
+    }
+  };
+
+  return (
+    <AlertDialog open={isOpen} onOpenChange={(e) => setIsOpen(e)}>
+      <AlertDialogTrigger asChild>
+        <Button variant={'outline'} size={'sm'} className='select-none focus-visible:ring-0 text-[15px] bg-blue-500 hover:bg-blue-600 text-white tracking-normal font-medium font-poppins'>
+          <Icons.Banknote className='h-4 w-4 mr-2' />
+          {type === 'fullPayment' && 'Pay Full Payment'}
+          {type !== 'fullPayment' && type !== 'downPayment'&& type !== 'ssg' && type !== 'departmental' && 'Pay This Term'}
+          {type === 'downPayment' && 'Pay Down Payment'}
+          {type === 'departmental' && 'Make Payment'}
+          {type === 'ssg' && 'Make Payment'}
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent className='bg-white h-[75%] w-full overflow-y-scroll'>
+        <AlertDialogHeader>
+          <AlertDialogTitle className='font-semibold flex justify-between'>
+            <span className=''>STUDENT PAYMENT</span>
+            <Icons.close className='h-4 w-4 cursor-pointer' onClick={() => setIsOpen(!isOpen)} />
+          </AlertDialogTitle>
+          <div className='text-start'>
+            <span className='text-sm text-left sm:mt-10 mt-5 w-full '>
+              Dear{' '}
+              <span className='font-semibold capitalize'>
+                <span className='capitalize'>{enrollment?.profileId?.firstname ?? ''}</span> <span className='capitalize'>{enrollment?.profileId?.lastname ?? ''}</span>
+              </span>
+              ,
+            </span>
+          </div>
+          <div className=''>
+            <span className='text-sm mt-4 px-5 sm:px-10 w-full text-justify leading-relaxed'>
+              To proceed with your payment, you can use PayPal, a credit card, or a debit card. If you don&apos;t have access to these options, we kindly ask you to visit the school cashier&apos;s office at DCIT. Our friendly staff will assist you with the
+              payment process and ensure you receive any necessary documentation. For additional guidance or questions, please refer to our documentation, which can be accessed via{' '}
+              <a href='/documentation' className='text-blue-600 underline hover:text-blue-800'>
+                this link
+              </a>
+              .
+            </span>
+            <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>
+              <span className='text-[16px] font-bold text-orange-400'>Note</span>
+              <span className='text-sm text-justify'>Please be aware that the transaction fee applied to this payment is determined by PayPal. This fee is only applicable to online payments processed through PayPal.</span>
+            </div>
+          </div>
+          <AlertDialogDescription></AlertDialogDescription>
+        </AlertDialogHeader>
+        <Card className=' items-center justify-center flex border-0'>
+          <CardHeader className='space-y-3 hidden'>
+            <CardTitle className='hidden'>Waiting for Approval!</CardTitle>
+          </CardHeader>
+          <CardContent className='flex w-full drop-shadow-none shadow-none justify-center flex-col items-center border-0 rounded-lg bg-neutral-50 focus-visible:ring-0 space-y-5 px-0 mx-0'>
+            {displayPayment && (
+              <>
+                <div className='flex flex-col justify-center items-center w-full '>
+                  <div className='border p-11 rounded-lg bg-neutral-50 shadow-md drop-shadow-md'>
+                    <h1 className='w-full text-center text-2xl font-bold'>{title}</h1>
+                    <div className='grid grid-cols-1'>
+                      <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                        <div className='text-sm sm:mt-10 mt-5 w-full flex items-start'>
+                          <span className='font-bold text-nowrap'>Payment Amount:</span>
+                        </div>
+                        <div className='text-sm sm:mt-10 mt-5 w-ful flex flex-col items-end'>
+                          {/* <span className={`font-bold text-end w-full ${type === 'fullPayment' && 'line-through'}`}>₱{amountToPay}</span> */}
+                          <span className='font-bold text-end w-full text-nowrap '>
+                            <span className={`font-bold text-end w-full text-black ${type === 'fullPayment' && !enrollment?.profileId?.scholarshipId && 'line-through'}`}>₱{amountToPay}</span>
+                            {type === 'fullPayment' && !enrollment?.profileId?.scholarshipId && <span className='text-green-500'> ₱{amountPayment}(10%)</span>}
+                          </span>
+                        </div>
+                      </div>
+                      <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                        <div className='text-sm mt-5 w-full flex items-start'>
+                          <span className='font-bold text-nowrap'>Fixed Fee:</span>
+                        </div>
+                        <div className='text-sm mt-5 w-ful flex items-end'>
+                          <span className='font-bold text-end w-full'>₱15.00</span>
+                        </div>
+                      </div>
+                      <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                        <div className='text-sm mt-5 w-full flex items-start'>
+                          <span className='font-bold text-nowrap'>
+                            Transaction Rate <span className='text-xs'>(3.9%)</span>:
+                          </span>
+                        </div>
+                        <div className='text-sm mt-5 w-ful flex items-end'>
+                          <span className='font-bold text-end w-full'>₱{totalTransactionFee.current}</span>
+                        </div>
+                      </div>
+                      <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                        <div className='text-sm mt-5 w-full flex items-start'>
+                          <span className='font-bold text-nowrap'>Total Payment Amount:</span>
+                        </div>
+                        <div className='text-sm mt-5 w-ful flex items-end'>
+                          <span className='font-bold text-end w-full'>₱{totalPaymentRef.current}</span>
+                        </div>
+                      </div>
+                      {/* PayPal Button with Official SDK */}
+                      <div className='mt-10 w-full'>
+                        <PayPalScriptProvider
+                          options={{
+                            clientId: `${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string}`,
+                            currency: 'USD',
+                            // vault: true,
+                            intent: 'capture',
+                          }}
+                        >
+                          <PayPalButtons
+                            style={{ layout: 'vertical' }}
+                            createOrder={createOrder}
+                            onApprove={onApprove}
+                            onError={(err) => {
+                              // makeToastError('PayPal error');
+                            }}
+                            onCancel={() => {
+                              makeToastError('Your transaction was cancelled.');
+                            }}
+                          />
+                        </PayPalScriptProvider>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </CardContent>
+        </Card>
+        <AlertDialogFooter className='hidden'>
+          <AlertDialogCancel className='hover:bg-slate-100 focus-visible:ring-0 '>Cancel</AlertDialogCancel>
+          <AlertDialogAction type='submit' className='border rounded-lg hover:bg-slate-100 focus-visible:ring-0 '>
+            Continue
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
+
+export default SettleTermPayment;

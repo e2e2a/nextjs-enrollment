@@ -35,6 +35,7 @@ export const getAllStudentProfile = async () => {
         select: '-password',
       })
       .populate('courseId')
+      .populate('scholarshipId')
       .exec();
     return studentProfile;
   } catch (error) {
@@ -51,6 +52,7 @@ export const getStudentProfileById = async (id: any) => {
         select: '-password',
       })
       .populate('courseId')
+      .populate('scholarshipId')
       .exec();
     return studentProfile;
   } catch (error) {
@@ -67,6 +69,7 @@ export const getStudentProfileByUserId = async (userId: any) => {
         select: '-password',
       })
       .populate('courseId')
+      .populate('scholarshipId')
       .exec();
     return studentProfile;
   } catch (error) {

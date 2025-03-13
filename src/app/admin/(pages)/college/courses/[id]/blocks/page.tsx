@@ -9,7 +9,7 @@ import { useBlockCourseQueryByCourseId } from '@/lib/queries/blocks/get/courseId
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error } = useBlockCourseQueryByCourseId(params.id);
+  const { data, isLoading, error } = useBlockCourseQueryByCourseId(params.id || 'e2e2a');
 
   useEffect(() => {
     if (error || !data) return setIsError(true);

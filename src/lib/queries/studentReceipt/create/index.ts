@@ -1,7 +1,7 @@
 import { createStudentReceiptAction } from '@/action/studentReceipt/create';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export const useStudentReceiptMutation = () => {
+export const useCreateStudentReceiptMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, any>({
     mutationFn: async (data) => createStudentReceiptAction(data),

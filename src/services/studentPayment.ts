@@ -1,5 +1,5 @@
 'use server';
-import StudentReceipt from '@/models/StudentPayments';
+import StudentReceipt from '@/models/StudentReceipt';
 
 export const createStudentReceipt = async (data: any) => {
   try {
@@ -35,6 +35,16 @@ export const getStudentReceiptByCategory = async (category: any) => {
 export const getStudentReceiptById = async (id: any) => {
   try {
     const sr = await StudentReceipt.findById(id).populate('studentId').exec();
+    return sr;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const getStudentReceiptByStudentIdAndSchoolYear = async (studentId: any, schoolYear: string) => {
+  try {
+    const sr = await StudentReceipt.find({ studentId, schoolYear }).populate('studentId').exec();
     return sr;
   } catch (error) {
     console.log(error);

@@ -5,6 +5,8 @@ export interface ITuitionFee extends Document {
   courseId: mongoose.Schema.Types.ObjectId;
   ratePerUnit: string;
   ratePerLab: string;
+  departmentalFee: string;
+  ssgFee: string;
   cwtsOrNstpFee: string;
   downPayment: string;
   regOrMisc: any;
@@ -19,6 +21,8 @@ const schema = new Schema<ITuitionFee>(
     },
     ratePerUnit: { type: String },
     ratePerLab: { type: String },
+    departmentalFee: { type: String },
+    ssgFee: { type: String },
     cwtsOrNstpFee: { type: String },
     downPayment: { type: String },
     regOrMisc: [

@@ -39,7 +39,8 @@ export const getNotificationBySessionIdAction = async (type: string, get?: numbe
       for (let notif of notifications) {
         // notif.to = { ...notif.to, ...toProfile.profile };
         if (notif.from) {
-          const fromProfile = await getToProfile(session);
+          console.log('');
+          const fromProfile = await getToProfile(notif.from);
           notif.from = { ...notif.from, ...fromProfile.profile };
         } else {
           notif.from = { ...notif.from, type: 'Admin' };
@@ -63,21 +64,21 @@ export const getNotificationBySessionIdAction = async (type: string, get?: numbe
 const getToProfile = async (session: any): Promise<any> => {
   return tryCatch(async () => {
     let profile;
-    switch (session.user.role) {
+    switch (session.role) {
       case 'STUDENT':
-        profile = await StudentProfile.findOne({ userId: session.user._id }).select('firstname middlename lastname extensionName');
+        profile = await StudentProfile.findOne({ userId: session._id }).select('firstname middlename lastname extensionName');
         break;
       case 'TEACHER':
-        profile = await TeacherProfile.findOne({ userId: session.user._id }).select('firstname middlename lastname extensionName');
+        profile = await TeacherProfile.findOne({ userId: session._id }).select('firstname middlename lastname extensionName');
         break;
       case 'DEAN':
-        profile = await DeanProfile.findOne({ userId: session.user._id }).select('firstname middlename lastname extensionName');
+        profile = await DeanProfile.findOne({ userId: session._id }).select('firstname middlename lastname extensionName');
         break;
       case 'ADMIN':
-        profile = await AdminProfile.findOne({ userId: session.user._id }).select('firstname middlename lastname extensionName');
+        profile = await AdminProfile.findOne({ userId: session._id }).select('firstname middlename lastname extensionName');
         break;
       case 'ACCOUNTING':
-        profile = await AccountingProfile.findOne({ userId: session.user._id }).select('firstname middlename lastname extensionName');
+        profile = await AccountingProfile.findOne({ userId: session._id }).select('firstname middlename lastname extensionName');
         break;
       default:
         return { error: 'Forbidden.', status: 403 };
