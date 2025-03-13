@@ -76,32 +76,32 @@ export interface IStudentReceipt extends Document {
 
 const schema = new Schema<IStudentReceipt>(
   {
-    captureId: { type: String, required: true },
-    orderID: { type: String, required: true },
-    category: { type: String, required: true },
-    studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'StudentProfile', required: true },
-    transactionId: { type: String, required: true },
+    captureId: { type: String },
+    orderID: { type: String, unique: false },
+    category: { type: String },
+    studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'StudentProfile' },
+    transactionId: { type: String },
     amount: {
-      currency_code: { type: String, required: true },
-      value: { type: Number, required: true },
+      currency_code: { type: String },
+      value: { type: Number },
     },
-    status: { type: String, required: true },
+    status: { type: String },
     paymentMethod: { type: String },
     payment_source: {
       paypal: {
-        email_address: { type: String},
-        account_id: { type: String},
-        account_status: { type: String},
+        email_address: { type: String },
+        account_id: { type: String },
+        account_status: { type: String },
         name: {
-          given_name: { type: String},
-          surname: { type: String},
+          given_name: { type: String },
+          surname: { type: String },
         },
         address: {
-          country_code: { type: String},
+          country_code: { type: String },
         },
       },
     },
-    createTime: { type: Date, required: true },
+    createTime: { type: Date },
     updateTime: { type: Date },
     payer: {
       id: { type: String },
@@ -139,7 +139,7 @@ const schema = new Schema<IStudentReceipt>(
       fixed: { type: String },
       amount: { type: String },
     },
-    type: { type: String, required: true }, // Type of payment (e.g., 'DownPayment', 'FullPayment')
+    type: { type: String }, // Type of payment (e.g., 'DownPayment', 'FullPayment')
     captureTime: { type: Date },
     errorDetails: {
       message: { type: String },

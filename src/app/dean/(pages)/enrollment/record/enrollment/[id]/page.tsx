@@ -12,7 +12,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [schedule, setSchedule] = useState([]);
-  const { data, isLoading, error: isEnError } = useEnrollmentRecordQueryById(params.id);
+  const { data, isLoading, error: isEnError } = useEnrollmentRecordQueryById(params.id || 'e2e2a');
 
   useEffect(() => {
     if (isEnError || !data) return;

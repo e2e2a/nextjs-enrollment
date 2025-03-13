@@ -8,11 +8,14 @@ import LoaderPage from '@/components/shared/LoaderPage';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'; // PayPal React SDK
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { useStudentReceiptMutation } from '@/lib/queries/studentReceipt/create';
+import { useCreateStudentReceiptMutation } from '@/lib/queries/studentReceipt/create';
 import { useStudentReceiptQueryByUserId } from '@/lib/queries/studentReceipt/get/userId';
 import { useTuitionFeeQueryByCourseId } from '@/lib/queries/tuitionFee/get/courseId';
 import { Icons } from '@/components/shared/Icons';
 import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 type IProps = {
   enrollment: any;
@@ -20,19 +23,22 @@ type IProps = {
 
 const Step5 = ({ enrollment }: IProps) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
+  const [type, setType] = useState('downPayment');
+  const [showCwtsOrNstp, setShowCwtsOrNstp] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [downPayment, setDownPayment] = useState(0);
-  const dp = useRef(0);
+  const [amountToPay, setAmountToPay] = useState(0);
+  const [amountDiscountedToPay, setAmountDiscountedToPay] = useState(0);
+  const payment = useRef(0);
   const totalPaymentRef = useRef(0);
   const totalTransactionFee = useRef(0);
   const paymentMethod = useRef('');
   const [displayPayment, setDisplayPayment] = useState(true);
 
   const { data: s } = useSession();
-  const { data: esData, isLoading: esLoading, isError: esError } = useEnrollmentSetupQuery();
-  const { data: srData, isLoading: srLoading, error: srError } = useStudentReceiptQueryByUserId(s?.user.id as string, esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear);
-  const { data: pData, isLoading: PLoading, error: pError } = useProfileQueryBySessionId();
-  const { data: tfData, isLoading: tfLoading, error: tfError } = useTuitionFeeQueryByCourseId(pData?.profile.courseId._id as string);
+  const { data: esData, isError: esError } = useEnrollmentSetupQuery();
+  const { data: srData, error: srError } = useStudentReceiptQueryByUserId(s?.user.id as string, esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear);
+  const { data: pData, error: pError } = useProfileQueryBySessionId();
+  const { data: tfData, error: tfError } = useTuitionFeeQueryByCourseId(pData?.profile.courseId._id as string);
 
   useEffect(() => {
     if (!enrollment) return;
@@ -40,18 +46,54 @@ const Step5 = ({ enrollment }: IProps) => {
     if (!tfData || tfError) return;
     if (srError || !srData) return;
     if (pError || !pData) return;
-
-    if (pData && srData && pData.profile && tfData && tfData.tFee) {
-      setDownPayment(tfData.tFee.downPayment);
-      dp.current = tfData?.tFee?.downPayment;
-      const fee = Number(tfData.tFee.downPayment) * 0.039;
-      totalTransactionFee.current = parseFloat(fee.toFixed(2));
-      const totalPayment = Number(tfData.tFee.downPayment) + Number(fee) + 15;
-      totalPaymentRef.current = parseFloat(totalPayment.toFixed(2));
-      totalPaymentRef.current = totalPayment;
-      if (srData.studentReceipt && srData.studentReceipt.length > 0) {
+    setAmountToPay(0);
+    if (pData && srData && pData.profile && tfData && tfData) {
+      setAmountToPay(tfData?.tFee?.downPayment);
+      if (type.toLowerCase() === 'downpayment') {
+        payment.current = tfData?.tFee?.downPayment;
+        const fee = Number(tfData?.tFee?.downPayment) * 0.039;
+        totalTransactionFee.current = parseFloat(fee.toFixed(2));
+        const totalPayment = Number(tfData?.tFee?.downPayment) + Number(fee) + 15;
+        totalPaymentRef.current = parseFloat(totalPayment.toFixed(2));
+      }
+      if (type.toLowerCase() === 'fullpayment') {
+        const lab = enrollment.studentSubjects.reduce((acc: number, subjects: any) => acc + Number(subjects?.teacherScheduleId?.subjectId?.lab), 0);
+        const lec = enrollment.studentSubjects.reduce((acc: number, subjects: any) => acc + Number(subjects?.teacherScheduleId?.subjectId?.lec), 0);
+        let addcwtsOrNstpFee = false;
+        const cwtsOrNstpFee = Number(tfData?.tFee?.cwtsOrNstpFee) || 0;
+        const aFormatted = parseFloat((lab * tfData?.tFee?.ratePerLab).toFixed(2));
+        const bFormatted = parseFloat((lec * tfData?.tFee?.ratePerUnit).toFixed(2));
+        const cFormatted = parseFloat(tfData?.tFee?.regOrMisc.reduce((acc: number, tFee: any) => acc + Number(tFee.amount), 0).toFixed(2));
+        const dFormatted = Number(tfData?.tFee?.downPayment || 0);
+        const a = bFormatted + dFormatted;
+        const d = enrollment.studentSubjects.find((sub: any) => {
+          if (
+            sub?.teacherScheduleId?.subjectId.subjectCode.trim().toLowerCase() === 'cwts' ||
+            sub?.teacherScheduleId?.subjectId.subjectCode.trim().toLowerCase() === 'nstp' ||
+            sub?.teacherScheduleId?.subjectId.subjectCode.trim().toLowerCase() === 'nstp1' ||
+            sub?.teacherScheduleId?.subjectId.subjectCode.trim().toLowerCase() === 'nstp2' ||
+            sub?.teacherScheduleId?.subjectId.subjectCode.trim().toLowerCase() === 'cwts1' ||
+            sub?.teacherScheduleId?.subjectId.subjectCode.trim().toLowerCase() === 'cwts2'
+          ) {
+            setShowCwtsOrNstp(true);
+            addcwtsOrNstpFee = true;
+            return true;
+          }
+          return false;
+        });
+        const totalAmount = addcwtsOrNstpFee ? aFormatted + a + cFormatted + cwtsOrNstpFee : aFormatted + a + cFormatted;
+        setAmountToPay(parseFloat(totalAmount.toFixed(2)));
+        const formattedTotal = parseFloat((totalAmount - totalAmount * 0.1).toFixed(2)); // Final formatting
+        payment.current = formattedTotal;
+        setAmountDiscountedToPay(formattedTotal);
+        const fee = Number(formattedTotal) * 0.039;
+        totalTransactionFee.current = parseFloat(fee.toFixed(2));
+        const totalPayment = Number(formattedTotal) + Number(fee) + 15;
+        totalPaymentRef.current = parseFloat(totalPayment.toFixed(2));
+      }
+      if (srData?.studentReceipt && srData?.studentReceipt.length > 0) {
         const a = async () => {
-          const b = await srData.studentReceipt.filter((sr: any) => sr.type === 'DownPayment');
+          const b = await srData.studentReceipt.filter((sr: any) => sr.type.toLowerCase === 'downpayment');
           if (b && b.length === 0) return false;
 
           return b;
@@ -76,29 +118,28 @@ const Step5 = ({ enrollment }: IProps) => {
         return;
       } else {
         setDisplayPayment(true);
-        setIsPageLoading(false);
-        return;
       }
+      setIsPageLoading(false);
+      return;
     }
-  }, [pData, pError, srData, srError, tfData, tfError, esData, esError, enrollment]);
+  }, [pData, pError, srData, srError, tfData, tfError, esData, esError, enrollment, type]);
 
-  // Ensure that the amount is a string with two decimal places, except for certain currencies like JPY
   const formattedAmount = (amount: number) => {
-    return amount ? amount.toFixed(2) : '1.00';
+    return amount ? amount.toFixed(2) : '0.00';
   };
 
   const createOrder = (data: any, actions: any) => {
     paymentMethod.current = data.paymentSource;
     const payment = totalPaymentRef.current;
     return actions.order.create({
-      intent: 'CAPTURE', // Add intent: 'CAPTURE'
+      intent: 'CAPTURE',
       purchase_units: [
         {
           // reference_id: 'e2e2a_1234',
           description: 'e2e2a order-1234',
           amount: {
-            currency_code: 'USD', // Add the currency code
-            value: formattedAmount(payment), // The formatted amount
+            currency_code: 'USD',
+            value: formattedAmount(payment),
           },
         },
       ],
@@ -119,7 +160,7 @@ const Step5 = ({ enrollment }: IProps) => {
     });
   };
 
-  const mutation = useStudentReceiptMutation();
+  const mutation = useCreateStudentReceiptMutation();
   const onApprove = async (data: any, actions: any) => {
     try {
       const details = await actions.order.capture();
@@ -139,15 +180,15 @@ const Step5 = ({ enrollment }: IProps) => {
           createTime: new Date(details.create_time),
           updateTime: new Date(details.update_time),
           payer: {
-            id: details.payer.payer_id, // Payer ID
-            name: details.payer.name, // Payer name (given_name, surname)
-            email: details.payer.email_address, // Payer email
+            id: details.payer.payer_id,
+            name: details.payer.name,
+            email: details.payer.email_address,
             // address: details.purchase_units[0].address
           },
           taxes: {
             fee: totalTransactionFee.current,
             fixed: 15,
-            amount: dp.current,
+            amount: payment.current,
           },
           paymentIntent: details.intent, // Payment intent (CAPTURE)
           // payments: details.payment
@@ -172,7 +213,6 @@ const Step5 = ({ enrollment }: IProps) => {
         });
       }
     } catch (error) {
-      // console.error('Error capturing order:', error);
       alert('Payment could not be completed. Please try again.');
     }
   };
@@ -189,127 +229,180 @@ const Step5 = ({ enrollment }: IProps) => {
               <LoaderPage />
             ) : (
               <>
-                <div className=' mt-3'>
-                  <h1 className='text-center text-xl sm:text-3xl font-semibold text-black'>STUDENT PAYMENT</h1>
-                </div>
-                <div className='w-full flex justify-center items-center md:mt-4 md:mb-0'>
-                  <Icons.hourglass className='md:h-14 fill-gray-100 md:w-14 h-10 w-10 my-3 stroke-green-400 animate-spin' style={{ animationDuration: '6s' }} />
-                </div>
-                {/* <h1 className='text-center text-xl sm:text-3xl font-bold font-poppins text-green-400'>Student Payment!</h1> */}
-                <span className='text-sm text-left sm:mt-10 mt-5 w-full px-5 sm:px-10'>
-                  Dear{' '}
-                  <span className='font-semibold capitalize'>
-                    <span className='capitalize'>{enrollment?.profileId?.firstname ?? ''}</span> <span className='capitalize'>{enrollment?.profileId?.lastname ?? ''}</span>
-                  </span>
-                  ,
-                </span>
-                {displayPayment ? (
-                  <span className='text-sm mt-4 px-5 sm:px-10 w-full text-justify leading-relaxed'>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To proceed with your payment, you can use PayPal, a credit card, or a debit card. If you don&apos;t have access to these options, we kindly ask you to visit the school cashier&apos;s office at DCIT. Our
-                    friendly staff will assist you with the payment process and ensure you receive any necessary documentation. For additional guidance or questions, please refer to our documentation, which can be accessed via{' '}
-                    <a href='/documentation' className='text-blue-600 underline hover:text-blue-800'>
-                      this link
-                    </a>
-                    .
-                  </span>
-                ) : (
-                  <span className='text-sm mt-4 px-5 sm:px-10 w-full text-justify leading-relaxed'>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are pleased to inform you that your payment has been successfully received. Thank you for completing this step. If you have any further questions or need assistance, feel free to reach out to our
-                    support team or visit the school cashier&apos;s office.
-                  </span>
+                {!tfData?.tFee && (
+                  <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
+                    <Card className={`min-h-[35vh] my-[10%] shadow-none drop-shadow-none items-center justify-center flex border-0`}>
+                      <CardHeader className='space-y-3 hidden'>
+                        <CardTitle className=''>
+                          <div className='flex flex-col justify-center gap-y-1 items-center'>
+                            <div className=''>
+                              <Image src={'/images/logo1.png'} className='w-auto rounded-full' priority width={65} height={65} alt='nothing to say' />
+                            </div>
+                            <div className='text-center lg:text-left font-poppins'>No Payment Recorded Yet.</div>
+                          </div>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className='flex w-full justify-center py-5 flex-col rounded-lg shadow-sm bg-white items-center border focus-visible:ring-0 space-y-5 px-0 mt-7'>
+                        <div className='flex flex-col justify-center gap-y-1 items-center'>
+                          <div className=''>
+                            <Image src={'/images/logo1.png'} className='w-auto rounded-full' priority width={100} height={100} alt='nothing to say' />
+                          </div>
+                          <div className='text-center text-xl sm:text-2xl font-semibold tracking-tight'>No Payment Recorded Yet.</div>
+                        </div>
+                        <span className='text-left sm:text-center w-full px-5 text-[16px]'>
+                          The payment for this course has not been processed yet. The cashier is currently handling your transaction, and it will be updated soon. Please be patient, as this process does not take long.
+                        </span>
+                      </CardContent>
+                    </Card>
+                  </div>
+                )}
+                {tfData.tFee && (
+                  <>
+                    <div className=' mt-3'>
+                      <h1 className='text-center text-xl sm:text-3xl font-semibold text-black'>STUDENT PAYMENT</h1>
+                    </div>
+                    <div className='w-full flex justify-center items-center md:mt-4 md:mb-0'>
+                      <Icons.hourglass className='md:h-14 fill-gray-100 md:w-14 h-10 w-10 my-3 stroke-green-400 animate-spin' style={{ animationDuration: '6s' }} />
+                    </div>
+                    <span className='text-sm text-left sm:mt-10 mt-5 w-full px-5 sm:px-10'>
+                      Dear{' '}
+                      <span className='font-semibold capitalize'>
+                        <span className='capitalize'>{enrollment?.profileId?.firstname ?? ''}</span> <span className='capitalize'>{enrollment?.profileId?.lastname ?? ''}</span>
+                      </span>
+                      ,
+                    </span>
+                    {displayPayment ? (
+                      <span className='text-sm mt-4 px-5 sm:px-10 w-full text-justify leading-relaxed'>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To proceed with your payment, you can use PayPal, a credit card, or a debit card. If you don&apos;t have access to these options, we kindly ask you to visit the school cashier&apos;s office at DCIT.
+                        Our friendly staff will assist you with the payment process and ensure you receive any necessary documentation. For additional guidance or questions, please refer to our documentation, which can be accessed via{' '}
+                        <a href='/documentation' className='text-blue-600 underline hover:text-blue-800'>
+                          this link
+                        </a>
+                        .
+                      </span>
+                    ) : (
+                      <span className='text-sm mt-4 px-5 sm:px-10 w-full text-justify leading-relaxed'>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are pleased to inform you that your payment has been successfully received. Thank you for completing this step. If you have any further questions or need assistance, feel free to reach out to our
+                        support team or visit the school cashier&apos;s office.
+                      </span>
+                    )}
+                    <div className='px-5 w-full sm:px-1 sm:w-1/2 flex justify-center flex-col mt-10'>
+                      <h1 className=''>
+                        <span className='text-[16px] font-bold text-orange-400'>Note</span>
+                      </h1>
+                      <span className='text-sm text-justify'>Please be aware that the transaction fee applied to this payment is determined by PayPal. This fee is only applicable to online payments processed through PayPal.</span>
+                    </div>
+                    <div className='flex flex-col justify-center items-center w-full '>
+                      <div className='border p-11 rounded-lg bg-neutral-50 shadow-md drop-shadow-md'>
+                        <h1 className='w-full text-center text-2xl font-bold'>Payment</h1>
+                        <div className='grid grid-cols-1'>
+                          <div className='text-sm sm:mt-10 mt-5 w-full flex items-start'>
+                            <div className='w-full flex justify-center items-center'>
+                              <div className='relative bg-slate-50 rounded-lg w-full'>
+                                <Select onValueChange={(e) => setType(e)} value={type}>
+                                  <SelectTrigger id={'type'} className='w-full pt-10 pb-4  capitalize text-black rounded-lg focus:border-gray-400 ring-0 focus:ring-0 '>
+                                    <SelectValue placeholder={'Select Type of Payment'} />
+                                  </SelectTrigger>
+                                  <SelectContent className='bg-white border-gray-300'>
+                                    <SelectGroup>
+                                      <SelectItem value={'downPayment'} className='capitalize'>
+                                        Down Payment
+                                      </SelectItem>
+                                      <SelectItem value={'fullPayment'} className='capitalize'>
+                                        Full Payment
+                                      </SelectItem>
+                                    </SelectGroup>
+                                  </SelectContent>
+                                </Select>
+                                <label
+                                  htmlFor='type'
+                                  className={`pointer-events-none absolute cursor-text text-md select-none duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5`}
+                                >
+                                  Type of Payment
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                          <div className='flex flex-row w-full gap-28'>
+                            <div className='text-sm sm:mt-10 mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>Payment Amount:</span>
+                            </div>
+                            <div className='text-sm sm:mt-10 mt-5 w-ful flex items-end gap-2'>
+                              <span className={`font-bold text-end w-full text-black ${type === 'fullPayment' && 'line-through'}`}>₱{amountToPay} </span>
+                              {type === 'fullPayment' && <span className='text-green-500'> ₱{amountDiscountedToPay}(10%)</span>}
+                            </div>
+                          </div>
+                          <div className='flex flex-row w-full gap-28'>
+                            <div className='text-sm mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>Fixed Fee:</span>
+                            </div>
+                            <div className='text-sm mt-5 w-ful flex items-end'>
+                              <span className='font-bold text-end w-full'>₱15.00</span>
+                            </div>
+                          </div>
+                          <div className='flex flex-row w-full gap-28'>
+                            <div className='text-sm mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>
+                                Transaction Rate <span className='text-xs'>(3.9%)</span>:
+                              </span>
+                            </div>
+                            <div className='text-sm mt-5 w-ful flex items-end'>
+                              <span className='font-bold text-end w-full'>₱{totalTransactionFee.current}</span>
+                            </div>
+                          </div>
+                          <div className='flex flex-row w-full gap-28'>
+                            <div className='text-sm mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>Total Payment Amount:</span>
+                            </div>
+                            <div className='text-sm mt-5 w-ful flex items-end'>
+                              <span className='font-bold text-end w-full'>₱{totalPaymentRef.current.toFixed(2)}</span>
+                            </div>
+                          </div>
+                          {/* PayPal Button with Official SDK */}
+                          <div className='mt-10 w-full'>
+                            <PayPalScriptProvider
+                              options={{
+                                clientId: `${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string}`,
+                                currency: 'USD', // Ensure the currency is set here
+                                // vault: true,
+                                intent: 'capture', // Add the intent
+                              }}
+                            >
+                              <PayPalButtons
+                                style={{ layout: 'vertical' }}
+                                createOrder={createOrder}
+                                onApprove={onApprove}
+                                onError={(err) => {
+                                  // console.error('PayPal error:', err);
+                                  makeToastError('PayPal error');
+                                }}
+                                onCancel={() => {
+                                  makeToastError('Your transaction was cancelled.');
+                                }}
+                              />
+                            </PayPalScriptProvider>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className='flex flex-col w-full mt-10'>
+                      <span className='text-left sm:text-center w-full px-5 sm:px-10 mt-5 sm:mt-10 text-sm text-muted-foreground'>
+                        <span className=' relative sm:hidden'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        This action cannot be cancelled while its being on process, this will only be undone by the administrator. For further information, please visit our support team at{' '}
+                        <a href='/support' className='text-blue-600 underline'>
+                          this link
+                        </a>
+                        , or check out our FAQ section for common inquiries, if you want to stop enrolling please contact us{' '}
+                        <Link href={''} className='hover:underline hover:text-blue-600 text-blue-500'>
+                          e2e2a@mondrey.dev
+                        </Link>
+                        or visit our office for assistance.
+                      </span>
+                    </div>
+                  </>
                 )}
               </>
             )}
-          </div>
-          {displayPayment && (
-            <>
-              <div className='px-5 w-full sm:px-1 sm:w-1/2 flex justify-center flex-col'>
-                <h1 className=''>
-                  <span className='text-[16px] font-bold text-orange-400'>Note</span>
-                </h1>
-                <span className='text-sm text-justify'>Please be aware that the transaction fee applied to this payment is determined by PayPal. This fee is only applicable to online payments processed through PayPal.</span>
-              </div>
-              <div className='flex flex-col justify-center items-center w-full '>
-                <div className='border p-11 rounded-lg bg-neutral-50 shadow-md drop-shadow-md'>
-                  <h1 className='w-full text-center text-2xl font-bold'>Down Payment</h1>
-                  <div className='grid grid-cols-1'>
-                    <div className='flex flex-row w-full gap-28'>
-                      <div className='text-sm sm:mt-10 mt-5 w-full flex items-start'>
-                        <span className='font-bold text-nowrap'>Payment Amount:</span>
-                      </div>
-                      <div className='text-sm sm:mt-10 mt-5 w-ful flex items-end'>
-                        <span className='font-bold text-end w-full'>₱{downPayment}</span>
-                      </div>
-                    </div>
-                    <div className='flex flex-row w-full gap-28'>
-                      <div className='text-sm mt-5 w-full flex items-start'>
-                        <span className='font-bold text-nowrap'>Fixed Fee:</span>
-                      </div>
-                      <div className='text-sm mt-5 w-ful flex items-end'>
-                        <span className='font-bold text-end w-full'>₱15.00</span>
-                      </div>
-                    </div>
-                    <div className='flex flex-row w-full gap-28'>
-                      <div className='text-sm mt-5 w-full flex items-start'>
-                        <span className='font-bold text-nowrap'>
-                          Transaction Rate <span className='text-xs'>(3.9%)</span>:
-                        </span>
-                      </div>
-                      <div className='text-sm mt-5 w-ful flex items-end'>
-                        <span className='font-bold text-end w-full'>₱{totalTransactionFee.current}</span>
-                      </div>
-                    </div>
-                    <div className='flex flex-row w-full gap-28'>
-                      <div className='text-sm mt-5 w-full flex items-start'>
-                        <span className='font-bold text-nowrap'>Total Payment Amount:</span>
-                      </div>
-                      <div className='text-sm mt-5 w-ful flex items-end'>
-                        <span className='font-bold text-end w-full'>₱{totalPaymentRef.current}</span>
-                      </div>
-                    </div>
-                    {/* PayPal Button with Official SDK */}
-                    <div className='mt-10 w-full'>
-                      <PayPalScriptProvider
-                        options={{
-                          clientId: `${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string}`,
-                          currency: 'USD', // Ensure the currency is set here
-                          // vault: true,
-                          intent: 'capture', // Add the intent
-                        }}
-                      >
-                        <PayPalButtons
-                          style={{ layout: 'vertical' }}
-                          createOrder={createOrder}
-                          onApprove={onApprove}
-                          onError={(err) => {
-                            // console.error('PayPal error:', err);
-                            makeToastError('PayPal error');
-                          }}
-                          onCancel={() => {
-                            makeToastError('Your transaction was cancelled.');
-                          }}
-                        />
-                      </PayPalScriptProvider>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-
-          <div className='flex flex-col w-full mt-20'>
-            <span className='text-left sm:text-center w-full px-5 sm:px-10 mt-5 sm:mt-10 text-sm text-muted-foreground'>
-              <span className=' relative sm:hidden'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              This action cannot be cancelled while its being on process, this will only be undone by the administrator. For further information, please visit our support team at{' '}
-              <a href='/support' className='text-blue-600 underline'>
-                this link
-              </a>
-              , or check out our FAQ section for common inquiries, if you want to stop enrolling please contact us{' '}
-              <Link href={''} className='hover:underline hover:text-blue-600 text-blue-500'>
-                e2e2a@mondrey.dev{' '}
-              </Link>
-              or visit our office for assistance.
-            </span>
           </div>
         </CardContent>
       </Card>

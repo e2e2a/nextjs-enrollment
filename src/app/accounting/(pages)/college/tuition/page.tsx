@@ -20,7 +20,7 @@ interface ITuitionFee {
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error } = useTuitionFeeQueryByCategory('College');
+  const { data, error } = useTuitionFeeQueryByCategory('College');
 
   useEffect(() => {
     if (error || !data) return setIsError(true);

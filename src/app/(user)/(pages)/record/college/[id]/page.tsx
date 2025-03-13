@@ -11,7 +11,7 @@ import { Icons } from '@/components/shared/Icons';
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [schedule, setSchedule] = useState([]);
-  const { data, error: isEnError } = useEnrollmentRecordQueryById(params.id);
+  const { data, error: isEnError } = useEnrollmentRecordQueryById(params.id || 'e2e2a');
 
   useEffect(() => {
     if (isEnError || !data) return;

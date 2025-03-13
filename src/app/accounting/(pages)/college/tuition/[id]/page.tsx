@@ -21,12 +21,11 @@ import { useUpdateTuitionFeeMutation } from '@/lib/queries/tuitionFee/update';
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPending, setIsPending] = useState(false);
   const [isNotEditable, setIsNotEditable] = useState(true);
-  const [total, setTotal] = useState(0);
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
   const [regMiscRows, setRegMiscRows] = useState<any[]>([{ type: '', name: '', amount: '' }]);
 
-  const { data: tfData, isLoading: load, error: isTFError } = useTuitionFeeQueryById(params.id);
-  const { data: cData, isLoading, error } = useCourseQueryByCategory('College');
+  const { data: tfData, error: isTFError } = useTuitionFeeQueryById(params.id);
+  const { data: cData, error } = useCourseQueryByCategory('College');
 
   useEffect(() => {
     if (error || !cData) return;
@@ -43,30 +42,22 @@ const Page = ({ params }: { params: { id: string } }) => {
   const form = useForm<z.infer<typeof TuitionFeeValidator>>({
     resolver: zodResolver(TuitionFeeValidator),
     defaultValues: {
-      courseCode: '',
-      ratePerUnit: '',
-      ratePerLab: '',
-      cwtsOrNstpFee: '',
-      downPayment: ``,
+      courseCode: '0.00',
+      ratePerUnit: '0.00',
+      ratePerLab: '0.00',
+      departmentalFee: '0.00',
+      ssgFee: '0.00',
+      cwtsOrNstpFee: '0.00',
+      downPayment: `0.00`,
     },
   });
 
   useEffect(() => {
-    // Initialize a to calculate non-iterable fees
-    const a = Number(tfData?.tFee?.ratePerUnit || 0) + Number(tfData?.tFee?.ratePerLab || 0) + Number(tfData?.tFee?.cwtsOrNstpFee || 0) + Number(tfData?.tFee?.downPayment || 0);
-
-    let b = 0;
-    if (Array.isArray(tfData?.tFee?.regOrMisc) && tfData?.tFee?.regOrMisc.length > 0) {
-      for (const reg of tfData.tFee.regOrMisc) {
-        b += Number(reg.amount || 0);
-      }
-    }
-    const c = (a + b).toFixed(2);
-    setTotal(Number(c));
-
     form.setValue('courseCode', tfData?.tFee?.courseId?.courseCode);
     form.setValue('ratePerUnit', tfData?.tFee?.ratePerUnit);
     form.setValue('ratePerLab', tfData?.tFee?.ratePerLab);
+    form.setValue('departmentalFee', tfData?.tFee?.departmentalFee);
+    form.setValue('ssgFee', tfData?.tFee?.ssgFee);
     form.setValue('cwtsOrNstpFee', tfData?.tFee?.cwtsOrNstpFee);
     form.setValue('downPayment', tfData?.tFee?.downPayment);
   }, [form, tfData, isNotEditable]);
@@ -81,8 +72,8 @@ const Page = ({ params }: { params: { id: string } }) => {
   };
 
   const onSubmit: SubmitHandler<z.infer<typeof TuitionFeeValidator>> = async (data) => {
-    setIsPending(true);
     if (regMiscRows.length === 0) return makeToastError('Please Provide Reg/Misc Fee');
+    setIsPending(true);
     for (const row of regMiscRows) {
       const regex = /^\d+(\.\d{1,2})?$/;
       if (!row.name || !row.amount) {
@@ -132,14 +123,14 @@ const Page = ({ params }: { params: { id: string } }) => {
         <div className='border-0 bg-white rounded-xl min-h-[87vh]'>
           <Card className='border-0 py-5 bg-transparent'>
             <CardHeader className='space-y-3'>
-              <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Add a New Room</CardTitle>
-              <CardDescription className='text-xs sm:text-sm hidden'></CardDescription>
-              <div className='text-xs sm:text-sm'>
+              <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Course Fee</CardTitle>
+              <CardDescription className='text-xs sm:text-sm'>Department: {tfData?.tFee?.courseId?.name}</CardDescription>
+              {/* <div className='text-xs sm:text-sm'>
                 <div className=''>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To create a new Course Tuition Fee, this section allows you to define the tuition rates, lab fees, CWTS/NSTP fees, and any other related charges for a specific course. Providing this information will ensure
                   accurate billing and management of course fees for students.
                 </div>
-              </div>
+              </div> */}
             </CardHeader>
             <Form {...form}>
               <form method='post' onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-4'>
@@ -157,16 +148,18 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <Input name={'cwtsOrNstpFee'} type={'text'} isNotEditable={isNotEditable} form={form} label={'CWTS/NSTP Fee:'} classNameInput={'uppercase'} />
                     <Input name={'downPayment'} type={'text'} isNotEditable={isNotEditable} form={form} label={'Down Payment:'} classNameInput={''} />
                   </div>
+                  <div className='flex flex-col items-start w-full justify-center mt-10 mb-10'>
+                    <h1 className='text-lg font-semibold xs:text-xl sm:text-2xl tracking-tight w-full text-start uppercase'>1 Year Payment</h1>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 w-full'>
+                      <Input name={'departmentalFee'} type={'text'} isNotEditable={isNotEditable} form={form} label={'Departmental Fee:'} classNameInput={'uppercase'} />
+                      <Input name={'ssgFee'} type={'text'} isNotEditable={isNotEditable} form={form} label={'SSG Fee:'} classNameInput={''} />
+                    </div>
+                  </div>
                 </CardContent>
 
                 <RegOrMisc isNotEditable={isNotEditable} regMiscRows={regMiscRows} setRegMiscRows={setRegMiscRows} />
                 <CardFooter className=''>
-                  {isNotEditable ? (
-                    <div className=''>
-                      <span className='font-bold'>Total Payment:</span>
-                      <span>₱ {total.toFixed(2)}</span>
-                    </div>
-                  ) : (
+                  {!isNotEditable && (
                     <div className='flex w-full justify-center md:justify-end items-center mt-4'>
                       <Button type='submit' variant={'destructive'} disabled={isPending} className='bg-blue-500 hover:bg-blue-700 text-white font-semibold tracking-wide'>
                         {isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Submit'}

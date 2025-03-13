@@ -13,7 +13,7 @@ import { Icons } from '@/components/shared/Icons';
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isPageError, setIsPageError] = useState(false);
-  const { data, error: isEnError } = useCurriculumQueryById(params.id);
+  const { data, error: isEnError } = useCurriculumQueryById(params.id || 'e2e2a');
   const { data: sData, error: sError } = useSubjectQueryByCategory('College');
   useEffect(() => {
     if (isEnError || !data) return;

@@ -17,7 +17,7 @@ export const getTuitionFeeByCourseId = async (courseId: string) => {
     const tFee = await TuitionFee.findOne({ courseId }).populate('courseId').exec();
     return tFee;
   } catch (error) {
-    console.log(error);
+    console.log('service error', error);
     return null;
   }
 };

@@ -11,7 +11,7 @@ import { checkAuth } from '@/utils/actions/session';
 import mongoose from 'mongoose';
 
 /**
- * handles archived teacher schedule in college action
+ * handles retrieve teacher schedule in college action
  *
  * @param {string} id
  */

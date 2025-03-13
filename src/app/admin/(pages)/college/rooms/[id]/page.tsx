@@ -22,7 +22,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isPending, setIsPending] = useState(false);
   const [value, setValue] = React.useState('');
 
-  const { data: roomData, error } = useRoomQueryById(params.id);
+  const { data: roomData, error } = useRoomQueryById(params.id || 'e2e2a');
 
   useEffect(() => {
     if (error || !roomData) return;

@@ -39,14 +39,16 @@ const Page = () => {
       courseCode: '',
       ratePerUnit: '0.00',
       ratePerLab: '0.00',
+      departmentalFee: '0.00',
+      ssgFee: '0.00',
       cwtsOrNstpFee: '0.00',
       downPayment: `0.00`,
     },
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof TuitionFeeValidator>> = async (data) => {
-    setIsPending(true);
     if (regMiscRows.length === 0) return makeToastError('Please Provide Reg/Misc Fee');
+    setIsPending(true);
     for (const row of regMiscRows) {
       const regex = /^\d+(\.\d{1,2})?$/;
       if (!row.name || !row.amount) {
@@ -95,7 +97,7 @@ const Page = () => {
         <div className='border-0 bg-white rounded-xl min-h-[87vh]'>
           <Card className='border-0 py-5 bg-transparent'>
             <CardHeader className='space-y-3'>
-              <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Add a New Room</CardTitle>
+              <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Add Tuition Fee</CardTitle>
               <CardDescription className='text-xs sm:text-sm hidden'></CardDescription>
               <div className='text-xs sm:text-sm'>
                 <div className=''>
@@ -113,6 +115,13 @@ const Page = () => {
                     <Input name={'ratePerLab'} type={'text'} form={form} label={'Rate PerLab:'} classNameInput={'uppercase'} />
                     <Input name={'cwtsOrNstpFee'} type={'text'} form={form} label={'CWTS/NSTP Fee:'} classNameInput={'uppercase'} />
                     <Input name={'downPayment'} type={'text'} form={form} label={'Down Payment:'} classNameInput={''} />
+                  </div>
+                  <div className='flex flex-col items-start w-full justify-center mt-10 mb-10'>
+                    <h1 className='text-lg font-semibold xs:text-xl sm:text-2xl tracking-tight w-full text-start uppercase'>1 Year Payment</h1>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 w-full'>
+                      <Input name={'departmentalFee'} type={'text'} form={form} label={'Departmental Fee:'} classNameInput={'uppercase'} />
+                      <Input name={'ssgFee'} type={'text'} form={form} label={'SSG Fee:'} classNameInput={''} />
+                    </div>
                   </div>
                 </CardContent>
 

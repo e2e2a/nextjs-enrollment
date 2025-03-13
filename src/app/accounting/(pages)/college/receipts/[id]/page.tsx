@@ -93,7 +93,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                 </div>
                 <Table className='mt-6 w-full '>
-                  <TableCaption>A list of your recent invoices.</TableCaption>
+                  <TableCaption>A list of your recent receipts.</TableCaption>
                   <TableHeader className='bg-none p-5'>
                     <TableRow className='text-center items-center'>
                       <TableHead className='text-center text-black font-bold' colSpan={2}>

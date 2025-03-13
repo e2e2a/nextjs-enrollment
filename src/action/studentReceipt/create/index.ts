@@ -9,6 +9,7 @@ import { getTuitionFeeByCourseId } from '@/services/tuitionFee';
 import { checkAuth } from '@/utils/actions/session';
 import { v4 as uuidv4 } from 'uuid';
 import { ApiError, Client, Environment, LogLevel, OrdersController } from '@paypal/paypal-server-sdk';
+import { handleAccountingRole } from './helpers/cash';
 
 /**
  * any authenticated user
@@ -37,6 +38,9 @@ const checkRole = async (user: any, data: any) => {
     switch (user.role) {
       case 'STUDENT':
         b = await handleStudentRole(user, data);
+        break;
+      case 'ACCOUNTING':
+        b = await handleAccountingRole(user, data);
         break;
       default:
         return { error: 'Forbidden.', status: 403 };
@@ -75,7 +79,6 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
 
     const capture = d.res.purchase_units[0].payments.captures[0];
     // console.log('capture: ', capture);
-    console.log('captureid: ', capture?.id);
     const captures = {
       id: capture.id,
       status: capture.status,
@@ -104,7 +107,7 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
 
     const setup = await getEnrollmentSetupByName('GODOY');
     const a = await getStudentReceiptByStudentId(data.studentId);
-    const b = await a.filter((rs) => rs.type === 'DownPayment' && rs.schoolYear.toLowerCase() === setup.enrollmentTertiary.schoolYear.toLowerCase());
+    const b = await a.filter((rs) => rs.type.toLowerCase() === 'downpayment' && rs.schoolYear.toLowerCase() === setup.enrollmentTertiary.schoolYear.toLowerCase());
 
     let recentPayment = 0;
     if (b && b.length > 0) {
@@ -112,11 +115,9 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
         recentPayment += parseFloat(Number(rs.amount.value || 0).toFixed(2));
       }
 
-      if (recentPayment >= total) {
-        // if(studentEnrollment.step === 5) return { error: 'Your step is not valid.', status: 403 };
-        if (d.res.purchase_units[0].payments.captures[0].status === 'COMPLETED') {
-          await updateEnrollmentById(studentEnrollment._id, { step: 6, payment: true });
-        }
+      // if(studentEnrollment.step === 5) return { error: 'Your step is not valid.', status: 403 };
+      if (d.res.purchase_units[0].payments.captures[0].status === 'COMPLETED') {
+        await updateEnrollmentById(studentEnrollment._id, { step: 6, payment: true });
       }
     }
     return { success: true, message: 'Successful Payment, Receipt has been created.', status: 201 };

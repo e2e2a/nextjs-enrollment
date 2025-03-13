@@ -4,9 +4,9 @@ export const StudentProfileExtension = z
   .object({
     studentStatus: z.string().min(1, { message: 'Student Status is required...' }),
     studentYear: z.string().min(1, { message: 'Student Year is required...' }),
-    primarySchoolName: z.string().min(5, { message: 'School Name is required...' }).max(30, { message: 'School Name length too long.' }),
+    primarySchoolName: z.string().min(5, { message: 'School Name is required...' }).max(40, { message: 'School Name length too long.' }),
     primarySchoolYear: z.string().min(4, { message: 'School Year is required...' }).max(20, { message: 'School Year length too long.' }),
-    secondarySchoolName: z.string().min(5, { message: 'School Name is required...' }).max(30, { message: 'School Name length too long.' }),
+    secondarySchoolName: z.string().min(5, { message: 'School Name is required...' }).max(40, { message: 'School Name length too long.' }),
     secondarySchoolYear: z.string().min(4, { message: 'School Year is required...' }).max(20, { message: 'School Year length too long.' }),
     seniorHighSchoolName: z.string().optional(),
     seniorHighSchoolYear: z.string().optional(),

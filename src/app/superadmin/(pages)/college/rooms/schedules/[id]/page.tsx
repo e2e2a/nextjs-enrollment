@@ -9,7 +9,7 @@ import OptionsExport from './components/OptionsExport';
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, error } = useRoomQueryById(params.id);
+  const { data, error } = useRoomQueryById(params.id || 'e2e2a');
 
   useEffect(() => {
     if (error || !data) return;

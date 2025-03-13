@@ -25,7 +25,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [photoError, setPhotoError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mutation = useUpdateCourseByIdMutation();
-  const { data: courseData, error } = useCourseQueryById(params.id);
+  const { data: courseData, error } = useCourseQueryById(params.id || 'e2e2a');
 
   useEffect(() => {
     if (error || !courseData) return;

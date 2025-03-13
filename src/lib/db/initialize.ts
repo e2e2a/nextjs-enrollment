@@ -25,6 +25,8 @@ import AccountingProfile from '@/models/AccountingProfile';
 import ReportGradeRecord from '@/models/ReportGradeRecord';
 import TuitionFee from '@/models/TuitionFee';
 import SuperAdminProfile from '@/models/SuperAdminProfile';
+import Scholarship from '@/models/Scholarship';
+import StudentReceipt from '@/models/StudentReceipt';
 
 type ModelName =
   | 'Session'
@@ -51,7 +53,9 @@ type ModelName =
   | 'AccountingProfile'
   | 'ReportGradeRecord'
   | 'TuitionFee'
-  | 'SuperAdminProfile';
+  | 'SuperAdminProfile'
+  | 'Scholarship'
+  | 'StudentReceipt';
 
 const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   Session,
@@ -79,6 +83,8 @@ const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   ReportGradeRecord,
   TuitionFee,
   SuperAdminProfile,
+  Scholarship,
+  StudentReceipt,
 };
 
 let isInitialized = false;

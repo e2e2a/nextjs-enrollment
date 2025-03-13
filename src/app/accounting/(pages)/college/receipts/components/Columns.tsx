@@ -6,14 +6,27 @@ import ActionsCell from './ActionsCell';
 
 export const columns: ColumnDef<any>[] = [
   {
-    accessorFn: (row) => row.orderID,
+    accessorFn: (row) => row?.orderID,
     id: 'orderID',
     header: 'Order #',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.orderID}
+          {user?.orderID ? user?.orderID : <span className='text-red font-semibold'>N/A</span>}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row?.paymentMethod,
+    id: 'Payment Method',
+    header: 'Payment Method',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user?.paymentMethod}
         </div>
       );
     },
@@ -65,27 +78,32 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.type, // Use accessorFn for nested fields
+    accessorFn: (row) => row?.type, // Use accessorFn for nested fields
     id: 'type',
     header: 'Type',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase font-semibold'>
-          {user.type === 'DownPayment' && 'Down Payment'}
+          {user?.type.toLowerCase() === 'downpayment' && 'Down Payment'}
+          {user?.type.toLowerCase() === 'prelim' && 'Prelim Payment'}
+          {user?.type.toLowerCase() === 'midterm' && 'Midterm Payment'}
+          {user?.type.toLowerCase() === 'semi-final' && 'Semi-final Payment'}
+          {user?.type.toLowerCase() === 'final' && 'Final Payment'}
+          {user?.type.toLowerCase() === 'fullpayment' && 'Full Payment'}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.amount.value, // Use accessorFn for nested fields
+    accessorFn: (row) => row.amount?.value, // Use accessorFn for nested fields
     id: 'Amount',
     header: 'Amount',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.amount.value && `₱${Number(user.amount.value).toFixed(2)}`}
+          {user?.amount?.value && `₱${Number(user.amount.value).toFixed(2)}`}
         </div>
       );
     },
@@ -98,7 +116,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase font-semibold'>
-          {user.schoolYear ?? ''}
+          {user?.schoolYear ?? ''}
         </div>
       );
     },

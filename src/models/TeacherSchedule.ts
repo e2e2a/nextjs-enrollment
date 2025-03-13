@@ -30,7 +30,6 @@ const schema = new Schema<ITeacherSchedule>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Course',
     },
-    // this sectionId will be used to compare which section and subject to compare with students
     blockTypeId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'BlockType',

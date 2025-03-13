@@ -26,7 +26,10 @@ export const getEnrollmentById = async (id: any) => {
         select: '-password',
       })
       .populate('courseId')
-      .populate('profileId')
+      .populate({
+        path: 'profileId',
+        populate: [{ path: 'scholarshipId' }],
+      })
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
@@ -52,7 +55,10 @@ export const getEnrollmentByUserId = async (userId: string) => {
         select: '-password',
       })
       .populate('courseId')
-      .populate('profileId')
+      .populate({
+        path: 'profileId',
+        populate: [{ path: 'scholarshipId' }],
+      })
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
@@ -79,7 +85,10 @@ export const getEnrollmentByCourseId = async (courseId: string) => {
         select: '-password',
       })
       .populate('courseId')
-      .populate('profileId')
+      .populate({
+        path: 'profileId',
+        populate: [{ path: 'scholarshipId' }],
+      })
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
@@ -106,7 +115,10 @@ export const getEnrollmentByProfileId = async (profileId: string) => {
         select: '-password',
       })
       .populate('courseId')
-      .populate('profileId')
+      .populate({
+        path: 'profileId',
+        populate: [{ path: 'scholarshipId' }],
+      })
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
@@ -132,7 +144,10 @@ export const getEnrollmentQueryStepByCategory = async (data: any) => {
         select: '-password',
       })
       .populate('courseId')
-      .populate('profileId')
+      .populate({
+        path: 'profileId',
+        populate: [{ path: 'scholarshipId' }],
+      })
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
@@ -222,7 +237,10 @@ export const getAllEnrollmentByTeacherScheduleId = async (teacherScheduleId: any
         select: '-password',
       })
       .populate('courseId')
-      .populate('profileId')
+      .populate({
+        path: 'profileId',
+        populate: [{ path: 'scholarshipId' }],
+      })
       .populate('blockTypeId')
       .populate({
         path: 'studentSubjects.teacherScheduleId',
