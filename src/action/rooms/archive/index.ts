@@ -3,8 +3,8 @@ import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import Room from '@/models/Room';
 import TeacherSchedule from '@/models/TeacherSchedule';
-import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getRoomById } from '@/services/room';
+import { getSuperAdminProfileByUserId } from '@/services/superAdminProfile';
 import { checkAuth } from '@/utils/actions/session';
 
 /**
@@ -17,10 +17,10 @@ export const archiveRoomAction = async (data: any) => {
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-    if (session.user.role !== 'DEAN') return { error: 'Forbidden', status: 403 };
+    if (session.user.role !== 'SUPER ADMIN') return { error: 'Forbidden', status: 403 };
 
-    const p = await getDeanProfileByUserId(session?.user?._id);
-    if (!p) return { error: 'Profile not found', status: 404 };
+    const p = await getSuperAdminProfileByUserId(session?.user?._id);
+    if (!p) return { error: 'Super Admin Profile not found', status: 404 };
 
     const room = await getRoomById(data.roomId);
     if (!room) return { error: 'Room ID is not valid.', status: 404 };

@@ -991,12 +991,12 @@ export const dashboardConfig: DashboardConfig = {
   mainNavSuperAdmin: [
     {
       title: 'Home',
-      href: '/admin',
+      href: '/superadmin',
       icon: 'home',
     },
     {
       title: 'Dashboard',
-      href: '/admin/dashboard',
+      href: '/superadmin/dashboard',
       icon: 'layoutDashboard',
     },
     {
@@ -1180,8 +1180,8 @@ export const dashboardConfig: DashboardConfig = {
       title: 'Instructors Schedule',
       i: [
         {
-          title: 'Instructors Management',
-          href: '/superadmin/college/schedules/instructors',
+          title: 'Instructors Schedule Management',
+          href: '/superadmin/college/schedules/all',
           icon: 'eye',
         },
         {

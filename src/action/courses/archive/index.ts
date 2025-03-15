@@ -3,8 +3,8 @@ import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import BlockType from '@/models/BlockType';
 import Course from '@/models/Course';
-import { getAdminProfileByUserId } from '@/services/adminProfile';
 import { getCoursesById } from '@/services/course';
+import { getSuperAdminProfileByUserId } from '@/services/superAdminProfile';
 import { checkAuth } from '@/utils/actions/session';
 
 /**
@@ -17,9 +17,9 @@ export const archiveCourseAction = async (id: string) => {
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-    if (session.user.role !== 'ADMIN') return { error: 'Forbidden', status: 403 };
+    if (session.user.role !== 'SUPER ADMIN') return { error: 'Forbidden', status: 403 };
 
-    const p = await getAdminProfileByUserId(session?.user?._id);
+    const p = await getSuperAdminProfileByUserId(session?.user?._id);
     if (!p) return { error: 'Profile not found', status: 404 };
 
     const course = await getCoursesById(id);

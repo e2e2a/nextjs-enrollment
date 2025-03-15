@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Command, CommandGroup, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -7,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { useRetrieveSubjectByIdMutation } from '@/lib/queries/subjects/retrieve';
+import { useArchiveSubjectByIdMutation } from '@/lib/queries/subjects/archive';
 
 type IProps = {
   user: any;
@@ -16,7 +17,7 @@ type IProps = {
 const ActionsCell = ({ user }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState<boolean>(false);
-  const mutation = useRetrieveSubjectByIdMutation();
+  const mutation = useArchiveSubjectByIdMutation();
 
   const onSubmit = async () => {
     setIsPending(true);
@@ -26,9 +27,11 @@ const ActionsCell = ({ user }: IProps) => {
           case 200:
           case 201:
           case 203:
-            return makeToastSucess(res.message);
+            makeToastSucess(res.message);
+            return;
           default:
-            return makeToastError(res.error);
+            if (res.error) return makeToastError(res.error);
+            return;
         }
       },
       onSettled: () => {
@@ -52,9 +55,18 @@ const ActionsCell = ({ user }: IProps) => {
           <Command>
             <CommandList>
               <CommandGroup className=''>
+                <Button disabled={isPending} size={'sm'} className={'w-full group focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-0 gap-x-1 justify-start items-center hover:text-neutral-50 font-medium'}>
+                  <Link
+                    href={`${isPending ? '' : `/superadmin/college/subjects/${user._id}`}`}
+                    className={'w-full h-full group/item rounded-md focus-visible:ring-0 flex text-black bg-transparent gap-x-1 justify-start items-center group-hover:hover:text-neutral-50'}
+                  >
+                    <Icons.eye className='h-4 w-4' />
+                    Edit Subject
+                  </Link>
+                </Button>
                 <Button disabled={isPending} onClick={() => onSubmit()} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
                   <Icons.trash className='h-4 w-4' />
-                  Retrieve Subject
+                  Archive Subject
                 </Button>
               </CommandGroup>
             </CommandList>

@@ -18,7 +18,7 @@ const Page = () => {
 
     if (data) {
       if (data.subjects) {
-        const a = data.subjects.filter((s: any) => s?.archive === false);
+        const a = data.subjects.filter((s: any) => !s?.archive);
         setSubjects(a);
       }
       setIsPageLoading(false);

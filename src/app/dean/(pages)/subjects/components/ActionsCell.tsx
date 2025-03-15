@@ -6,8 +6,6 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
-import { useArchiveSubjectByIdMutation } from '@/lib/queries/subjects/archive';
-import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 
 type IProps = {
   user: any;
@@ -16,28 +14,6 @@ type IProps = {
 const ActionsCell = ({ user }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState<boolean>(false);
-  const mutation = useArchiveSubjectByIdMutation();
-
-  const onSubmit = async () => {
-    setIsPending(true);
-    mutation.mutate(user?._id, {
-      onSuccess: (res) => {
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            makeToastSucess(res.message);
-            return;
-          default:
-            if (res.error) return makeToastError(res.error);
-            return;
-        }
-      },
-      onSettled: () => {
-        setIsPending(false);
-      },
-    });
-  };
 
   return (
     <div className=''>
@@ -59,10 +35,6 @@ const ActionsCell = ({ user }: IProps) => {
                     <Icons.eye className='h-4 w-4' />
                     Edit Subject
                   </Link>
-                </Button>
-                <Button disabled={isPending} onClick={() => onSubmit()} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
-                  <Icons.trash className='h-4 w-4' />
-                  Archive Subject
                 </Button>
               </CommandGroup>
             </CommandList>

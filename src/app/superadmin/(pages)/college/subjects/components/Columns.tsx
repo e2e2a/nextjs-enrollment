@@ -120,13 +120,13 @@ export const columns: ColumnDef<any>[] = [
       return <div className='font-medium'>{formatted}</div>;
     },
   },
-  // {
-  //   id: 'actions',
-  //   header: 'Actions',
-  //   cell: ({ row }) => {
-  //     const user = row.original;
+  {
+    id: 'actions',
+    header: 'Actions',
+    cell: ({ row }) => {
+      const user = row.original;
 
-  //     return <ActionsCell user={user} />;
-  //   },
-  // },
+      return <ActionsCell user={user} />;
+    },
+  },
 ];

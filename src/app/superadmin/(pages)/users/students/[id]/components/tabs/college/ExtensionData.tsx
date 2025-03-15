@@ -198,7 +198,7 @@ const ExtensionData = ({ form, profile, isNotEditable, photoPreview, filePreview
               </div>
             </div>
             <div className='text-sm font-normal flex w-full justify-center items-center'>
-              <Link href={`/admin/${data?.enrollment?.courseId?.category.toLowerCase()}/enrollment/schedules/${data?.enrollment?._id}`} className='hover:underline hover:text-blue-600 text-blue-500 space-y-2'>
+              <Link href={`/superadmin/${data?.enrollment?.courseId?.category.toLowerCase()}/enrollment/schedules/${data?.enrollment?._id}`} className='hover:underline hover:text-blue-600 text-blue-500 space-y-2'>
                 <Button size={'sm'} type='button' className='w-auto flex gap-2'>
                   {' '}
                   View Enrollment Info 👉{' '}

@@ -15,6 +15,7 @@ export interface ITeacherSchedule extends Document {
   archive?: boolean;
   archiveBy?: mongoose.Schema.Types.ObjectId;
 }
+
 const schema = new Schema<ITeacherSchedule>(
   {
     category: { type: String },
@@ -46,16 +47,12 @@ const schema = new Schema<ITeacherSchedule>(
       type: [String],
       default: [],
     },
-    startTime: {
-      type: String,
-    },
-    endTime: {
-      type: String,
-    },
+    startTime: { type: String },
+    endTime: { type: String },
     archive: { type: Boolean, default: false },
     archiveBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'DeanProfile',
+      ref: 'SuperAdminProfile',
     },
   },
   {

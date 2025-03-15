@@ -24,7 +24,7 @@ const schema = new Schema<ICourse>(
     archive: { type: Boolean, default: false },
     archiveBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'AdminProfile',
+      ref: 'SuperAdminProfile',
     },
   },
   {

@@ -88,10 +88,10 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className='border py-5 bg-white rounded-xl'>
               <Card className='border-0 bg-transparent'>
                 <CardHeader className='space-y-3'>
-                  <CardTitle className='text-lg xs:text-2xl sm:text-3xl text-center w-full uppercase'>Add a New Subject!</CardTitle>
+                  <CardTitle className='text-lg xs:text-2xl sm:text-3xl text-center w-full uppercase'>Edit Subject!</CardTitle>
                   <CardDescription className='text-xs sm:text-sm'>
-                    &nbsp;&nbsp;&nbsp;&nbsp;Easily add a new subject by filling out the required details below. Each subject you add will contribute to the growth and diversity of our educational offerings, enriching the learning experiences of students.
-                    Let&apos;s work together to create an engaging and comprehensive academic environment!
+                    &nbsp;&nbsp;&nbsp;&nbsp;Easily Edit by filling out the required details below. Each subject you add will contribute to the growth and diversity of our educational offerings, enriching the learning experiences of students. Let&apos;s work
+                    together to create an engaging and comprehensive academic environment!
                   </CardDescription>
                 </CardHeader>
                 <Form {...formCollege}>

@@ -32,14 +32,15 @@ export const getBlockTypeByIdAction = async (id: string) => {
 const checkRole = async (session: any, id: string) => {
   return tryCatch(async () => {
     let b;
+    b = await getBlockTypeById(id);
     switch (session.user.role) {
       case 'ADMIN':
-        b = await getBlockTypeById(id);
+        break;
+      case 'SUPER ADMIN':
         break;
       case 'DEAN':
         const p = await getDeanProfileByUserId(session.user._id);
-        b = await getBlockTypeById(id);
-        if (b && b.courseId._id.toString() !== p.courseId._id.toString()) return { error: 'Forbidden', status: 403 };
+        if (b?.courseId?._id.toString() !== p?.courseId?._id.toString()) return { error: 'Forbidden', status: 403 };
         break;
       default:
         return { error: 'Forbidden.', status: 403 };

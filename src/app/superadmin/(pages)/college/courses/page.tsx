@@ -27,7 +27,7 @@ const Page = () => {
     if (data) {
       setIsError(false);
       if (data.courses) {
-        const a = data.courses.filter((s: any) => s?.archive === false);
+        const a = data.courses.filter((s: any) => !s?.archive);
         setCourses(a);
       }
       setIsPageLoading(false);

@@ -5,7 +5,6 @@ import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/id';
 import { useEnrollmentQueryByTeacherScheduleId } from '@/lib/queries/enrollment/get/teacherSchedule';
-import { useProfileQueryByParamsUserId } from '@/lib/queries/profile/get/userId';
 import { useReportGradeQueryByTeacherId } from '@/lib/queries/reportGrade/get/teacherId';
 import ViewGrades from './components/ViewGrades';
 import OptionsExport from './components/OptionsExport';
@@ -13,18 +12,16 @@ import OptionsExport from './components/OptionsExport';
 const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, error: isEnError } = useProfileQueryByParamsUserId(params.id);
-  const { data: ts, error: tsError } = useTeacherScheduleQueryById(params.scheduleId, 'College');
+  const { data: ts, error: tsError } = useTeacherScheduleQueryById(params.id, 'College');
   const { data: rgData, error: rgError } = useReportGradeQueryByTeacherId(ts?.teacherSchedule.profileId?._id as string);
   const { data: s, error: sError } = useEnrollmentQueryByTeacherScheduleId({ id: ts?.teacherSchedule?._id, category: 'College' });
 
   useEffect(() => {
     if (tsError || !ts) return;
-    if (isEnError || !data) return;
     if (sError || !s) return;
     if (rgError || !rgData) return;
 
-    if (ts && data && s) {
+    if (ts && s) {
       if (ts.teacherSchedule) {
         if (s.students) {
           setIsPageLoading(false);
@@ -37,7 +34,7 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
         setIsPageLoading(false);
       }
     }
-  }, [ts, tsError, data, isEnError, s, sError, rgData, rgError]);
+  }, [ts, tsError, s, sError, rgData, rgError]);
 
   return (
     <>
@@ -49,7 +46,7 @@ const Page = ({ params }: { params: { id: string; scheduleId: string } }) => {
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           {isError ? (
             <div className=''>404</div>
-          ) : data && data.profile ? (
+          ) : ts && ts.teacherSchedule ? (
             <div>
               <OptionsExport data={ts?.teacherSchedule || []} students={s?.students} />
               <div className='flex items-center py-4 text-black text-center flex-col mb-7'>

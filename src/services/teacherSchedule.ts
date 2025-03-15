@@ -132,7 +132,6 @@ export const getTeacherScheduleById = async (id: any) => {
 
 export const archivedTeacherScheduleById = async (id: string, data: any) => {
   try {
-    console.log('data: ', data);
     const Ts = await TeacherSchedule.findByIdAndUpdate(id, data, { new: true }).exec();
     return Ts;
   } catch (error) {
