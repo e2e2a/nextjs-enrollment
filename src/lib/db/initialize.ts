@@ -23,10 +23,11 @@ import TeacherScheduleRecord from '@/models/TeacherScheduleRecord';
 import { Session } from '@/models/Sessions';
 import AccountingProfile from '@/models/AccountingProfile';
 import ReportGradeRecord from '@/models/ReportGradeRecord';
-import TuitionFee from '@/models/TuitionFee';
 import SuperAdminProfile from '@/models/SuperAdminProfile';
 import Scholarship from '@/models/Scholarship';
 import StudentReceipt from '@/models/StudentReceipt';
+import CourseFee from '@/models/CourseFee';
+import CourseFeeRecord from '@/models/CourseFeeRecord';
 
 type ModelName =
   | 'Session'
@@ -52,7 +53,8 @@ type ModelName =
   | 'TeacherScheduleRecord'
   | 'AccountingProfile'
   | 'ReportGradeRecord'
-  | 'TuitionFee'
+  | 'CourseFee'
+  | 'CourseFeeRecord'
   | 'SuperAdminProfile'
   | 'Scholarship'
   | 'StudentReceipt';
@@ -81,7 +83,8 @@ const modelsMap: Record<ModelName, mongoose.Model<any>> = {
   TeacherScheduleRecord,
   AccountingProfile,
   ReportGradeRecord,
-  TuitionFee,
+  CourseFee,
+  CourseFeeRecord,
   SuperAdminProfile,
   Scholarship,
   StudentReceipt,

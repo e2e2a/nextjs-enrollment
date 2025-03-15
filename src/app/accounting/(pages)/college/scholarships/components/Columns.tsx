@@ -67,20 +67,20 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.courseId.courseCode,
+    accessorFn: (row) => row.type,
     id: 'Type',
     header: 'Type',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.exemptedFees.length > 0 ? user.exemptedFees.join(', ') : <span className='text-red font-semibold'>N/A</span>}
+          {user?.type}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.discountPercentage || row.amount,
+    accessorFn: (row) => row?.discountPercentage || row?.amount,
     id: 'Amount/Percent',
     header: 'Amount/Percent',
     cell: ({ cell, row }) => {
@@ -93,14 +93,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.courseId.courseCode,
+    accessorFn: (row) => row?.exemptedFees || [],
     id: 'Exempted Fees',
     header: 'Exempted Fees',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.exemptedFees.length > 0 ? user.exemptedFees.join(', ') : <span className='text-red font-semibold'>N/A</span>}
+          {user?.exemptedFees.length > 0 ? user.exemptedFees.join(', ') : <span className='text-red font-semibold'>N/A</span>}
         </div>
       );
     },

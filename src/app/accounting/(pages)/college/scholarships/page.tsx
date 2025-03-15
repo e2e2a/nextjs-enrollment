@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useTuitionFeeQueryByCategory } from '@/lib/queries/tuitionFee/get/category';
+import { useTuitionFeeQueryByCategory } from '@/lib/queries/courseFee/get/category';
 import { useScholarshipQueryByCategory } from '@/lib/queries/scholarship/get/category';
 
 interface ITuitionFee {

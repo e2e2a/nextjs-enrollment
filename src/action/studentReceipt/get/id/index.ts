@@ -1,7 +1,7 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import { getStudentReceiptById } from '@/services/studentPayment';
+import { getStudentReceiptById } from '@/services/studentReceipt';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { checkAuth } from '@/utils/actions/session';
 

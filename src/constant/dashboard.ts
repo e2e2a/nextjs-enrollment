@@ -1379,13 +1379,6 @@ export const dashboardConfig: DashboardConfig = {
     },
   ],
   sidebarAccounting: [
-    // {
-    //   title: 'College',
-    //   i: [
-
-    //   ],
-    //   icon: 'packageSearch',
-    // },
     {
       title: 'Courses Fees',
       i: [
@@ -1399,20 +1392,9 @@ export const dashboardConfig: DashboardConfig = {
           href: '/accounting/college/tuition/add',
           icon: 'add',
         },
-        // {
-        //   title: `View Student's Down Payments`,
-        //   href: '/accounting/college/downpayment',
-        //   icon: 'eye',
-        // },
-        // {
-        //   title: `Add Student's Down Payment`,
-        //   href: '/accounting/college/downpayment',
-        //   icon: 'add',
-        // },
       ],
       icon: 'packageSearch',
     },
-
     {
       title: 'Enrolling Students',
       i: [
@@ -1453,6 +1435,17 @@ export const dashboardConfig: DashboardConfig = {
         {
           title: 'View Students Balances',
           href: '/accounting/college/balance',
+          icon: 'eye',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Students Balance Record',
+      i: [
+        {
+          title: 'View Students Balances Record',
+          href: '/accounting/college/record',
           icon: 'eye',
         },
       ],

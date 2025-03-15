@@ -13,8 +13,9 @@ import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 import { SelectInput } from './components/SelectInputs';
 import LoaderPage from '@/components/shared/LoaderPage';
 import RegOrMisc from './components/RegOrMisc';
-import { useCreatTuitionFeeMutation } from '@/lib/queries/tuitionFee/create';
+import { useCreatTuitionFeeMutation } from '@/lib/queries/courseFee/create';
 import { TuitionFeeValidator } from '@/lib/validators/tuitionFee/create';
+import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 
 const Page = () => {
   const [isPending, setIsPending] = useState(false);
@@ -37,6 +38,7 @@ const Page = () => {
     resolver: zodResolver(TuitionFeeValidator),
     defaultValues: {
       courseCode: '',
+      year: '',
       ratePerUnit: '0.00',
       ratePerLab: '0.00',
       departmentalFee: '0.00',
@@ -111,6 +113,8 @@ const Page = () => {
                 <CardContent className='w-full'>
                   <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                     <SelectInput name={'courseCode'} selectItems={cData.courses} form={form} label={'Course:'} placeholder={'Select Course'} />
+                    <SelectInput name={'year'} selectItems={studentYearData} form={form} label={'Year:'} placeholder={'Select Year'} />
+                    {/* <SelectInput name={'semester'} selectItems={studentSemesterData} form={form} label={'Semester:'} placeholder={'Select Semester'} /> */}
                     <Input name={'ratePerUnit'} type={'text'} form={form} label={'Rate Per Unit:'} classNameInput={'uppercase'} />
                     <Input name={'ratePerLab'} type={'text'} form={form} label={'Rate PerLab:'} classNameInput={'uppercase'} />
                     <Input name={'cwtsOrNstpFee'} type={'text'} form={form} label={'CWTS/NSTP Fee:'} classNameInput={'uppercase'} />
