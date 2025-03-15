@@ -5,7 +5,7 @@ import { getCoursesById } from '@/services/course';
 import { checkAuth } from '@/utils/actions/session';
 
 /**
- * handles query room by id
+ * handles query course by id
  *
  * @param {string} id
  */
@@ -14,7 +14,8 @@ export const getCourseByIdAction = async (id: string): Promise<any> => {
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-    if (session && session.user.role !== 'ADMIN') return { error: 'Not Authorized', status: 401 };
+    if (session.user.role !== 'ADMIN' && session.user.role !== 'SUPER ADMIN') return { error: 'Not Authorized', status: 401 };
+
     const course = await getCoursesById(id);
     if (!course) return { error: 'Course not found', status: 404 };
 

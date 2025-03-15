@@ -17,7 +17,7 @@ const Page = () => {
     if (error || !data) return;
     if (data) {
       if (data.blockTypes) {
-        const a = data.blockTypes.filter((b: any) => b.archive === false);
+        const a = data.blockTypes.filter((b: any) => !b?.archive);
         setBlockTypes(a);
       }
       setIsPageLoading(false);

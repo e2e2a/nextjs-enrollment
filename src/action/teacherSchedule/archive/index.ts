@@ -2,8 +2,8 @@
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getBlockTypeByCourseId } from '@/services/blockType';
-import { getDeanProfileByUserId } from '@/services/deanProfile';
 import { getEnrollmentByCategory } from '@/services/enrollment';
+import { getSuperAdminProfileByUserId } from '@/services/superAdminProfile';
 import { getTeacherScheduleById, archivedTeacherScheduleById } from '@/services/teacherSchedule';
 import { checkAuth } from '@/utils/actions/session';
 import mongoose from 'mongoose';
@@ -18,9 +18,9 @@ export const archiveTeacherScheduleCollegeAction = async (data: any) => {
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-    if (session.user?.role !== 'DEAN') return { error: 'Forbidden.', status: 403 };
+    if (session.user?.role !== 'SUPER ADMIN') return { error: 'Forbidden.', status: 403 };
 
-    const p = await getDeanProfileByUserId(session?.user?._id);
+    const p = await getSuperAdminProfileByUserId(session?.user?._id);
     if (!p) return { error: 'Invalid Profile Id.', status: 404 };
 
     const isValidScheduleIdObjectId = mongoose.Types.ObjectId.isValid(data.teacherScheduleId);

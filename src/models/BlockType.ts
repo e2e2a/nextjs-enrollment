@@ -32,7 +32,7 @@ const schema = new Schema<IBlockType>(
     archive: { type: Boolean, default: false },
     archiveBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'DeanProfile',
+      ref: 'SuperAdminProfile',
     },
   },
   {

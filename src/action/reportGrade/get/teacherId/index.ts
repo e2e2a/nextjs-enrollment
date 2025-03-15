@@ -43,7 +43,10 @@ const checkRole = async (user: any, teacherId: string) => {
         rp = await getReportGradeByTeacherId(t._id);
         break;
       case 'ADMIN':
-        rp = await getReportGradeByTeacherId(teacherId) || await getReportGradeByDeanId(teacherId);
+        rp = (await getReportGradeByTeacherId(teacherId)) || (await getReportGradeByDeanId(teacherId));
+        break;
+      case 'SUPER ADMIN':
+        rp = (await getReportGradeByTeacherId(teacherId)) || (await getReportGradeByDeanId(teacherId));
         break;
       default:
         return { error: 'Forbidden', status: 403 };

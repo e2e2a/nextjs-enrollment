@@ -28,7 +28,7 @@ const schema = new Schema<ISubject>(
     archive: { type: Boolean, default: false },
     archiveBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'DeanProfile',
+      ref: 'SuperAdminProfile',
     },
   },
   {

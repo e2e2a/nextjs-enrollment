@@ -6,20 +6,19 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { useSession } from 'next-auth/react';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { Combobox } from './components/Combobox';
 import Input from './components/Input';
 import LoaderPage from '@/components/shared/LoaderPage';
 import Link from 'next/link';
 import { ComboboxDays } from './components/ComboboxDays';
 import { ComboboxRoom } from './components/ComboboxRoom';
 import { ComboboxSubjects } from './components/ComboboxSubjects';
-import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 import { useAllRoomQueryByEduLevel } from '@/lib/queries/rooms/get/all';
 import { useSubjectQueryByCategory } from '@/lib/queries/subjects/get/category';
-import { TeacherScheduleCollegeValidator } from '@/lib/validators/teacherSchedule/create/college';
-import { useCreateTeacherScheduleByCategoryMutation } from '@/lib/queries/teacherSchedule/create';
+import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
+import { useTeacherScheduleQueryById } from '@/lib/queries/teacherSchedule/get/id';
+import { useEditTeacherScheduleByCategoryMutation } from '@/lib/queries/teacherSchedule/update';
+import { EditTeacherScheduleCollegeValidator } from '@/lib/validators/teacherSchedule/edit/college';
 
 const daysOfWeek = [
   { label: 'Monday', value: 'M' },
@@ -31,57 +30,41 @@ const daysOfWeek = [
   { label: 'Sunday', value: 'Su' },
 ];
 
-const Page = () => {
+const Page = ({ params }: { params: { id: string } }) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [loading, setLoading] = useState(true);
   const [rooms, setRooms] = useState([{}]);
-  const [teacherId, setTeacherId] = useState('');
-  const [role, setRole] = useState('');
   const [roomId, setRoomId] = useState('');
   const [showLink, setShowLink] = useState(false);
   const [instructorLink, setInstructorLink] = useState('');
   const [roomLink, setRoomLink] = useState('');
-  const [teachers, setTeachers] = useState<any[]>([]);
   const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
-  const { data: tData, isLoading, isError } = useAllProfileQueryByUserRoles('TEACHER');
-  const { data: dData, isError: dError } = useAllProfileQueryByUserRoles('DEAN');
-  const { data: sData, isLoading: sLoading, isError: sError } = useSubjectQueryByCategory('College');
-  const { data: rData, isLoading: rLoading, error: rError } = useAllRoomQueryByEduLevel('tertiary');
+  const { data: dData, isError: dError } = useProfileQueryBySessionId();
+  const { data: ts, error: tsError } = useTeacherScheduleQueryById(params.id, 'College');
+  const { data: sData, isError: sError } = useSubjectQueryByCategory('College');
+  const { data: rData, error: rError } = useAllRoomQueryByEduLevel('tertiary');
 
   useEffect(() => {
-    if (sError || dError || isError || rError) return;
-    if (!tData || !dData || !rData || !sData) return;
-    if (rData && tData && sData) {
+    if (sError || dError || rError) return;
+    if (!dData || !rData || !sData) return;
+    if (!ts || tsError) return;
+
+    if (rData && sData) {
       if (rData.rooms) {
         const filteredRooms = rData.rooms.filter((room: any) => room.educationLevel === 'tertiary');
         setRooms(filteredRooms);
       }
-      if (tData && tData.profiles) {
-        const filteredTeacherProfiles = tData.profiles.filter((p: any) => p.isVerified);
-        const filteredDeanProfiles = dData.profiles.filter((p: any) => p.isVerified);
 
-        setTeachers(
-          [...(filteredTeacherProfiles || []), ...(filteredDeanProfiles || [])].sort((a, b) => {
-            const fullNameA = `${a?.firstname ?? ''} ${a?.lastname ?? ''}`.toLowerCase();
-            const fullNameB = `${b?.firstname ?? ''} ${b?.lastname ?? ''}`.toLowerCase();
-            return fullNameA.localeCompare(fullNameB);
-          })
-        );
-      } else {
-        setTeachers([]);
-      }
       setLoading(false);
       return;
     }
-  }, [rData, tData, dData, sData, dError, sError, isError, rError]);
+  }, [rData, dData, sData, ts, dError, sError, rError, tsError]);
 
-  const mutation = useCreateTeacherScheduleByCategoryMutation();
-  const { data } = useSession();
+  const mutation = useEditTeacherScheduleByCategoryMutation();
 
-  const formCollege = useForm<z.infer<typeof TeacherScheduleCollegeValidator>>({
-    resolver: zodResolver(TeacherScheduleCollegeValidator),
+  const formCollege = useForm<z.infer<typeof EditTeacherScheduleCollegeValidator>>({
+    resolver: zodResolver(EditTeacherScheduleCollegeValidator),
     defaultValues: {
-      teacherId: '',
       subjectId: '',
       roomId: '',
       days: [],
@@ -90,15 +73,24 @@ const Page = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof TeacherScheduleCollegeValidator>> = async (data) => {
+  useEffect(() => {
+    formCollege.setValue('subjectId', ts?.teacherSchedule?.subjectId?._id);
+    formCollege.setValue('roomId', ts?.teacherSchedule?.roomId?.roomName);
+    formCollege.setValue('days', ts?.teacherSchedule?.days);
+    formCollege.setValue('startTime', ts?.teacherSchedule?.startTime);
+    formCollege.setValue('endTime', ts?.teacherSchedule?.endTime);
+    setSelectedItems(ts?.teacherSchedule?.days);
+    setRoomId(ts?.teacherSchedule?.roomId?._id);
+  }, [formCollege, ts]);
+
+  const onSubmit: SubmitHandler<z.infer<typeof EditTeacherScheduleCollegeValidator>> = async (data) => {
     setIsDisabled(true);
     setShowLink(false);
     setRoomLink('');
     setInstructorLink('');
     data.roomId = roomId;
-    data.teacherId = teacherId;
 
-    const dataa = { ...data, role, category: 'College' };
+    const dataa = { ...data, tsId: params.id, role: ts?.teacherSchedule?.profileId?.userId?.role, category: 'College' };
     mutation.mutate(dataa, {
       onSuccess: (res) => {
         switch (res.status) {
@@ -108,8 +100,8 @@ const Page = () => {
             setShowLink(false);
             setRoomLink('');
             setInstructorLink('');
-            setSelectedItems([]);
-            formCollege.reset();
+            // setSelectedItems([]);
+            // formCollege.reset();
             makeToastSucess(res?.message);
             return;
           default:
@@ -136,12 +128,11 @@ const Page = () => {
         ) : (
           <>
             <CardHeader className='space-y-3'>
-              <CardTitle className='text-left text-lg xs:text-2xl sm:text-3xl font-poppins'>Register a New Instructor Schedule!</CardTitle>
+              <CardTitle className='text-left text-lg xs:text-2xl sm:text-3xl font-poppins'>Edit Instructor Schedule!</CardTitle>
               <CardDescription className='text-xs sm:text-sm hidden'></CardDescription>
               <div className='text-xs sm:text-sm'>
                 <p className='text-sm sm:text-[15px] font-normal text-muted-foreground'>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To register a new instructor, please fill out the necessary details, including personal information, qualifications, and assigned courses. This form ensures accurate scheduling and smooth onboarding of
-                  instructors into the system.
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To edit instructor, please fill out the necessary details, including time, assigned room, etc. This form ensures accurate scheduling and smooth onboarding of instructors into the system.
                 </p>
               </div>
             </CardHeader>
@@ -151,12 +142,12 @@ const Page = () => {
                   <div className='flex flex-col py-5 w-full sm:flex-row gap-5 items-center'>
                     <span className='text-red'>Schedule Conflict</span>
                     {instructorLink && (
-                      <Link href={`/superadmin/college/schedules/instructors/${instructorLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
+                      <Link href={`/dean/schedules/instructors/${instructorLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
                         See Instructor Schedule
                       </Link>
                     )}
                     {roomLink && (
-                      <Link href={`/superadmin/college/rooms/schedules/${roomLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
+                      <Link href={`/dean/rooms/schedules/${roomLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
                         See Room Schedule
                       </Link>
                     )}
@@ -165,11 +156,10 @@ const Page = () => {
               </div>
             )}
             <Form {...formCollege}>
-              <form method='post' onSubmit={formCollege.handleSubmit(onSubmit)} className='w-full space-y-4'>
+              <form method='post' className='w-full space-y-4'>
                 <CardContent className='w-full '>
                   <div className='flex flex-col gap-4'>
-                    <Combobox name={'teacherId'} selectItems={teachers} form={formCollege} label={'Select Instructor:'} placeholder={'Select Instructor'} setTeacherId={setTeacherId} setRole={setRole} />
-                    <ComboboxSubjects name={'subjectId'} selectItems={sData!.subjects} form={formCollege} label={'Select Subject:'} placeholder={'Select Subject'} />
+                    <ComboboxSubjects name={'subjectId'} selectItems={sData?.subjects} form={formCollege} label={'Select Subject:'} placeholder={'Select Subject'} />
                     <ComboboxRoom name={'roomId'} selectItems={rooms} form={formCollege} label={'Select Room:'} placeholder={'Select Room'} setRoomId={setRoomId} />
                     <ComboboxDays name={'days'} selectItems={daysOfWeek} form={formCollege} label={'Select Day/s:'} placeholder={'Select Day/s'} selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
                     <Input name={'startTime'} type={'time'} form={formCollege} label={'Start Time:'} classNameInput={''} />
@@ -178,8 +168,8 @@ const Page = () => {
                 </CardContent>
                 <CardFooter>
                   <div className='flex w-full justify-center md:justify-end items-center mt-4'>
-                    <Button type='submit' variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-bold'>
-                      Register now!
+                    <Button type='submit' disabled={isDisabled} onClick={formCollege.handleSubmit(onSubmit)} variant={'destructive'} className='bg-blue-500 hover:bg-blue-700 text-white font-bold'>
+                      Submit!
                     </Button>
                   </div>
                 </CardFooter>

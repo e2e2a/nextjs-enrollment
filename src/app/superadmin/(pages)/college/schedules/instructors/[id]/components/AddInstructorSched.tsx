@@ -121,12 +121,12 @@ const AddInstructorSched = ({ teacher, r, s }: IProps) => {
                 <div className='flex flex-col py-5 w-full sm:flex-row gap-5 items-center'>
                   <span className='text-red'>Schedule Conflict</span>
                   {instructorLink && (
-                    <Link href={`/admin/college/schedules/instructors/${instructorLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
+                    <Link href={`/superadmin/college/schedules/instructors/${instructorLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
                       See Professor Schedule
                     </Link>
                   )}
                   {roomLink && (
-                    <Link href={`/admin/college/rooms/schedules/${roomLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
+                    <Link href={`/superadmin/college/rooms/schedules/${roomLink}`} className='text-sm text-blue-500 hover:underline' target='_blank' rel='noopener noreferrer'>
                       See Room Schedule
                     </Link>
                   )}

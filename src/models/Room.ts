@@ -63,7 +63,7 @@ const schema = new Schema<IRoom>(
     archive: { type: Boolean, default: false },
     archiveBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'DeanProfile',
+      ref: 'SuperAdminProfile',
     },
   },
   {

@@ -28,6 +28,9 @@ const checkSessionRole = async (user: any, data: any) => {
       case 'ADMIN':
         enrollments = await adminRole(data);
         break;
+      case 'SUPER ADMIN':
+        enrollments = await adminRole(data);
+        break;
       case 'DEAN':
         enrollments = await deanRole(user, data);
         break;

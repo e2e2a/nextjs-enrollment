@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Command, CommandGroup, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -13,6 +14,7 @@ type IProps = {
 
 const ActionsCell = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
+
   return (
     <div className=''>
       <Popover>
@@ -29,15 +31,14 @@ const ActionsCell = ({ user }: IProps) => {
             <CommandList>
               <CommandGroup className=''>
                 <Button disabled={isPending} size={'sm'} className={'w-full group focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-0 gap-x-1 justify-start items-center hover:text-neutral-50 font-medium'}>
-                  <Link href={`${isPending ? '' : `/admin/college/schedules/instructors/${user.userId._id}`}`} className={'w-full h-full group/item rounded-md focus-visible:ring-0 flex text-black bg-transparent gap-x-1 justify-start items-center group-hover:hover:text-neutral-50'}>
+                  <Link
+                    href={`${isPending ? '' : `/superadmin/college/schedules/instructors/${user.userId._id}`}`}
+                    className={'w-full h-full group/item rounded-md focus-visible:ring-0 flex text-black bg-transparent gap-x-1 justify-start items-center group-hover:hover:text-neutral-50'}
+                  >
                     <Icons.eye className='h-4 w-4' />
                     View Instructor Schedule
                   </Link>
                 </Button>
-                {/* <Button disabled={isPending} type='button' size={'sm'} className={'w-full focus-visible:ring-0 mb-2 text-black bg-transparent flex justify-start hover:bg-red px-2 py-0 gap-x-1 hover:text-neutral-50 font-medium'}>
-                  <Icons.close className='h-4 w-4' />
-                  Delete Course
-                </Button> */}
               </CommandGroup>
             </CommandList>
           </Command>

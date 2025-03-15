@@ -20,6 +20,8 @@ export const getSubjectByIdAction = async (id: string) => {
     switch (session.user.role) {
       case 'ADMIN':
         break;
+      case 'SUPER ADMIN':
+        break;
       case 'DEAN':
         const p = await getDeanProfileByUserId(session.user._id);
         if (p.courseId._id.toString() !== subject.courseId._id.toString()) return { error: 'Subject not found.', status: 404 };
