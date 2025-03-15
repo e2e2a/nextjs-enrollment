@@ -14,9 +14,9 @@ import { SelectInput } from './components/SelectInputs';
 import LoaderPage from '@/components/shared/LoaderPage';
 import RegOrMisc from './components/RegOrMisc';
 import { TuitionFeeValidator } from '@/lib/validators/tuitionFee/create';
-import { useTuitionFeeQueryById } from '@/lib/queries/tuitionFee/get/id';
+import { useTuitionFeeQueryById } from '@/lib/queries/courseFee/get/id';
 import { Icons } from '@/components/shared/Icons';
-import { useUpdateTuitionFeeMutation } from '@/lib/queries/tuitionFee/update';
+import { useUpdateTuitionFeeMutation } from '@/lib/queries/courseFee/update';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPending, setIsPending] = useState(false);

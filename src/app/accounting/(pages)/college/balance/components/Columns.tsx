@@ -73,7 +73,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.courseId.courseCode}
+          {user?.courseId?.courseCode}
         </div>
       );
     },
@@ -167,7 +167,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.blockTypeId?.section && `block ${user.blockTypeId?.section}`}
+          {user?.blockTypeId?.section && `block ${user?.blockTypeId?.section}`}
         </div>
       );
     },
@@ -186,40 +186,40 @@ export const columns: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.schoolYear,
+    accessorFn: (row) => row?.schoolYear,
     accessorKey: 'school year',
     header: 'School Year',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.schoolYear}
+          {user?.schoolYear}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.studentSubjects.length,
+    accessorFn: (row) => row.studentSubjects?.length,
     accessorKey: 'Subjects Count',
     header: 'Subjects Count',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' '>
-          {user.studentSubjects.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green'>{user.studentSubjects.length}</span>}
+          {user?.studentSubjects.length === 0 ? <span className='text-red'>{user?.studentSubjects.length}</span> : <span className='text-green'>{user.studentSubjects.length}</span>}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.enrollStatus,
+    accessorFn: (row) => row?.enrollStatus,
     accessorKey: 'enrollment status',
     header: 'Enrollment Status',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.enrollStatus?.toLowerCase() === 'enrolled' ? <span className='text-green-500'>{user.enrollStatus}</span> : <span className='text-gren-500'>{user.enrollStatus}</span>}
+          {user?.enrollStatus?.toLowerCase() === 'enrolled' ? <span className='text-green-500'>{user.enrollStatus}</span> : <span className='text-gren-500'>{user.enrollStatus}</span>}
         </div>
       );
     },

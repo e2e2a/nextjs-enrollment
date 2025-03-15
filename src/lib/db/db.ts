@@ -28,10 +28,11 @@ const modelsToInitialize = [
   'TeacherScheduleRecord',
   'AccountingProfile',
   'ReportGradeRecord',
-  'TuitionFee',
+  'CourseFee',
+  'CourseFeeRecord',
   'SuperAdminProfile',
   'Scholarship',
-  'StudentReceipt'
+  'StudentReceipt',
 ];
 let cached = global.mongoose;
 
@@ -57,8 +58,8 @@ async function dbConnect() {
       maxPoolSize: 10,
     };
 
-    cached.promise =
-    mongoose.connect(MONGODB_URI, opts)
+    cached.promise = mongoose
+      .connect(MONGODB_URI, opts)
       .then(async (mongoose) => {
         try {
           await initializeModel(modelsToInitialize);

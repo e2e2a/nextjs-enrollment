@@ -3,9 +3,8 @@ import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getEnrollmentByProfileId, updateEnrollmentById } from '@/services/enrollment';
 import { getEnrollmentSetupByName } from '@/services/EnrollmentSetup';
-import { createStudentReceipt, getStudentReceiptByStudentId } from '@/services/studentPayment';
+import { createStudentReceipt, getStudentReceiptByStudentId } from '@/services/studentReceipt';
 import { getStudentProfileById } from '@/services/studentProfile';
-import { getTuitionFeeByCourseId } from '@/services/tuitionFee';
 import { checkAuth } from '@/utils/actions/session';
 import { v4 as uuidv4 } from 'uuid';
 import { ApiError, Client, Environment, LogLevel, OrdersController } from '@paypal/paypal-server-sdk';
@@ -70,9 +69,7 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
   return tryCatch(async () => {
     const studentEnrollment = await getEnrollmentByProfileId(student._id);
     if (!studentEnrollment) return { error: 'No Enrollment found', status: 404 };
-    const fee = await getTuitionFeeByCourseId(studentEnrollment.courseId._id);
 
-    const total = parseFloat(Number(fee.downPayment).toFixed(2));
     const d = await checkSellerProtectionStatus(data.orderID);
     if (!d) return { error: 'Sorry we cant find your Payment', message: 'yesyes', status: 200 };
     const seller_protection = d.res.purchase_units[0].payments.captures[0].seller_protection.status;
@@ -101,7 +98,7 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
     };
     // data.payer.address = d.res.purchase_units[0].shipping.address;
     // data.payer.captures = captures;
-    const data2 = { ...data, captures: captures, 'payer.address': d?.res?.purchase_units[0].shipping?.address, payment_source: payment_source };
+    const data2 = { ...data, captures: captures, year: studentEnrollment.year, semester: studentEnrollment.semester, 'payer.address': d?.res?.purchase_units[0].shipping?.address, payment_source: payment_source };
     const createdReceipt = await createStudentReceipt(data2);
     if (!createdReceipt) return { error: 'Something went wrong.', status: 500 };
 
@@ -109,17 +106,8 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
     const a = await getStudentReceiptByStudentId(data.studentId);
     const b = await a.filter((rs) => rs.type.toLowerCase() === 'downpayment' && rs.schoolYear.toLowerCase() === setup.enrollmentTertiary.schoolYear.toLowerCase());
 
-    let recentPayment = 0;
-    if (b && b.length > 0) {
-      for (const rs of a) {
-        recentPayment += parseFloat(Number(rs.amount.value || 0).toFixed(2));
-      }
+    if (studentEnrollment.step === 5 && d.res.purchase_units[0].payments.captures[0].status === 'COMPLETED') await updateEnrollmentById(studentEnrollment._id, { step: 6, payment: true });
 
-      // if(studentEnrollment.step === 5) return { error: 'Your step is not valid.', status: 403 };
-      if (d.res.purchase_units[0].payments.captures[0].status === 'COMPLETED') {
-        await updateEnrollmentById(studentEnrollment._id, { step: 6, payment: true });
-      }
-    }
     return { success: true, message: 'Successful Payment, Receipt has been created.', status: 201 };
   });
 };

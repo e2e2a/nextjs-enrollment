@@ -18,9 +18,10 @@ type IProps = {
   amountToPay: any;
   type: string;
   title: string;
+  isScholarshipStart: boolean;
 };
 
-const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title }: IProps) => {
+const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [amountPayment, setAmountPayment] = useState(0.0);
   const [amountInput, setAmountInput] = useState(0.0);
@@ -33,17 +34,16 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
   useEffect(() => {
     if (!enrollment) return;
     if (!tfData) return;
-    if (!srData) return;
     if (!esData || esError) return;
 
-    if (srData && tfData) {
+    if (tfData) {
       let totalAmountToPay = amountToPay;
-      if (!enrollment?.profileId?.scholarshipId && type === 'fullPayment') totalAmountToPay = parseFloat((amountToPay - amountToPay * 0.1).toFixed(2));
+      if (!isScholarshipStart && type === 'fullPayment') totalAmountToPay = parseFloat((amountToPay - amountToPay * 0.1).toFixed(2));
       setAmountPayment(totalAmountToPay);
       setAmountInput(totalAmountToPay);
       setDiscounted(totalAmountToPay);
     }
-  }, [srData, tfData, esData, esError, enrollment, amountToPay, type]);
+  }, [srData, tfData, esData, esError, enrollment, amountToPay, type, isScholarshipStart]);
 
   const mutation = useCreateStudentReceiptMutation();
   const onSubmit = async (e: any) => {
@@ -54,7 +54,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
       category: 'College',
       amount: {
         currency_code: 'Php',
-        value: type === 'fullPayment' ? parseFloat((amountInput - amountInput * 0.1).toFixed(2)) : Number(amountInput).toFixed(2),
+        value: Number(amountInput).toFixed(2),
       },
       status: 'COMPLETED',
       paymentMethod: 'CASH',
@@ -63,7 +63,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
       taxes: {
         fee: (0).toFixed(2),
         fixed: (0).toFixed(2),
-        amount: type === 'fullPayment' ? parseFloat((amountInput - amountInput * 0.1).toFixed(2)) : Number(amountInput).toFixed(2),
+        amount: Number(amountInput).toFixed(2),
       },
       type: type,
     };
@@ -134,8 +134,8 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
                         </div>
                         <div className='text-sm sm:mt-10 mt-5 w-ful flex flex-col '>
                           <span className='font-bold text-end w-full text-nowrap '>
-                            <span className={`font-bold text-end w-full text-black ${type === 'fullPayment' && !enrollment?.profileId?.scholarshipId && 'line-through'}`}>₱{amountToPay}</span>
-                            {type === 'fullPayment' && !enrollment?.profileId?.scholarshipId && <span className='text-green-500'> ₱{amountPayment}(10%)</span>}
+                            <span className={`font-bold text-end w-full text-black ${type === 'fullPayment' && !isScholarshipStart && 'line-through'}`}>₱{amountToPay}</span>
+                            {type === 'fullPayment' && !isScholarshipStart && <span className='text-green-500'> ₱{amountPayment}(10%)</span>}
                           </span>
                         </div>
                       </div>

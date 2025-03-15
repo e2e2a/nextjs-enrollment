@@ -71,6 +71,8 @@ export interface IStudentReceipt extends Document {
     code: string;
   };
   paymentMethod: string;
+  semester: string;
+  year: string;
   schoolYear: string;
 }
 
@@ -81,6 +83,8 @@ const schema = new Schema<IStudentReceipt>(
     category: { type: String },
     studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'StudentProfile' },
     transactionId: { type: String },
+    semester: { type: String },
+    year: { type: String },
     amount: {
       currency_code: { type: String },
       value: { type: Number },

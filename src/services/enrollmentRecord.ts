@@ -3,7 +3,12 @@ import EnrollmentRecord from '@/models/EnrollmentRecord';
 
 export const getEnrollmentRecordByCategory = async (category: string) => {
   try {
-    const TProfile = await EnrollmentRecord.find({ category }).populate('profileId').exec();
+    const TProfile = await EnrollmentRecord.find({ category })
+      .populate({
+        path: 'profileId',
+        populate: [{ path: 'scholarshipId' }],
+      })
+      .exec();
     return TProfile;
   } catch (error) {
     console.log('error in service:', error);
@@ -12,7 +17,12 @@ export const getEnrollmentRecordByCategory = async (category: string) => {
 };
 export const getEnrollmentRecordByProfileId = async (profileId: any) => {
   try {
-    const TProfile = await EnrollmentRecord.find({ profileId }).populate('profileId').exec();
+    const TProfile = await EnrollmentRecord.find({ profileId })
+      .populate({
+        path: 'profileId',
+        populate: [{ path: 'scholarshipId' }],
+      })
+      .exec();
     return TProfile;
   } catch (error) {
     console.log('error in service:', error);
@@ -22,7 +32,12 @@ export const getEnrollmentRecordByProfileId = async (profileId: any) => {
 
 export const getEnrollmentRecordById = async (id: any) => {
   try {
-    const TProfile = await EnrollmentRecord.findById(id).populate('profileId').exec();
+    const TProfile = await EnrollmentRecord.findById(id)
+      .populate({
+        path: 'profileId',
+        populate: [{ path: 'scholarshipId' }],
+      })
+      .exec();
     return TProfile;
   } catch (error) {
     console.log('error in service:', error);

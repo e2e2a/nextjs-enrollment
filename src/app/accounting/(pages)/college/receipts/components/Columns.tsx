@@ -71,14 +71,17 @@ export const columns: ColumnDef<any>[] = [
     accessorFn: (row) => row.captureTime,
     header: 'Billing Date',
     cell: ({ row }) => {
-      const date = new Date(row.getValue('Billing Date'));
-      const formatted = date.toLocaleDateString();
+      let date;
+      date = new Date(row.getValue('Billing Date'));
+      let formatted;
+      formatted = date.toLocaleDateString();
+      if (formatted.toLowerCase() === 'invalid date') formatted = new Date(row.original?.createdAt).toLocaleDateString();
 
       return <div className='font-medium'>{formatted}</div>;
     },
   },
   {
-    accessorFn: (row) => row?.type, // Use accessorFn for nested fields
+    accessorFn: (row) => row?.type,
     id: 'type',
     header: 'Type',
     cell: ({ cell, row }) => {
@@ -91,25 +94,53 @@ export const columns: ColumnDef<any>[] = [
           {user?.type.toLowerCase() === 'semi-final' && 'Semi-final Payment'}
           {user?.type.toLowerCase() === 'final' && 'Final Payment'}
           {user?.type.toLowerCase() === 'fullpayment' && 'Full Payment'}
+          {user?.type.toLowerCase() === 'departmental' && 'Departmental Payment'}
+          {user?.type.toLowerCase() === 'ssg' && 'SSG Payment'}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.amount?.value, // Use accessorFn for nested fields
+    accessorFn: (row) => row.amount?.value,
     id: 'Amount',
     header: 'Amount',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.amount?.value && `₱${Number(user.amount.value).toFixed(2)}`}
+          {user?.amount?.value && `₱${Number(user?.amount?.value).toFixed(2)}`}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.schoolYear, // Use accessorFn for nested fields
+    accessorFn: (row) => row?.year,
+    id: 'year',
+    header: 'Year',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase font-semibold'>
+          {user?.year ?? ''}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row?.semester,
+    id: 'semester',
+    header: 'Semester',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase font-semibold'>
+          {user?.semester ?? ''}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row?.schoolYear,
     id: 'school year',
     header: 'School Year',
     cell: ({ cell, row }) => {

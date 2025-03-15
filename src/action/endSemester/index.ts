@@ -22,6 +22,8 @@ import { getEnrollmentRecordData } from './helpers/getEnrollmentRecordData';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { checkAuth } from '@/utils/actions/session';
 import ReportGradeRecord from '@/models/ReportGradeRecord';
+import { getCourseFeeByCategory } from '@/services/courseFee';
+import CourseFeeRecord from '@/models/CourseFeeRecord';
 // import { verificationTemplate } from './emailTemplate/verificationTemplate';
 
 const sendEmailWithPDF = async (checkE: any) => {
@@ -110,6 +112,27 @@ const handleCategoryCollege = async (data: any) => {
 
     const courses = await Course.find({ category: 'College' }).select('_id');
     const courseIds = courses.map((course) => course._id);
+
+    // for course fee
+    const courseFees = await getCourseFeeByCategory('College');
+    const mappedCourseFees = courseFees.map((cf) => {
+      return {
+        category: cf.category,
+        course: cf.courseId.name,
+        courseCode: cf.courseId.courseCode,
+        ratePerUnit: cf.ratePerUnit,
+        ratePerLab: cf.ratePerLab,
+        departmentalFee: cf.departmentalFee,
+        ssgFee: cf.ssgFee,
+        cwtsOrNstpFee: cf.cwtsOrNstpFee,
+        downPayment: cf.downPayment,
+        year: cf.year,
+        schoolYear: cf.schoolYear,
+        regOrMisc: cf.regOrMisc,
+        semester: eSetup.enrollmentTertiary.semester,
+      };
+    });
+    await CourseFeeRecord.insertMany(mappedCourseFees);
 
     // Use bulk operation
     await StudentProfile.updateMany({ courseId: { $in: courseIds }, studentStatus: 'Continue', enrollStatus: { $in: ['', 'Pending'] } }, { $set: { studentStatus: 'Returning', enrollStatus: '' } }, { new: true });
