@@ -178,6 +178,45 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorFn: (row) => row?.days,
+    id: 'days',
+    header: 'Days',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.days.join(', ')}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row?.startTime,
+    id: 'start time',
+    header: 'Start Time',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.startTime}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row?.endTime,
+    id: 'end time',
+    header: 'End Time',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className='uppercase'>
+          {user?.endTime}
+        </div>
+      );
+    },
+  },
+  {
     accessorFn: (row) => row.room?.roomName,
     id: 'room name',
     header: 'Room Name',

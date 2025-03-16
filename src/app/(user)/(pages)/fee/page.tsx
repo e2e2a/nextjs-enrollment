@@ -8,7 +8,6 @@ import { useEnrollmentQueryBySessionId } from '@/lib/queries/enrollment/get/sess
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
-import { useStudentReceiptQueryByUserId } from '@/lib/queries/studentReceipt/get/userId';
 import SettleTermPayment from './components/SettleTermPayment';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -17,6 +16,7 @@ import { exportToPDF } from './components/ExportUtils';
 import { Icons } from '@/components/shared/Icons';
 import { GeneratePDF } from './components/GeneratePDF';
 import { isScholarshipApplicable } from '@/constant/scholarship';
+import { useStudentReceiptQueryByUserIdAndYearAndSemester } from '@/lib/queries/studentReceipt/get/yearAndSemester';
 
 const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
@@ -33,7 +33,7 @@ const Page = () => {
   const { data, error } = useEnrollmentQueryBySessionId(session?.user?.id!);
   const { data: tfData, error: isTFError } = useCourseFeeQueryByCourseIdAndYear(data?.enrollment?.studentYear, data?.enrollment?.courseId?._id || 'e2e2a');
   const { data: esData, isError: esError } = useEnrollmentSetupQuery();
-  const { data: srData, error: srError } = useStudentReceiptQueryByUserId(session?.user.id as string, esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear);
+  const { data: srData, error: srError } = useStudentReceiptQueryByUserIdAndYearAndSemester(session?.user.id as string, data?.enrollment?.studentYear, data?.enrollment?.studentSemester, esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear);
 
   //full payment exclude all terms payment and downpayment
   const paymentOfFullPayment = srData?.studentReceipt.find((r: any) => r.type.toLowerCase() === 'fullpayment');
@@ -210,7 +210,7 @@ const Page = () => {
         <>
           {data?.enrollment ? (
             <>
-              {tfData?.tFee && data.enrollment.step >= 5 ? (
+              {tfData?.tFee && data.enrollment.step >= 5 && data?.enrollment?.enrollStatus.toLowerCase() !== 'withdraw' ? (
                 <div className='border-0 bg-white rounded-xl min-h-[87vh]'>
                   {tfData?.tFee && (
                     <Accordion type='single' collapsible className='w-full p-10'>
@@ -648,7 +648,29 @@ const Page = () => {
                 </div>
               ) : (
                 <>
-                  {!tfData?.tFee && (
+                  {data?.enrollment?.enrollStatus.toLowerCase() === 'withdraw' && (
+                    <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
+                      <Card className={`min-h-[35vh] my-[10%] shadow-none drop-shadow-none items-center justify-center flex border-0`}>
+                        <CardHeader className='space-y-3 hidden'>
+                          <CardTitle className=''>
+                            <div className='flex flex-col justify-center gap-y-1 items-center'>
+                              <div className='text-center lg:text-left font-poppins'>e2e2a</div>
+                            </div>
+                          </CardTitle>
+                          <CardDescription>e2e2a</CardDescription>
+                        </CardHeader>
+                        <CardContent className='flex w-full justify-center py-5 flex-col rounded-lg shadow-sm bg-white items-center border focus-visible:ring-0 space-y-5 px-0 mt-7'>
+                          <div className='flex flex-col justify-center gap-y-1 py-10 items-center'>
+                            <div className=''>
+                              <Image src={'/images/logo1.png'} className='w-auto rounded-full' priority width={100} height={100} alt='nothing to say' />
+                            </div>
+                            <div className='text-center text-xl sm:text-2xl font-semibold tracking-tight uppercase'>Enrollment has been Withdraw</div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  )}
+                  {!tfData?.tFee && data?.enrollment?.enrollStatus.toLowerCase() !== 'withdraw' && (
                     <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
                       <Card className={`min-h-[35vh] my-[10%] shadow-none drop-shadow-none items-center justify-center flex border-0`}>
                         <CardHeader className='space-y-3 hidden'>
@@ -681,17 +703,9 @@ const Page = () => {
                       <Card className={`min-h-[35vh] my-[10%] shadow-none drop-shadow-none items-center justify-center flex border-0`}>
                         <CardHeader className='space-y-3 hidden'>
                           <CardTitle className=''>
-                            <div className='flex flex-col justify-center gap-y-1 items-center'>
-                              <div className=''>
-                                <Image src={'/images/logo1.png'} className='w-auto rounded-full' priority width={65} height={65} alt='nothing to say' />
-                              </div>
-                              <div className='text-center lg:text-left font-poppins'>No Enrollment Found</div>
-                            </div>
+                            <div className='text-center lg:text-left font-poppins'>e2e2a</div>
                           </CardTitle>
-                          <CardDescription>
-                            To proceed with your enrollment, please ensure all required fields are completed. Accurate and complete information is essential for successful registration. Double-check your details before submitting to avoid any delays in
-                            processing your enrollment. If you have trouble filling out any fields, please check out our documentation or contact us at <span className='text-blue-500 cursor-pointer'>+639123456789</span> for further information.
-                          </CardDescription>
+                          <CardDescription>e2e2a</CardDescription>
                         </CardHeader>
                         <CardContent className='flex w-full justify-center py-5 flex-col rounded-lg shadow-sm bg-white items-center border focus-visible:ring-0 space-y-5 px-0 mt-7'>
                           <div className='flex flex-col justify-center gap-y-1 items-center'>
@@ -721,17 +735,9 @@ const Page = () => {
               <Card className={`min-h-[35vh] my-[10%] shadow-none drop-shadow-none items-center justify-center flex border-0`}>
                 <CardHeader className='space-y-3 hidden'>
                   <CardTitle className=''>
-                    <div className='flex flex-col justify-center gap-y-1 items-center'>
-                      <div className=''>
-                        <Image src={'/images/logo1.png'} className='w-auto rounded-full' priority width={65} height={65} alt='nothing to say' />
-                      </div>
-                      <div className='text-center lg:text-left font-poppins'>No Enrollment Found</div>
-                    </div>
+                    <div className='text-center lg:text-left font-poppins'>e2e2a</div>
                   </CardTitle>
-                  <CardDescription>
-                    To proceed with your enrollment, please ensure all required fields are completed. Accurate and complete information is essential for successful registration. Double-check your details before submitting to avoid any delays in processing your
-                    enrollment. If you have trouble filling out any fields, please check out our documentation or contact us at <span className='text-blue-500 cursor-pointer'>+639123456789</span> for further information.
-                  </CardDescription>
+                  <CardDescription>e2e2a</CardDescription>
                 </CardHeader>
                 <CardContent className='flex w-full justify-center py-5 flex-col rounded-lg shadow-sm bg-white items-center border focus-visible:ring-0 space-y-5 px-0 mt-7'>
                   <div className='flex flex-col justify-center gap-y-1 items-center'>

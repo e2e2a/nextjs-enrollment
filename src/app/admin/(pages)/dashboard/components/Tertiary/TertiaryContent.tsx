@@ -13,6 +13,8 @@ import MainGrade from './grades/MainGrade';
 import { useBlockCourseQueryByCategory } from '@/lib/queries/blocks/get/category';
 import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 import StudentsByCourses from './studentsByCourses/StudentsByCourses';
+import EnableAddDrop from './EnableAddDrop';
+import EnableWithdrawal from './EnableWithdrawal';
 
 const TertiaryContent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -92,6 +94,15 @@ const TertiaryContent = () => {
             )}
           </div>
 
+          {esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear && esData?.enrollmentSetup?.enrollmentTertiary?.semester && (
+            <div className=''>
+              <h1 className='font-semibold tracking-tight text-[18px] xs:text-xl text-center mt-10 mb-5'>Enable Add/Drop/Withdrawal</h1>
+              <div className='flex justify-between'>
+                <EnableAddDrop enrollmentSetup={esData?.enrollmentSetup} />
+                <EnableWithdrawal enrollmentSetup={esData?.enrollmentSetup} />
+              </div>
+            </div>
+          )}
           {esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear && esData?.enrollmentSetup?.enrollmentTertiary?.semester && <MainGrade setup={esData?.enrollmentSetup?.enrollmentTertiary} />}
 
           <div className='w-full'>

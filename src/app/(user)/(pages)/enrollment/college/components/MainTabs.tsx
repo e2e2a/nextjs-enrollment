@@ -43,7 +43,7 @@ const MainTabs = ({ search, value, enrollment, profile, enrollmentSetup, courses
           <Step6 enrollment={enrollment} />
         </>
       )}
-      {enrollment && (profile.enrollStatus === 'Enrolled' || profile.enrollStatus === 'Temporary Enrolled') && <Congrats enrollment={enrollment} />}
+      {enrollment && (profile.enrollStatus === 'Enrolled' || profile.enrollStatus === 'Temporary Enrolled') && <Congrats enrollment={enrollment} enrollmentSetup={enrollmentSetup} />}
     </Tabs>
   );
 };

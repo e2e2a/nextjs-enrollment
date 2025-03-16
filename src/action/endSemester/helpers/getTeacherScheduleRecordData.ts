@@ -6,6 +6,7 @@ export const getTeacherScheduleRecordData = async (filteredSchedule: any, filter
   return tryCatch(async () => {
     let teacherSchededRecord = [];
     let ReportedGradesRecord = [];
+    const a = filterEnrolledEnrollments.filter((e: any) => e.enrollStatus.toLowerCase() !== 'withdraw');
     const reportedGrades = await getReportGradeByCategory('College');
     for (const sched of filteredSchedule) {
       let filteredReportGrades = [];
@@ -54,7 +55,7 @@ export const getTeacherScheduleRecordData = async (filteredSchedule: any, filter
           }
           ReportedGradesRecord.push(processRG);
         }
-        for (const studentEnrollment of filterEnrolledEnrollments) {
+        for (const studentEnrollment of a) {
           for (const studentSubject of studentEnrollment.studentSubjects) {
             if (studentSubject.teacherScheduleId._id.toString() === sched._id.toString()) {
               if (studentSubject.status === 'Approved') {

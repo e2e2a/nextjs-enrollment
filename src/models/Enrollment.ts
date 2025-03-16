@@ -19,6 +19,10 @@ export interface IEnrollment extends Document {
   scholarType: 'TWSP' | 'STEP' | 'PESFA' | 'UAQTEA' | 'None';
   studentSubjects: Number;
   payment: boolean;
+  requestWithdraw: boolean;
+  withdrawApprovedByDean: boolean;
+  withdrawApprovedByAdmin: boolean;
+  withdrawReason: string;
   rejectedRemark: string;
 }
 
@@ -54,7 +58,7 @@ const schema = new Schema<IEnrollment>(
     enrollStatus: {
       type: String,
       default: 'Pending',
-      enum: ['Pending', 'Rejected', 'Enrolled', 'Temporary Enrolled', 'Failed', 'Completed'],
+      enum: ['Pending', 'Rejected', 'Enrolled', 'Temporary Enrolled', 'Failed', 'Withdraw', 'Completed'],
     },
     studentStatus: {
       type: String,
@@ -111,6 +115,10 @@ const schema = new Schema<IEnrollment>(
       },
     ],
     payment: { type: Boolean },
+    requestWithdraw: { type: Boolean },
+    withdrawReason: { type: String },
+    withdrawApprovedByDean: { type: Boolean },
+    withdrawApprovedByAdmin: { type: Boolean },
     rejectedRemark: { type: String },
   },
   {

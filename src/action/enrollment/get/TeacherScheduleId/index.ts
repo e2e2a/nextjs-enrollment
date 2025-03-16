@@ -49,9 +49,9 @@ const adminRole = async (data: any) => {
   return tryCatch(async () => {
     const ts = await getTeacherScheduleById(data.id);
     if (!ts) return { error: 'forbidden', status: 500 };
-
-    const s = await getAllEnrollmentByTeacherScheduleId(data.id);
-
+    let s;
+    const a = await getAllEnrollmentByTeacherScheduleId(data.id);
+    s = a?.filter((e) => e.enrollStatus.toLowerCase() !== 'withdraw');
     let students;
     if (s && s.length > 0) {
       students = s
@@ -72,8 +72,9 @@ const deanRole = async (user: any, data: any) => {
     if (!ts) return { error: 'forbidden', status: 500 };
     //double check if the courseId is not equal
     if (p.courseId._id.toString() !== ts.courseId._id.toString()) return { error: 'Dont have permission.', status: 403 };
-
-    const s = await getAllEnrollmentByTeacherScheduleId(data.id);
+    let s;
+    const a = await getAllEnrollmentByTeacherScheduleId(data.id);
+    s = a?.filter((e) => e.enrollStatus.toLowerCase() !== 'withdraw');
 
     let students;
     if (s && s.length > 0) {
@@ -99,7 +100,9 @@ const teacherRole = async (user: any, data: any) => {
     //double check if the courseId is not equal
     if (p._id.toString() !== ts.profileId._id.toString()) return { error: 'Dont have permission.', status: 403 };
 
-    const s = await getAllEnrollmentByTeacherScheduleId(data.id);
+    let s;
+    const a = await getAllEnrollmentByTeacherScheduleId(data.id);
+    s = a?.filter((e) => e.enrollStatus.toLowerCase() !== 'withdraw');
 
     let students;
     if (s && s.length > 0) {

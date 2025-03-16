@@ -5,7 +5,7 @@ export const useStudentReceiptQueryByUserId = (userId: string, schoolYear?: stri
   return useQuery<any, Error>({
     queryKey: ['StudentReceiptByUserId', userId],
     queryFn: () => getAllStudentReceiptByUserIdAction(userId, schoolYear),
-    enabled: !!userId,
+    enabled: !!userId && !!schoolYear,
     retry: 0,
     refetchOnMount: false,
     refetchOnWindowFocus: true,

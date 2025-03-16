@@ -1,10 +1,9 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { TabsContent } from '@/components/ui/tabs';
 import { Icons } from '@/components/shared/Icons';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
 import LoaderPage from '@/components/shared/LoaderPage';
 
 type IProps = {
@@ -12,14 +11,14 @@ type IProps = {
 };
 const Step6 = ({ enrollment }: IProps) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [isUploading, setIsUploading] = useState(false);
-  const { data: s } = useSession();
+
   useEffect(() => {
     if (!enrollment) return;
     if (enrollment) return setIsPageLoading(false);
 
-    console.log('me and you');
+    console.log('me and you♥');
   }, [enrollment]);
+
   return (
     <>
       {isPageLoading ? (
@@ -57,14 +56,6 @@ const Step6 = ({ enrollment }: IProps) => {
                   .
                 </span>
               </div>
-              {/* <div className='my-10'>
-                <div className='flex w-full items-center justify-center'>
-                  <Link href='/schedules' className='bg-blue-600 text-neutral-50 hover:bg-blue-700 flex px-2 items-center py-2 text-xs sm:text-sm rounded-md'>
-                    <Icons.eye className='h-5 w-5' />
-                    Add/Drop Subjects
-                  </Link>
-                </div>
-              </div> */}
               <div className='flex flex-col w-full '>
                 <span className='text-left sm:text-center w-full px-5 sm:px-10 mt-5 sm:mt-10 text-sm text-muted-foreground'>
                   <span className=' relative sm:hidden'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>

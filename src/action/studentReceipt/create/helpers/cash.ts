@@ -31,8 +31,8 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
     };
 
     const data2 = {
-      year: studentEnrollment.year,
-      semester: studentEnrollment.semester,
+      year: studentEnrollment.studentYear,
+      semester: studentEnrollment.studentSemester,
       ...data,
       captures: captures,
       payer: {
