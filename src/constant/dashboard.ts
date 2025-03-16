@@ -1267,13 +1267,13 @@ export const dashboardConfig: DashboardConfig = {
           title: 'Role Super Admins',
           i: [
             {
-              title: 'Admins Management',
-              href: '/superadmin/users/admins',
+              title: 'Super Admins Management',
+              href: '/superadmin/users/superadmin',
               icon: 'eye',
             },
             {
-              title: 'Add Admin',
-              href: '/superadmin/users/admins/add',
+              title: 'Add Super Admin',
+              href: '/superadmin/users/superadmin/add',
               icon: 'add',
             },
           ],

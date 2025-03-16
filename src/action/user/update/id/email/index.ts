@@ -17,7 +17,8 @@ export const newEmailActionByAdmin = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
     const session = await checkAuth();
-    if (!session || session.error || session.user.role !== 'ADMIN') return { error: 'Not authenticated.', status: 403 };
+    if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
+    if (session.user.role !== 'ADMIN' && session.user.role !== 'SUPER ADMIN') return { error: 'Not authenticated.', status: 403 };
 
     const validatedFields = EmailValidator.safeParse(data);
     if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };

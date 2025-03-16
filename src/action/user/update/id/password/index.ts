@@ -16,7 +16,8 @@ export const newPasswordActionByAdmin = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
     const session = await checkAuth();
-    if (!session || session.error || session.user.role !== 'ADMIN') return { error: 'Not authenticated.', status: 403 };
+    if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
+    if (session.user.role !== 'ADMIN' && session.user.role !== 'SUPER ADMIN') return { error: 'Not authenticated.', status: 403 };
 
     const validatedFields = NewPasswordValidator.safeParse(data);
     if (!validatedFields.success) return { error: 'Invalid fields!', status: 400 };
@@ -38,7 +39,7 @@ const updateUserPassword = async (id: string, password: string) => {
   return tryCatch(async () => {
     const user = await getUserById(id);
     if (!user) return { error: 'Not found!', status: 404 };
-    
+
     const hashedPassword = await hashPassword(password);
 
     const updateUser = await updateUserById(user._id, { password: hashedPassword });
