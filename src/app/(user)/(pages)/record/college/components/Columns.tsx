@@ -1,4 +1,3 @@
-'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -54,6 +53,19 @@ export const columns: ColumnDef<any>[] = [
       return (
         <div key={cell.id} className=' uppercase'>
           {user.blockType?.year} - {user.blockType?.semester}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row?.enrollStatus,
+    id: 'enrollment status',
+    header: 'Enrollment Status',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user?.enrollStatus}
         </div>
       );
     },

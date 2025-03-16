@@ -16,24 +16,27 @@ const MainOverview = () => {
   const { data: rsData, error: rsError } = useAllProfileQueryByUserRoles('STUDENT');
   const { data: rtData, error: rtError } = useAllProfileQueryByUserRoles('TEACHER');
   const { data: rdData, error: rdError } = useAllProfileQueryByUserRoles('DEAN');
+  const { data: racData, error: racError } = useAllProfileQueryByUserRoles('ACCOUNTING');
+
   useEffect(() => {
     if (!AllU || AllUError) return;
     if (!rsData || rsError) return;
     if (!rtData || rtError) return;
     if (!rdData || rdError) return;
     if (!raData || raError) return;
+    if (!racData || racError) return;
 
     if (rsData && rtData && rdData && raData) {
       if (rsData.profiles && rtData.profiles && rdData.profiles && raData.profiles) {
-        const total = rsData.profiles.length + rtData.profiles.length + rdData.profiles.length + raData.profiles.length;
+        const total = rsData.profiles.length + rtData.profiles.length + rdData.profiles.length + raData.profiles.length + racData.profiles.length;
         setTotalAccounts(total);
-        const totalActive = AllU.users.filter((u:any) => u.active === true);
-        setTotalActive(totalActive.length)
+        const totalActive = AllU.users.filter((u: any) => u.active === true);
+        setTotalActive(totalActive.length);
         setIsPageLoading(false);
       }
       return;
     }
-  }, [rsData, rsError, rtData, rtError, rdData, rdError, raData, raError, AllU, AllUError]);
+  }, [rsData, rsError, rtData, rtError, rdData, rdError, raData, raError, racData, racError, AllU, AllUError]);
   return (
     <>
       {isPageLoading ? (
@@ -106,7 +109,7 @@ const MainOverview = () => {
                 </svg>
               </CardHeader>
               <CardContent>
-                <div className='text-2xl font-bold'>0</div>
+                <div className='text-2xl font-bold'>{racData?.profiles?.length}</div>
               </CardContent>
             </Card>
             <Card>
@@ -127,7 +130,7 @@ const MainOverview = () => {
               <CardTitle>Account Created</CardTitle>
             </CardHeader>
             <CardContent className='pl-2'>
-              <Overview users={AllU.users}/>
+              <Overview users={AllU?.users} />
             </CardContent>
           </Card>
         </TabsContent>

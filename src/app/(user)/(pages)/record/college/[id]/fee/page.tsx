@@ -5,7 +5,6 @@ import LoaderPage from '@/components/shared/LoaderPage';
 import { useSession } from 'next-auth/react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useStudentReceiptQueryByUserId } from '@/lib/queries/studentReceipt/get/userId';
 import SettleTermPayment from './components/SettleTermPayment';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -16,6 +15,7 @@ import { GeneratePDF } from './components/GeneratePDF';
 import { isScholarshipApplicable } from '@/constant/scholarship';
 import { useEnrollmentRecordQueryById } from '@/lib/queries/enrollmentRecord/get/id';
 import { useCourseFeeRecordQueryByCourseCodeAndYearAndSemester } from '@/lib/queries/courseFeeRecord/get/courseCode';
+import { useStudentReceiptQueryByUserIdAndYearAndSemester } from '@/lib/queries/studentReceipt/get/yearAndSemester';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
@@ -31,7 +31,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data: session } = useSession();
   const { data, error } = useEnrollmentRecordQueryById(params.id);
   const { data: tfData, error: isTFError } = useCourseFeeRecordQueryByCourseCodeAndYearAndSemester(data?.enrollmentRecord?.studentYear, data?.enrollmentRecord?.studentSemester, data?.enrollmentRecord?.courseCode || 'e2e2a');
-  const { data: srData, error: srError } = useStudentReceiptQueryByUserId(session?.user.id as string, data?.enrollmentRecord?.schoolYear);
+  const { data: srData, error: srError } = useStudentReceiptQueryByUserIdAndYearAndSemester(session?.user.id as string, data?.enrollmentRecord?.studentYear, data?.enrollmentRecord?.studentSemester, data?.enrollmentRecord?.schoolYear);
 
   //full payment exclude all terms payment and downpayment
   const paymentOfFullPayment = srData?.studentReceipt.find((r: any) => r.type.toLowerCase() === 'fullpayment');

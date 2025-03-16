@@ -5,7 +5,6 @@ import LoaderPage from '@/components/shared/LoaderPage';
 import { useSession } from 'next-auth/react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useStudentReceiptQueryByUserId } from '@/lib/queries/studentReceipt/get/userId';
 import SettleTermPayment from './components/SettleTermPayment';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -16,6 +15,7 @@ import { GeneratePDF } from './components/GeneratePDF';
 import { isScholarshipApplicable } from '@/constant/scholarship';
 import { useEnrollmentRecordQueryById } from '@/lib/queries/enrollmentRecord/get/id';
 import { useCourseFeeRecordQueryByCourseCodeAndYearAndSemester } from '@/lib/queries/courseFeeRecord/get/courseCode';
+import { useStudentReceiptQueryByUserIdAndYearAndSemester } from '@/lib/queries/studentReceipt/get/yearAndSemester';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
@@ -31,8 +31,13 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data: session } = useSession();
   const { data, error } = useEnrollmentRecordQueryById(params.id);
   const { data: tfData, error: isTFError } = useCourseFeeRecordQueryByCourseCodeAndYearAndSemester(data?.enrollmentRecord?.studentYear, data?.enrollmentRecord?.studentSemester, data?.enrollmentRecord?.courseCode || 'e2e2a');
-  const { data: srData, error: srError } = useStudentReceiptQueryByUserId((session?.user.id as string) || 'e2e2a', data?.enrollmentRecord?.schoolYear);
-
+  const { data: srData, error: srError } = useStudentReceiptQueryByUserIdAndYearAndSemester(
+    (data?.enrollmentRecord?.profileId?.userId as string) || 'e2e2a',
+    data?.enrollmentRecord?.studentYear,
+    data?.enrollmentRecord?.studentSemester,
+    data?.enrollmentRecord?.schoolYear
+  );
+  const isWithdrawn = data?.enrollmentRecord?.enrollStatus?.toLowerCase() === 'withdraw';
   //full payment exclude all terms payment and downpayment
   const paymentOfFullPayment = srData?.studentReceipt?.find((r: any) => r.type.toLowerCase() === 'fullpayment');
 
@@ -352,11 +357,12 @@ const Page = ({ params }: { params: { id: string } }) => {
                       <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Remaining Fee&apos;s</CardTitle>
                       <CardDescription className='grid grid-cols-1 sm:grid-cols-2'>
                         <span className='text-xs sm:text-sm capitalize'>Fullname: {name} </span>
-                        <span className='text-xs sm:text-sm w-full text-start sm:text-end'>Department: {tfData?.tFee?.courseId?.name} </span>
+                        <span className='text-xs sm:text-sm w-full text-start sm:text-end'>Department: {tfData?.tFee?.course} </span>
                         <span className='text-xs sm:text-sm'>SchoolYear: {data?.enrollmentRecord?.schoolYear} </span>
+                        <span className='text-xs sm:text-sm w-full text-start sm:text-end'>Enrollment Status: {data?.enrollmentRecord?.enrollStatus} </span>
                       </CardDescription>
                       <div className=''>
-                        {!showPaymentOfFullPayment && !showPaymentOfDownPayment && !showPaymentOfPrelim && !showPaymentOfMidterm && !showPaymentOfSemiFinal && !showPaymentOfFinal && (
+                        {!isWithdrawn && !showPaymentOfFullPayment && !showPaymentOfDownPayment && !showPaymentOfPrelim && !showPaymentOfMidterm && !showPaymentOfSemiFinal && !showPaymentOfFinal && (
                           <div className='flex flex-col justify-center items-center w-full border-[0.5px] rounded-lg px-5 py-3'>
                             <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>
                               <h1 className='flex gap-x-2 justify-center items-center'>
@@ -411,19 +417,19 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <TableCell className={`px-4 py-2 ${showPaymentOfDownPayment && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
                                   <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>{showPaymentOfDownPayment ? 'Paid' : 'unpaid'}</TableCell>
                                   <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
-                                    {showPaymentOfDownPayment ? (
-                                      'Completed'
-                                    ) : (
-                                      <SettleTermPayment
-                                        enrollment={data?.enrollmentRecord}
-                                        tfData={tfData?.tFee}
-                                        srData={srData?.studentReceipt}
-                                        amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
-                                        type={'downPayment'}
-                                        title='Down Payment'
-                                        isScholarshipStart={isScholarshipStart}
-                                      />
-                                    )}
+                                    {showPaymentOfDownPayment
+                                      ? 'Completed'
+                                      : !isWithdrawn && (
+                                          <SettleTermPayment
+                                            enrollment={data?.enrollmentRecord}
+                                            tfData={tfData?.tFee}
+                                            srData={srData?.studentReceipt}
+                                            amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
+                                            type={'downPayment'}
+                                            title='Down Payment'
+                                            isScholarshipStart={isScholarshipStart}
+                                          />
+                                        )}
                                   </TableCell>
                                   {/* <TableCell className={`px-4 py-2`}>{a > 0 && `₱${a.toFixed(2)}`}</TableCell> */}
                                 </TableRow>
@@ -434,7 +440,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfPrelim ? 'text-green-400' : 'text-red'}`}>
                                     {showPaymentOfPrelim ? (
                                       'Completed'
-                                    ) : showPaymentOfDownPayment ? (
+                                    ) : !isWithdrawn && showPaymentOfDownPayment ? (
                                       <SettleTermPayment
                                         enrollment={data?.enrollmentRecord}
                                         tfData={tfData?.tFee}
@@ -457,7 +463,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfMidterm ? 'text-green-400' : 'text-red'}`}>
                                     {showPaymentOfMidterm ? (
                                       'Completed'
-                                    ) : showPaymentOfDownPayment && showPaymentOfPrelim ? (
+                                    ) : !isWithdrawn && showPaymentOfDownPayment && showPaymentOfPrelim ? (
                                       <SettleTermPayment
                                         enrollment={data?.enrollmentRecord}
                                         tfData={tfData?.tFee}
@@ -480,7 +486,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfSemiFinal ? 'text-green-400' : 'text-red'}`}>
                                     {showPaymentOfSemiFinal ? (
                                       'Completed'
-                                    ) : showPaymentOfDownPayment && showPaymentOfPrelim && showPaymentOfMidterm ? (
+                                    ) : !isWithdrawn && showPaymentOfDownPayment && showPaymentOfPrelim && showPaymentOfMidterm ? (
                                       <SettleTermPayment
                                         enrollment={data?.enrollmentRecord}
                                         tfData={tfData?.tFee}
@@ -503,7 +509,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFinal ? 'text-green-400' : 'text-red'}`}>
                                     {showPaymentOfFinal ? (
                                       'Completed'
-                                    ) : showPaymentOfDownPayment && showPaymentOfPrelim && showPaymentOfMidterm && showPaymentOfSemiFinal ? (
+                                    ) : !isWithdrawn && showPaymentOfDownPayment && showPaymentOfPrelim && showPaymentOfMidterm && showPaymentOfSemiFinal ? (
                                       <SettleTermPayment
                                         enrollment={data?.enrollmentRecord}
                                         tfData={tfData?.tFee}
@@ -605,7 +611,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDepartmental || srData?.departmentalPayment ? 'text-green-400' : 'text-red'}`}>
                                   {srData?.departmentalPayment || showPaymentOfDepartmental ? (
                                     'Completed'
-                                  ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
+                                  ) : !isWithdrawn && (showPaymentOfFinal || showPaymentOfDownPayment) ? (
                                     <SettleTermPayment
                                       enrollment={data?.enrollmentRecord}
                                       tfData={tfData?.tFee}
@@ -628,7 +634,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>
                                   {srData?.ssgPayment || showPaymentOfSSG ? (
                                     'Completed'
-                                  ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
+                                  ) : !isWithdrawn && (showPaymentOfFinal || showPaymentOfDownPayment) ? (
                                     <SettleTermPayment
                                       enrollment={data?.enrollmentRecord}
                                       tfData={tfData?.tFee}

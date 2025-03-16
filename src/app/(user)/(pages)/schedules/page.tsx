@@ -85,66 +85,92 @@ const Page = () => {
           </Card>
         </div>
       ) : data && data.enrollment ? (
-        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
-          <div className='flex items-end justify-end pt-1 text-black w-full text-center'>
-            <Button
-              type='button'
-              onClick={() => exportToPDF(data?.enrollment, schedule, 'schedule')}
-              className='select-none focus-visible:ring-0 text-[15px] bg-none hover:bg-blue-500 text-black hover:text-neutral-100 tracking-normal font-medium font-poppins flex items-center justify-center'
-            >
-              <Icons.download className='h-4 w-4 mr-1' /> Download
-            </Button>
-          </div>
-          <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
-            <div className='mb-3'>
-              <h1 className='text-lg sm:text-2xl font-bold uppercase'>Student&apos;s Schedules</h1>
-              {data.enrollment.enrollStatus === 'Pending' && data.enrollment.step > 3 && (
-                <span className='text-[15px] font-semibold'>
-                  Drop/Add Subjects: {ESetup?.enrollmentSetup?.addOrDropSubjects ? <span className='text-green-500 text-[15px] font-semibold'>Open</span> : <span className='text-red text-[15px] font-semibold'>Closed</span>}
-                </span>
-              )}
+        <>
+          {data.enrollment.enrollStatus.toLowerCase() === 'withdraw' ? (
+            <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
+              <Card className={`min-h-[35vh] my-[10%] shadow-none drop-shadow-none items-center justify-center flex border-0`}>
+                <CardHeader className='space-y-3 hidden'>
+                  <CardTitle className=''>
+                    <div className='flex flex-col justify-center gap-y-1 items-center'>
+                      <div className='text-center lg:text-left font-poppins'>e2e2a</div>
+                    </div>
+                  </CardTitle>
+                  <CardDescription>e2e2a</CardDescription>
+                </CardHeader>
+                <CardContent className='flex w-full justify-center py-5 flex-col rounded-lg shadow-sm bg-white items-center border focus-visible:ring-0 space-y-5 px-0 mt-7'>
+                  <div className='flex flex-col justify-center gap-y-1 py-10 items-center'>
+                    <div className=''>
+                      <Image src={'/images/logo1.png'} className='w-auto rounded-full' priority width={100} height={100} alt='nothing to say' />
+                    </div>
+                    <div className='text-center text-xl sm:text-2xl font-semibold tracking-tight uppercase'>Enrollment has been Withdraw</div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-            <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
-              <div className='justify-between items-center flex w-full'>
-                <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                  Fullname:{' '}
-                  <span className='font-normal'>
-                    {data?.enrollment?.profileId?.firstname ?? ''} {data?.enrollment?.profileId?.middlename ?? ''} {data?.enrollment?.profileId?.lastname ?? ''}{' '}
-                    {data?.enrollment?.profileId?.extensionName ? data?.enrollment?.profileId?.extensionName + '.' : ''}
-                  </span>
-                </span>
+          ) : (
+            <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
+              <div className='flex items-end justify-end pt-1 text-black w-full text-center'>
+                <Button
+                  type='button'
+                  onClick={() => exportToPDF(data?.enrollment, schedule, 'schedule')}
+                  className='select-none focus-visible:ring-0 text-[15px] bg-none hover:bg-blue-500 text-black hover:text-neutral-100 tracking-normal font-medium font-poppins flex items-center justify-center'
+                >
+                  <Icons.download className='h-4 w-4 mr-1' /> Download
+                </Button>
               </div>
-              <div className='flex w-full justify-start sm:justify-end'>
-                <span className='text-sm sm:text-[17px] font-bold'>
-                  Department: <span className='font-normal'>{data?.enrollment?.courseId?.name}</span>
-                </span>
+              <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
+                <div className='mb-3'>
+                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Student&apos;s Schedules</h1>
+                  {data.enrollment.enrollStatus === 'Pending' && data.enrollment.step > 3 && (
+                    <span className='text-[15px] font-semibold'>
+                      Drop/Add Subjects: {ESetup?.enrollmentSetup?.addOrDropSubjects ? <span className='text-green-500 text-[15px] font-semibold'>Open</span> : <span className='text-red text-[15px] font-semibold'>Closed</span>}
+                    </span>
+                  )}
+                </div>
+                <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
+                  <div className='justify-between items-center flex w-full'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Fullname:{' '}
+                      <span className='font-normal'>
+                        {data?.enrollment?.profileId?.firstname ?? ''} {data?.enrollment?.profileId?.middlename ?? ''} {data?.enrollment?.profileId?.lastname ?? ''}{' '}
+                        {data?.enrollment?.profileId?.extensionName ? data?.enrollment?.profileId?.extensionName + '.' : ''}
+                      </span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold'>
+                      Department: <span className='font-normal'>{data?.enrollment?.courseId?.name}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start '>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Year:{' '}
+                      <span className='font-normal'>
+                        {data?.enrollment?.studentYear} - {data?.enrollment?.studentSemester}
+                      </span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start sm:justify-end'>
+                    <span className='text-sm sm:text-[17px] font-bold'>
+                      Block: <span className='font-normal'>{data?.enrollment?.blockTypeId?.section ? data?.enrollment?.blockTypeId?.section : 'N/A'}</span>
+                    </span>
+                  </div>
+                  <div className='flex w-full justify-start'>
+                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                      Enrollment Status:
+                      {data?.enrollment?.enrollStatus === 'Pending' && <span className='font-normal text-blue-500'>{data?.enrollment?.enrollStatus}</span>}
+                      {data?.enrollment?.enrollStatus === 'Enrolled' && <span className='font-normal text-green-500'>{data?.enrollment?.enrollStatus}</span>}
+                      {data?.enrollment?.enrollStatus === 'Temporary Enrolled' && <span className='font-normal text-orange-500'>{data?.enrollment?.enrollStatus}</span>}
+                      {data?.enrollment?.enrollStatus === 'Rejected' && <span className='font-normal text-red'>{data?.enrollment?.enrollStatus}</span>}
+                      {data?.enrollment?.enrollStatus === 'Withdraw' && <span className='font-semibold text-red uppercase'>{data?.enrollment?.enrollStatus}</span>}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div className='flex w-full justify-start '>
-                <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                  Year:{' '}
-                  <span className='font-normal'>
-                    {data?.enrollment?.studentYear} - {data?.enrollment?.studentSemester}
-                  </span>
-                </span>
-              </div>
-              <div className='flex w-full justify-start sm:justify-end'>
-                <span className='text-sm sm:text-[17px] font-bold'>
-                  Block: <span className='font-normal'>{data?.enrollment?.blockTypeId?.section ? data?.enrollment?.blockTypeId?.section : 'N/A'}</span>
-                </span>
-              </div>
-              <div className='flex w-full justify-start'>
-                <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                  Enrollment Status:
-                  {data?.enrollment?.enrollStatus === 'Pending' && <span className='font-normal text-blue-500'>{data?.enrollment?.enrollStatus}</span>}
-                  {data?.enrollment?.enrollStatus === 'Enrolled' && <span className='font-normal text-green-500'>{data?.enrollment?.enrollStatus}</span>}
-                  {data?.enrollment?.enrollStatus === 'Temporary Enrolled' && <span className='font-normal text-orange-500'>{data?.enrollment?.enrollStatus}</span>}
-                  {data?.enrollment?.enrollStatus === 'Rejected' && <span className='font-normal text-red'>{data?.enrollment?.enrollStatus}</span>}
-                </span>
-              </div>
+              <DataTable columns={columns} data={schedule} enrollmentSetup={ESetup.enrollmentSetup} enrollment={data.enrollment} />
             </div>
-          </div>
-          <DataTable columns={columns} data={schedule} enrollmentSetup={ESetup.enrollmentSetup} enrollment={data.enrollment} />
-        </div>
+          )}
+        </>
       ) : (
         <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
           <Card className={`min-h-[35vh] my-[10%] shadow-none drop-shadow-none items-center justify-center flex border-0`}>

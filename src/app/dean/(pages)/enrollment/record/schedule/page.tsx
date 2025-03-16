@@ -18,7 +18,7 @@ const Page = () => {
     if (pError || !pData) return;
 
     if (data && pData) {
-      const a = data?.teacherScheduleRecords?.filter((s: any) => s.course.name.toLowerCase() === pData?.profile.courseId.name.toLowerCase()  && s.course.courseCode.toLowerCase()  === pData?.profile.courseId.courseCode.toLowerCase() );
+      const a = data?.teacherScheduleRecords?.filter((s: any) => s.course.name.toLowerCase() === pData?.profile.courseId.name.toLowerCase() && s.course.courseCode.toLowerCase() === pData?.profile.courseId.courseCode.toLowerCase());
       setTeacherScheduleRecord(a);
 
       setIsPageLoading(false);
@@ -38,7 +38,7 @@ const Page = () => {
           {data?.teacherScheduleRecords && !data.error && (
             <div className=''>
               <div className='flex items-center py-4 text-black w-full justify-center'>
-                <h1 className='sm:text-3xl text-xl font-semibold tracking-tight '>Schedule&apos;s Records</h1>
+                <h1 className='sm:text-3xl text-xl font-semibold tracking-tight '>Instructor&apos;s Schedule Record</h1>
               </div>
               <DataTable columns={columns} data={teacherScheduleRecord as any[]} />
             </div>

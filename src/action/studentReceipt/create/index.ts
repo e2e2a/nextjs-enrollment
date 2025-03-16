@@ -98,7 +98,7 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
     };
     // data.payer.address = d.res.purchase_units[0].shipping.address;
     // data.payer.captures = captures;
-    const data2 = { ...data, captures: captures, year: studentEnrollment.year, semester: studentEnrollment.semester, 'payer.address': d?.res?.purchase_units[0].shipping?.address, payment_source: payment_source };
+    const data2 = { ...data, captures: captures, year: studentEnrollment.studentYear, semester: studentEnrollment.studentSemester, 'payer.address': d?.res?.purchase_units[0].shipping?.address, payment_source: payment_source };
     const createdReceipt = await createStudentReceipt(data2);
     if (!createdReceipt) return { error: 'Something went wrong.', status: 500 };
 

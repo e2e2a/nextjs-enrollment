@@ -8,13 +8,13 @@ import LoaderPage from '@/components/shared/LoaderPage';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'; // PayPal React SDK
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { useCreateStudentReceiptMutation } from '@/lib/queries/studentReceipt/create';
-import { useStudentReceiptQueryByUserId } from '@/lib/queries/studentReceipt/get/userId';
 import { useCourseFeeQueryByCourseIdAndYear } from '@/lib/queries/courseFee/get/courseId';
 import { Icons } from '@/components/shared/Icons';
 import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Image from 'next/image';
 import { useEnrollmentQueryBySessionId } from '@/lib/queries/enrollment/get/session';
+import { useStudentReceiptQueryByUserIdAndYearAndSemester } from '@/lib/queries/studentReceipt/get/yearAndSemester';
 
 type IProps = {
   enrollment: any;
@@ -33,8 +33,8 @@ const Step5 = ({ enrollment }: IProps) => {
 
   const { data: s } = useSession();
   const { data: esData, isError: esError } = useEnrollmentSetupQuery();
-  const { data: srData, error: srError } = useStudentReceiptQueryByUserId(s?.user.id as string, esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear);
   const { data: eData, error: eError } = useEnrollmentQueryBySessionId(s?.user?.id as string); // change this to enrollment not a profile query
+  const { data: srData, error: srError } = useStudentReceiptQueryByUserIdAndYearAndSemester(s?.user.id as string, eData?.enrollment?.studentYear, eData?.enrollment?.studentSemester, esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear);
   const { data: tfData, error: tfError } = useCourseFeeQueryByCourseIdAndYear(eData?.enrollment?.studentYear || 'e2e2a', (eData?.enrollment?.courseId?._id as string) || 'e2e2a');
 
   useEffect(() => {

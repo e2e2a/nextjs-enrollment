@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ActionsCell from './ActionsCell';
 
@@ -116,6 +116,19 @@ export const columns: ColumnDef<any>[] = [
       return (
         <div key={cell.id} className=''>
           {user?.blockType?.year} - {user?.blockType?.semester}
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.enrollStatus,
+    id: 'enrollment status',
+    header: 'Enrollment Status',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user?.enrollStatus}
         </div>
       );
     },

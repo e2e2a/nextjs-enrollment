@@ -4,6 +4,7 @@ export interface IEnrollmentSetup extends Document {
   name?: string;
   enrollmentTertiary: any;
   studentYear?: string;
+  openWithdraw?: boolean;
   addOrDropSubjects?: boolean;
 }
 
@@ -20,6 +21,7 @@ const schema = new Schema<IEnrollmentSetup>(
       semester: { type: String },
     },
 
+    openWithdraw: { type: Boolean, default: false },
     addOrDropSubjects: { type: Boolean, default: false },
   },
   {

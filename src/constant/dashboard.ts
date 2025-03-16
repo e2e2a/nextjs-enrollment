@@ -218,6 +218,27 @@ export const dashboardConfig: DashboardConfig = {
           icon: 'packageSearch',
         },
         {
+          title: 'Request Add/Drop/Withdraw',
+          i: [
+            {
+              title: 'View Request Add',
+              href: '/dean/enrollment/management?step=1',
+              icon: 'eye',
+            },
+            {
+              title: 'View Request Drop',
+              href: '/dean/enrollment/management?step=2',
+              icon: 'eye',
+            },
+            {
+              title: 'View Request Withdraw',
+              href: '/dean/enrollment/request/withdraw',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
           title: 'Enrolling Students',
           i: [
             {
@@ -771,6 +792,27 @@ export const dashboardConfig: DashboardConfig = {
             {
               title: 'Step 6 Finalizing Student Enrollment',
               href: '/admin/college/enrollment/management?step=6',
+              icon: 'eye',
+            },
+          ],
+          icon: 'packageSearch',
+        },
+        {
+          title: 'Request Add/Drop/Withdraw',
+          i: [
+            {
+              title: 'View Request Add',
+              href: 'admin/college/enrollment/management?step=1',
+              icon: 'eye',
+            },
+            {
+              title: 'View Request Drop',
+              href: 'admin/college/enrollment/management?step=2',
+              icon: 'eye',
+            },
+            {
+              title: 'View Request Withdraw',
+              href: 'admin/college/enrollment/request/withdraw',
               icon: 'eye',
             },
           ],

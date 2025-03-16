@@ -76,7 +76,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Time:{' '}
                       <span className='font-normal'>
-                        {data.teacherScheduleRecord.startTime} - {data.teacherScheduleRecord.endTime}
+                        {data?.teacherScheduleRecord?.startTime} - {data?.teacherScheduleRecord?.endTime}
                       </span>
                     </span>
                   </div>
@@ -84,7 +84,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Year:{' '}
                       <span className='font-normal'>
-                        {data.teacherScheduleRecord.blockType.year} - {data?.teacherScheduleRecord?.blockType?.semester}
+                        {data?.teacherScheduleRecord?.blockType?.year} - {data?.teacherScheduleRecord?.blockType?.semester}
                       </span>
                     </span>
                   </div>
@@ -95,7 +95,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                 </div>
               </div>
-              <DataTable columns={columns} data={data.teacherScheduleRecord.studentsInClass as any[]} />
+              <DataTable columns={columns} data={data?.teacherScheduleRecord?.studentsInClass as any[]} />
             </div>
           )}
         </div>
