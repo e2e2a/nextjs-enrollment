@@ -2,27 +2,31 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { saveAs } from 'file-saver';
 
-// Automatically download the PDF
 export const exportToPDF = async (
   data: any,
-  downPaymentAmount: Number,
-  paymentPerTerm: Number,
-  finalPayment: Number,
-  showPaymentOfFullPayment: Boolean,
-  showPaymentOfDownPayment: Boolean,
-  showPaymentOfPrelim: Boolean,
-  showPaymentOfMidterm: Boolean,
-  showPaymentOfSemiFinal: Boolean,
-  showPaymentOfFinal: Boolean,
-  total: String | Number,
-  balance: String | Number,
+  downPaymentAmount: number,
+  paymentPerTerm: number,
+  finalPayment: number,
+  showPaymentOfFullPayment: boolean,
+  showPaymentOfDownPayment: boolean,
+  showPaymentOfPrelim: boolean,
+  showPaymentOfMidterm: boolean,
+  showPaymentOfSemiFinal: boolean,
+  showPaymentOfFinal: boolean,
+  total: string | number,
+  balance: string | number,
+  departmentalPayment: boolean,
+  ssgPayment: boolean,
+  departmentalShow: boolean,
+  ssgShow: boolean,
+  departmentalAmount: string | number,
+  ssgAmount: string | number,
+  additionalTotal: string | number,
   fileName: string
 ) => {
   return new Promise<void>((resolve, reject) => {
     try {
-      if (!data || data.length === 0) {
-        return;
-      }
+      if (!data || data.length === 0) return;
 
       const doc = new jsPDF({ orientation: 'landscape' });
       const pageWidth = doc.internal.pageSize.getWidth();
@@ -39,7 +43,7 @@ export const exportToPDF = async (
         .replace(/,(\S)/g, ', $1')
         .trim();
 
-      // Function to add a header
+      // Function to add header
       const addHeader = () => {
         doc.setFontSize(14);
         doc.text('Student Payment', pageWidth / 2, yOffset, { align: 'center' });
@@ -49,11 +53,11 @@ export const exportToPDF = async (
         doc.text(`Full Name: ${formattedName}`, 10, yOffset);
         yOffset += 6;
 
-        doc.text(`Department: ${data?.course || 'N/A'}`, 10, yOffset);
+        doc.text(`Department: ${data.courseId?.name || 'N/A'}`, 10, yOffset);
         doc.text(`Year: ${data?.studentYear || 'N/A'} - Semester: ${data?.studentSemester || 'N/A'}`, pageWidth - 10, yOffset, { align: 'right' });
         yOffset += 6;
 
-        doc.text(`Block: ${data?.blockType?.section || 'N/A'}`, 10, yOffset);
+        doc.text(`Block: ${data?.blockTypeId?.section || 'N/A'}`, 10, yOffset);
         doc.text(`Enrollment Status: ${data?.enrollStatus || 'N/A'}`, pageWidth - 10, yOffset, { align: 'right' });
         yOffset += 6;
 
@@ -61,34 +65,25 @@ export const exportToPDF = async (
         yOffset += 6;
       };
 
-      // Add the first header
+      // Add the header
       addHeader();
 
-      // Format the schedule data
-      let formattedData;
-      if (!showPaymentOfFullPayment) {
-        const paymentType = ['Down Payment', 'Prelim', 'Midterm', 'Semi-final', 'Final'];
-        const paymentAmount = [downPaymentAmount.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), finalPayment.toFixed(2) || (0).toFixed(2)];
-        const paymentStatus = [showPaymentOfDownPayment ? 'PAID' : 'UNPAID', showPaymentOfPrelim ? 'PAID' : 'UNPAID', showPaymentOfMidterm ? 'PAID' : 'UNPAID', showPaymentOfSemiFinal ? 'PAID' : 'UNPAID', showPaymentOfFinal ? 'PAID' : 'UNPAID'];
-        formattedData = paymentType.map((item: any, index: number) => {
-          return [item, paymentAmount[index], paymentStatus[index]];
-        });
-      } else {
-        const paymentType = ['Down Payment', 'Prelim', 'Midterm', 'Semi-final', 'Final'];
-        const paymentAmount = [downPaymentAmount.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), finalPayment.toFixed(2) || (0).toFixed(2)];
-        const paymentStatus = ['PAID', 'PAID', 'PAID', 'PAID', 'PAID'];
-        formattedData = paymentType.map((item: any, index: number) => {
-          return [item, paymentAmount[index], paymentStatus[index]];
-        });
-      }
+      // Format payment table data
+      const paymentType = ['Down Payment', 'Prelim', 'Midterm', 'Semi-final', 'Final'];
+      const paymentAmount = [downPaymentAmount.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), finalPayment.toFixed(2) || (0).toFixed(2)];
 
-      // Define table headers
-      const tableHeaders = [['Payments Type', 'Amount', 'Status']];
+      const paymentStatus = showPaymentOfFullPayment
+        ? ['PAID', 'PAID', 'PAID', 'PAID', 'PAID']
+        : [showPaymentOfDownPayment ? 'PAID' : 'UNPAID', showPaymentOfPrelim ? 'PAID' : 'UNPAID', showPaymentOfMidterm ? 'PAID' : 'UNPAID', showPaymentOfSemiFinal ? 'PAID' : 'UNPAID', showPaymentOfFinal ? 'PAID' : 'UNPAID'];
 
-      // Add table
+      const formattedData = paymentType.map((item, index) => {
+        return [item, paymentAmount[index], paymentStatus[index]];
+      });
+
+      // Table 1: Payment Details
       autoTable(doc, {
         startY: yOffset,
-        head: tableHeaders,
+        head: [['Payment Type', 'Amount', 'Status']],
         body: formattedData,
         theme: 'grid',
         styles: { fontSize: 10, cellPadding: 3 },
@@ -96,6 +91,25 @@ export const exportToPDF = async (
           ['Total', '', Number(total).toFixed(2)],
           ['Balance', '', Number(balance).toFixed(2)],
         ],
+        footStyles: { fillColor: [230, 230, 230], textColor: [0, 0, 0], fontStyle: 'bold' },
+        headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
+      });
+
+      yOffset = (doc as any).lastAutoTable.finalY + 10; // Adjust yOffset for next table
+
+      // Table 2: Departmental and SSG Fees
+      const additionalData = [
+        ['Departmental Fee', Number(departmentalAmount).toFixed(2), departmentalShow ? 'PAID' : 'UNPAID'],
+        ['SSG Payment', Number(ssgAmount).toFixed(2), ssgShow ? 'PAID' : 'UNPAID'],
+      ];
+
+      autoTable(doc, {
+        startY: yOffset,
+        head: [['Payment Type', 'Amount', 'Status']],
+        body: additionalData,
+        theme: 'grid',
+        styles: { fontSize: 10, cellPadding: 3 },
+        foot: [['Total', '', Number(additionalTotal).toFixed(2)]],
         footStyles: { fillColor: [230, 230, 230], textColor: [0, 0, 0], fontStyle: 'bold' },
         headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
       });

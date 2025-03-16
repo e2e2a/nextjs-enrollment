@@ -5,6 +5,7 @@ import { getAllAccountingProfile } from '@/services/accountingProfile';
 import { getAllAdminProfile } from '@/services/adminProfile';
 import { getAllDeanProfile } from '@/services/deanProfile';
 import { getAllStudentProfile } from '@/services/studentProfile';
+import { getAllSuperAdminProfile } from '@/services/superAdminProfile';
 import { getAllTeacherProfile } from '@/services/teacherProfile';
 import { checkAuth } from '@/utils/actions/session';
 
@@ -51,6 +52,9 @@ const checkSearchRole = async (role: string) => {
         break;
       case 'ACCOUNTING':
         profiles = await getAllAccountingProfile();
+        break;
+      case 'SUPER ADMIN':
+        profiles = await getAllSuperAdminProfile();
         break;
       default:
         return { error: 'Invalid role', status: 403 };

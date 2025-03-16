@@ -40,6 +40,7 @@ export const signInAction = async (data: any) => {
 const checkUser = async (data: any) => {
   return tryCatch(async () => {
     const existingUser = await getUserByEmail(data.email);
+    if (existingUser && existingUser.revoke) return { error: 'Account has been revoked by admin.', status: 403 };
     const isLimit = await myLimit(data.email);
     if (!isLimit || isLimit.error || !isLimit.success) return { error: 'Rate Limit exceeded.', limit: true, status: 429 };
 

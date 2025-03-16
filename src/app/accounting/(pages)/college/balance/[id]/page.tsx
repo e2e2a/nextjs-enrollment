@@ -38,7 +38,6 @@ const Page = ({ params }: { params: { id: string } }) => {
   const paymentOfFullPayment = srData?.studentReceipt.find((r: any) => r.type.toLowerCase() === 'fullpayment');
   let showPaymentOfFullPayment = false;
   showPaymentOfFullPayment = paymentOfFullPayment && Math.round((Number(paymentOfFullPayment?.taxes?.amount) + Number(total) * 0.1) * 100) / 100 === Math.round(Number(total) * 100) / 100;
-  console.log('showPaymentOfFullPayment', Math.round((Number(paymentOfFullPayment?.taxes?.amount) + Number(total) * 0.1) * 100) / 100);
   const scholarship = isScholarshipApplicable(data?.enrollment?.studentYear, data?.enrollment?.studentSemester, data?.enrollment?.profileId?.scholarshipId);
   const isScholarshipStart = scholarship && data?.enrollment?.profileId?.scholarshipId && data?.enrollment?.profileId?.scholarshipId;
   if (isScholarshipStart) showPaymentOfFullPayment = paymentOfFullPayment && Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 === Math.round(Number(total) * 100) / 100;
@@ -326,6 +325,13 @@ const Page = ({ params }: { params: { id: string } }) => {
                           showPaymentOfFinal,
                           Number(total).toFixed(2) || (0).toFixed(2),
                           Number(showBalance).toFixed(2) || (0).toFixed(2),
+                          srData?.departmentalPayment,
+                          srData?.ssgPayment,
+                          showPaymentOfDepartmental,
+                          showPaymentOfSSG,
+                          tfData?.tFee?.departmentalFee,
+                          tfData?.tFee?.ssgFee,
+                          Number(additionalTotal).toFixed(2),
                           'student payment'
                         )
                       }
@@ -553,7 +559,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <CardFooter className=''></CardFooter>
                   </Card>
                   {/* Departmental and ssg Fee */}
-                  {!srData?.departmentalPayment && (
+                  {(!srData?.departmentalPayment || !srData?.ssgPayment) && (
                     <Card className='border-0 py-5 bg-transparent'>
                       <CardHeader className='space-y-3'>
                         <CardTitle className='text-lg md:text-xl tracking-tight w-full text-left font-semibold uppercase'>
@@ -584,16 +590,18 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDepartmental || srData?.departmentalPayment ? 'text-green-400' : 'text-red'}`}>
                                   {srData?.departmentalPayment || showPaymentOfDepartmental ? (
                                     'Completed'
-                                  ) : (
+                                  ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
                                     <SettleTermPayment
                                       enrollment={data?.enrollment}
                                       tfData={tfData?.tFee}
                                       srData={srData?.studentReceipt}
                                       amountToPay={Number(tfData?.tFee?.departmentalFee).toFixed(2)}
                                       type={'departmental'}
-                                      title='Down Payment'
+                                      title='Departmental Payment'
                                       isScholarshipStart={isScholarshipStart}
                                     />
+                                  ) : (
+                                    ''
                                   )}
                                 </TableCell>
                                 {/* <TableCell className={`px-4 py-2`}>{a > 0 && `₱${a.toFixed(2)}`}</TableCell> */}
@@ -605,16 +613,18 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>
                                   {srData?.ssgPayment || showPaymentOfSSG ? (
                                     'Completed'
-                                  ) : (
+                                  ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
                                     <SettleTermPayment
                                       enrollment={data?.enrollment}
                                       tfData={tfData?.tFee}
                                       srData={srData?.studentReceipt}
                                       amountToPay={Number(tfData?.tFee?.ssgFee).toFixed(2)}
                                       type={'ssg'}
-                                      title='Down Payment'
+                                      title='SSG Payment'
                                       isScholarshipStart={isScholarshipStart}
                                     />
+                                  ) : (
+                                    ''
                                   )}
                                 </TableCell>
                               </TableRow>

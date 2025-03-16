@@ -8,9 +8,10 @@ import { createAdminProfile } from '@/services/adminProfile';
 import { getCoursesById } from '@/services/course';
 import { createDeanProfile } from '@/services/deanProfile';
 import { createStudentProfile } from '@/services/studentProfile';
+import { createSuperAdminProfile } from '@/services/superAdminProfile';
 import { createTeacherProfile } from '@/services/teacherProfile';
 import { createUser } from '@/services/user';
-import { verifyADMIN } from '@/utils/actions/session/roles/admin';
+import { checkAuth } from '@/utils/actions/session';
 import { checkNewEmail } from '@/utils/actions/user/email';
 import { checkNewUsername } from '@/utils/actions/user/username';
 
@@ -22,8 +23,9 @@ import { checkNewUsername } from '@/utils/actions/user/username';
 export const adminCreateUserWithRoleAction = async (data: any) => {
   return tryCatch(async () => {
     await dbConnect();
-    const session = await verifyADMIN();
+    const session = await checkAuth();
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
+    if (session.user.role !== 'SUPER ADMIN') return { error: 'Not Authorized.', status: 403 };
 
     const checkConflict = await checkingConflict(data);
     if (checkConflict && checkConflict.error) return { error: checkConflict?.error, status: checkConflict?.status };
@@ -79,6 +81,9 @@ const createProfile = async (data: any, userData: any) => {
       case 'ACCOUNTING':
         profile = await createAccounting(data, userData);
         break;
+      case 'SUPER ADMIN':
+        profile = await createSuperAdmin(data, userData);
+        break;
       default:
         return { error: 'Forbidden.', status: 403 };
     }
@@ -93,6 +98,21 @@ const createProfile = async (data: any, userData: any) => {
  * @param {object} data
  * @param {object} userData
  */
+const createSuperAdmin = async (data: any, userData: any) => {
+  return tryCatch(async () => {
+    let profileParse;
+    if (data.configProfile === 'Yes') {
+      profileParse = AdminProfileUpdateValidator.safeParse(data);
+      if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
+    }
+    const createdU = await createUser({ email: userData.email, username: userData.username, role: data.role, emailVerified: new Date(Date.now()) }, userData.password);
+    if (!createdU) return { error: 'Error Creating User', status: 404 };
+
+    await createSuperAdminProfile({ userId: createdU._id, ...(data.configProfile === 'Yes' ? { ...profileParse!.data, isVerified: true } : { isVerified: false }) });
+    return { success: 'yesyes.', status: 201 };
+  });
+};
+
 const createAdmin = async (data: any, userData: any) => {
   return tryCatch(async () => {
     let profileParse;

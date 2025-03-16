@@ -106,6 +106,19 @@ export const columns: ColumnDef<IAdminProfile>[] = [
     },
   },
   {
+    accessorFn: (row) => row.userId?.revoke,
+    id: 'Revoke',
+    header: 'Revoke',
+    cell: ({ cell, row }) => {
+      const user = row.original;
+      return (
+        <div key={cell.id} className=' uppercase'>
+          {user?.userId?.revoke ? 'TRUE' : 'FALSE'}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: 'createdAt',
     header: 'CreatedAt',
     cell: ({ row }) => {

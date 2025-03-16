@@ -58,6 +58,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         if (account?.provider === 'google') {
           const existingUser = await getUserByEmail(user.email!);
           if (existingUser) {
+            if (existingUser.revoke) return false;
             const existAccount = await Account.findOne({ userId: existingUser._id });
             if (!existAccount) {
               await createAccount(account, existingUser._id as string);
@@ -82,7 +83,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           const existingUser = await getUserById(user._id);
 
           // Prevent sign-in without email verification
-          if (!existingUser || !existingUser.emailVerified) {
+          if (!existingUser || !existingUser.emailVerified || existingUser.revoke) {
             return false;
           }
           return true;
@@ -131,7 +132,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       } else if (account && account.provider === 'google') {
         // If the user signs in, cache data in the token
         if (user) {
-          const userData = await getUserById(user.id);
+          const userData = await getUserById(user.id as string);
           token.sub = userData._id;
           token.role = userData.role;
           token.username = userData.username;
