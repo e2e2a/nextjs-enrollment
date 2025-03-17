@@ -138,16 +138,15 @@ const Page = ({ params }: { params: { id: string } }) => {
         setRegMiscTotal(0);
         setTotal(0);
         const lab = data.enrollmentRecord.studentSubjects.reduce((acc: number, subjects: any) => acc + Number(subjects?.subject?.lab), 0);
-        const lec = data.enrollmentRecord.studentSubjects.reduce((acc: number, subjects: any) => acc + Number(subjects?.subject?.lec), 0);
+        const unit = data.enrollmentRecord.studentSubjects.reduce((acc: number, subjects: any) => acc + Number(subjects?.subject?.unit), 0);
         let addcwtsOrNstpFee = false;
         const cwtsOrNstpFee = Number(tfData?.tFee?.cwtsOrNstpFee) || 0;
 
         // Ensure correct calculations at every step
         const aFormatted = parseFloat((lab * tfData?.tFee?.ratePerLab).toFixed(2));
-        const bFormatted = parseFloat((lec * tfData?.tFee?.ratePerUnit).toFixed(2));
+        const bFormatted = parseFloat((unit * tfData?.tFee?.ratePerUnit).toFixed(2));
         const cFormatted = parseFloat(tfData?.tFee?.regOrMisc.reduce((acc: number, tFee: any) => acc + Number(tFee.amount), 0).toFixed(2));
         const dFormatted = Number(tfData?.tFee?.downPayment || 0);
-        const a = bFormatted + dFormatted;
         const d = data.enrollmentRecord.studentSubjects.find((sub: any) => {
           if (
             sub?.subject.subjectCode.trim().toLowerCase() === 'cwts' ||
@@ -165,40 +164,38 @@ const Page = ({ params }: { params: { id: string } }) => {
         });
 
         setLabTotal(aFormatted);
-        let LecTotal = aFormatted;
-        setLecTotal(a);
+        let LecTotal = bFormatted;
+        setLecTotal(bFormatted);
         if (isScholarshipStart && data?.enrollmentRecord?.profileId?.scholarshipId?.exemptedFees.includes('Tuition Fee')) {
+          if (data?.enrollmentRecord?.profileId?.scholarshipId?.type === 'percentage') {
+            const b = parseFloat((bFormatted * Number(data?.enrollmentRecord?.profileId?.scholarshipId?.discountPercentage)).toFixed(2));
+            const c = parseFloat((bFormatted - b).toFixed(2));
+            LecTotal = c;
+            setLecTotal(c);
+          }
+        }
+
+        const a = cFormatted + dFormatted;
+        setRegMiscTotal(a);
+        let RegMiscTotal = a;
+        if (isScholarshipStart && data?.enrollmentRecord?.profileId?.scholarshipId?.exemptedFees.includes('Miscellaneous Fees')) {
           if (data?.enrollmentRecord?.profileId?.scholarshipId?.type === 'percentage') {
             const b = parseFloat((a * Number(data?.enrollmentRecord?.profileId?.scholarshipId?.discountPercentage)).toFixed(2));
             const c = parseFloat((a - b).toFixed(2));
-            LecTotal = c;
-            setLecTotal(c);
-          } else {
-            // cFormatted = parseFloat((cFormatted * data?.enrollment?.profileId?.scholarshipId).toFixed(2))
-          }
-        }
-
-        setRegMiscTotal(cFormatted);
-        let RegMiscTotal = cFormatted;
-        if (isScholarshipStart && data?.enrollmentRecord?.profileId?.scholarshipId?.exemptedFees.includes('Miscellaneous Fees')) {
-          if (data?.enrollmentRecord?.profileId?.scholarshipId?.type === 'percentage') {
-            const b = parseFloat((cFormatted * Number(data?.enrollmentRecord?.profileId?.scholarshipId?.discountPercentage)).toFixed(2));
-            const c = parseFloat((cFormatted - b).toFixed(2));
             RegMiscTotal = c;
             setRegMiscTotal(c);
-          } else {
-            // cFormatted = parseFloat((cFormatted * data?.enrollment?.profileId?.scholarshipId).toFixed(2))
           }
         }
-        const totalAmount = addcwtsOrNstpFee ? aFormatted + LecTotal + RegMiscTotal + cwtsOrNstpFee : aFormatted + LecTotal + RegMiscTotal;
 
+        const totalAmount = addcwtsOrNstpFee ? aFormatted + LecTotal + RegMiscTotal + cwtsOrNstpFee : aFormatted + LecTotal + RegMiscTotal;
         const formattedTotal = parseFloat(totalAmount.toFixed(2)); // Final formatting
         setTotal(formattedTotal);
         const totalWithoutDownPayment = Number(formattedTotal) - dFormatted;
         const totalPerTerm = Math.round(totalWithoutDownPayment * 100) / 100;
         const paymentPerTerm = Math.ceil((totalPerTerm / 4) * 100) / 100;
+        const paymentPerTermRoundOff = paymentPerTerm % 100 >= 35 ? Math.ceil(paymentPerTerm / 100) * 100 : Math.floor(paymentPerTerm / 100) * 100;
 
-        setPaymentPerTerm(Number(paymentPerTerm));
+        setPaymentPerTerm(Number(paymentPerTermRoundOff));
       }
       setIsPageLoading(false);
       return;

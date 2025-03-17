@@ -123,6 +123,6 @@ const fourthGrade = Number('asdasd');
 // const name = 'asd'
 
 // console.log('message:', name + ',')
-const role = 'SUPER ADMIN';
-
-console.log('role', role === 'SUPER ADMIN');
+const amount = 101.01;
+const ex1 = parseFloat((Math.ceil(amount / 100) * 100).toFixed(2));
+console.log('role', ex1);
