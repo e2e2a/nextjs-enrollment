@@ -5,18 +5,6 @@ import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useTuitionFeeQueryByCategory } from '@/lib/queries/courseFee/get/category';
 
-interface ITuitionFee {
-  id: string;
-  courseId: any;
-  ratePerUnit: string;
-  ratePerLab: string;
-  cwtsOrNstpFee: string;
-  downPayment: string;
-  regOrMisc: any;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -45,7 +33,7 @@ const Page = () => {
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-bold '>Courses Fee&apos;s Management</h1>
               </div>
-              <DataTable columns={columns} data={data.tFees as ITuitionFee[]} />
+              <DataTable columns={columns} data={data.tFees as []} />
             </div>
           )}
         </div>

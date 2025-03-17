@@ -16,7 +16,7 @@ const RegOrMisc = ({ regMiscRows, setRegMiscRows }: IProps) => {
 
   // Handle adding a new row
   const handleAddRow = () => {
-    setRegMiscRows([...regMiscRows, { type: '', name: '', amount: '' }]);
+    setRegMiscRows([...regMiscRows, { name: '', amount: '' }]);
   };
 
   // Handle input change in the dynamic table rows
@@ -29,14 +29,10 @@ const RegOrMisc = ({ regMiscRows, setRegMiscRows }: IProps) => {
   return (
     <div>
       <CardContent className='w-full'>
-        <div className=''>
-          <h1 className='text-lg font-semibold xs:text-xl sm:text-2xl tracking-tight w-full text-start uppercase'>Reg/Misc Fee</h1>
-        </div>
         <div className='overflow-x-auto'>
           <table className='min-w-full table-auto'>
             <thead>
               <tr>
-                <th className='px-4 py-2 text-left'>Type</th>
                 <th className='px-4 py-2 text-left'>Name</th>
                 <th className='px-4 py-2 text-left'>Amount</th>
                 <th className='px-4 py-2'>
@@ -49,14 +45,6 @@ const RegOrMisc = ({ regMiscRows, setRegMiscRows }: IProps) => {
             <tbody>
               {regMiscRows.map((row: any, index: any) => (
                 <tr key={index}>
-                  <td className='px-4 py-2'>
-                    <Input
-                      type='text'
-                      value={row.type} // Type-safe value
-                      onChange={(e: any) => handleInputChange(index, 'type', e.target.value)} // Type-safe handler
-                      placeholder='Type'
-                    />
-                  </td>
                   <td className='px-4 py-2'>
                     <Input
                       type='text'
