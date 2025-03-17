@@ -15,7 +15,6 @@ export const exportToPDF = async (
   showPaymentOfFinal: boolean,
   total: string | number,
   balance: string | number,
-  departmentalPayment: boolean,
   ssgPayment: boolean,
   departmentalShow: boolean,
   ssgShow: boolean,

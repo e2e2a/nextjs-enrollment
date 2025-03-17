@@ -95,6 +95,7 @@ export const columns: ColumnDef<any>[] = [
           {user?.type.toLowerCase() === 'final' && 'Final Payment'}
           {user?.type.toLowerCase() === 'fullpayment' && 'Full Payment'}
           {user?.type.toLowerCase() === 'departmental' && 'Departmental Payment'}
+          {user?.type.toLowerCase() === 'insurance' && 'Insurance Payment'}
           {user?.type.toLowerCase() === 'ssg' && 'SSG Payment'}
         </div>
       );

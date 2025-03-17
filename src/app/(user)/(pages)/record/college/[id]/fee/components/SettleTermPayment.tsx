@@ -96,6 +96,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
         const receipt = {
           captureId: details.purchase_units[0].payments.captures[0].id,
           studentId: enrollment?.profileId?._id,
+          enrollmentId: enrollment?._id,
           category: 'College',
           orderID: details.id,
           transactionId: details.id,
@@ -122,6 +123,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
           // payments: details.payment
           type: type,
           captureTime: new Date(details.update_time),
+          request: 'record',
         };
 
         mutation.mutate(receipt, {
@@ -153,10 +155,11 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
         <Button variant={'outline'} size={'sm'} className='select-none focus-visible:ring-0 text-[15px] bg-blue-500 hover:bg-blue-600 text-white tracking-normal font-medium font-poppins'>
           <Icons.Banknote className='h-4 w-4 mr-2' />
           {type === 'fullPayment' && 'Pay Full Payment'}
-          {type !== 'fullPayment' && type !== 'downPayment' && type !== 'ssg' && type !== 'departmental' && 'Pay This Term'}
+          {type !== 'fullPayment' && type !== 'downPayment' && type !== 'ssg' && type !== 'insurance' && type !== 'departmental' && 'Pay This Term'}
           {type === 'downPayment' && 'Pay Down Payment'}
           {type === 'departmental' && 'Make Payment'}
           {type === 'ssg' && 'Make Payment'}
+          {type === 'insurance' && 'Make Payment'}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className='bg-white h-[75%] w-full overflow-y-scroll'>

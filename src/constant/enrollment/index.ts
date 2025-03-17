@@ -91,6 +91,7 @@ export const studentYearData = [
     title: '5th year',
   },
 ];
+
 export const studentSemesterData = [
   {
     title: '1st semester',

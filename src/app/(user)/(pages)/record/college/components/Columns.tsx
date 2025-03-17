@@ -45,14 +45,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.courseCode,
+    accessorFn: (row) => row?.studentYear,
     id: 'Year',
     header: 'Year',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.blockType?.year} - {user.blockType?.semester}
+          {user?.studentYear} - {user?.studentSemester}
         </div>
       );
     },

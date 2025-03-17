@@ -14,8 +14,8 @@ import { SelectInput } from './components/SelectInputs';
 import LoaderPage from '@/components/shared/LoaderPage';
 import RegOrMisc from './components/RegOrMisc';
 import { useCreatTuitionFeeMutation } from '@/lib/queries/courseFee/create';
-import { TuitionFeeValidator } from '@/lib/validators/tuitionFee/create';
-import { studentSemesterData, studentYearData } from '@/constant/enrollment';
+import { CourseFeeValidator } from '@/lib/validators/courseFee/create';
+import { studentYearData } from '@/constant/enrollment';
 
 const Page = () => {
   const [isPending, setIsPending] = useState(false);
@@ -34,13 +34,14 @@ const Page = () => {
   }, [cData, error]);
 
   const mutation = useCreatTuitionFeeMutation();
-  const form = useForm<z.infer<typeof TuitionFeeValidator>>({
-    resolver: zodResolver(TuitionFeeValidator),
+  const form = useForm<z.infer<typeof CourseFeeValidator>>({
+    resolver: zodResolver(CourseFeeValidator),
     defaultValues: {
       courseCode: '',
       year: '',
       ratePerUnit: '0.00',
       ratePerLab: '0.00',
+      insuranceFee: '0.00',
       departmentalFee: '0.00',
       ssgFee: '0.00',
       cwtsOrNstpFee: '0.00',
@@ -48,7 +49,7 @@ const Page = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof TuitionFeeValidator>> = async (data) => {
+  const onSubmit: SubmitHandler<z.infer<typeof CourseFeeValidator>> = async (data) => {
     if (regMiscRows.length === 0) return makeToastError('Please Provide Reg/Misc Fee');
     setIsPending(true);
     for (const row of regMiscRows) {
@@ -120,10 +121,18 @@ const Page = () => {
                     <Input name={'cwtsOrNstpFee'} type={'text'} form={form} label={'CWTS/NSTP Fee:'} classNameInput={'uppercase'} />
                     <Input name={'downPayment'} type={'text'} form={form} label={'Down Payment:'} classNameInput={''} />
                   </div>
+
                   <div className='flex flex-col items-start w-full justify-center mt-10 mb-10'>
-                    <h1 className='text-lg font-semibold xs:text-xl sm:text-2xl tracking-tight w-full text-start uppercase'>1 Year Payment</h1>
-                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 w-full'>
+                    <h1 className='text-lg font-semibold xs:text-xl sm:text-2xl tracking-tight w-full text-start uppercase'>
+                      Additional Payment <span className='text-muted-foreground text-red'>(REQUIRED)</span>
+                    </h1>
+                    <p className='text-sm text-muted-foreground mt-2'>
+                      The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a single academic year. After the first two payments, it will no longer be
+                      required for the remaining semesters.
+                    </p>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mt-4'>
                       <Input name={'departmentalFee'} type={'text'} form={form} label={'Departmental Fee:'} classNameInput={'uppercase'} />
+                      <Input name={'insuranceFee'} type={'text'} form={form} label={'Insurance Fee:'} classNameInput={'uppercase'} />
                       <Input name={'ssgFee'} type={'text'} form={form} label={'SSG Fee:'} classNameInput={''} />
                     </div>
                   </div>

@@ -13,7 +13,7 @@ import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 import { SelectInput } from './components/SelectInputs';
 import LoaderPage from '@/components/shared/LoaderPage';
 import RegOrMisc from './components/RegOrMisc';
-import { TuitionFeeValidator } from '@/lib/validators/tuitionFee/create';
+import { CourseFeeValidator } from '@/lib/validators/courseFee/create';
 import { useTuitionFeeQueryById } from '@/lib/queries/courseFee/get/id';
 import { Icons } from '@/components/shared/Icons';
 import { useUpdateTuitionFeeMutation } from '@/lib/queries/courseFee/update';
@@ -40,8 +40,8 @@ const Page = ({ params }: { params: { id: string } }) => {
   }, [cData, error, tfData, isTFError]);
 
   const mutation = useUpdateTuitionFeeMutation();
-  const form = useForm<z.infer<typeof TuitionFeeValidator>>({
-    resolver: zodResolver(TuitionFeeValidator),
+  const form = useForm<z.infer<typeof CourseFeeValidator>>({
+    resolver: zodResolver(CourseFeeValidator),
     defaultValues: {
       courseCode: '',
       ratePerUnit: '',
@@ -80,7 +80,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     form.reset();
   };
 
-  const onSubmit: SubmitHandler<z.infer<typeof TuitionFeeValidator>> = async (data) => {
+  const onSubmit: SubmitHandler<z.infer<typeof CourseFeeValidator>> = async (data) => {
     setIsPending(true);
     if (regMiscRows.length === 0) return makeToastError('Please Provide Reg/Misc Fee');
     for (const row of regMiscRows) {

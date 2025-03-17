@@ -84,18 +84,24 @@ const Page = ({ params }: { params: { id: string } }) => {
   const showPaymentOfFinal = paymentOfFinal && (Number(paymentOfFinal) - Number(final)).toFixed(2) >= (0).toFixed(2);
 
   // Departmental Payment
-  // only to show and hide if he paid in this schoolYear
   const paymentOfDepartmental = srData?.studentReceipt
-    ?.filter((r: any) => r.type.toLowerCase() === 'departmental' && r.schoolYear === data?.enrollmentRecord?.schoolYear)
+    ?.filter((r: any) => r.type.toLowerCase() === 'departmental')
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
   const showPaymentOfDepartmental = paymentOfDepartmental && (Number(paymentOfDepartmental) - Number(tfData?.tFee?.departmentalFee)).toFixed(2) >= (0).toFixed(2);
 
+  // Insurance Payment
+  const paymentOfInsurance = srData?.studentReceipt
+    ?.filter((r: any) => r.type.toLowerCase() === 'insurance')
+    ?.reduce((total: number, payment: any) => {
+      return total + (Number(payment?.taxes?.amount) || 0);
+    }, 0);
+  const showPaymentOfInsurance = paymentOfInsurance && (Number(paymentOfInsurance) - Number(tfData?.tFee?.insuranceFee)).toFixed(2) >= (0).toFixed(2);
+
   // SSG Payment
-  // only to show and hide if he paid in this schoolYear
   const paymentOfSSG = srData?.studentReceipt
-    ?.filter((r: any) => r.type.toLowerCase() === 'ssg' && r.schoolYear === data?.enrollmentRecord?.schoolYear)
+    ?.filter((r: any) => r.type.toLowerCase() === 'ssg')
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
@@ -195,11 +201,14 @@ const Page = ({ params }: { params: { id: string } }) => {
   }, [data, error, tfData, srData, srError, isTFError, isScholarshipStart]);
 
   useEffect(() => {
-    let additionPayment = parseFloat((Number(tfData?.tFee?.ssgFee) + Number(tfData?.tFee?.departmentalFee)).toFixed(2));
-    if (showPaymentOfDepartmental) additionPayment = parseFloat((additionPayment - tfData?.tFee?.ssgFee).toFixed(2));
-    if (showPaymentOfSSG) additionPayment = parseFloat((additionPayment - tfData?.tFee?.departmentalFee).toFixed(2));
-    setAdditionalTotal(additionPayment);
-  }, [tfData, showPaymentOfSSG, showPaymentOfDepartmental]);
+    let additionPayment = parseFloat((Number(tfData?.tFee?.ssgFee) + Number(tfData?.tFee?.insuranceFee) + Number(tfData?.tFee?.departmentalFee)).toFixed(2));
+    if (showPaymentOfDepartmental) additionPayment = parseFloat((additionPayment - tfData?.tFee?.departmentalFee).toFixed(2));
+    if (!srData?.ssgPayment && showPaymentOfSSG) additionPayment = parseFloat((additionPayment - tfData?.tFee?.ssgFee).toFixed(2));
+    if (srData?.insurancePayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.insurancePayment).toFixed(2));
+    if (srData?.ssgPayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.ssgFee).toFixed(2));
+    setAdditionalTotal(additionPayment || 0);
+  }, [tfData, srData, showPaymentOfDepartmental, showPaymentOfSSG]);
+
   return (
     <>
       {isPageLoading ? (
@@ -281,13 +290,20 @@ const Page = ({ params }: { params: { id: string } }) => {
                               </div>
                               <div className='flex flex-col items-start w-full justify-center mt-10 mb-10'>
                                 <h1 className='text-lg font-semibold sm:text-xl tracking-tight w-full text-start uppercase flex'>
-                                  1 Year Payment <span className='flex justify-start items-start text-[15px] text-red'>(Required)</span>
+                                  ADDITIONAL PAYMENT <span className='flex justify-start items-start text-[15px] text-red'>(Required)</span>
                                 </h1>
-                                <span className='text-muted-foreground'>Note: This is only for New student and it will automatically have a payment if student still not pay or avail with this.</span>
+                                <p className='text-sm text-muted-foreground mt-2'>
+                                  The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a single academic year. After the first two payments, it will
+                                  no longer be required for the remaining semesters.
+                                </p>
                                 <div className='grid grid-cols-1 w-full sm:px-32 px-5'>
                                   <div className='flex justify-between w-full'>
                                     <span className='font-medium'>Departmental Fee</span>
                                     <span>₱{Number(tfData?.tFee?.departmentalFee || 0).toFixed(2) || (0).toFixed(2)}</span>
+                                  </div>
+                                  <div className='flex justify-between'>
+                                    <span className='font-medium'>Insurance Fee</span>
+                                    <span>₱{Number(tfData?.tFee?.insuranceFee || 0).toFixed(2) || (0).toFixed(2)}</span>
                                   </div>
                                   <div className='flex justify-between'>
                                     <span className='font-medium'>SSG Fee</span>
@@ -297,7 +313,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 <div className='grid grid-cols-1 sm:px-36 w-full px-5'>
                                   <div className='flex justify-between'>
                                     <span className='font-medium'>Total</span>
-                                    <span>₱{(Number(tfData?.tFee?.departmentalFee || 0) + Number(tfData?.tFee?.ssgFee || 0)).toFixed(2)}</span>
+                                    <span>₱{(Number(tfData?.tFee?.departmentalFee || 0) + Number(tfData?.tFee?.insuranceFee || 0) + Number(tfData?.tFee?.ssgFee || 0)).toFixed(2)}</span>
                                   </div>
                                 </div>
                               </div>
@@ -326,7 +342,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                           showPaymentOfFinal,
                           Number(total).toFixed(2) || (0).toFixed(2),
                           Number(showBalance).toFixed(2) || (0).toFixed(2),
-                          srData?.departmentalPayment,
                           srData?.ssgPayment,
                           showPaymentOfDepartmental,
                           showPaymentOfSSG,
@@ -569,53 +584,80 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <CardFooter className=''></CardFooter>
                   </Card>
                   {/* Departmental and ssg Fee */}
-                  {(!srData?.departmentalPayment || !srData?.ssgPayment) && (
-                    <Card className='border-0 py-5 bg-transparent'>
-                      <CardHeader className='space-y-3'>
-                        <CardTitle className='text-lg md:text-xl tracking-tight w-full text-left font-semibold uppercase'>
-                          Additional Fees <span className='text-red'>(REQUIRED)</span>
-                        </CardTitle>
-                        <CardDescription className='text-xs sm:text-sm flex'>
-                          <span className='text-xs sm:text-sm'>Note: This Payment will only be available for 1Year payment. </span>
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className='w-full'>
-                        <div className='grid grid-cols-1 sm:px-32 px-5'>
-                          <Table className='table-auto border-collapse rounded-t-lg border '>
-                            <TableHeader>
-                              <TableRow className=' border-black rounded-t-lg bg-gray-200 font-bold text-[16px]'>
-                                <TableHead className='px-4 py-2 text-left'>Payments Type</TableHead>
-                                <TableHead className='px-4 py-2 text-left'>Amount</TableHead>
-                                <TableHead className='px-4 py-2 text-left'>Status</TableHead>
-                                <TableHead className='px-4 py-2 text-left'>Settle Payment</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
+                  <Card className='border-0 py-5 bg-transparent'>
+                    <CardHeader className='space-y-3'>
+                      <CardTitle className='text-lg md:text-xl tracking-tight w-full text-left font-semibold uppercase'>
+                        Additional Fees <span className='text-red'>(REQUIRED)</span>
+                      </CardTitle>
+                      <CardDescription className='text-xs sm:text-sm flex'>
+                        <span className='text-sm text-muted-foreground mt-2'>
+                          The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a single academic year. After the first two payments, it will no longer
+                          be required for the remaining semesters.
+                        </span>
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className='w-full'>
+                      <div className='grid grid-cols-1 sm:px-32 px-5'>
+                        <Table className='table-auto border-collapse rounded-t-lg border '>
+                          <TableHeader>
+                            <TableRow className=' border-black rounded-t-lg bg-gray-200 font-bold text-[16px]'>
+                              <TableHead className='px-4 py-2 text-left'>Payments Type</TableHead>
+                              <TableHead className='px-4 py-2 text-left'>Amount</TableHead>
+                              <TableHead className='px-4 py-2 text-left'>Status</TableHead>
+                              <TableHead className='px-4 py-2 text-left'>Settle Payment</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            <TableRow>
+                              <TableCell className={`px-4 py-2 ${showPaymentOfDepartmental && 'text-green-400 line-through'}`}>Departmental Fee</TableCell>
+                              <TableCell className={`px-4 py-2 ${showPaymentOfDepartmental && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.departmentalFee).toFixed(2)}</TableCell>
+                              <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>{showPaymentOfDepartmental ? 'Paid' : 'unpaid'}</TableCell>
+                              <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>
+                                {showPaymentOfDepartmental ? (
+                                  'Completed'
+                                ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
+                                  <SettleTermPayment
+                                    enrollment={data?.enrollmentRecord}
+                                    tfData={tfData?.tFee}
+                                    srData={srData?.studentReceipt}
+                                    amountToPay={Number(tfData?.tFee?.departmentalFee).toFixed(2)}
+                                    type={'departmental'}
+                                    title='Departmental Payment'
+                                    isScholarshipStart={isScholarshipStart}
+                                  />
+                                ) : (
+                                  ''
+                                )}
+                              </TableCell>
+                              {/* <TableCell className={`px-4 py-2`}>{a > 0 && `₱${a.toFixed(2)}`}</TableCell> */}
+                            </TableRow>
+                            {!srData?.insurancePayment && (
                               <TableRow>
-                                <TableCell className={`px-4 py-2 ${(srData?.departmentalPayment || showPaymentOfDepartmental) && 'text-green-400 line-through'}`}>Departmental Fee</TableCell>
-                                <TableCell className={`px-4 py-2 ${(srData?.departmentalPayment || showPaymentOfDepartmental) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.departmentalFee).toFixed(2)}</TableCell>
-                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDepartmental || srData?.departmentalPayment ? 'text-green-400' : 'text-red'}`}>
-                                  {showPaymentOfDepartmental || srData?.departmentalPayment ? 'Paid' : 'unpaid'}
+                                <TableCell className={`px-4 py-2 ${(srData?.insurancePayment || showPaymentOfInsurance) && 'text-green-400 line-through'}`}>Insurance Fee</TableCell>
+                                <TableCell className={`px-4 py-2 ${(srData?.insurancePayment || showPaymentOfInsurance) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.insuranceFee).toFixed(2)}</TableCell>
+                                <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.insurancePayment || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
+                                  {srData?.insurancePayment || showPaymentOfInsurance ? 'Paid' : 'unpaid'}
                                 </TableCell>
-                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDepartmental || srData?.departmentalPayment ? 'text-green-400' : 'text-red'}`}>
-                                  {srData?.departmentalPayment || showPaymentOfDepartmental ? (
+                                <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.insurancePayment || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
+                                  {srData?.insurancePayment || showPaymentOfInsurance ? (
                                     'Completed'
                                   ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
                                     <SettleTermPayment
-                                      enrollment={data?.enrollmentRecord}
+                                      enrollment={data?.enrollment}
                                       tfData={tfData?.tFee}
                                       srData={srData?.studentReceipt}
-                                      amountToPay={Number(tfData?.tFee?.departmentalFee).toFixed(2)}
-                                      type={'departmental'}
-                                      title='Departmental Payment'
+                                      amountToPay={Number(tfData?.tFee?.insuranceFee).toFixed(2)}
+                                      type={'insurance'}
+                                      title='Insurance Payment'
                                       isScholarshipStart={isScholarshipStart}
                                     />
                                   ) : (
                                     ''
                                   )}
                                 </TableCell>
-                                {/* <TableCell className={`px-4 py-2`}>{a > 0 && `₱${a.toFixed(2)}`}</TableCell> */}
                               </TableRow>
+                            )}
+                            {!srData?.ssgPayment && (
                               <TableRow>
                                 <TableCell className={`px-4 py-2 ${(srData?.ssgPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>SSG Fee</TableCell>
                                 <TableCell className={`px-4 py-2 ${(srData?.ssgPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.ssgFee).toFixed(2)}</TableCell>
@@ -638,19 +680,19 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   )}
                                 </TableCell>
                               </TableRow>
-                            </TableBody>
-                          </Table>
+                            )}
+                          </TableBody>
+                        </Table>
+                      </div>
+                      <div className='grid grid-cols-1 sm:px-36 px-5'>
+                        <div className='flex justify-between'>
+                          <span className='font-medium'>Total</span>
+                          <span>₱{Number(additionalTotal).toFixed(2)}</span>
                         </div>
-                        <div className='grid grid-cols-1 sm:px-36 px-5'>
-                          <div className='flex justify-between'>
-                            <span className='font-medium'>Total</span>
-                            <span>₱{Number(additionalTotal).toFixed(2)}</span>
-                          </div>
-                        </div>
-                      </CardContent>
-                      <CardFooter className=''></CardFooter>
-                    </Card>
-                  )}
+                      </div>
+                    </CardContent>
+                    <CardFooter className=''></CardFooter>
+                  </Card>
                 </div>
               ) : (
                 <>
@@ -682,7 +724,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                       </Card>
                     </div>
                   )}
-                  {data && data.enrollment.step < 5 && (
+                  {data && (
                     <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
                       <Card className={`min-h-[35vh] my-[10%] shadow-none drop-shadow-none items-center justify-center flex border-0`}>
                         <CardHeader className='space-y-3 hidden'>

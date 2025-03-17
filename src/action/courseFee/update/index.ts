@@ -1,7 +1,7 @@
 'use server';
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
-import { TuitionFeeValidator } from '@/lib/validators/tuitionFee/create';
+import { CourseFeeValidator } from '@/lib/validators/courseFee/create';
 import { getCourseByCourseCode } from '@/services/course';
 import { updateCourseFeeById, getCourseFeeById, getCourseFeeByCourseIdAndYear } from '@/services/courseFee';
 import { checkAuth } from '@/utils/actions/session';
@@ -31,7 +31,7 @@ const checkCategory = async (data: any) => {
 
 const handleCategoryCollege = async (data: any) => {
   return tryCatch(async () => {
-    const parse = TuitionFeeValidator.safeParse(data);
+    const parse = CourseFeeValidator.safeParse(data);
     if (!parse.success) return { error: 'Invalid fields!', status: 400 };
     const tFee = await getCourseFeeById(data.id);
     if (!tFee) return { error: 'Tuition Fee to update has not found.', status: 404 };
@@ -62,6 +62,7 @@ const handleCategoryCollege = async (data: any) => {
       category: course.category,
       regOrMisc: data.regMiscRows,
       year: data.year,
+      insuranceFee: Number(parse.data.insuranceFee).toFixed(2),
       departmentalFee: Number(parse.data.departmentalFee).toFixed(2),
       ratePerUnit: Number(parse.data.ratePerUnit).toFixed(2),
       ssgFee: Number(parse.data.ssgFee).toFixed(2),

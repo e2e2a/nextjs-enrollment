@@ -30,7 +30,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
   const [displayPayment, setDisplayPayment] = useState(true);
 
   const { data: esData, isError: esError } = useEnrollmentSetupQuery();
-  console.log('amountToPay', amountToPay);
+  console.log('enrollment', enrollment)
   useEffect(() => {
     if (!enrollment) return;
     if (!tfData) return;
@@ -51,6 +51,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
     if (Number(amountInput).toFixed(2) > Number(amountToPay).toFixed(2)) return makeToastError('Amount exceed on the total amount to pay.');
     const receipt = {
       studentId: enrollment?.profileId?._id,
+      enrollmentId: enrollment?._id,
       category: 'College',
       amount: {
         currency_code: 'Php',
@@ -66,6 +67,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
         amount: Number(amountInput).toFixed(2),
       },
       type: type,
+      request: 'record',
     };
     mutation.mutate(receipt, {
       onSuccess: (res: any) => {
@@ -91,10 +93,11 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
         <Button variant={'outline'} size={'sm'} className='select-none focus-visible:ring-0 text-[15px] bg-blue-500 hover:bg-blue-600 text-white tracking-normal font-medium font-poppins'>
           <Icons.Banknote className='h-4 w-4 mr-2' />
           {type === 'fullPayment' && 'Pay Full Payment'}
-          {type !== 'fullPayment' && type !== 'downPayment' && type !== 'ssg' && type !== 'departmental' && 'Pay This Term'}
+          {type !== 'fullPayment' && type !== 'downPayment' && type !== 'ssg' && type !== 'insurance' && type !== 'departmental' && 'Pay This Term'}
           {type === 'downPayment' && 'Pay Down Payment'}
           {type === 'departmental' && 'Make Payment'}
           {type === 'ssg' && 'Make Payment'}
+          {type === 'insurance' && 'Make Payment'}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className='bg-white h-[75%] w-full overflow-y-scroll'>
