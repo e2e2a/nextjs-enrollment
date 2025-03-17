@@ -135,7 +135,7 @@ const Page = () => {
         setRegMiscTotal(0);
         setTotal(0);
         const lab = data.enrollment.studentSubjects.reduce((acc: number, subjects: any) => acc + Number(subjects?.teacherScheduleId?.subjectId?.lab), 0);
-        const lec = data.enrollment.studentSubjects.reduce((acc: number, subjects: any) => acc + Number(subjects?.teacherScheduleId?.subjectId?.lec), 0);
+        const lec = data.enrollment.studentSubjects.reduce((acc: number, subjects: any) => acc + Number(subjects?.teacherScheduleId?.subjectId?.unit), 0);
         let addcwtsOrNstpFee = false;
         const cwtsOrNstpFee = Number(tfData?.tFee?.cwtsOrNstpFee) || 0;
 
