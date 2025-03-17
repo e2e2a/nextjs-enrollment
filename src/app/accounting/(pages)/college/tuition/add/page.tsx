@@ -21,7 +21,7 @@ const Page = () => {
   const [isPending, setIsPending] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
   const { data: cData, isLoading, error } = useCourseQueryByCategory('College');
-  const [regMiscRows, setRegMiscRows] = useState<any[]>([{ type: '', name: '', amount: '' }]);
+  const [regMiscRows, setRegMiscRows] = useState<any[]>([{ name: '', amount: '' }]);
 
   useEffect(() => {
     if (error || !cData) return;
@@ -44,6 +44,7 @@ const Page = () => {
       insuranceFee: '0.00',
       departmentalFee: '0.00',
       ssgFee: '0.00',
+      ojtFee: '0.00',
       cwtsOrNstpFee: '0.00',
       downPayment: `0.00`,
     },
@@ -118,13 +119,11 @@ const Page = () => {
                     {/* <SelectInput name={'semester'} selectItems={studentSemesterData} form={form} label={'Semester:'} placeholder={'Select Semester'} /> */}
                     <Input name={'ratePerUnit'} type={'text'} form={form} label={'Rate Per Unit:'} classNameInput={'uppercase'} />
                     <Input name={'ratePerLab'} type={'text'} form={form} label={'Rate PerLab:'} classNameInput={'uppercase'} />
-                    <Input name={'cwtsOrNstpFee'} type={'text'} form={form} label={'CWTS/NSTP Fee:'} classNameInput={'uppercase'} />
-                    <Input name={'downPayment'} type={'text'} form={form} label={'Down Payment:'} classNameInput={''} />
                   </div>
 
                   <div className='flex flex-col items-start w-full justify-center mt-10 mb-10'>
                     <h1 className='text-lg font-semibold xs:text-xl sm:text-2xl tracking-tight w-full text-start uppercase'>
-                      Additional Payment <span className='text-muted-foreground text-red'>(REQUIRED)</span>
+                      Additional Fees <span className='text-muted-foreground text-red'>(REQUIRED)</span>
                     </h1>
                     <p className='text-sm text-muted-foreground mt-2'>
                       The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a single academic year. After the first two payments, it will no longer be
@@ -137,9 +136,26 @@ const Page = () => {
                     </div>
                   </div>
                 </CardContent>
-
-                <RegOrMisc regMiscRows={regMiscRows} setRegMiscRows={setRegMiscRows} />
-
+                <div className=''>
+                  <div className='flex flex-col w-full px-7'>
+                    <h1 className='text-lg font-semibold xs:text-xl sm:text-2xl tracking-tight w-full text-start uppercase '>Reg/Misc Fees</h1>
+                    <p className='text-sm text-muted-foreground mt-2'>Note: Down payment is handled as a separate under Reg/Misc Fee. This allows flexibility in adjusting the down payment amount based on the student's specific requirements.</p>
+                    <div className='grid grid-cols-2 my-5'>
+                      <Input name={'downPayment'} type={'text'} form={form} label={'Down Payment:'} classNameInput={''} />
+                    </div>
+                  </div>
+                  <RegOrMisc regMiscRows={regMiscRows} setRegMiscRows={setRegMiscRows} />
+                </div>
+                <div className=''>
+                  <div className='flex flex-col items-start w-full justify-center mt-10 mb-10 px-7'>
+                    <h1 className='text-lg font-semibold xs:text-xl sm:text-2xl tracking-tight w-full text-start uppercase'>Other Fees</h1>
+                    <p className='text-sm text-muted-foreground mt-2'>Note: CWTS/NSTP and OJT fees are only applicable if the student is enrolled in the corresponding subject.</p>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mt-4'>
+                      <Input name={'cwtsOrNstpFee'} type={'text'} form={form} label={'CWTS/NSTP Fee:'} classNameInput={'uppercase'} />
+                      <Input name={'ojtFee'} type={'text'} form={form} label={'OJT Fee:'} classNameInput={'uppercase'} />
+                    </div>
+                  </div>
+                </div>
                 <CardFooter className=''>
                   <div className='flex w-full justify-center md:justify-end items-center mt-4'>
                     <Button type='submit' variant={'destructive'} disabled={isPending} className='bg-blue-500 hover:bg-blue-700 text-white font-semibold tracking-wide'>

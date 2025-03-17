@@ -43,24 +43,15 @@ const Page = () => {
             <CardContent className='w-full'>
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                 <span className='uppercase text-[16px]'>
-                  <span className='font-semibold'>year</span>: {tfData?.tFee?.year}
+                  <span className='font-semibold'>Rate Per Unit</span>: ₱{tfData?.tFee?.ratePerUnit}
                 </span>
                 <span className='uppercase text-[16px]'>
-                  <span className='font-semibold'>Rate Per Unit</span>: {tfData?.tFee?.ratePerUnit}
-                </span>
-                <span className='uppercase text-[16px]'>
-                  <span className='font-semibold'>Rate Per Lab</span>: {tfData?.tFee?.ratePerLab}
-                </span>
-                <span className='uppercase text-[16px]'>
-                  <span className='font-semibold'>CWTS/NSTP Fee</span>: {tfData?.tFee?.cwtsOrNstpFee}
-                </span>
-                <span className='uppercase text-[16px]'>
-                  <span className='font-semibold'>Down Payment</span>: {tfData?.tFee?.downPayment}
+                  <span className='font-semibold'>Rate Per Lab</span>: ₱{tfData?.tFee?.ratePerLab}
                 </span>
               </div>
               <div className='flex flex-col items-start w-full justify-center mt-10 mb-10'>
                 <h1 className='text-lg font-semibold xs:text-xl sm:text-2xl tracking-tight w-full text-start uppercase'>
-                  Additional Payment <span className='text-muted-foreground text-red'>(REQUIRED)</span>
+                  Additional Fees <span className='text-muted-foreground text-red'>(REQUIRED)</span>
                 </h1>
                 <p className='text-sm text-muted-foreground mt-2'>
                   The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a single academic year. After the first two payments, it will no longer be
@@ -68,24 +59,27 @@ const Page = () => {
                 </p>
                 <div className='mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full'>
                   <span className='uppercase text-[16px]'>
-                    <span className='font-semibold'>Departmental Fee</span>: {tfData?.tFee?.departmentalFee}
+                    <span className='font-semibold'>Departmental Fee</span>: ₱{tfData?.tFee?.departmentalFee}
                   </span>
                   <span className='uppercase text-[16px]'>
-                    <span className='font-semibold'>Insurance Feeyear</span>: {tfData?.tFee?.insuranceFee}
+                    <span className='font-semibold'>Insurance Feeyear</span>: ₱{tfData?.tFee?.insuranceFee}
                   </span>
                   <span className='uppercase text-[16px]'>
-                    <span className='font-semibold'>SSG Fee</span>: {tfData?.tFee?.ssgFee}
+                    <span className='font-semibold'>SSG Fee</span>: ₱{tfData?.tFee?.ssgFee}
                   </span>
                 </div>
               </div>
               <div className='overflow-x-auto mt-3 rounded-t-lg'>
                 <div className='my-3'>
-                  <h1 className='text-lg font-semibold xs:text-xl sm:text-xl tracking-tight w-full text-start uppercase'>Reg/Misc Fee</h1>
+                  <h1 className='text-lg font-semibold xs:text-xl sm:text-xl tracking-tight w-full text-start uppercase'>Reg/Misc Fees</h1>
+                  <p className='text-sm text-muted-foreground mt-2'>Note: Down payment is handled as a separate under Reg/Misc Fee. This allows flexibility in adjusting the down payment amount based on the student's specific requirements.</p>
                 </div>
+                <span className='uppercase text-[16px] my-5 flex'>
+                  <span className='font-semibold'>Down Payment</span>: {tfData?.tFee?.downPayment}
+                </span>
                 <Table className='table-auto border-collapse rounded-t-lg border '>
                   <TableHeader>
                     <TableRow className=' border-black rounded-t-lg bg-gray-200 font-bold text-[16px]'>
-                      <TableHead className='px-4 py-2 text-left'>Type</TableHead>
                       <TableHead className='px-4 py-2 text-left'>Name</TableHead>
                       <TableHead className='px-4 py-2 text-left'>Amount</TableHead>
                     </TableRow>
@@ -93,13 +87,26 @@ const Page = () => {
                   <TableBody>
                     {tfData?.tFee?.regOrMisc.map((row: any, index: any) => (
                       <TableRow key={index}>
-                        <TableCell className='px-4 py-2'>{row.type}</TableCell>
                         <TableCell className='px-4 py-2'>{row.name}</TableCell>
-                        <TableCell className='px-4 py-2'>{Number(row?.amount).toFixed(2)}</TableCell>
+                        <TableCell className='px-4 py-2'>₱{Number(row?.amount).toFixed(2)}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
+              </div>
+              <div className='overflow-x-auto mt-3 rounded-t-lg'>
+                <div className='my-3'>
+                  <h1 className='text-lg font-semibold xs:text-xl sm:text-xl tracking-tight w-full text-start uppercase'>Other Fees</h1>
+                  <p className='text-sm text-muted-foreground mt-2'>Note: CWTS/NSTP and OJT fees are only applicable if the student is enrolled in the corresponding subject.</p>
+                </div>
+                <div className='grid grid-cols-1 sm:grid-cols-2'>
+                  <span className='uppercase text-[16px]'>
+                    <span className='font-semibold'>CWTS/NSTP Fee</span>: ₱{tfData?.tFee?.cwtsOrNstpFee}
+                  </span>
+                  <span className='uppercase text-[16px]'>
+                    <span className='font-semibold'>CWTS/NSTP Fee</span>: ₱{tfData?.tFee?.ojtFee}
+                  </span>
+                </div>
               </div>
             </CardContent>
 

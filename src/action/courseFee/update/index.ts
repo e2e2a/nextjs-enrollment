@@ -63,6 +63,7 @@ const handleCategoryCollege = async (data: any) => {
       regOrMisc: data.regMiscRows,
       year: data.year,
       insuranceFee: Number(parse.data.insuranceFee).toFixed(2),
+      ojtFee: Number(parse.data.ojtFee).toFixed(2),
       departmentalFee: Number(parse.data.departmentalFee).toFixed(2),
       ratePerUnit: Number(parse.data.ratePerUnit).toFixed(2),
       ssgFee: Number(parse.data.ssgFee).toFixed(2),

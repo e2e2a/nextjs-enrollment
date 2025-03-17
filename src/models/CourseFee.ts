@@ -12,6 +12,7 @@ export interface ICourseFee extends Document {
   insuranceFee: string;
   year: string;
   schoolYear: string;
+  ojtFee: string;
   regOrMisc: any;
 }
 
@@ -29,11 +30,11 @@ const schema = new Schema<ICourseFee>(
     cwtsOrNstpFee: { type: String },
     downPayment: { type: String },
     insuranceFee: { type: String },
+    ojtFee: { type: String },
     year: { type: String },
     schoolYear: { type: String },
     regOrMisc: [
       {
-        type: { type: String },
         name: { type: String },
         amount: { type: String },
       },

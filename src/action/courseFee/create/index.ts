@@ -58,6 +58,7 @@ const handleCategoryCollege = async (data: any) => {
       year: parse.data.year,
       regOrMisc: data.regMiscRows,
       insuranceFee: Number(parse.data.insuranceFee).toFixed(2),
+      ojtFee: Number(parse.data.ojtFee).toFixed(2),
       ratePerUnit: Number(parse.data.ratePerUnit).toFixed(2),
       ratePerLab: Number(parse.data.ratePerLab).toFixed(2),
       departmentalFee: Number(parse.data.departmentalFee).toFixed(2),

@@ -31,4 +31,8 @@ export const CourseFeeValidator = z.object({
     .string()
     .regex(/^\d+(\.\d+)?$/, { message: 'Down Payment must be a valid number...' })
     .min(1, { message: 'Down Payment is required...' }),
+  ojtFee: z
+    .string()
+    .regex(/^\d+(\.\d+)?$/, { message: 'OJT Fee must be a valid number...' })
+    .min(1, { message: 'Down Payment is required...' }),
 });

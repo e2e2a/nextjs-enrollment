@@ -122,6 +122,7 @@ const handleCategoryCollege = async (data: any) => {
         courseCode: cf.courseId.courseCode,
         ratePerUnit: cf.ratePerUnit,
         ratePerLab: cf.ratePerLab,
+        ojtFee: cf.ojtFee,
         departmentalFee: cf.departmentalFee,
         insuranceFee: cf.insuranceFee,
         ssgFee: cf.ssgFee,

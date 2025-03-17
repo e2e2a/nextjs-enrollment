@@ -19,7 +19,7 @@ const RegOrMisc = ({ isNotEditable, regMiscRows, setRegMiscRows }: IProps) => {
 
   // Handle adding a new row
   const handleAddRow = () => {
-    setRegMiscRows([...regMiscRows, { type: '', name: '', amount: '' }]);
+    setRegMiscRows([...regMiscRows, { name: '', amount: '' }]);
   };
 
   // Handle input change in the dynamic table rows
@@ -57,7 +57,6 @@ const RegOrMisc = ({ isNotEditable, regMiscRows, setRegMiscRows }: IProps) => {
                   <>
                     {regMiscRows.map((row: any, index: any) => (
                       <TableRow key={index}>
-                        <TableCell className='px-4 py-2'>{row.type}</TableCell>
                         <TableCell className='px-4 py-2'>{row.name}</TableCell>
                         <TableCell className='px-4 py-2'>{Number(row?.amount).toFixed(2)}</TableCell>
                       </TableRow>
@@ -67,9 +66,6 @@ const RegOrMisc = ({ isNotEditable, regMiscRows, setRegMiscRows }: IProps) => {
                   <>
                     {regMiscRows.map((row: any, index: any) => (
                       <TableRow key={index}>
-                        <TableCell className='px-4 py-2'>
-                          <Input type='text' value={row.type} onChange={(e: any) => handleInputChange(index, 'type', e.target.value)} placeholder='Type' />
-                        </TableCell>
                         <TableCell className='px-4 py-2'>
                           <Input type='text' value={row.name} onChange={(e) => handleInputChange(index, 'name', e.target.value)} placeholder='Name' />
                         </TableCell>
