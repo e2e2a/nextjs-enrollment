@@ -28,6 +28,7 @@ const Page = () => {
   const [lecTotal, setLecTotal] = useState<number>(0.0); // consider in the tuition fee
   const [regMiscTotal, setRegMiscTotal] = useState<number>(0.0);
   const [showCwtsOrNstp, setShowCwtsOrNstp] = useState<boolean>(false);
+  const [showOJT, setShowOJT] = useState<boolean>(false);
 
   const { data: session } = useSession();
   const { data, error } = useEnrollmentQueryBySessionId(session?.user?.id!);
@@ -136,15 +137,16 @@ const Page = () => {
         setTotal(0);
         const lab = data.enrollment.studentSubjects.reduce((acc: number, subjects: any) => acc + Number(subjects?.teacherScheduleId?.subjectId?.lab), 0);
         const unit = data.enrollment.studentSubjects.reduce((acc: number, subjects: any) => acc + Number(subjects?.teacherScheduleId?.subjectId?.unit), 0);
-        let addcwtsOrNstpFee = false;
-        const cwtsOrNstpFee = Number(tfData?.tFee?.cwtsOrNstpFee) || 0;
 
         // Ensure correct calculations at every step
         const aFormatted = parseFloat((lab * tfData?.tFee?.ratePerLab).toFixed(2));
         const bFormatted = parseFloat((unit * tfData?.tFee?.ratePerUnit).toFixed(2));
         const cFormatted = parseFloat(tfData?.tFee?.regOrMisc.reduce((acc: number, tFee: any) => acc + Number(tFee.amount), 0).toFixed(2));
         const dFormatted = Number(tfData?.tFee?.downPayment || 0);
-        const d = data.enrollment.studentSubjects.find((sub: any) => {
+
+        let addcwtsOrNstpFee = false;
+        const cwtsOrNstpFee = Number(tfData?.tFee?.cwtsOrNstpFee) || 0;
+        const cwtsOrNstp = data.enrollment.studentSubjects.find((sub: any) => {
           if (
             sub?.teacherScheduleId?.subjectId?.subjectCode.trim().toLowerCase() === 'cwts' ||
             sub?.teacherScheduleId?.subjectId?.subjectCode.trim().toLowerCase() === 'nstp' ||
@@ -155,6 +157,17 @@ const Page = () => {
           ) {
             setShowCwtsOrNstp(true);
             addcwtsOrNstpFee = true;
+            return true;
+          }
+          return false;
+        });
+
+        let addOjtFee = false;
+        const ojtFee = Number(tfData?.tFee?.ojtFee) || 0;
+        const ojt = data.enrollment.studentSubjects.find((sub: any) => {
+          if (sub?.teacherScheduleId?.subjectId?.subjectCode.trim().toLowerCase() === 'prac1' || sub?.teacherScheduleId?.subjectId?.subjectCode.trim().toLowerCase() === 'prac2') {
+            setShowOJT(true);
+            addOjtFee = true;
             return true;
           }
           return false;
@@ -182,8 +195,11 @@ const Page = () => {
             setRegMiscTotal(c);
           }
         }
+        let totalAmount = 0;
 
-        const totalAmount = addcwtsOrNstpFee ? aFormatted + LecTotal + RegMiscTotal + cwtsOrNstpFee : aFormatted + LecTotal + RegMiscTotal;
+        totalAmount = aFormatted + LecTotal + RegMiscTotal;
+        if (addcwtsOrNstpFee) totalAmount = totalAmount + cwtsOrNstpFee;
+        if (addOjtFee) totalAmount = totalAmount + ojtFee;
         const formattedTotal = parseFloat(totalAmount.toFixed(2)); // Final formatting
         setTotal(formattedTotal);
         const totalWithoutDownPayment = Number(formattedTotal) - dFormatted;
@@ -275,8 +291,14 @@ const Page = () => {
                                 </div>
                                 {showCwtsOrNstp && (
                                   <div className='flex justify-between'>
-                                    <span className='font-medium'>CWTS/NSTP</span>
+                                    <span className='font-medium'>CWTS/NSTP FEE</span>
                                     <span>₱{Number(tfData?.tFee?.cwtsOrNstpFee).toFixed(2) || (0).toFixed(2)}</span>
+                                  </div>
+                                )}
+                                {showOJT && (
+                                  <div className='flex justify-between'>
+                                    <span className='font-medium'>OJT FEE</span>
+                                    <span>₱{Number(tfData?.tFee?.ojtFee).toFixed(2) || (0).toFixed(2)}</span>
                                   </div>
                                 )}
                               </div>
