@@ -16,11 +16,12 @@ interface IProps {
 
 export function SelectInput({ form, name, label, isNotEditable, classNameInput, selectItems, placeholder, tFee }: IProps) {
   const [value, setValue] = React.useState('');
-
+  console.log('tFee?.year', tFee?.year);
   React.useEffect(() => {
     const getVal = name;
     if (!tFee) return;
-    setValue(tFee.courseId?.courseCode);
+    if (name === 'courseCode') setValue(tFee?.courseId?.courseCode);
+    if (name === 'year') setValue(tFee?.year);
   }, [form, tFee, name, isNotEditable]);
 
   return (

@@ -4,6 +4,7 @@ import { getEnrollmentByProfileId, updateEnrollmentById } from '@/services/enrol
 import { getEnrollmentSetupByName } from '@/services/EnrollmentSetup';
 import { createStudentReceipt, getStudentReceiptByStudentId } from '@/services/studentReceipt';
 import { getStudentProfileById } from '@/services/studentProfile';
+import { getEnrollmentRecordById, getEnrollmentRecordByProfileId } from '@/services/enrollmentRecord';
 
 export const handleAccountingRole = async (user: any, data: any) => {
   return tryCatch(async () => {
@@ -20,7 +21,9 @@ export const handleAccountingRole = async (user: any, data: any) => {
 
 const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: any) => {
   return tryCatch(async () => {
-    const studentEnrollment = await getEnrollmentByProfileId(student._id);
+    let studentEnrollment;
+    studentEnrollment = await getEnrollmentByProfileId(student._id);
+    if (data.request === 'record') studentEnrollment = await getEnrollmentRecordById(data.enrollmentId);
     if (!studentEnrollment) return { error: 'No Enrollment found', status: 404 };
 
     const captures = {

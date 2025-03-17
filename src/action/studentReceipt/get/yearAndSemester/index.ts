@@ -4,6 +4,7 @@ import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getStudentReceiptByStudentId } from '@/services/studentReceipt';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { checkAuth } from '@/utils/actions/session';
+import { getCourseFeeByCourseId } from '@/services/courseFee';
 
 /**
  * handles query student receipt by userId
@@ -22,42 +23,36 @@ export const getAllStudentReceiptByUserIdAndYearAndSemesterAction = async (userI
     let studentReceipt;
     const a = await getStudentReceiptByStudentId(student._id);
     studentReceipt = a;
+    const b = await checkPaymentOfSSG(studentReceipt);
     if (!year && !semester && !schoolYear) return { error: 'Invalid inputs', status: 400 };
+    const c = await checkPaymentOfInsurance(studentReceipt, year, schoolYear);
+    // this is the insurance space for searching the insurance by semester and year
     studentReceipt = a.filter((sr) => sr.year.toLowerCase() === year.toLowerCase() && sr.semester.toLowerCase() === semester.toLowerCase() && sr.schoolYear.toLowerCase() === schoolYear.toLowerCase());
 
-    const b = await checkPaymentOfRequired(studentReceipt);
-
-    return { studentReceipt: JSON.parse(JSON.stringify(studentReceipt)), ...b, status: 200 };
+    return { studentReceipt: JSON.parse(JSON.stringify(studentReceipt)), ...b, ...c, status: 200 };
   });
 };
 
-const checkPaymentOfRequired = async (studentReceipt: any) => {
+const checkPaymentOfSSG = async (studentReceipt: any) => {
   return tryCatch(async () => {
-    let departmentalPayment = false;
     let ssgPayment = false;
-    const departmentalPayment1 = studentReceipt
-      ?.filter((r: any) => r.type.toLowerCase() === 'departmental')
-      ?.reduce((total: number, payment: any) => {
-        return { amount: total + (Number(payment?.taxes?.amount) || 0), schoolYear: payment.schoolYear };
-      }, 0);
-    const departmentalPayment2 = studentReceipt
-      ?.filter((r: any) => r.type.toLowerCase() === 'departmental' && r.schoolYear !== departmentalPayment1?.schoolYear)
-      ?.reduce((total: number, payment: any) => {
-        return { amount: total + (Number(payment?.taxes?.amount) || 0), schoolYear: payment.schoolYear };
-      }, 0);
+    const ssgPayment1 = studentReceipt?.filter((r: any) => r.type.toLowerCase() === 'ssg');
 
-    const ssgPayment1 = studentReceipt
-      ?.filter((r: any) => r.type.toLowerCase() === 'ssg')
+    if (ssgPayment1.length >= 2) ssgPayment = true;
+    return { ssgPayment };
+  });
+};
+
+const checkPaymentOfInsurance = async (studentReceipt: any, year: string, schoolYear: string) => {
+  return tryCatch(async () => {
+    const a = studentReceipt.filter((sr: any) => sr?.year.toLowerCase() === year.toLowerCase() && sr?.schoolYear.toLowerCase() === schoolYear.toLowerCase());
+    let insurancePayment = false;
+    const insurancePayment1 = a
+      ?.filter((r: any) => r.type.toLowerCase() === 'insurance')
       ?.reduce((total: number, payment: any) => {
         return { amount: total + (Number(payment?.taxes?.amount) || 0), schoolYear: payment.schoolYear };
       }, 0);
-    const ssgPayment2 = studentReceipt
-      ?.filter((r: any) => r.type.toLowerCase() === 'ssg')
-      ?.reduce((total: number, payment: any) => {
-        return { amount: total + (Number(payment?.taxes?.amount) || 0), schoolYear: payment.schoolYear };
-      }, 0);
-    if (departmentalPayment1 && departmentalPayment2) departmentalPayment = true;
-    if (ssgPayment1 && ssgPayment2) ssgPayment = true;
-    return { departmentalPayment, ssgPayment };
+    if (insurancePayment1) insurancePayment = true;
+    return { insurancePayment };
   });
 };

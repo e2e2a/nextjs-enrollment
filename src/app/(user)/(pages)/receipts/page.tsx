@@ -10,7 +10,7 @@ const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
 
   const { data: s } = useSession();
-  const { data, isLoading, error } = useStudentReceiptQueryByUserId(s?.user?.id as string);
+  const { data, error } = useStudentReceiptQueryByUserId(s?.user?.id as string);
 
   useEffect(() => {
     if (error || !data) return;

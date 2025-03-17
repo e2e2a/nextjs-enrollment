@@ -9,6 +9,7 @@ import { checkAuth } from '@/utils/actions/session';
 import { v4 as uuidv4 } from 'uuid';
 import { ApiError, Client, Environment, LogLevel, OrdersController } from '@paypal/paypal-server-sdk';
 import { handleAccountingRole } from './helpers/cash';
+import { getEnrollmentRecordById } from '@/services/enrollmentRecord';
 
 /**
  * any authenticated user
@@ -67,7 +68,9 @@ const handleStudentRole = async (user: any, data: any) => {
 
 const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: any) => {
   return tryCatch(async () => {
-    const studentEnrollment = await getEnrollmentByProfileId(student._id);
+    let studentEnrollment;
+    studentEnrollment = await getEnrollmentByProfileId(student._id);
+    if (data.request === 'record') studentEnrollment = await getEnrollmentRecordById(data.enrollmentId);
     if (!studentEnrollment) return { error: 'No Enrollment found', status: 404 };
 
     const d = await checkSellerProtectionStatus(data.orderID);
