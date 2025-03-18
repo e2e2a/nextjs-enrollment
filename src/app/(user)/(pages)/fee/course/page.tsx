@@ -72,7 +72,7 @@ const Page = () => {
               <div className='overflow-x-auto mt-3 rounded-t-lg'>
                 <div className='my-3'>
                   <h1 className='text-lg font-semibold xs:text-xl sm:text-xl tracking-tight w-full text-start uppercase'>Reg/Misc Fees</h1>
-                  <p className='text-sm text-muted-foreground mt-2'>Note: Down payment is handled as a separate under Reg/Misc Fee. This allows flexibility in adjusting the down payment amount based on the student's specific requirements.</p>
+                  <p className='text-sm text-muted-foreground mt-2'>Note: Down payment is handled as a separate under Reg/Misc Fee. This allows flexibility in adjusting the down payment amount based on the student&apos;s specific requirements.</p>
                 </div>
                 <span className='uppercase text-[16px] my-5 flex'>
                   <span className='font-semibold'>Down Payment</span>: {tfData?.tFee?.downPayment}
