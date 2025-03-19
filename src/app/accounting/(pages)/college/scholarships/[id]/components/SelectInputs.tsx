@@ -11,18 +11,24 @@ interface IProps {
   classNameInput?: string;
   selectItems: any[];
   placeholder: string;
-  tFee: any;
+  scholarship: any;
 }
 
-export function SelectInput({ form, name, label, isNotEditable, classNameInput, selectItems, placeholder, tFee }: IProps) {
+export function SelectInput({ form, name, label, isNotEditable, classNameInput, selectItems, placeholder, scholarship }: IProps) {
   const [value, setValue] = React.useState('');
 
   React.useEffect(() => {
     const getVal = name;
-    if (!tFee) return;
-    setValue(tFee.courseId?.courseCode);
-  }, [form, tFee, name, isNotEditable]);
-
+    if (!scholarship) return;
+    if (name === 'discountPercentage' && scholarship?.discountPercentage !== undefined) {
+      const decimalValue = String(scholarship.discountPercentage); // Set as decimal string like "0.5"
+      setValue(decimalValue);
+      form.setValue(name, decimalValue);
+    } else if (scholarship[name] !== undefined) {
+      setValue(String(scholarship[name]));
+      form.setValue(name, String(scholarship[name]));
+    }
+  }, [form, scholarship, name, isNotEditable]);
   return (
     <FormField
       control={form.control}
@@ -33,7 +39,7 @@ export function SelectInput({ form, name, label, isNotEditable, classNameInput, 
             <div className={`${isNotEditable ? 'flex flex-row-reverse ' : 'relative bg-slate-50 rounded-lg'}`}>
               {isNotEditable ? (
                 <span className='w-full flex items-center uppercase font-semibold' id={name}>
-                  {field.value}
+                  {name === 'discountPercentage' ? `${parseFloat((Number(field?.value) * Number(100)).toFixed(0))}%` : field.value}
                 </span>
               ) : (
                 <Select
@@ -50,15 +56,8 @@ export function SelectInput({ form, name, label, isNotEditable, classNameInput, 
                     <SelectGroup className=''>
                       {selectItems.length > 0 ? (
                         selectItems.map((item: any, index: any) => {
-                          return item.name ? (
-                            <SelectItem value={item.courseCode} key={index} className='capitalize'>
-                              <div className=''>
-                                <span className='uppercase'>{item.courseCode}</span>
-                                {'-' + item.name}
-                              </div>
-                            </SelectItem>
-                          ) : (
-                            <SelectItem value={item.title} key={index} className='capitalize'>
+                          return (
+                            <SelectItem value={item.value || item.title} key={index} className='capitalize'>
                               {item.title}
                             </SelectItem>
                           );

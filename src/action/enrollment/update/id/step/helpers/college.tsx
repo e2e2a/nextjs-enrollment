@@ -209,7 +209,9 @@ const handleStep3 = async (user: any, data: any, e: any) => {
 const handleStep4 = async (user: any, data: any, e: any) => {
   return tryCatch(async () => {
     if (data.request === 'Approved') {
-      const newStep = e.step + 1;
+      let newStep = 0;
+      newStep = e.step + 1;
+      if (e.profileId.scholarshipId && e.profileId.scholarshipId.type.toLowerCase() === 'fixed') newStep = newStep + 1;
       await updateEnrollmentById(e._id, { step: newStep });
       await createNotification({ to: e.userId._id, title: `Your Enrollment has been Approved in step ${e.step}!`, link: '/enrollment/college' });
       await CreateDeanAndAdminNotifications(`Student has been Approved in step ${e.step}`, `Student has been Approved in step ${e.step}`, e.courseId._id, `/admin/college/enrollment/management?step=${e.step}`, `/dean/enrollment/management?step=${e.step}`);

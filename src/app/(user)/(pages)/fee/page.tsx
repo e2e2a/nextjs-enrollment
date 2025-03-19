@@ -36,6 +36,13 @@ const Page = () => {
   const { data: esData, isError: esError } = useEnrollmentSetupQuery();
   const { data: srData, error: srError } = useStudentReceiptQueryByUserIdAndYearAndSemester(session?.user.id as string, data?.enrollment?.studentYear, data?.enrollment?.studentSemester, esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear);
 
+  //to be deducted amount of scholarship payment
+  const isPaidByScholarship = srData?.studentReceipt
+    ?.filter((r: any) => r.isPaidByScholarship)
+    ?.reduce((total: number, payment: any) => {
+      return total + (Number(payment?.taxes?.amount) || 0);
+    }, 0);
+  const balanceGrant = parseFloat((Number(data?.enrollment?.profileId?.scholarshipId?.amount) - Number(isPaidByScholarship)).toFixed(2));
   //full payment exclude all terms payment and downpayment
   const paymentOfFullPayment = srData?.studentReceipt.find((r: any) => r.type.toLowerCase() === 'fullpayment');
   let showPaymentOfFullPayment = false;
@@ -384,7 +391,7 @@ const Page = () => {
                         <span className='text-xs sm:text-sm'>SchoolYear: {esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear} </span>
                       </CardDescription>
                       <div className=''>
-                        {!showPaymentOfFullPayment && !showPaymentOfDownPayment && !showPaymentOfPrelim && !showPaymentOfMidterm && !showPaymentOfSemiFinal && !showPaymentOfFinal && (
+                        {!data?.enrollment?.profileId?.scholarshipId?.amount && !showPaymentOfFullPayment && !showPaymentOfDownPayment && !showPaymentOfPrelim && !showPaymentOfMidterm && !showPaymentOfSemiFinal && !showPaymentOfFinal && (
                           <div className='flex flex-col justify-center items-center w-full border-[0.5px] rounded-lg px-5 py-3'>
                             <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>
                               <h1 className='flex gap-x-2 justify-center items-center'>
@@ -410,6 +417,22 @@ const Page = () => {
                               </h1>
                             </div>
                           )}
+                          {data?.enrollment?.profileId?.scholarshipId?.amount && (
+                            <div className=''>
+                              <div className='text-sm text-muted-foreground my-3'>
+                                <span className=''>Note: Only Cashier can make a payment until the Scholarship Support Balance is zero.</span>
+                              </div>
+                              <h1 className='flex flex-col gap-x-2 justify-start items-start font-semibold '>
+                                <span className='text-sm text-justify'>Scholarship Name: {data?.enrollment?.profileId?.scholarshipId?.name}</span>
+                                <span className='text-sm text-justify'>
+                                  Scholarship Support: <span className='text-green-500'>₱{parseFloat(Number(data?.enrollment?.profileId?.scholarshipId?.amount).toFixed(0))}</span>
+                                </span>
+                                <span className='text-sm text-justify'>
+                                  Scholarship Support Balance: <span className='text-green-500'>₱{parseFloat((Number(data?.enrollment?.profileId?.scholarshipId?.amount) - isPaidByScholarship).toFixed(0))}</span>
+                                </span>
+                              </h1>
+                            </div>
+                          )}
                         </>
                       )}
                     </CardHeader>
@@ -421,7 +444,7 @@ const Page = () => {
                               <TableHead className='px-4 py-2 text-left'>Payments Type</TableHead>
                               <TableHead className='px-4 py-2 text-left'>Amount</TableHead>
                               <TableHead className='px-4 py-2 text-left'>Status</TableHead>
-                              <TableHead className='px-4 py-2 text-left'>Settle Payment</TableHead>
+                              {data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0 && <TableHead className='px-4 py-2 text-left'>Settle Payment</TableHead>}
                               <TableHead className='px-4 py-2 text-left'>Advanced</TableHead>
                             </TableRow>
                           </TableHeader>
@@ -432,113 +455,126 @@ const Page = () => {
                                   <TableCell className={`px-4 py-2 ${showPaymentOfDownPayment && 'text-green-400 line-through'}`}>Down Payment</TableCell>
                                   <TableCell className={`px-4 py-2 ${showPaymentOfDownPayment && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
                                   <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>{showPaymentOfDownPayment ? 'Paid' : 'unpaid'}</TableCell>
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
-                                    {showPaymentOfDownPayment ? (
-                                      'Completed'
-                                    ) : (
-                                      <SettleTermPayment
-                                        enrollment={data?.enrollment}
-                                        tfData={tfData?.tFee}
-                                        srData={srData?.studentReceipt}
-                                        amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
-                                        type={'downPayment'}
-                                        title='Down Payment'
-                                        isScholarshipStart={isScholarshipStart}
-                                      />
-                                    )}
-                                  </TableCell>
-                                  {/* <TableCell className={`px-4 py-2`}>{a > 0 && `₱${a.toFixed(2)}`}</TableCell> */}
+                                  {data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0 && (
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
+                                      {showPaymentOfDownPayment ? (
+                                        'Completed'
+                                      ) : (
+                                        <SettleTermPayment
+                                          enrollment={data?.enrollment}
+                                          tfData={tfData?.tFee}
+                                          srData={srData?.studentReceipt}
+                                          amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
+                                          type={'downPayment'}
+                                          title='Down Payment'
+                                          isScholarshipStart={isScholarshipStart}
+                                        />
+                                      )}
+                                    </TableCell>
+                                  )}
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className={`px-4 py-2 ${showPaymentOfPrelim && 'text-green-400 line-through'}`}>Prelim</TableCell>
                                   <TableCell className={`px-4 py-2 ${showPaymentOfPrelim && 'text-green-400 line-through'}`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
                                   <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfPrelim ? 'text-green-400 line-through' : 'text-red'}`}>{showPaymentOfPrelim ? 'Paid' : 'unpaid'}</TableCell>
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfPrelim ? 'text-green-400' : 'text-red'}`}>
-                                    {showPaymentOfPrelim ? (
-                                      'Completed'
-                                    ) : showPaymentOfDownPayment ? (
-                                      <SettleTermPayment
-                                        enrollment={data?.enrollment}
-                                        tfData={tfData?.tFee}
-                                        srData={srData?.studentReceipt}
-                                        amountToPay={Number(paymentPerTerm).toFixed(2)}
-                                        type={'prelim'}
-                                        title='Prelim Payment'
-                                        isScholarshipStart={isScholarshipStart}
-                                      />
-                                    ) : (
-                                      'Not Available'
-                                    )}
-                                  </TableCell>
+                                  {data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0 && (
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfPrelim ? 'text-green-400' : 'text-red'}`}>
+                                      {showPaymentOfPrelim ? (
+                                        'Completed'
+                                      ) : showPaymentOfDownPayment ? (
+                                        <SettleTermPayment
+                                          enrollment={data?.enrollment}
+                                          tfData={tfData?.tFee}
+                                          srData={srData?.studentReceipt}
+                                          amountToPay={Number(paymentPerTerm - paymentOfPrelim).toFixed(2)}
+                                          type={'prelim'}
+                                          title='Prelim Payment'
+                                          isScholarshipStart={isScholarshipStart}
+                                        />
+                                      ) : (
+                                        'Not Available'
+                                      )}
+                                    </TableCell>
+                                  )}
+
                                   <TableCell className={`px-4 py-2`}>{a && `₱${paymentOfPrelim.toFixed(2)}`}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className={`px-4 py-2 ${showPaymentOfMidterm && 'text-green-400 line-through'}`}>Midterm</TableCell>
                                   <TableCell className={`px-4 py-2 ${showPaymentOfMidterm && 'text-green-400 line-through'}`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
                                   <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfMidterm ? 'text-green-400 line-through' : 'text-red'}`}>{showPaymentOfMidterm ? 'Paid' : 'unpaid'}</TableCell>
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfMidterm ? 'text-green-400' : 'text-red'}`}>
-                                    {showPaymentOfMidterm ? (
-                                      'Completed'
-                                    ) : showPaymentOfDownPayment && showPaymentOfPrelim ? (
-                                      <SettleTermPayment
-                                        enrollment={data?.enrollment}
-                                        tfData={tfData?.tFee}
-                                        srData={srData?.studentReceipt}
-                                        amountToPay={Number(paymentPerTerm - paymentOfMidterm).toFixed(2)}
-                                        type={'midterm'}
-                                        title='Midterm Payment'
-                                        isScholarshipStart={isScholarshipStart}
-                                      />
-                                    ) : (
-                                      'Not Available'
-                                    )}
-                                  </TableCell>
+                                  {data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0 && (
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfMidterm ? 'text-green-400' : 'text-red'}`}>
+                                      {showPaymentOfMidterm ? (
+                                        'Completed'
+                                      ) : showPaymentOfDownPayment && showPaymentOfPrelim ? (
+                                        <SettleTermPayment
+                                          enrollment={data?.enrollment}
+                                          tfData={tfData?.tFee}
+                                          srData={srData?.studentReceipt}
+                                          amountToPay={Number(paymentPerTerm - paymentOfMidterm).toFixed(2)}
+                                          type={'midterm'}
+                                          title='Midterm Payment'
+                                          isScholarshipStart={isScholarshipStart}
+                                        />
+                                      ) : (
+                                        'Not Available'
+                                      )}
+                                    </TableCell>
+                                  )}
+
                                   <TableCell className={`px-4 py-2`}>{b && `₱${paymentOfMidterm.toFixed(2)}`}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className={`px-4 py-2 ${showPaymentOfSemiFinal && 'text-green-400 line-through'}`}>Semi-final</TableCell>
                                   <TableCell className={`px-4 py-2 ${showPaymentOfSemiFinal && 'text-green-400 line-through'}`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
                                   <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfSemiFinal ? 'text-green-400 line-through' : 'text-red'}`}>{showPaymentOfSemiFinal ? 'Paid' : 'unpaid'}</TableCell>
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfSemiFinal ? 'text-green-400' : 'text-red'}`}>
-                                    {showPaymentOfSemiFinal ? (
-                                      'Completed'
-                                    ) : showPaymentOfDownPayment && showPaymentOfPrelim && showPaymentOfMidterm ? (
-                                      <SettleTermPayment
-                                        enrollment={data?.enrollment}
-                                        tfData={tfData?.tFee}
-                                        srData={srData?.studentReceipt}
-                                        amountToPay={Number(paymentPerTerm - paymentOfSemiFinal).toFixed(2)}
-                                        type={'semi-final'}
-                                        title='Semi-Final Payment'
-                                        isScholarshipStart={isScholarshipStart}
-                                      />
-                                    ) : (
-                                      'Not Available'
-                                    )}
-                                  </TableCell>
+                                  {data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0 && (
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfSemiFinal ? 'text-green-400' : 'text-red'}`}>
+                                      {showPaymentOfSemiFinal ? (
+                                        'Completed'
+                                      ) : showPaymentOfDownPayment && showPaymentOfPrelim && showPaymentOfMidterm ? (
+                                        <SettleTermPayment
+                                          enrollment={data?.enrollment}
+                                          tfData={tfData?.tFee}
+                                          srData={srData?.studentReceipt}
+                                          amountToPay={Number(paymentPerTerm - paymentOfSemiFinal).toFixed(2)}
+                                          type={'semi-final'}
+                                          title='Semi-Final Payment'
+                                          isScholarshipStart={isScholarshipStart}
+                                        />
+                                      ) : (
+                                        'Not Available'
+                                      )}
+                                    </TableCell>
+                                  )}
+
                                   <TableCell className={`px-4 py-2`}>{c && `₱${paymentOfSemiFinal.toFixed(2)}`}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className={`px-4 py-2 ${showPaymentOfFinal && 'text-green-400 line-through'}`}>Final</TableCell>
                                   <TableCell className={`px-4 py-2 ${showPaymentOfFinal && 'text-green-400 line-through'}`}>₱{final.toFixed(2)}</TableCell>
                                   <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFinal ? 'text-green-400 line-through' : 'text-red'}`}>{showPaymentOfFinal ? 'Paid' : 'unpaid'}</TableCell>
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFinal ? 'text-green-400' : 'text-red'}`}>
-                                    {showPaymentOfFinal ? (
-                                      'Completed'
-                                    ) : showPaymentOfDownPayment && showPaymentOfPrelim && showPaymentOfMidterm && showPaymentOfSemiFinal ? (
-                                      <SettleTermPayment
-                                        enrollment={data?.enrollment}
-                                        tfData={tfData?.tFee}
-                                        srData={srData?.studentReceipt}
-                                        amountToPay={Number(final - paymentOfFinal).toFixed(2)}
-                                        type={'final'}
-                                        title='Final Payment'
-                                        isScholarshipStart={isScholarshipStart}
-                                      />
-                                    ) : (
-                                      'Not Available'
-                                    )}
-                                  </TableCell>
+                                  {data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0 && (
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFinal ? 'text-green-400' : 'text-red'}`}>
+                                      {showPaymentOfFinal ? (
+                                        'Completed'
+                                      ) : showPaymentOfDownPayment && showPaymentOfPrelim && showPaymentOfMidterm && showPaymentOfSemiFinal ? (
+                                        <SettleTermPayment
+                                          enrollment={data?.enrollment}
+                                          tfData={tfData?.tFee}
+                                          srData={srData?.studentReceipt}
+                                          amountToPay={Number(final - paymentOfFinal).toFixed(2)}
+                                          type={'final'}
+                                          title='Final Payment'
+                                          isScholarshipStart={isScholarshipStart}
+                                        />
+                                      ) : (
+                                        'Not Available'
+                                      )}
+                                    </TableCell>
+                                  )}
+
                                   <TableCell className={`px-4 py-2`}>{d && `₱${paymentOfFinal.toFixed(2)}`}</TableCell>
                                 </TableRow>
                               </>
@@ -616,7 +652,7 @@ const Page = () => {
                               <TableHead className='px-4 py-2 text-left'>Payments Type</TableHead>
                               <TableHead className='px-4 py-2 text-left'>Amount</TableHead>
                               <TableHead className='px-4 py-2 text-left'>Status</TableHead>
-                              <TableHead className='px-4 py-2 text-left'>Settle Payment</TableHead>
+                              {data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0 && <TableHead className='px-4 py-2 text-left'>Settle Payment</TableHead>}
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -624,24 +660,25 @@ const Page = () => {
                               <TableCell className={`px-4 py-2 ${showPaymentOfDepartmental && 'text-green-400 line-through'}`}>Departmental Fee</TableCell>
                               <TableCell className={`px-4 py-2 ${showPaymentOfDepartmental && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.departmentalFee).toFixed(2)}</TableCell>
                               <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>{showPaymentOfDepartmental ? 'Paid' : 'unpaid'}</TableCell>
-                              <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>
-                                {showPaymentOfDepartmental ? (
-                                  'Completed'
-                                ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
-                                  <SettleTermPayment
-                                    enrollment={data?.enrollment}
-                                    tfData={tfData?.tFee}
-                                    srData={srData?.studentReceipt}
-                                    amountToPay={Number(tfData?.tFee?.departmentalFee).toFixed(2)}
-                                    type={'departmental'}
-                                    title='Departmental Payment'
-                                    isScholarshipStart={isScholarshipStart}
-                                  />
-                                ) : (
-                                  ''
-                                )}
-                              </TableCell>
-                              {/* <TableCell className={`px-4 py-2`}>{a > 0 && `₱${a.toFixed(2)}`}</TableCell> */}
+                              {data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0 && (
+                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>
+                                  {showPaymentOfDepartmental ? (
+                                    'Completed'
+                                  ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
+                                    <SettleTermPayment
+                                      enrollment={data?.enrollment}
+                                      tfData={tfData?.tFee}
+                                      srData={srData?.studentReceipt}
+                                      amountToPay={Number(tfData?.tFee?.departmentalFee).toFixed(2)}
+                                      type={'departmental'}
+                                      title='Departmental Payment'
+                                      isScholarshipStart={isScholarshipStart}
+                                    />
+                                  ) : (
+                                    ''
+                                  )}
+                                </TableCell>
+                              )}
                             </TableRow>
                             {!srData?.insurancePayment && (
                               <TableRow>
@@ -650,23 +687,25 @@ const Page = () => {
                                 <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.insurancePayment || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
                                   {srData?.insurancePayment || showPaymentOfInsurance ? 'Paid' : 'unpaid'}
                                 </TableCell>
-                                <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.insurancePayment || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
-                                  {srData?.insurancePayment || showPaymentOfInsurance ? (
-                                    'Completed'
-                                  ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
-                                    <SettleTermPayment
-                                      enrollment={data?.enrollment}
-                                      tfData={tfData?.tFee}
-                                      srData={srData?.studentReceipt}
-                                      amountToPay={Number(tfData?.tFee?.insuranceFee).toFixed(2)}
-                                      type={'insurance'}
-                                      title='Insurance Payment'
-                                      isScholarshipStart={isScholarshipStart}
-                                    />
-                                  ) : (
-                                    ''
-                                  )}
-                                </TableCell>
+                                {data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0 && (
+                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.insurancePayment || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
+                                    {srData?.insurancePayment || showPaymentOfInsurance ? (
+                                      'Completed'
+                                    ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
+                                      <SettleTermPayment
+                                        enrollment={data?.enrollment}
+                                        tfData={tfData?.tFee}
+                                        srData={srData?.studentReceipt}
+                                        amountToPay={Number(tfData?.tFee?.insuranceFee).toFixed(2)}
+                                        type={'insurance'}
+                                        title='Insurance Payment'
+                                        isScholarshipStart={isScholarshipStart}
+                                      />
+                                    ) : (
+                                      ''
+                                    )}
+                                  </TableCell>
+                                )}
                               </TableRow>
                             )}
                             {!srData?.ssgPayment && (
@@ -674,23 +713,25 @@ const Page = () => {
                                 <TableCell className={`px-4 py-2 ${(srData?.ssgPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>SSG Fee</TableCell>
                                 <TableCell className={`px-4 py-2 ${(srData?.ssgPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.ssgFee).toFixed(2)}</TableCell>
                                 <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>{srData?.ssgPayment || showPaymentOfSSG ? 'Paid' : 'unpaid'}</TableCell>
-                                <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>
-                                  {srData?.ssgPayment || showPaymentOfSSG ? (
-                                    'Completed'
-                                  ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
-                                    <SettleTermPayment
-                                      enrollment={data?.enrollment}
-                                      tfData={tfData?.tFee}
-                                      srData={srData?.studentReceipt}
-                                      amountToPay={Number(tfData?.tFee?.ssgFee).toFixed(2)}
-                                      type={'ssg'}
-                                      title='SSG Payment'
-                                      isScholarshipStart={isScholarshipStart}
-                                    />
-                                  ) : (
-                                    ''
-                                  )}
-                                </TableCell>
+                                {data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0 && (
+                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>
+                                    {srData?.ssgPayment || showPaymentOfSSG ? (
+                                      'Completed'
+                                    ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
+                                      <SettleTermPayment
+                                        enrollment={data?.enrollment}
+                                        tfData={tfData?.tFee}
+                                        srData={srData?.studentReceipt}
+                                        amountToPay={Number(tfData?.tFee?.ssgFee).toFixed(2)}
+                                        type={'ssg'}
+                                        title='SSG Payment'
+                                        isScholarshipStart={isScholarshipStart}
+                                      />
+                                    ) : (
+                                      ''
+                                    )}
+                                  </TableCell>
+                                )}
                               </TableRow>
                             )}
                           </TableBody>

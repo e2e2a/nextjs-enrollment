@@ -24,31 +24,43 @@ type IProps = {
 const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [amountPayment, setAmountPayment] = useState(0.0);
-  const [amountInput, setAmountInput] = useState(0.0);
-  const [discounted, setDiscounted] = useState(0.0);
+  const [amountInput, setAmountInput] = useState(0);
   const [isPending, setIsPending] = useState(false);
   const [displayPayment, setDisplayPayment] = useState(true);
 
-  const { data: esData, isError: esError } = useEnrollmentSetupQuery();
+  //to be deducted amount of scholarship payment
+  const isPaidByScholarship = srData
+    ?.filter((r: any) => r.isPaidByScholarship)
+    ?.reduce((total: number, payment: any) => {
+      return total + (Number(payment?.taxes?.amount) || 0);
+    }, 0);
+
+  const balanceGrant = parseFloat((Number(enrollment?.profileId?.scholarshipId?.amount) - Number(isPaidByScholarship)).toFixed(2));
 
   useEffect(() => {
     if (!enrollment) return;
     if (!tfData) return;
-    if (!esData || esError) return;
 
     if (tfData) {
       let totalAmountToPay = amountToPay;
       if (!isScholarshipStart && type === 'fullPayment') totalAmountToPay = parseFloat((amountToPay - amountToPay * 0.1).toFixed(2));
       setAmountPayment(totalAmountToPay);
       setAmountInput(totalAmountToPay);
-      setDiscounted(totalAmountToPay);
+      if (enrollment?.profileId?.scholarshipId?.amount) {
+        if (Number(balanceGrant) > 0) {
+          if (Number(balanceGrant) <= Number(totalAmountToPay)) setAmountInput(balanceGrant);
+        } else {
+          setAmountInput(totalAmountToPay);
+        }
+      }
     }
-  }, [srData, tfData, esData, esError, enrollment, amountToPay, type, isScholarshipStart]);
+  }, [srData, tfData, enrollment, amountToPay, type, isScholarshipStart, balanceGrant]);
 
   const mutation = useCreateStudentReceiptMutation();
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    if (Number(amountInput).toFixed(2) > Number(amountToPay).toFixed(2)) return makeToastError('Amount exceed on the total amount to pay.');
+    if (enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 && Number(balanceGrant) < Number(amountInput)) return makeToastError('Amount exceed on the balance total of scholarship grant amount.');
+    if (Number(amountInput) > Number(amountToPay)) return makeToastError('Amount exceed on the total amount to pay.');
     const receipt = {
       studentId: enrollment?.profileId?._id,
       category: 'College',
@@ -60,6 +72,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
       paymentMethod: 'CASH',
       createTime: new Date(Date.now()),
       updateTime: new Date(Date.now()),
+      isPaidByScholarship: enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 ? true : false,
       taxes: {
         fee: (0).toFixed(2),
         fixed: (0).toFixed(2),
@@ -67,6 +80,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
       },
       type: type,
     };
+
     mutation.mutate(receipt, {
       onSuccess: (res: any) => {
         switch (res.status) {
@@ -105,7 +119,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
             <Icons.close className='h-4 w-4 cursor-pointer' onClick={() => setIsOpen(!isOpen)} />
           </AlertDialogTitle>
           <div className='text-start'>
-            <span className='text-sm text-left sm:mt-10 mt-5 w-full '>
+            <span className='text-sm text-left w-full flex '>
               Fullname:
               <span className='font-semibold capitalize'>
                 <span className='capitalize'>
@@ -114,6 +128,14 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
               </span>
               ,
             </span>
+            {enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 && (
+              <div className='mt-5 flex text-sm text-muted-foreground'>
+                <span>
+                  <span className='text-orange-500'>Note:</span> The student has a scholarship grant of <span className='text-green-500'>₱{enrollment?.profileId?.scholarshipId?.amount}</span>. If a payment is processed for the student, the corresponding amount
+                  will be deducted from the total scholarship grant.
+                </span>
+              </div>
+            )}
           </div>
           <AlertDialogDescription className=' hidden'></AlertDialogDescription>
         </AlertDialogHeader>

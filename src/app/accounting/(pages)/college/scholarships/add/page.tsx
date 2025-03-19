@@ -18,27 +18,22 @@ import { ComboboxExempted } from './components/ComboboxExempted';
 import { useCreateScholarshipMutation } from '@/lib/queries/scholarship/create';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 
-const excemptedItems = [
-  { value: 'Tuition Fee' },
-  { value: 'Miscellaneous Fees' },
-  // { value: 'Laboratory Fees' },
-  // { value: 'Library Fees' },
-  // { value: 'Athletic Fees' },
-  // { value: 'Medical and Dental Fees' },
-  // { value: 'Guidance and Counseling Fees' },
-  // { value: 'Computer Fees' },
-  // { value: 'Energy Fee (Electricity & Water)' },
-  // { value: 'Development Fee' },
-  { value: 'Departmental Fee' },
-  { value: 'SSG Fee' },
-];
+const excemptedItems = [{ value: 'Tuition Fee' }, { value: 'Miscellaneous Fees' }];
 
 const typeItems = [
   { value: 'percentage', title: 'percentage' },
   { value: 'fixed', title: 'fixed' },
 ];
 
-const availableScholarship = [{ title: 'Working Student' }, { title: 'Person with Disability Discount' }, { title: 'Tulong Dunong Scholarship' }, { title: 'TES Scholarship' }, { title: 'Corporate Scholar' }, { title: 'Family Discount' }];
+const availableScholarship = [
+  { title: 'Working Student' },
+  { title: 'Person with Disability Discount' },
+  { title: 'Alay Lakad Scholar' },
+  { title: 'Tulong Dunong Scholarship' },
+  { title: 'TES Scholarship' },
+  { title: 'Corporate Scholar' },
+  { title: 'Family Discount' },
+];
 
 const percentageItems = Array.from({ length: 20 }, (_, i) => {
   const percentage = (i + 1) * 5;

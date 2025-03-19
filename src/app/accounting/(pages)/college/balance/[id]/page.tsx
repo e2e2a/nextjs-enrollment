@@ -34,8 +34,16 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data: esData, isError: esError } = useEnrollmentSetupQuery();
   const { data: srData, error: srError } = useStudentReceiptQueryByUserIdAndYearAndSemester(data?.enrollment?.userId?._id as string, data?.enrollment?.studentYear, data?.enrollment?.studentSemester, esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear);
 
-  //full payment exclude all terms payment and downpayment
+  //to be deducted amount of scholarship payment
+  const isPaidByScholarship = srData?.studentReceipt
+    ?.filter((r: any) => r.isPaidByScholarship)
+    ?.reduce((total: number, payment: any) => {
+      return total + (Number(payment?.taxes?.amount) || 0);
+    }, 0);
+
   const isWithdrawn = data?.enrollment?.enrollStatus?.toLowerCase() === 'withdraw';
+
+  //full payment exclude all terms payment and downpayment
   const paymentOfFullPayment = srData?.studentReceipt.find((r: any) => r.type.toLowerCase() === 'fullpayment');
   let showPaymentOfFullPayment = false;
   showPaymentOfFullPayment = paymentOfFullPayment && Math.round((Number(paymentOfFullPayment?.taxes?.amount) + Number(total) * 0.1) * 100) / 100 === Math.round(Number(total) * 100) / 100;
@@ -45,6 +53,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const paymentOfDownPayment = srData?.studentReceipt.find((r: any) => r.type.toLowerCase() === 'downpayment');
   const showPaymentOfDownPayment = paymentOfDownPayment && Number(paymentOfDownPayment?.taxes?.amount).toFixed(2) === Number(tfData?.tFee?.downPayment).toFixed(2);
+
   const paymentOfPrelim = srData?.studentReceipt
     ?.filter((r: any) => r.type.toLowerCase() === 'prelim')
     ?.reduce((total: number, payment: any) => {
@@ -386,17 +395,33 @@ const Page = ({ params }: { params: { id: string } }) => {
                       </CardDescription>
                       <div className=''>
                         {!isWithdrawn && !showPaymentOfFullPayment && !showPaymentOfDownPayment && !showPaymentOfPrelim && !showPaymentOfMidterm && !showPaymentOfSemiFinal && !showPaymentOfFinal && (
-                          <div className='flex flex-col justify-center items-center w-full border-[0.5px] rounded-lg px-5 py-3'>
-                            <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>
-                              <h1 className='flex gap-x-2 justify-center items-center'>
-                                <span className='text-[16px] font-bold text-orange-400'>Note:</span>
-                                <span className='text-sm text-justify'>Full payment for the semester is only applicable for the initial payment and includes a 10% discount.</span>
-                              </h1>
-                            </div>
-                            <div className=''>
-                              <SettleTermPayment enrollment={data?.enrollment} tfData={tfData?.tFee} srData={srData?.studentReceipt} amountToPay={Number(total).toFixed(2)} type={'fullPayment'} title='Full Payment' isScholarshipStart={isScholarshipStart} />
-                            </div>
-                          </div>
+                          <>
+                            {data?.enrollment?.profileId?.scholarshipId.type.toLowerCase() !== 'fixed' ? (
+                              <div className='flex flex-col justify-center items-center w-full border-[0.5px] rounded-lg px-5 py-3'>
+                                <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>
+                                  <h1 className='flex gap-x-2 justify-center items-center'>
+                                    <span className='text-[16px] font-bold text-orange-400'>Note:</span>
+                                    <span className='text-sm text-justify'>Full payment for the semester is only applicable for the initial payment and includes a 10% discount.</span>
+                                  </h1>
+                                </div>
+                                <div className=''>
+                                  <SettleTermPayment enrollment={data?.enrollment} tfData={tfData?.tFee} srData={srData?.studentReceipt} amountToPay={Number(total).toFixed(2)} type={'fullPayment'} title='Full Payment' isScholarshipStart={isScholarshipStart} />
+                                </div>
+                              </div>
+                            ) : Number(data?.enrollment?.profileId?.scholarshipId.amount) >= Number(total) ? (
+                              <div className='flex flex-col justify-center items-center w-full border-[0.5px] rounded-lg px-5 py-3'>
+                                <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>
+                                  <h1 className='flex gap-x-2 justify-center items-center'>
+                                    <span className='text-[16px] font-bold text-orange-400'>Note:</span>
+                                    <span className='text-sm text-justify'>Full payment for the semester is only applicable for the initial payment and includes a 10% discount.</span>
+                                  </h1>
+                                </div>
+                                <div className=''>
+                                  <SettleTermPayment enrollment={data?.enrollment} tfData={tfData?.tFee} srData={srData?.studentReceipt} amountToPay={Number(total).toFixed(2)} type={'fullPayment'} title='Full Payment' isScholarshipStart={isScholarshipStart} />
+                                </div>
+                              </div>
+                            ) : null}
+                          </>
                         )}
                         {isScholarshipStart && (
                           <>
@@ -405,6 +430,22 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 <h1 className='flex flex-col gap-x-2 justify-start items-start font-semibold text-green-500'>
                                   <span className='text-sm text-justify'>Discounted:{parseFloat((data?.enrollment?.profileId?.scholarshipId?.discountPercentage * 100).toFixed(0))}%</span>
                                   <span className='text-sm text-justify'>Exempted:{data?.enrollment?.profileId?.scholarshipId?.exemptedFees.join(', ')}</span>
+                                </h1>
+                              </div>
+                            )}
+                            {data?.enrollment?.profileId?.scholarshipId?.amount && (
+                              <div className=''>
+                                <div className='text-sm text-muted-foreground my-3'>
+                                  <span className=''>Note: Only Cashier can make a payment until the Scholarship Support Balance is zero.</span>
+                                </div>
+                                <h1 className='flex flex-col gap-x-2 justify-start items-start font-semibold '>
+                                  <span className='text-sm text-justify'>Scholarship Name: {data?.enrollment?.profileId?.scholarshipId?.name}</span>
+                                  <span className='text-sm text-justify'>
+                                    Scholarship Support: <span className='text-green-500'>₱{parseFloat(Number(data?.enrollment?.profileId?.scholarshipId?.amount).toFixed(0))}</span>
+                                  </span>
+                                  <span className='text-sm text-justify'>
+                                    Scholarship Support Balance: <span className='text-green-500'>₱{parseFloat((Number(data?.enrollment?.profileId?.scholarshipId?.amount) - isPaidByScholarship).toFixed(0))}</span>
+                                  </span>
                                 </h1>
                               </div>
                             )}
@@ -460,7 +501,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                         enrollment={data?.enrollment}
                                         tfData={tfData?.tFee}
                                         srData={srData?.studentReceipt}
-                                        amountToPay={Number(paymentPerTerm).toFixed(2)}
+                                        amountToPay={Number(paymentPerTerm - paymentOfPrelim).toFixed(2)}
                                         type={'prelim'}
                                         title='Prelim Payment'
                                         isScholarshipStart={isScholarshipStart}

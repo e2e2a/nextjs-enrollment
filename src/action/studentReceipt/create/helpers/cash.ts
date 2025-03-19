@@ -37,6 +37,7 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
       year: studentEnrollment.studentYear,
       semester: studentEnrollment.studentSemester,
       ...data,
+      isPaidByScholarship: data.isPaidByScholarship,
       captures: captures,
       payer: {
         name: { given_name: student?.firstname, surname: student?.lastname },

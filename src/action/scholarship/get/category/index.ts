@@ -5,7 +5,7 @@ import { getScholarshipByCategory } from '@/services/scholarship';
 import { checkAuth } from '@/utils/actions/session';
 
 /**
- * handles query subject by category
+ * handles query scholarship by category
  *
  * @param {string} category
  */
