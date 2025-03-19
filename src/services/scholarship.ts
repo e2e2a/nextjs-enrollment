@@ -22,6 +22,15 @@ export const getScholarshipByProfileId = async (profileId: string) => {
   }
 };
 
+export const getScholarshipById = async (id: string) => {
+  try {
+    const s = await Scholarship.findById(id).populate('profileId');
+    return s;
+  } catch (error) {
+    return null;
+  }
+};
+
 export const getScholarshipByCategory = async (category: string) => {
   try {
     const s = await Scholarship.find({ category }).populate('profileId');

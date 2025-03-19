@@ -33,10 +33,10 @@ export const createScholarshipAction = async (data: any) => {
     const studentProfile = await getStudentProfileById(data.studentId);
     if (!studentProfile) return { error: 'Student Profile Not Found.', status: 404 };
     const createdScholarship = await createScholarship({ ...parse.data, profileId: studentProfile._id, userId: studentProfile.userId._id });
-    if (!createdScholarship) return { error: 'Something went wrongaaaa.', status: 500 };
+    if (!createdScholarship) return { error: 'Something went wrong.', status: 500 };
 
     const student = await updateStudentProfileById(data.studentId, { scholarshipId: createdScholarship._id });
-    if (!student) return { error: 'Something went wrongaaaa.', status: 500 };
+    if (!student) return { error: 'Something went wrong.', status: 500 };
 
     await createdScholarship.save();
     return { message: 'Scholarship created successfully.', category: data.category, status: 201 };

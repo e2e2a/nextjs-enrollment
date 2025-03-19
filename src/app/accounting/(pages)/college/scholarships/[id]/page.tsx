@@ -9,100 +9,103 @@ import { Form } from '@/components/ui/form';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import Input from './components/Input';
 import Image from 'next/image';
-import { useCourseQueryByCategory } from '@/lib/queries/courses/get/category';
 import { SelectInput } from './components/SelectInputs';
 import LoaderPage from '@/components/shared/LoaderPage';
-import RegOrMisc from './components/RegOrMisc';
-import { CourseFeeValidator } from '@/lib/validators/courseFee/create';
-import { useTuitionFeeQueryById } from '@/lib/queries/courseFee/get/id';
+import { ScholarshipValidator } from '@/lib/validators/scholarship';
+import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
+import { Combobox } from './components/Combobox';
+import { ComboboxExempted } from './components/ComboboxExempted';
+import { studentSemesterData, studentYearData } from '@/constant/enrollment';
+import { useScholarshipQueryById } from '@/lib/queries/scholarship/get/id';
 import { Icons } from '@/components/shared/Icons';
-import { useUpdateTuitionFeeMutation } from '@/lib/queries/courseFee/update';
+import { useUpdateScholarshipMutation } from '@/lib/queries/scholarship/update/id';
+
+const excemptedItems = [{ value: 'Tuition Fee' }, { value: 'Miscellaneous Fees' }];
+
+const typeItems = [
+  { value: 'percentage', title: 'percentage' },
+  { value: 'fixed', title: 'fixed' },
+];
+
+const availableScholarship = [
+  { title: 'Working Student' },
+  { title: 'Person with Disability Discount' },
+  { title: 'Alay Lakad Scholar' },
+  { title: 'Tulong Dunong Scholarship' },
+  { title: 'TES Scholarship' },
+  { title: 'Corporate Scholar' },
+  { title: 'Family Discount' },
+];
+
+const percentageItems = Array.from({ length: 20 }, (_, i) => {
+  const percentage = (i + 1) * 5;
+  return {
+    title: `${percentage}%`,
+    value: (percentage / 100).toString(),
+  };
+});
 
 const Page = ({ params }: { params: { id: string } }) => {
+  const [studentId, setStudentId] = useState<string | undefined>('');
+  const [studentName, setStudentName] = useState<string | undefined>('');
   const [isPending, setIsPending] = useState(false);
   const [isNotEditable, setIsNotEditable] = useState(true);
-  const [total, setTotal] = useState(0);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
-  const [regMiscRows, setRegMiscRows] = useState<any[]>([{ type: '', name: '', amount: '' }]);
 
-  const { data: tfData, isLoading: load, error: isTFError } = useTuitionFeeQueryById(params.id);
-  const { data: cData, isLoading, error } = useCourseQueryByCategory('College');
+  const { data: sData, error: sError } = useScholarshipQueryById(params.id);
+  const { data, error } = useAllProfileQueryByUserRoles('STUDENT');
 
   useEffect(() => {
-    if (error || !cData) return;
-    if (isTFError || !tfData) return;
-    if (cData && tfData) {
-      if (cData.courses && tfData.tFee) {
-        setIsPageLoading(false);
-        return;
-      }
+    if (error || !data) return;
+    if (sError || !sData) return;
+    if (data) {
+      return setIsPageLoading(false);
     }
-  }, [cData, error, tfData, isTFError]);
+  }, [data, sData, sError, error]);
 
-  const mutation = useUpdateTuitionFeeMutation();
-  const form = useForm<z.infer<typeof CourseFeeValidator>>({
-    resolver: zodResolver(CourseFeeValidator),
+  const mutation = useUpdateScholarshipMutation();
+  const form = useForm<z.infer<typeof ScholarshipValidator>>({
+    resolver: zodResolver(ScholarshipValidator),
     defaultValues: {
-      courseCode: '',
-      ratePerUnit: '',
-      ratePerLab: '',
-      cwtsOrNstpFee: '',
-      downPayment: ``,
+      category: 'College',
+      studentId: '',
+      year: '',
+      semester: '',
+      type: '',
+      amount: '',
+      name: '',
+      discountPercentage: '',
+      exemptedFees: [],
     },
   });
 
   useEffect(() => {
-    // Initialize a to calculate non-iterable fees
-    const a = Number(tfData?.tFee?.ratePerUnit || 0) + Number(tfData?.tFee?.ratePerLab || 0) + Number(tfData?.tFee?.cwtsOrNstpFee || 0) + Number(tfData?.tFee?.downPayment || 0);
+    const name = `${sData?.scholarship?.profileId?.lastname ? sData?.scholarship?.profileId?.lastname + ',' : ''}${sData?.scholarship?.profileId?.firstname ?? ''} ${sData?.scholarship?.profileId?.middlename ?? ''}${
+      sData?.scholarship?.profileId?.extensionName ? ', ' + sData?.scholarship?.profileId?.extensionName + '.' : ''
+    }`
+      .replace(/\s+,/g, ',')
+      .replace(/(\S),/g, '$1,')
+      .replace(/,(\S)/g, ', $1')
+      .trim();
+    setStudentId(sData?.scholarship?.profileId?._id);
+    setStudentName(name);
+    form.setValue('studentId', `${name}`);
+    form.setValue('year', sData?.scholarship?.year);
+    form.setValue('semester', sData?.scholarship?.semester);
+    form.setValue('type', sData?.scholarship?.type);
+    form.setValue('amount', sData?.scholarship?.amount);
+    form.setValue('name', sData?.scholarship?.name);
+    form.setValue('discountPercentage', String(sData?.scholarship?.discountPercentage));
+    setSelectedItems(sData?.scholarship?.exemptedFees);
+    form.setValue('exemptedFees', sData?.scholarship?.exemptedFees);
+  }, [form, sData, isNotEditable]);
 
-    let b = 0;
-    if (Array.isArray(tfData?.tFee?.regOrMisc) && tfData?.tFee?.regOrMisc.length > 0) {
-      for (const reg of tfData.tFee.regOrMisc) {
-        b += Number(reg.amount || 0);
-      }
-    }
-    const c = (a + b).toFixed(2);
-    setTotal(Number(c));
-
-    form.setValue('courseCode', tfData?.tFee?.courseId?.courseCode);
-    form.setValue('ratePerUnit', tfData?.tFee?.ratePerUnit);
-    form.setValue('ratePerLab', tfData?.tFee?.ratePerLab);
-    form.setValue('cwtsOrNstpFee', tfData?.tFee?.cwtsOrNstpFee);
-    form.setValue('downPayment', tfData?.tFee?.downPayment);
-  }, [form, tfData, isNotEditable]);
-
-  useEffect(() => {
-    setRegMiscRows(tfData?.tFee?.regOrMisc || []);
-  }, [isNotEditable, tfData]);
-
-  const handleEditable = async () => {
-    setIsNotEditable(!isNotEditable);
-    form.reset();
-  };
-
-  const onSubmit: SubmitHandler<z.infer<typeof CourseFeeValidator>> = async (data) => {
+  const onSubmit: SubmitHandler<z.infer<typeof ScholarshipValidator>> = async (data) => {
+    if (!studentId) return makeToastError('Must select a student.');
     setIsPending(true);
-    if (regMiscRows.length === 0) return makeToastError('Please Provide Reg/Misc Fee');
-    for (const row of regMiscRows) {
-      const regex = /^\d+(\.\d{1,2})?$/;
-      if (!row.name || !row.amount) {
-        setIsPending(false);
-        makeToastError('Please ensure to fill amount and name in Reg/Misc Fee');
-        return;
-      }
-      if (!regex.test(row.amount)) {
-        setIsPending(false);
-        makeToastError('Invalid amount in Reg/Misc Fee');
-        return;
-      }
-    }
-
-    const dataa = {
-      id: tfData?.tFee?._id,
-      category: 'College',
-      regMiscRows: regMiscRows,
-      ...data,
-    };
+    data.studentId = studentId;
+    const dataa = { ...data, scholarshipId: sData?.scholarship?._id };
 
     mutation.mutate(dataa, {
       onSuccess: (res) => {
@@ -110,7 +113,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           case 200:
           case 201:
           case 203:
-            form.reset();
+            setSelectedItems([]);
             setIsNotEditable(true);
             makeToastSucess(res.message);
             return;
@@ -124,6 +127,14 @@ const Page = ({ params }: { params: { id: string } }) => {
       },
     });
   };
+
+  const handleEditable = async () => {
+    setIsNotEditable(!isNotEditable);
+    form.reset();
+  };
+
+  const type = form.watch('type');
+
   return (
     <>
       {isPageLoading ? (
@@ -132,41 +143,59 @@ const Page = ({ params }: { params: { id: string } }) => {
         <div className='border-0 bg-white rounded-xl min-h-[87vh]'>
           <Card className='border-0 py-5 bg-transparent'>
             <CardHeader className='space-y-3'>
-              <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Add a New Room</CardTitle>
+              <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Edit Scholarship Student</CardTitle>
               <CardDescription className='text-xs sm:text-sm hidden'></CardDescription>
               <div className='text-xs sm:text-sm'>
                 <div className=''>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To create a new Course Tuition Fee, this section allows you to define the tuition rates, lab fees, CWTS/NSTP fees, and any other related charges for a specific course. Providing this information will ensure
-                  accurate billing and management of course fees for students.
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To edit a student scholarship, fill out the form below. This section allows you to specify the student&apos;s scholarship details, applicable discounts, and exempted fees. Providing accurate information ensures
+                  proper billing and fee management for the student.
+                </div>
+              </div>
+              <div className='flex justify-end mb-5'>
+                <div className='bg-slate-200 hover:bg-slate-300 relative right-2 rounded-xl py-1.5 px-2 cursor-pointer flex items-center gap-1' title='Edit' onClick={handleEditable}>
+                  <Icons.squarePen className='h-5 w-5 fill-white stroke-blue-600 relative' />
+                  <span className='hidden sm:flex tracking-normal text-sm'>Edit</span>
                 </div>
               </div>
             </CardHeader>
             <Form {...form}>
               <form method='post' onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-4'>
                 <CardContent className='w-full'>
-                  <div className='flex justify-end mb-5'>
-                    <div className='bg-slate-200 hover:bg-slate-300 relative right-2 rounded-xl py-1.5 px-2 cursor-pointer flex items-center gap-1' title='Edit' onClick={handleEditable}>
-                      <Icons.squarePen className='h-5 w-5 fill-white stroke-blue-600 relative' />
-                      <span className='hidden sm:flex tracking-normal text-sm'>Edit</span>
-                    </div>
-                  </div>
                   <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                    <SelectInput isNotEditable={isNotEditable} name={'courseCode'} selectItems={cData.courses} form={form} label={'Course:'} placeholder={'Select Course'} tFee={tfData.tFee} />
-                    <Input name={'ratePerUnit'} type={'text'} isNotEditable={isNotEditable} form={form} label={'Rate Per Unit:'} classNameInput={'uppercase'} />
-                    <Input name={'ratePerLab'} type={'text'} isNotEditable={isNotEditable} form={form} label={'Rate PerLab:'} classNameInput={'uppercase'} />
-                    <Input name={'cwtsOrNstpFee'} type={'text'} isNotEditable={isNotEditable} form={form} label={'CWTS/NSTP Fee:'} classNameInput={'uppercase'} />
-                    <Input name={'downPayment'} type={'text'} isNotEditable={isNotEditable} form={form} label={'Down Payment:'} classNameInput={''} />
+                    {isNotEditable ? (
+                      <div className=''>
+                        <span className='text-[16px] font-medium'>
+                          Student: <span className=' capitalize font-semibold'>{studentName}</span>
+                        </span>
+                      </div>
+                    ) : (
+                      <Combobox name={'studentId'} selectItems={data?.profiles || []} form={form} label={'Select Student:'} placeholder={'Select Student'} fullname={`${studentName}`} setStudentId={setStudentId} />
+                    )}
+                    <SelectInput name={'name'} selectItems={availableScholarship} isNotEditable={isNotEditable} form={form} label={'Scholarship Name:'} placeholder={'Select Scholarship Name'} scholarship={sData?.scholarship} />
+                    <SelectInput name={'year'} selectItems={studentYearData} isNotEditable={isNotEditable} form={form} label={'Year:'} placeholder={'Select Year'} scholarship={sData?.scholarship} />
+                    <SelectInput name={'semester'} selectItems={studentSemesterData} isNotEditable={isNotEditable} form={form} label={'Semester:'} placeholder={'Select Semester'} scholarship={sData?.scholarship} />
+                    <SelectInput name={'type'} selectItems={typeItems} isNotEditable={isNotEditable} form={form} label={'Type:'} placeholder={'Select Type'} scholarship={sData?.scholarship} />
+                    {type === 'percentage' && (
+                      <>
+                        <SelectInput name={'discountPercentage'} selectItems={percentageItems} isNotEditable={isNotEditable} form={form} label={'Discount Percentage:'} placeholder={'Select Discount Percentage'} scholarship={sData?.scholarship} />
+
+                        {isNotEditable ? (
+                          <div className=''>
+                            <span className='text-[16px] font-medium'>
+                              Exempted: <span className=' capitalize font-semibold'>{sData?.scholarship?.exemptedFees.join(', ')}</span>
+                            </span>
+                          </div>
+                        ) : (
+                          <ComboboxExempted name={'exemptedFees'} selectItems={excemptedItems} form={form} label={'Exempted Fees:'} placeholder={'Select Exempted Fees'} selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
+                        )}
+                      </>
+                    )}
+
+                    {type === 'fixed' && <Input name={'amount'} type={'number'} isNotEditable={isNotEditable} form={form} label={'Amount:'} classNameInput={'uppercase'} />}
                   </div>
                 </CardContent>
-
-                <RegOrMisc isNotEditable={isNotEditable} regMiscRows={regMiscRows} setRegMiscRows={setRegMiscRows} />
                 <CardFooter className=''>
-                  {isNotEditable ? (
-                    <div className=''>
-                      <span className='font-bold'>Total Payment:</span>
-                      <span>₱ {total.toFixed(2)}</span>
-                    </div>
-                  ) : (
+                  {!isNotEditable && (
                     <div className='flex w-full justify-center md:justify-end items-center mt-4'>
                       <Button type='submit' variant={'destructive'} disabled={isPending} className='bg-blue-500 hover:bg-blue-700 text-white font-semibold tracking-wide'>
                         {isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Submit'}
