@@ -23,34 +23,32 @@ type IProps = {
 
 const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [discounted, setDiscounted] = useState(0.0);
   const [amountPayment, setAmountPayment] = useState(0.0);
+  const [extraPayment, setExtraPayment] = useState(0.0);
   const totalPaymentRef = useRef(0);
   const totalTransactionFee = useRef(0);
   const paymentMethod = useRef('');
   const [displayPayment, setDisplayPayment] = useState(true);
 
-  const { data: esData, isError: esError } = useEnrollmentSetupQuery();
-
   useEffect(() => {
     if (!enrollment) return;
     if (!tfData) return;
-    if (!esData || esError) return;
 
     if (tfData) {
       let totalAmountToPay = amountToPay;
       if (type === 'fullPayment' && !isScholarshipStart) totalAmountToPay = parseFloat((amountToPay - amountToPay * 0.1).toFixed(2));
       setAmountPayment(totalAmountToPay);
-      setDiscounted(totalAmountToPay);
+      const a = Number(tfData?.departmentalFee || 0) + Number(tfData?.ssgFee || 0) + Number(tfData?.insuranceFee || 0);
+      setExtraPayment(a);
+      if (type.toLowerCase() === 'fullpayment') totalAmountToPay = totalAmountToPay + a;
+
       const fee = Number(totalAmountToPay) * 0.039;
       totalTransactionFee.current = parseFloat(fee.toFixed(2));
       const totalPayment = Number(totalAmountToPay) + Number(fee) + 15;
       totalPaymentRef.current = parseFloat(totalPayment.toFixed(2));
-      //   totalPaymentRef.current = totalPayment;
     }
-  }, [srData, tfData, esData, esError, enrollment, amountToPay, type, isScholarshipStart]);
+  }, [srData, tfData, enrollment, amountToPay, type, isScholarshipStart]);
 
-  // Ensure that the amount is a string with two decimal places, except for certain currencies like JPY
   const formattedAmount = (amount: number) => {
     return amount ? amount.toFixed(2) : '0.00';
   };
@@ -63,7 +61,6 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
       intent: 'CAPTURE',
       purchase_units: [
         {
-          // reference_id: 'e2e2a_1234',
           description: 'e2e2a order-1234',
           amount: {
             currency_code: 'USD',
@@ -71,20 +68,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
           },
         },
       ],
-      // payment_source: {
-      //   paypal: {},
-      // },
-      application_context: {
-        // locale: 'en-US',
-        // brand_name: 'asd',
-        // landing_page: 'billing',
-        // user_action: 'continue',
-        // supplementary_data: [
-        //   { name: 'risk_correlation_id', value: '9N8554567F903282T' },
-        //   { name: 'buyer_ipaddress', value: '109.20.212.116' },
-        //   { name: 'external_channel', value: 'WEB' },
-        // ],
-      },
+      application_context: {},
     });
   };
 
@@ -116,7 +100,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
           taxes: {
             fee: totalTransactionFee.current,
             fixed: 15,
-            amount: type === 'fullPayment' && !isScholarshipStart ? parseFloat((amountToPay - amountToPay * 0.1).toFixed(2)) : Number(amountToPay).toFixed(2),
+            amount: type === 'fullPayment' && !isScholarshipStart ? parseFloat((Number(amountToPay - amountToPay * 0.1) + Number(extraPayment)).toFixed(2)) : Number(amountToPay).toFixed(2),
           },
           paymentIntent: details.intent, // Payment intent (CAPTURE)
           // payments: details.payment
@@ -214,6 +198,34 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
                           </span>
                         </div>
                       </div>
+                      {type.toLowerCase() === 'fullpayment' && (
+                        <>
+                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                            <div className='text-sm mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>Departmental Fee:</span>
+                            </div>
+                            <div className='text-sm mt-5 w-ful flex items-end'>
+                              <span className='font-bold text-end w-full'>₱{tfData.departmentalFee}</span>
+                            </div>
+                          </div>
+                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                            <div className='text-sm mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>Insurance Fee:</span>
+                            </div>
+                            <div className='text-sm mt-5 w-ful flex items-end'>
+                              <span className='font-bold text-end w-full'>₱{tfData.insuranceFee}</span>
+                            </div>
+                          </div>
+                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                            <div className='text-sm mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>SSG Fee:</span>
+                            </div>
+                            <div className='text-sm mt-5 w-ful flex items-end'>
+                              <span className='font-bold text-end w-full'>₱{tfData.ssgFee}</span>
+                            </div>
+                          </div>
+                        </>
+                      )}
                       <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
                         <div className='text-sm mt-5 w-full flex items-start'>
                           <span className='font-bold text-nowrap'>Fixed Fee:</span>
@@ -229,7 +241,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
                           </span>
                         </div>
                         <div className='text-sm mt-5 w-ful flex items-end'>
-                          <span className='font-bold text-end w-full'>₱{totalTransactionFee.current}</span>
+                          <span className='font-bold text-end w-full'>₱{totalTransactionFee.current.toFixed(2)}</span>
                         </div>
                       </div>
                       <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>

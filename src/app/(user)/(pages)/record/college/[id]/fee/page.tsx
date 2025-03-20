@@ -41,13 +41,16 @@ const Page = ({ params }: { params: { id: string } }) => {
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
-  const balanceGrant = parseFloat((Number(data?.enrollment?.profileId?.scholarshipId?.amount) - Number(isPaidByScholarship)).toFixed(2));
+  const balanceGrant = parseFloat((Number(data?.enrollmentRecord?.profileId?.scholarshipId?.amount) - Number(isPaidByScholarship)).toFixed(2));
 
   //full payment exclude all terms payment and downpayment
   const paymentOfFullPayment = srData?.studentReceipt.find((r: any) => r.type.toLowerCase() === 'fullpayment');
-
   let showPaymentOfFullPayment = false;
-  showPaymentOfFullPayment = paymentOfFullPayment && Math.round((Number(paymentOfFullPayment?.taxes?.amount) + Number(total) * 0.1) * 100) / 100 === Math.round(Number(total) * 100) / 100;
+  const totalofPerTermFullPayment = Math.round(Number(total - total * 0.1) * 100) / 100;
+  showPaymentOfFullPayment =
+    paymentOfFullPayment &&
+    Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 >= Math.round(Number(totalofPerTermFullPayment + Number(tfData?.tFee?.ssgFee || 0) + Number(tfData?.tFee?.departmentalFee || 0) + Number(tfData?.tFee?.insuranceFee || 0)) * 100) / 100;
+
   const scholarship = isScholarshipApplicable(data?.enrollmentRecord?.studentYear, data?.enrollmentRecord?.studentSemester, data?.enrollmentRecord?.profileId?.scholarshipId);
   const isScholarshipStart = scholarship && data?.enrollmentRecord?.profileId?.scholarshipId && data?.enrollmentRecord?.profileId?.scholarshipId;
   if (isScholarshipStart) showPaymentOfFullPayment = paymentOfFullPayment && Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 === Math.round(Number(total) * 100) / 100;
@@ -63,7 +66,8 @@ const Page = ({ params }: { params: { id: string } }) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
   const a = Number(paymentOfPrelim) > 0 && Number(paymentOfPrelim) !== Number(paymentPerTerm);
-  const showPaymentOfPrelim = paymentOfPrelim && (Number(paymentOfPrelim) - Number(paymentPerTerm)).toFixed(2) >= (0).toFixed(2);
+  const prelimPayment = Number(paymentOfPrelim) - Number(paymentPerTerm);
+  const showPaymentOfPrelim = paymentOfPrelim && prelimPayment >= 0;
 
   // Midterm Payment
   const paymentOfMidterm = srData?.studentReceipt
@@ -72,7 +76,8 @@ const Page = ({ params }: { params: { id: string } }) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
   const b = Number(paymentOfMidterm) > 0 && Number(paymentOfMidterm) !== Number(paymentPerTerm);
-  const showPaymentOfMidterm = paymentOfMidterm && (Number(paymentOfMidterm) - Number(paymentPerTerm)).toFixed(2) >= (0).toFixed(2);
+  const midtermPayment = Number(paymentOfMidterm) - Number(paymentPerTerm);
+  const showPaymentOfMidterm = paymentOfMidterm && midtermPayment >= 0;
 
   // Semi-final Payment
   const paymentOfSemiFinal = srData?.studentReceipt
@@ -81,7 +86,8 @@ const Page = ({ params }: { params: { id: string } }) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
   const c = Number(paymentOfSemiFinal) > 0 && Number(paymentOfSemiFinal) !== Number(paymentPerTerm);
-  const showPaymentOfSemiFinal = paymentOfSemiFinal && (Number(paymentOfSemiFinal) - Number(paymentPerTerm)).toFixed(2) >= (0).toFixed(2);
+  const semiFinalPayment = Number(paymentOfSemiFinal) - Number(paymentPerTerm);
+  const showPaymentOfSemiFinal = paymentOfSemiFinal && semiFinalPayment >= 0;
 
   // Final Payment
   const paymentOfFinal = srData?.studentReceipt
@@ -91,7 +97,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     }, 0);
   const final = parseFloat((total - tfData?.tFee?.downPayment - 3 * paymentPerTerm).toFixed(2));
   const d = Number(paymentOfFinal) > 0 && Number(paymentOfFinal) !== Number(final);
-  const showPaymentOfFinal = paymentOfFinal && (Number(paymentOfFinal) - Number(final)).toFixed(2) >= (0).toFixed(2);
+  const finalPayment = Number(paymentOfFinal) - Number(final);
+  const showPaymentOfFinal = paymentOfFinal && finalPayment >= 0;
 
   // Departmental Payment
   const paymentOfDepartmental = srData?.studentReceipt
@@ -99,7 +106,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
-  const showPaymentOfDepartmental = paymentOfDepartmental && (Number(paymentOfDepartmental) - Number(tfData?.tFee?.departmentalFee)).toFixed(2) >= (0).toFixed(2);
+  const departmentalPayment = Number(paymentOfDepartmental) - Number(tfData?.tFee?.departmentalFee);
+  const showPaymentOfDepartmental = paymentOfDepartmental && departmentalPayment >= 0;
 
   // Insurance Payment
   const paymentOfInsurance = srData?.studentReceipt
@@ -107,7 +115,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
-  const showPaymentOfInsurance = paymentOfInsurance && (Number(paymentOfInsurance) - Number(tfData?.tFee?.insuranceFee)).toFixed(2) >= (0).toFixed(2);
+  const insurancePayment = Number(paymentOfInsurance) - Number(tfData?.tFee?.insuranceFee);
+  const showPaymentOfInsurance = paymentOfInsurance && insurancePayment >= 0;
 
   // SSG Payment
   const paymentOfSSG = srData?.studentReceipt
@@ -115,10 +124,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
-  const showPaymentOfSSG = paymentOfSSG && (Number(paymentOfSSG) - Number(tfData?.tFee?.ssgFee)).toFixed(2) >= (0).toFixed(2);
-
-  // boolean for all required payments
-  const requiredPaymentsFulfill = showPaymentOfDownPayment && showPaymentOfSSG && showPaymentOfInsurance && showPaymentOfDepartmental;
+  const ssgPayment = Number(paymentOfSSG) - Number(tfData?.tFee?.ssgFee);
+  const showPaymentOfSSG = paymentOfSSG && ssgPayment >= 0;
 
   useEffect(() => {
     if (!showPaymentOfFullPayment) {
@@ -128,9 +135,9 @@ const Page = ({ params }: { params: { id: string } }) => {
       const remainingBalance = Math.round((totalBalance - paidAmount) * 100) / 100;
       setShowBalance(remainingBalance);
     } else {
-      let a = Math.round((Number(paymentOfFullPayment?.taxes?.amount) + Number(total) * 0.1) * 100) / 100 - Math.round(Number(total) * 100) / 100;
-      if (isScholarshipStart && data?.enrollmentRecord?.profileId?.scholarshipId?.discountPercentage) a = Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 - Math.round(Number(total) * 100) / 100;
-      setShowBalance(a);
+      // let a = Math.round((Number(paymentOfFullPayment?.taxes?.amount) + Number(total) * 0.1) * 100) / 100 - Math.round(Number(total) * 100) / 100;
+      // if (isScholarshipStart && data?.enrollmentRecord?.profileId?.scholarshipId?.discountPercentage) a = Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 - Math.round(Number(total) * 100) / 100;
+      setShowBalance(0);
     }
   }, [total, paymentOfFullPayment, showPaymentOfFullPayment, paymentOfDownPayment, paymentOfPrelim, paymentOfMidterm, paymentOfSemiFinal, paymentOfFinal, showBalance, data, isScholarshipStart]);
 
@@ -159,12 +166,12 @@ const Page = ({ params }: { params: { id: string } }) => {
         const cwtsOrNstpFee = Number(tfData?.tFee?.cwtsOrNstpFee) || 0;
         const cwtsOrNstp = data.enrollmentRecord.studentSubjects.find((sub: any) => {
           if (
-            sub?.subject.subjectCode.trim().toLowerCase() === 'cwts' ||
-            sub?.subject.subjectCode.trim().toLowerCase() === 'nstp' ||
-            sub?.subject.subjectCode.trim().toLowerCase() === 'nstp1' ||
-            sub?.subject.subjectCode.trim().toLowerCase() === 'nstp2' ||
-            sub?.subject.subjectCode.trim().toLowerCase() === 'cwts1' ||
-            sub?.subject.subjectCode.trim().toLowerCase() === 'cwts2'
+            sub?.subject?.subjectCode.trim().toLowerCase() === 'cwts' ||
+            sub?.subject?.subjectCode.trim().toLowerCase() === 'nstp' ||
+            sub?.subject?.subjectCode.trim().toLowerCase() === 'nstp1' ||
+            sub?.subject?.subjectCode.trim().toLowerCase() === 'nstp2' ||
+            sub?.subject?.subjectCode.trim().toLowerCase() === 'cwts1' ||
+            sub?.subject?.subjectCode.trim().toLowerCase() === 'cwts2'
           ) {
             setShowCwtsOrNstp(true);
             addcwtsOrNstpFee = true;
@@ -175,8 +182,8 @@ const Page = ({ params }: { params: { id: string } }) => {
 
         let addOjtFee = false;
         const ojtFee = Number(tfData?.tFee?.ojtFee) || 0;
-        const ojt = data.enrollment.studentSubjects.find((sub: any) => {
-          if (sub?.teacherScheduleId?.subjectId?.subjectCode.trim().toLowerCase() === 'prac1' || sub?.teacherScheduleId?.subjectId?.subjectCode.trim().toLowerCase() === 'prac2') {
+        const ojt = data?.enrollmentRecord?.studentSubjects.find((sub: any) => {
+          if (sub?.subject?.subjectCode.trim().toLowerCase() === 'prac1' || sub?.teacherScheduleId?.subjectId?.subjectCode.trim().toLowerCase() === 'prac2') {
             setShowOJT(true);
             addOjtFee = true;
             return true;
@@ -234,9 +241,19 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (!srData?.ssgPayment && showPaymentOfSSG) additionPayment = parseFloat((additionPayment - tfData?.tFee?.ssgFee).toFixed(2));
     if (srData?.insurancePayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.insurancePayment).toFixed(2));
     if (srData?.ssgPayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.ssgFee).toFixed(2));
-    setAdditionalTotal(additionPayment || 0);
-  }, [tfData, srData, showPaymentOfDepartmental, showPaymentOfSSG]);
 
+    setAdditionalTotal(additionPayment || 0);
+    if (showPaymentOfFullPayment) setAdditionalTotal(0);
+  }, [tfData, srData, showPaymentOfFullPayment, showPaymentOfDepartmental, showPaymentOfSSG]);
+
+  const insurancePaidInThisSemester = srData?.insurancePaymentSemester?.toLowerCase() === data?.enrollmentRecord?.studentSemester?.toLowerCase();
+  const ssgPaidInThisSemester =
+    (srData?.ssgYear1?.toLowerCase() === data?.enrollmentRecord?.studentYear?.toLowerCase() && srData?.ssgSemester1?.toLowerCase() === data?.enrollmentRecord?.studentSemester?.toLowerCase()) ||
+    (srData?.ssgYear2?.toLowerCase() === data?.enrollmentRecord?.studentYear?.toLowerCase() && srData?.ssgSemester2?.toLowerCase() === data?.enrollmentRecord?.studentSemester?.toLowerCase());
+  // boolean for all required payments
+  const myBooleanForInsurance = srData?.insurancePayment || insurancePaidInThisSemester;
+  const myBooleanForSSG = srData?.ssgPayment || ssgPaidInThisSemester;
+  const requiredPaymentsFulfill = showPaymentOfDownPayment && myBooleanForSSG && myBooleanForInsurance && showPaymentOfDepartmental;
   return (
     <>
       {isPageLoading ? (
@@ -402,29 +419,36 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <span className='text-xs sm:text-sm'>SchoolYear: {data?.enrollmentRecord?.schoolYear} </span>
                       </CardDescription>
                       <div className=''>
-                        {!data?.enrollment?.profileId?.scholarshipId?.amount && !showPaymentOfFullPayment && !showPaymentOfDownPayment && !showPaymentOfPrelim && !showPaymentOfMidterm && !showPaymentOfSemiFinal && !showPaymentOfFinal && (
-                          <div className='flex flex-col justify-center items-center w-full border-[0.5px] rounded-lg px-5 py-3'>
-                            <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>
-                              <h1 className='flex gap-x-2 justify-center items-center'>
-                                <span className='text-[16px] font-bold text-orange-400'>Note:</span>
-                                <span className='text-sm text-justify'>
-                                  Full payment for the semester is only applicable for the initial payment and includes a 10% discount. {isScholarshipStart && 'For more details 10% discount is only available for students who does not have a schollarship.'}
-                                </span>
-                              </h1>
+                        {!data?.enrollmentRecord?.profileId?.scholarshipId?.amount &&
+                          !requiredPaymentsFulfill &&
+                          !showPaymentOfFullPayment &&
+                          !showPaymentOfDownPayment &&
+                          !showPaymentOfPrelim &&
+                          !showPaymentOfMidterm &&
+                          !showPaymentOfSemiFinal &&
+                          !showPaymentOfFinal && (
+                            <div className='flex flex-col justify-center items-center w-full border-[0.5px] rounded-lg px-5 py-3'>
+                              <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>
+                                <h1 className='flex gap-x-2 justify-center items-center'>
+                                  <span className='text-[16px] font-bold text-orange-400'>Note:</span>
+                                  <span className='text-sm text-justify'>
+                                    Full payment for the semester is only applicable for the initial payment and includes a 10% discount. {isScholarshipStart && 'For more details 10% discount is only available for students who does not have a schollarship.'}
+                                  </span>
+                                </h1>
+                              </div>
+                              <div className=''>
+                                <SettleTermPayment
+                                  enrollment={data?.enrollmentRecord}
+                                  tfData={tfData?.tFee}
+                                  srData={srData?.studentReceipt}
+                                  amountToPay={Number(total).toFixed(2)}
+                                  type={'fullPayment'}
+                                  title='Full Payment'
+                                  isScholarshipStart={isScholarshipStart}
+                                />
+                              </div>
                             </div>
-                            <div className=''>
-                              <SettleTermPayment
-                                enrollment={data?.enrollmentRecord}
-                                tfData={tfData?.tFee}
-                                srData={srData?.studentReceipt}
-                                amountToPay={Number(total).toFixed(2)}
-                                type={'fullPayment'}
-                                title='Full Payment'
-                                isScholarshipStart={isScholarshipStart}
-                              />
-                            </div>
-                          </div>
-                        )}
+                          )}
                       </div>
                       {isScholarshipStart && (
                         <>
@@ -436,18 +460,18 @@ const Page = ({ params }: { params: { id: string } }) => {
                               </h1>
                             </div>
                           )}
-                          {data?.enrollment?.profileId?.scholarshipId?.amount && (
+                          {data?.enrollmentRecord?.profileId?.scholarshipId?.amount && (
                             <div className=''>
                               <div className='text-sm text-muted-foreground my-3'>
                                 <span className=''>Note: Only Cashier can make a payment until the Scholarship Support Balance is zero.</span>
                               </div>
                               <h1 className='flex flex-col gap-x-2 justify-start items-start font-semibold '>
-                                <span className='text-sm text-justify'>Scholarship Name: {data?.enrollment?.profileId?.scholarshipId?.name}</span>
+                                <span className='text-sm text-justify'>Scholarship Name: {data?.enrollmentRecord?.profileId?.scholarshipId?.name}</span>
                                 <span className='text-sm text-justify'>
-                                  Scholarship Support: <span className='text-green-500'>₱{parseFloat(Number(data?.enrollment?.profileId?.scholarshipId?.amount).toFixed(0))}</span>
+                                  Scholarship Support: <span className='text-green-500'>₱{parseFloat(Number(data?.enrollmentRecord?.profileId?.scholarshipId?.amount).toFixed(0))}</span>
                                 </span>
                                 <span className='text-sm text-justify'>
-                                  Scholarship Support Balance: <span className='text-green-500'>₱{parseFloat((Number(data?.enrollment?.profileId?.scholarshipId?.amount) - isPaidByScholarship).toFixed(0))}</span>
+                                  Scholarship Support Balance: <span className='text-green-500'>₱{parseFloat((Number(data?.enrollmentRecord?.profileId?.scholarshipId?.amount) - isPaidByScholarship).toFixed(0))}</span>
                                 </span>
                               </h1>
                             </div>
@@ -474,17 +498,19 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 <TableHead className='px-4 py-2 text-left'>Payments Type</TableHead>
                                 <TableHead className='px-4 py-2 text-left'>Amount</TableHead>
                                 <TableHead className='px-4 py-2 text-left'>Status</TableHead>
-                                {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && <TableHead className='px-4 py-2 text-left'>Settle Payment</TableHead>}
+                                {(!data?.enrollmentRecord?.profileId?.scholarshipId?.amount || (data?.enrollmentRecord?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && <TableHead className='px-4 py-2 text-left'>Settle Payment</TableHead>}
                               </TableRow>
                             </TableHeader>
                             <TableBody>
                               <TableRow>
-                                <TableCell className={`px-4 py-2 ${showPaymentOfDownPayment && 'text-green-400 line-through'}`}>Down Payment</TableCell>
-                                <TableCell className={`px-4 py-2 ${showPaymentOfDownPayment && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
-                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>{showPaymentOfDownPayment ? 'Paid' : 'unpaid'}</TableCell>
-                                {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
-                                    {showPaymentOfDownPayment ? (
+                                <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDownPayment) && 'text-green-400 line-through'}`}>Down Payment</TableCell>
+                                <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDownPayment) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
+                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
+                                  {showPaymentOfFullPayment || showPaymentOfDownPayment ? 'Paid' : 'unpaid'}
+                                </TableCell>
+                                {(!data?.enrollmentRecord?.profileId?.scholarshipId?.amount || (data?.enrollmentRecord?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
+                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
+                                    {showPaymentOfFullPayment || showPaymentOfDownPayment ? (
                                       'Completed'
                                     ) : (
                                       <SettleTermPayment
@@ -501,12 +527,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 )}
                               </TableRow>
                               <TableRow>
-                                <TableCell className={`px-4 py-2 ${showPaymentOfDepartmental && 'text-green-400 line-through'}`}>Departmental Fee</TableCell>
-                                <TableCell className={`px-4 py-2 ${showPaymentOfDepartmental && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.departmentalFee).toFixed(2)}</TableCell>
-                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>{showPaymentOfDepartmental ? 'Paid' : 'unpaid'}</TableCell>
-                                {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>
-                                    {showPaymentOfDepartmental ? (
+                                <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDepartmental) && 'text-green-400 line-through'}`}>Departmental Fee</TableCell>
+                                <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDepartmental) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.departmentalFee).toFixed(2)}</TableCell>
+                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>
+                                  {showPaymentOfFullPayment || showPaymentOfDepartmental ? 'Paid' : 'unpaid'}
+                                </TableCell>
+                                {(!data?.enrollmentRecord?.profileId?.scholarshipId?.amount || (data?.enrollmentRecord?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
+                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>
+                                    {showPaymentOfFullPayment || showPaymentOfDepartmental ? (
                                       'Completed'
                                     ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
                                       <SettleTermPayment
@@ -524,20 +552,22 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   </TableCell>
                                 )}
                               </TableRow>
-                              {!srData?.insurancePayment && (
+                              {(!srData?.insurancePayment || insurancePaidInThisSemester) && (
                                 <TableRow>
-                                  <TableCell className={`px-4 py-2 ${(srData?.insurancePayment || showPaymentOfInsurance) && 'text-green-400 line-through'}`}>Insurance Fee</TableCell>
-                                  <TableCell className={`px-4 py-2 ${(srData?.insurancePayment || showPaymentOfInsurance) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.insuranceFee).toFixed(2)}</TableCell>
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.insurancePayment || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
-                                    {srData?.insurancePayment || showPaymentOfInsurance ? 'Paid' : 'unpaid'}
+                                  <TableCell className={`px-4 py-2 ${(srData?.insurancePayment || insurancePaidInThisSemester || showPaymentOfFullPayment || showPaymentOfInsurance) && 'text-green-400 line-through'}`}>Insurance Fee</TableCell>
+                                  <TableCell className={`px-4 py-2 ${(srData?.insurancePayment || insurancePaidInThisSemester || showPaymentOfFullPayment || showPaymentOfInsurance) && 'text-green-400 line-through'}`}>
+                                    ₱{Number(tfData?.tFee?.insuranceFee).toFixed(2)}
                                   </TableCell>
-                                  {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.insurancePayment || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
-                                      {srData?.insurancePayment || showPaymentOfInsurance ? (
+                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${insurancePaidInThisSemester || showPaymentOfFullPayment || srData?.insurancePayment || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
+                                    {srData?.insurancePayment || showPaymentOfFullPayment || insurancePaidInThisSemester || showPaymentOfInsurance ? 'Paid' : 'unpaid'}
+                                  </TableCell>
+                                  {(!data?.enrollmentRecord?.profileId?.scholarshipId?.amount || (data?.enrollmentRecord?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || insurancePaidInThisSemester || srData?.insurancePayment || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
+                                      {showPaymentOfFullPayment || insurancePaidInThisSemester || srData?.insurancePayment || showPaymentOfInsurance ? (
                                         'Completed'
                                       ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
                                         <SettleTermPayment
-                                          enrollment={data?.enrollment}
+                                          enrollment={data?.enrollmentRecord}
                                           tfData={tfData?.tFee}
                                           srData={srData?.studentReceipt}
                                           amountToPay={Number(tfData?.tFee?.insuranceFee).toFixed(2)}
@@ -552,14 +582,16 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   )}
                                 </TableRow>
                               )}
-                              {!srData?.ssgPayment && (
+                              {(!srData?.ssgPayment || ssgPaidInThisSemester) && (
                                 <TableRow>
-                                  <TableCell className={`px-4 py-2 ${(srData?.ssgPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>SSG Fee</TableCell>
-                                  <TableCell className={`px-4 py-2 ${(srData?.ssgPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.ssgFee).toFixed(2)}</TableCell>
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>{srData?.ssgPayment || showPaymentOfSSG ? 'Paid' : 'unpaid'}</TableCell>
-                                  {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>
-                                      {srData?.ssgPayment || showPaymentOfSSG ? (
+                                  <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || ssgPaidInThisSemester || srData?.ssgPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>SSG Fee</TableCell>
+                                  <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || ssgPaidInThisSemester || srData?.ssgPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.ssgFee).toFixed(2)}</TableCell>
+                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || ssgPaidInThisSemester || srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>
+                                    {showPaymentOfFullPayment || ssgPaidInThisSemester || srData?.ssgPayment || showPaymentOfSSG ? 'Paid' : 'unpaid'}
+                                  </TableCell>
+                                  {(!data?.enrollmentRecord?.profileId?.scholarshipId?.amount || (data?.enrollmentRecord?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || ssgPaidInThisSemester || srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>
+                                      {showPaymentOfFullPayment || srData?.ssgPayment || ssgPaidInThisSemester || showPaymentOfSSG ? (
                                         'Completed'
                                       ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
                                         <SettleTermPayment
@@ -596,7 +628,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 <TableHead className='px-4 py-2 text-left'>Payments Type</TableHead>
                                 <TableHead className='px-4 py-2 text-left'>Amount</TableHead>
                                 <TableHead className='px-4 py-2 text-left'>Status</TableHead>
-                                {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && <TableHead className='px-4 py-2 text-left'>Settle Payment</TableHead>}
+                                {(!data?.enrollmentRecord?.profileId?.scholarshipId?.amount || (data?.enrollmentRecord?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && <TableHead className='px-4 py-2 text-left'>Settle Payment</TableHead>}
                                 <TableHead className='px-4 py-2 text-left'>Advanced</TableHead>
                               </TableRow>
                             </TableHeader>
@@ -606,8 +638,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfPrelim && 'text-green-400 line-through'}`}>Prelim</TableCell>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfPrelim && 'text-green-400 line-through'}`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfPrelim ? 'text-green-400 line-through' : 'text-red'}`}>{showPaymentOfPrelim ? 'Paid' : 'unpaid'}</TableCell>
-                                    {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfPrelim ? 'text-green-400' : 'text-red'}`}>{showPaymentOfPrelim ? 'Paid' : 'unpaid'}</TableCell>
+                                    {(!data?.enrollmentRecord?.profileId?.scholarshipId?.amount || (data?.enrollmentRecord?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
                                       <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfPrelim ? 'text-green-400' : 'text-red'}`}>
                                         {showPaymentOfPrelim ? (
                                           'Completed'
@@ -632,8 +664,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfMidterm && 'text-green-400 line-through'}`}>Midterm</TableCell>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfMidterm && 'text-green-400 line-through'}`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfMidterm ? 'text-green-400 line-through' : 'text-red'}`}>{showPaymentOfMidterm ? 'Paid' : 'unpaid'}</TableCell>
-                                    {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfMidterm ? 'text-green-400' : 'text-red'}`}>{showPaymentOfMidterm ? 'Paid' : 'unpaid'}</TableCell>
+                                    {(!data?.enrollmentRecord?.profileId?.scholarshipId?.amount || (data?.enrollmentRecord?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
                                       <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfMidterm ? 'text-green-400' : 'text-red'}`}>
                                         {showPaymentOfMidterm ? (
                                           'Completed'
@@ -658,8 +690,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfSemiFinal && 'text-green-400 line-through'}`}>Semi-final</TableCell>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfSemiFinal && 'text-green-400 line-through'}`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfSemiFinal ? 'text-green-400 line-through' : 'text-red'}`}>{showPaymentOfSemiFinal ? 'Paid' : 'unpaid'}</TableCell>
-                                    {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfSemiFinal ? 'text-green-400' : 'text-red'}`}>{showPaymentOfSemiFinal ? 'Paid' : 'unpaid'}</TableCell>
+                                    {(!data?.enrollmentRecord?.profileId?.scholarshipId?.amount || (data?.enrollmentRecord?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
                                       <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfSemiFinal ? 'text-green-400' : 'text-red'}`}>
                                         {showPaymentOfSemiFinal ? (
                                           'Completed'
@@ -678,14 +710,13 @@ const Page = ({ params }: { params: { id: string } }) => {
                                         )}
                                       </TableCell>
                                     )}
-
                                     <TableCell className={`px-4 py-2`}>{c && `₱${paymentOfSemiFinal.toFixed(2)}`}</TableCell>
                                   </TableRow>
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfFinal && 'text-green-400 line-through'}`}>Final</TableCell>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfFinal && 'text-green-400 line-through'}`}>₱{final.toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFinal ? 'text-green-400 line-through' : 'text-red'}`}>{showPaymentOfFinal ? 'Paid' : 'unpaid'}</TableCell>
-                                    {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFinal ? 'text-green-400' : 'text-red'}`}>{showPaymentOfFinal ? 'Paid' : 'unpaid'}</TableCell>
+                                    {(!data?.enrollmentRecord?.profileId?.scholarshipId?.amount || (data?.enrollmentRecord?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
                                       <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFinal ? 'text-green-400' : 'text-red'}`}>
                                         {showPaymentOfFinal ? (
                                           'Completed'
@@ -712,33 +743,27 @@ const Page = ({ params }: { params: { id: string } }) => {
                               {showPaymentOfFullPayment && (
                                 <>
                                   <TableRow>
-                                    <TableCell className={`px-4 py-2 text-green-400 line-through`}>Down Payment</TableCell>
-                                    <TableCell className={`px-4 py-2 text-green-400 line-through`}>₱{Number(tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Paid</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Completed</TableCell>
-                                  </TableRow>
-                                  <TableRow>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>Prelim</TableCell>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400 line-through`}>Paid</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Paid</TableCell>
                                     <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Completed</TableCell>
                                   </TableRow>
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>Midterm</TableCell>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400 line-through`}>Paid</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Paid</TableCell>
                                     <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Completed</TableCell>
                                   </TableRow>
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>Semi-final</TableCell>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400 line-through`}>Paid</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Paid</TableCell>
                                     <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Completed</TableCell>
                                   </TableRow>
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>Final</TableCell>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>₱{(((total - tfData?.tFee?.downPayment - 3 * paymentPerTerm) * 100) / 100).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400 line-through`}>Paid</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Paid</TableCell>
                                     <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Completed</TableCell>
                                   </TableRow>
                                 </>

@@ -23,6 +23,7 @@ type IProps = {
 
 const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [total, setTotal] = useState(0.0);
   const [amountPayment, setAmountPayment] = useState(0.0);
   const [amountInput, setAmountInput] = useState(0);
   const [isPending, setIsPending] = useState(false);
@@ -45,7 +46,9 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
       let totalAmountToPay = amountToPay;
       if (!isScholarshipStart && type === 'fullPayment') totalAmountToPay = parseFloat((amountToPay - amountToPay * 0.1).toFixed(2));
       setAmountPayment(totalAmountToPay);
+      if (type.toLowerCase() === 'fullpayment') totalAmountToPay = totalAmountToPay + Number(tfData?.departmentalFee || 0) + Number(tfData?.ssgFee || 0) + Number(tfData?.insuranceFee || 0);
       setAmountInput(totalAmountToPay);
+      setTotal(totalAmountToPay);
       if (enrollment?.profileId?.scholarshipId?.amount) {
         if (Number(balanceGrant) > 0) {
           if (Number(balanceGrant) <= Number(totalAmountToPay)) setAmountInput(balanceGrant);
@@ -162,6 +165,42 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
                           </span>
                         </div>
                       </div>
+                      {type.toLowerCase() === 'fullpayment' && (
+                        <>
+                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                            <div className='text-sm mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>Departmental Fee:</span>
+                            </div>
+                            <div className='text-sm mt-5 w-ful flex items-end'>
+                              <span className='font-bold text-end w-full'>₱{tfData.departmentalFee}</span>
+                            </div>
+                          </div>
+                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                            <div className='text-sm mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>Insurance Fee:</span>
+                            </div>
+                            <div className='text-sm mt-5 w-ful flex items-end'>
+                              <span className='font-bold text-end w-full'>₱{tfData.insuranceFee}</span>
+                            </div>
+                          </div>
+                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                            <div className='text-sm mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>SSG Fee:</span>
+                            </div>
+                            <div className='text-sm mt-5 w-ful flex items-end'>
+                              <span className='font-bold text-end w-full'>₱{tfData.ssgFee}</span>
+                            </div>
+                          </div>
+                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                            <div className='text-sm mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>Total Payment Amount:</span>
+                            </div>
+                            <div className='text-sm mt-5 w-ful flex items-end'>
+                              <span className='font-bold text-end w-full'>₱{total}</span>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                   <div className='mt-10 w-full'>

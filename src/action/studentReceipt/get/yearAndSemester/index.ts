@@ -37,9 +37,21 @@ const checkPaymentOfSSG = async (studentReceipt: any) => {
   return tryCatch(async () => {
     let ssgPayment = false;
     const ssgPayment1 = studentReceipt?.filter((r: any) => r.type.toLowerCase() === 'ssg');
-
-    if (ssgPayment1.length >= 2) ssgPayment = true;
-    return { ssgPayment };
+    let ssgSemester1 = '';
+    let ssgSemester2 = '';
+    let ssgYear1 = '';
+    let ssgYear2 = '';
+    if (ssgPayment1.length >= 2) {
+      ssgYear1 = ssgPayment1[0].year;
+      ssgSemester1 = ssgPayment1[0].semester;
+      ssgYear2 = ssgPayment1[1].year;
+      ssgSemester2 = ssgPayment1[1].semester;
+      ssgPayment = true;
+    } else if (ssgPayment1.length === 1) {
+      ssgYear1 = ssgPayment1[0].year;
+      ssgSemester1 = ssgPayment1[0].semester;
+    }
+    return { ssgPayment, ssgSemester1, ssgSemester2, ssgYear1, ssgYear2 };
   });
 };
 
@@ -50,9 +62,9 @@ const checkPaymentOfInsurance = async (studentReceipt: any, year: string, school
     const insurancePayment1 = a
       ?.filter((r: any) => r.type.toLowerCase() === 'insurance')
       ?.reduce((total: number, payment: any) => {
-        return { amount: total + (Number(payment?.taxes?.amount) || 0), schoolYear: payment.schoolYear };
+        return { amount: total + (Number(payment?.taxes?.amount) || 0), semester: payment.semester, schoolYear: payment.schoolYear };
       }, 0);
     if (insurancePayment1) insurancePayment = true;
-    return { insurancePayment };
+    return { insurancePayment, insurancePaymentSemester: insurancePayment1.semester };
   });
 };
