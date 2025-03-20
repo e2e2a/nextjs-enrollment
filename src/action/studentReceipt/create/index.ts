@@ -51,7 +51,8 @@ const checkRole = async (user: any, data: any, setup: any) => {
     cFee = await getCourseFeeByCourseId(studentEnrollment?.courseId?._id);
     if (data.request === 'record') cFee = await getCourseFeeByCourseId(course?._id);
     if (!cFee) return { error: 'Course fee not found.', status: 404 };
-
+    const checkedType = await checkTypeOfPayment(data, cFee);
+    if (!checkedType || checkedType.error) return checkedType;
     switch (user.role) {
       case 'STUDENT':
         b = await handleStudentRole(user, data, studentProfile, studentEnrollment);
@@ -118,6 +119,35 @@ const checkRole = async (user: any, data: any, setup: any) => {
     if (studentEnrollment.step === 5 && showPaymentOfSSG && insurancePayment.insurancePayment && pymentOfDownPaymentExceed && paymentOfDepartmentalExceed) await updateEnrollmentById(studentEnrollment._id, updateData);
 
     return b;
+  });
+};
+
+const checkTypeOfPayment = async (data: any, cFee: any) => {
+  return tryCatch(async () => {
+    const type = data.type.toLowerCase();
+    let payment = false;
+
+    switch (type) {
+      case 'downpayment':
+        payment = Number(data.taxes.amount) === Number(cFee.downPayment);
+        break;
+      case 'ssg':
+        payment = Number(data.taxes.amount) === Number(cFee.ssgFee);
+        break;
+      case 'departmental':
+        payment = Number(data.taxes.amount) === Number(cFee.departmentalFee);
+        break;
+      case 'insurance':
+        payment = Number(data.taxes.amount) === Number(cFee.insuranceFee);
+        break;
+      // case 'fullpayment':
+      //   break;
+      default:
+        payment = true;
+        break;
+    }
+    if (!payment) return { error: 'Amount of payment should be equal to amount to pay.', status: 400 };
+    return { success: true, message: 'Payment type is valid.', status: 200 };
   });
 };
 
