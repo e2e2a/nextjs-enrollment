@@ -156,6 +156,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         const aFormatted = parseFloat((lab * tfData?.tFee?.ratePerLab).toFixed(2));
         const bFormatted = parseFloat((unit * tfData?.tFee?.ratePerUnit).toFixed(2));
         const cFormatted = parseFloat(tfData?.tFee?.regOrMisc.reduce((acc: number, tFee: any) => acc + Number(tFee.amount), 0).toFixed(2));
+        const ccFormatted = parseFloat(tfData?.tFee?.regOrMiscNew?.reduce((acc: number, tFee: any) => acc + Number(tFee.amount), 0).toFixed(2));
         const dFormatted = Number(tfData?.tFee?.downPayment || 0);
 
         let addcwtsOrNstpFee = false;
@@ -200,8 +201,22 @@ const Page = ({ params }: { params: { id: string } }) => {
         }
 
         const a = cFormatted + dFormatted;
-        setRegMiscTotal(a);
         let RegMiscTotal = a;
+        const totalOfNew = ccFormatted + dFormatted;
+
+        if (tfData?.tFee?.regOrMiscWithOldAndNew) {
+          if (data?.enrollment?.studentStatus.toLowerCase() === 'new student' || data?.enrollment?.studentStatus.toLowerCase() === 'transfer student') {
+            setRegMiscTotal(totalOfNew);
+            RegMiscTotal = totalOfNew
+          } else {
+            RegMiscTotal = a
+            setRegMiscTotal(a);
+          }
+        } else {
+          RegMiscTotal = a
+          setRegMiscTotal(a);
+        }
+
         if (isScholarshipStart && data?.enrollment?.profileId?.scholarshipId?.exemptedFees.includes('Miscellaneous Fees')) {
           if (data?.enrollment?.profileId?.scholarshipId?.type === 'percentage') {
             const b = parseFloat((a * Number(data?.enrollment?.profileId?.scholarshipId?.discountPercentage)).toFixed(2));

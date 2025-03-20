@@ -23,7 +23,9 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isPending, setIsPending] = useState(false);
   const [isNotEditable, setIsNotEditable] = useState(true);
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
+  const [regOrMiscWithOldAndNew, setRegOrMiscWithOldAndNew] = useState<boolean>(false);
   const [regMiscRows, setRegMiscRows] = useState<any[]>([{ name: '', amount: '' }]);
+  const [regMiscRowsNew, setRegMiscRowsNew] = useState<any[]>([{ name: '', amount: '' }]);
 
   const { data: tfData, error: isTFError } = useTuitionFeeQueryById(params.id);
   const { data: cData, error } = useCourseQueryByCategory('College');
@@ -33,6 +35,9 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (isTFError || !tfData) return;
     if (cData && tfData) {
       if (cData.courses && tfData.tFee) {
+        setRegOrMiscWithOldAndNew(tfData?.tFee?.regOrMiscWithOldAndNew);
+        setRegMiscRows(() => (tfData?.tFee?.regOrMisc.length > 0 ? tfData?.tFee?.regOrMisc : [{ name: '', amount: '' }]));
+        setRegMiscRowsNew(() => (tfData?.tFee?.regOrMiscNew.length > 0 ? tfData?.tFee?.regOrMiscNew : [{ name: '', amount: '' }]));
         setIsPageLoading(false);
         return;
       }
@@ -69,17 +74,20 @@ const Page = ({ params }: { params: { id: string } }) => {
     form.setValue('ojtFee', tfData?.tFee?.ojtFee);
   }, [form, tfData, isNotEditable]);
 
-  useEffect(() => {
-    setRegMiscRows(tfData?.tFee?.regOrMisc || []);
-  }, [isNotEditable, tfData]);
-
   const handleEditable = async () => {
+    // Use functional state updates to ensure they are set correctly
+
+    setRegMiscRows(() => (tfData?.tFee?.regOrMisc.length > 0 ? tfData?.tFee?.regOrMisc : [{ name: '', amount: '' }]));
+    setRegMiscRowsNew(() => (tfData?.tFee?.regOrMiscNew.length > 0 ? tfData?.tFee?.regOrMiscNew : [{ name: '', amount: '' }]));
     setIsNotEditable(!isNotEditable);
+    setRegOrMiscWithOldAndNew(tfData?.tFee?.regOrMiscWithOldAndNew);
     form.reset();
   };
 
   const onSubmit: SubmitHandler<z.infer<typeof CourseFeeValidator>> = async (data) => {
     if (regMiscRows.length === 0) return makeToastError('Please Provide Reg/Misc Fee');
+    if (regOrMiscWithOldAndNew && regMiscRowsNew.length === 0) return makeToastError('Please Provide Reg/Misc Fee');
+
     setIsPending(true);
     for (const row of regMiscRows) {
       const regex = /^\d+(\.\d{1,2})?$/;
@@ -94,11 +102,27 @@ const Page = ({ params }: { params: { id: string } }) => {
         return;
       }
     }
-
+    if (regOrMiscWithOldAndNew) {
+      for (const row of regMiscRows) {
+        const regex = /^\d+(\.\d{1,2})?$/;
+        if (!row.name || !row.amount) {
+          setIsPending(false);
+          makeToastError('Please ensure to fill amount and name in Reg/Misc Fee');
+          return;
+        }
+        if (!regex.test(row.amount)) {
+          setIsPending(false);
+          makeToastError('Invalid amount in Reg/Misc Fee');
+          return;
+        }
+      }
+    }
     const dataa = {
       id: tfData?.tFee?._id,
       category: 'College',
       regMiscRows: regMiscRows,
+      regMiscRowsNew: regMiscRowsNew,
+      regOrMiscWithOldAndNew: regOrMiscWithOldAndNew,
       ...data,
     };
 
@@ -132,12 +156,6 @@ const Page = ({ params }: { params: { id: string } }) => {
             <CardHeader className='space-y-3'>
               <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Course Fee</CardTitle>
               <CardDescription className='text-xs sm:text-sm'>Department: {tfData?.tFee?.courseId?.name}</CardDescription>
-              {/* <div className='text-xs sm:text-sm'>
-                <div className=''>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To create a new Course Tuition Fee, this section allows you to define the tuition rates, lab fees, CWTS/NSTP fees, and any other related charges for a specific course. Providing this information will ensure
-                  accurate billing and management of course fees for students.
-                </div>
-              </div> */}
             </CardHeader>
             <Form {...form}>
               <form method='post' className='w-full space-y-4'>
@@ -177,7 +195,32 @@ const Page = ({ params }: { params: { id: string } }) => {
                       <Input name={'downPayment'} type={'text'} isNotEditable={isNotEditable} form={form} label={'Down Payment:'} classNameInput={''} />
                     </div>
                   </div>
-                  <RegOrMisc isNotEditable={isNotEditable} regMiscRows={regMiscRows} setRegMiscRows={setRegMiscRows} />
+                  {!isNotEditable && (
+                    <div className=' w-full flex justify-center items-center'>
+                      <Button
+                        type='button'
+                        onClick={() => {
+                          setRegOrMiscWithOldAndNew(!regOrMiscWithOldAndNew);
+                          setRegMiscRowsNew([{ name: '', amount: '' }]);
+                          setRegMiscRowsNew(tfData?.tFee?.regOrMiscNew || []);
+                        }}
+                        className={`${regOrMiscWithOldAndNew ? 'bg-red  hover:bg-opacity-90' : 'bg-blue-500 hover:bg-blue-700'} text-white font-semibold tracking-wide`}
+                      >
+                        {regOrMiscWithOldAndNew && 'Cancel'} Setup Reg/Misc for New Student
+                      </Button>
+                    </div>
+                  )}
+                  <div className='w-full'>
+                    {regOrMiscWithOldAndNew && <span className='text-sm font-bold ml-7 uppercase'>Old Student</span>}
+                    <RegOrMisc isNotEditable={isNotEditable} regMiscRows={regMiscRows} setRegMiscRows={setRegMiscRows} />
+                  </div>
+                  {}
+                  {regOrMiscWithOldAndNew ? (
+                    <div className='w-full'>
+                      {regOrMiscWithOldAndNew && <span className='text-sm font-bold ml-7 uppercase'>New Student</span>}
+                      <RegOrMisc isNotEditable={isNotEditable} regMiscRows={regMiscRowsNew} setRegMiscRows={setRegMiscRowsNew} />
+                    </div>
+                  ) : null}
                 </div>
 
                 <div className=''>

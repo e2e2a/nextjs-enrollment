@@ -1,3 +1,4 @@
+'use Effect';
 import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -61,11 +62,13 @@ const RegOrMisc = ({ regMiscRows, setRegMiscRows }: IProps) => {
                       placeholder='Amount'
                     />
                   </td>
-                  <td className='px-4 py-2 hover:text-white'>
-                    <Button type='button' onClick={() => handleDeleteRow(index)} variant='destructive' className='bg-red hover:opacity-85 text-white'>
-                      Delete
-                    </Button>
-                  </td>
+                  {index > 0 && (
+                    <td className='px-4 py-2 hover:text-white'>
+                      <Button type='button' onClick={() => handleDeleteRow(index)} variant='destructive' className='bg-red hover:opacity-85 text-white'>
+                        Delete
+                      </Button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

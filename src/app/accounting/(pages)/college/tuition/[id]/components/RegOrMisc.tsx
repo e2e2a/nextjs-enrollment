@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface IProps {
   isNotEditable: boolean;
@@ -12,6 +12,10 @@ interface IProps {
 }
 
 const RegOrMisc = ({ isNotEditable, regMiscRows, setRegMiscRows }: IProps) => {
+  useEffect(() => {
+    if (regMiscRows.length === 0) setRegMiscRows([{ name: '', amount: '' }]);
+  }, [isNotEditable, regMiscRows, setRegMiscRows]);
+
   // Handle deleting a new row
   const handleDeleteRow = (index: number) => {
     setRegMiscRows((prevRows) => prevRows.filter((_, i) => i !== index));
@@ -33,14 +37,13 @@ const RegOrMisc = ({ isNotEditable, regMiscRows, setRegMiscRows }: IProps) => {
     <>
       <div>
         <CardContent className='w-full'>
-          <div className=''>
+          {/* <div className=''>
             <h1 className='text-lg font-semibold xs:text-xl sm:text-2xl tracking-tight w-full text-start uppercase'>Reg/Misc Fee</h1>
-          </div>
+          </div> */}
           <div className='overflow-x-auto mt-3 rounded-t-lg'>
             <Table className='table-auto border-collapse rounded-t-lg border '>
               <TableHeader>
                 <TableRow className=' border-black rounded-t-lg bg-gray-200 font-bold text-[16px]'>
-                  <TableHead className='px-4 py-2 text-left'>Type</TableHead>
                   <TableHead className='px-4 py-2 text-left'>Name</TableHead>
                   <TableHead className='px-4 py-2 text-left'>Amount</TableHead>
                   {!isNotEditable && (
@@ -73,9 +76,11 @@ const RegOrMisc = ({ isNotEditable, regMiscRows, setRegMiscRows }: IProps) => {
                           <Input type='text' value={row.amount} onChange={(e) => handleInputChange(index, 'amount', e.target.value)} placeholder='Amount' />
                         </TableCell>
                         <TableCell className='px-4 py-2 hover:text-white'>
-                          <Button type='button' onClick={() => handleDeleteRow(index)} variant='destructive' className='bg-red hover:opacity-85 text-white'>
-                            Delete Row
-                          </Button>
+                          {index > 0 && (
+                            <Button type='button' onClick={() => handleDeleteRow(index)} variant='destructive' className='bg-red hover:opacity-85 text-white'>
+                              Delete Row
+                            </Button>
+                          )}
                         </TableCell>
                       </TableRow>
                     ))}

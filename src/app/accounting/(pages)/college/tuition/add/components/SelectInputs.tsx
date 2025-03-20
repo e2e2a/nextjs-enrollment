@@ -26,7 +26,7 @@ export function SelectInput({ form, name, label, selectItems, placeholder }: IPr
                 </SelectTrigger>
                 <SelectContent className='bg-white border-gray-300'>
                   <SelectGroup>
-                    {selectItems.length > 0 ? (
+                    {selectItems?.length > 0 ? (
                       selectItems.map((item: any, index: any) => {
                         return item.name ? (
                           <SelectItem value={item.courseCode} key={index} className='capitalize'>
