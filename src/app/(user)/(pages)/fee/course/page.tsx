@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
+  const [regMisc, setRegMisc] = useState([]);
   const { data: s } = useSession();
   const { data: eData, error: eError } = useEnrollmentQueryBySessionId(s?.user?.id as string);
   const { data: tfData, error: isTFError } = useCourseFeeQueryByCourseIdAndYear(eData?.enrollment?.profileId?.studentYear, eData?.enrollment?.courseId?._id);
@@ -20,6 +21,15 @@ const Page = () => {
 
     if (eData && tfData) {
       if (eData.enrollment && tfData.tFee) {
+        if (tfData?.tFee?.regOrMiscWithOldAndNew) {
+          if (eData?.enrollment?.studentStatus.toLowerCase() === 'new student' || eData.enrollment.studentStatus.toLowerCase() === 'transfer student') {
+            setRegMisc(tfData?.tFee?.regOrMiscNew);
+          } else {
+            setRegMisc(tfData?.tFee?.regOrMisc);
+          }
+        } else {
+          setRegMisc(tfData?.tFee?.regOrMisc);
+        }
         setIsPageLoading(false);
         return;
       }
@@ -62,7 +72,7 @@ const Page = () => {
                     <span className='font-semibold'>Departmental Fee</span>: ₱{tfData?.tFee?.departmentalFee}
                   </span>
                   <span className='uppercase text-[16px]'>
-                    <span className='font-semibold'>Insurance Feeyear</span>: ₱{tfData?.tFee?.insuranceFee}
+                    <span className='font-semibold'>Insurance Fee</span>: ₱{tfData?.tFee?.insuranceFee}
                   </span>
                   <span className='uppercase text-[16px]'>
                     <span className='font-semibold'>SSG Fee</span>: ₱{tfData?.tFee?.ssgFee}
@@ -85,7 +95,7 @@ const Page = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {tfData?.tFee?.regOrMisc.map((row: any, index: any) => (
+                    {regMisc?.map((row: any, index: any) => (
                       <TableRow key={index}>
                         <TableCell className='px-4 py-2'>{row.name}</TableCell>
                         <TableCell className='px-4 py-2'>₱{Number(row?.amount).toFixed(2)}</TableCell>

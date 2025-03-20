@@ -13,7 +13,9 @@ export interface ICourseFee extends Document {
   year: string;
   schoolYear: string;
   ojtFee: string;
+  regOrMiscWithOldAndNew: boolean;
   regOrMisc: any;
+  regOrMiscNew: any;
 }
 
 const schema = new Schema<ICourseFee>(
@@ -33,7 +35,14 @@ const schema = new Schema<ICourseFee>(
     ojtFee: { type: String },
     year: { type: String },
     schoolYear: { type: String },
+    regOrMiscWithOldAndNew: { type: Boolean, default: false },
     regOrMisc: [
+      {
+        name: { type: String },
+        amount: { type: String },
+      },
+    ],
+    regOrMiscNew: [
       {
         name: { type: String },
         amount: { type: String },

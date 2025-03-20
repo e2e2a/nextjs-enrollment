@@ -52,11 +52,24 @@ const handleCategoryCollege = async (data: any) => {
       regOrMisc.amount = Number(regOrMisc.amount).toFixed(2);
     }
 
+    if (data?.regOrMiscWithOldAndNew) {
+      for (const regOrMisc of data.regMiscRowsNew) {
+        const regex = /^\d+(\.\d{1,2})?$/;
+        if (!regOrMisc.name || !regOrMisc.amount) return { error: 'Please fill all fields in Reg/Misc Fee', status: '400' };
+        const nameOccurrences = data.regMiscRows.filter((row: any) => row.name === regOrMisc.name).length;
+        if (nameOccurrences > 1) return { error: `Duplicate name found in REG/MISC: ${regOrMisc.name.toUpperCase()}`, status: '400' };
+        if (!regex.test(regOrMisc.amount)) return { error: 'Invalid amount in Reg/Misc Fee', status: '400' };
+        regOrMisc.amount = Number(regOrMisc.amount).toFixed(2);
+      }
+    }
+
     const dataToStore = {
       courseId: course._id,
       category: course.category,
       year: parse.data.year,
       regOrMisc: data.regMiscRows,
+      regOrMiscWithOldAndNew: data?.regOrMiscWithOldAndNew,
+      ...(data?.regOrMiscWithOldAndNew ? { regOrMiscNew: data.regMiscRowsNew } : {}),
       insuranceFee: Number(parse.data.insuranceFee).toFixed(2),
       ojtFee: Number(parse.data.ojtFee).toFixed(2),
       ratePerUnit: Number(parse.data.ratePerUnit).toFixed(2),

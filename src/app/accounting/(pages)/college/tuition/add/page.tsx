@@ -20,8 +20,10 @@ import { studentYearData } from '@/constant/enrollment';
 const Page = () => {
   const [isPending, setIsPending] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
-  const { data: cData, isLoading, error } = useCourseQueryByCategory('College');
+  const [regOrMiscWithOldAndNew, setRegOrMiscWithOldAndNew] = useState<boolean>(false);
+  const { data: cData, error } = useCourseQueryByCategory('College');
   const [regMiscRows, setRegMiscRows] = useState<any[]>([{ name: '', amount: '' }]);
+  const [regMiscRowsNew, setRegMiscRowsNew] = useState<any[]>([{ name: '', amount: '' }]);
 
   useEffect(() => {
     if (error || !cData) return;
@@ -52,6 +54,7 @@ const Page = () => {
 
   const onSubmit: SubmitHandler<z.infer<typeof CourseFeeValidator>> = async (data) => {
     if (regMiscRows.length === 0) return makeToastError('Please Provide Reg/Misc Fee');
+    if (regOrMiscWithOldAndNew && regMiscRowsNew.length === 0) return makeToastError('Please Provide Reg/Misc Fee');
     setIsPending(true);
     for (const row of regMiscRows) {
       const regex = /^\d+(\.\d{1,2})?$/;
@@ -67,9 +70,27 @@ const Page = () => {
       }
     }
 
+    if (regOrMiscWithOldAndNew) {
+      for (const row of regMiscRowsNew) {
+        const regex = /^\d+(\.\d{1,2})?$/;
+        if (!row.name || !row.amount) {
+          setIsPending(false);
+          makeToastError('Please ensure to fill amount and name in Reg/Misc Fee');
+          return;
+        }
+        if (!regex.test(row.amount)) {
+          setIsPending(false);
+          makeToastError('Invalid amount in Reg/Misc Fee');
+          return;
+        }
+      }
+    }
+
     const dataa = {
       category: 'College',
       regMiscRows: regMiscRows,
+      regMiscRowsNew: regMiscRowsNew,
+      regOrMiscWithOldAndNew: regOrMiscWithOldAndNew,
       ...data,
     };
 
@@ -81,6 +102,8 @@ const Page = () => {
           case 203:
             form.reset();
             setRegMiscRows([{ type: '', name: '', amount: '' }]);
+            setRegMiscRowsNew([{ type: '', name: '', amount: '' }]);
+            setRegOrMiscWithOldAndNew(false);
             makeToastSucess(res.message);
             return;
           default:
@@ -114,7 +137,7 @@ const Page = () => {
               <form method='post' onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-4'>
                 <CardContent className='w-full'>
                   <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                    <SelectInput name={'courseCode'} selectItems={cData.courses} form={form} label={'Course:'} placeholder={'Select Course'} />
+                    <SelectInput name={'courseCode'} selectItems={cData?.courses} form={form} label={'Course:'} placeholder={'Select Course'} />
                     <SelectInput name={'year'} selectItems={studentYearData} form={form} label={'Year:'} placeholder={'Select Year'} />
                     {/* <SelectInput name={'semester'} selectItems={studentSemesterData} form={form} label={'Semester:'} placeholder={'Select Semester'} /> */}
                     <Input name={'ratePerUnit'} type={'text'} form={form} label={'Rate Per Unit:'} classNameInput={'uppercase'} />
@@ -139,12 +162,36 @@ const Page = () => {
                 <div className=''>
                   <div className='flex flex-col w-full px-7'>
                     <h1 className='text-lg font-semibold xs:text-xl sm:text-2xl tracking-tight w-full text-start uppercase '>Reg/Misc Fees</h1>
-                    <p className='text-sm text-muted-foreground mt-2'>Note: Down payment is handled as a separate under Reg/Misc Fee. This allows flexibility in adjusting the down payment amount based on the student&apos;s specific requirements.</p>
+                    <p className='text-sm text-muted-foreground mt-2'>
+                      Note: Down payment is handled as a separate under Reg/Misc Fee. This allows flexibility in adjusting the down payment amount based on the student&apos;s specific requirements and this downpayment will apply to both old and new students.
+                      If you configure the bottom Reg/Misc, it means there are now two Reg/Misc setups. The bottom one is for new students, while the top one remains for old students. If not, the top Reg/Misc will apply to both new and old students.
+                    </p>
                     <div className='grid grid-cols-2 my-5'>
                       <Input name={'downPayment'} type={'text'} form={form} label={'Down Payment:'} classNameInput={''} />
                     </div>
                   </div>
-                  <RegOrMisc regMiscRows={regMiscRows} setRegMiscRows={setRegMiscRows} />
+                  <div className=' w-full flex justify-center items-center'>
+                    <Button
+                      type='button'
+                      onClick={() => {
+                        setRegOrMiscWithOldAndNew(!regOrMiscWithOldAndNew);
+                        setRegMiscRowsNew([{ name: '', amount: '' }]);
+                      }}
+                      className={`${regOrMiscWithOldAndNew ? 'bg-red  hover:bg-opacity-90' : 'bg-blue-500 hover:bg-blue-700'} text-white font-semibold tracking-wide`}
+                    >
+                      {regOrMiscWithOldAndNew && 'Cancel'} Setup Reg/Misc for New Student
+                    </Button>
+                  </div>
+                  <div className='w-full'>
+                    {regOrMiscWithOldAndNew && <span className='text-sm font-bold ml-7 uppercase'>Old Student</span>}
+                    <RegOrMisc regMiscRows={regMiscRows} setRegMiscRows={setRegMiscRows} />
+                  </div>
+                  {regOrMiscWithOldAndNew ? (
+                    <div className='w-full'>
+                      {regOrMiscWithOldAndNew && <span className='text-sm font-bold ml-7 uppercase'>New Student</span>}
+                      <RegOrMisc regMiscRows={regMiscRowsNew} setRegMiscRows={setRegMiscRowsNew} />
+                    </div>
+                  ) : null}
                 </div>
                 <div className=''>
                   <div className='flex flex-col items-start w-full justify-center mt-10 mb-10 px-7'>

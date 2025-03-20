@@ -160,6 +160,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         const aFormatted = parseFloat((lab * tfData?.tFee?.ratePerLab).toFixed(2));
         const bFormatted = parseFloat((unit * tfData?.tFee?.ratePerUnit).toFixed(2));
         const cFormatted = parseFloat(tfData?.tFee?.regOrMisc.reduce((acc: number, tFee: any) => acc + Number(tFee.amount), 0).toFixed(2));
+        const ccFormatted = parseFloat(tfData?.tFee?.regOrMiscNew?.reduce((acc: number, tFee: any) => acc + Number(tFee.amount), 0).toFixed(2));
         const dFormatted = Number(tfData?.tFee?.downPayment || 0);
 
         let addcwtsOrNstpFee = false;
@@ -204,8 +205,22 @@ const Page = ({ params }: { params: { id: string } }) => {
         }
 
         const a = cFormatted + dFormatted;
-        setRegMiscTotal(a);
         let RegMiscTotal = a;
+        const totalOfNew = ccFormatted + dFormatted;
+
+        if (tfData?.tFee?.regOrMiscWithOldAndNew) {
+          if (data?.enrollmentRecord?.studentStatus.toLowerCase() === 'new student' || data?.enrollmentRecord?.studentStatus.toLowerCase() === 'transfer student') {
+            setRegMiscTotal(totalOfNew);
+            RegMiscTotal = totalOfNew;
+          } else {
+            setRegMiscTotal(a);
+            RegMiscTotal = a;
+          }
+        } else {
+          setRegMiscTotal(a);
+          RegMiscTotal = a;
+        }
+
         if (isScholarshipStart && data?.enrollmentRecord?.profileId?.scholarshipId?.exemptedFees.includes('Miscellaneous Fees')) {
           if (data?.enrollmentRecord?.profileId?.scholarshipId?.type === 'percentage') {
             const b = parseFloat((a * Number(data?.enrollmentRecord?.profileId?.scholarshipId?.discountPercentage)).toFixed(2));
@@ -295,13 +310,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                             </div>
                             <CardHeader className='space-y-3'>
                               <CardTitle className=''>
-                                <div className='flex justify-between items-center'>
+                                <div className='flex justify-start items-start'>
                                   <span className='text-lg xs:text-2xl font-semibold sm:text-3xl tracking-tight w-full text-start uppercase'>Summary</span>
-                                  <Link href={`/fee/course`} className='hover:underline hover:text-blue-600 text-blue-500 space-y-2'>
-                                    <Button size={'sm'} type='button' className='w-auto flex gap-2'>
-                                      View More Details 👉
-                                    </Button>
-                                  </Link>
                                 </div>
                               </CardTitle>
                               <CardDescription className='text-xs sm:text-sm'>Department: {tfData?.tFee?.course}</CardDescription>

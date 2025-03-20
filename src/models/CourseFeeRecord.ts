@@ -14,7 +14,9 @@ export interface ICourseFeeRecord extends Document {
   year: string;
   semester: string;
   downPayment: string;
+  regOrMiscWithOldAndNew: boolean;
   regOrMisc: any;
+  regOrMiscNew: any;
   schoolYear: any;
 }
 
@@ -34,9 +36,16 @@ const schema = new Schema<ICourseFeeRecord>(
     year: { type: String },
     semester: { type: String },
     schoolYear: { type: String },
+    regOrMiscWithOldAndNew: { type: Boolean, default: false },
     regOrMisc: [
       {
         type: { type: String },
+        name: { type: String },
+        amount: { type: String },
+      },
+    ],
+    regOrMiscNew: [
+      {
         name: { type: String },
         amount: { type: String },
       },
