@@ -144,7 +144,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       // if (isScholarshipStart && data?.enrollmentRecord?.profileId?.scholarshipId?.discountPercentage) a = Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 - Math.round(Number(total) * 100) / 100;
       setShowBalance(0);
     }
-  }, [total, paymentOfFullPayment, showPaymentOfFullPayment, paymentOfDownPayment, paymentOfPrelim, paymentOfMidterm, paymentOfSemiFinal, paymentOfFinal, showBalance, data, isScholarshipStart]);
+  }, [total, paymentOfFullPayment, totalWithoutDownPayment, showPaymentOfFullPayment, paymentOfDownPayment, paymentOfPrelim, paymentOfMidterm, paymentOfSemiFinal, paymentOfFinal, showBalance, data, isScholarshipStart]);
 
   useEffect(() => {
     if (isTFError || !tfData) return;
@@ -249,7 +249,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     setAdditionalTotal(additionPayment || 0);
     if (showPaymentOfFullPayment) setAdditionalTotal(0);
-  }, [tfData, srData, showPaymentOfFullPayment, showPaymentOfDepartmental, showPaymentOfSSG]);
+  }, [tfData, srData, showPaymentOfFullPayment, showPaymentOfDepartmental, showPaymentOfDownPayment, showPaymentOfSSG]);
 
   const insurancePaidInThisSemester = srData?.insurancePaymentSemester?.toLowerCase() === data?.enrollmentRecord?.studentSemester?.toLowerCase();
   const ssgPaidInThisSemester =
