@@ -134,7 +134,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       // const a = Math.round((Number(paymentOfFullPayment?.taxes?.amount) + Number(total) * 0.1) * 100) / 100 - Math.round(Number(total) * 100) / 100;
       setShowBalance(0);
     }
-  }, [total, paymentOfFullPayment, showPaymentOfFullPayment, paymentOfDownPayment, paymentOfPrelim, paymentOfMidterm, paymentOfSemiFinal, paymentOfFinal, showBalance]);
+  }, [total, paymentOfFullPayment, totalWithoutDownPayment, showPaymentOfFullPayment, paymentOfDownPayment, paymentOfPrelim, paymentOfMidterm, paymentOfSemiFinal, paymentOfFinal, showBalance]);
 
   useEffect(() => {
     if (isTFError || !tfData) return;
@@ -240,7 +240,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     setAdditionalTotal(additionPayment || 0);
     if (showPaymentOfFullPayment) setAdditionalTotal(0);
-  }, [tfData, srData, showPaymentOfFullPayment, showPaymentOfDepartmental, showPaymentOfSSG]);
+  }, [tfData, srData, showPaymentOfFullPayment, showPaymentOfDepartmental, showPaymentOfDownPayment, showPaymentOfSSG]);
 
   const insurancePaidInThisSemester = srData?.insurancePaymentSemester?.toLowerCase() === data?.enrollment?.studentSemester?.toLowerCase();
   const ssgPaidInThisSemester =
