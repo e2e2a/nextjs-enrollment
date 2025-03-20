@@ -47,7 +47,11 @@ const Page = ({ params }: { params: { id: string } }) => {
   //full payment exclude all terms payment and downpayment
   const paymentOfFullPayment = srData?.studentReceipt.find((r: any) => r.type.toLowerCase() === 'fullpayment');
   let showPaymentOfFullPayment = false;
-  showPaymentOfFullPayment = paymentOfFullPayment && Math.round((Number(paymentOfFullPayment?.taxes?.amount) + Number(total) * 0.1) * 100) / 100 === Math.round(Number(total) * 100) / 100;
+  const totalofPerTermFullPayment = Math.round(Number(total - total * 0.1) * 100) / 100;
+  showPaymentOfFullPayment =
+    paymentOfFullPayment &&
+    Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 >= Math.round(Number(totalofPerTermFullPayment + Number(tfData?.tFee?.ssgFee || 0) + Number(tfData?.tFee?.departmentalFee || 0) + Number(tfData?.tFee?.insuranceFee || 0)) * 100) / 100;
+
   const scholarship = isScholarshipApplicable(data?.enrollment?.studentYear, data?.enrollment?.studentSemester, data?.enrollment?.profileId?.scholarshipId);
   const isScholarshipStart = scholarship && data?.enrollment?.profileId?.scholarshipId && data?.enrollment?.profileId?.scholarshipId;
   if (isScholarshipStart) showPaymentOfFullPayment = paymentOfFullPayment && Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 === Math.round(Number(total) * 100) / 100;
@@ -61,7 +65,8 @@ const Page = ({ params }: { params: { id: string } }) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
   const a = Number(paymentOfPrelim) > 0 && Number(paymentOfPrelim) !== Number(paymentPerTerm);
-  const showPaymentOfPrelim = paymentOfPrelim && (Number(paymentOfPrelim) - Number(paymentPerTerm)).toFixed(2) >= (0).toFixed(2);
+  const prelimPayment = Number(paymentOfPrelim) - Number(paymentPerTerm);
+  const showPaymentOfPrelim = paymentOfPrelim && prelimPayment >= 0;
 
   const paymentOfMidterm = srData?.studentReceipt
     ?.filter((r: any) => r.type.toLowerCase() === 'midterm')
@@ -69,7 +74,8 @@ const Page = ({ params }: { params: { id: string } }) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
   const b = Number(paymentOfMidterm) > 0 && Number(paymentOfMidterm) !== Number(paymentPerTerm);
-  const showPaymentOfMidterm = paymentOfMidterm && (Number(paymentOfMidterm) - Number(paymentPerTerm)).toFixed(2) >= (0).toFixed(2);
+  const midtermPayment = Number(paymentOfMidterm) - Number(paymentPerTerm);
+  const showPaymentOfMidterm = paymentOfMidterm && midtermPayment >= 0;
 
   const paymentOfSemiFinal = srData?.studentReceipt
     ?.filter((r: any) => r.type.toLowerCase() === 'semi-final')
@@ -77,7 +83,8 @@ const Page = ({ params }: { params: { id: string } }) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
   const c = Number(paymentOfSemiFinal) > 0 && Number(paymentOfSemiFinal) !== Number(paymentPerTerm);
-  const showPaymentOfSemiFinal = paymentOfSemiFinal && (Number(paymentOfSemiFinal) - Number(paymentPerTerm)).toFixed(2) >= (0).toFixed(2);
+  const semiFinalPayment = Number(paymentOfSemiFinal) - Number(paymentPerTerm);
+  const showPaymentOfSemiFinal = paymentOfSemiFinal && semiFinalPayment >= 0;
 
   const paymentOfFinal = srData?.studentReceipt
     ?.filter((r: any) => r.type.toLowerCase() === 'final')
@@ -86,7 +93,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     }, 0);
   const final = parseFloat((total - tfData?.tFee?.downPayment - 3 * paymentPerTerm).toFixed(2));
   const d = Number(paymentOfFinal) > 0 && Number(paymentOfFinal) !== Number(final);
-  const showPaymentOfFinal = paymentOfFinal && (Number(paymentOfFinal) - Number(final)).toFixed(2) >= (0).toFixed(2);
+  const finalPayment = Number(paymentOfFinal) - Number(final);
+  const showPaymentOfFinal = paymentOfFinal && finalPayment >= 0;
 
   // Departmental Payment
   const paymentOfDepartmental = srData?.studentReceipt
@@ -94,7 +102,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
-  const showPaymentOfDepartmental = paymentOfDepartmental && (Number(paymentOfDepartmental) - Number(tfData?.tFee?.departmentalFee)).toFixed(2) >= (0).toFixed(2);
+  const departmentalPayment = Number(paymentOfDepartmental) - Number(tfData?.tFee?.departmentalFee);
+  const showPaymentOfDepartmental = paymentOfDepartmental && departmentalPayment >= 0;
 
   // Insurance Payment
   const paymentOfInsurance = srData?.studentReceipt
@@ -102,7 +111,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
-  const showPaymentOfInsurance = paymentOfInsurance && (Number(paymentOfInsurance) - Number(tfData?.tFee?.insuranceFee)).toFixed(2) >= (0).toFixed(2);
+  const insurancePayment = Number(paymentOfInsurance) - Number(tfData?.tFee?.insuranceFee);
+  const showPaymentOfInsurance = paymentOfInsurance && insurancePayment >= 0;
 
   // SSG Payment
   const paymentOfSSG = srData?.studentReceipt
@@ -110,10 +120,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
-  const showPaymentOfSSG = paymentOfSSG && (Number(paymentOfSSG) - Number(tfData?.tFee?.ssgFee)).toFixed(2) >= (0).toFixed(2);
-
-  // boolean for all required payments
-  const requiredPaymentsFulfill = showPaymentOfDownPayment && showPaymentOfSSG && showPaymentOfInsurance && showPaymentOfDepartmental;
+  const ssgPayment = Number(paymentOfSSG) - Number(tfData?.tFee?.ssgFee);
+  const showPaymentOfSSG = paymentOfSSG && ssgPayment >= 0;
 
   useEffect(() => {
     if (!showPaymentOfFullPayment) {
@@ -123,8 +131,8 @@ const Page = ({ params }: { params: { id: string } }) => {
       const remainingBalance = Math.round((totalBalance - paidAmount) * 100) / 100;
       setShowBalance(remainingBalance);
     } else {
-      const a = Math.round((Number(paymentOfFullPayment?.taxes?.amount) + Number(total) * 0.1) * 100) / 100 - Math.round(Number(total) * 100) / 100;
-      setShowBalance(a);
+      // const a = Math.round((Number(paymentOfFullPayment?.taxes?.amount) + Number(total) * 0.1) * 100) / 100 - Math.round(Number(total) * 100) / 100;
+      setShowBalance(0);
     }
   }, [total, paymentOfFullPayment, showPaymentOfFullPayment, paymentOfDownPayment, paymentOfPrelim, paymentOfMidterm, paymentOfSemiFinal, paymentOfFinal, showBalance]);
 
@@ -229,8 +237,19 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (!srData?.ssgPayment && showPaymentOfSSG) additionPayment = parseFloat((additionPayment - tfData?.tFee?.ssgFee).toFixed(2));
     if (srData?.insurancePayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.insuranceFee).toFixed(2));
     if (srData?.ssgPayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.ssgFee).toFixed(2));
+
     setAdditionalTotal(additionPayment || 0);
-  }, [tfData, srData, showPaymentOfDepartmental, showPaymentOfSSG]);
+    if (showPaymentOfFullPayment) setAdditionalTotal(0);
+  }, [tfData, srData, showPaymentOfFullPayment, showPaymentOfDepartmental, showPaymentOfSSG]);
+
+  const insurancePaidInThisSemester = srData?.insurancePaymentSemester?.toLowerCase() === data?.enrollment?.studentSemester?.toLowerCase();
+  const ssgPaidInThisSemester =
+    (srData?.ssgYear1?.toLowerCase() === data?.enrollment?.studentYear?.toLowerCase() && srData?.ssgSemester1?.toLowerCase() === data?.enrollment?.studentSemester?.toLowerCase()) ||
+    (srData?.ssgYear2?.toLowerCase() === data?.enrollment?.studentYear?.toLowerCase() && srData?.ssgSemester2?.toLowerCase() === data?.enrollment?.studentSemester?.toLowerCase());
+  // boolean for all required payments
+  const myBooleanForInsurance = srData?.insurancePayment || insurancePaidInThisSemester;
+  const myBooleanForSSG = srData?.ssgPayment || ssgPaidInThisSemester;
+  const requiredPaymentsFulfill = showPaymentOfDownPayment && myBooleanForSSG && myBooleanForInsurance && showPaymentOfDepartmental;
 
   const profile = data?.enrollment?.profileId;
   const name = `${profile?.lastname ? profile?.lastname + ',' : ''} ${profile?.firstname ?? ''} ${profile?.middlename ?? ''}${profile?.extensionName ? ', ' + profile?.extensionName : ''}`
@@ -406,7 +425,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <span className='text-xs sm:text-sm w-full text-start sm:text-end'>Enrollment Status: {data?.enrollment?.enrollStatus} </span>
                       </CardDescription>
                       <div className=''>
-                        {!isWithdrawn && !showPaymentOfFullPayment && !showPaymentOfDownPayment && !showPaymentOfPrelim && !showPaymentOfMidterm && !showPaymentOfSemiFinal && !showPaymentOfFinal && (
+                        {!isWithdrawn && !requiredPaymentsFulfill && !showPaymentOfFullPayment && !showPaymentOfDownPayment && !showPaymentOfPrelim && !showPaymentOfMidterm && !showPaymentOfSemiFinal && !showPaymentOfFinal && (
                           <>
                             {data?.enrollment?.profileId?.scholarshipId?.type.toLowerCase() !== 'fixed' ? (
                               <div className='flex flex-col justify-center items-center w-full border-[0.5px] rounded-lg px-5 py-3'>
@@ -489,11 +508,13 @@ const Page = ({ params }: { params: { id: string } }) => {
                             </TableHeader>
                             <TableBody>
                               <TableRow>
-                                <TableCell className={`px-4 py-2 ${showPaymentOfDownPayment && 'text-green-400 line-through'}`}>Down Payment</TableCell>
-                                <TableCell className={`px-4 py-2 ${showPaymentOfDownPayment && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
-                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>{showPaymentOfDownPayment ? 'Paid' : 'unpaid'}</TableCell>
-                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
-                                  {showPaymentOfDownPayment
+                                <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDownPayment) && 'text-green-400 line-through'}`}>Down Payment</TableCell>
+                                <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDownPayment) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
+                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
+                                  {showPaymentOfFullPayment || showPaymentOfDownPayment ? 'Paid' : 'unpaid'}
+                                </TableCell>
+                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
+                                  {showPaymentOfFullPayment || showPaymentOfDownPayment
                                     ? 'Completed'
                                     : !isWithdrawn && (
                                         <SettleTermPayment
@@ -509,13 +530,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 </TableCell>
                               </TableRow>
                               <TableRow>
-                                <TableCell className={`px-4 py-2 ${showPaymentOfDepartmental && 'text-green-400 line-through'}`}>Departmental Fee</TableCell>
-                                <TableCell className={`px-4 py-2 ${showPaymentOfDepartmental && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.departmentalFee).toFixed(2)}</TableCell>
-                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>{showPaymentOfDepartmental ? 'Paid' : 'unpaid'}</TableCell>
-                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>
-                                  {showPaymentOfDepartmental ? (
+                                <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDepartmental) && 'text-green-400 line-through'}`}>Departmental Fee</TableCell>
+                                <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDepartmental) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.departmentalFee).toFixed(2)}</TableCell>
+                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>
+                                  {showPaymentOfFullPayment || showPaymentOfFullPayment || showPaymentOfDepartmental ? 'Paid' : 'unpaid'}
+                                </TableCell>
+                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>
+                                  {showPaymentOfFullPayment || showPaymentOfDepartmental ? (
                                     'Completed'
-                                  ) : !isWithdrawn && (showPaymentOfFinal || showPaymentOfDownPayment) ? (
+                                  ) : !isWithdrawn && showPaymentOfDownPayment ? (
                                     <SettleTermPayment
                                       enrollment={data?.enrollment}
                                       tfData={tfData?.tFee}
@@ -530,17 +553,19 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   )}
                                 </TableCell>
                               </TableRow>
-                              {!srData?.insurancePayment && (
+                              {(!srData?.insurancePayment || insurancePaidInThisSemester) && (
                                 <TableRow>
-                                  <TableCell className={`px-4 py-2 ${(srData?.insurancePayment || showPaymentOfInsurance) && 'text-green-400 line-through'}`}>Insurance Fee</TableCell>
-                                  <TableCell className={`px-4 py-2 ${(srData?.insurancePayment || showPaymentOfInsurance) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.insuranceFee).toFixed(2)}</TableCell>
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.insurancePayment || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
-                                    {srData?.insurancePayment || showPaymentOfInsurance ? 'Paid' : 'unpaid'}
+                                  <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || insurancePaidInThisSemester || srData?.insurancePayment || showPaymentOfInsurance) && 'text-green-400 line-through'}`}>Insurance Fee</TableCell>
+                                  <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || insurancePaidInThisSemester || srData?.insurancePayment || showPaymentOfInsurance) && 'text-green-400 line-through'}`}>
+                                    ₱{Number(tfData?.tFee?.insuranceFee).toFixed(2)}
                                   </TableCell>
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.insurancePayment || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
-                                    {srData?.insurancePayment || showPaymentOfInsurance ? (
+                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || insurancePaidInThisSemester || srData?.insurancePayment || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
+                                    {srData?.insurancePayment || showPaymentOfFullPayment || insurancePaidInThisSemester || showPaymentOfInsurance ? 'Paid' : 'unpaid'}
+                                  </TableCell>
+                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || insurancePaidInThisSemester || srData?.insurancePayment || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
+                                    {srData?.insurancePayment || showPaymentOfFullPayment || insurancePaidInThisSemester || showPaymentOfInsurance ? (
                                       'Completed'
-                                    ) : showPaymentOfFinal || showPaymentOfDownPayment ? (
+                                    ) : showPaymentOfDownPayment ? (
                                       <SettleTermPayment
                                         enrollment={data?.enrollment}
                                         tfData={tfData?.tFee}
@@ -556,15 +581,17 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   </TableCell>
                                 </TableRow>
                               )}
-                              {!srData?.ssgPayment && (
+                              {(!srData?.ssgPayment || ssgPaidInThisSemester) && (
                                 <TableRow>
-                                  <TableCell className={`px-4 py-2 ${(srData?.ssgPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>SSG Fee</TableCell>
-                                  <TableCell className={`px-4 py-2 ${(srData?.ssgPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.ssgFee).toFixed(2)}</TableCell>
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>{srData?.ssgPayment || showPaymentOfSSG ? 'Paid' : 'unpaid'}</TableCell>
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>
-                                    {srData?.ssgPayment || showPaymentOfSSG ? (
+                                  <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || ssgPaidInThisSemester || srData?.ssgPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>SSG Fee</TableCell>
+                                  <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || ssgPaidInThisSemester || srData?.ssgPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.ssgFee).toFixed(2)}</TableCell>
+                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || ssgPaidInThisSemester || srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>
+                                    {showPaymentOfFullPayment || srData?.ssgPayment || ssgPaidInThisSemester || showPaymentOfSSG ? 'Paid' : 'unpaid'}
+                                  </TableCell>
+                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || ssgPaidInThisSemester || srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>
+                                    {showPaymentOfFullPayment || srData?.ssgPayment || ssgPaidInThisSemester || showPaymentOfSSG ? (
                                       'Completed'
-                                    ) : !isWithdrawn && (showPaymentOfFinal || showPaymentOfDownPayment) ? (
+                                    ) : !isWithdrawn && showPaymentOfDownPayment ? (
                                       <SettleTermPayment
                                         enrollment={data?.enrollment}
                                         tfData={tfData?.tFee}
@@ -608,7 +635,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfPrelim && 'text-green-400 line-through'}`}>Prelim</TableCell>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfPrelim && 'text-green-400 line-through'}`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfPrelim ? 'text-green-400 line-through' : 'text-red'}`}>{showPaymentOfPrelim ? 'Paid' : 'unpaid'}</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfPrelim ? 'text-green-400' : 'text-red'}`}>{showPaymentOfPrelim ? 'Paid' : 'unpaid'}</TableCell>
                                     <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfPrelim ? 'text-green-400' : 'text-red'}`}>
                                       {showPaymentOfPrelim ? (
                                         'Completed'
@@ -631,7 +658,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfMidterm && 'text-green-400 line-through'}`}>Midterm</TableCell>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfMidterm && 'text-green-400 line-through'}`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfMidterm ? 'text-green-400 line-through' : 'text-red'}`}>{showPaymentOfMidterm ? 'Paid' : 'unpaid'}</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfMidterm ? 'text-green-400' : 'text-red'}`}>{showPaymentOfMidterm ? 'Paid' : 'unpaid'}</TableCell>
                                     <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfMidterm ? 'text-green-400' : 'text-red'}`}>
                                       {showPaymentOfMidterm ? (
                                         'Completed'
@@ -654,7 +681,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfSemiFinal && 'text-green-400 line-through'}`}>Semi-final</TableCell>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfSemiFinal && 'text-green-400 line-through'}`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfSemiFinal ? 'text-green-400 line-through' : 'text-red'}`}>{showPaymentOfSemiFinal ? 'Paid' : 'unpaid'}</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfSemiFinal ? 'text-green-400' : 'text-red'}`}>{showPaymentOfSemiFinal ? 'Paid' : 'unpaid'}</TableCell>
                                     <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfSemiFinal ? 'text-green-400' : 'text-red'}`}>
                                       {showPaymentOfSemiFinal ? (
                                         'Completed'
@@ -677,7 +704,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfFinal && 'text-green-400 line-through'}`}>Final</TableCell>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfFinal && 'text-green-400 line-through'}`}>₱{final.toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFinal ? 'text-green-400 line-through' : 'text-red'}`}>{showPaymentOfFinal ? 'Paid' : 'unpaid'}</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFinal ? 'text-green-400' : 'text-red'}`}>{showPaymentOfFinal ? 'Paid' : 'unpaid'}</TableCell>
                                     <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFinal ? 'text-green-400' : 'text-red'}`}>
                                       {showPaymentOfFinal ? (
                                         'Completed'
@@ -702,33 +729,27 @@ const Page = ({ params }: { params: { id: string } }) => {
                               {showPaymentOfFullPayment && (
                                 <>
                                   <TableRow>
-                                    <TableCell className={`px-4 py-2 text-green-400 line-through`}>Down Payment</TableCell>
-                                    <TableCell className={`px-4 py-2 text-green-400 line-through`}>₱{Number(tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Paid</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Completed</TableCell>
-                                  </TableRow>
-                                  <TableRow>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>Prelim</TableCell>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400 line-through`}>Paid</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Paid</TableCell>
                                     <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Completed</TableCell>
                                   </TableRow>
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>Midterm</TableCell>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400 line-through`}>Paid</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Paid</TableCell>
                                     <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Completed</TableCell>
                                   </TableRow>
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>Semi-final</TableCell>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400 line-through`}>Paid</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Paid</TableCell>
                                     <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Completed</TableCell>
                                   </TableRow>
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>Final</TableCell>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>₱{(((total - tfData?.tFee?.downPayment - 3 * paymentPerTerm) * 100) / 100).toFixed(2)}</TableCell>
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400 line-through`}>Paid</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Paid</TableCell>
                                     <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Completed</TableCell>
                                   </TableRow>
                                 </>

@@ -10,6 +10,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { ApiError, Client, Environment, LogLevel, OrdersController } from '@paypal/paypal-server-sdk';
 import { handleAccountingRole } from './helpers/cash';
 import { getEnrollmentRecordById } from '@/services/enrollmentRecord';
+import { getCourseFeeByCourseId } from '@/services/courseFee';
+import { getCourseByCourseCode } from '@/services/course';
 
 /**
  * any authenticated user
@@ -27,36 +29,101 @@ export const createStudentReceiptAction = async (data: any) => {
     if (!setup || !setup.enrollmentTertiary || !setup.enrollmentTertiary.schoolYear) return { error: 'Enrollment has not started yet.', status: 400 };
     data.schoolYear = setup.enrollmentTertiary.schoolYear;
 
-    const a = await checkRole(session.user, data);
+    const a = await checkRole(session.user, data, setup);
     return a;
   });
 };
 
-const checkRole = async (user: any, data: any) => {
+const checkRole = async (user: any, data: any, setup: any) => {
   return tryCatch(async () => {
     let b;
-    switch (user.role) {
-      case 'STUDENT':
-        b = await handleStudentRole(user, data);
-        break;
-      case 'ACCOUNTING':
-        b = await handleAccountingRole(user, data);
-        break;
-      default:
-        return { error: 'Forbidden.', status: 403 };
-    }
-    return b;
-  });
-};
-
-const handleStudentRole = async (user: any, data: any) => {
-  return tryCatch(async () => {
     const studentProfile = await getStudentProfileById(data.studentId);
     if (!studentProfile) {
       // await refundPayment(data.captureId, data.amount);
       return { error: 'Your information false, Payment has been refunded.', status: 403 };
     }
-    const checkedDownPayment = await checkPaymentInDownPaymentExceed(user, studentProfile, data);
+    let studentEnrollment;
+    studentEnrollment = await getEnrollmentByProfileId(studentProfile?._id);
+    if (data.request === 'record') studentEnrollment = await getEnrollmentRecordById(data.enrollmentId);
+    if (!studentEnrollment) return { error: 'No Enrollment found', status: 404 };
+    let cFee = null;
+    const course = await getCourseByCourseCode(studentEnrollment.courseCode);
+    cFee = await getCourseFeeByCourseId(studentEnrollment?.courseId?._id);
+    if (data.request === 'record') cFee = await getCourseFeeByCourseId(course?._id);
+    if (!cFee) return { error: 'Course fee not found.', status: 404 };
+
+    switch (user.role) {
+      case 'STUDENT':
+        b = await handleStudentRole(user, data, studentProfile, studentEnrollment);
+        break;
+      case 'ACCOUNTING':
+        b = await handleAccountingRole(user, data, studentProfile, studentEnrollment);
+        break;
+      default:
+        return { error: 'Forbidden.', status: 403 };
+    }
+    if (!b || b.error) return b;
+
+    let studentReceipt;
+    const a = await getStudentReceiptByStudentId(studentProfile._id);
+    studentReceipt = a;
+    const ssgPayment = await checkPaymentOfSSG(studentReceipt);
+    if (!studentEnrollment.studentYear && !studentEnrollment.studentSemester && !studentEnrollment.schoolYear) return { error: 'Invalid inputs', status: 400 };
+    const insurancePayment = await checkPaymentOfInsurance(studentReceipt, studentEnrollment.studentYear, studentEnrollment.schoolYear);
+
+    // this is the insurance space for searching the insurance by semester and year
+    studentReceipt = a.filter(
+      (sr) => sr.year.toLowerCase() === studentEnrollment.studentYear.toLowerCase() && sr.semester.toLowerCase() === studentEnrollment.studentSemester.toLowerCase() && sr.schoolYear.toLowerCase() === studentEnrollment.schoolYear.toLowerCase()
+    );
+
+    // Departmental Payment
+    const paymentOfDownPayment = studentReceipt
+      ?.filter((r: any) => r.type.toLowerCase() === 'downpayment')
+      ?.reduce((total: number, payment: any) => {
+        return total + (Number(payment?.taxes?.amount) || 0);
+      }, 0);
+    const downPayment = Number(paymentOfDownPayment) - Number(cFee?.downPayment || 0);
+    const pymentOfDownPaymentExceed = paymentOfDownPayment && downPayment >= 0;
+
+    // Departmental Payment
+    const paymentOfDepartmental = studentReceipt
+      ?.filter((r: any) => r.type.toLowerCase() === 'departmental')
+      ?.reduce((total: number, payment: any) => {
+        return total + (Number(payment?.taxes?.amount) || 0);
+      }, 0);
+    const departmentalPayment = Number(paymentOfDepartmental) - Number(cFee?.departmentalFee || 0);
+    const paymentOfDepartmentalExceed = paymentOfDepartmental && departmentalPayment >= 0;
+
+    // Insurance Payment
+    // const paymentOfInsurance = studentReceipt
+    //   ?.filter((r: any) => r.type.toLowerCase() === 'insurance')
+    //   ?.reduce((total: number, payment: any) => {
+    //     return total + (Number(payment?.taxes?.amount) || 0);
+    //   }, 0);
+    // const insurancePayment = Number(paymentOfInsurance) - Number(cFee?.insurance || 0);
+    // const showPaymentOfInsurance = paymentOfInsurance && insurancePayment >= 0;
+
+    // SSG Payment
+    const paymentOfSSG = studentReceipt
+      ?.filter((r: any) => r.type.toLowerCase() === 'ssg')
+      ?.reduce((total: number, payment: any) => {
+        return total + (Number(payment?.taxes?.amount) || 0);
+      }, 0);
+    const ssgPaymentCheck = Number(paymentOfSSG) - Number(cFee?.ssgFee || 0);
+    const showPaymentOfSSG = ssgPayment.ssgPayment || (paymentOfSSG && ssgPaymentCheck >= 0);
+
+    const updateData = { payment: true, step: 6 };
+
+    // const asd = await studentReceipt.filter((rs) => rs.type.toLowerCase() === 'downpayment' && rs.schoolYear.toLowerCase() === setup.enrollmentTertiary.schoolYear.toLowerCase());
+    if (studentEnrollment.step === 5 && showPaymentOfSSG && insurancePayment.insurancePayment && pymentOfDownPaymentExceed && paymentOfDepartmentalExceed) await updateEnrollmentById(studentEnrollment._id, updateData);
+
+    return b;
+  });
+};
+
+const handleStudentRole = async (user: any, data: any, studentProfile: any, studentEnrollment: any) => {
+  return tryCatch(async () => {
+    const checkedDownPayment = await checkPaymentInDownPaymentExceed(user, studentProfile, data, studentEnrollment);
     if (!checkedDownPayment || checkedDownPayment.error) {
       // await refundPayment(data.captureId, data.amount);
       return { error: 'Your information false, Payment has been refunded.', status: 403 };
@@ -66,13 +133,8 @@ const handleStudentRole = async (user: any, data: any) => {
   });
 };
 
-const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: any) => {
+const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: any, studentEnrollment: any) => {
   return tryCatch(async () => {
-    let studentEnrollment;
-    studentEnrollment = await getEnrollmentByProfileId(student._id);
-    if (data.request === 'record') studentEnrollment = await getEnrollmentRecordById(data.enrollmentId);
-    if (!studentEnrollment) return { error: 'No Enrollment found', status: 404 };
-
     const d = await checkSellerProtectionStatus(data.orderID);
     if (!d) return { error: 'Sorry we cant find your Payment', message: 'yesyes', status: 200 };
     const seller_protection = d.res.purchase_units[0].payments.captures[0].seller_protection.status;
@@ -106,10 +168,6 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
     if (!createdReceipt) return { error: 'Something went wrong.', status: 500 };
 
     const setup = await getEnrollmentSetupByName('GODOY');
-    const a = await getStudentReceiptByStudentId(data.studentId);
-    const b = await a.filter((rs) => rs.type.toLowerCase() === 'downpayment' && rs.schoolYear.toLowerCase() === setup.enrollmentTertiary.schoolYear.toLowerCase());
-
-    if (studentEnrollment.step === 5 && d.res.purchase_units[0].payments.captures[0].status === 'COMPLETED') await updateEnrollmentById(studentEnrollment._id, { step: 6, payment: true });
 
     return { success: true, message: 'Successful Payment, Receipt has been created.', status: 201 };
   });
@@ -128,7 +186,7 @@ async function getAccessToken() {
   const data = await response.json();
   if (data.error) {
     console.error('Error getting PayPal token:', data.error_description);
-    throw new Error(data.error_description); // Handle error appropriately
+    throw new Error(data.error_description);
   }
 
   return data.access_token;
@@ -170,7 +228,6 @@ async function refundPayment(captureId: string, amount: any) {
 async function checkSellerProtectionStatus(orderID: string) {
   const accessToken = await getAccessToken(); // Get the access token
   const uniqueRequestId = uuidv4();
-  console.log('captureId:', orderID);
   const response = await fetch(`https://api-m.sandbox.paypal.com/v2/checkout/orders/${orderID}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -194,3 +251,27 @@ async function checkSellerProtectionStatus(orderID: string) {
   // console.log(' Successful:', res);
   return { success: true, status: 201, res };
 }
+
+const checkPaymentOfSSG = async (studentReceipt: any) => {
+  return tryCatch(async () => {
+    let ssgPayment = false;
+    const ssgPayment1 = studentReceipt?.filter((r: any) => r.type.toLowerCase() === 'ssg');
+
+    if (ssgPayment1.length >= 2) ssgPayment = true;
+    return { ssgPayment };
+  });
+};
+
+const checkPaymentOfInsurance = async (studentReceipt: any, year: string, schoolYear: string) => {
+  return tryCatch(async () => {
+    const a = studentReceipt.filter((sr: any) => sr?.year.toLowerCase() === year.toLowerCase() && sr?.schoolYear.toLowerCase() === schoolYear.toLowerCase());
+    let insurancePayment = false;
+    const insurancePayment1 = a
+      ?.filter((r: any) => r.type.toLowerCase() === 'insurance')
+      ?.reduce((total: number, payment: any) => {
+        return { amount: total + (Number(payment?.taxes?.amount) || 0), schoolYear: payment.schoolYear };
+      }, 0);
+    if (insurancePayment1) insurancePayment = true;
+    return { insurancePayment };
+  });
+};

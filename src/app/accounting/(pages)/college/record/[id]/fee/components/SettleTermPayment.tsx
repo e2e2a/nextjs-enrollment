@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
@@ -23,9 +23,9 @@ type IProps = {
 
 const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [total, setTotal] = useState(0.0);
   const [amountPayment, setAmountPayment] = useState(0.0);
-  const [amountInput, setAmountInput] = useState(0.0);
-  const [discounted, setDiscounted] = useState(0.0);
+  const [amountInput, setAmountInput] = useState(0);
   const [isPending, setIsPending] = useState(false);
   const [displayPayment, setDisplayPayment] = useState(true);
 
@@ -44,9 +44,11 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
 
     if (tfData) {
       let totalAmountToPay = amountToPay;
-      if (!isScholarshipStart && type.toLowerCase() === 'fullpayment') totalAmountToPay = parseFloat((amountToPay - amountToPay * 0.1).toFixed(2));
+      if (!isScholarshipStart && type === 'fullPayment') totalAmountToPay = parseFloat((amountToPay - amountToPay * 0.1).toFixed(2));
       setAmountPayment(totalAmountToPay);
+      if (type.toLowerCase() === 'fullpayment') totalAmountToPay = totalAmountToPay + Number(tfData?.departmentalFee || 0) + Number(tfData?.ssgFee || 0) + Number(tfData?.insuranceFee || 0);
       setAmountInput(totalAmountToPay);
+      setTotal(totalAmountToPay);
       if (enrollment?.profileId?.scholarshipId?.amount) {
         if (Number(balanceGrant) > 0) {
           if (Number(balanceGrant) <= Number(totalAmountToPay)) setAmountInput(balanceGrant);
@@ -54,7 +56,6 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
           setAmountInput(totalAmountToPay);
         }
       }
-      setDiscounted(totalAmountToPay);
     }
   }, [srData, tfData, enrollment, amountToPay, type, isScholarshipStart, balanceGrant]);
 
@@ -63,6 +64,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
     e.preventDefault();
     if (enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 && Number(balanceGrant) < Number(amountInput)) return makeToastError('Amount exceed on the balance total of scholarship grant amount.');
     if (Number(amountInput) > Number(amountToPay)) return makeToastError('Amount exceed on the total amount to pay.');
+    setIsPending(true);
     const receipt = {
       studentId: enrollment?.profileId?._id,
       enrollmentId: enrollment?._id,
@@ -99,7 +101,9 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
             return;
         }
       },
-      onSettled: () => {},
+      onSettled: () => {
+        setIsPending(false);
+      },
     });
   };
 
@@ -123,7 +127,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
             <Icons.close className='h-4 w-4 cursor-pointer' onClick={() => setIsOpen(!isOpen)} />
           </AlertDialogTitle>
           <div className='text-start'>
-            <span className='text-sm text-left sm:mt-10 mt-5 w-full '>
+            <span className='text-sm text-left w-full flex '>
               Fullname:
               <span className='font-semibold capitalize'>
                 <span className='capitalize'>
@@ -166,6 +170,42 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
                           </span>
                         </div>
                       </div>
+                      {type.toLowerCase() === 'fullpayment' && (
+                        <>
+                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                            <div className='text-sm mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>Departmental Fee:</span>
+                            </div>
+                            <div className='text-sm mt-5 w-ful flex items-end'>
+                              <span className='font-bold text-end w-full'>₱{tfData.departmentalFee}</span>
+                            </div>
+                          </div>
+                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                            <div className='text-sm mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>Insurance Fee:</span>
+                            </div>
+                            <div className='text-sm mt-5 w-ful flex items-end'>
+                              <span className='font-bold text-end w-full'>₱{tfData.insuranceFee}</span>
+                            </div>
+                          </div>
+                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                            <div className='text-sm mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>SSG Fee:</span>
+                            </div>
+                            <div className='text-sm mt-5 w-ful flex items-end'>
+                              <span className='font-bold text-end w-full'>₱{tfData.ssgFee}</span>
+                            </div>
+                          </div>
+                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                            <div className='text-sm mt-5 w-full flex items-start'>
+                              <span className='font-bold text-nowrap'>Total Payment Amount:</span>
+                            </div>
+                            <div className='text-sm mt-5 w-ful flex items-end'>
+                              <span className='font-bold text-end w-full'>₱{total}</span>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                   <div className='mt-10 w-full'>
