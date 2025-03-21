@@ -13,12 +13,12 @@ const TotalsByYear = ({ enrollments, year }: IProps) => {
       <div className=''>
         <span className='font-semibold capitalized'>Total {year}:</span> {enrollments.length}
       </div>
-      <div className='hidden group-hover:flex space-x-2'>
+      {/* <div className='hidden group-hover:flex space-x-2'>
         <Icons.download className='h-5 w-5 cursor-pointer' />
         <Icons.download className='h-5 w-5 cursor-pointer' />
         <Icons.download className='h-5 w-5 cursor-pointer' />
         <Icons.download className='h-5 w-5 cursor-pointer' />
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import StudentsByYear from './StudentsByYear';
 import { Icons } from '@/components/shared/Icons';
 import TotalsByYear from './TotalsByYear';
@@ -26,12 +26,12 @@ const StudentsByCourses = ({ enrollments, courses, blockTypes }: IProps) => {
                   <div className=''>
                     <span className='font-semibold capitalized'>OverAll:</span> {enrollments.length}
                   </div>
-                  <div className='hidden group-hover:flex space-x-2'>
+                  {/* <div className='hidden group-hover:flex space-x-2'>
                     <Icons.download className='h-5 w-5 cursor-pointer' />
                     <Icons.download className='h-5 w-5 cursor-pointer' />
                     <Icons.download className='h-5 w-5 cursor-pointer' />
                     <Icons.download className='h-5 w-5 cursor-pointer' />
-                  </div>
+                  </div> */}
                 </div>
                 {years.map((y: any, i: any) => {
                   const enrollment = enrollments.filter((e: any) => e.studentYear === y.year);
