@@ -291,16 +291,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 onClick={() =>
                                   GeneratePDF(
                                     {
+                                      tFee: tfData?.tFee,
                                       regmiscAmount: Number(regMiscTotal).toFixed(2) || (0).toFixed(2),
                                       tuitionFeeAmount: Number(lecTotal).toFixed(2) || (0).toFixed(2),
                                       labFeeAmount: Number(labTotal).toFixed(2) || (0).toFixed(2),
                                       ...(showCwtsOrNstp ? { cwtsOrNstpFeeAmount: Number(tfData?.tFee?.cwtsOrNstpFee).toFixed(2) || (0).toFixed(2) } : {}),
                                       totalAmount: Number(total).toFixed(2) || (0).toFixed(2),
-                                      departmentalFeeAmount: Number(tfData?.tFee?.departmentalFee).toFixed(2) || (0).toFixed(2),
-                                      ssgFeeAmount: Number(tfData?.tFee?.ssgFee).toFixed(2) || (0).toFixed(2) || (0).toFixed(),
-                                      total1YearFeeAmount: (Number(tfData?.tFee?.departmentalFee || 0) + Number(tfData?.tFee?.ssgFee || 0)).toFixed(2),
+                                      total1YearFeeAmount: (Number(tfData?.tFee?.departmentalFee || 0) + Number(tfData?.tFee?.ssgFee || 0) + Number(tfData?.tFee?.insuranceFee || 0)).toFixed(2),
                                     },
-                                    'Course Payment'
+                                    'Course Fee Summary'
                                   )
                                 }
                                 className='select-none focus-visible:ring-0 text-[15px] bg-none hover:bg-blue-500 text-black hover:text-neutral-100 tracking-normal font-medium font-poppins flex items-center justify-center'
