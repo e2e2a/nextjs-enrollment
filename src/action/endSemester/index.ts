@@ -126,11 +126,13 @@ const handleCategoryCollege = async (data: any) => {
         departmentalFee: cf.departmentalFee,
         insuranceFee: cf.insuranceFee,
         ssgFee: cf.ssgFee,
+        regOrMiscWithOldAndNew: cf.regOrMiscWithOldAndNew,
         cwtsOrNstpFee: cf.cwtsOrNstpFee,
         downPayment: cf.downPayment,
         year: cf.year,
         schoolYear: cf.schoolYear,
         regOrMisc: cf.regOrMisc,
+        regOrMiscNew: cf.regOrMiscNew,
         semester: eSetup.enrollmentTertiary.semester,
       };
     });

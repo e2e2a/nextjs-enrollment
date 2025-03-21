@@ -1437,40 +1437,11 @@ export const dashboardConfig: DashboardConfig = {
       ],
       icon: 'packageSearch',
     },
-    {
-      title: 'Enrolling Students',
-      i: [
-        {
-          title: 'View Enrolling Students',
-          href: '/accounting/college/enrolling',
-          icon: 'eye',
-        },
-      ],
-      icon: 'packageSearch',
-    },
-
-    {
-      title: 'Enrolled Students',
-      i: [
-        {
-          title: 'View Enrolled Students',
-          href: '/accounting/college/enrolled',
-          icon: 'eye',
-        },
-      ],
-      icon: 'packageSearch',
-    },
-    {
-      title: 'Temporary Enrolled',
-      i: [
-        {
-          title: 'View Temporary Enrolled',
-          href: '/accounting/college/temporary',
-          icon: 'eye',
-        },
-      ],
-      icon: 'packageSearch',
-    },
+    // {
+    //   title: 'Step 5 Enrollment Payment Process',
+    //   href: '/accounting/college/enrolling',
+    //   icon: 'packageSearch',
+    // },
     {
       title: 'Students Balance',
       i: [
