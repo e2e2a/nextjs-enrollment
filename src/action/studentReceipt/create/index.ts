@@ -12,6 +12,7 @@ import { handleAccountingRole } from './helpers/cash';
 import { getEnrollmentRecordById } from '@/services/enrollmentRecord';
 import { getCourseFeeByCourseId } from '@/services/courseFee';
 import { getCourseByCourseCode } from '@/services/course';
+import { getCourseFeeRecordByCourse, getCourseFeeRecordByCourseCode } from '@/services/courseFeeRecord';
 
 /**
  * any authenticated user
@@ -49,7 +50,11 @@ const checkRole = async (user: any, data: any, setup: any) => {
     let cFee = null;
     const course = await getCourseByCourseCode(studentEnrollment.courseCode);
     cFee = await getCourseFeeByCourseId(studentEnrollment?.courseId?._id);
-    if (data.request === 'record') cFee = await getCourseFeeByCourseId(course?._id);
+    if (data.request === 'record') {
+      cFee = await getCourseFeeRecordByCourseCode(course?.courseCode);
+      if (!cFee) cFee = await getCourseFeeRecordByCourse(course?.name);
+      console.log('cFee', cFee)
+    }
     if (!cFee) return { error: 'Course fee not found.', status: 404 };
     const checkedType = await checkTypeOfPayment(data, cFee);
     if (!checkedType || checkedType.error) return checkedType;

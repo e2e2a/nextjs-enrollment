@@ -417,11 +417,16 @@ const Page = ({ params }: { params: { id: string } }) => {
                           showPaymentOfMidterm,
                           showPaymentOfSemiFinal,
                           showPaymentOfFinal,
-                          Number(total).toFixed(2) || (0).toFixed(2),
+                          Number(totalWithoutDownPayment).toFixed(2) || (0).toFixed(2),
                           Number(showBalance).toFixed(2) || (0).toFixed(2),
                           srData?.ssgPayment,
+                          srData?.insurancePayment,
+                          ssgPaidInThisSemester,
+                          insurancePaidInThisSemester,
                           showPaymentOfDepartmental,
                           showPaymentOfSSG,
+                          showPaymentOfInsurance,
+                          tfData?.tFee?.insuranceFee,
                           tfData?.tFee?.departmentalFee,
                           tfData?.tFee?.ssgFee,
                           Number(additionalTotal).toFixed(2),
@@ -435,12 +440,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <Card className='border-0 py-5 bg-transparent'>
                     <CardHeader className='space-y-3'>
-                      <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Remaining Fee&apos;s</CardTitle>
-                      <CardDescription className='grid grid-cols-1 sm:grid-cols-2'>
-                        <span className='text-xs sm:text-sm capitalize'>Fullname: {name} </span>
-                        <span className='text-xs sm:text-sm w-full text-start sm:text-end'>Department: {tfData?.tFee?.course} </span>
-                        <span className='text-xs sm:text-sm'>SchoolYear: {data?.enrollmentRecord?.schoolYear} </span>
-                        <span className='text-xs sm:text-sm w-full text-start sm:text-end'>Enrollment Status: {data?.enrollmentRecord?.enrollStatus} </span>
+                      <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Remaining Fee&apos;s Record</CardTitle>
+                      <CardDescription className='text-xs sm:text-sm grid grid-cols-1 sm:grid-cols-2'>
+                        <span className='text-xs sm:text-sm'>Department: {tfData?.tFee?.course} </span>
+                        <span className='text-xs sm:text-sm flex justify-end capitalize'>Student Status: {data?.enrollmentRecord?.studentStatus} </span>
+                        <span className='text-xs sm:text-sm capitalize'>
+                          Year: {data?.enrollmentRecord?.studentYear} - {data?.enrollmentRecord?.studentSemester}{' '}
+                        </span>
+                        <span className='text-xs sm:text-sm flex justify-end'>SchoolYear: {data?.enrollmentRecord?.schoolYear} </span>
                       </CardDescription>
                       <div className=''>
                         {!isWithdrawn && !showPaymentOfFullPayment && !showPaymentOfDownPayment && !showPaymentOfPrelim && !showPaymentOfMidterm && !showPaymentOfSemiFinal && !showPaymentOfFinal && (

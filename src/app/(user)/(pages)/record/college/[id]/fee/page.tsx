@@ -250,11 +250,11 @@ const Page = ({ params }: { params: { id: string } }) => {
   }, [data, error, tfData, srData, srError, isTFError, isScholarshipStart]);
 
   useEffect(() => {
-    let additionPayment = parseFloat((Number(tfData?.tFee?.downPayment) + Number(tfData?.tFee?.ssgFee) + Number(tfData?.tFee?.insuranceFee) + Number(tfData?.tFee?.departmentalFee)).toFixed(2));
+    let additionPayment = parseFloat((Number(tfData?.tFee?.downPayment || 0) + Number(tfData?.tFee?.ssgFee || 0) + Number(tfData?.tFee?.insuranceFee || 0) + Number(tfData?.tFee?.departmentalFee || 0)).toFixed(2));
     if (showPaymentOfDownPayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.downPayment).toFixed(2));
     if (showPaymentOfDepartmental) additionPayment = parseFloat((additionPayment - tfData?.tFee?.departmentalFee).toFixed(2));
     if (!srData?.ssgPayment && showPaymentOfSSG) additionPayment = parseFloat((additionPayment - tfData?.tFee?.ssgFee).toFixed(2));
-    if (srData?.insurancePayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.insurancePayment).toFixed(2));
+    if (srData?.insurancePayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.insuranceFee).toFixed(2));
     if (srData?.ssgPayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.ssgFee).toFixed(2));
 
     setAdditionalTotal(additionPayment || 0);
@@ -404,11 +404,16 @@ const Page = ({ params }: { params: { id: string } }) => {
                           showPaymentOfMidterm,
                           showPaymentOfSemiFinal,
                           showPaymentOfFinal,
-                          Number(total).toFixed(2) || (0).toFixed(2),
+                          Number(totalWithoutDownPayment).toFixed(2) || (0).toFixed(2),
                           Number(showBalance).toFixed(2) || (0).toFixed(2),
                           srData?.ssgPayment,
+                          srData?.insurancePayment,
+                          ssgPaidInThisSemester,
+                          insurancePaidInThisSemester,
                           showPaymentOfDepartmental,
                           showPaymentOfSSG,
+                          showPaymentOfInsurance,
+                          tfData?.tFee?.insuranceFee,
                           tfData?.tFee?.departmentalFee,
                           tfData?.tFee?.ssgFee,
                           Number(additionalTotal).toFixed(2),
@@ -422,10 +427,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <Card className='border-0 py-5 bg-transparent'>
                     <CardHeader className='space-y-3'>
-                      <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Remaining Fee&apos;s</CardTitle>
-                      <CardDescription className='text-xs sm:text-sm flex justify-between'>
+                      <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Remaining Fee&apos;s Record</CardTitle>
+                      <CardDescription className='text-xs sm:text-sm grid grid-cols-1 sm:grid-cols-2'>
                         <span className='text-xs sm:text-sm'>Department: {tfData?.tFee?.course} </span>
-                        <span className='text-xs sm:text-sm'>SchoolYear: {data?.enrollmentRecord?.schoolYear} </span>
+                        <span className='text-xs sm:text-sm flex justify-end capitalize'>Student Status: {data?.enrollmentRecord?.studentStatus} </span>
+                        <span className='text-xs sm:text-sm capitalize'>
+                          Year: {data?.enrollmentRecord?.studentYear} - {data?.enrollmentRecord?.studentSemester}{' '}
+                        </span>
+                        <span className='text-xs sm:text-sm flex justify-end'>SchoolYear: {data?.enrollmentRecord?.schoolYear} </span>
                       </CardDescription>
                       <div className=''>
                         {!data?.enrollmentRecord?.profileId?.scholarshipId?.amount &&
