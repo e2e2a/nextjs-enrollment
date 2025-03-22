@@ -23,35 +23,12 @@ export const getAllStudentReceiptByUserIdAndYearAndSemesterAction = async (userI
     let studentReceipt;
     const a = await getStudentReceiptByStudentId(student._id);
     studentReceipt = a;
-    const b = await checkPaymentOfSSG(studentReceipt);
     if (!year && !semester && !schoolYear) return { error: 'Invalid inputs', status: 400 };
     const c = await checkPaymentOfInsurance(studentReceipt, year, schoolYear);
     // this is the insurance space for searching the insurance by semester and year
     studentReceipt = a.filter((sr) => sr.year.toLowerCase() === year.toLowerCase() && sr.semester.toLowerCase() === semester.toLowerCase() && sr.schoolYear.toLowerCase() === schoolYear.toLowerCase());
 
-    return { studentReceipt: JSON.parse(JSON.stringify(studentReceipt)), ...b, ...c, status: 200 };
-  });
-};
-
-const checkPaymentOfSSG = async (studentReceipt: any) => {
-  return tryCatch(async () => {
-    let ssgPayment = false;
-    const ssgPayment1 = studentReceipt?.filter((r: any) => r.type.toLowerCase() === 'ssg');
-    let ssgSemester1 = '';
-    let ssgSemester2 = '';
-    let ssgYear1 = '';
-    let ssgYear2 = '';
-    if (ssgPayment1.length >= 2) {
-      ssgYear1 = ssgPayment1[0].year;
-      ssgSemester1 = ssgPayment1[0].semester;
-      ssgYear2 = ssgPayment1[1].year;
-      ssgSemester2 = ssgPayment1[1].semester;
-      ssgPayment = true;
-    } else if (ssgPayment1.length === 1) {
-      ssgYear1 = ssgPayment1[0].year;
-      ssgSemester1 = ssgPayment1[0].semester;
-    }
-    return { ssgPayment, ssgSemester1, ssgSemester2, ssgYear1, ssgYear2 };
+    return { studentReceipt: JSON.parse(JSON.stringify(studentReceipt)), ...c, status: 200 };
   });
 };
 

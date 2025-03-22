@@ -253,25 +253,19 @@ const Page = () => {
   }, [data, error, tfData, esData, esError, srData, srError, isTFError, isScholarshipStart]);
 
   useEffect(() => {
-    let additionPayment = parseFloat((Number(tfData?.tFee?.downPayment) + Number(tfData?.tFee?.ssgFee) + Number(tfData?.tFee?.insuranceFee) + Number(tfData?.tFee?.departmentalFee)).toFixed(2));
-    if (showPaymentOfDownPayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.downPayment).toFixed(2));
+    let additionPayment = parseFloat((Number(tfData?.tFee?.ssgFee) + Number(tfData?.tFee?.insuranceFee) + Number(tfData?.tFee?.departmentalFee)).toFixed(2));
     if (showPaymentOfDepartmental) additionPayment = parseFloat((additionPayment - tfData?.tFee?.departmentalFee).toFixed(2));
-    if (!srData?.ssgPayment && showPaymentOfSSG) additionPayment = parseFloat((additionPayment - tfData?.tFee?.ssgFee).toFixed(2));
+    if (showPaymentOfSSG) additionPayment = parseFloat((additionPayment - tfData?.tFee?.ssgFee).toFixed(2));
     if (srData?.insurancePayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.insuranceFee).toFixed(2));
-    if (srData?.ssgPayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.ssgFee).toFixed(2));
 
     setAdditionalTotal(additionPayment || 0);
     if (showPaymentOfFullPayment) setAdditionalTotal(0);
-  }, [tfData, srData, showPaymentOfFullPayment, showPaymentOfDepartmental, showPaymentOfSSG, showPaymentOfDownPayment]);
+  }, [tfData, srData, showPaymentOfFullPayment, showPaymentOfDepartmental, showPaymentOfSSG]);
 
   const insurancePaidInThisSemester = srData?.insurancePaymentSemester?.toLowerCase() === data?.enrollment?.studentSemester?.toLowerCase();
-  const ssgPaidInThisSemester =
-    (srData?.ssgYear1?.toLowerCase() === data?.enrollment?.studentYear?.toLowerCase() && srData?.ssgSemester1?.toLowerCase() === data?.enrollment?.studentSemester?.toLowerCase()) ||
-    (srData?.ssgYear2?.toLowerCase() === data?.enrollment?.studentYear?.toLowerCase() && srData?.ssgSemester2?.toLowerCase() === data?.enrollment?.studentSemester?.toLowerCase());
   // boolean for all required payments
   const myBooleanForInsurance = srData?.insurancePayment || insurancePaidInThisSemester;
-  const myBooleanForSSG = srData?.ssgPayment || ssgPaidInThisSemester;
-  const requiredPaymentsFulfill = showPaymentOfDownPayment && myBooleanForSSG && myBooleanForInsurance && showPaymentOfDepartmental;
+  const requiredPaymentsFulfill = showPaymentOfDownPayment && myBooleanForInsurance && showPaymentOfDepartmental;
 
   return (
     <>
@@ -366,8 +360,8 @@ const Page = () => {
                                   ADDITIONAL PAYMENT <span className='flex justify-start items-start text-[15px] text-red'>(Required)</span>
                                 </h1>
                                 <span className='text-sm text-muted-foreground mt-2'>
-                                  The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a whole academic year. After the first two payments, it will
-                                  no longer be required for the remaining semesters.
+                                  The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a whole academic year. After the first two payments, it will no
+                                  longer be required for the remaining semesters.
                                 </span>
                                 <div className='grid grid-cols-1 w-full sm:px-32 px-5'>
                                   <div className='flex justify-between w-full'>
@@ -415,9 +409,7 @@ const Page = () => {
                           showPaymentOfFinal,
                           Number(totalWithoutDownPayment).toFixed(2) || (0).toFixed(2),
                           Number(showBalance).toFixed(2) || (0).toFixed(2),
-                          srData?.ssgPayment,
                           srData?.insurancePayment,
-                          ssgPaidInThisSemester,
                           insurancePaidInThisSemester,
                           showPaymentOfDepartmental,
                           showPaymentOfSSG,
@@ -499,147 +491,6 @@ const Page = () => {
                       )}
                     </CardHeader>
                     <CardContent className='w-full'>
-                      <div className=' mb-20 mt-5'>
-                        <h1 className='text-lg md:text-xl tracking-tight w-full text-left font-semibold uppercase'>
-                          Down Payment & Additional Fees <span className='text-red'>(REQUIRED)</span>
-                        </h1>
-                        <span className='text-sm text-muted-foreground mt-2'>
-                          <span className='text-sm text-muted-foreground mt-2'>
-                            To proceed with enrollment, students are required to settle the <strong>Down Payment</strong>, <strong>Insurance Fee</strong>, <strong>SSG Fee</strong>, and <strong>Departmental Fee</strong>. The <strong>Departmental Fee</strong> is
-                            mandatory every semester, while the <strong>Insurance Fee</strong> is only required once per academic year. The <strong>SSG Fee</strong> is mandatory for the first two payments within a whole academic year. After these two
-                            payments, it will no longer be required for the remaining semesters.
-                            <span className='text-red-500 font-semibold'>Enrollment will not be processed until all required fees have been fully paid.</span>
-                          </span>
-                        </span>
-                        <div className='grid grid-cols-1 sm:px-32 px-5'>
-                          <Table className='table-auto border-collapse rounded-t-lg border '>
-                            <TableHeader>
-                              <TableRow className=' border-black rounded-t-lg bg-gray-200 font-bold text-[16px]'>
-                                <TableHead className='px-4 py-2 text-left'>Payments Type</TableHead>
-                                <TableHead className='px-4 py-2 text-left'>Amount</TableHead>
-                                <TableHead className='px-4 py-2 text-left'>Status</TableHead>
-                                {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && <TableHead className='px-4 py-2 text-left'>Settle Payment</TableHead>}
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              <TableRow>
-                                <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDownPayment) && 'text-green-400 line-through'}`}>Down Payment</TableCell>
-                                <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDownPayment) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
-                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
-                                  {showPaymentOfFullPayment || showPaymentOfDownPayment ? 'Paid' : 'unpaid'}
-                                </TableCell>
-                                {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
-                                    {showPaymentOfFullPayment || showPaymentOfDownPayment ? (
-                                      'Completed'
-                                    ) : (
-                                      <SettleTermPayment
-                                        enrollment={data?.enrollment}
-                                        tfData={tfData?.tFee}
-                                        srData={srData?.studentReceipt}
-                                        amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
-                                        type={'downPayment'}
-                                        title='Down Payment'
-                                        isScholarshipStart={isScholarshipStart}
-                                      />
-                                    )}
-                                  </TableCell>
-                                )}
-                              </TableRow>
-                              <TableRow>
-                                <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDepartmental) && 'text-green-400 line-through'}`}>Departmental Fee</TableCell>
-                                <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDepartmental) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.departmentalFee).toFixed(2)}</TableCell>
-                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>
-                                  {showPaymentOfFullPayment || showPaymentOfDepartmental ? 'Paid' : 'unpaid'}
-                                </TableCell>
-                                {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>
-                                    {showPaymentOfFullPayment || showPaymentOfDepartmental ? (
-                                      'Completed'
-                                    ) : showPaymentOfDownPayment ? (
-                                      <SettleTermPayment
-                                        enrollment={data?.enrollment}
-                                        tfData={tfData?.tFee}
-                                        srData={srData?.studentReceipt}
-                                        amountToPay={Number(tfData?.tFee?.departmentalFee).toFixed(2)}
-                                        type={'departmental'}
-                                        title='Departmental Payment'
-                                        isScholarshipStart={isScholarshipStart}
-                                      />
-                                    ) : (
-                                      ''
-                                    )}
-                                  </TableCell>
-                                )}
-                              </TableRow>
-                              {(!srData?.insurancePayment || insurancePaidInThisSemester) && (
-                                <TableRow>
-                                  <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || insurancePaidInThisSemester || srData?.insurancePayment || showPaymentOfInsurance) && 'text-green-400 line-through'}`}>Insurance Fee</TableCell>
-                                  <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || insurancePaidInThisSemester || srData?.insurancePayment || showPaymentOfInsurance) && 'text-green-400 line-through'}`}>
-                                    ₱{Number(tfData?.tFee?.insuranceFee).toFixed(2)}
-                                  </TableCell>
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || srData?.insurancePayment || insurancePaidInThisSemester || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
-                                    {showPaymentOfFullPayment || srData?.insurancePayment || insurancePaidInThisSemester || showPaymentOfInsurance ? 'Paid' : 'unpaid'}
-                                  </TableCell>
-                                  {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || srData?.insurancePayment || insurancePaidInThisSemester || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
-                                      {showPaymentOfFullPayment || srData?.insurancePayment || insurancePaidInThisSemester || showPaymentOfInsurance ? (
-                                        'Completed'
-                                      ) : showPaymentOfDownPayment ? (
-                                        <SettleTermPayment
-                                          enrollment={data?.enrollment}
-                                          tfData={tfData?.tFee}
-                                          srData={srData?.studentReceipt}
-                                          amountToPay={Number(tfData?.tFee?.insuranceFee).toFixed(2)}
-                                          type={'insurance'}
-                                          title='Insurance Payment'
-                                          isScholarshipStart={isScholarshipStart}
-                                        />
-                                      ) : (
-                                        ''
-                                      )}
-                                    </TableCell>
-                                  )}
-                                </TableRow>
-                              )}
-                              {(!srData?.ssgPayment || ssgPaidInThisSemester) && (
-                                <TableRow>
-                                  <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || ssgPaidInThisSemester || srData?.ssgPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>SSG Fee</TableCell>
-                                  <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || ssgPaidInThisSemester || srData?.ssgPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.ssgFee).toFixed(2)}</TableCell>
-                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || ssgPaidInThisSemester || srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>
-                                    {srData?.ssgPayment || ssgPaidInThisSemester || showPaymentOfFullPayment || showPaymentOfSSG ? 'Paid' : 'unpaid'}
-                                  </TableCell>
-                                  {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
-                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || ssgPaidInThisSemester || srData?.ssgPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>
-                                      {showPaymentOfFullPayment || ssgPaidInThisSemester || srData?.ssgPayment || showPaymentOfSSG ? (
-                                        'Completed'
-                                      ) : showPaymentOfDownPayment ? (
-                                        <SettleTermPayment
-                                          enrollment={data?.enrollment}
-                                          tfData={tfData?.tFee}
-                                          srData={srData?.studentReceipt}
-                                          amountToPay={Number(tfData?.tFee?.ssgFee).toFixed(2)}
-                                          type={'ssg'}
-                                          title='SSG Payment'
-                                          isScholarshipStart={isScholarshipStart}
-                                        />
-                                      ) : (
-                                        ''
-                                      )}
-                                    </TableCell>
-                                  )}
-                                </TableRow>
-                              )}
-                            </TableBody>
-                          </Table>
-                          <div className='grid grid-cols-1 sm:px-8 px-5'>
-                            <div className='flex justify-between'>
-                              <span className='font-medium'>Total</span>
-                              <span>₱{Number(additionalTotal).toFixed(2)}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                       <div className=''>
                         <div className='grid grid-cols-1 sm:px-32 px-5'>
                           <Table className='table-auto border-collapse rounded-t-lg border '>
@@ -655,6 +506,30 @@ const Page = () => {
                             <TableBody>
                               {!showPaymentOfFullPayment && (
                                 <>
+                                  <TableRow>
+                                    <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDownPayment) && 'text-green-400 line-through'}`}>Down Payment</TableCell>
+                                    <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDownPayment) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
+                                      {showPaymentOfFullPayment || showPaymentOfDownPayment ? 'Paid' : 'unpaid'}
+                                    </TableCell>
+                                    {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
+                                      <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
+                                        {showPaymentOfFullPayment || showPaymentOfDownPayment ? (
+                                          'Completed'
+                                        ) : (
+                                          <SettleTermPayment
+                                            enrollment={data?.enrollment}
+                                            tfData={tfData?.tFee}
+                                            srData={srData?.studentReceipt}
+                                            amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
+                                            type={'downPayment'}
+                                            title='Down Payment'
+                                            isScholarshipStart={isScholarshipStart}
+                                          />
+                                        )}
+                                      </TableCell>
+                                    )}
+                                  </TableRow>
                                   <TableRow>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfPrelim && 'text-green-400 line-through'}`}>Prelim</TableCell>
                                     <TableCell className={`px-4 py-2 ${showPaymentOfPrelim && 'text-green-400 line-through'}`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
@@ -764,6 +639,12 @@ const Page = () => {
                               {showPaymentOfFullPayment && (
                                 <>
                                   <TableRow>
+                                    <TableCell className={`px-4 py-2 text-green-400 line-through`}>Down Payment</TableCell>
+                                    <TableCell className={`px-4 py-2 text-green-400 line-through`}>₱{Number(1000).toFixed(2)}</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Paid</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Completed</TableCell>
+                                  </TableRow>
+                                  <TableRow>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>Prelim</TableCell>
                                     <TableCell className={`px-4 py-2 text-green-400 line-through`}>₱{Number(paymentPerTerm).toFixed(2)}</TableCell>
                                     <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400 `}>Paid</TableCell>
@@ -802,6 +683,121 @@ const Page = () => {
                           <div className='flex justify-between'>
                             <span className='font-medium'>Balance</span>
                             <span>₱{Number(showBalance).toFixed(2) || (0).toFixed(2)}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className=' mb-20 mt-5'>
+                        <h1 className='text-lg md:text-xl tracking-tight w-full text-left font-semibold uppercase'>
+                          Additional Fees <span className='text-red'>(REQUIRED)</span>
+                        </h1>
+                        <span className='text-sm text-muted-foreground mt-2'>
+                          <span className='text-sm text-muted-foreground mt-2'>
+                            To proceed with enrollment, students are required to settle the <strong>Down Payment</strong>, <strong>Insurance Fee</strong>, <strong>SSG Fee</strong>, and <strong>Departmental Fee</strong>. The <strong>Departmental Fee</strong> is
+                            mandatory every semester, while the <strong>Insurance Fee</strong> is only required once per academic year. The <strong>SSG Fee</strong> is mandatory for the first two payments within a whole academic year. After these two payments,
+                            it will no longer be required for the remaining semesters.
+                            <span className='text-red-500 font-semibold'>Enrollment will not be processed until all required fees have been fully paid.</span>
+                          </span>
+                        </span>
+                        <div className='grid grid-cols-1 sm:px-32 px-5'>
+                          <Table className='table-auto border-collapse rounded-t-lg border '>
+                            <TableHeader>
+                              <TableRow className=' border-black rounded-t-lg bg-gray-200 font-bold text-[16px]'>
+                                <TableHead className='px-4 py-2 text-left'>Payments Type</TableHead>
+                                <TableHead className='px-4 py-2 text-left'>Amount</TableHead>
+                                <TableHead className='px-4 py-2 text-left'>Status</TableHead>
+                                {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && <TableHead className='px-4 py-2 text-left'>Settle Payment</TableHead>}
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              <TableRow>
+                                <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDepartmental) && 'text-green-400 line-through'}`}>Departmental Fee</TableCell>
+                                <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDepartmental) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.departmentalFee).toFixed(2)}</TableCell>
+                                <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>
+                                  {showPaymentOfFullPayment || showPaymentOfDepartmental ? 'Paid' : 'unpaid'}
+                                </TableCell>
+                                {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
+                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDepartmental ? 'text-green-400' : 'text-red'}`}>
+                                    {showPaymentOfFullPayment || showPaymentOfDepartmental ? (
+                                      'Completed'
+                                    ) : showPaymentOfDownPayment ? (
+                                      <SettleTermPayment
+                                        enrollment={data?.enrollment}
+                                        tfData={tfData?.tFee}
+                                        srData={srData?.studentReceipt}
+                                        amountToPay={Number(tfData?.tFee?.departmentalFee).toFixed(2)}
+                                        type={'departmental'}
+                                        title='Departmental Payment'
+                                        isScholarshipStart={isScholarshipStart}
+                                      />
+                                    ) : (
+                                      ''
+                                    )}
+                                  </TableCell>
+                                )}
+                              </TableRow>
+                              {(!srData?.insurancePayment || insurancePaidInThisSemester) && (
+                                <TableRow>
+                                  <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || insurancePaidInThisSemester || srData?.insurancePayment || showPaymentOfInsurance) && 'text-green-400 line-through'}`}>Insurance Fee</TableCell>
+                                  <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || insurancePaidInThisSemester || srData?.insurancePayment || showPaymentOfInsurance) && 'text-green-400 line-through'}`}>
+                                    ₱{Number(tfData?.tFee?.insuranceFee).toFixed(2)}
+                                  </TableCell>
+                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || srData?.insurancePayment || insurancePaidInThisSemester || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
+                                    {showPaymentOfFullPayment || srData?.insurancePayment || insurancePaidInThisSemester || showPaymentOfInsurance ? 'Paid' : 'unpaid'}
+                                  </TableCell>
+                                  {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || srData?.insurancePayment || insurancePaidInThisSemester || showPaymentOfInsurance ? 'text-green-400' : 'text-red'}`}>
+                                      {showPaymentOfFullPayment || srData?.insurancePayment || insurancePaidInThisSemester || showPaymentOfInsurance ? (
+                                        'Completed'
+                                      ) : showPaymentOfDownPayment ? (
+                                        <SettleTermPayment
+                                          enrollment={data?.enrollment}
+                                          tfData={tfData?.tFee}
+                                          srData={srData?.studentReceipt}
+                                          amountToPay={Number(tfData?.tFee?.insuranceFee).toFixed(2)}
+                                          type={'insurance'}
+                                          title='Insurance Payment'
+                                          isScholarshipStart={isScholarshipStart}
+                                        />
+                                      ) : (
+                                        ''
+                                      )}
+                                    </TableCell>
+                                  )}
+                                </TableRow>
+                              )}
+                              {showPaymentOfSSG && (
+                                <TableRow>
+                                  <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>SSG Fee</TableCell>
+                                  <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfSSG) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.ssgFee).toFixed(2)}</TableCell>
+                                  <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>{showPaymentOfFullPayment || showPaymentOfSSG ? 'Paid' : 'unpaid'}</TableCell>
+                                  {(!data?.enrollment?.profileId?.scholarshipId?.amount || (data?.enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) === 0)) && (
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfSSG ? 'text-green-400' : 'text-red'}`}>
+                                      {showPaymentOfFullPayment || showPaymentOfSSG ? (
+                                        'Completed'
+                                      ) : showPaymentOfDownPayment ? (
+                                        <SettleTermPayment
+                                          enrollment={data?.enrollment}
+                                          tfData={tfData?.tFee}
+                                          srData={srData?.studentReceipt}
+                                          amountToPay={Number(tfData?.tFee?.ssgFee).toFixed(2)}
+                                          type={'ssg'}
+                                          title='SSG Payment'
+                                          isScholarshipStart={isScholarshipStart}
+                                        />
+                                      ) : (
+                                        ''
+                                      )}
+                                    </TableCell>
+                                  )}
+                                </TableRow>
+                              )}
+                            </TableBody>
+                          </Table>
+                          <div className='grid grid-cols-1 sm:px-8 px-5'>
+                            <div className='flex justify-between'>
+                              <span className='font-medium'>Total</span>
+                              <span>₱{Number(additionalTotal).toFixed(2)}</span>
+                            </div>
                           </div>
                         </div>
                       </div>
