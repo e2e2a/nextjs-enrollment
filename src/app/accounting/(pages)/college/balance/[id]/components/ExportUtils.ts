@@ -15,9 +15,7 @@ export const exportToPDF = async (
   showPaymentOfFinal: boolean,
   total: string | number,
   balance: string | number,
-  ssgPayment: boolean,
   insurancePayment: boolean,
-  ssgPaidInThisSemester: boolean,
   insurancePaidInThisSemester: boolean,
   departmentalShow: boolean,
   ssgShow: boolean,
@@ -74,8 +72,8 @@ export const exportToPDF = async (
       const additionalData = [
         ['Down Payment', downPaymentAmount.toFixed(2) || (0).toFixed(2), showPaymentOfDownPayment || showPaymentOfFullPayment ? 'PAID' : 'UNPAID'],
         ['Departmental Fee', Number(departmentalAmount).toFixed(2), departmentalShow || showPaymentOfFullPayment ? 'PAID' : 'UNPAID'],
-        ...(!insurancePayment || insurancePaidInThisSemester ? [['Insurance Payment', Number(insuranceAmount).toFixed(2), insuranceShow || showPaymentOfFullPayment || insurancePayment || ssgPaidInThisSemester ? 'PAID' : 'UNPAID']] : []),
-        ...(!ssgPayment || ssgPaidInThisSemester ? [['SSG Payment', Number(ssgAmount).toFixed(2), ssgShow || showPaymentOfFullPayment || ssgPayment || ssgPaidInThisSemester ? 'PAID' : 'UNPAID']] : []),
+        ...(!insurancePayment || insurancePaidInThisSemester ? [['Insurance Payment', Number(insuranceAmount).toFixed(2), insuranceShow || showPaymentOfFullPayment || insurancePayment || insurancePaidInThisSemester ? 'PAID' : 'UNPAID']] : []),
+        ...(ssgShow ? [['SSG Payment', Number(ssgAmount).toFixed(2), ssgShow || showPaymentOfFullPayment ? 'PAID' : 'UNPAID']] : []),
       ];
 
       autoTable(doc, {
