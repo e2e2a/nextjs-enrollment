@@ -14,26 +14,10 @@ import LoaderPage from '@/components/shared/LoaderPage';
 import { ScholarshipValidator } from '@/lib/validators/scholarship';
 import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 import { Combobox } from './components/Combobox';
-import { ComboboxExempted } from './components/ComboboxExempted';
 import { useCreateScholarshipMutation } from '@/lib/queries/scholarship/create';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 
-const excemptedItems = [{ value: 'Tuition Fee' }, { value: 'Miscellaneous Fees' }];
-
-const typeItems = [
-  { value: 'percentage', title: 'percentage' },
-  { value: 'fixed', title: 'fixed' },
-];
-
-const availableScholarship = [
-  { title: 'Working Student' },
-  { title: 'Person with Disability Discount' },
-  { title: 'Alay Lakad Scholar' },
-  { title: 'Tulong Dunong Scholarship' },
-  { title: 'TES Scholarship' },
-  { title: 'Corporate Scholar' },
-  { title: 'Family Discount' },
-];
+const availableScholarship = [{ title: 'Working Student' }, { title: 'Alay Lakad Scholar' }, { title: 'Tulong Dunong Scholarship' }, { title: 'TES Scholarship' }, { title: 'Corporate Scholar' }];
 
 const percentageItems = Array.from({ length: 20 }, (_, i) => {
   const percentage = (i + 1) * 5;
@@ -65,7 +49,7 @@ const Page = () => {
       studentId: '',
       year: '',
       semester: '',
-      type: '',
+      type: 'fixed',
       amount: '',
       name: '',
       discountPercentage: '',
@@ -98,8 +82,6 @@ const Page = () => {
     });
   };
 
-  const type = form.watch('type');
-
   return (
     <>
       {isPageLoading ? (
@@ -108,7 +90,7 @@ const Page = () => {
         <div className='border-0 bg-white rounded-xl min-h-[87vh]'>
           <Card className='border-0 py-5 bg-transparent'>
             <CardHeader className='space-y-3'>
-              <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Add New Scholarship Student</CardTitle>
+              <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Add Scholarship Student</CardTitle>
               <CardDescription className='text-xs sm:text-sm hidden'></CardDescription>
               <div className='text-xs sm:text-sm'>
                 <div className=''>
@@ -125,15 +107,7 @@ const Page = () => {
                     <SelectInput name={'name'} selectItems={availableScholarship} form={form} label={'Scholarship Name:'} placeholder={'Select Scholarship Name'} />
                     <SelectInput name={'year'} selectItems={studentYearData} form={form} label={'Year:'} placeholder={'Select Year'} />
                     <SelectInput name={'semester'} selectItems={studentSemesterData} form={form} label={'Semester:'} placeholder={'Select Semester'} />
-                    <SelectInput name={'type'} selectItems={typeItems} form={form} label={'Type:'} placeholder={'Select Type'} />
-                    {type === 'percentage' && (
-                      <>
-                        <SelectInput name={'discountPercentage'} selectItems={percentageItems} form={form} label={'Discount Percentage:'} placeholder={'Select Discount Percentage'} />
-                        <ComboboxExempted name={'exemptedFees'} selectItems={excemptedItems} form={form} label={'Exempted Fees:'} placeholder={'Select Exempted Fees'} selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
-                      </>
-                    )}
-
-                    {type === 'fixed' && <Input name={'amount'} type={'number'} form={form} label={'Amount:'} classNameInput={'uppercase'} />}
+                    <Input name={'amount'} type={'number'} form={form} label={'Amount:'} classNameInput={'uppercase'} />
                   </div>
                 </CardContent>
                 <CardFooter className=''>

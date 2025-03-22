@@ -76,7 +76,7 @@ const Page = () => {
     profileData.lastname = profileData?.lastname.toLowerCase();
     profileData.middlename = profileData?.middlename?.toLowerCase();
     if (profileData.extensionName) profileData.extensionName = profileData?.extensionName.toLowerCase();
-    
+
     const data = { ...userData, ...profileData, ...categoryData, role: 'DEAN', configProfile: configProfile };
 
     mutation.mutate(data, {
@@ -118,17 +118,8 @@ const Page = () => {
               <CardContent className='w-full '>
                 <div className='flex flex-col gap-4'>
                   <Form {...formCategory}>
-                    {' '}
                     <SelectInput isPending={isPending} name={'category'} form={formCategory} label={'Educational Category:'} selectItems={selectType.deansCategory} placeholder='Select Educational Category' />
-                    {deanCategory === 'College' ? (
-                      <SelectInput isPending={isPending} name={'courseId'} form={formCategory} label={'Deans Division:'} selectItems={cData?.courses} placeholder='Select Deans Division' />
-                    ) : deanCategory === 'Senior High School' ? (
-                      // <SelectInput name={'courseId'} form={formCollege} label={'Deans Division:'} selectItems={cData?.courses} placeholder='Select Deans Division' />
-                      <div className=''>Senior High School</div>
-                    ) : deanCategory === 'Tesda' ? (
-                      // <SelectInput name={'courseId'} form={formCollege} label={'Deans Division:'} selectItems={cData?.courses} placeholder='Select Deans Division' />
-                      <div className=''>Tesda</div>
-                    ) : null}
+                    <SelectInput isPending={isPending} name={'courseId'} form={formCategory} label={'Deans Department:'} selectItems={cData?.courses} placeholder='Select Deans Department' />
                   </Form>
                   <Form {...formUser}>
                     <Input isPending={isPending} name={'email'} type={'email'} form={formUser} label={'Email:'} classNameInput={''} />

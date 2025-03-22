@@ -139,14 +139,14 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
               </div>
               <div className='flex w-full justify-start sm:justify-end'>
                 <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                  Status:
+                  Status in Dean:
                   <span className='font-normal text-sm text-green-500 uppercase'> {reportGrades?.statusInDean}</span>
                 </span>
               </div>
               <div className='flex w-full justify-start'>
                 <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                  Evaluated:
-                  <span className='font-normal text-sm uppercase'> {reportGrades?.evaluated ? <span className=' text-green-500'>True</span> : <span className=' text-blue-500'>False</span>}</span>
+                  Verify By Registrar:
+                  <span className='font-normal text-sm uppercase'> {reportGrades?.evaluated ? <span className=' text-green-500'>Verified</span> : <span className=' text-red'>Not Verified</span>}</span>
                 </span>
               </div>
             </div>

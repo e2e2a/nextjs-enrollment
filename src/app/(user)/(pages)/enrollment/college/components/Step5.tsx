@@ -10,7 +10,7 @@ import LoaderPage from '@/components/shared/LoaderPage';
 type IProps = {
   enrollment: any;
 };
-const Step4 = ({ enrollment }: IProps) => {
+const Step5 = ({ enrollment }: IProps) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
   const { data: s } = useSession();
@@ -20,21 +20,22 @@ const Step4 = ({ enrollment }: IProps) => {
 
     console.log('me and you');
   }, [enrollment]);
+
   return (
     <>
       {isPageLoading ? (
         <LoaderPage />
       ) : (
-        <TabsContent value='4' className='p-5 focus-visible:ring-0 border-0'>
+        <TabsContent value='5' className='p-5 focus-visible:ring-0 border-0'>
           <Card className={`min-h-[35vh] shadow-none drop-shadow-none items-center justify-center flex border-0`}>
             <CardHeader className='space-y-3 hidden'>
-              <CardTitle className=' hidden'>Waiting for Approval!</CardTitle>
+              <CardTitle className=' hidden'>Waiting for Approval!asdasdasd</CardTitle>
               <CardDescription className='text-center hidden'></CardDescription>
             </CardHeader>
             <CardContent className='flex w-full justify-center flex-col items-center border-[0.5px] rounded-lg shadow-sm bg-white focus-visible:ring-0 space-y-5 px-0 mx-0'>
               <div className='w-full flex flex-col items-center justify-center h-full'>
                 <div className=' mt-3'>
-                  <h1 className='text-center text-xl sm:text-3xl font-semibold text-black uppercase'>Add/Drop Subjects</h1>
+                  <h1 className='text-center text-xl sm:text-3xl font-semibold text-black uppercase'>Required Payments in Enrollment Process</h1>
                 </div>
                 <div className='w-full flex justify-center items-center md:my-4'>
                   <Icons.hourglass className='md:h-14 md:w-14 h-10 w-10 my-3 stroke-green-400 animate-spin' style={{ animationDuration: '6s' }} />
@@ -49,8 +50,8 @@ const Step4 = ({ enrollment }: IProps) => {
                 </span>
                 <span className='text-sm text-left mt-4 px-5 sm:px-10 w-full'>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To proceed with your payment, you can use PayPal, a credit card, or a debit card. If you don&apos;t have access to these options, we kindly ask you to visit the school cashier&apos;s office at DCIT, where
-                  our friendly staff will assist you with the payment process. <strong>Important:</strong> In Step 5 of the student enrollment process, all required payments must be completed before you can proceed with
-                  final enrollment. Please ensure that you have settled the necessary fees to avoid delays.
+                  our friendly staff will assist you with the payment process. <strong>Important:</strong> In Step 5 of the student enrollment process, all required payments must be completed before you can proceed with final enrollment. Please ensure that you
+                  have settled the necessary fees to avoid delays.
                 </span>
               </div>
               <div className='my-10'>
@@ -84,4 +85,4 @@ const Step4 = ({ enrollment }: IProps) => {
   );
 };
 
-export default Step4;
+export default Step5;

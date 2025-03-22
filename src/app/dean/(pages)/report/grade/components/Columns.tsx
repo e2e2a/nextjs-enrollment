@@ -192,8 +192,8 @@ export const columns: ColumnDef<any>[] = [
   },
   {
     accessorFn: (row) => row?.statusInDean,
-    id: 'Approved By Dean',
-    header: 'Approved By Dean',
+    id: 'Status in Dean',
+    header: 'Status in Dean',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
@@ -207,8 +207,8 @@ export const columns: ColumnDef<any>[] = [
   },
   {
     accessorFn: (row) => row?.evaluated,
-    id: 'Verify',
-    header: 'Verify',
+    id: 'Verify By Registrar',
+    header: 'Verify By Registrar',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (

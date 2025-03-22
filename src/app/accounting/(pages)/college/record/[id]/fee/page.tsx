@@ -370,7 +370,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   ADDITIONAL PAYMENT <span className='flex justify-start items-start text-[15px] text-red'>(Required)</span>
                                 </h1>
                                 <span className='text-sm text-muted-foreground mt-2'>
-                                  The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a single academic year. After the first two payments, it will
+                                  The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a whole academic year. After the first two payments, it will
                                   no longer be required for the remaining semesters.
                                 </span>
                                 <div className='grid grid-cols-1 w-full sm:px-32 px-5'>
@@ -532,7 +532,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         </h1>
                         <span className='text-sm text-muted-foreground mt-2'>
                           To proceed with enrollment, students are required to settle the <strong>Down Payment</strong>, <strong>Insurance Fee</strong>, <strong>SSG Fee</strong>, and <strong>Departmental Fee</strong>. The <strong>Departmental Fee</strong> is
-                          mandatory every semester, while the <strong>Insurance Fee</strong> is only required once per academic year. The <strong>SSG Fee</strong> is mandatory for the first two payments within a single academic year. After these two payments,
+                          mandatory every semester, while the <strong>Insurance Fee</strong> is only required once per academic year. The <strong>SSG Fee</strong> is mandatory for the first two payments within a whole academic year. After these two payments,
                           it will no longer be required for the remaining semesters.
                           <span className='text-red-500 font-semibold'>Enrollment will not be processed until all required fees have been fully paid.</span>
                         </span>
