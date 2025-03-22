@@ -93,13 +93,13 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Status:
+                      Status in Dean:
                       <span className='font-normal text-sm text-green-500 uppercase'> {data?.reportedGrades?.statusInDean}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Evaluated:
+                      Verify by Registrar:
                       <span className='font-normal text-sm uppercase'> {data?.reportedGrades?.evaluated ? <span className=' text-green-500'>True</span> : <span className=' text-blue-500'>False</span>}</span>
                     </span>
                   </div>

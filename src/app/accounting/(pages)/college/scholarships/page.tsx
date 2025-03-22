@@ -21,16 +21,19 @@ interface ITuitionFee {
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
+  const [scholarships, setScholarships] = useState([]);
   const { data, isLoading, error } = useScholarshipQueryByCategory('College');
 
   useEffect(() => {
     if (error || !data) return setIsError(true);
     if (data) {
+      const a = data?.scholarships.filter((s: any) => s.type === 'fixed');
+      setScholarships(a);
       setIsError(false);
       setIsPageLoading(false);
     }
   }, [data, error]);
-  console.log('data', data)
+  console.log('data', data);
   return (
     <>
       {isPageLoading ? (
@@ -44,7 +47,7 @@ const Page = () => {
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-bold '>Student Scholarships Management</h1>
               </div>
-              <DataTable columns={columns} data={data?.scholarships as []} />
+              <DataTable columns={columns} data={scholarships as []} />
             </div>
           )}
         </div>

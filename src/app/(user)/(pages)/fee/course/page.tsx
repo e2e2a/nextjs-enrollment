@@ -64,7 +64,7 @@ const Page = () => {
                   Additional Fees <span className='text-muted-foreground text-red'>(REQUIRED)</span>
                 </h1>
                 <p className='text-sm text-muted-foreground mt-2'>
-                  The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a single academic year. After the first two payments, it will no longer be
+                  The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a whole academic year. After the first two payments, it will no longer be
                   required for the remaining semesters.
                 </p>
                 <div className='mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full'>

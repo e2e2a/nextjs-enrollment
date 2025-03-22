@@ -14,7 +14,7 @@ type IProps = {
 const OptionsCell = ({ user }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
-  
+
   return (
     <div className=''>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -30,7 +30,7 @@ const OptionsCell = ({ user }: IProps) => {
           <Command>
             <CommandList>
               <CommandGroup className=''>
-                <UpdateDialog teacher={user?.teacherId} type={'Approve'} reportGrades={user} />
+                {user.statusInDean.toLowerCase() === 'pending' && <UpdateDialog teacher={user?.teacherId} type={'Approve'} reportGrades={user} />}
                 <DeleteAlert isUploading={isUploading} setIsOpen={setIsOpen} reportGrades={user} />
               </CommandGroup>
             </CommandList>

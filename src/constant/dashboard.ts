@@ -46,7 +46,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: 'Records',
-      href: '/record',
+      href: '/record/college',
       icon: 'fileStack',
     },
     {
@@ -163,6 +163,11 @@ export const dashboardConfig: DashboardConfig = {
         {
           title: 'Curriculum Management',
           href: '/dean/curriculums',
+          icon: 'eye',
+        },
+        {
+          title: 'Student Curriculum Management',
+          href: '/dean/curriculums/students',
           icon: 'eye',
         },
       ],
@@ -1486,6 +1491,22 @@ export const dashboardConfig: DashboardConfig = {
         {
           title: 'Add Student Scholarships',
           href: '/accounting/college/scholarships/add',
+          icon: 'add',
+        },
+      ],
+      icon: 'packageSearch',
+    },
+    {
+      title: 'Student Tuition Fee Discount',
+      i: [
+        {
+          title: `View Student Tuition Fee Discount`,
+          href: '/accounting/college/discount',
+          icon: 'eye',
+        },
+        {
+          title: 'Add Student Tuition Fee Discount',
+          href: '/accounting/college/discount/add',
           icon: 'add',
         },
       ],

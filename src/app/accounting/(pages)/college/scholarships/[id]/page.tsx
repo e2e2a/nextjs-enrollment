@@ -14,7 +14,6 @@ import LoaderPage from '@/components/shared/LoaderPage';
 import { ScholarshipValidator } from '@/lib/validators/scholarship';
 import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/admin';
 import { Combobox } from './components/Combobox';
-import { ComboboxExempted } from './components/ComboboxExempted';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 import { useScholarshipQueryById } from '@/lib/queries/scholarship/get/id';
 import { Icons } from '@/components/shared/Icons';
@@ -27,23 +26,7 @@ const typeItems = [
   { value: 'fixed', title: 'fixed' },
 ];
 
-const availableScholarship = [
-  { title: 'Working Student' },
-  { title: 'Person with Disability Discount' },
-  { title: 'Alay Lakad Scholar' },
-  { title: 'Tulong Dunong Scholarship' },
-  { title: 'TES Scholarship' },
-  { title: 'Corporate Scholar' },
-  { title: 'Family Discount' },
-];
-
-const percentageItems = Array.from({ length: 20 }, (_, i) => {
-  const percentage = (i + 1) * 5;
-  return {
-    title: `${percentage}%`,
-    value: (percentage / 100).toString(),
-  };
-});
+const availableScholarship = [{ title: 'Working Student' }, { title: 'Alay Lakad Scholar' }, { title: 'Tulong Dunong Scholarship' }, { title: 'TES Scholarship' }, { title: 'Corporate Scholar' }];
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [studentId, setStudentId] = useState<string | undefined>('');
@@ -72,7 +55,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       studentId: '',
       year: '',
       semester: '',
-      type: '',
+      type: 'fixed',
       amount: '',
       name: '',
       discountPercentage: '',
@@ -93,12 +76,9 @@ const Page = ({ params }: { params: { id: string } }) => {
     form.setValue('studentId', `${name}`);
     form.setValue('year', sData?.scholarship?.year);
     form.setValue('semester', sData?.scholarship?.semester);
-    form.setValue('type', sData?.scholarship?.type);
     form.setValue('amount', sData?.scholarship?.amount);
     form.setValue('name', sData?.scholarship?.name);
-    form.setValue('discountPercentage', String(sData?.scholarship?.discountPercentage));
     setSelectedItems(sData?.scholarship?.exemptedFees);
-    form.setValue('exemptedFees', sData?.scholarship?.exemptedFees);
   }, [form, sData, isNotEditable]);
 
   const onSubmit: SubmitHandler<z.infer<typeof ScholarshipValidator>> = async (data) => {
@@ -174,24 +154,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <SelectInput name={'name'} selectItems={availableScholarship} isNotEditable={isNotEditable} form={form} label={'Scholarship Name:'} placeholder={'Select Scholarship Name'} scholarship={sData?.scholarship} />
                     <SelectInput name={'year'} selectItems={studentYearData} isNotEditable={isNotEditable} form={form} label={'Year:'} placeholder={'Select Year'} scholarship={sData?.scholarship} />
                     <SelectInput name={'semester'} selectItems={studentSemesterData} isNotEditable={isNotEditable} form={form} label={'Semester:'} placeholder={'Select Semester'} scholarship={sData?.scholarship} />
-                    <SelectInput name={'type'} selectItems={typeItems} isNotEditable={isNotEditable} form={form} label={'Type:'} placeholder={'Select Type'} scholarship={sData?.scholarship} />
-                    {type === 'percentage' && (
-                      <>
-                        <SelectInput name={'discountPercentage'} selectItems={percentageItems} isNotEditable={isNotEditable} form={form} label={'Discount Percentage:'} placeholder={'Select Discount Percentage'} scholarship={sData?.scholarship} />
-
-                        {isNotEditable ? (
-                          <div className=''>
-                            <span className='text-[16px] font-medium'>
-                              Exempted: <span className=' capitalize font-semibold'>{sData?.scholarship?.exemptedFees.join(', ')}</span>
-                            </span>
-                          </div>
-                        ) : (
-                          <ComboboxExempted name={'exemptedFees'} selectItems={excemptedItems} form={form} label={'Exempted Fees:'} placeholder={'Select Exempted Fees'} selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
-                        )}
-                      </>
-                    )}
-
-                    {type === 'fixed' && <Input name={'amount'} type={'number'} isNotEditable={isNotEditable} form={form} label={'Amount:'} classNameInput={'uppercase'} />}
+                    <Input name={'amount'} type={'number'} isNotEditable={isNotEditable} form={form} label={'Amount:'} classNameInput={'uppercase'} />
                   </div>
                 </CardContent>
                 <CardFooter className=''>
