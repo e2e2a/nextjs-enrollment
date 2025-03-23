@@ -1,61 +1,52 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useSession } from 'next-auth/react';
-import LoaderPage from '@/components/shared/LoaderPage';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'; // PayPal React SDK
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { useCreateStudentReceiptMutation } from '@/lib/queries/studentReceipt/create';
 import { Icons } from '@/components/shared/Icons';
-import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import InputAmount from './InputAmount';
 
 type IProps = {
   enrollment: any;
   tfData: any;
   srData: any;
-  amountToPay: any;
+  //   amountToPay: any;
   type: string;
   title: string;
   isScholarshipStart: Boolean;
 };
 
-const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart }: IProps) => {
+const DownPayment = ({ enrollment, tfData, srData, type, title, isScholarshipStart }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const paypalContainerRef = useRef(null);
+  const [isPending, setIsPending] = useState(false);
   const [amountInput, setAmountInput] = useState(1000.0);
-  const [amountPayment, setAmountPayment] = useState(0.0);
-  const [extraPayment, setExtraPayment] = useState(0.0);
   const totalPaymentRef = useRef(0);
   const totalTransactionFee = useRef(0);
   const paymentMethod = useRef('');
-  const [displayPayment, setDisplayPayment] = useState(true);
 
   useEffect(() => {
     if (!enrollment) return;
     if (!tfData) return;
 
     if (tfData) {
-      let totalAmountToPay = amountToPay;
-      if (type === 'fullPayment' && !isScholarshipStart) totalAmountToPay = parseFloat((amountToPay - amountToPay * 0.1).toFixed(2));
-      setAmountPayment(totalAmountToPay);
-      const a = Number(tfData?.departmentalFee || 0) + Number(tfData?.ssgFee || 0) + Number(tfData?.insuranceFee || 0);
-      setExtraPayment(a);
-      if (type.toLowerCase() === 'fullpayment') totalAmountToPay = totalAmountToPay + a;
-
+      let totalAmountToPay = amountInput;
       const fee = Number(totalAmountToPay) * 0.039;
       totalTransactionFee.current = parseFloat(fee.toFixed(2));
       const totalPayment = Number(totalAmountToPay) + Number(fee) + 15;
       totalPaymentRef.current = parseFloat(totalPayment.toFixed(2));
     }
-  }, [srData, tfData, enrollment, amountToPay, type, isScholarshipStart]);
+  }, [srData, tfData, enrollment, amountInput, type, isScholarshipStart]);
 
   const formattedAmount = (amount: number) => {
     return amount ? amount.toFixed(2) : '0.00';
   };
 
   const createOrder = (data: any, actions: any) => {
+    if (Number(amountInput) < Number(tfData.downPayment)) return makeToastError(`Down payment should atleast greater than ${tfData.downPayment}.`);
+    setIsPending(true);
     paymentMethod.current = data.paymentSource;
     const payment = totalPaymentRef.current;
 
@@ -102,7 +93,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
           taxes: {
             fee: totalTransactionFee.current,
             fixed: 15,
-            amount: type === 'fullPayment' && !isScholarshipStart ? parseFloat((Number(amountToPay - amountToPay * 0.1) + Number(extraPayment)).toFixed(2)) : Number(amountToPay).toFixed(2),
+            amount: amountInput,
           },
           paymentIntent: details.intent, // Payment intent (CAPTURE)
           // payments: details.payment
@@ -129,6 +120,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
       }
     } catch (error) {
       console.log('error: ', error);
+      setIsPending(false);
       alert('Payment could not be completed. Please try again.');
     }
   };
@@ -138,11 +130,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
       <AlertDialogTrigger asChild>
         <Button variant={'outline'} size={'sm'} className='select-none focus-visible:ring-0 text-[15px] bg-blue-500 hover:bg-blue-600 text-white tracking-normal font-medium font-poppins'>
           <Icons.Banknote className='h-4 w-4 mr-2' />
-          {type === 'fullPayment' && 'Pay Full Payment'}
-          {type !== 'fullPayment' && type !== 'ssg' && type !== 'insurance' && type !== 'departmental' && 'Pay This Term'}
-          {type === 'departmental' && 'Make Payment'}
-          {type === 'ssg' && 'Make Payment'}
-          {type === 'insurance' && 'Make Payment'}
+          Pay Down Payment
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className='bg-white h-[75%] w-full overflow-y-scroll'>
@@ -181,104 +169,79 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
             <CardTitle className='hidden'>Waiting for Approval!</CardTitle>
           </CardHeader>
           <CardContent className='flex w-full drop-shadow-none shadow-none justify-center flex-col items-center border-0 rounded-lg bg-neutral-50 focus-visible:ring-0 space-y-5 px-0 mx-0'>
-            {displayPayment && (
-              <>
-                <div className='flex flex-col justify-center items-center w-full '>
-                  <div className='border p-11 rounded-lg bg-neutral-50 shadow-md drop-shadow-md'>
-                    <h1 className='w-full text-center text-2xl font-bold'>{title}</h1>
-                    <div className='grid grid-cols-1'>
-                      <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
-                        <div className='text-sm sm:mt-10 mt-5 w-full flex items-start'>
-                          <span className='font-bold text-nowrap'>Payment Amount:</span>
-                        </div>
-                        <div className='text-sm sm:mt-10 mt-5 w-ful flex flex-col items-end'>
-                          <span className='font-bold text-end w-full text-nowrap '>
-                            <span className={`font-bold text-end w-full text-black ${type === 'fullPayment' && !isScholarshipStart && 'line-through'}`}>₱{amountToPay}</span>
-                            {type === 'fullPayment' && !isScholarshipStart && <span className='text-green-500'> ₱{amountPayment}(10%)</span>}
-                          </span>
-                        </div>
+            <InputAmount amountInput={amountInput} setAmountInput={setAmountInput} />
+            {amountInput >= 1000 ? (
+              <div className='flex flex-col justify-center items-center w-full '>
+                <div className='border p-11 rounded-lg bg-neutral-50 shadow-md drop-shadow-md'>
+                  <h1 className='w-full text-center text-2xl font-bold'>{title}</h1>
+                  <div className='grid grid-cols-1'>
+                    <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                      <div className='text-sm sm:mt-10 mt-5 w-full flex items-start'>
+                        <span className='font-bold text-nowrap'>Payment Amount:</span>
                       </div>
-                      {type.toLowerCase() === 'fullpayment' && (
-                        <>
-                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
-                            <div className='text-sm mt-5 w-full flex items-start'>
-                              <span className='font-bold text-nowrap'>Departmental Fee:</span>
-                            </div>
-                            <div className='text-sm mt-5 w-ful flex items-end'>
-                              <span className='font-bold text-end w-full'>₱{tfData.departmentalFee}</span>
-                            </div>
-                          </div>
-                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
-                            <div className='text-sm mt-5 w-full flex items-start'>
-                              <span className='font-bold text-nowrap'>Insurance Fee:</span>
-                            </div>
-                            <div className='text-sm mt-5 w-ful flex items-end'>
-                              <span className='font-bold text-end w-full'>₱{tfData.insuranceFee}</span>
-                            </div>
-                          </div>
-                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
-                            <div className='text-sm mt-5 w-full flex items-start'>
-                              <span className='font-bold text-nowrap'>SSG Fee:</span>
-                            </div>
-                            <div className='text-sm mt-5 w-ful flex items-end'>
-                              <span className='font-bold text-end w-full'>₱{tfData.ssgFee}</span>
-                            </div>
-                          </div>
-                        </>
-                      )}
-
-                      <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
-                        <div className='text-sm mt-5 w-full flex items-start'>
-                          <span className='font-bold text-nowrap'>Fixed Fee:</span>
-                        </div>
-                        <div className='text-sm mt-5 w-ful flex items-end'>
-                          <span className='font-bold text-end w-full'>₱15.00</span>
-                        </div>
+                      <div className='text-sm sm:mt-10 mt-5 w-ful flex flex-col items-end'>
+                        <span className='font-bold text-end w-full text-nowrap '>
+                          <span className={`font-bold text-end w-full text-black `}>₱{amountInput}</span>
+                        </span>
                       </div>
-                      <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
-                        <div className='text-sm mt-5 w-full flex items-start'>
-                          <span className='font-bold text-nowrap'>
-                            Transaction Rate <span className='text-xs'>(3.9%)</span>:
-                          </span>
-                        </div>
-                        <div className='text-sm mt-5 w-ful flex items-end'>
-                          <span className='font-bold text-end w-full'>₱{totalTransactionFee.current.toFixed(2)}</span>
-                        </div>
+                    </div>
+                    <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                      <div className='text-sm mt-5 w-full flex items-start'>
+                        <span className='font-bold text-nowrap'>Fixed Fee:</span>
                       </div>
-                      <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
-                        <div className='text-sm mt-5 w-full flex items-start'>
-                          <span className='font-bold text-nowrap'>Total Payment Amount:</span>
-                        </div>
-                        <div className='text-sm mt-5 w-ful flex items-end'>
-                          <span className='font-bold text-end w-full'>₱{totalPaymentRef.current}</span>
-                        </div>
+                      <div className='text-sm mt-5 w-ful flex items-end'>
+                        <span className='font-bold text-end w-full'>₱15.00</span>
                       </div>
-                      <div ref={paypalContainerRef} className='mt-10 w-full'>
-                        <PayPalScriptProvider
-                          options={{
-                            clientId: `${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string}`,
-                            currency: 'USD',
-                            // vault: true,
-                            intent: 'capture',
+                    </div>
+                    <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                      <div className='text-sm mt-5 w-full flex items-start'>
+                        <span className='font-bold text-nowrap'>
+                          Transaction Rate <span className='text-xs'>(3.9%)</span>:
+                        </span>
+                      </div>
+                      <div className='text-sm mt-5 w-ful flex items-end'>
+                        <span className='font-bold text-end w-full'>₱{totalTransactionFee.current.toFixed(2)}</span>
+                      </div>
+                    </div>
+                    <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                      <div className='text-sm mt-5 w-full flex items-start'>
+                        <span className='font-bold text-nowrap'>Total Payment Amount:</span>
+                      </div>
+                      <div className='text-sm mt-5 w-ful flex items-end'>
+                        <span className='font-bold text-end w-full'>₱{totalPaymentRef.current.toFixed(2)}</span>
+                      </div>
+                    </div>
+                    <div className='mt-10 w-full'>
+                      <PayPalScriptProvider
+                        options={{
+                          clientId: `${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string}`,
+                          currency: 'USD',
+                          // vault: true,
+                          intent: 'capture',
+                        }}
+                      >
+                        <PayPalButtons
+                          style={{ layout: 'vertical' }}
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                          disabled={isPending}
+                          onError={(err) => {
+                            // makeToastError('PayPal error');
                           }}
-                        >
-                          <PayPalButtons
-                            style={{ layout: 'vertical' }}
-                            createOrder={createOrder}
-                            onApprove={onApprove}
-                            onError={(err) => {
-                              // makeToastError('PayPal error');
-                            }}
-                            onCancel={() => {
-                              makeToastError('Your transaction was cancelled.');
-                            }}
-                          />
-                        </PayPalScriptProvider>
-                      </div>
+                          onCancel={() => {
+                            setIsPending(false);
+                            makeToastError('Your transaction was cancelled.');
+                          }}
+                        />
+                      </PayPalScriptProvider>
                     </div>
                   </div>
                 </div>
-              </>
+              </div>
+            ) : (
+              <div className=''>
+                <span className=''>Down payment only accept when the amount is greater than 1000 or please go to the accounting office in DCIT.</span>
+              </div>
             )}
           </CardContent>
         </Card>
@@ -293,4 +256,4 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
   );
 };
 
-export default SettleTermPayment;
+export default DownPayment;
