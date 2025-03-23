@@ -53,10 +53,9 @@ const checkRole = async (user: any, data: any, setup: any) => {
     if (data.request === 'record') {
       cFee = await getCourseFeeRecordByCourseCode(course?.courseCode);
       if (!cFee) cFee = await getCourseFeeRecordByCourse(course?.name);
-      console.log('cFee', cFee)
     }
     if (!cFee) return { error: 'Course fee not found.', status: 404 };
-    const checkedType = await checkTypeOfPayment(data, cFee);
+    const checkedType = await checkTypeOfPayment(user, data, cFee);
     if (!checkedType || checkedType.error) return checkedType;
     switch (user.role) {
       case 'STUDENT':
@@ -73,10 +72,7 @@ const checkRole = async (user: any, data: any, setup: any) => {
     let studentReceipt;
     const a = await getStudentReceiptByStudentId(studentProfile._id);
     studentReceipt = a;
-    const ssgPayment = await checkPaymentOfSSG(studentReceipt);
     if (!studentEnrollment.studentYear && !studentEnrollment.studentSemester && !studentEnrollment.schoolYear) return { error: 'Invalid inputs', status: 400 };
-    const insurancePayment = await checkPaymentOfInsurance(studentReceipt, studentEnrollment.studentYear, studentEnrollment.schoolYear);
-
     // this is the insurance space for searching the insurance by semester and year
     studentReceipt = a.filter(
       (sr) => sr.year.toLowerCase() === studentEnrollment.studentYear.toLowerCase() && sr.semester.toLowerCase() === studentEnrollment.studentSemester.toLowerCase() && sr.schoolYear.toLowerCase() === studentEnrollment.schoolYear.toLowerCase()
@@ -88,53 +84,31 @@ const checkRole = async (user: any, data: any, setup: any) => {
       ?.reduce((total: number, payment: any) => {
         return total + (Number(payment?.taxes?.amount) || 0);
       }, 0);
-    const downPayment = Number(paymentOfDownPayment) - Number(cFee?.downPayment || 0);
-    const pymentOfDownPaymentExceed = paymentOfDownPayment && downPayment >= 0;
-
-    // Departmental Payment
-    const paymentOfDepartmental = studentReceipt
-      ?.filter((r: any) => r.type.toLowerCase() === 'departmental')
-      ?.reduce((total: number, payment: any) => {
-        return total + (Number(payment?.taxes?.amount) || 0);
-      }, 0);
-    const departmentalPayment = Number(paymentOfDepartmental) - Number(cFee?.departmentalFee || 0);
-    const paymentOfDepartmentalExceed = paymentOfDepartmental && departmentalPayment >= 0;
-
-    // Insurance Payment
-    // const paymentOfInsurance = studentReceipt
-    //   ?.filter((r: any) => r.type.toLowerCase() === 'insurance')
-    //   ?.reduce((total: number, payment: any) => {
-    //     return total + (Number(payment?.taxes?.amount) || 0);
-    //   }, 0);
-    // const insurancePayment = Number(paymentOfInsurance) - Number(cFee?.insurance || 0);
-    // const showPaymentOfInsurance = paymentOfInsurance && insurancePayment >= 0;
-
-    // SSG Payment
-    const paymentOfSSG = studentReceipt
-      ?.filter((r: any) => r.type.toLowerCase() === 'ssg')
-      ?.reduce((total: number, payment: any) => {
-        return total + (Number(payment?.taxes?.amount) || 0);
-      }, 0);
-    const ssgPaymentCheck = Number(paymentOfSSG) - Number(cFee?.ssgFee || 0);
-    const showPaymentOfSSG = ssgPayment.ssgPayment || (paymentOfSSG && ssgPaymentCheck >= 0);
+    const downPayment = Number(paymentOfDownPayment) >= 500;
 
     const updateData = { payment: true, step: 6 };
-
-    // const asd = await studentReceipt.filter((rs) => rs.type.toLowerCase() === 'downpayment' && rs.schoolYear.toLowerCase() === setup.enrollmentTertiary.schoolYear.toLowerCase());
-    if (studentEnrollment.step === 5 && showPaymentOfSSG && insurancePayment.insurancePayment && pymentOfDownPaymentExceed && paymentOfDepartmentalExceed) await updateEnrollmentById(studentEnrollment._id, updateData);
+    if (studentEnrollment.step === 5 && downPayment) await updateEnrollmentById(studentEnrollment._id, updateData);
 
     return b;
   });
 };
 
-const checkTypeOfPayment = async (data: any, cFee: any) => {
+const checkTypeOfPayment = async (user: any, data: any, cFee: any) => {
   return tryCatch(async () => {
     const type = data.type.toLowerCase();
     let payment = false;
 
     switch (type) {
       case 'downpayment':
-        payment = Number(data.taxes.amount) === Number(cFee.downPayment);
+        console.log('running here');
+        if (user.role === 'STUDENT') {
+          payment = Number(data.taxes.amount) >= Number(cFee.downPayment);
+          if (!payment) return { error: `Amount of down payment should greater than ${cFee.downPayment}.`, status: 400 };
+        }
+        if (user.role === 'ACCOUNTING') {
+          payment = Number(data.taxes.amount) >= 500;
+          if (!payment) return { error: 'Amount of down payment should greater than 500.', status: 400 };
+        }
         break;
       case 'ssg':
         payment = Number(data.taxes.amount) === Number(cFee.ssgFee);
