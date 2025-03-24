@@ -66,6 +66,7 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
     setIsPending(true);
     const receipt = {
       studentId: enrollment?.profileId?._id,
+      enrollmentId: enrollment?._id,
       category: 'College',
       amount: {
         currency_code: 'Php',
@@ -82,6 +83,7 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
         amount: Number(amountInputRef.current).toFixed(2),
       },
       type: type,
+      request: 'record',
     };
 
     mutation.mutate(receipt, {

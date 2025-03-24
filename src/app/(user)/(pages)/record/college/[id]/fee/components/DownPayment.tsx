@@ -75,6 +75,7 @@ const DownPayment = ({ enrollment, tfData, srData, type, title, isScholarshipSta
           category: 'College',
           orderID: details.id,
           transactionId: details.id,
+          enrollmentId: enrollment?._id,
           amount: {
             currency_code: details.purchase_units[0].amount.currency_code,
             value: parseFloat(details.purchase_units[0].amount.value),
@@ -98,6 +99,7 @@ const DownPayment = ({ enrollment, tfData, srData, type, title, isScholarshipSta
           // payments: details.payment
           type: type,
           captureTime: new Date(details.update_time),
+          request: 'record',
         };
 
         mutation.mutate(receipt, {
