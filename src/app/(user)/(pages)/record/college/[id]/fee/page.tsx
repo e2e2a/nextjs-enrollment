@@ -51,8 +51,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   let showPaymentOfFullPayment = false;
   const totalofPerTermFullPayment = Math.round(Number(total - total * 0.1) * 100) / 100;
   showPaymentOfFullPayment =
-    paymentOfFullPayment &&
-    Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 >= Math.round(Number(totalofPerTermFullPayment + Number(tfData?.tFee?.ssgFee || 0) + Number(tfData?.tFee?.departmentalFee || 0) + Number(tfData?.tFee?.insuranceFee || 0)) * 100) / 100;
+    paymentOfFullPayment && Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 >= Math.round(Number(totalofPerTermFullPayment + Number(tfData?.tFee?.ssgFee || 0) + Number(tfData?.tFee?.departmentalFee || 0)) * 100) / 100;
 
   const scholarship = isScholarshipApplicable(data?.enrollmentRecord?.studentYear, data?.enrollmentRecord?.studentSemester, data?.enrollmentRecord?.profileId?.scholarshipId);
   const isScholarshipStart = scholarship && data?.enrollmentRecord?.profileId?.scholarshipId && data?.enrollmentRecord?.profileId?.scholarshipId;
@@ -60,7 +59,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   // Down Payment
   const paymentOfDownPayment = srData?.studentReceipt.find((r: any) => r.type.toLowerCase() === 'downpayment');
-  const showPaymentOfDownPayment = paymentOfDownPayment && Number(paymentOfDownPayment?.taxes?.amount).toFixed(2) === Number(tfData?.tFee?.downPayment).toFixed(2);
+  const showPaymentOfDownPayment = paymentOfDownPayment && Number(paymentOfDownPayment?.taxes?.amount) >= Number(500);
 
   // Prelim Payment
   const paymentOfPrelim = srData?.studentReceipt
@@ -253,10 +252,6 @@ const Page = ({ params }: { params: { id: string } }) => {
         const paymentPerTermCurrent = Math.ceil((totalPerTermCurrent / 4) * 100) / 100;
         const paymentPerTermRoundOffCurrent = paymentPerTermCurrent % 100 >= 1 ? Math.ceil(paymentPerTermCurrent / 100) * 100 : Math.floor(paymentPerTermCurrent / 100) * 100;
         const paymentPerTermRoundOff = paymentPerTerm % 100 >= 1 ? Math.ceil(paymentPerTerm / 100) * 100 : Math.floor(paymentPerTerm / 100) * 100;
-        console.log('paymentOfDownPayment?.taxes?.amount', paymentOfDownPayment?.taxes?.amount);
-        console.log('formattedTotal', formattedTotal);
-        console.log('totalWithoutDownPayment', totalWithoutDownPayment);
-        console.log('paymentPerTerm', totalWithoutDownPayment);
         setPaymentPerTermCurrent(Number(paymentPerTermRoundOffCurrent));
         setPaymentPerTerm(Number(paymentPerTermRoundOff));
       }
@@ -264,7 +259,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       return;
     }
   }, [data, error, tfData, srData, srError, isTFError, paymentOfDownPayment, showPaymentOfFullPayment, isScholarshipStart]);
-
+  console.log('srData', srData);
   useEffect(() => {
     let additionPayment = parseFloat((Number(tfData?.tFee?.ssgFee || 0) + Number(tfData?.tFee?.insuranceFee || 0) + Number(tfData?.tFee?.departmentalFee || 0)).toFixed(2));
     if (showPaymentOfDepartmental) additionPayment = parseFloat((additionPayment - tfData?.tFee?.departmentalFee).toFixed(2));
@@ -453,26 +448,36 @@ const Page = ({ params }: { params: { id: string } }) => {
                           !showPaymentOfSemiFinal &&
                           !showPaymentOfFinal && (
                             <div className='flex flex-col justify-center items-center w-full border-[0.5px] rounded-lg px-5 py-3'>
-                              <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>
-                                <h1 className='flex gap-x-2 justify-center items-center'>
-                                  <span className='text-[16px] font-bold text-orange-400'>Note:</span>
-                                  <span className='text-sm text-justify'>
-                                    Full payment for the semester is only applicable for the initial payment and includes a 10% discount. {isScholarshipStart && 'For more details 10% discount is only available for students who does not have a schollarship.'}
-                                  </span>
-                                </h1>
-                              </div>
+                              {srData?.overAllBalance <= 0 && (
+                                <>
+                                  <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>
+                                    <h1 className='flex gap-x-2 justify-center items-center'>
+                                      <span className='text-[16px] font-bold text-orange-400'>Note:</span>
+                                      <span className='text-sm text-justify'>
+                                        Full payment for the semester is only applicable for the initial payment and includes a 10% discount.{' '}
+                                        {isScholarshipStart && 'For more details 10% discount is only available for students who does not have a schollarship.'}
+                                      </span>
+                                    </h1>
+                                  </div>
+                                </>
+                              )}
+
                               <div className='flex items-center justify-center flex-col'>
-                                <SettleTermPayment
-                                  perTermPayment={paymentPerTermCurrent}
-                                  enrollment={data?.enrollmentRecord}
-                                  tfData={tfData?.tFee}
-                                  srData={srData}
-                                  amountToPay={Number(total).toFixed(2)}
-                                  type={'fullPayment'}
-                                  title='Full Payment'
-                                  isScholarshipStart={isScholarshipStart}
-                                />
-                                <span className=''>or</span>
+                                {srData?.overAllBalance <= 0 && (
+                                  <>
+                                    <SettleTermPayment
+                                      perTermPayment={paymentPerTermCurrent}
+                                      enrollment={data?.enrollmentRecord}
+                                      tfData={tfData?.tFee}
+                                      srData={srData}
+                                      amountToPay={Number(total).toFixed(2)}
+                                      type={'fullPayment'}
+                                      title='Full Payment'
+                                      isScholarshipStart={isScholarshipStart}
+                                    />
+                                    <span className=''>or</span>
+                                  </>
+                                )}
                                 <DownPayment
                                   enrollment={data?.enrollmentRecord}
                                   tfData={tfData?.tFee}
@@ -534,7 +539,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <>
                                     <TableRow>
                                       <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDownPayment) && 'text-green-400 line-through'}`}>Down Payment</TableCell>
-                                      <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDownPayment) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
+                                      <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || showPaymentOfDownPayment) && 'text-green-400 line-through'}`}>₱{Number(paymentOfDownPayment?.taxes?.amount).toFixed(2)}</TableCell>
                                       <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
                                         {showPaymentOfFullPayment || showPaymentOfDownPayment ? 'Paid' : 'unpaid'}
                                       </TableCell>
@@ -670,7 +675,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <>
                                     <TableRow>
                                       <TableCell className={`px-4 py-2 text-green-400 line-through`}>Down Payment</TableCell>
-                                      <TableCell className={`px-4 py-2 text-green-400 line-through`}>₱{Number(1000).toFixed(2)}</TableCell>
+                                      <TableCell className={`px-4 py-2 text-green-400 line-through`}>₱{Number(tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
                                       <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Paid</TableCell>
                                       <TableCell className={`px-4 py-2 uppercase font-semibold text-green-400`}>Completed</TableCell>
                                     </TableRow>

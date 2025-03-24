@@ -23,7 +23,7 @@ export const getAllStudentReceiptByUserIdAndYearAndSemesterAction = async (userI
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
     if (session && session.user.role !== 'STUDENT' && session.user.role !== 'ACCOUNTING') return { error: 'Forbidden', status: 403 };
     if (session.user.role === 'STUDENT' && session.user._id !== userId) return { error: 'Forbidden', status: 403 };
-
+    console.log('year', year, semester);
     const student = await getStudentProfileByUserId(userId);
     let studentReceipt;
     const a = await getStudentReceiptByStudentId(student._id);
@@ -54,10 +54,10 @@ const checkBalance = async (currentYear: string, currentSemester: string, profil
 
     // Sort enrollment records by year & semester (oldest first)
     const sortedRecords = enrollmentRecords.sort((a, b) => {
-      let yearA = studentYearData.findIndex((y) => y.title === a.studentYear);
-      let yearB = studentYearData.findIndex((y) => y.title === b.studentYear);
-      let semA = studentSemesterData.findIndex((s) => s.title === a.studentSemester);
-      let semB = studentSemesterData.findIndex((s) => s.title === b.studentSemester);
+      let yearA = studentYearData.findIndex((y) => y?.title === a?.studentYear);
+      let yearB = studentYearData.findIndex((y) => y?.title === b?.studentYear);
+      let semA = studentSemesterData.findIndex((s) => s?.title === a?.studentSemester);
+      let semB = studentSemesterData.findIndex((s) => s.title === b?.studentSemester);
 
       if (yearA !== yearB) return yearA - yearB;
       return semA - semB;
@@ -70,13 +70,13 @@ const checkBalance = async (currentYear: string, currentSemester: string, profil
     let overAllBalance = 0;
     let overAllShowBalance = 0;
     for (const record of sortedRecords) {
-      const recordYearIndex = studentYearData.findIndex((y) => y.title === record.studentYear);
-      const recordSemIndex = studentSemesterData.findIndex((s) => s.title === record.studentSemester);
+      const recordYearIndex = studentYearData.findIndex((y) => y?.title === record?.studentYear);
+      const recordSemIndex = studentSemesterData.findIndex((s) => s?.title === record?.studentSemester);
 
       // Check only past enrollments (before current year/sem)
       if (recordYearIndex < currentYearIndex || (recordYearIndex === currentYearIndex && recordSemIndex < currentSemIndex)) {
         const getTotal = await getTotalOfBalance(record, studentReceipt);
-        previousBalance.push({ year: record.studentYear, semester: record.studentSemester, ...getTotal });
+        previousBalance.push({ year: record?.studentYear, semester: record?.studentSemester, schoolYear: record?.schoolYear, ...getTotal });
         overAllBalance += Number(getTotal.balance || 0);
         overAllShowBalance += Number(getTotal.balanceToShow || 0);
       }
@@ -143,9 +143,9 @@ const getTotalOfBalance = async (enrollment: any, studentReceipt: any) => {
           ? studentReceipt?.filter((r: any) => r.year.toLowerCase() === enrollment.studentYear.toLowerCase() && r.semester.toLowerCase() === enrollment.studentSemester.toLowerCase() && !r.isPaidIn?.year && !r.isPaidIn?.semester)
           : studentReceipt?.filter((r: any) => r.year.toLowerCase() === enrollment.studentYear.toLowerCase() && r.semester.toLowerCase() === enrollment.studentSemester.toLowerCase());
 
-      const paymentOfFullPayment = filteredReceipts.find((r: any) => r.type.toLowerCase() === 'fullpayment');
+      const paymentOfFullPayment = filteredReceipts.find((r: any) => r?.type?.toLowerCase() === 'fullpayment');
       let showPaymentOfFullPayment = paymentOfFullPayment;
-      const paymentOfDownPayment = filteredReceipts.find((r: any) => r.type.toLowerCase() === 'downpayment');
+      const paymentOfDownPayment = filteredReceipts.find((r: any) => r?.type?.toLowerCase() === 'downpayment');
 
       const totalWithoutDownPayment = Number(totalAmount) - Number(paymentOfDownPayment?.taxes?.amount);
       const totalPerTerm = Math.round(totalWithoutDownPayment * 100) / 100;
@@ -197,7 +197,27 @@ const checkPaymentOfInsurance = async (studentReceipt: any, year: string, school
       ?.reduce((total: number, payment: any) => {
         return { amount: total + (Number(payment?.taxes?.amount) || 0), semester: payment.semester, schoolYear: payment.schoolYear };
       }, 0);
+    const fullpayment = a
+      ?.filter((r: any) => r.type.toLowerCase() === 'fullpayment')
+      ?.sort((a: any, b: any) => {
+        // Sorting by school year first, then semester
+        if (a.schoolYear !== b.schoolYear) {
+          return a.schoolYear.localeCompare(b.schoolYear);
+        }
+        return a.semester.localeCompare(b.semester);
+      })
+      ?.reduce((acc: any, payment: any, index: number) => {
+        if (index === 0) {
+          return {
+            amount: Number(payment?.taxes?.amount) || 0,
+            semester: payment.semester,
+            schoolYear: payment.schoolYear,
+          };
+        }
+        return acc; // Keep only the first (oldest) entry
+      }, null);
     if (insurancePayment1) insurancePayment = true;
-    return { insurancePayment, insurancePaymentSemester: insurancePayment1.semester };
+    if (fullpayment) insurancePayment = true;
+    return { insurancePayment, insurancePaymentSemester: insurancePayment1?.semester || fullpayment?.semester };
   });
 };

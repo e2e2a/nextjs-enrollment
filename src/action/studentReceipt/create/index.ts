@@ -39,6 +39,7 @@ export const createStudentReceiptAction = async (data: any) => {
 const checkRole = async (user: any, data: any, setup: any) => {
   return tryCatch(async () => {
     let b;
+    console.log('data', data);
     const studentProfile = await getStudentProfileById(data.studentId);
     if (!studentProfile) {
       // await refundPayment(data.captureId, data.amount);
@@ -47,13 +48,13 @@ const checkRole = async (user: any, data: any, setup: any) => {
     let studentEnrollment;
     studentEnrollment = await getEnrollmentByProfileId(studentProfile?._id);
     if (data.request === 'record') studentEnrollment = await getEnrollmentRecordById(data.enrollmentId);
+    console.log('studentEnrollment', studentEnrollment);
     if (!studentEnrollment) return { error: 'No Enrollment found', status: 404 };
     let cFee = null;
     const course = await getCourseByCourseCode(studentEnrollment.courseCode);
     cFee = await getCourseFeeByCourseId(studentEnrollment?.courseId?._id);
     if (data.request === 'record') {
-      cFee = await getCourseFeeRecordByCourseCode(course?.courseCode);
-      if (!cFee) cFee = await getCourseFeeRecordByCourse(course?.name);
+      cFee = await getCourseFeeByCourseCodeAndYearAndSemester(studentEnrollment.studentYear, studentEnrollment.studentSemester, course?.courseCode);
     }
     if (!cFee) return { error: 'Course fee not found.', status: 404 };
     const checkedType = await checkTypeOfPayment(user, data, cFee);
@@ -111,6 +112,9 @@ const checkTypeOfPayment = async (user: any, data: any, cFee: any) => {
         }
         break;
       case 'ssg':
+        console.log('cfee', cFee);
+        console.log('cFee.ssgFee', cFee.ssgFee);
+        console.log('data.taxes.amount', data.taxes.amount);
         payment = Number(data.taxes.amount) === Number(cFee.ssgFee);
         break;
       case 'departmental':
@@ -125,6 +129,7 @@ const checkTypeOfPayment = async (user: any, data: any, cFee: any) => {
         payment = true;
         break;
     }
+    console.log('asdasd');
     if (!payment) return { error: 'Amount of payment should be equal to amount to pay.', status: 400 };
     return { success: true, message: 'Payment type is valid.', status: 200 };
   });
@@ -175,30 +180,17 @@ const checkAndCreateStudentReceipt = async (user: any, student: any, data: any, 
     const data2 = { ...data, captures: captures, year: studentEnrollment.studentYear, semester: studentEnrollment.studentSemester, 'payer.address': d?.res?.purchase_units[0].shipping?.address, payment_source: payment_source };
     if (data.previousBalance && data.previousBalance.length > 0 && data?.type?.toLowerCase() !== 'downpayment' && data?.type?.toLowerCase() !== 'ssg' && data?.type?.toLowerCase() !== 'departmental' && data?.type?.toLowerCase() !== 'insurance') {
       // await checkBalance(studentEnrollment.studentYear, studentEnrollment.studentSemester, student._id.toString(), studentReceipt);
-      let amountPaid = data.taxes.amount - data.perTermPaymentCurrent;
+      let amountPaid = data.taxes.amount;
+      if (data.perTermPaymentCurrent > 0) amountPaid = data.taxes.amount - data.perTermPaymentCurrent;
       for (const prev of data.previousBalance) {
         if (Number(amountPaid) > 0) {
           let type;
           let amount;
-          if (prev.finalBalance > 0) {
-            type === 'final';
-            amount = prev.finalBalance;
-          }
-          if (prev.semiFinalBalance > 0) {
-            type === 'semi-final';
-            amount = prev.semiFinalBalance;
-          }
-          if (prev.midtermBalance > 0) {
-            type === 'midterm';
-            amount = prev.midtermBalance;
-          }
-          if (prev.prelimBalance > 0) {
-            type === 'prelim';
-            amount = prev.prelimBalance;
-          }
           const captures = {
             id: '',
+            category: 'College',
             status: capture.status,
+            studentId: studentEnrollment.profileId?._id,
             amount: {
               currency_code: capture.amount.currency_code,
               value: capture.amount.value,
@@ -208,21 +200,86 @@ const checkAndCreateStudentReceipt = async (user: any, student: any, data: any, 
               status: capture.seller_protection.status,
               dispute_categories: capture.seller_protection.dispute_categories,
             },
-            taxes: {
-              fee: '',
-              fixed: '',
-              amount: amountPaid > amount ? Number(amount || 0) : Number(amountPaid || 0),
-            },
             isPaidIn: {
               year: studentEnrollment.studentYear,
               semester: studentEnrollment.studentSemester,
             },
-            type,
             create_time: new Date(capture.create_time),
             update_time: new Date(capture.update_time),
           };
-          const createdReceipt = await createStudentReceipt({ ...captures, year: prev.year, semester: prev.semester, 'payer.address': d?.res?.purchase_units[0].shipping?.address, payment_source: payment_source });
-          if (!createdReceipt) return { error: 'Something went wrong.', status: 500 };
+          if (Number(amountPaid) > 0) {
+            if (prev.prelimBalance > 0) {
+              type = 'prelim';
+              amount = prev.prelimBalance;
+              const createdReceipt = await createStudentReceipt({
+                ...captures,
+                year: prev.year,
+                semester: prev.semester,
+                schoolYear: prev.schoolYear,
+                taxes: { amount: amountPaid > amount ? Number(amount || 0) : Number(amountPaid || 0) },
+                'payer.address': d?.res?.purchase_units[0].shipping?.address,
+                payment_source: payment_source,
+                type,
+              });
+              if (!createdReceipt) return { error: 'Something went wrong.', status: 500 };
+              amountPaid = Number(amountPaid - amount);
+            }
+          }
+          if (Number(amountPaid) > 0) {
+            if (prev.midtermBalance > 0) {
+              type = 'midterm';
+              amount = prev.midtermBalance;
+              const createdReceipt = await createStudentReceipt({
+                ...captures,
+                year: prev.year,
+                semester: prev.semester,
+                schoolYear: prev.schoolYear,
+                taxes: { amount: amountPaid > amount ? Number(amount || 0) : Number(amountPaid || 0) },
+                'payer.address': d?.res?.purchase_units[0].shipping?.address,
+                payment_source: payment_source,
+                type,
+              });
+              if (!createdReceipt) return { error: 'Something went wrong.', status: 500 };
+              amountPaid = Number(amountPaid - amount);
+            }
+          }
+          if (Number(amountPaid) > 0) {
+            if (prev.semiFinalBalance > 0) {
+              type = 'semi-final';
+              amount = prev.semiFinalBalance;
+              const createdReceipt = await createStudentReceipt({
+                ...captures,
+                year: prev.year,
+                semester: prev.semester,
+                schoolYear: prev.schoolYear,
+                taxes: { amount: amountPaid > amount ? Number(amount || 0) : Number(amountPaid || 0) },
+                'payer.address': d?.res?.purchase_units[0].shipping?.address,
+                payment_source: payment_source,
+                type,
+              });
+              if (!createdReceipt) return { error: 'Something went wrong.', status: 500 };
+              amountPaid = Number(amountPaid - amount);
+            }
+          }
+          if (Number(amountPaid) > 0) {
+            if (prev.finalBalance > 0) {
+              type = 'final';
+              amount = prev.finalBalance;
+              const createdReceipt = await createStudentReceipt({
+                ...captures,
+                year: prev.year,
+                semester: prev.semester,
+                schoolYear: prev.schoolYear,
+                taxes: { amount: amountPaid > amount ? Number(amount || 0) : Number(amountPaid || 0) },
+                'payer.address': d?.res?.purchase_units[0].shipping?.address,
+                payment_source: payment_source,
+                type,
+              });
+              if (!createdReceipt) return { error: 'Something went wrong.', status: 500 };
+              amountPaid = Number(amountPaid - amount);
+            }
+          }
+
           amountPaid = Number(amountPaid - amount);
         }
       }

@@ -23,6 +23,7 @@ type IProps = {
 const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart, perTermPayment }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [amountPayment, setAmountPayment] = useState(0.0);
+  const [insuranceFee, setInsuranceFee] = useState(false);
   const [extraPayment, setExtraPayment] = useState(0.0);
   const totalPaymentRef = useRef(0);
   const totalTransactionFee = useRef(0);
@@ -34,10 +35,12 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
     if (!tfData) return;
 
     if (tfData) {
+      const insurence = !srData.insurancePayment || srData?.insurancePaymentSemester?.toLowerCase() === enrollment?.studentSemester?.toLowerCase();
+      setInsuranceFee(insurence);
       let totalAmountToPay = amountToPay;
       if (type === 'fullPayment' && !isScholarshipStart) totalAmountToPay = parseFloat((amountToPay - amountToPay * 0.1).toFixed(2));
       setAmountPayment(totalAmountToPay);
-      const a = Number(tfData?.departmentalFee || 0) + Number(tfData?.ssgFee || 0) + Number(tfData?.insuranceFee || 0);
+      const a = Number(tfData?.departmentalFee || 0) + Number(tfData?.ssgFee || 0) + Number(insurence ? tfData?.insuranceFee || 0 : 0);
       setExtraPayment(a);
       if (type.toLowerCase() === 'fullpayment') totalAmountToPay = totalAmountToPay + a;
 
@@ -110,7 +113,6 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
           captureTime: new Date(details.update_time),
           request: 'record',
         };
-
         mutation.mutate(receipt, {
           onSuccess: (res: any) => {
             switch (res.status) {
@@ -211,14 +213,17 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
                               <span className='font-bold text-end w-full'>₱{tfData.departmentalFee}</span>
                             </div>
                           </div>
-                          <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
-                            <div className='text-sm mt-5 w-full flex items-start'>
-                              <span className='font-bold text-nowrap'>Insurance Fee:</span>
+                          {insuranceFee && (
+                            <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                              <div className='text-sm mt-5 w-full flex items-start'>
+                                <span className='font-bold text-nowrap'>Insurance Fee:</span>
+                              </div>
+
+                              <div className='text-sm mt-5 w-ful flex items-end'>
+                                <span className='font-bold text-end w-full'>₱{tfData.insuranceFee}</span>
+                              </div>
                             </div>
-                            <div className='text-sm mt-5 w-ful flex items-end'>
-                              <span className='font-bold text-end w-full'>₱{tfData.insuranceFee}</span>
-                            </div>
-                          </div>
+                          )}
                           <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
                             <div className='text-sm mt-5 w-full flex items-start'>
                               <span className='font-bold text-nowrap'>SSG Fee:</span>
