@@ -17,9 +17,10 @@ type IProps = {
   type: string;
   title: string;
   isScholarshipStart: Boolean;
+  perTermPayment: any;
 };
 
-const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart }: IProps) => {
+const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart, perTermPayment }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [amountPayment, setAmountPayment] = useState(0.0);
   const [extraPayment, setExtraPayment] = useState(0.0);
@@ -82,6 +83,8 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
           category: 'College',
           orderID: details.id,
           transactionId: details.id,
+          previousBalance: srData?.previousBalance,
+          perTermPaymentCurrent: perTermPayment,
           amount: {
             currency_code: details.purchase_units[0].amount.currency_code,
             value: parseFloat(details.purchase_units[0].amount.value),

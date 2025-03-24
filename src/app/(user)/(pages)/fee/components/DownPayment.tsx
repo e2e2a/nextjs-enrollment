@@ -26,6 +26,7 @@ const DownPayment = ({ enrollment, tfData, srData, type, title, isScholarshipSta
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [amountInput, setAmountInput] = useState(1000.0);
+  const amountInputRef = useRef(0);
   const totalPaymentRef = useRef(0);
   const totalTransactionFee = useRef(0);
   const paymentMethod = useRef('');
@@ -33,15 +34,14 @@ const DownPayment = ({ enrollment, tfData, srData, type, title, isScholarshipSta
   useEffect(() => {
     if (!enrollment) return;
     if (!tfData) return;
+  }, [srData, tfData, enrollment]);
 
-    if (tfData) {
-      let totalAmountToPay = amountInput;
-      const fee = Number(totalAmountToPay) * 0.039;
-      totalTransactionFee.current = parseFloat(fee.toFixed(2));
-      const totalPayment = Number(totalAmountToPay) + Number(fee) + 15;
-      totalPaymentRef.current = parseFloat(totalPayment.toFixed(2));
-    }
-  }, [srData, tfData, enrollment, amountInput, type, isScholarshipStart]);
+  let totalAmountToPay = amountInput;
+  amountInputRef.current = amountInput
+  const fee = Number(totalAmountToPay) * 0.039;
+  totalTransactionFee.current = parseFloat(fee.toFixed(2));
+  const totalPayment = Number(totalAmountToPay) + Number(fee) + 15;
+  totalPaymentRef.current = parseFloat(totalPayment.toFixed(2));
 
   const formattedAmount = (amount: number) => {
     return amount ? amount.toFixed(2) : '0.00';
@@ -96,7 +96,7 @@ const DownPayment = ({ enrollment, tfData, srData, type, title, isScholarshipSta
           taxes: {
             fee: totalTransactionFee.current,
             fixed: 15,
-            amount: amountInput,
+            amount: amountInputRef.current,
           },
           paymentIntent: details.intent, // Payment intent (CAPTURE)
           // payments: details.payment

@@ -19,24 +19,27 @@ type IProps = {
   type: string;
   title: string;
   isScholarshipStart: boolean;
+  perTermPayment: any;
 };
 
-const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart }: IProps) => {
+const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart, perTermPayment }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [total, setTotal] = useState(0.0);
   const [amountPayment, setAmountPayment] = useState(0.0);
   const [amountInput, setAmountInput] = useState(0);
+  const amountInputRef = useRef(0);
   const [isPending, setIsPending] = useState(false);
   const [displayPayment, setDisplayPayment] = useState(true);
 
   //to be deducted amount of scholarship payment
-  const isPaidByScholarship = srData
+  const isPaidByScholarship = srData?.studentReceipt
     ?.filter((r: any) => r.isPaidByScholarship)
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
 
   const balanceGrant = parseFloat((Number(enrollment?.profileId?.scholarshipId?.amount) - Number(isPaidByScholarship)).toFixed(2));
+  amountInputRef.current = amountInput;
 
   useEffect(() => {
     if (!enrollment) return;
@@ -71,6 +74,8 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
         currency_code: 'Php',
         value: Number(amountInput).toFixed(2),
       },
+      previousBalance: srData?.previousBalance,
+      perTermPaymentCurrent: perTermPayment,
       status: 'COMPLETED',
       paymentMethod: 'CASH',
       createTime: new Date(Date.now()),
@@ -79,7 +84,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
       taxes: {
         fee: (0).toFixed(2),
         fixed: (0).toFixed(2),
-        amount: Number(amountInput).toFixed(2),
+        amount: Number(amountInputRef.current).toFixed(2),
       },
       type: type,
     };
@@ -108,8 +113,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
         <Button variant={'outline'} size={'sm'} className='select-none focus-visible:ring-0 text-[15px] bg-blue-500 hover:bg-blue-600 text-white tracking-normal font-medium font-poppins'>
           <Icons.Banknote className='h-4 w-4 mr-2' />
           {type === 'fullPayment' && 'Pay Full Payment'}
-          {type !== 'fullPayment' && type !== 'downPayment' && type !== 'ssg' && type !== 'insurance' && type !== 'departmental' && 'Pay This Term'}
-          {type === 'downPayment' && 'Pay Down Payment'}
+          {type !== 'fullPayment' && type !== 'ssg' && type !== 'insurance' && type !== 'departmental' && 'Pay This Term'}
           {type === 'departmental' && 'Make Payment'}
           {type === 'ssg' && 'Make Payment'}
           {type === 'insurance' && 'Make Payment'}

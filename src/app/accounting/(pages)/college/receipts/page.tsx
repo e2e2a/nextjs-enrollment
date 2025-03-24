@@ -8,16 +8,19 @@ import { useStudentReceiptQueryByCategory } from '@/lib/queries/studentReceipt/g
 
 const Page = () => {
   const [isError, setIsError] = useState(false);
+  const [studentReceipt, setStudentReceipt] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
 
   const { data: s } = useSession();
-  const { data, isLoading, error } = useStudentReceiptQueryByCategory('College');
+  const { data, error } = useStudentReceiptQueryByCategory('College');
 
   useEffect(() => {
     if (error || !data) return setIsError(true);
     if (data) {
       setIsError(false);
       if (data.studentReceipt) {
+        const a = data.studentReceipt.filter((sr: any) => !sr?.isPaidIn?.year && !sr?.isPaidIn?.semester);
+        setStudentReceipt(a);
         setIsPageLoading(false);
       }
     }
@@ -36,7 +39,7 @@ const Page = () => {
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-bold '>Payments Receipts</h1>
               </div>
-              <DataTable columns={columns} data={data.studentReceipt} />
+              <DataTable columns={columns} data={studentReceipt as []} />
             </div>
           )}
         </div>

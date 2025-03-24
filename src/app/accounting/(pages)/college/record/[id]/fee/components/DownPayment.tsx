@@ -25,6 +25,7 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
   const [isOpen, setIsOpen] = useState(false);
   const [amountPayment, setAmountPayment] = useState(500.0);
   const [amountInput, setAmountInput] = useState(500.0);
+  const amountInputRef = useRef(0);
   const [isPending, setIsPending] = useState(false);
   const [displayPayment, setDisplayPayment] = useState(true);
 
@@ -36,6 +37,7 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
     }, 0);
 
   const balanceGrant = parseFloat((Number(enrollment?.profileId?.scholarshipId?.amount) - Number(isPaidByScholarship)).toFixed(2));
+  amountInputRef.current = amountInput;
 
   useEffect(() => {
     if (!enrollment) return;
@@ -77,7 +79,7 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
       taxes: {
         fee: (0).toFixed(2),
         fixed: (0).toFixed(2),
-        amount: Number(amountInput).toFixed(2),
+        amount: Number(amountInputRef.current).toFixed(2),
       },
       type: type,
     };
