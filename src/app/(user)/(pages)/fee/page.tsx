@@ -22,10 +22,12 @@ import DownPayment from './components/DownPayment';
 const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
   const [total, setTotal] = useState<number>(0.0);
+  const [totalCurrent, setTotalCurrent] = useState<number>(0.0);
   const [totalWithoutDownPayment, setTotalWithoutDownPayment] = useState<number>(0.0);
   const [additionalTotal, setAdditionalTotal] = useState<number>(0.0);
   const [showBalance, setShowBalance] = useState<number>(0.0);
   const [paymentPerTerm, setPaymentPerTerm] = useState<number>(0.0);
+  const [paymentPerTermCurrent, setPaymentPerTermCurrent] = useState<number>(0.0);
   const [labTotal, setLabTotal] = useState<number>(0.0);
   const [lecTotal, setLecTotal] = useState<number>(0.0); // consider in the tuition fee
   const [regMiscTotal, setRegMiscTotal] = useState<number>(0.0);
@@ -98,7 +100,7 @@ const Page = () => {
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
-  const final = parseFloat((total - Number(paymentOfDownPayment?.taxes?.amount || 0) - 3 * paymentPerTerm).toFixed(2));
+  const final = parseFloat((total - Number(showPaymentOfFullPayment ? tfData?.tFee?.downPayment || 0 : paymentOfDownPayment?.taxes?.amount || 0) - 3 * paymentPerTerm).toFixed(2));
   const d = Number(paymentOfFinal) > 0 && Number(paymentOfFinal) !== Number(final);
   const finalPayment = Number(paymentOfFinal) - Number(final);
   const showPaymentOfFinal = paymentOfFinal && finalPayment >= 0;
@@ -136,13 +138,14 @@ const Page = () => {
       const paidAmount = Number(paymentOfDownPayment?.taxes?.amount || 0) + Number(paymentOfPrelim || 0) + Number(paymentOfMidterm || 0) + Number(paymentOfSemiFinal || 0) + Number(paymentOfFinal || 0);
 
       const remainingBalance = Math.round((totalBalance - paidAmount) * 100) / 100;
-      setShowBalance(remainingBalance);
+      let remainingBalancePrevious = Number(srData?.balanceToShow || 0);
+      setShowBalance(remainingBalance + remainingBalancePrevious);
     } else {
       // let a = Math.round((Number(paymentOfFullPayment?.taxes?.amount) + Number(total) * 0.1) * 100) / 100 - Math.round(Number(total) * 100) / 100;
       // if (isScholarshipStart && data?.enrollment?.profileId?.scholarshipId?.discountPercentage) a = Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 - Math.round(Number(total) * 100) / 100;
       setShowBalance(0);
     }
-  }, [total, paymentOfFullPayment, showPaymentOfFullPayment, paymentOfDownPayment, paymentOfPrelim, paymentOfMidterm, paymentOfSemiFinal, paymentOfFinal, showBalance, data, isScholarshipStart]);
+  }, [total, paymentOfFullPayment, srData, showPaymentOfFullPayment, paymentOfDownPayment, paymentOfPrelim, paymentOfMidterm, paymentOfSemiFinal, paymentOfFinal, showBalance, data, isScholarshipStart]);
 
   useEffect(() => {
     if (isTFError || !tfData) return;
@@ -233,25 +236,34 @@ const Page = () => {
             setRegMiscTotal(c);
           }
         }
-        let totalAmount = 0;
 
+        let totalAmount = 0;
         totalAmount = aFormatted + LecTotal + RegMiscTotal;
-        if (addcwtsOrNstpFee) totalAmount = totalAmount + cwtsOrNstpFee;
-        if (addOjtFee) totalAmount = totalAmount + ojtFee;
+        if (addcwtsOrNstpFee) totalAmount = totalAmount + Number(cwtsOrNstpFee);
+        if (addOjtFee) totalAmount = totalAmount + Number(ojtFee);
+        const formattedTotalCurrent = totalAmount;
+        if (srData?.overAllShowBalance) totalAmount = totalAmount + Number(srData?.overAllShowBalance || 0);
         const formattedTotal = parseFloat(Number(totalAmount).toFixed(2)); // Final formatting
+
+        setTotalCurrent(formattedTotalCurrent);
         setTotal(formattedTotal);
         setTotalWithoutDownPayment(formattedTotal);
-        const totalWithoutDownPayment = Number(formattedTotal) - Number(paymentOfDownPayment?.taxes?.amount);
+        const totalWithoutDownPaymentCurrent = Number(formattedTotalCurrent) - Number(paymentOfDownPayment?.taxes?.amount);
+        const totalWithoutDownPayment = Number(formattedTotal || 0) - Number(showPaymentOfFullPayment ? tfData?.tFee?.downPayment || 0 : paymentOfDownPayment?.taxes?.amount || 0);
+        const totalPerTermCurrent = Math.round(totalWithoutDownPaymentCurrent * 100) / 100;
         const totalPerTerm = Math.round(totalWithoutDownPayment * 100) / 100;
         const paymentPerTerm = Math.ceil((totalPerTerm / 4) * 100) / 100;
+        const paymentPerTermCurrent = Math.ceil((totalPerTermCurrent / 4) * 100) / 100;
+        const paymentPerTermRoundOffCurrent = paymentPerTermCurrent % 100 >= 1 ? Math.ceil(paymentPerTermCurrent / 100) * 100 : Math.floor(paymentPerTermCurrent / 100) * 100;
         const paymentPerTermRoundOff = paymentPerTerm % 100 >= 1 ? Math.ceil(paymentPerTerm / 100) * 100 : Math.floor(paymentPerTerm / 100) * 100;
 
+        setPaymentPerTermCurrent(Number(paymentPerTermRoundOffCurrent));
         setPaymentPerTerm(Number(paymentPerTermRoundOff));
       }
       setIsPageLoading(false);
       return;
     }
-  }, [data, error, tfData, esData, esError, srData, srError, isTFError, paymentOfDownPayment, isScholarshipStart]);
+  }, [data, error, tfData, esData, esError, srData, srError, isTFError, paymentOfDownPayment, showPaymentOfFullPayment, isScholarshipStart]);
 
   useEffect(() => {
     let additionPayment = parseFloat((Number(tfData?.tFee?.ssgFee) + Number(tfData?.tFee?.insuranceFee) + Number(tfData?.tFee?.departmentalFee)).toFixed(2));
@@ -322,7 +334,7 @@ const Page = () => {
                             <CardContent className='w-full'>
                               <div className='grid grid-cols-1 sm:px-32 px-5'>
                                 <div className='flex justify-between'>
-                                  <span className='font-medium'>REG/MISC</span>
+                                  <span className='font-medium'>REG/MISC FEE</span>
                                   <span>₱{Number(regMiscTotal).toFixed(2) || (0).toFixed(2)}</span>
                                 </div>
                                 <div className='flex justify-between'>
@@ -349,7 +361,7 @@ const Page = () => {
                               <div className='grid grid-cols-1 sm:px-36 px-5'>
                                 <div className='flex justify-between'>
                                   <span className='font-medium'>Total</span>
-                                  <span>₱{Number(total).toFixed(2) || (0).toFixed(2)}</span>
+                                  <span>₱{Number(totalCurrent).toFixed(2) || (0).toFixed(2)}</span>
                                 </div>
                               </div>
                               <div className='flex flex-col items-start w-full justify-center mt-10 mb-10'>
@@ -366,10 +378,12 @@ const Page = () => {
                                     <span className='font-medium'>Departmental Fee</span>
                                     <span>₱{Number(tfData?.tFee?.departmentalFee || 0).toFixed(2) || (0).toFixed(2)}</span>
                                   </div>
-                                  <div className='flex justify-between'>
-                                    <span className='font-medium'>Insurance Fee</span>
-                                    <span>₱{Number(tfData?.tFee?.insuranceFee || 0).toFixed(2) || (0).toFixed(2)}</span>
-                                  </div>
+                                  {(!srData?.insurancePayment || insurancePaidInThisSemester) && (
+                                    <div className='flex justify-between'>
+                                      <span className='font-medium'>Insurance Fee</span>
+                                      <span>₱{Number(tfData?.tFee?.insuranceFee || 0).toFixed(2) || (0).toFixed(2)}</span>
+                                    </div>
+                                  )}
                                   <div className='flex justify-between'>
                                     <span className='font-medium'>SSG Fee</span>
                                     <span>₱{Number(tfData?.tFee?.ssgFee || 0).toFixed(2) || (0).toFixed(2)}</span>
@@ -378,7 +392,7 @@ const Page = () => {
                                 <div className='grid grid-cols-1 sm:px-36 w-full px-5'>
                                   <div className='flex justify-between'>
                                     <span className='font-medium'>Total</span>
-                                    <span>₱{(Number(tfData?.tFee?.departmentalFee || 0) + Number(tfData?.tFee?.insuranceFee || 0) + Number(tfData?.tFee?.ssgFee || 0)).toFixed(2)}</span>
+                                    <span>₱{(Number(tfData?.tFee?.departmentalFee || 0) + Number(!srData?.insurancePayment || insurancePaidInThisSemester ? tfData?.tFee?.insuranceFee || 0 : 0) + Number(tfData?.tFee?.ssgFee || 0)).toFixed(2)}</span>
                                   </div>
                                 </div>
                               </div>
@@ -454,12 +468,21 @@ const Page = () => {
                                 </h1>
                               </div>
                               <div className='flex items-center justify-center flex-col'>
-                                <SettleTermPayment enrollment={data?.enrollment} tfData={tfData?.tFee} srData={srData?.studentReceipt} amountToPay={Number(total).toFixed(2)} type={'fullPayment'} title='Full Payment' isScholarshipStart={isScholarshipStart} />
+                                <SettleTermPayment
+                                  perTermPayment={paymentPerTermCurrent}
+                                  enrollment={data?.enrollment}
+                                  tfData={tfData?.tFee}
+                                  srData={srData}
+                                  amountToPay={Number(total).toFixed(2)}
+                                  type={'fullPayment'}
+                                  title='Full Payment'
+                                  isScholarshipStart={isScholarshipStart}
+                                />
                                 <span className=''>or</span>
                                 <DownPayment
                                   enrollment={data?.enrollment}
                                   tfData={tfData?.tFee}
-                                  srData={srData?.studentReceipt}
+                                  srData={srData}
                                   // amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
                                   type={'downPayment'}
                                   title='Down Payment'
@@ -533,9 +556,10 @@ const Page = () => {
                                             'Completed'
                                           ) : requiredPaymentsFulfill ? (
                                             <SettleTermPayment
+                                              perTermPayment={Number(paymentPerTermCurrent - paymentOfPrelim).toFixed(2)}
                                               enrollment={data?.enrollment}
                                               tfData={tfData?.tFee}
-                                              srData={srData?.studentReceipt}
+                                              srData={srData}
                                               amountToPay={Number(paymentPerTerm - paymentOfPrelim).toFixed(2)}
                                               type={'prelim'}
                                               title='Prelim Payment'
@@ -559,9 +583,10 @@ const Page = () => {
                                             'Completed'
                                           ) : requiredPaymentsFulfill && showPaymentOfPrelim ? (
                                             <SettleTermPayment
+                                              perTermPayment={Number(paymentPerTermCurrent - paymentOfMidterm).toFixed(2)}
                                               enrollment={data?.enrollment}
                                               tfData={tfData?.tFee}
-                                              srData={srData?.studentReceipt}
+                                              srData={srData}
                                               amountToPay={Number(paymentPerTerm - paymentOfMidterm).toFixed(2)}
                                               type={'midterm'}
                                               title='Midterm Payment'
@@ -585,9 +610,10 @@ const Page = () => {
                                             'Completed'
                                           ) : requiredPaymentsFulfill && showPaymentOfPrelim && showPaymentOfMidterm ? (
                                             <SettleTermPayment
+                                              perTermPayment={Number(paymentPerTermCurrent - paymentOfSemiFinal).toFixed(2)}
                                               enrollment={data?.enrollment}
                                               tfData={tfData?.tFee}
-                                              srData={srData?.studentReceipt}
+                                              srData={srData}
                                               amountToPay={Number(paymentPerTerm - paymentOfSemiFinal).toFixed(2)}
                                               type={'semi-final'}
                                               title='Semi-Final Payment'
@@ -611,9 +637,10 @@ const Page = () => {
                                             'Completed'
                                           ) : requiredPaymentsFulfill && showPaymentOfPrelim && showPaymentOfMidterm && showPaymentOfSemiFinal ? (
                                             <SettleTermPayment
+                                              perTermPayment={parseFloat((totalCurrent - Number(paymentOfDownPayment?.taxes?.amount || 0) - 3 * paymentPerTermCurrent).toFixed(2))}
                                               enrollment={data?.enrollment}
                                               tfData={tfData?.tFee}
-                                              srData={srData?.studentReceipt}
+                                              srData={srData}
                                               amountToPay={Number(final - paymentOfFinal).toFixed(2)}
                                               type={'final'}
                                               title='Final Payment'
@@ -666,15 +693,40 @@ const Page = () => {
                               </TableBody>
                             </Table>
                           </div>
+                          {Number(total) > Number(totalCurrent) && (
+                            <>
+                              {srData && srData?.previousBalance.length > 0 && (
+                                <div className='grid grid-cols-1 sm:px-36 px-5'>
+                                  {srData.previousBalance.map((balance: any, index: number) => (
+                                    <div key={index} className='flex justify-between'>
+                                      <span className='font-medium'>
+                                        Outstanding Balance
+                                        <span className='text-xs text-muted-foreground'>
+                                          ({balance?.year}- {balance?.semester})
+                                        </span>
+                                      </span>
+                                      <span>₱{Number(balance?.balanceToShow).toFixed(2)}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                              <div className='grid grid-cols-1 sm:px-36 px-5'>
+                                <div className='flex justify-between'>
+                                  <span className='font-medium'>Current Semester Fees</span>
+                                  <span>₱{Number(totalCurrent).toFixed(2) || (0).toFixed(2)}</span>
+                                </div>
+                              </div>
+                            </>
+                          )}
                           <div className='grid grid-cols-1 sm:px-36 px-5'>
                             <div className='flex justify-between'>
-                              <span className='font-medium'>Total</span>
+                              <span className='font-medium'>Total Amount</span>
                               <span>₱{Number(total).toFixed(2) || (0).toFixed(2)}</span>
                             </div>
                           </div>
                           <div className='grid grid-cols-1 sm:px-40 px-8'>
                             <div className='flex justify-between'>
-                              <span className='font-medium'>Balance</span>
+                              <span className='font-medium'>Remaining Balance</span>
                               <span>₱{Number(showBalance).toFixed(2) || (0).toFixed(2)}</span>
                             </div>
                           </div>
@@ -717,9 +769,10 @@ const Page = () => {
                                       'Completed'
                                     ) : showPaymentOfDownPayment ? (
                                       <SettleTermPayment
+                                        perTermPayment={paymentPerTermCurrent}
                                         enrollment={data?.enrollment}
                                         tfData={tfData?.tFee}
-                                        srData={srData?.studentReceipt}
+                                        srData={srData}
                                         amountToPay={Number(tfData?.tFee?.departmentalFee).toFixed(2)}
                                         type={'departmental'}
                                         title='Departmental Payment'
@@ -746,9 +799,10 @@ const Page = () => {
                                         'Completed'
                                       ) : showPaymentOfDownPayment ? (
                                         <SettleTermPayment
+                                          perTermPayment={paymentPerTermCurrent}
                                           enrollment={data?.enrollment}
                                           tfData={tfData?.tFee}
-                                          srData={srData?.studentReceipt}
+                                          srData={srData}
                                           amountToPay={Number(tfData?.tFee?.insuranceFee).toFixed(2)}
                                           type={'insurance'}
                                           title='Insurance Payment'
@@ -771,9 +825,10 @@ const Page = () => {
                                       'Completed'
                                     ) : showPaymentOfDownPayment ? (
                                       <SettleTermPayment
+                                        perTermPayment={paymentPerTermCurrent}
                                         enrollment={data?.enrollment}
                                         tfData={tfData?.tFee}
-                                        srData={srData?.studentReceipt}
+                                        srData={srData}
                                         amountToPay={Number(tfData?.tFee?.ssgFee).toFixed(2)}
                                         type={'ssg'}
                                         title='SSG Payment'
@@ -789,7 +844,13 @@ const Page = () => {
                           </Table>
                           <div className='grid grid-cols-1 sm:px-8 px-5'>
                             <div className='flex justify-between'>
-                              <span className='font-medium'>Total</span>
+                              <span className='font-medium'>Total Amount</span>
+                              <span>₱{(Number(tfData?.tFee?.departmentalFee || 0) + Number(!srData?.insurancePayment || insurancePaidInThisSemester ? tfData?.tFee?.insuranceFee || 0 : 0) + Number(tfData?.tFee?.ssgFee || 0)).toFixed(2)}</span>
+                            </div>
+                          </div>
+                          <div className='grid grid-cols-1 sm:px-12 px-7'>
+                            <div className='flex justify-between'>
+                              <span className='font-medium'>Remaining Balance</span>
                               <span>₱{Number(additionalTotal).toFixed(2)}</span>
                             </div>
                           </div>

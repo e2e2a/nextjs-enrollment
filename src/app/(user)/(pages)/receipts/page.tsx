@@ -8,13 +8,17 @@ import { useSession } from 'next-auth/react';
 
 const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
-
+  const [studentReceipt, setStudentReceipt] = useState([]);
   const { data: s } = useSession();
   const { data, error } = useStudentReceiptQueryByUserId(s?.user?.id as string);
 
   useEffect(() => {
     if (error || !data) return;
     if (data) {
+      if (data.studentReceipt) {
+        const a = data.studentReceipt.filter((sr: any) => !sr?.isPaidIn?.year && !sr?.isPaidIn?.semester);
+        setStudentReceipt(a);
+      }
       setIsPageLoading(false);
     }
   }, [data, error]);
@@ -32,7 +36,7 @@ const Page = () => {
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-bold '>Your Payment Receipts</h1>
               </div>
-              <DataTable columns={columns} data={data.studentReceipt} />
+              <DataTable columns={columns} data={studentReceipt as []} />
             </div>
           )}
         </div>

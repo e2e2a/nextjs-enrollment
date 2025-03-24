@@ -75,6 +75,7 @@ export interface IStudentReceipt extends Document {
   semester: string;
   year: string;
   schoolYear: string;
+  isPaidIn: any;
 }
 
 const schema = new Schema<IStudentReceipt>(
@@ -151,6 +152,10 @@ const schema = new Schema<IStudentReceipt>(
       code: { type: String },
     },
     isPaidByScholarship: { type: Boolean, default: false },
+    isPaidIn: {
+      year: { type: String },
+      semester: { type: String },
+    },
     schoolYear: { type: String },
   },
   { timestamps: true }
