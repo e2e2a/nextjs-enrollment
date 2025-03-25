@@ -15,10 +15,10 @@ export const getEnrollmentBySessionIdAction = async (id: string) => {
     await dbConnect();
     const session = await checkAuth();
     // Not authenticated || Not Foribidden
-    if (!session || session.error || session.user.role !== 'STUDENT' || id !== session.user._id) return { error: 'Foribidden.', status: 403 };
-
-    const enrollment = await getEnrollmentByUserId(session.user._id);
-
+    // if (!session || session.error || session.user.role !== 'STUDENT' || id !== session.user._id) return { error: 'Foribidden.', status: 403 };
+    let enrollment;
+    enrollment = await getEnrollmentByUserId(session.user._id);
+    if (session.user.role === 'ACCOUNTING') enrollment = await getEnrollmentByUserId(id);
     return { enrollment: JSON.parse(JSON.stringify(enrollment)), status: 200 };
   });
 };
