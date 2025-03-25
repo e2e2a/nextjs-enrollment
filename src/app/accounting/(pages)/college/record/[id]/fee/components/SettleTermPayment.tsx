@@ -20,9 +20,10 @@ type IProps = {
   title: string;
   isScholarshipStart: boolean;
   perTermPayment: any;
+  passbookPaymentBoolean?: boolean;
 };
 
-const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart, perTermPayment }: IProps) => {
+const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart, perTermPayment, passbookPaymentBoolean }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [total, setTotal] = useState(0.0);
   const [insuranceFee, setInsuranceFee] = useState(false);
@@ -52,7 +53,8 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
       let totalAmountToPay = amountToPay;
       if (!isScholarshipStart && type === 'fullPayment') totalAmountToPay = parseFloat((amountToPay - amountToPay * 0.1).toFixed(2));
       setAmountPayment(totalAmountToPay);
-      if (type.toLowerCase() === 'fullpayment') totalAmountToPay = totalAmountToPay + Number(tfData?.departmentalFee || 0) + Number(tfData?.ssgFee || 0) + Number(insurence ? tfData?.insuranceFee || 0 : 0);
+      if (type.toLowerCase() === 'fullpayment')
+        totalAmountToPay = totalAmountToPay + Number(tfData?.departmentalFee || 0) + Number(tfData?.ssgFee || 0) + Number(insurence ? tfData?.insuranceFee || 0 : 0) + Number(passbookPaymentBoolean ? tfData?.passbookFee || 0 : 0);
       setAmountInput(totalAmountToPay);
       setTotal(totalAmountToPay);
       if (enrollment?.profileId?.scholarshipId?.amount) {
@@ -63,7 +65,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
         }
       }
     }
-  }, [srData, tfData, enrollment, amountToPay, type, isScholarshipStart, balanceGrant]);
+  }, [srData, tfData, enrollment, amountToPay, type, isScholarshipStart, balanceGrant, passbookPaymentBoolean]);
 
   const mutation = useCreateStudentReceiptMutation();
   const onSubmit = async (e: any) => {
@@ -182,7 +184,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
                               <span className='font-bold text-nowrap'>Departmental Fee:</span>
                             </div>
                             <div className='text-sm mt-5 w-ful flex items-end'>
-                              <span className='font-bold text-end w-full'>₱{tfData.departmentalFee}</span>
+                              <span className='font-bold text-end w-full'>₱{tfData?.departmentalFee}</span>
                             </div>
                           </div>
                           {insuranceFee && (
@@ -192,7 +194,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
                               </div>
 
                               <div className='text-sm mt-5 w-ful flex items-end'>
-                                <span className='font-bold text-end w-full'>₱{tfData.insuranceFee}</span>
+                                <span className='font-bold text-end w-full'>₱{tfData?.insuranceFee}</span>
                               </div>
                             </div>
                           )}
@@ -201,9 +203,20 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
                               <span className='font-bold text-nowrap'>SSG Fee:</span>
                             </div>
                             <div className='text-sm mt-5 w-ful flex items-end'>
-                              <span className='font-bold text-end w-full'>₱{tfData.ssgFee}</span>
+                              <span className='font-bold text-end w-full'>₱{tfData?.ssgFee}</span>
                             </div>
                           </div>
+                          {passbookPaymentBoolean && (
+                            <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
+                              <div className='text-sm mt-5 w-full flex items-start'>
+                                <span className='font-bold text-nowrap'>Passbook Fee:</span>
+                              </div>
+
+                              <div className='text-sm mt-5 w-ful flex items-end'>
+                                <span className='font-bold text-end w-full'>₱{tfData?.passbookFee}</span>
+                              </div>
+                            </div>
+                          )}
                           <div className='flex flex-row w-full sm:gap-28 xs:gap-10'>
                             <div className='text-sm mt-5 w-full flex items-start'>
                               <span className='font-bold text-nowrap'>Total Payment Amount:</span>

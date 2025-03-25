@@ -479,7 +479,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                           <>
                             {data?.enrollmentRecord?.profileId?.scholarshipId?.type.toLowerCase() !== 'fixed' ? (
                               <div className='flex flex-col justify-center items-center w-full border-[0.5px] rounded-lg px-5 py-3'>
-                                {srData?.overAllBalance <= 0 && (
+                                {(!srData?.overAllBalance || srData?.overAllBalance <= 0) && (
                                   <>
                                     <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>
                                       <h1 className='flex gap-x-2 justify-center items-center'>
@@ -490,7 +490,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   </>
                                 )}
                                 <div className='flex flex-col items-center justify-center'>
-                                  {srData?.overAllBalance <= 0 && (
+                                  {(!srData?.overAllBalance || srData?.overAllBalance <= 0) && (
                                     <>
                                       <SettleTermPayment
                                         perTermPayment={paymentPerTermCurrent}
@@ -501,6 +501,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                         type={'fullPayment'}
                                         title='Full Payment'
                                         isScholarshipStart={isScholarshipStart}
+                                        passbookPaymentBoolean={!srData?.passbookPayment}
                                       />
                                       <span className='text-sm uppercase font-semibold'>OR</span>
                                     </>
@@ -518,19 +519,17 @@ const Page = ({ params }: { params: { id: string } }) => {
                               </div>
                             ) : Number(data?.enrollmentRecord?.profileId?.scholarshipId.amount) >= Number(total) ? (
                               <div className='flex flex-col justify-center items-center w-full border-[0.5px] rounded-lg px-5 py-3'>
-                                {srData?.overAllBalance <= 0 && (
-                                  <>
-                                    <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>
-                                      <h1 className='flex gap-x-2 justify-center items-center'>
-                                        <span className='text-[16px] font-bold text-orange-400'>Note:</span>
-                                        <span className='text-sm text-justify'>Full payment for the semester is only applicable for the initial payment and includes a 10% discount.</span>
-                                      </h1>
-                                    </div>
-                                  </>
+                                {(!srData?.overAllBalance || srData?.overAllBalance <= 0) && (
+                                  <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>
+                                    <h1 className='flex gap-x-2 justify-center items-center'>
+                                      <span className='text-[16px] font-bold text-orange-400'>Note:</span>
+                                      <span className='text-sm text-justify'>Full payment for the semester is only applicable for the initial payment and includes a 10% discount.</span>
+                                    </h1>
+                                  </div>
                                 )}
 
                                 <div className='flex flex-col items-center justify-center'>
-                                  {srData?.overAllBalance <= 0 && (
+                                  {(!srData?.overAllBalance || srData?.overAllBalance <= 0) && (
                                     <>
                                       <SettleTermPayment
                                         perTermPayment={paymentPerTermCurrent}
@@ -541,11 +540,20 @@ const Page = ({ params }: { params: { id: string } }) => {
                                         type={'fullPayment'}
                                         title='Full Payment'
                                         isScholarshipStart={isScholarshipStart}
+                                        passbookPaymentBoolean={!srData?.passbookPayment}
                                       />
                                       <span className='text-sm uppercase font-semibold'>OR</span>
                                     </>
                                   )}
-                                  <DownPayment enrollment={data?.enrollment} tfData={tfData?.tFee} srData={srData} amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)} type={'downPayment'} title='Down Payment' isScholarshipStart={isScholarshipStart} />
+                                  <DownPayment
+                                    enrollment={data?.enrollment}
+                                    tfData={tfData?.tFee}
+                                    srData={srData?.studentReceipt || []}
+                                    amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
+                                    type={'downPayment'}
+                                    title='Down Payment'
+                                    isScholarshipStart={isScholarshipStart}
+                                  />
                                 </div>
                               </div>
                             ) : null}
