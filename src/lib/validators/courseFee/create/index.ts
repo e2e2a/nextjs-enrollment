@@ -23,6 +23,10 @@ export const CourseFeeValidator = z.object({
     .string()
     .regex(/^\d+(\.\d+)?$/, { message: 'SSG Fee must be a valid number...' })
     .min(1, { message: 'SSG Fee is required...' }),
+  passbookFee: z
+    .string()
+    .regex(/^\d+(\.\d+)?$/, { message: 'Passbook Fee must be a valid number...' })
+    .min(1, { message: 'SSG Fee is required...' }),
   cwtsOrNstpFee: z
     .string()
     .regex(/^\d+(\.\d+)?$/, { message: 'CWTS or NSTP Fee must be a valid number...' })

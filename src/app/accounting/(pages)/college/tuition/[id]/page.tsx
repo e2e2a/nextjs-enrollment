@@ -55,6 +55,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       insuranceFee: '0.00',
       departmentalFee: '0.00',
       ssgFee: '0.00',
+      passbookFee: '0.00',
       cwtsOrNstpFee: '0.00',
       downPayment: `0.00`,
       ojtFee: `0.00`,
@@ -69,6 +70,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     form.setValue('insuranceFee', tfData?.tFee?.insuranceFee);
     form.setValue('departmentalFee', tfData?.tFee?.departmentalFee);
     form.setValue('ssgFee', tfData?.tFee?.ssgFee);
+    form.setValue('passbookFee', tfData?.tFee?.passbookFee);
     form.setValue('cwtsOrNstpFee', tfData?.tFee?.cwtsOrNstpFee);
     form.setValue('downPayment', tfData?.tFee?.downPayment);
     form.setValue('ojtFee', tfData?.tFee?.ojtFee);
@@ -184,6 +186,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                       <Input name={'departmentalFee'} type={'text'} isNotEditable={isNotEditable} form={form} label={'Departmental Fee:'} classNameInput={'uppercase'} />
                       <Input name={'insuranceFee'} type={'text'} isNotEditable={isNotEditable} form={form} label={'Insurance Fee:'} classNameInput={''} />
                       <Input name={'ssgFee'} type={'text'} isNotEditable={isNotEditable} form={form} label={'SSG Fee:'} classNameInput={''} />
+                      <Input name={'passbookFee'} type={'text'} isNotEditable={isNotEditable} form={form} label={'Passbook Fee:'} classNameInput={''} />
                     </div>
                   </div>
                 </CardContent>

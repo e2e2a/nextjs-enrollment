@@ -38,7 +38,15 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
       },
       payment_source: 'CASH',
     };
-    if (data.previousBalance && data.previousBalance.length > 0 && data?.type?.toLowerCase() !== 'downpayment' && data?.type?.toLowerCase() !== 'ssg' && data?.type?.toLowerCase() !== 'departmental' && data?.type?.toLowerCase() !== 'insurance') {
+    if (
+      data.previousBalance &&
+      data.previousBalance.length > 0 &&
+      data?.type?.toLowerCase() !== 'downpayment' &&
+      data?.type?.toLowerCase() !== 'passbook' &&
+      data?.type?.toLowerCase() !== 'ssg' &&
+      data?.type?.toLowerCase() !== 'departmental' &&
+      data?.type?.toLowerCase() !== 'insurance'
+    ) {
       // await checkBalance(studentEnrollment.studentYear, studentEnrollment.studentSemester, student._id.toString(), studentReceipt);
       let amountPaid = 0;
       amountPaid = data.taxes.amount;

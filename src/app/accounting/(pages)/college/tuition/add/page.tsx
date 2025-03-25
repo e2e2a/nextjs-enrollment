@@ -47,6 +47,7 @@ const Page = () => {
       departmentalFee: '0.00',
       ssgFee: '0.00',
       ojtFee: '0.00',
+      passbookFee: '0.00',
       cwtsOrNstpFee: '0.00',
       downPayment: `0.00`,
     },
@@ -156,6 +157,7 @@ const Page = () => {
                       <Input name={'departmentalFee'} type={'text'} form={form} label={'Departmental Fee:'} classNameInput={'uppercase'} />
                       <Input name={'insuranceFee'} type={'text'} form={form} label={'Insurance Fee:'} classNameInput={'uppercase'} />
                       <Input name={'ssgFee'} type={'text'} form={form} label={'SSG Fee:'} classNameInput={''} />
+                      <Input name={'passbookFee'} type={'text'} form={form} label={'Passbook Fee:'} classNameInput={''} />
                     </div>
                   </div>
                 </CardContent>

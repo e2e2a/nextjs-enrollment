@@ -126,6 +126,7 @@ const handleCategoryCollege = async (data: any) => {
         departmentalFee: cf.departmentalFee,
         insuranceFee: cf.insuranceFee,
         ssgFee: cf.ssgFee,
+        passbookFee: cf.passbookFee,
         regOrMiscWithOldAndNew: cf.regOrMiscWithOldAndNew,
         cwtsOrNstpFee: cf.cwtsOrNstpFee,
         downPayment: cf.downPayment,

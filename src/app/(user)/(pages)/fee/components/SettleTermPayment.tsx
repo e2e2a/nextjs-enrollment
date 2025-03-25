@@ -144,10 +144,8 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
         <Button variant={'outline'} size={'sm'} className='select-none focus-visible:ring-0 text-[15px] bg-blue-500 hover:bg-blue-600 text-white tracking-normal font-medium font-poppins'>
           <Icons.Banknote className='h-4 w-4 mr-2' />
           {type === 'fullPayment' && 'Pay Full Payment'}
-          {type !== 'fullPayment' && type !== 'ssg' && type !== 'insurance' && type !== 'departmental' && 'Pay This Term'}
-          {type === 'departmental' && 'Make Payment'}
-          {type === 'ssg' && 'Make Payment'}
-          {type === 'insurance' && 'Make Payment'}
+          {type !== 'fullPayment' && type !== 'ssg' && type !== 'insurance' && type !== 'departmental' && type !== 'passbook' && 'Pay This Term'}
+          {(type === 'departmental' || type === 'ssg' || type === 'insurance' || type === 'passbook') && 'Make Payment'}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className='bg-white h-[75%] w-full overflow-y-scroll'>
