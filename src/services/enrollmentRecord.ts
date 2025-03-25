@@ -35,7 +35,7 @@ export const getEnrollmentRecordById = async (id: any) => {
     const TProfile = await EnrollmentRecord.findById(id)
       .populate({
         path: 'profileId',
-        populate: [{ path: 'scholarshipId' }],
+        populate: [{ path: 'scholarshipId' }, { path: 'userId' }],
       })
       .exec();
     return TProfile;

@@ -17,6 +17,7 @@ import { useEnrollmentRecordQueryById } from '@/lib/queries/enrollmentRecord/get
 import { useCourseFeeRecordQueryByCourseCodeAndYearAndSemester } from '@/lib/queries/courseFeeRecord/get/courseCode';
 import { useStudentReceiptQueryByUserIdAndYearAndSemester } from '@/lib/queries/studentReceipt/get/yearAndSemester';
 import DownPayment from './components/DownPayment';
+import { useEnrollmentQueryBySessionId } from '@/lib/queries/enrollment/get/session';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
@@ -34,6 +35,8 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [showOJT, setShowOJT] = useState<boolean>(false);
 
   const { data, error } = useEnrollmentRecordQueryById(params.id);
+  console.log('data?.enrollmentRecord?.profileId?.userId?._id', data?.enrollmentRecord?.profileId);
+  const { data: enrollmentData, error: enrollmentError } = useEnrollmentQueryBySessionId(data?.enrollmentRecord?.profileId?.userId?._id || 'e2e2a');
   const { data: tfData, error: isTFError } = useCourseFeeRecordQueryByCourseCodeAndYearAndSemester(data?.enrollmentRecord?.studentYear, data?.enrollmentRecord?.studentSemester, data?.enrollmentRecord?.courseCode || 'e2e2a');
   const { data: srData, error: srError } = useStudentReceiptQueryByUserIdAndYearAndSemester(
     (data?.enrollmentRecord?.profileId?.userId as string) || 'e2e2a',
@@ -153,6 +156,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (isTFError || !tfData) return;
     if (error || !data) return;
     if (srError || !srData) return;
+    if (enrollmentError || !enrollmentData) return;
 
     if (tfData && data) {
       if (data?.enrollmentRecord && tfData.tFee) {
@@ -263,7 +267,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       setIsPageLoading(false);
       return;
     }
-  }, [data, error, tfData, srData, srError, isTFError, paymentOfDownPayment, showPaymentOfFullPayment, isScholarshipStart]);
+  }, [data, error, tfData, srData, srError, isTFError, paymentOfDownPayment, showPaymentOfFullPayment, isScholarshipStart, enrollmentData, enrollmentError]);
 
   useEffect(() => {
     let additionPayment = parseFloat((Number(tfData?.tFee?.ssgFee) + Number(tfData?.tFee?.insuranceFee) + Number(tfData?.tFee?.departmentalFee)).toFixed(2));
@@ -287,6 +291,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     .replace(/,(\S)/g, ', $1')
     .trim();
 
+  console.log('enrollment', enrollmentData);
   return (
     <>
       {isPageLoading ? (
@@ -466,7 +471,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                                     </div>
                                   </>
                                 )}
-
                                 <div className='flex flex-col items-center justify-center'>
                                   {srData?.overAllBalance <= 0 && (
                                     <>
@@ -607,16 +611,27 @@ const Page = ({ params }: { params: { id: string } }) => {
                                         {showPaymentOfPrelim ? (
                                           'Completed'
                                         ) : !isWithdrawn && requiredPaymentsFulfill ? (
-                                          <SettleTermPayment
-                                            perTermPayment={Number(paymentPerTermCurrent - paymentOfPrelim).toFixed(2)}
-                                            enrollment={data?.enrollmentRecord}
-                                            tfData={tfData?.tFee}
-                                            srData={srData}
-                                            amountToPay={Number(paymentPerTerm - paymentOfPrelim).toFixed(2)}
-                                            type={'prelim'}
-                                            title='Prelim Payment'
-                                            isScholarshipStart={isScholarshipStart}
-                                          />
+                                          <>
+                                            {enrollmentData.enrollment && enrollmentData.enrollment.step >= 5 ? (
+                                              <span className='text-blue-500 text-xs uppercase'>
+                                                Pending
+                                                <span className='text-muted-foreground text-[10px]'>
+                                                  ({enrollmentData.enrollment.studentYear}-{enrollmentData.enrollment.studentSemester})
+                                                </span>
+                                              </span>
+                                            ) : (
+                                              <SettleTermPayment
+                                                perTermPayment={Number(paymentPerTermCurrent - paymentOfPrelim).toFixed(2)}
+                                                enrollment={data?.enrollmentRecord}
+                                                tfData={tfData?.tFee}
+                                                srData={srData}
+                                                amountToPay={Number(paymentPerTerm - paymentOfPrelim).toFixed(2)}
+                                                type={'prelim'}
+                                                title='Prelim Payment'
+                                                isScholarshipStart={isScholarshipStart}
+                                              />
+                                            )}
+                                          </>
                                         ) : (
                                           'Not Available'
                                         )}
@@ -631,16 +646,27 @@ const Page = ({ params }: { params: { id: string } }) => {
                                         {showPaymentOfMidterm ? (
                                           'Completed'
                                         ) : !isWithdrawn && requiredPaymentsFulfill && showPaymentOfPrelim ? (
-                                          <SettleTermPayment
-                                            perTermPayment={Number(paymentPerTermCurrent - paymentOfMidterm).toFixed(2)}
-                                            enrollment={data?.enrollmentRecord}
-                                            tfData={tfData?.tFee}
-                                            srData={srData}
-                                            amountToPay={Number(paymentPerTerm - paymentOfMidterm).toFixed(2)}
-                                            type={'midterm'}
-                                            title='Midterm Payment'
-                                            isScholarshipStart={isScholarshipStart}
-                                          />
+                                          <>
+                                            {enrollmentData.enrollment && enrollmentData.enrollment.step >= 5 ? (
+                                              <span className='text-blue-500 text-xs uppercase'>
+                                                Pending
+                                                <span className='text-muted-foreground text-[10px]'>
+                                                  ({enrollmentData.enrollment.studentYear}-{enrollmentData.enrollment.studentSemester})
+                                                </span>
+                                              </span>
+                                            ) : (
+                                              <SettleTermPayment
+                                                perTermPayment={Number(paymentPerTermCurrent - paymentOfMidterm).toFixed(2)}
+                                                enrollment={data?.enrollmentRecord}
+                                                tfData={tfData?.tFee}
+                                                srData={srData}
+                                                amountToPay={Number(paymentPerTerm - paymentOfMidterm).toFixed(2)}
+                                                type={'midterm'}
+                                                title='Midterm Payment'
+                                                isScholarshipStart={isScholarshipStart}
+                                              />
+                                            )}
+                                          </>
                                         ) : (
                                           'Not Available'
                                         )}
@@ -655,16 +681,27 @@ const Page = ({ params }: { params: { id: string } }) => {
                                         {showPaymentOfSemiFinal ? (
                                           'Completed'
                                         ) : !isWithdrawn && requiredPaymentsFulfill && showPaymentOfPrelim && showPaymentOfMidterm ? (
-                                          <SettleTermPayment
-                                            perTermPayment={Number(paymentPerTermCurrent - paymentOfSemiFinal).toFixed(2)}
-                                            enrollment={data?.enrollmentRecord}
-                                            tfData={tfData?.tFee}
-                                            srData={srData}
-                                            amountToPay={Number(paymentPerTerm - paymentOfSemiFinal).toFixed(2)}
-                                            type={'semi-final'}
-                                            title='Semi-Final Payment'
-                                            isScholarshipStart={isScholarshipStart}
-                                          />
+                                          <>
+                                            {enrollmentData.enrollment && enrollmentData.enrollment.step >= 5 ? (
+                                              <span className='text-blue-500 text-xs uppercase'>
+                                                Pending
+                                                <span className='text-muted-foreground text-[10px]'>
+                                                  ({enrollmentData.enrollment.studentYear}-{enrollmentData.enrollment.studentSemester})
+                                                </span>
+                                              </span>
+                                            ) : (
+                                              <SettleTermPayment
+                                                perTermPayment={Number(paymentPerTermCurrent - paymentOfSemiFinal).toFixed(2)}
+                                                enrollment={data?.enrollmentRecord}
+                                                tfData={tfData?.tFee}
+                                                srData={srData}
+                                                amountToPay={Number(paymentPerTerm - paymentOfSemiFinal).toFixed(2)}
+                                                type={'semi-final'}
+                                                title='Semi-Final Payment'
+                                                isScholarshipStart={isScholarshipStart}
+                                              />
+                                            )}
+                                          </>
                                         ) : (
                                           'Not Available'
                                         )}
@@ -679,16 +716,27 @@ const Page = ({ params }: { params: { id: string } }) => {
                                         {showPaymentOfFinal ? (
                                           'Completed'
                                         ) : !isWithdrawn && requiredPaymentsFulfill && showPaymentOfPrelim && showPaymentOfMidterm && showPaymentOfSemiFinal ? (
-                                          <SettleTermPayment
-                                            perTermPayment={parseFloat((totalCurrent - Number(paymentOfDownPayment?.taxes?.amount || 0) - 3 * paymentPerTermCurrent).toFixed(2))}
-                                            enrollment={data?.enrollmentRecord}
-                                            tfData={tfData?.tFee}
-                                            srData={srData}
-                                            amountToPay={Number(final - paymentOfFinal).toFixed(2)}
-                                            type={'final'}
-                                            title='Final Payment'
-                                            isScholarshipStart={isScholarshipStart}
-                                          />
+                                          <>
+                                            {enrollmentData.enrollment && enrollmentData.enrollment.step >= 5 ? (
+                                              <span className='text-blue-500 text-xs uppercase'>
+                                                Pending
+                                                <span className='text-muted-foreground text-[10px]'>
+                                                  ({enrollmentData.enrollment.studentYear}-{enrollmentData.enrollment.studentSemester})
+                                                </span>
+                                              </span>
+                                            ) : (
+                                              <SettleTermPayment
+                                                perTermPayment={parseFloat((totalCurrent - Number(paymentOfDownPayment?.taxes?.amount || 0) - 3 * paymentPerTermCurrent).toFixed(2))}
+                                                enrollment={data?.enrollmentRecord}
+                                                tfData={tfData?.tFee}
+                                                srData={srData}
+                                                amountToPay={Number(final - paymentOfFinal).toFixed(2)}
+                                                type={'final'}
+                                                title='Final Payment'
+                                                isScholarshipStart={isScholarshipStart}
+                                              />
+                                            )}
+                                          </>
                                         ) : (
                                           'Not Available'
                                         )}
