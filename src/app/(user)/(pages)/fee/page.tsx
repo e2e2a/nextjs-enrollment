@@ -476,7 +476,7 @@ const Page = () => {
                           !showPaymentOfSemiFinal &&
                           !showPaymentOfFinal && (
                             <div className='flex flex-col justify-center items-center w-full border-[0.5px] rounded-lg px-5 py-3'>
-                              {srData?.overAllBalance <= 0 && (
+                              {(!srData?.overAllBalance || srData?.overAllBalance <= 0) && (
                                 <>
                                   <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>
                                     <h1 className='flex gap-x-2 justify-center items-center'>
@@ -490,7 +490,7 @@ const Page = () => {
                                 </>
                               )}
                               <div className='flex items-center justify-center flex-col'>
-                                {srData?.overAllBalance <= 0 && (
+                                {(!srData?.overAllBalance || srData?.overAllBalance <= 0) && (
                                   <>
                                     <SettleTermPayment
                                       perTermPayment={paymentPerTermCurrent}
@@ -501,15 +501,15 @@ const Page = () => {
                                       type={'fullPayment'}
                                       title='Full Payment'
                                       isScholarshipStart={isScholarshipStart}
+                                      passbookPaymentBoolean={!srData?.passbookPayment}
                                     />
                                     <span className=''>or</span>
                                   </>
                                 )}
-
                                 <DownPayment
                                   enrollment={data?.enrollment}
                                   tfData={tfData?.tFee}
-                                  srData={srData}
+                                  srData={srData?.studentReceipt || []}
                                   // amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
                                   type={'downPayment'}
                                   title='Down Payment'

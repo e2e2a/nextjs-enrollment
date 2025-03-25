@@ -283,7 +283,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     .replace(/(\S),/g, '$1,')
     .replace(/,(\S)/g, ', $1')
     .trim();
-
+  console.log('srData', srData);
   return (
     <>
       {isPageLoading ? (
@@ -484,7 +484,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   </>
                                 )}
                                 <div className='flex flex-col items-center justify-center'>
-                                  {srData?.overAllBalance < 0 && (
+                                  {(!srData?.overAllBalance || srData?.overAllBalance <= 0) && (
                                     <>
                                       <SettleTermPayment
                                         perTermPayment={paymentPerTermCurrent}
@@ -495,12 +495,21 @@ const Page = ({ params }: { params: { id: string } }) => {
                                         type={'fullPayment'}
                                         title='Full Payment'
                                         isScholarshipStart={isScholarshipStart}
+                                        passbookPaymentBoolean={!srData?.passbookPayment}
                                       />
                                       <span className='text-sm uppercase font-semibold'>OR</span>
                                     </>
                                   )}
 
-                                  <DownPayment enrollment={data?.enrollment} tfData={tfData?.tFee} srData={srData} amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)} type={'downPayment'} title='Down Payment' isScholarshipStart={isScholarshipStart} />
+                                  <DownPayment
+                                    enrollment={data?.enrollment}
+                                    tfData={tfData?.tFee}
+                                    srData={srData?.studentReceipt || []}
+                                    amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
+                                    type={'downPayment'}
+                                    title='Down Payment'
+                                    isScholarshipStart={isScholarshipStart}
+                                  />
                                 </div>
                               </div>
                             ) : Number(data?.enrollment?.profileId?.scholarshipId.amount) >= Number(total) ? (
@@ -528,11 +537,20 @@ const Page = ({ params }: { params: { id: string } }) => {
                                         type={'fullPayment'}
                                         title='Full Payment'
                                         isScholarshipStart={isScholarshipStart}
+                                        passbookPaymentBoolean={!srData?.passbookPayment}
                                       />
                                       <span className='text-sm uppercase font-semibold'>OR</span>
                                     </>
                                   )}
-                                  <DownPayment enrollment={data?.enrollment} tfData={tfData?.tFee} srData={srData} amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)} type={'downPayment'} title='Down Payment' isScholarshipStart={isScholarshipStart} />
+                                  <DownPayment
+                                    enrollment={data?.enrollment}
+                                    tfData={tfData?.tFee}
+                                    srData={srData?.studentReceipt || []}
+                                    amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
+                                    type={'downPayment'}
+                                    title='Down Payment'
+                                    isScholarshipStart={isScholarshipStart}
+                                  />
                                 </div>
                               </div>
                             ) : null}
