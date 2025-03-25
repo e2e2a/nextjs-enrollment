@@ -97,6 +97,7 @@ export const columns: ColumnDef<any>[] = [
           {user?.type.toLowerCase() === 'departmental' && 'Departmental Payment'}
           {user?.type.toLowerCase() === 'insurance' && 'Insurance Payment'}
           {user?.type.toLowerCase() === 'ssg' && 'SSG Payment'}
+          {user?.type.toLowerCase() === 'passbook' && 'Passbook Payment'}
         </div>
       );
     },

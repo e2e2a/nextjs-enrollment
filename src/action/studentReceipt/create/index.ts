@@ -39,7 +39,6 @@ export const createStudentReceiptAction = async (data: any) => {
 const checkRole = async (user: any, data: any, setup: any) => {
   return tryCatch(async () => {
     let b;
-    console.log('data', data);
     const studentProfile = await getStudentProfileById(data.studentId);
     if (!studentProfile) {
       // await refundPayment(data.captureId, data.amount);
@@ -112,9 +111,6 @@ const checkTypeOfPayment = async (user: any, data: any, cFee: any) => {
         }
         break;
       case 'ssg':
-        console.log('cfee', cFee);
-        console.log('cFee.ssgFee', cFee.ssgFee);
-        console.log('data.taxes.amount', data.taxes.amount);
         payment = Number(data.taxes.amount) === Number(cFee.ssgFee);
         break;
       case 'departmental':
@@ -123,13 +119,16 @@ const checkTypeOfPayment = async (user: any, data: any, cFee: any) => {
       case 'insurance':
         payment = Number(data.taxes.amount) === Number(cFee.insuranceFee);
         break;
+      case 'passbook':
+        payment = Number(data.taxes.amount) === Number(cFee.passbookFee);
+        break;
       // case 'fullpayment':
       //   break;
       default:
         payment = true;
         break;
     }
-    console.log('asdasd');
+
     if (!payment) return { error: 'Amount of payment should be equal to amount to pay.', status: 400 };
     return { success: true, message: 'Payment type is valid.', status: 200 };
   });
@@ -178,7 +177,15 @@ const checkAndCreateStudentReceipt = async (user: any, student: any, data: any, 
     // data.payer.address = d.res.purchase_units[0].shipping.address;
     // data.payer.captures = captures;
     const data2 = { ...data, captures: captures, year: studentEnrollment.studentYear, semester: studentEnrollment.studentSemester, 'payer.address': d?.res?.purchase_units[0].shipping?.address, payment_source: payment_source };
-    if (data.previousBalance && data.previousBalance.length > 0 && data?.type?.toLowerCase() !== 'downpayment' && data?.type?.toLowerCase() !== 'ssg' && data?.type?.toLowerCase() !== 'departmental' && data?.type?.toLowerCase() !== 'insurance') {
+    if (
+      data.previousBalance &&
+      data.previousBalance.length > 0 &&
+      data?.type?.toLowerCase() !== 'downpayment' &&
+      data?.type?.toLowerCase() !== 'ssg' &&
+      data?.type?.toLowerCase() !== 'passbook' &&
+      data?.type?.toLowerCase() !== 'departmental' &&
+      data?.type?.toLowerCase() !== 'insurance'
+    ) {
       // await checkBalance(studentEnrollment.studentYear, studentEnrollment.studentSemester, student._id.toString(), studentReceipt);
       let amountPaid = data.taxes.amount;
       if (data.perTermPaymentCurrent > 0) amountPaid = data.taxes.amount - data.perTermPaymentCurrent;

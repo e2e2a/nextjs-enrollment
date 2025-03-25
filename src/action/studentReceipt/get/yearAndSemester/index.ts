@@ -28,13 +28,14 @@ export const getAllStudentReceiptByUserIdAndYearAndSemesterAction = async (userI
     let studentReceipt;
     const a = await getStudentReceiptByStudentId(student._id);
     studentReceipt = a;
+    const passbook = await checkPaymentOfPassbook(studentReceipt);
     if (!year && !semester && !schoolYear) return { error: 'Invalid inputs', status: 400 };
     const c = await checkPaymentOfInsurance(studentReceipt, year, schoolYear);
     const checkedBalance = await checkBalance(year, semester, student._id, studentReceipt);
     // this is the insurance space for searching the insurance by semester and year
     studentReceipt = a.filter((sr) => sr.year.toLowerCase() === year.toLowerCase() && sr.semester.toLowerCase() === semester.toLowerCase() && sr.schoolYear.toLowerCase() === schoolYear.toLowerCase());
 
-    return { studentReceipt: JSON.parse(JSON.stringify(studentReceipt)), ...c, ...checkedBalance, status: 200 };
+    return { studentReceipt: JSON.parse(JSON.stringify(studentReceipt)), ...c, ...checkedBalance, ...passbook, status: 200 };
   });
 };
 
@@ -219,5 +220,19 @@ const checkPaymentOfInsurance = async (studentReceipt: any, year: string, school
     if (insurancePayment1) insurancePayment = true;
     if (fullpayment) insurancePayment = true;
     return { insurancePayment, insurancePaymentSemester: insurancePayment1?.semester || fullpayment?.semester };
+  });
+};
+
+const checkPaymentOfPassbook = async (studentReceipt: any) => {
+  return tryCatch(async () => {
+    let passbookPayment = false;
+    const checkPassbook = studentReceipt
+      ?.filter((r: any) => r.type.toLowerCase() === 'passbook')
+      ?.reduce((total: number, payment: any) => {
+        return { amount: total + (Number(payment?.taxes?.amount) || 0), year: payment.year, semester: payment.semester, schoolYear: payment.schoolYear };
+      }, 0);
+
+    if (checkPassbook) passbookPayment = true;
+    return { passbookPayment, passbookPaymentSemester: checkPassbook?.semester, passbookPaymentYear: checkPassbook.year };
   });
 };

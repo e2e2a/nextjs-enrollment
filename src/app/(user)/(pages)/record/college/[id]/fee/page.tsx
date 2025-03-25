@@ -264,16 +264,22 @@ const Page = ({ params }: { params: { id: string } }) => {
   }, [data, error, tfData, srData, srError, isTFError, paymentOfDownPayment, showPaymentOfFullPayment, isScholarshipStart, enrollmentData, enrollmentError]);
 
   useEffect(() => {
-    let additionPayment = parseFloat((Number(tfData?.tFee?.ssgFee || 0) + Number(tfData?.tFee?.insuranceFee || 0) + Number(tfData?.tFee?.departmentalFee || 0)).toFixed(2));
+    let additionPayment = parseFloat((Number(tfData?.tFee?.ssgFee || 0) + Number(tfData?.tFee?.insuranceFee || 0) + Number(tfData?.tFee?.passbookFee || 0) + Number(tfData?.tFee?.departmentalFee || 0)).toFixed(2));
     if (showPaymentOfDepartmental) additionPayment = parseFloat((additionPayment - tfData?.tFee?.departmentalFee).toFixed(2));
     if (showPaymentOfSSG) additionPayment = parseFloat((additionPayment - tfData?.tFee?.ssgFee).toFixed(2));
     if (srData?.insurancePayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.insuranceFee).toFixed(2));
+    if (srData?.passbookPayment) additionPayment = parseFloat((additionPayment - tfData?.tFee?.passbookFee).toFixed(2));
 
     setAdditionalTotal(additionPayment || 0);
     if (showPaymentOfFullPayment) setAdditionalTotal(0);
   }, [tfData, srData, showPaymentOfFullPayment, showPaymentOfDepartmental, showPaymentOfSSG]);
 
   const insurancePaidInThisSemester = srData?.insurancePaymentSemester?.toLowerCase() === data?.enrollmentRecord?.studentSemester?.toLowerCase();
+  const passbookPaidInThisSemester =
+    srData?.passbookPaymentSemester &&
+    srData?.passbookPaymentSemester?.toLowerCase() === data?.enrollmentRecord?.studentSemester?.toLowerCase() &&
+    srData?.passbookPaymentYear &&
+    srData?.passbookPaymentYear?.toLowerCase() === data?.enrollmentRecord?.studentYear?.toLowerCase();
   // boolean for all required payments
   const myBooleanForInsurance = srData?.insurancePayment || insurancePaidInThisSemester;
   const requiredPaymentsFulfill = showPaymentOfDownPayment && myBooleanForInsurance && showPaymentOfDepartmental;
@@ -380,11 +386,25 @@ const Page = ({ params }: { params: { id: string } }) => {
                                     <span className='font-medium'>SSG Fee</span>
                                     <span>₱{Number(tfData?.tFee?.ssgFee || 0).toFixed(2) || (0).toFixed(2)}</span>
                                   </div>
+                                  {(!srData?.passbookPayment || passbookPaidInThisSemester) && (
+                                    <div className='flex justify-between'>
+                                      <span className='font-medium'>Passbook Fee</span>
+                                      <span>₱{Number(tfData?.tFee?.passbookFee || 0).toFixed(2) || (0).toFixed(2)}</span>
+                                    </div>
+                                  )}
                                 </div>
                                 <div className='grid grid-cols-1 sm:px-36 w-full px-5'>
                                   <div className='flex justify-between'>
                                     <span className='font-medium'>Total</span>
-                                    <span>₱{(Number(tfData?.tFee?.departmentalFee || 0) + Number(!srData?.insurancePayment || insurancePaidInThisSemester ? tfData?.tFee?.insuranceFee || 0 : 0) + Number(tfData?.tFee?.ssgFee || 0)).toFixed(2)}</span>
+                                    <span>
+                                      ₱
+                                      {(
+                                        Number(tfData?.tFee?.departmentalFee || 0) +
+                                        Number(!srData?.insurancePayment || insurancePaidInThisSemester ? tfData?.tFee?.insuranceFee || 0 : 0) +
+                                        Number(!srData?.passbookPayment || passbookPaidInThisSemester ? tfData?.tFee?.passbookFee || 0 : 0) +
+                                        Number(tfData?.tFee?.ssgFee || 0)
+                                      ).toFixed(2)}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
@@ -538,6 +558,17 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 </TableRow>
                               </TableHeader>
                               <TableBody>
+                                {enrollmentData.enrollment && enrollmentData.enrollment.step >= 5 && (
+                                  <div className='flex items-center justify-center'>
+                                    <span className='text-orange-500 text-sm px-5 gap-2 flex'>
+                                      NOTE:
+                                      <span className='text-muted-foreground '>
+                                        This per-term installment payment is disabled because the balance from this enrollment has been carried over to the latest enrollment. It has been included in the current enrollment (
+                                        {enrollmentData.enrollment.studentYear}-{enrollmentData.enrollment.studentSemester}).
+                                      </span>
+                                    </span>
+                                  </div>
+                                )}
                                 {!showPaymentOfFullPayment && (
                                   <>
                                     <TableRow>
@@ -900,13 +931,48 @@ const Page = ({ params }: { params: { id: string } }) => {
                                     )}
                                   </TableCell>
                                 )}
+                                {(!srData?.passbookPayment || passbookPaidInThisSemester) && (
+                                  <TableRow>
+                                    <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || passbookPaidInThisSemester) && 'text-green-400 line-through'}`}>Passbook Fee</TableCell>
+                                    <TableCell className={`px-4 py-2 ${(showPaymentOfFullPayment || passbookPaidInThisSemester) && 'text-green-400 line-through'}`}>₱{Number(tfData?.tFee?.passbookFee || 0).toFixed(2)}</TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || passbookPaidInThisSemester ? 'text-green-400' : 'text-red'}`}>
+                                      {showPaymentOfFullPayment || passbookPaidInThisSemester ? 'Paid' : 'unpaid'}
+                                    </TableCell>
+                                    <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfFullPayment || passbookPaidInThisSemester ? 'text-green-400' : 'text-red'}`}>
+                                      {showPaymentOfFullPayment || passbookPaidInThisSemester ? (
+                                        'Completed'
+                                      ) : showPaymentOfDownPayment ? (
+                                        <SettleTermPayment
+                                          perTermPayment={paymentPerTermCurrent}
+                                          enrollment={data?.enrollmentRecord}
+                                          tfData={tfData?.tFee}
+                                          srData={srData}
+                                          amountToPay={Number(tfData?.tFee?.passbookFee).toFixed(2)}
+                                          type={'passbook'}
+                                          title='Passbook Payment'
+                                          isScholarshipStart={isScholarshipStart}
+                                        />
+                                      ) : (
+                                        ''
+                                      )}
+                                    </TableCell>
+                                  </TableRow>
+                                )}
                               </TableRow>
                             </TableBody>
                           </Table>
                           <div className='grid grid-cols-1 sm:px-8 px-5'>
                             <div className='flex justify-between'>
                               <span className='font-medium'>Total Amount</span>
-                              <span>₱{(Number(tfData?.tFee?.departmentalFee || 0) + Number(!srData?.insurancePayment || insurancePaidInThisSemester ? tfData?.tFee?.insuranceFee || 0 : 0) + Number(tfData?.tFee?.ssgFee || 0)).toFixed(2)}</span>
+                              <span>
+                                ₱
+                                {(
+                                  Number(tfData?.tFee?.departmentalFee || 0) +
+                                  Number(!srData?.insurancePayment || insurancePaidInThisSemester ? tfData?.tFee?.insuranceFee || 0 : 0) +
+                                  Number(!srData?.passbookPayment || passbookPaidInThisSemester ? tfData?.tFee?.passbookFee || 0 : 0) +
+                                  Number(tfData?.tFee?.ssgFee || 0)
+                                ).toFixed(2)}
+                              </span>
                             </div>
                           </div>
                           <div className='grid grid-cols-1 sm:px-12 px-7'>

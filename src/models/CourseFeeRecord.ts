@@ -9,6 +9,7 @@ export interface ICourseFeeRecord extends Document {
   departmentalFee: string;
   insuranceFee: string;
   ssgFee: string;
+  passbookFee: string;
   cwtsOrNstpFee: string;
   ojtFee: string;
   year: string;
@@ -29,6 +30,7 @@ const schema = new Schema<ICourseFeeRecord>(
     ratePerLab: { type: String },
     departmentalFee: { type: String },
     ssgFee: { type: String },
+    passbookFee: { type: String },
     cwtsOrNstpFee: { type: String },
     downPayment: { type: String },
     insuranceFee: { type: String },
