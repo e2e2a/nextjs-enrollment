@@ -10,6 +10,7 @@ import { checkAuth } from '@/utils/actions/session';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { storage } from '@/firebase';
 import { updateAccountingProfileByUserId } from '@/services/accountingProfile';
+import { updateSuperAdminProfileByUserId } from '@/services/superAdminProfile';
 
 /**
  * Update profile by session action
@@ -58,6 +59,9 @@ const checkSessionRole = async (session: any, data: any): Promise<any> => {
         break;
       case 'ADMIN':
         profile = await updateAdminProfile(session.user._id, data);
+        break;
+      case 'SUPER ADMIN':
+        profile = await updateSuperAdminProfile(session.user._id, data);
         break;
       case 'ACCOUNTING':
         profile = await updateAccountingProfile(session.user._id, data);
@@ -119,6 +123,26 @@ const updateDeanProfile = async (userId: string, data: any) => {
     }
     const profile = await updateDeanProfileByUserId(userId, data);
     if (!profile) return { error: 'Something went wrong. ', status: 500 };
+    return { message: 'Profile has been update. ', status: 201 };
+  });
+};
+
+/**
+ * update admin profile
+ *
+ * @param {String} userId
+ * @param {Object} data
+ */
+const updateSuperAdminProfile = async (userId: string, data: any) => {
+  return tryCatch(async () => {
+    if (!data.formData) {
+      const profileParse = AdminProfileUpdateValidator.safeParse(data);
+      if (!profileParse.success) return { error: 'Invalid fields!', status: 400 };
+    }
+
+    const profile = await updateSuperAdminProfileByUserId(userId, data);
+    if (!profile) return { error: 'Something went wrong. ', status: 500 };
+
     return { message: 'Profile has been update. ', status: 201 };
   });
 };

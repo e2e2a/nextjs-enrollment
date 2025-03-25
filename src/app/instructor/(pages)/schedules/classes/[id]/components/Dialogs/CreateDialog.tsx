@@ -117,7 +117,7 @@ const CreateDialog = ({ teacher, data, type }: IProps) => {
             <div className=''>
               <div className='text-orange-500'>Reminder:</div>
               <div className=''>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Empty grades consider as <span className='text-red'>INC</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Empty grades cannot be submitted. If a grade is incomplete, input <span className='text-red'>INC</span>.
               </div>
             </div>
           </DialogDescription>
