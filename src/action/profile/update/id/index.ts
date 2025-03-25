@@ -23,7 +23,7 @@ export const updateProfileByAdminAction = async (data: any) => {
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not authenticated.', status: 403 };
-    if (session && session.user.role !== 'ADMIN') return { error: 'Dont have permission.', status: 403 };
+    if (session && session.user.role !== 'SUPER ADMIN' && session.user.role !== 'ADMIN') return { error: 'Dont have permission.', status: 403 };
 
     const checkedR = await checkSessionRole(data);
 

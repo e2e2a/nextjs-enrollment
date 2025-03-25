@@ -25,7 +25,7 @@ export const adminCreateUserWithRoleAction = async (data: any) => {
     await dbConnect();
     const session = await checkAuth();
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
-    if (session.user.role !== 'SUPER ADMIN') return { error: 'Not Authorized.', status: 403 };
+    if (session.user.role !== 'SUPER ADMIN' && session.user.role !== 'ADMIN') return { error: 'Not Authorized.', status: 403 };
 
     const checkConflict = await checkingConflict(data);
     if (checkConflict && checkConflict.error) return { error: checkConflict?.error, status: checkConflict?.status };

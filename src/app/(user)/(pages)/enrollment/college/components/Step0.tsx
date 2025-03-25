@@ -263,8 +263,11 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
     }
     setFileGoodMoralError('');
     setTORError('');
-
     const profileData = form.getValues();
+    if (profileData.seniorHighSchoolName?.toLowerCase() === 'n/a') {
+      profileData.seniorHighSchoolYear = '';
+      profileData.seniorHighSchoolStrand = '';
+    }
     profileData.studentYear = profileData.studentYear.toLowerCase();
     const dataa = {
       ...profileData,
