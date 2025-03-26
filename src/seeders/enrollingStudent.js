@@ -43,7 +43,7 @@ const schema = new Schema(
 
     enrollStatus: {
       type: String,
-      enum: ['Pending', 'Continue', 'Completed'],
+      enum: ['Pending', 'Old Student', 'Completed'],
     },
 
     imageUrl: { type: String },
@@ -114,7 +114,7 @@ const schemaEnrollment = new Schema(
     studentStatus: {
       type: String,
       default: 'New Student',
-      enum: ['New Student', 'Continue', 'Completed'],
+      enum: ['New Student', 'Old Student', 'Completed'],
     },
 
     isStudentProfile: {

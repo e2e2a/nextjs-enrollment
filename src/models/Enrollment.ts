@@ -63,7 +63,7 @@ const schema = new Schema<IEnrollment>(
     studentStatus: {
       type: String,
       default: 'New Student',
-      enum: ['New Student', 'Continue', 'Transferee', 'Returning'],
+      enum: ['New Student', 'Old Student', 'Transferee', 'Returning'],
     },
     isStudentProfile: { type: String },
     studentType: {

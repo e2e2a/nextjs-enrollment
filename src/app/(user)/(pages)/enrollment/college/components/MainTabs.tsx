@@ -32,7 +32,7 @@ const MainTabs = ({ search, value, enrollment, profile, enrollmentSetup, courses
     <Tabs value={`${value}`} className='w-full gap-4 '>
       {!enrollment && !enrollmentSetup?.enrollmentTertiary.open && <Open es={enrollmentSetup?.enrollmentTertiary} />}
       {enrollmentSetup?.enrollmentTertiary.open && (!enrollment && profile.studentStatus === 'New Student' && isEnrolled) && <Step0 search={search} enrollmentSetup={enrollmentSetup} courses={courses} />}
-      {enrollmentSetup?.enrollmentTertiary.open && (!enrollment && profile.studentStatus === 'Continue' && isEnrolled) && <CollegeOldStudent profile={profile} enrollmentSetup={enrollmentSetup} />}
+      {enrollmentSetup?.enrollmentTertiary.open && (!enrollment && profile.studentStatus.toLowerCase() === 'old student' && isEnrolled) && <CollegeOldStudent profile={profile} enrollmentSetup={enrollmentSetup} />}
       {enrollment && profile.enrollStatus.toLowerCase() === 'pending' && (
         <>
           <Step1 search={search} enrollment={enrollment} />
