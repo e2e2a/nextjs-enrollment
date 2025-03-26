@@ -28,7 +28,7 @@ export const exportToPDF = async (
 ) => {
   return new Promise<void>((resolve, reject) => {
     try {
-      if (!data || data.length === 0) return;
+      if (!data || data?.length === 0) return;
 
       const doc = new jsPDF({ orientation: 'landscape' });
       const pageWidth = doc.internal.pageSize.getWidth();

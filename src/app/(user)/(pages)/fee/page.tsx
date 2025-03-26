@@ -58,7 +58,7 @@ const Page = () => {
   const isScholarshipStart = scholarship && data?.enrollment?.profileId?.scholarshipId;
   if (isScholarshipStart) showPaymentOfFullPayment = paymentOfFullPayment && Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 === Math.round(Number(total) * 100) / 100;
   // Down Payment
-  const paymentOfDownPayment = srData?.studentReceipt.find((r: any) => r.type.toLowerCase() === 'downpayment');
+  const paymentOfDownPayment = srData?.studentReceipt?.find((r: any) => r.type.toLowerCase() === 'downpayment');
   const showPaymentOfDownPayment = paymentOfDownPayment && Number(paymentOfDownPayment?.taxes?.amount) >= Number(500);
 
   // Prelim Payment
@@ -108,7 +108,7 @@ const Page = () => {
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
-  const departmentalPayment = Number(paymentOfDepartmental) - Number(tfData?.tFee?.departmentalFee);
+  const departmentalPayment = Number(paymentOfDepartmental) - Number(tfData?.tFee?.departmentalFee || 0);
   const showPaymentOfDepartmental = paymentOfDepartmental && departmentalPayment >= 0;
 
   // Insurance Payment
@@ -117,7 +117,7 @@ const Page = () => {
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
-  const insurancePayment = Number(paymentOfInsurance) - Number(tfData?.tFee?.insuranceFee);
+  const insurancePayment = Number(paymentOfInsurance) - Number(tfData?.tFee?.insuranceFee || 0);
   const showPaymentOfInsurance = paymentOfInsurance && insurancePayment >= 0;
 
   // SSG Payment
@@ -126,7 +126,7 @@ const Page = () => {
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
-  const ssgPayment = Number(paymentOfSSG) - Number(tfData?.tFee?.ssgFee);
+  const ssgPayment = Number(paymentOfSSG) - Number(tfData?.tFee?.ssgFee || 0);
   const showPaymentOfSSG = paymentOfSSG && ssgPayment >= 0;
 
   useEffect(() => {
@@ -291,7 +291,7 @@ const Page = () => {
         <>
           {data?.enrollment ? (
             <>
-              {tfData?.tFee && data.enrollment.step >= 5 && data?.enrollment?.enrollStatus.toLowerCase() !== 'withdraw' ? (
+              {tfData?.tFee && data?.enrollment?.step >= 5 && data?.enrollment?.enrollStatus.toLowerCase() !== 'withdraw' ? (
                 <div className='border-0 bg-white rounded-xl min-h-[87vh]'>
                   {tfData?.tFee && (
                     <Accordion type='single' collapsible className='w-full p-10'>
@@ -351,13 +351,13 @@ const Page = () => {
                                 {showCwtsOrNstp && (
                                   <div className='flex justify-between'>
                                     <span className='font-medium'>CWTS/NSTP FEE</span>
-                                    <span>₱{Number(tfData?.tFee?.cwtsOrNstpFee).toFixed(2) || (0).toFixed(2)}</span>
+                                    <span>₱{Number(tfData?.tFee?.cwtsOrNstpFee || 0).toFixed(2) || (0).toFixed(2)}</span>
                                   </div>
                                 )}
                                 {showOJT && (
                                   <div className='flex justify-between'>
                                     <span className='font-medium'>OJT FEE</span>
-                                    <span>₱{Number(tfData?.tFee?.ojtFee).toFixed(2) || (0).toFixed(2)}</span>
+                                    <span>₱{Number(tfData?.tFee?.ojtFee || 0).toFixed(2) || (0).toFixed(2)}</span>
                                   </div>
                                 )}
                               </div>
@@ -545,13 +545,13 @@ const Page = () => {
                               </h1>
                             </div>
                           )}
-                          {data?.enrollment?.profileId?.scholarshipId?.amount && isScholarshipStart && srData?.previousBalance.length > 0 && (
+                          {data?.enrollment?.profileId?.scholarshipId?.amount && isScholarshipStart && srData?.previousBalance?.length > 0 && (
                             <div className='md:px-14 px-5'>
                               <div className='flex flex-col py-5 justify-center items-center px-5 text-sm text-muted-foreground my-3 border rounded-lg'>
                                 <span className='text-red'>
                                   Warning: <span className='text-muted-foreground'> Student has an outstanding balance from a previous enrollment that still needs to be paid.</span>
                                 </span>
-                                {srData.previousBalance.map((balance: any, index: number) => (
+                                {srData?.previousBalance.map((balance: any, index: number) => (
                                   <div key={index} className='grid grid-cols-1 xs:grid-cols-3 mt-5 xs:mt-0 text-start gap-x-5 w-full'>
                                     <span className='font-medium flex flex-col'>
                                       Outstanding Balance

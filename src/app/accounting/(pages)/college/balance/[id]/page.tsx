@@ -581,7 +581,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 </h1>
                               </div>
                             )}
-                            {data?.enrollment?.profileId?.scholarshipId?.amount && isScholarshipStart && srData?.previousBalance.length > 0 && (
+                            {data?.enrollment?.profileId?.scholarshipId?.amount && isScholarshipStart && srData?.previousBalance?.length > 0 && (
                               <div className='md:px-14 px-5'>
                                 <div className='flex flex-col py-5 justify-center items-center px-5 text-sm text-muted-foreground my-3 border rounded-lg'>
                                   <span className='text-red'>
@@ -785,7 +785,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                           </div>
                           {!data?.enrollment?.profileId?.scholarshipId?.amount && !isScholarshipStart && Number(total) > Number(totalCurrent) && (
                             <>
-                              {srData && srData?.previousBalance.length > 0 && (
+                              {srData && srData?.previousBalance?.length > 0 && (
                                 <div className='grid grid-cols-1 sm:px-36 px-5'>
                                   {srData.previousBalance.map((balance: any, index: number) => (
                                     <div key={index} className='flex justify-between'>
