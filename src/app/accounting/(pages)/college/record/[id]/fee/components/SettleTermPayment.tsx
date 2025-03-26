@@ -9,7 +9,6 @@ import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-('@/components/ui/button');
 
 type IProps = {
   enrollment: any;
@@ -87,7 +86,8 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
       paymentMethod: 'CASH',
       createTime: new Date(Date.now()),
       updateTime: new Date(Date.now()),
-      isPaidByScholarship: enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 ? true : false,
+      isPaidByScholarship:
+        type.toLowerCase() !== 'insurance' && type.toLowerCase() !== 'departmental' && type.toLowerCase() !== 'ssg' && type.toLowerCase() !== 'passbook' && enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 ? true : false,
       taxes: {
         fee: (0).toFixed(2),
         fixed: (0).toFixed(2),
@@ -143,7 +143,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
               </span>
               ,
             </span>
-            {enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 && (
+            {type.toLowerCase() !== 'insurance' && type.toLowerCase() !== 'departmental' && type.toLowerCase() !== 'ssg' && type.toLowerCase() !== 'passbook' && isScholarshipStart && enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 && (
               <div className='mt-5 flex text-sm text-muted-foreground'>
                 <span>
                   <span className='text-orange-500'>Note:</span> The student has a scholarship grant of <span className='text-green-500'>₱{enrollment?.profileId?.scholarshipId?.amount}</span>. If a payment is processed for the student, the corresponding amount

@@ -77,7 +77,7 @@ const checkBalance = async (currentYear: string, currentSemester: string, profil
       // Check only past enrollments (before current year/sem)
       if (recordYearIndex < currentYearIndex || (recordYearIndex === currentYearIndex && recordSemIndex < currentSemIndex)) {
         const getTotal = await getTotalOfBalance(record, studentReceipt);
-        previousBalance.push({ year: record?.studentYear, semester: record?.studentSemester, schoolYear: record?.schoolYear, ...getTotal });
+        previousBalance.push({ year: record?.studentYear, semester: record?.studentSemester, schoolYear: record?.schoolYear, id: record._id.toString(), ...getTotal });
         overAllBalance += Number(getTotal.balance || 0);
         overAllShowBalance += Number(getTotal.balanceToShow || 0);
       }

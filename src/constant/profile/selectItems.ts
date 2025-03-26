@@ -74,6 +74,10 @@ export const profileSelectItems = {
       title: 'college graduate or higher',
       value: 'college graduate or higher',
     },
+    {
+      title: 'others',
+      value: 'others',
+    },
   ],
   learnerOrTraineeOrStudentClassification: [
     {

@@ -37,7 +37,6 @@ export const getEnrollmentRecordById = async (id: any) => {
         path: 'profileId',
         populate: [{ path: 'scholarshipId' }, { path: 'userId' }],
       })
-      .exec();
     return TProfile;
   } catch (error) {
     console.log('error in service:', error);
