@@ -822,26 +822,28 @@ const Page = ({ params }: { params: { id: string } }) => {
                           {Number(total) > Number(totalCurrent) && (
                             <>
                               {srData && srData?.previousBalance.length > 0 && (
-                                <div className='grid grid-cols-1 sm:px-36 px-5'>
-                                  {srData.previousBalance.map((balance: any, index: number) => (
-                                    <div key={index} className='flex justify-between'>
-                                      <span className='font-medium'>
-                                        Outstanding Balance
-                                        <span className='text-xs text-muted-foreground'>
-                                          ({balance?.year}- {balance?.semester})
+                                <>
+                                  <div className='grid grid-cols-1 sm:px-36 px-5'>
+                                    {srData.previousBalance.map((balance: any, index: number) => (
+                                      <div key={index} className='flex justify-between'>
+                                        <span className='font-medium'>
+                                          Outstanding Balance
+                                          <span className='text-xs text-muted-foreground'>
+                                            ({balance?.year}- {balance?.semester})
+                                          </span>
                                         </span>
-                                      </span>
-                                      <span>₱{Number(balance?.balanceToShow).toFixed(2)}</span>
+                                        <span>₱{Number(balance?.balanceToShow).toFixed(2)}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                  <div className='grid grid-cols-1 sm:px-36 px-5'>
+                                    <div className='flex justify-between'>
+                                      <span className='font-medium'>Current Semester Fees</span>
+                                      <span>₱{Number(totalCurrent).toFixed(2) || (0).toFixed(2)}</span>
                                     </div>
-                                  ))}
-                                </div>
+                                  </div>
+                                </>
                               )}
-                              <div className='grid grid-cols-1 sm:px-36 px-5'>
-                                <div className='flex justify-between'>
-                                  <span className='font-medium'>Current Semester Fees</span>
-                                  <span>₱{Number(totalCurrent).toFixed(2) || (0).toFixed(2)}</span>
-                                </div>
-                              </div>
                             </>
                           )}
                           <div className='grid grid-cols-1 sm:px-36 px-5'>

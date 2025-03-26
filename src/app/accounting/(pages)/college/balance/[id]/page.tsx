@@ -206,24 +206,24 @@ const Page = ({ params }: { params: { id: string } }) => {
         const a = cFormatted;
         let RegMiscTotal = a;
         const totalOfNew = ccFormatted;
-        console.log('a1', RegMiscTotal)
+        console.log('a1', RegMiscTotal);
         if (tfData?.tFee?.regOrMiscWithOldAndNew) {
           if (data?.enrollment?.studentStatus.toLowerCase() === 'new student' || data?.enrollment?.studentStatus.toLowerCase() === 'transfer student') {
             setRegMiscTotal(totalOfNew);
             RegMiscTotal = totalOfNew;
-            console.log('2', RegMiscTotal)
+            console.log('2', RegMiscTotal);
           } else {
             RegMiscTotal = a;
             setRegMiscTotal(a);
-            console.log('3', RegMiscTotal)
+            console.log('3', RegMiscTotal);
           }
         } else {
           RegMiscTotal = a;
           setRegMiscTotal(a);
-          console.log('4', RegMiscTotal)
+          console.log('4', RegMiscTotal);
         }
-        
-        console.log('5', RegMiscTotal)
+
+        console.log('5', RegMiscTotal);
         if (isScholarshipStart && data?.enrollment?.profileId?.scholarshipId?.exemptedFees.includes('Miscellaneous Fees')) {
           if (data?.enrollment?.profileId?.scholarshipId?.type === 'percentage') {
             const b = parseFloat((a * Number(data?.enrollment?.profileId?.scholarshipId?.discountPercentage)).toFixed(2));
@@ -790,26 +790,29 @@ const Page = ({ params }: { params: { id: string } }) => {
                           {!data?.enrollment?.profileId?.scholarshipId?.amount && !isScholarshipStart && Number(total) > Number(totalCurrent) && (
                             <>
                               {srData && srData?.previousBalance?.length > 0 && (
-                                <div className='grid grid-cols-1 sm:px-36 px-5'>
-                                  {srData.previousBalance.map((balance: any, index: number) => (
-                                    <div key={index} className='flex justify-between'>
-                                      <span className='font-medium'>
-                                        Outstanding Balance
-                                        <span className='text-xs text-muted-foreground'>
-                                          ({balance?.year}- {balance?.semester})
+                                <>
+                                  <div className='grid grid-cols-1 sm:px-36 px-5'>
+                                    {srData.previousBalance.map((balance: any, index: number) => (
+                                      <div key={index} className='flex justify-between'>
+                                        <span className='font-medium'>
+                                          Outstanding Balance
+                                          <span className='text-xs text-muted-foreground'>
+                                            ({balance?.year}- {balance?.semester})
+                                          </span>
                                         </span>
-                                      </span>
-                                      <span>₱{Number(balance?.balanceToShow).toFixed(2)}</span>
+                                        <span>₱{Number(balance?.balanceToShow).toFixed(2)}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+
+                                  <div className='grid grid-cols-1 sm:px-36 px-5'>
+                                    <div className='flex justify-between'>
+                                      <span className='font-medium'>Current Semester Fees</span>
+                                      <span>₱{Number(totalCurrent).toFixed(2) || (0).toFixed(2)}</span>
                                     </div>
-                                  ))}
-                                </div>
+                                  </div>
+                                </>
                               )}
-                              <div className='grid grid-cols-1 sm:px-36 px-5'>
-                                <div className='flex justify-between'>
-                                  <span className='font-medium'>Current Semester Fees</span>
-                                  <span>₱{Number(totalCurrent).toFixed(2) || (0).toFixed(2)}</span>
-                                </div>
-                              </div>
                             </>
                           )}
                           <div className='grid grid-cols-1 sm:px-36 px-5'>

@@ -13,8 +13,8 @@ const StudentPhoto = ({ user }: { user: any }) => {
 
   useEffect(() => {
     const fetchFileUrl = async () => {
-      if (navigator.onLine && user && user.profileId.photoUrl) {
-        const photoPath = `enrollment/studentphoto/${user?.profileId._id}/${user?.profileId.photoUrl}`;
+      if (navigator.onLine && user && user?.profileId?.photoUrl) {
+        const photoPath = `enrollment/studentphoto/${user?.profileId?._id}/${user?.profileId?.photoUrl}`;
         // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
 
         const fileRef = ref(storage, photoPath);

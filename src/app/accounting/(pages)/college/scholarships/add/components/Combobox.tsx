@@ -66,7 +66,7 @@ export function Combobox({ form, name, label, selectItems, placeholder, setStude
                               onSelect={(currentValue) => {
                                 setValue(currentValue === value ? '' : currentValue);
                                 if (setStudentId) {
-                                  setStudentId(item._id);
+                                  setStudentId(item?._id);
                                 }
                                 field.onChange(currentValue);
                                 setOpen(false);
