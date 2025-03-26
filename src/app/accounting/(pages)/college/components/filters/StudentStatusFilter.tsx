@@ -56,7 +56,7 @@ const StudentStatusFilter = ({ onChange }: IProps) => {
                   New Student
                 </CommandItem>
                 <CommandItem
-                  value={'Continue'}
+                  value={'Old Student'}
                   className='w-auto'
                   onSelect={(currentValue) => {
                     setIsOpen(!isOpen);
@@ -64,8 +64,8 @@ const StudentStatusFilter = ({ onChange }: IProps) => {
                     setValue(currentValue);
                   }}
                 >
-                  <Check className={cn('mr-2 h-4 w-4', value === 'Continue' ? 'opacity-100' : 'opacity-0')} />
-                  Continue
+                  <Check className={cn('mr-2 h-4 w-4', value === 'Old Student' ? 'opacity-100' : 'opacity-0')} />
+                  Old Student
                 </CommandItem>
                 <CommandItem
                   value={'Transferee'}

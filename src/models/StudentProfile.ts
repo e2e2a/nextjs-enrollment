@@ -107,7 +107,7 @@ const schema = new Schema<IProfile>(
     studentStatus: {
       type: String,
       default: 'New Student',
-      enum: ['New Student', 'Continue', 'Transferee'],
+      enum: ['New Student', 'Old Student', 'Transferee'],
     },
     enrollStatus: {
       type: String,

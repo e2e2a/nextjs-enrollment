@@ -140,7 +140,7 @@ const handleCategoryCollege = async (data: any) => {
     await CourseFeeRecord.insertMany(mappedCourseFees);
 
     // Use bulk operation
-    // await StudentProfile.updateMany({ courseId: { $in: courseIds }, studentStatus: 'Continue', enrollStatus: { $in: ['', 'Pending'] } }, { $set: { studentStatus: 'Returning', enrollStatus: '' } }, { new: true });
+    // await StudentProfile.updateMany({ courseId: { $in: courseIds }, studentStatus: 'Old Student', enrollStatus: { $in: ['', 'Pending'] } }, { $set: { studentStatus: 'Returning', enrollStatus: '' } }, { new: true });
     // await StudentProfile.updateMany({ courseId: { $in: courseIds }, studentStatus: 'New Student', enrollStatus: 'Pending' }, { $set: { enrollStatus: '' } }, { new: true });
     await TeacherScheduleRecord.insertMany(tsRecordData.data);
     await EnrollmentRecord.insertMany(enRecordData.data);
@@ -154,7 +154,7 @@ const handleCategoryCollege = async (data: any) => {
       await TeacherSchedule.deleteMany({ category: 'College' });
     }
 
-    // await StudentProfile.updateMany({ courseId: { $in: courseIds }, enrollStatus: 'Enrolled' }, { $set: { studentStatus: 'Continue', enrollStatus: '' } }, { new: true });
+    // await StudentProfile.updateMany({ courseId: { $in: courseIds }, enrollStatus: 'Enrolled' }, { $set: { studentStatus: 'Old Student', enrollStatus: '' } }, { new: true });
 
     // const enrollmentTertiary = { enrollmentTertiary: { open: false, schoolYear: '', semester: '' } };
     // await updateEnrollmentSetupByName('GODOY', enrollmentTertiary);

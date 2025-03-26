@@ -275,7 +275,7 @@ export interface IStudentProfile {
   learnerOrTraineeOrStudentClassification?: string;
   studentYear?: string;
   semester?: string;
-  enrollStatus?: 'Pending' | 'Continue' | 'Completed';
+  enrollStatus?: 'Pending' | 'Old Student' | 'Completed';
   studentType?: 'Regular' | 'Non-Regular';
   scholarType: string;
   imageUrl?: string;
