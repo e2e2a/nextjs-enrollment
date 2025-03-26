@@ -74,6 +74,7 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
               const createdReceipt = await createStudentReceipt({
                 ...data2,
                 ...captures,
+                isPaidByScholarship: false,
                 taxes: { amount: amountPaid > amount ? Number(amount || 0) : Number(amountPaid || 0) },
                 year: prev.year,
                 semester: prev.semester,
@@ -91,6 +92,7 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
               const createdReceipt = await createStudentReceipt({
                 ...data2,
                 ...captures,
+                isPaidByScholarship: false,
                 taxes: { amount: amountPaid > amount ? Number(amount || 0) : Number(amountPaid || 0) },
                 year: prev.year,
                 semester: prev.semester,
@@ -109,6 +111,7 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
               const createdReceipt = await createStudentReceipt({
                 ...data2,
                 ...captures,
+                isPaidByScholarship: false,
                 taxes: { amount: amountPaid > amount ? Number(amount || 0) : Number(amountPaid || 0) },
                 year: prev.year,
                 semester: prev.semester,
@@ -125,6 +128,7 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
                 const createdReceipt = await createStudentReceipt({
                   ...data2,
                   ...captures,
+                  isPaidByScholarship: false,
                   taxes: { amount: amountPaid > amount ? Number(amount || 0) : Number(amountPaid || 0) },
                   year: prev.year,
                   semester: prev.semester,

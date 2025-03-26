@@ -52,6 +52,10 @@ const Page = ({ params }: { params: { id: string } }) => {
     }, 0);
 
   const isWithdrawn = data?.enrollmentRecord?.enrollStatus?.toLowerCase() === 'withdraw';
+  const haveEnrollmentYearSemester =
+    (data?.latestEnrollment.year === data?.enrollmentRecord?.studentYear.toLowerCase() && data?.latestEnrollment?.semester.toLowerCase() !== data?.enrollmentRecord?.studentSemester.toLowerCase()) ||
+    (data?.latestEnrollment.semester === data?.enrollmentRecord?.studentSemester.toLowerCase() && data?.latestEnrollment?.year.toLowerCase() !== data?.enrollmentRecord?.studentYear.toLowerCase());
+  const haveLatestEnrollment = !enrollmentData?.enrollment && haveEnrollmentYearSemester;
 
   //full payment exclude all terms payment and downpayment
   const paymentOfFullPayment = srData?.studentReceipt?.find((r: any) => r.type.toLowerCase() === 'fullpayment');
@@ -61,10 +65,10 @@ const Page = ({ params }: { params: { id: string } }) => {
     paymentOfFullPayment && Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 >= Math.round(Number(totalofPerTermFullPayment + Number(tfData?.tFee?.ssgFee || 0) + Number(tfData?.tFee?.departmentalFee || 0)) * 100) / 100;
 
   const scholarship = isScholarshipApplicable(data?.enrollmentRecord?.studentYear, data?.enrollmentRecord?.studentSemester, data?.enrollmentRecord?.profileId?.scholarshipId);
+  const scholarshipNew = isScholarshipApplicable(enrollmentData?.enrollment?.studentYear || data?.latestEnrollment.year, enrollmentData?.enrollment?.studentSemester || data?.latestEnrollment.semester, data?.enrollmentRecord?.profileId?.scholarshipId);
+  const isScholarshipNewStart = scholarshipNew && data?.enrollmentRecord?.profileId?.scholarshipId.amount && data?.enrollmentRecord?.profileId?.scholarshipId;
   const isScholarshipStart = scholarship && data?.enrollmentRecord?.profileId?.scholarshipId && data?.enrollmentRecord?.profileId?.scholarshipId;
   if (isScholarshipStart) showPaymentOfFullPayment = paymentOfFullPayment && Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 === Math.round(Number(total) * 100) / 100;
-
-  // Down Payment
   const paymentOfDownPayment = srData?.studentReceipt?.find((r: any) => r.type.toLowerCase() === 'downpayment');
   const showPaymentOfDownPayment = paymentOfDownPayment && Number(paymentOfDownPayment?.taxes?.amount) >= Number(500);
 
@@ -150,7 +154,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       setShowBalance(0);
     }
   }, [total, srData, paymentOfFullPayment, showPaymentOfFullPayment, paymentOfDownPayment, paymentOfPrelim, paymentOfMidterm, paymentOfSemiFinal, paymentOfFinal, showBalance, data, isScholarshipStart]);
-
+  
   useEffect(() => {
     if (isTFError || !tfData) return;
     if (error || !data) return;
@@ -246,7 +250,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         if (addcwtsOrNstpFee) totalAmount = totalAmount + Number(cwtsOrNstpFee);
         if (addOjtFee) totalAmount = totalAmount + Number(ojtFee);
         const formattedTotalCurrent = totalAmount;
-        if (srData?.overAllShowBalance) totalAmount = totalAmount + Number(srData?.overAllShowBalance || 0);
+        if (srData?.overAllShowBalance && !data?.enrollment?.profileId?.scholarshipId?.amount && !isScholarshipStart) totalAmount = totalAmount + Number(srData?.overAllShowBalance || 0);
         const formattedTotal = parseFloat(Number(totalAmount).toFixed(2)); // Final formatting
         setTotalCurrent(formattedTotalCurrent);
         setTotal(formattedTotal);
@@ -585,23 +589,49 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 </h1>
                               </div>
                             )}
+                            {data?.enrollmentRecord?.profileId?.scholarshipId?.amount && isScholarshipStart && srData?.previousBalance?.length > 0 && (
+                              <div className='md:px-14 px-5'>
+                                <div className='flex flex-col py-5 justify-center items-center px-5 text-sm text-muted-foreground my-3 border rounded-lg'>
+                                  <span className='text-red'>
+                                    Warning: <span className='text-muted-foreground'> Student has an outstanding balance from a previous enrollment that still needs to be paid.</span>
+                                  </span>
+                                  {srData.previousBalance.map((balance: any, index: number) => (
+                                    <div key={index} className='grid grid-cols-1 xs:grid-cols-3 mt-5 xs:mt-0 text-start gap-x-5 w-full'>
+                                      <span className='font-medium flex flex-col'>
+                                        Outstanding Balance
+                                        <span className='text-xs text-muted-foreground'>
+                                          ({balance?.year}- {balance?.semester})
+                                        </span>
+                                      </span>
+                                      <span className='mt-5 xs:mt-0'>Amount: ₱{Number(balance?.balanceToShow).toFixed(2)}</span>
+                                      <div className='flex items-start xs:items-center justify-start xs:justify-center '>
+                                        <Link href={`/accounting/college/record/${balance.id}/fee`} className='flex items-start xs:items-center justify-start xs:justify-center text-nowrap mt-5 xs:mt-0 text-blue-500 hover:underline'>
+                                          <Icons.eye className='w-4 h-4 mr-2' />
+                                          View Balance
+                                        </Link>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
                           </>
                         )}
                       </div>
                     </CardHeader>
                     <CardContent className='w-full'>
-                      {enrollmentData.enrollment && enrollmentData.enrollment.step >= 5 && (
+                      {enrollmentData?.enrollment && enrollmentData?.enrollment?.step >= 5 && !isScholarshipNewStart && (
                         <div className='flex items-center justify-center'>
                           <span className='text-orange-500 text-sm px-5 gap-2 flex'>
                             NOTE:
                             <span className='text-muted-foreground '>
-                              This per-term installment payment is disabled because the balance from this enrollment has been carried over to the latest enrollment. It has been included in the current enrollment ({enrollmentData.enrollment.studentYear}-
-                              {enrollmentData.enrollment.studentSemester}).
+                              This per-term installment payment is disabled because the balance from this enrollment has been carried over to the latest enrollment. It has been included in the current enrollment (
+                              {enrollmentData?.enrollment?.studentYear || data?.latestEnrollment?.year}-{enrollmentData?.enrollment?.studentSemester || data?.latestEnrollment?.semester}).
                             </span>
                           </span>
                         </div>
                       )}
-                      {showPaymentOfDownPayment || showPaymentOfFullPayment ? (
+                      {showPaymentOfDownPayment || showPaymentOfFullPayment || data?.enrollment?.profileId?.scholarshipId?.amount ? (
                         <div className=''>
                           <div className='grid grid-cols-1 sm:px-32 px-5'>
                             <Table className='table-auto border-collapse rounded-t-lg border '>
@@ -627,11 +657,10 @@ const Page = ({ params }: { params: { id: string } }) => {
                                         {showPaymentOfFullPayment || showPaymentOfDownPayment
                                           ? 'Completed'
                                           : !isWithdrawn && (
-                                              <SettleTermPayment
-                                                perTermPayment={paymentPerTermCurrent}
+                                              <DownPayment
                                                 enrollment={data?.enrollmentRecord}
                                                 tfData={tfData?.tFee}
-                                                srData={srData}
+                                                srData={srData?.studentReceipt || []}
                                                 amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
                                                 type={'downPayment'}
                                                 title='Down Payment'
@@ -649,11 +678,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                                           'Completed'
                                         ) : !isWithdrawn && requiredPaymentsFulfill ? (
                                           <>
-                                            {enrollmentData.enrollment && enrollmentData.enrollment.step >= 5 ? (
+                                            {((enrollmentData?.enrollment && enrollmentData?.enrollment?.step >= 5) || haveLatestEnrollment) && !isScholarshipNewStart ? (
                                               <span className='text-blue-500 text-xs uppercase'>
                                                 Pending
                                                 <span className='text-muted-foreground text-[10px]'>
-                                                  ({enrollmentData.enrollment.studentYear}-{enrollmentData.enrollment.studentSemester})
+                                                  ({enrollmentData?.enrollment?.studentYear || data?.latestEnrollment?.year}-{enrollmentData?.enrollment?.studentSemester || data?.latestEnrollment?.semester})
                                                 </span>
                                               </span>
                                             ) : (
@@ -684,11 +713,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                                           'Completed'
                                         ) : !isWithdrawn && requiredPaymentsFulfill && showPaymentOfPrelim ? (
                                           <>
-                                            {enrollmentData.enrollment && enrollmentData.enrollment.step >= 5 ? (
+                                            {((enrollmentData?.enrollment && enrollmentData?.enrollment?.step >= 5) || haveLatestEnrollment) && !isScholarshipNewStart ? (
                                               <span className='text-blue-500 text-xs uppercase'>
                                                 Pending
                                                 <span className='text-muted-foreground text-[10px]'>
-                                                  ({enrollmentData.enrollment.studentYear}-{enrollmentData.enrollment.studentSemester})
+                                                  ({enrollmentData?.enrollment?.studentYear || data?.latestEnrollment?.year}-{enrollmentData?.enrollment?.studentSemester || data?.latestEnrollment?.semester})
                                                 </span>
                                               </span>
                                             ) : (
@@ -719,11 +748,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                                           'Completed'
                                         ) : !isWithdrawn && requiredPaymentsFulfill && showPaymentOfPrelim && showPaymentOfMidterm ? (
                                           <>
-                                            {enrollmentData.enrollment && enrollmentData.enrollment.step >= 5 ? (
+                                            {((enrollmentData?.enrollment && enrollmentData?.enrollment?.step >= 5) || haveLatestEnrollment) && !isScholarshipNewStart ? (
                                               <span className='text-blue-500 text-xs uppercase'>
                                                 Pending
                                                 <span className='text-muted-foreground text-[10px]'>
-                                                  ({enrollmentData.enrollment.studentYear}-{enrollmentData.enrollment.studentSemester})
+                                                  ({enrollmentData?.enrollment?.studentYear || data?.latestEnrollment?.year}-{enrollmentData?.enrollment?.studentSemester || data?.latestEnrollment?.semester})
                                                 </span>
                                               </span>
                                             ) : (
@@ -754,11 +783,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                                           'Completed'
                                         ) : !isWithdrawn && requiredPaymentsFulfill && showPaymentOfPrelim && showPaymentOfMidterm && showPaymentOfSemiFinal ? (
                                           <>
-                                            {enrollmentData.enrollment && enrollmentData.enrollment.step >= 5 ? (
+                                            {((enrollmentData?.enrollment && enrollmentData?.enrollment?.step >= 5) || haveLatestEnrollment) && !isScholarshipNewStart ? (
                                               <span className='text-blue-500 text-xs uppercase'>
                                                 Pending
                                                 <span className='text-muted-foreground text-[10px]'>
-                                                  ({enrollmentData.enrollment.studentYear}-{enrollmentData.enrollment.studentSemester})
+                                                  ({enrollmentData?.enrollment?.studentYear || data?.latestEnrollment?.year}-{enrollmentData?.enrollment?.studentSemester || data?.latestEnrollment?.semester})
                                                 </span>
                                               </span>
                                             ) : (
@@ -819,7 +848,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                               </TableBody>
                             </Table>
                           </div>
-                          {Number(total) > Number(totalCurrent) && (
+                          {!data?.enrollment?.profileId?.scholarshipId?.amount && !isScholarshipStart && Number(total) > Number(totalCurrent) && (
                             <>
                               {srData && srData?.previousBalance.length > 0 && (
                                 <div className='grid grid-cols-1 sm:px-36 px-5'>

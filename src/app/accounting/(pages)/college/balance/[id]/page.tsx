@@ -234,7 +234,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         if (addcwtsOrNstpFee) totalAmount = totalAmount + Number(cwtsOrNstpFee);
         if (addOjtFee) totalAmount = totalAmount + Number(ojtFee);
         const formattedTotalCurrent = totalAmount;
-        if (srData?.overAllShowBalance) totalAmount = totalAmount + Number(srData?.overAllShowBalance || 0);
+        if (srData?.overAllShowBalance && !data?.enrollment?.profileId?.scholarshipId?.amount && !isScholarshipStart) totalAmount = totalAmount + Number(srData?.overAllShowBalance || 0);
         const formattedTotal = parseFloat(Number(totalAmount).toFixed(2)); // Final formatting
         setTotalCurrent(formattedTotalCurrent);
         setTotal(formattedTotal);
@@ -283,7 +283,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     .replace(/(\S),/g, '$1,')
     .replace(/,(\S)/g, ', $1')
     .trim();
-  console.log('srData', srData);
+
   return (
     <>
       {isPageLoading ? (
@@ -500,7 +500,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                                       <span className='text-sm uppercase font-semibold'>OR</span>
                                     </>
                                   )}
-
                                   <DownPayment
                                     enrollment={data?.enrollment}
                                     tfData={tfData?.tFee}
@@ -512,7 +511,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   />
                                 </div>
                               </div>
-                            ) : Number(data?.enrollment?.profileId?.scholarshipId.amount) >= Number(total) ? (
+                            ) : Number(data?.enrollment?.profileId?.scholarshipId?.amount) >= Number(total) ? (
                               <div className='flex flex-col justify-center items-center w-full border-[0.5px] rounded-lg px-5 py-3'>
                                 {srData?.overAllBalance < 0 && (
                                   <>
@@ -582,12 +581,38 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 </h1>
                               </div>
                             )}
+                            {data?.enrollment?.profileId?.scholarshipId?.amount && isScholarshipStart && srData?.previousBalance.length > 0 && (
+                              <div className='md:px-14 px-5'>
+                                <div className='flex flex-col py-5 justify-center items-center px-5 text-sm text-muted-foreground my-3 border rounded-lg'>
+                                  <span className='text-red'>
+                                    Warning: <span className='text-muted-foreground'> Student has an outstanding balance from a previous enrollment that still needs to be paid.</span>
+                                  </span>
+                                  {srData.previousBalance.map((balance: any, index: number) => (
+                                    <div key={index} className='grid grid-cols-1 xs:grid-cols-3 mt-5 xs:mt-0 text-start gap-x-5 w-full'>
+                                      <span className='font-medium flex flex-col'>
+                                        Outstanding Balance
+                                        <span className='text-xs text-muted-foreground'>
+                                          ({balance?.year}- {balance?.semester})
+                                        </span>
+                                      </span>
+                                      <span className='mt-5 xs:mt-0'>Amount: ₱{Number(balance?.balanceToShow).toFixed(2)}</span>
+                                      <div className='flex items-start xs:items-center justify-start xs:justify-center '>
+                                        <Link href={`/accounting/college/record/${balance.id}/fee`} className='flex items-start xs:items-center justify-start xs:justify-center text-nowrap mt-5 xs:mt-0 text-blue-500 hover:underline'>
+                                          <Icons.eye className='w-4 h-4 mr-2' />
+                                          View Balance
+                                        </Link>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
                           </>
                         )}
                       </div>
                     </CardHeader>
                     <CardContent className='w-full'>
-                      {showPaymentOfDownPayment || showPaymentOfFullPayment ? (
+                      {showPaymentOfDownPayment || showPaymentOfFullPayment || data?.enrollment?.profileId?.scholarshipId?.amount ? (
                         <div className=''>
                           <div className='grid grid-cols-1 sm:px-32 px-5'>
                             <Table className='table-auto border-collapse rounded-t-lg border '>
@@ -605,9 +630,23 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <>
                                     <TableRow>
                                       <TableCell className={`px-4 py-2 ${showPaymentOfDownPayment && 'text-green-400 line-through'}`}>Down Payment</TableCell>
-                                      <TableCell className={`px-4 py-2 ${showPaymentOfDownPayment && 'text-green-400 line-through'}`}>₱{Number(paymentOfDownPayment?.taxes?.amount).toFixed(2)}</TableCell>
+                                      <TableCell className={`px-4 py-2 ${showPaymentOfDownPayment && 'text-green-400 line-through'}`}>₱{Number(paymentOfDownPayment?.taxes?.amount || tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
                                       <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>{showPaymentOfDownPayment ? 'Paid' : 'unpaid'}</TableCell>
-                                      <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>{showPaymentOfDownPayment ? 'Completed' : null}</TableCell>
+                                      <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
+                                        {showPaymentOfDownPayment
+                                          ? 'Completed'
+                                          : !isWithdrawn && (
+                                              <DownPayment
+                                                enrollment={data?.enrollment}
+                                                tfData={tfData?.tFee}
+                                                srData={srData?.studentReceipt || []}
+                                                amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
+                                                type={'downPayment'}
+                                                title='Down Payment'
+                                                isScholarshipStart={isScholarshipStart}
+                                              />
+                                            )}
+                                      </TableCell>
                                     </TableRow>
                                     <TableRow>
                                       <TableCell className={`px-4 py-2 ${showPaymentOfPrelim && 'text-green-400 line-through'}`}>Prelim</TableCell>
@@ -744,7 +783,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                               </TableBody>
                             </Table>
                           </div>
-                          {Number(total) > Number(totalCurrent) && (
+                          {!data?.enrollment?.profileId?.scholarshipId?.amount && !isScholarshipStart && Number(total) > Number(totalCurrent) && (
                             <>
                               {srData && srData?.previousBalance.length > 0 && (
                                 <div className='grid grid-cols-1 sm:px-36 px-5'>

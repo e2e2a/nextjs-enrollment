@@ -2,7 +2,7 @@
 import dbConnect from '@/lib/db/db';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getDeanProfileByUserId } from '@/services/deanProfile';
-import { getEnrollmentRecordById } from '@/services/enrollmentRecord';
+import { getEnrollmentRecordById, getEnrollmentRecordByProfileId } from '@/services/enrollmentRecord';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { checkAuth } from '@/utils/actions/session';
 
@@ -26,6 +26,8 @@ const checkUserRole = async (user: any, id: string) => {
   return tryCatch(async () => {
     const er = await getEnrollmentRecordById(id);
     if (!er) return { error: 'Not Found.', status: 404 };
+    // @ts-ignore
+    const aller = await getEnrollmentRecordByProfileId(er?.profileId?._id.toString());
     switch (user.role) {
       case 'STUDENT':
         const studentP = await getStudentProfileByUserId(user._id);
@@ -45,6 +47,7 @@ const checkUserRole = async (user: any, id: string) => {
       default:
         return { error: 'Forbidden', status: 403 };
     }
-    return { enrollmentRecord: JSON.parse(JSON.stringify(er)), status: 200 };
+    const latestEnrollment = aller?.slice().sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+    return { enrollmentRecord: JSON.parse(JSON.stringify(er)), latestEnrollment: { year: latestEnrollment?.studentYear || '', semester: latestEnrollment?.studentSemester || '' }, status: 200 };
   });
 };

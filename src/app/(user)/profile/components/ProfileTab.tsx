@@ -181,7 +181,7 @@ const ProfileTab = ({ profile }: Iprops) => {
                       label={'Education Attainment:'}
                       classNameInput={'capitalize'}
                       selectItems={profileSelectItems.educationAttainment}
-                      placeholder='Select employment status'
+                      placeholder='Select Education Attainment'
                       profile={profile}
                     />
                     {/* <BirthdayInput isNotEditable={isNotEditable} name={'birthday'} form={form} label={'Birthday:'} classNameInput={'capitalize'} /> */}
@@ -208,7 +208,7 @@ const ProfileTab = ({ profile }: Iprops) => {
                       label={'Classification:'}
                       classNameInput={'capitalize'}
                       selectItems={profileSelectItems.learnerOrTraineeOrStudentClassification}
-                      placeholder='Select employment status'
+                      placeholder='Select Classification'
                     />
                   </div>
                   {/* {isNotEditable && (
