@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ColumnDef, flexRender, SortingState, VisibilityState, ColumnFiltersState, getCoreRowModel, getSortedRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -12,7 +12,6 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  // console.log(data)
   useEffect(() => {
     if (!data) {
       return;
@@ -41,8 +40,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
   return (
     <div>
-      {/* Filters */}
-      
       <div className='flex items-center justify-between w-full '>
         <div className='flex items-center  py-4 text-black'>
           <Input
@@ -113,7 +110,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         </Table>
       </div>
 
-      {/* Pagination */}
       <div className='flex items-center justify-end space-x-2 py-4 w-full'>
         <Button variant='outline' size='sm' onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
           Previous

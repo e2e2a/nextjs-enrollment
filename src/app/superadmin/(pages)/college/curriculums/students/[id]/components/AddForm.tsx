@@ -30,26 +30,20 @@ const AddForm = ({ c, syData }: IProps) => {
       order: '0',
     },
   });
-  const handleChange = (e: any) => {
-    let inputValue = e.target.value;
-    // Optionally, format input value if necessary
-    setValue(inputValue);
-  };
+
   const actionFormSubmit = (data: z.infer<typeof StudentCurriculumValidator>) => {
     data.year = data.year.toLowerCase();
     data.semester = data.semester.toLowerCase();
     const dataa = {
       ...data,
-      CId: c._id
-    }
+      CId: c?._id,
+    };
     mutation.mutate(dataa, {
       onSuccess: (res: any) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            // return (window.location.href = '/');
             return;
           default:
             return;
@@ -60,7 +54,7 @@ const AddForm = ({ c, syData }: IProps) => {
   };
   return (
     <Dialog>
-      <DialogTrigger asChild >
+      <DialogTrigger asChild>
         <Button size={'sm'} className={'focus-visible:ring-0 flex mb-7 bg-transparent bg-green-500 px-2 py-0 gap-x-1 justify-center text-neutral-50 font-medium'}>
           <Icons.add className='h-4 w-4' />
           <span className='flex'>Add Curriculum Layer</span>

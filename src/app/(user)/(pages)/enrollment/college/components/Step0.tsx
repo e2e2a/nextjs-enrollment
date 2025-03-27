@@ -301,12 +301,10 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
   const handleDeleteEnrollment = (EId: any) => {
     deleteMutation.mutate(EId, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            console.log(res);
             if (res.error) return window.location.reload();
             return;
           default:

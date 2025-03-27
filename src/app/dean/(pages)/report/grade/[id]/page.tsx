@@ -9,12 +9,11 @@ import OptionsExport from './components/OptionsExport';
 const Page = ({ params }: { params: { id: string } }) => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error: isEnError } = useReportGradeQueryById(params.id);
+  const { data, error: isEnError } = useReportGradeQueryById(params.id);
 
   useEffect(() => {
     if (isEnError || !data) return;
     if (data) {
-      console.log(data.reportedGrades);
       if (data.reportedGrades) {
         setIsPageLoading(false);
       } else if (data.error) {
@@ -23,7 +22,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       }
     }
   }, [data, isEnError]);
-  console.log('data', data);
+
   return (
     <>
       {isPageLoading ? (

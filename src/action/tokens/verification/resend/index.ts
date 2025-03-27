@@ -21,7 +21,6 @@ export const verificationCodeResend = async (data: any) => {
     if (!checkedToken || checkedToken.error) return { error: checkedToken.error, status: checkedToken.status };
 
     const result = await resendVerificationCodeIfUserExists(checkedToken.token);
-    console.log('result', result);
     if (!result || result.error) return { error: result.error, status: result.status };
     return { token: result.token, message: 'hello', status: 200 };
   });

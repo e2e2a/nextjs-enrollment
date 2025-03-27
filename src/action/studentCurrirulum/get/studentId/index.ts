@@ -45,7 +45,6 @@ const checkRole = async (user: any, studentId: string) => {
         const p = await getDeanProfileByUserId(user._id);
         if (a.courseId._id.toString() !== p.courseId._id.toString()) return { error: 'Forbidden.', status: 403 };
         const c = b?.filter((e) => e.courseId._id.toString() === p.courseId._id.toString());
-        console.log('c', c?.length);
         return { curriculums: JSON.parse(JSON.stringify(c)), status: 200 };
       default:
         return { error: 'Forbidden.', status: 403 };

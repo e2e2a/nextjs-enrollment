@@ -21,12 +21,10 @@ const ActionsCell = ({ user }: IProps) => {
 
     mutation.mutate(data, {
       onSuccess: (res: any) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            // return (window.location.href = '/');
             makeToastSucess(res.message);
             return;
           default:

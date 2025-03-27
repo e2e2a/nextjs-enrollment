@@ -134,7 +134,6 @@ const AddStudentSched = ({ student, b }: IProps) => {
                       Add list:
                       <div className='flex flex-col'>
                         {selectedItems.map((item, index) => {
-                          console.log('schedule', schedules)
                           let selectedItem = null;
                           for (const schedule of schedules) {
                             if (Array.isArray(schedule.blockSubjects)) {
@@ -143,7 +142,6 @@ const AddStudentSched = ({ student, b }: IProps) => {
                               if (selectedItem) break;
                             }
                           }
-                          console.log('selecteditem', selectedItem)
                           if (selectedItem) {
                             return (
                               <div key={`${selectedItem?._id}`} className='text-green-500 flex gap-3'>

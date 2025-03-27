@@ -25,7 +25,6 @@ const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   // const isAllowed = ['1', '2', '3', '4'];
   const isAllowed = useMemo(() => ['Nursery', 'Kindergarten 1&2', 'Junior High School', 'Senior High School', 'Tesda', 'College'], []);
-  // console.log(search);
   // Validate the step parameter whenever the search parameter changes
   useEffect(() => {
     if (search === null || !isAllowed.includes(search)) {

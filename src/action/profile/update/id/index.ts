@@ -114,7 +114,6 @@ const uploadFileOrPhoto = async (profile: any, files: any) => {
     }
 
     if (files.fileCOC && files.fileCOC.name) {
-      console.log('run here');
       const storageRefFileCOC = ref(storage, `enrollment/coc/${profile._id}/${files.fileCOC.name}`);
       uploads.push(uploadBytes(storageRefFileCOC, files.fileCOC, { contentType: files.fileCOC.type }));
     }

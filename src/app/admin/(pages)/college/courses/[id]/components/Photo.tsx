@@ -16,8 +16,6 @@ type IProps = {
 };
 
 const Photo = ({ handleSelectedFile, handleClick, fileInputRef, imagePreview, photoError, isUploading, link }: IProps) => {
-
-  console.log('imagePreview', imagePreview || link || '/icons/course-photo-placeholder.svg');
   return (
     <div>
       <div className={`text-center w-full flex flex-col items-center justify-center ${photoError ? '' : 'mb-4'}`}>

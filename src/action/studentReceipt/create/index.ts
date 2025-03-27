@@ -47,8 +47,8 @@ const checkRole = async (user: any, data: any, setup: any) => {
     let studentEnrollment;
     studentEnrollment = await getEnrollmentByProfileId(studentProfile?._id);
     if (data.request === 'record') studentEnrollment = await getEnrollmentRecordById(data.enrollmentId);
-    console.log('studentEnrollment', studentEnrollment);
     if (!studentEnrollment) return { error: 'No Enrollment found', status: 404 };
+
     let cFee = null;
     const course = await getCourseByCourseCode(studentEnrollment.courseCode);
     cFee = await getCourseFeeByCourseId(studentEnrollment?.courseId?._id);
@@ -153,7 +153,6 @@ const checkAndCreateStudentReceipt = async (user: any, student: any, data: any, 
     const seller_protection = d.res.purchase_units[0].payments.captures[0].seller_protection.status;
 
     const capture = d.res.purchase_units[0].payments.captures[0];
-    // console.log('capture: ', capture);
     const captures = {
       id: capture.id,
       status: capture.status,
@@ -373,7 +372,6 @@ async function checkSellerProtectionStatus(orderID: string) {
   }
 
   const res = await response.json();
-  // console.log(' Successful:', res);
   return { success: true, status: 201, res };
 }
 

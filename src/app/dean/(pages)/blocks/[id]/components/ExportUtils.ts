@@ -80,7 +80,6 @@ export const exportToPDF = async (data: any, schedules: any, fileName: string) =
 // ✅ Export as Excel (Same Format as PDF)
 export const exportToExcel = (data: any, schedules: any, fileName: string) => {
   if (!schedules || schedules.length === 0) {
-    console.log('no schedules to export', schedules);
     return;
   }
 
@@ -92,7 +91,7 @@ export const exportToExcel = (data: any, schedules: any, fileName: string) => {
     return schedules.map((a: any) => {
       const item = a?.teacherScheduleId;
       const teacher = item?.profileId || item?.deanId || {};
-      const formattedTeacherName = `${teacher?.lastname ? capitalize(teacher?.lastname) + ',' : ''} ${capitalize(teacher.firstname ?? '')} ${capitalize(teacher?.middlename ?? '')}${teacher?.extensionName ? ', ' + capitalize(teacher?.extensionName) + '.' : ''}`
+      const formattedTeacherName = `${teacher?.lastname ? capitalize(teacher?.lastname) + ',' : ''} ${capitalize(teacher?.firstname ?? '')} ${capitalize(teacher?.middlename ?? '')}${teacher?.extensionName ? ', ' + capitalize(teacher?.extensionName) + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/(\S),/g, '$1,')
         .replace(/,(\S)/g, ', $1')

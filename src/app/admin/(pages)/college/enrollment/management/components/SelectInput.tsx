@@ -40,10 +40,7 @@ export function SelectInput({ form, name, label, selectItems, placeholder, schol
               <Select
                 disabled={isDisabled}
                 onValueChange={(value) => {
-                  console.log(value);
                   field.onChange(value);
-                  console.log(data);
-                  console.log('field.value', field.value);
                   if (asd) {
                     setData(value);
                   }

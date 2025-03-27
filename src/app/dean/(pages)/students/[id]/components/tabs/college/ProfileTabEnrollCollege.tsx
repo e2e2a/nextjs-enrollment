@@ -88,48 +88,48 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
     },
   });
   useEffect(() => {
-    formExtenstion.setValue('studentStatus', profile.studentStatus);
-    formExtenstion.setValue('studentYear', profile.studentYear);
-    formExtenstion.setValue('primarySchoolName', profile.primarySchoolName);
-    formExtenstion.setValue('primarySchoolYear', profile.primarySchoolYear);
-    formExtenstion.setValue('secondarySchoolName', profile.secondarySchoolName);
-    formExtenstion.setValue('secondarySchoolYear', profile.secondarySchoolYear);
-    formExtenstion.setValue('seniorHighSchoolName', profile.seniorHighSchoolName);
-    formExtenstion.setValue('seniorHighSchoolYear', profile.seniorHighSchoolYear);
-    formExtenstion.setValue('seniorHighSchoolStrand', profile.seniorHighSchoolStrand);
-    formExtenstion.setValue('FathersLastName', profile.FathersLastName);
-    formExtenstion.setValue('FathersFirstName', profile.FathersFirstName);
-    formExtenstion.setValue('FathersMiddleName', profile.FathersMiddleName || '');
-    formExtenstion.setValue('FathersContact', profile.FathersContact || '');
-    formExtenstion.setValue('MothersLastName', profile.MothersLastName);
-    formExtenstion.setValue('MothersFirstName', profile.MothersFirstName);
-    formExtenstion.setValue('MothersMiddleName', profile.MothersMiddleName || '');
-    formExtenstion.setValue('MothersContact', profile.MothersContact || '');
+    formExtenstion.setValue('studentStatus', profile?.studentStatus);
+    formExtenstion.setValue('studentYear', profile?.studentYear);
+    formExtenstion.setValue('primarySchoolName', profile?.primarySchoolName);
+    formExtenstion.setValue('primarySchoolYear', profile?.primarySchoolYear);
+    formExtenstion.setValue('secondarySchoolName', profile?.secondarySchoolName);
+    formExtenstion.setValue('secondarySchoolYear', profile?.secondarySchoolYear);
+    formExtenstion.setValue('seniorHighSchoolName', profile?.seniorHighSchoolName);
+    formExtenstion.setValue('seniorHighSchoolYear', profile?.seniorHighSchoolYear);
+    formExtenstion.setValue('seniorHighSchoolStrand', profile?.seniorHighSchoolStrand);
+    formExtenstion.setValue('FathersLastName', profile?.FathersLastName);
+    formExtenstion.setValue('FathersFirstName', profile?.FathersFirstName);
+    formExtenstion.setValue('FathersMiddleName', profile?.FathersMiddleName || '');
+    formExtenstion.setValue('FathersContact', profile?.FathersContact || '');
+    formExtenstion.setValue('MothersLastName', profile?.MothersLastName);
+    formExtenstion.setValue('MothersFirstName', profile?.MothersFirstName);
+    formExtenstion.setValue('MothersMiddleName', profile?.MothersMiddleName || '');
+    formExtenstion.setValue('MothersContact', profile?.MothersContact || '');
   }, [formExtenstion, profile, isNotEditable]);
 
   useEffect(() => {
-    formProfile.setValue('firstname', profile.firstname);
-    formProfile.setValue('middlename', profile.middlename);
-    formProfile.setValue('lastname', profile.lastname);
-    formProfile.setValue('extensionName', profile.extensionName);
-    formProfile.setValue('numberStreet', profile.numberStreet);
-    formProfile.setValue('barangay', profile.barangay);
-    formProfile.setValue('district', profile.district);
-    formProfile.setValue('cityMunicipality', profile.cityMunicipality);
-    formProfile.setValue('province', profile.province);
-    formProfile.setValue('region', profile.region);
-    formProfile.setValue('emailFbAcc', profile.emailFbAcc);
-    formProfile.setValue('contact', profile.contact);
-    formProfile.setValue('nationality', profile.nationality);
-    formProfile.setValue('sex', profile.sex);
+    formProfile.setValue('firstname', profile?.firstname);
+    formProfile.setValue('middlename', profile?.middlename || '');
+    formProfile.setValue('lastname', profile?.lastname);
+    formProfile.setValue('extensionName', profile?.extensionName);
+    formProfile.setValue('numberStreet', profile?.numberStreet);
+    formProfile.setValue('barangay', profile?.barangay);
+    formProfile.setValue('district', profile?.district);
+    formProfile.setValue('cityMunicipality', profile?.cityMunicipality);
+    formProfile.setValue('province', profile?.province);
+    formProfile.setValue('region', profile?.region);
+    formProfile.setValue('emailFbAcc', profile?.emailFbAcc);
+    formProfile.setValue('contact', profile?.contact);
+    formProfile.setValue('nationality', profile?.nationality);
+    formProfile.setValue('sex', profile?.sex);
     formProfile.setValue('civilStatus', profile.civilStatus);
     formProfile.setValue('employmentStatus', profile.employmentStatus);
-    formProfile.setValue('birthday', new Date(profile.birthday));
-    formProfile.setValue('birthPlaceCity', profile.birthPlaceCity);
-    formProfile.setValue('birthPlaceProvince', profile.birthPlaceProvince);
-    formProfile.setValue('birthPlaceRegion', profile.birthPlaceRegion);
-    formProfile.setValue('educationAttainment', profile.educationAttainment);
-    formProfile.setValue('learnerOrTraineeOrStudentClassification', profile.learnerOrTraineeOrStudentClassification);
+    formProfile.setValue('birthday', new Date(profile?.birthday));
+    formProfile.setValue('birthPlaceCity', profile?.birthPlaceCity);
+    formProfile.setValue('birthPlaceProvince', profile?.birthPlaceProvince);
+    formProfile.setValue('birthPlaceRegion', profile?.birthPlaceRegion);
+    formProfile.setValue('educationAttainment', profile?.educationAttainment);
+    formProfile.setValue('learnerOrTraineeOrStudentClassification', profile?.learnerOrTraineeOrStudentClassification);
   }, [formProfile, profile, isNotEditable]);
 
   const onSubmit = async (e: any) => {
@@ -143,7 +143,7 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
     if (fileCoCPreview) formData.append('fileCOC', fileCoCPreview);
 
     const isProfileValid = await formProfile.trigger();
-    if (profile.enrollStatus === 'Enrolled' || profile.enrollStatus === 'Temporary Enrolled' || profile.enrollStatus === 'Pending') {
+    if (profile?.enrollStatus === 'Enrolled' || profile?.enrollStatus === 'Temporary Enrolled' || profile?.enrollStatus === 'Pending') {
       const isExtensionValid = await formExtenstion.trigger();
       if (!isExtensionValid || !isProfileValid) return setIsPending(false);
     } else {
@@ -151,9 +151,9 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
     }
     const profileData = formProfile.getValues();
     const extensionData = formExtenstion.getValues();
-    profileData.firstname = profileData.firstname.toLowerCase();
-    profileData.lastname = profileData.lastname.toLowerCase();
-    profileData.middlename = profileData.middlename?.toLowerCase();
+    profileData.firstname = profileData?.firstname?.toLowerCase();
+    profileData.lastname = profileData?.lastname?.toLowerCase();
+    profileData.middlename = profileData?.middlename?.toLowerCase();
 
     const data = {
       ...profileData,
@@ -165,7 +165,6 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
 
     mutation.mutate(data, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:

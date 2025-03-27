@@ -78,11 +78,7 @@ const handleCollege = async (user: any, data: any) => {
             const e = b.filter((e) => e.teacherScheduleId._id.toString() === data.teacherScheduleId && e.type === data.type && e.requestType === 'Individual');
 
             if (e && e.length > 0) {
-              console.log('e', e[0].reportedGrade);
               for (const student of e[0].reportedGrade) {
-                console.log('student', student);
-
-                // Add null-check for student.profileId
                 if (student.profileId && student.profileId._id.toString() === data.reportedGrade[0].profileId) {
                   return { error: `You have already reported a grade for this student in ${a.message}`, status: 409 };
                 }
@@ -109,11 +105,7 @@ const handleCollege = async (user: any, data: any) => {
             const e = b.filter((e) => e.teacherScheduleId._id.toString() === data.teacherScheduleId && e.type === data.type && e.requestType === 'Individual');
 
             if (e && e.length > 0) {
-              console.log('e', e[0].reportedGrade);
               for (const student of e[0].reportedGrade) {
-                console.log('student', student);
-
-                // Add null-check for student.profileId
                 if (student.profileId && student.profileId._id.toString() === data.reportedGrade[0].profileId) {
                   return { error: `You have already reported a grade for this student in ${a.message}`, status: 409 };
                 }

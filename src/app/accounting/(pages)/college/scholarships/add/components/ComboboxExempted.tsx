@@ -24,7 +24,6 @@ export function ComboboxExempted({ form, name, label, selectItems, placeholder, 
   }, [selectedItems, form, name]);
 
   const handleSelect = (value: string) => {
-    console.log('value', value);
     setSelectedItems((prevSelected) => {
       const updatedSelection = prevSelected.includes(value) ? prevSelected.filter((d) => d !== value) : [...prevSelected, value];
 

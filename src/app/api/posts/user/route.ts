@@ -8,7 +8,6 @@ export const GET = async (req: NextRequest) => {
   try {
 
 
-    console.log('posts fetched');
     return NextResponse.json( { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

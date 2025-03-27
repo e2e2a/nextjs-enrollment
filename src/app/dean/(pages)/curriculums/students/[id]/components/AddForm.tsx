@@ -44,12 +44,10 @@ const AddForm = ({ c, syData }: IProps) => {
     }
     mutation.mutate(dataa, {
       onSuccess: (res: any) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            // return (window.location.href = '/');
             return;
           default:
             return;

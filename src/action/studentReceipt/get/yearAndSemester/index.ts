@@ -4,11 +4,8 @@ import { tryCatch } from '@/lib/helpers/tryCatch';
 import { getStudentReceiptByStudentId } from '@/services/studentReceipt';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { checkAuth } from '@/utils/actions/session';
-import { getCourseFeeByCourseId } from '@/services/courseFee';
 import { getEnrollmentRecordByProfileId } from '@/services/enrollmentRecord';
-import { isScholarshipApplicable } from '@/constant/scholarship';
-import { getCourseFeeByCourseCodeAndYearAndSemester, getCourseFeeRecordByCourseCode } from '@/services/courseFeeRecord';
-import { lookup } from 'dns';
+import { getCourseFeeByCourseCodeAndYearAndSemester } from '@/services/courseFeeRecord';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
 
 /**
@@ -23,7 +20,7 @@ export const getAllStudentReceiptByUserIdAndYearAndSemesterAction = async (userI
     if (!session || session.error) return { error: 'Not Authorized.', status: 403 };
     if (session && session.user.role !== 'STUDENT' && session.user.role !== 'ACCOUNTING') return { error: 'Forbidden', status: 403 };
     if (session.user.role === 'STUDENT' && session.user._id !== userId) return { error: 'Forbidden', status: 403 };
-    console.log('year', year, semester);
+
     const student = await getStudentProfileByUserId(userId);
     let studentReceipt;
     const a = await getStudentReceiptByStudentId(student._id);
@@ -45,7 +42,6 @@ const checkBalance = async (currentYear: string, currentSemester: string, profil
     const enrollmentRecords = await getEnrollmentRecordByProfileId(profileId);
 
     if (!enrollmentRecords || enrollmentRecords.length === 0) {
-      console.log('No enrollment records found.');
       return;
     }
 
@@ -63,8 +59,6 @@ const checkBalance = async (currentYear: string, currentSemester: string, profil
       if (yearA !== yearB) return yearA - yearB;
       return semA - semB;
     });
-
-    // console.log('Sorted Enrollment Records:', sortedRecords);
 
     // Loop through past records and check balances
     let previousBalance = [];

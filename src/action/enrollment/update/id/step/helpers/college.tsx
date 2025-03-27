@@ -66,7 +66,6 @@ const handleReject = async (user: any, data: any, e: any) => {
     await createNotification({ to: e.userId._id, title: 'Your Enrollment has been Rejected!', link: '/enrollment/college' });
     const nameRejected = `${e?.profileId?.lastname ? e?.profileId?.lastname + ',' : ''} ${e?.profileId?.firstname ?? ''} ${e?.profileId?.middlename ?? ''}${e?.profileId?.extensionName ? ', ' + e?.profileId?.extensionName : ''}`;
     await CreateDeanAndAdminNotifications(`Student has been Rejected - ${nameRejected}.`, `Student has been Rejected - ${nameRejected}.`, e.courseId._id, `/`, `/`);
-    console.log('step', e?.step);
     return { message: `Student Enrollment has been ${data.request}`, nextStep: e.step, prevStep: e.step, userId: e.userId._id.toString(), category: data?.category, courseId: e.courseId._id.toString(), profileId: e.profileId._id.toString(), status: 201 };
   });
 };

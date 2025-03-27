@@ -63,14 +63,13 @@ const ActionsCell = ({ user }: IProps) => {
         return;
       }
       if (inputValueType.toLowerCase().trim() !== 'drop') {
-        console.log('qwes')
         if (!inputValueReason) return;
         setIsUploading(false);
         setErrorInSUbjectInput(true);
         return;
       }
     }
-    console.log('inputValueReason', inputValueReason)
+
     const data = {
       category: 'College',
       profileId: user?.profileId?._id,

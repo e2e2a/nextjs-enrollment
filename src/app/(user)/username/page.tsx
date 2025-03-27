@@ -37,7 +37,6 @@
 //   const fetchUserProfile = useCallback(async () => {
 //     try {
 //       // if (!username) {
-//       //   console.log('Username not available');
 //       //   return;
 //       // }
 
@@ -52,9 +51,6 @@
 //     fetchUserProfile();
 //   }, [fetchUserProfile,username]);
 
-//   if (currentUserProfile) {
-//     console.log('Current user profile:', currentUserProfile);
-//   }
 //   // if (!currentUserProfile) {
 //   //   return <div>No user profile found</div>;
 //   // }

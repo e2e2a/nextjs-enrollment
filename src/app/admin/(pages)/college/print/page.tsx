@@ -108,7 +108,6 @@ const Page = () => {
           case 203:
             // formCollege.reset();
             if (res.message) makeToastSucess(res.message);
-            console.log('res', res);
             if (data.exportType === 'Pdf') await exportToPDF(res?.b?.dataToPrint, 'asd', data.printSelection, data.selectionScope);
             if (data.exportType === 'Excel') await exportToExcel(res?.b?.dataToPrint, 'as3d', data.printSelection, data.selectionScope);
             return;

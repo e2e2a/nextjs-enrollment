@@ -80,7 +80,6 @@ export const exportToPDF = async (data: any, schedules: any, fileName: string) =
 // ✅ Export as Excel (Same Format as PDF)
 export const exportToExcel = (data: any, schedules: any, fileName: string) => {
   if (!schedules || schedules.length === 0) {
-    console.log('no schedules to export', schedules);
     return;
   }
 
