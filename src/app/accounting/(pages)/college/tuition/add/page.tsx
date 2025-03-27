@@ -125,11 +125,11 @@ const Page = () => {
         <div className='border-0 bg-white rounded-xl min-h-[87vh]'>
           <Card className='border-0 py-5 bg-transparent'>
             <CardHeader className='space-y-3'>
-              <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Add Tuition Fee</CardTitle>
+              <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Add Course Fee</CardTitle>
               <CardDescription className='text-xs sm:text-sm hidden'></CardDescription>
               <div className='text-xs sm:text-sm'>
                 <div className=''>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To create a new Course Tuition Fee, this section allows you to define the tuition rates, lab fees, CWTS/NSTP fees, and any other related charges for a specific course. Providing this information will ensure
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To create a new Course Fee, this section allows you to define the Course rates, lab fees, CWTS/NSTP fees, and any other related charges for a specific course. Providing this information will ensure
                   accurate billing and management of course fees for students.
                 </div>
               </div>
@@ -150,8 +150,8 @@ const Page = () => {
                       Additional Fees <span className='text-muted-foreground text-red'>(REQUIRED)</span>
                     </h1>
                     <p className='text-sm text-muted-foreground mt-2'>
-                      The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a single academic year. After the first two payments, it will no longer be
-                      required for the remaining semesters.
+                      The Departmental Fee is required each semester, the Insurance Fee once per year, and the SSG Fee only for the first two payments of an academic year. The Passbook Fee is a one-time payment but is created yearly for transferees who may
+                      still need to purchase one.
                     </p>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mt-4'>
                       <Input name={'departmentalFee'} type={'text'} form={form} label={'Departmental Fee:'} classNameInput={'uppercase'} />
@@ -165,8 +165,7 @@ const Page = () => {
                   <div className='flex flex-col w-full px-7'>
                     <h1 className='text-lg font-semibold xs:text-xl sm:text-2xl tracking-tight w-full text-start uppercase '>Reg/Misc Fees</h1>
                     <p className='text-sm text-muted-foreground mt-2'>
-                      Note: Down payment is handled as a separate under Reg/Misc Fee. This allows flexibility in adjusting the down payment amount based on the student&apos;s specific requirements and this downpayment will apply to both old and new students.
-                      If you configure the bottom Reg/Misc, it means there are now two Reg/Misc setups. The bottom one is for new students, while the top one remains for old students. If not, the top Reg/Misc will apply to both new and old students.
+                      Note: The downpayment will not be included in the total amount of Registration and Miscellaneous Fees. Instead, students are required to input a downpayment amount that meets or exceeds the minimum required downpayment.
                     </p>
                     <div className='grid grid-cols-2 my-5'>
                       <Input name={'downPayment'} type={'text'} form={form} label={'Down Payment:'} classNameInput={''} />

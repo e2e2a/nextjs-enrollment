@@ -32,7 +32,14 @@ export const GeneratePDF = async (data: any, fileName: string) => {
       addHeader();
 
       // First section data
-      const summaryData = [['REG/MISC', data?.regmiscAmount], ['TUITION FEE', data?.tuitionFeeAmount], ['LAB FEE', data?.labFeeAmount], ...(data?.cwtsOrNstpFeeAmount ? [['CWTS/NSTP', data?.cwtsOrNstpFeeAmount]] : [[]]), ['Total', data?.totalAmount]];
+      const summaryData = [
+        ['REG/MISC', data?.regmiscAmount],
+        ['TUITION FEE', data?.tuitionFeeAmount],
+        ['LAB FEE', data?.labFeeAmount],
+        ...(data?.cwtsOrNstpFeeAmount ? [['CWTS/NSTP FEE', data?.cwtsOrNstpFeeAmount]] : []),
+        ...(data?.ojtFeeAmount ? [['OJT FEE', data?.ojtFeeAmount]] : []),
+        ['Total', data?.totalAmount],
+      ];
 
       // Render first section
       summaryData.forEach(([label, value]) => {
@@ -58,8 +65,7 @@ export const GeneratePDF = async (data: any, fileName: string) => {
 
       // Note Section
       doc.setFontSize(10);
-      const noteText =
-        'Note: The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a single academic year. After the first two payments, it will no longer be required for the remaining semesters.';
+      const noteText = 'Note:  The Departmental Fee is required each semester, the Insurance Fee once per year, and the SSG Fee only for the first two payments of an academic year. The Passbook Fee is a one-time payment.';
 
       // Define a max width for the text to wrap properly
       const textLines = doc.splitTextToSize(noteText, 180); // Adjust width as needed
@@ -71,9 +77,10 @@ export const GeneratePDF = async (data: any, fileName: string) => {
       // Second section data
       const oneYearPaymentData = [
         ['Departmental Fee', data?.tFee?.departmentalFee],
-        ['Insurance Fee', data?.tFee?.insuranceFee],
+        ...(data.insuranceBoolean ? [['Insurance Fee', data?.tFee?.insuranceFee]] : []),
+        ...(data.passbookBoolean ? [['Passbook Fee', data?.tFee?.passbookFee]] : []),
         ['SSG Fee', data?.tFee?.ssgFee],
-        ['Total', (Number(data?.tFee?.departmentalFee || 0) + Number(data?.tFee?.ssgFee || 0) + Number(data?.tFee?.insuranceFee || 0)).toFixed(2)],
+        ['Total', (Number(data?.tFee?.departmentalFee || 0) + Number(data?.tFee?.ssgFee || 0) + Number(data.insuranceBoolean ? data?.tFee?.insuranceFee || 0 : 0) + Number(data.passbookBoolean ? data?.tFee?.passbookFee || 0 : 0)).toFixed(2)],
       ];
 
       // Render second section
