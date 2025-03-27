@@ -231,8 +231,28 @@ const checkPaymentOfPassbook = async (studentReceipt: any) => {
       ?.reduce((total: number, payment: any) => {
         return { amount: total + (Number(payment?.taxes?.amount) || 0), year: payment.year, semester: payment.semester, schoolYear: payment.schoolYear };
       }, 0);
-
+    const fullpayment = studentReceipt
+      ?.filter((r: any) => r.type.toLowerCase() === 'fullpayment')
+      ?.sort((a: any, b: any) => {
+        // Sorting by school year first, then semester
+        if (a.schoolYear !== b.schoolYear) {
+          return a.schoolYear.localeCompare(b.schoolYear);
+        }
+        return a.semester.localeCompare(b.semester);
+      })
+      ?.reduce((acc: any, payment: any, index: number) => {
+        if (index === 0) {
+          return {
+            amount: Number(payment?.taxes?.amount) || 0,
+            year: payment.year,
+            semester: payment.semester,
+            schoolYear: payment.schoolYear,
+          };
+        }
+        return acc;
+      }, null);
     if (checkPassbook) passbookPayment = true;
-    return { passbookPayment, passbookPaymentSemester: checkPassbook?.semester, passbookPaymentYear: checkPassbook.year };
+    if (fullpayment) passbookPayment = true;
+    return { passbookPayment, passbookPaymentSemester: checkPassbook?.semester || fullpayment?.semester, passbookPaymentYear: checkPassbook?.year || fullpayment?.year };
   });
 };

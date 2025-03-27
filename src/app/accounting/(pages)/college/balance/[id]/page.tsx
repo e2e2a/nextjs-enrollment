@@ -314,9 +314,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                                       regmiscAmount: Number(regMiscTotal).toFixed(2) || (0).toFixed(2),
                                       tuitionFeeAmount: Number(lecTotal).toFixed(2) || (0).toFixed(2),
                                       labFeeAmount: Number(labTotal).toFixed(2) || (0).toFixed(2),
-                                      ...(showCwtsOrNstp ? { cwtsOrNstpFeeAmount: Number(tfData?.tFee?.cwtsOrNstpFee).toFixed(2) || (0).toFixed(2) } : {}),
+                                      passbookBoolean: !srData?.passbookPayment || passbookPaidInThisSemester,
+                                      insuranceBoolean: !srData?.insurancePayment || insurancePaidInThisSemester,
+                                      ...(showOJT ? { ojtFeeAmount: Number(tfData?.tFee?.ojtFee || 0).toFixed(2) || 0 } : {}),
+                                      ...(showCwtsOrNstp ? { cwtsOrNstpFeeAmount: Number(tfData?.tFee?.cwtsOrNstpFee || 0).toFixed(2) || 0 } : {}),
                                       totalAmount: Number(total).toFixed(2) || (0).toFixed(2),
-                                      total1YearFeeAmount: (Number(tfData?.tFee?.departmentalFee || 0) + Number(tfData?.tFee?.ssgFee || 0) + Number(tfData?.tFee?.insuranceFee || 0)).toFixed(2),
                                     },
                                     'Course Fee Summary'
                                   )
@@ -330,7 +332,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                               <CardTitle className=''>
                                 <div className='flex justify-between items-center'>
                                   <span className='text-lg xs:text-2xl font-semibold sm:text-3xl tracking-tight w-full text-start uppercase'>Summary</span>
-                                  <Link href={`/fee/course`} className='hover:underline hover:text-blue-600 text-blue-500 space-y-2'>
+                                  <Link href={`/accounting/college/tuition/${tfData?.tFee?._id}`} className='hover:underline hover:text-blue-600 text-blue-500 space-y-2'>
                                     <Button size={'sm'} type='button' className='w-auto flex gap-2'>
                                       View More Details 👉
                                     </Button>
@@ -375,12 +377,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                               </div>
                               <div className='flex flex-col items-start w-full justify-center mt-10 mb-10'>
                                 <h1 className='text-lg font-semibold sm:text-xl tracking-tight w-full text-start uppercase flex'>
-                                  ADDITIONAL PAYMENT <span className='flex justify-start items-start text-[15px] text-red'>(Required)</span>
+                                  ADDITIONAL FEES <span className='flex justify-start items-start text-[15px] text-red'>(Required)</span>
                                 </h1>
                                 <span className='text-sm text-muted-foreground mt-2'>
-                                  This will available after down payment completed, <strong>Insurance Fee</strong>, <strong>SSG Fee</strong>, and <strong>Departmental Fee</strong>. The <strong>Departmental Fee</strong> and <strong>SSG Fee</strong> is mandatory
-                                  every semester, while the <strong>Insurance Fee</strong> is only required once per academic year.
-                                  <span className='text-red-500 font-semibold'>Enrollment will not be exited until all required fees have been fully paid.</span>
+                                  The Departmental Fee is required each semester, the Insurance Fee once per year, and the SSG Fee only for the first two payments of an academic year. The Passbook Fee is a one-time payment but is created yearly for transferees
+                                  who may still need to purchase one.
                                 </span>
                                 <div className='grid grid-cols-1 w-full sm:px-32 px-5'>
                                   <div className='flex justify-between w-full'>
@@ -433,7 +434,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                       onClick={() =>
                         exportToPDF(
                           data?.enrollment,
-                          Number(tfData?.tFee?.downPayment),
+                          Number(paymentOfDownPayment?.taxes?.amount || tfData?.tFee?.downPayment),
                           paymentPerTerm,
                           parseFloat((total - tfData?.tFee?.downPayment - 3 * paymentPerTerm).toFixed(2)),
                           showPaymentOfFullPayment,
@@ -442,17 +443,27 @@ const Page = ({ params }: { params: { id: string } }) => {
                           showPaymentOfMidterm,
                           showPaymentOfSemiFinal,
                           showPaymentOfFinal,
-                          Number(totalWithoutDownPayment).toFixed(2) || (0).toFixed(2),
-                          Number(showBalance).toFixed(2) || (0).toFixed(2),
+                          Number(totalWithoutDownPayment || 0).toFixed(2) || (0).toFixed(2),
+                          Number(totalCurrent || 0).toFixed(2) || (0).toFixed(2),
+                          Number(showBalance || 0).toFixed(2) || (0).toFixed(2),
                           srData?.insurancePayment,
                           insurancePaidInThisSemester,
+                          srData?.passbookPayment,
+                          passbookPaidInThisSemester,
                           showPaymentOfDepartmental,
                           showPaymentOfSSG,
                           showPaymentOfInsurance,
                           tfData?.tFee?.insuranceFee,
                           tfData?.tFee?.departmentalFee,
+                          tfData?.tFee?.passbookFee,
                           tfData?.tFee?.ssgFee,
+                          Number(tfData?.tFee?.departmentalFee || 0) +
+                            Number(!srData?.insurancePayment || insurancePaidInThisSemester ? tfData?.tFee?.insuranceFee || 0 : 0) +
+                            Number(!srData?.passbookPayment || passbookPaidInThisSemester ? tfData?.tFee?.passbookFee || 0 : 0) +
+                            Number(tfData?.tFee?.ssgFee || 0),
                           Number(additionalTotal).toFixed(2),
+                          srData?.previousBalance,
+                          isScholarshipStart,
                           'student payment'
                         )
                       }
@@ -465,12 +476,13 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <CardHeader className='space-y-3'>
                       <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Remaining Fee&apos;s</CardTitle>
                       <CardDescription className='text-xs sm:text-sm grid grid-cols-1 sm:grid-cols-2'>
-                        <span className='text-xs sm:text-sm'>Department: {tfData?.tFee?.courseId?.name} </span>
-                        <span className='text-xs sm:text-sm flex justify-end capitalize'>Student Status: {data?.enrollment?.studentStatus} </span>
-                        <span className='text-xs sm:text-sm capitalize'>
+                        <span className='text-xs sm:text-sm capitalize'>Fullname: {name} </span>
+                        <span className='text-xs sm:text-sm flex justify-end capitalize'>Department: {tfData?.tFee?.courseId?.name} </span>
+                        <span className='text-xs sm:text-sm'>Student Status: {data?.enrollment?.studentStatus} </span>
+                        <span className='text-xs sm:text-sm flex justify-end capitalize'>
                           Year: {data?.enrollment?.studentYear} - {data?.enrollment?.studentSemester}{' '}
                         </span>
-                        <span className='text-xs sm:text-sm flex justify-end'>SchoolYear: {esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear} </span>
+                        <span className='text-xs sm:text-sm '>SchoolYear: {esData?.enrollmentSetup?.enrollmentTertiary?.schoolYear} </span>
                       </CardDescription>
                       <div className=''>
                         {!isWithdrawn && !requiredPaymentsFulfill && !showPaymentOfFullPayment && !showPaymentOfDownPayment && !showPaymentOfPrelim && !showPaymentOfMidterm && !showPaymentOfSemiFinal && !showPaymentOfFinal && (
@@ -792,7 +804,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                               {srData && srData?.previousBalance?.length > 0 && (
                                 <>
                                   <div className='grid grid-cols-1 sm:px-36 px-5'>
-                                    {srData.previousBalance.map((balance: any, index: number) => (
+                                    {srData?.previousBalance.map((balance: any, index: number) => (
                                       <div key={index} className='flex justify-between'>
                                         <span className='font-medium'>
                                           Outstanding Balance
@@ -838,9 +850,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                           Additional Fees <span className='text-red'>(REQUIRED)</span>
                         </h1>
                         <span className='text-sm text-muted-foreground mt-2'>
-                          This will available after down payment completed, <strong>Insurance Fee</strong>, <strong>SSG Fee</strong>, and <strong>Departmental Fee</strong>. The <strong>Departmental Fee</strong> and <strong>SSG Fee</strong> is mandatory every
-                          semester, while the <strong>Insurance Fee</strong> is only required once per academic year.
-                          <span className='text-red-500 font-semibold'>Enrollment will not be exited until all required fees have been fully paid.</span>
+                          This will available after down payment completed, The Departmental Fee is required each semester, the Insurance Fee once per year, and the SSG Fee only for the first two payments of an academic year. The Passbook Fee is a one-time
+                          payment but is created yearly for transferees who may still need to purchase one.
                         </span>
                         <div className='grid grid-cols-1 sm:px-32 px-5'>
                           <Table className='table-auto border-collapse rounded-t-lg border '>

@@ -64,8 +64,8 @@ const Page = () => {
                   Additional Fees <span className='text-muted-foreground text-red'>(REQUIRED)</span>
                 </h1>
                 <p className='text-sm text-muted-foreground mt-2'>
-                  The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a whole academic year. After the first two payments, it will no longer be
-                  required for the remaining semesters.
+                  The Departmental Fee is required each semester, the Insurance Fee once per year, and the SSG Fee only for the first two payments of an academic year. The Passbook Fee is a one-time payment but is created yearly for transferees who may still
+                  need to purchase one.
                 </p>
                 <div className='mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full'>
                   <span className='uppercase text-[16px]'>
@@ -82,7 +82,9 @@ const Page = () => {
               <div className='overflow-x-auto mt-3 rounded-t-lg'>
                 <div className='my-3'>
                   <h1 className='text-lg font-semibold xs:text-xl sm:text-xl tracking-tight w-full text-start uppercase'>Reg/Misc Fees</h1>
-                  <p className='text-sm text-muted-foreground mt-2'>Note: Down payment is handled as a separate under Reg/Misc Fee. This allows flexibility in adjusting the down payment amount based on the student&apos;s specific requirements.</p>
+                  <p className='text-sm text-muted-foreground mt-2'>
+                    Note: Downpayment is a required initial amount that the student must input during enrollment. It is not included in the total Registration and Miscellaneous Fees but will be deducted from them once paid.
+                  </p>
                 </div>
                 <span className='uppercase text-[16px] my-5 flex'>
                   <span className='font-semibold'>Down Payment</span>: {tfData?.tFee?.downPayment}
@@ -119,7 +121,6 @@ const Page = () => {
                 </div>
               </div>
             </CardContent>
-
             <CardFooter className=''></CardFooter>
           </Card>
         </div>

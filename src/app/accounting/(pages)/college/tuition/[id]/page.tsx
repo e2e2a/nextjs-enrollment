@@ -176,11 +176,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='flex flex-col items-start w-full justify-center mt-10 mb-10'>
                     <h1 className='text-lg font-semibold xs:text-xl sm:text-2xl tracking-tight w-full text-start uppercase'>
-                      Additional Fee <span className='text-muted-foreground text-red'>(REQUIRED)</span>
+                      Additional Fees <span className='text-muted-foreground text-red'>(REQUIRED)</span>
                     </h1>
                     <p className='text-sm text-muted-foreground mt-2'>
-                      The Departmental Fee is required every semester, while the Insurance Fee is only required once per year. The SSG Fee is required for the first two payments within a whole academic year. After the first two payments, it will no longer be
-                      required for the remaining semesters.
+                      The Departmental Fee is required each semester, the Insurance Fee once per year, and the SSG Fee only for the first two payments of an academic year. The Passbook Fee is a one-time payment but is created yearly for transferees who may
+                      still need to purchase one.
                     </p>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 w-full'>
                       <Input name={'departmentalFee'} type={'text'} isNotEditable={isNotEditable} form={form} label={'Departmental Fee:'} classNameInput={'uppercase'} />
@@ -193,7 +193,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                 <div className=''>
                   <div className='flex flex-col w-full px-7'>
                     <h1 className='text-lg font-semibold xs:text-xl sm:text-2xl tracking-tight w-full text-start uppercase '>Reg/Misc Fees</h1>
-                    <p className='text-sm text-muted-foreground mt-2'>Note: Down payment is handled as a separate under Reg/Misc Fee. This allows flexibility in adjusting the down payment amount based on the student&apos;s specific requirements.</p>
+                    <p className='text-sm text-muted-foreground mt-2'>
+                      Note: The downpayment will not be included in the total amount of Registration and Miscellaneous Fees. Instead, students are required to input a downpayment amount that meets or exceeds the minimum required downpayment.
+                    </p>
                     <div className='grid grid-cols-2 my-5'>
                       <Input name={'downPayment'} type={'text'} isNotEditable={isNotEditable} form={form} label={'Down Payment:'} classNameInput={''} />
                     </div>
