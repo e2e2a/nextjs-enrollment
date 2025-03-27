@@ -36,11 +36,9 @@ const SignUpForm = () => {
           case 200:
           case 201:
           case 203:
-            console.log('res', res);
             setTypeMessage('success');
             setMessage(res?.message);
             if (!res.token) {
-              // return router.push('/sign-up');
               return;
             }
             return (window.location.href = `/verification?token=${res.token}`);

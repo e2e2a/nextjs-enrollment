@@ -81,7 +81,6 @@ const checkIp = async (user: any) => {
     if (userIp.errorIp) return { error: `Forbidden ${userIp.errorIp}`, status: 403 };
     if (!userIp || userIp.error || !userIp.success) {
       const verificationToken = await generateVerificationToken(user._id, 'Activation');
-      console.log('userIpqqqq: ', verificationToken);
       await sendEmail(user.email, user.username, 'Activation', 'auth', verificationToken.code, 'Activation');
       return { error: 'New Ip', token: verificationToken.token, status: 203 };
     }

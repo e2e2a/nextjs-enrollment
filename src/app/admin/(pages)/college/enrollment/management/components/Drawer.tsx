@@ -7,9 +7,7 @@ import { useForm } from 'react-hook-form';
 import { EnrollmentApprovedStep2 } from '@/lib/validators/Validator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { SelectInput } from './SelectInput';
 import { selectType } from '@/constant/enrollment';
-import { useEffect, useState } from 'react';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 type IProps = {
   user: any;
@@ -36,13 +34,11 @@ export function DataTableDrawer({ user }: IProps) {
     };
     // mutation.mutate(dataa, {
     //   onSuccess: (res) => {
-    //     console.log(res);
     //     switch (res.status) {
     //       case 200:
     //       case 201:
     //       case 203:
     //         // setTypeMessage('success');
-    //         console.log(res);
     //         return;
     //       default:
     //         // setMessage(res.error);
@@ -76,7 +72,6 @@ export function DataTableDrawer({ user }: IProps) {
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
                 onChange={(e) => {
-                  console.log('working', form.getValues('scholarType'));
                   setIsScholarType(form.getValues('scholarType'));
                   if (isScholarType && isScholarType !== '' && isScholarType !== 'None') {
                     form.setValue('studentType', 'Regular');

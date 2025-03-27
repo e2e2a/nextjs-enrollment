@@ -165,7 +165,6 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
 
     mutation.mutate(data, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:

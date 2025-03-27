@@ -12,20 +12,16 @@ const ActionsCell = ({ user }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const mutation = useArchiveCourseBlockScheduleMutation();
   const actionFormSubmit = () => {
-    console.log('user submitted:', user.teacherScheduleId)
    const data = {
-    teacherScheduleId: user.teacherScheduleId._id,
-    blockTypeId: user.teacherScheduleId.blockTypeId._id
+    teacherScheduleId: user?.teacherScheduleId?._id,
+    blockTypeId: user?.teacherScheduleId?.blockTypeId?._id
    }
-
     mutation.mutate(data, {
       onSuccess: (res: any) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            // return (window.location.href = '/');
             return;
           default:
             return;

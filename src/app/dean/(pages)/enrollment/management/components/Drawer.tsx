@@ -2,14 +2,12 @@
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { EnrollmentApprovedStep2 } from '@/lib/validators/Validator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { SelectInput } from './SelectInput';
 import { selectType } from '@/constant/enrollment';
-import { useEffect, useState } from 'react';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 type IProps = {
   user: any;
@@ -17,7 +15,6 @@ type IProps = {
 export function DataTableDrawer({ user }: IProps) {
   const [goal, setGoal] = React.useState(350);
   // const mutation = useApprovedEnrollmentStep2Mutation();
-  const [isNotEditable, setIsNotEditable] = React.useState(false);
   const [isScholarType, setIsScholarType] = React.useState<string | null>(null);
   const [isDisabled, setIsDisabled] = React.useState(false);
   const [data, setData] = React.useState('');
@@ -36,13 +33,11 @@ export function DataTableDrawer({ user }: IProps) {
     };
     // mutation.mutate(dataa, {
     //   onSuccess: (res) => {
-    //     console.log(res);
     //     switch (res.status) {
     //       case 200:
     //       case 201:
     //       case 203:
     //         // setTypeMessage('success');
-    //         console.log(res);
     //         return;
     //       default:
     //         // setMessage(res.error);
@@ -76,7 +71,6 @@ export function DataTableDrawer({ user }: IProps) {
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
                 onChange={(e) => {
-                  console.log('working', form.getValues('scholarType'));
                   setIsScholarType(form.getValues('scholarType'));
                   if (isScholarType && isScholarType !== '' && isScholarType !== 'None') {
                     form.setValue('studentType', 'Regular');
@@ -84,7 +78,6 @@ export function DataTableDrawer({ user }: IProps) {
                   } else {
                     setIsDisabled(false);
                   }
-                  // setData(e.target.value);
                 }}
               >
                 <div className='justify-center items-center flex-wrap'>

@@ -20,7 +20,6 @@ export const resetPasswordAction = async (data: any) => {
 
     const checkedToken = await checkRPToken(data.token);
     if (checkedToken && checkedToken.error) return { error: 'Invalid Token Request', status: '403' };
-    console.log('checkedToken', checkedToken)
     const updatedPassword = await updatePassword(checkedToken.token.userId._id, data.password);
     if (updatedPassword && updatedPassword.error) return { error: 'Invalid Token Request', status: '403' };
 

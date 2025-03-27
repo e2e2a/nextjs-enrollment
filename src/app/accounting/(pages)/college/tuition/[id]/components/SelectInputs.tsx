@@ -16,7 +16,6 @@ interface IProps {
 
 export function SelectInput({ form, name, label, isNotEditable, classNameInput, selectItems, placeholder, tFee }: IProps) {
   const [value, setValue] = React.useState('');
-  console.log('tFee?.year', tFee?.year);
   React.useEffect(() => {
     const getVal = name;
     if (!tFee) return;

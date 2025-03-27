@@ -50,8 +50,8 @@ const VerificationForm = () => {
         .map((_, i) => inputRefs.current[i] || createRef<HTMLInputElement>());
     }
 
-    if (result && result.token && result.token.expiresCode) {
-      const initialSeconds = calculateRemainingTime(new Date(result.token.expiresCode));
+    if (result && result?.token && result?.token?.expiresCode) {
+      const initialSeconds = calculateRemainingTime(new Date(result?.token?.expiresCode));
       setSecondsRemaining(initialSeconds);
     }
 
@@ -87,7 +87,6 @@ const VerificationForm = () => {
         if (res.error) return makeToastError(res.error);
         setMessage('Verification completed!');
         setTypeMessage('success');
-        console.log('result: ', res);
         if (!res.token) {
           if (res.redirect) {
             return (window.location.href = `${res.redirect}`);

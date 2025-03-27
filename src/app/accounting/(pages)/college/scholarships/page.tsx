@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/Columns';
 import LoaderPage from '@/components/shared/LoaderPage';
-import { useTuitionFeeQueryByCategory } from '@/lib/queries/courseFee/get/category';
 import { useScholarshipQueryByCategory } from '@/lib/queries/scholarship/get/category';
 
 interface ITuitionFee {
@@ -22,7 +21,7 @@ const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [scholarships, setScholarships] = useState([]);
-  const { data, isLoading, error } = useScholarshipQueryByCategory('College');
+  const { data, error } = useScholarshipQueryByCategory('College');
 
   useEffect(() => {
     if (error || !data) return setIsError(true);
@@ -33,7 +32,7 @@ const Page = () => {
       setIsPageLoading(false);
     }
   }, [data, error]);
-  console.log('data', data);
+
   return (
     <>
       {isPageLoading ? (

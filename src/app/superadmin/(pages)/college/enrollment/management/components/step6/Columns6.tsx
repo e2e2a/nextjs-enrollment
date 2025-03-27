@@ -1,8 +1,7 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, ArrowUpDown, ChevronsUpDown, Check } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DataTableDrawer } from '../Drawer';
 import ActionsCell from './ActionsCell';
 import { IEnrollment } from '@/types';
 import StudentPhoto from '../step1/StudentPhoto';

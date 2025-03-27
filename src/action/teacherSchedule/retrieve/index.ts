@@ -109,7 +109,6 @@ const handlesCollege = (data: any, user: any) => {
  */
 const checkTeacherScheduleConflict = async (scheds: any, data: any, teacher: any) => {
   return tryCatch(async () => {
-    console.log('scheds', scheds.length);
     const [newStartHours, newStartMinutes] = data.startTime.split(':').map(Number);
     const [newEndHours, newEndMinutes] = data.endTime.split(':').map(Number);
 

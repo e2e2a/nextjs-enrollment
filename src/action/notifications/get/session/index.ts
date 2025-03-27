@@ -39,7 +39,6 @@ export const getNotificationBySessionIdAction = async (type: string, get?: numbe
       for (let notif of notifications) {
         // notif.to = { ...notif.to, ...toProfile.profile };
         if (notif.from) {
-          console.log('');
           const fromProfile = await getToProfile(notif.from);
           notif.from = { ...notif.from, ...fromProfile.profile };
         } else {

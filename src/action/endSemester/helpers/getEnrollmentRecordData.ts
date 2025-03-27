@@ -71,9 +71,7 @@ const updateStudentCurriculum = async (enrollment: any, studentSubjects: any) =>
               let subjectFound = false;
 
               for (const subject of curriculum.subjectsFormat) {
-                // console.log('1', subject.subjectId);
                 if (studentS.subject.subjectCode === subject.subjectId.subjectCode) {
-                  // console.log('2', subject.subjectId);
                   const a = await getAverageGrade(studentS, true);
                   subject.grade = a.grade;
                   subjectFound = true;

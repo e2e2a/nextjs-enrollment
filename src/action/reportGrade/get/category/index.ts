@@ -42,7 +42,6 @@ const checkRole = async (user: any, category: string, requestType: string) => {
         const p = await getReportGradeByCategory(category);
         const dean = await getDeanProfileByUserId(user._id);
         a = p.filter((r: any) => r.teacherScheduleId.courseId._id.toString() === dean.courseId._id.toString() && requestType === r.requestType);
-        console.log('a', a);
         break;
       default:
         return { error: 'Forbidden.', status: 403 };

@@ -143,7 +143,7 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
     if (fileCoCPreview) formData.append('fileCOC', fileCoCPreview);
 
     const isProfileValid = await formProfile.trigger();
-    if (profile.enrollStatus === 'Enrolled' || profile.enrollStatus === 'Temporary Enrolled' || profile.enrollStatus === 'Pending') {
+    if (profile?.enrollStatus === 'Enrolled' || profile?.enrollStatus === 'Temporary Enrolled' || profile?.enrollStatus === 'Pending') {
       const isExtensionValid = await formExtenstion.trigger();
       if (!isExtensionValid || !isProfileValid) return setIsPending(false);
     } else {
@@ -160,12 +160,11 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
       ...extensionData,
       formData: formData,
       configuredExtension: true,
-      userId: profile?.userId._id,
+      userId: profile?.userId?._id,
     };
 
     mutation.mutate(data, {
       onSuccess: (res) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:

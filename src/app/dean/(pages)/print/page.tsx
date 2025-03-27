@@ -36,9 +36,9 @@ const Page = () => {
     if (error || !data) return;
     if (pError || !pData) return;
 
-    if (data && pData.profile) {
-      if (data.blockTypes) {
-        const filteredBlocks = data?.blockTypes.filter((b: any) => b.courseId._id === pData.profile.courseId._id);
+    if (data && pData?.profile) {
+      if (data?.blockTypes) {
+        const filteredBlocks = data?.blockTypes.filter((b: any) => b?.courseId?._id === pData.profile?.courseId?._id);
         setBlocks(filteredBlocks);
       }
       setIsPageLoading(false);
@@ -86,7 +86,6 @@ const Page = () => {
           case 203:
             formCollege.reset();
             if (res.message) makeToastSucess(res.message);
-            console.log('res', res);
             if (data.exportType === 'Pdf') await exportToPDF(res?.b?.dataToPrint, 'asd', data.printSelection, data.selectionScope);
             if (data.exportType === 'Excel') await exportToExcel(res?.b?.dataToPrint, 'as3d', data.printSelection, data.selectionScope);
             return;

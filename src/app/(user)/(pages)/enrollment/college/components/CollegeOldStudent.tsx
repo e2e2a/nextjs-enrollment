@@ -75,7 +75,6 @@ const CollegeOldStudent = ({ profile, enrollmentSetup }: IProps) => {
       category: 'College',
       userId: s?.user.id,
     };
-    console.log(dataa);
 
     mutation.mutate(dataa, {
       onSuccess: (res) => {

@@ -41,7 +41,7 @@ const ViewLackingSubjects = ({ c, sData }: IProps) => {
       setMissingSubjects(missingSubjectsObj);
     }
   }, [sData, c]);
-  console.log('Object.keys(missingSubjects).length > 0', Object.keys(missingSubjects));
+
   return (
     <Dialog>
       <DialogTrigger asChild>

@@ -8,13 +8,12 @@ import LoaderPage from '@/components/shared/LoaderPage';
 const Page = () => {
   const [isError, setIsError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, isLoading, error: isEnError } = useTeacherScheduleRecordQueryByCategory('College');
+  const { data, error: isEnError } = useTeacherScheduleRecordQueryByCategory('College');
 
   useEffect(() => {
-    console.log('data', data)
     if (isEnError || !data) return;
     if (data) {
-      if (data.teacherScheduleRecords) {
+      if (data?.teacherScheduleRecords) {
         setIsPageLoading(false);
       }
     }
@@ -35,7 +34,7 @@ const Page = () => {
               <div className='flex items-center py-4 text-black w-full justify-center'>
                 <h1 className='sm:text-3xl text-xl font-semibold tracking-tight '>Schedule&apos;s Records</h1>
               </div>
-              <DataTable columns={columns} data={data.teacherScheduleRecords as any[]} />
+              <DataTable columns={columns} data={data?.teacherScheduleRecords as any[]} />
             </div>
           )}
         </div>

@@ -55,7 +55,6 @@ export function ComboboxSubjects({ form, name, label, selectItems, placeholder }
                                 value={item.name}
                                 className='w-auto border p-0 m-0'
                                 onSelect={(currentValue) => {
-                                  console.log('currentValue', currentValue)
                                   setValue(currentValue === value ? value : item._id);
                                   field.onChange(item._id);
                                   setOpen(false);

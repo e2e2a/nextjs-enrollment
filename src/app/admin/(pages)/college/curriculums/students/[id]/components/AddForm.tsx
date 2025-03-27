@@ -19,7 +19,6 @@ interface IProps {
 }
 
 const AddForm = ({ c, syData }: IProps) => {
-  const [value, setValue] = useState('');
   const mutation = useUpdateStudentCurriculumLayerMutation();
   const form = useForm<z.infer<typeof StudentCurriculumValidator>>({
     resolver: zodResolver(StudentCurriculumValidator),
@@ -30,11 +29,7 @@ const AddForm = ({ c, syData }: IProps) => {
       order: '0',
     },
   });
-  const handleChange = (e: any) => {
-    let inputValue = e.target.value;
-    // Optionally, format input value if necessary
-    setValue(inputValue);
-  };
+
   const actionFormSubmit = (data: z.infer<typeof StudentCurriculumValidator>) => {
     data.year = data.year.toLowerCase();
     data.semester = data.semester.toLowerCase();
@@ -44,12 +39,10 @@ const AddForm = ({ c, syData }: IProps) => {
     }
     mutation.mutate(dataa, {
       onSuccess: (res: any) => {
-        console.log(res);
         switch (res.status) {
           case 200:
           case 201:
           case 203:
-            // return (window.location.href = '/');
             return;
           default:
             return;

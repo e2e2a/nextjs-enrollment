@@ -206,24 +206,19 @@ const Page = ({ params }: { params: { id: string } }) => {
         const a = cFormatted;
         let RegMiscTotal = a;
         const totalOfNew = ccFormatted;
-        console.log('a1', RegMiscTotal);
         if (tfData?.tFee?.regOrMiscWithOldAndNew) {
           if (data?.enrollment?.studentStatus.toLowerCase() === 'new student' || data?.enrollment?.studentStatus.toLowerCase() === 'transfer student') {
             setRegMiscTotal(totalOfNew);
             RegMiscTotal = totalOfNew;
-            console.log('2', RegMiscTotal);
           } else {
             RegMiscTotal = a;
             setRegMiscTotal(a);
-            console.log('3', RegMiscTotal);
           }
         } else {
           RegMiscTotal = a;
           setRegMiscTotal(a);
-          console.log('4', RegMiscTotal);
         }
 
-        console.log('5', RegMiscTotal);
         if (isScholarshipStart && data?.enrollment?.profileId?.scholarshipId?.exemptedFees.includes('Miscellaneous Fees')) {
           if (data?.enrollment?.profileId?.scholarshipId?.type === 'percentage') {
             const b = parseFloat((a * Number(data?.enrollment?.profileId?.scholarshipId?.discountPercentage)).toFixed(2));

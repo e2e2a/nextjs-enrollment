@@ -103,7 +103,7 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
               amountPaid = Number(amountPaid - amount);
             }
           }
-          console.log('amountPaid', amountPaid);
+
           if (Number(amountPaid) > 0) {
             if (prev.semiFinalBalance > 0) {
               type = 'semi-final';

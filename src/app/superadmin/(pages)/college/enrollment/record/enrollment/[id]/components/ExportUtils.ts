@@ -61,7 +61,7 @@ export const exportToPDF = async (data: any, schedules: any, fileName: string) =
           .replace(/(\S),/g, '$1,')
           .replace(/,(\S)/g, ', $1')
           .trim();
-          console.log('item', item)
+
         return [
           item?.blockType?.section ?? 'N/A',
           item?.subject?.subjectCode ?? 'N/A',

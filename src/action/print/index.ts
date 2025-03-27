@@ -90,7 +90,6 @@ const checkPrintScope = async (data: any, courseId: string) => {
           dataToPrint = [b];
         }
         if (data.printSelection === 'Students') dataToPrint = await getEnrollmentByProfileId(data.individualSelectionId);
-        console.log('dataToPrint', dataToPrint.length)
         break;
       default:
         return { error: 'Forbidden.', dataToPrint, status: 403 };
