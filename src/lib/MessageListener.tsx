@@ -9,7 +9,6 @@ const MessageListener = ({ children }: { children: React.ReactNode }) => {
   const queryClient = useQueryClient();
   useEffect(() => {
     const globalChannelName = 'global-channel'; // Define your global channel name
-
     const channel = supabase.channel(globalChannelName, {
       config: {
         broadcast: { ack: true },
@@ -21,15 +20,13 @@ const MessageListener = ({ children }: { children: React.ReactNode }) => {
         console.log('Subscribed to global channel successfully.');
       }
     });
-    channel.on('broadcast', { event: 'message' }, (payload: any) => {
-      console.log('Received message:', payload);
-      const messages = payload?.payload?.message;
-      messages.map((item: any) => {
-        if (item?.querKey) {
-          // Invalidate queries based on the queryKey from each message
-          queryClient.invalidateQueries({ queryKey: [item.querKey] });
-        }
-      });
+    channel.on('broadcast', { event: 'invalidate-query' }, (payload: any) => {
+      const queryKeys = payload?.payload?.queryKeys;
+      if (Array.isArray(queryKeys)) {
+        queryKeys.forEach(({ key1, key2 }) => {
+          queryClient.invalidateQueries({ queryKey: key2 ? [key1, key2] : [key1] });
+        });
+      }
     });
 
     return () => {
