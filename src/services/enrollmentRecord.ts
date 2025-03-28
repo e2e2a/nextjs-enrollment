@@ -32,11 +32,10 @@ export const getEnrollmentRecordByProfileId = async (profileId: any) => {
 
 export const getEnrollmentRecordById = async (id: any) => {
   try {
-    const TProfile = await EnrollmentRecord.findById(id)
-      .populate({
-        path: 'profileId',
-        populate: [{ path: 'scholarshipId' }, { path: 'userId' }],
-      })
+    const TProfile = await EnrollmentRecord.findById(id).populate({
+      path: 'profileId',
+      populate: [{ path: 'scholarshipId' }, { path: 'userId' }],
+    });
     return TProfile;
   } catch (error) {
     console.log('error in service:', error);
