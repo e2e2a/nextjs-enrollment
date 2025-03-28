@@ -66,7 +66,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
         {
           description: 'e2e2a order-1234',
           amount: {
-            currency_code: 'USD',
+            currency_code: 'PHP',
             value: formattedAmount(payment),
           },
         },
@@ -274,7 +274,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
                         <PayPalScriptProvider
                           options={{
                             clientId: `${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string}`,
-                            currency: 'USD',
+                            currency: 'PHP',
                             // vault: true,
                             intent: 'capture',
                           }}

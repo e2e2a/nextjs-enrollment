@@ -77,7 +77,7 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
       enrollmentId: enrollment?._id,
       category: 'College',
       amount: {
-        currency_code: 'Php',
+        currency_code: 'PHP',
         value: Number(amountInput).toFixed(2),
       },
       previousBalance: srData?.previousBalance,

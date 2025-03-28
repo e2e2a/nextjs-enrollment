@@ -73,6 +73,7 @@ export interface IStudentReceipt extends Document {
   isPaidByScholarship: Boolean;
   paymentMethod: string;
   semester: string;
+  refundAmount: string;
   year: string;
   schoolYear: string;
   isPaidIn: any;
@@ -146,6 +147,7 @@ const schema = new Schema<IStudentReceipt>(
       amount: { type: String },
     },
     type: { type: String }, // Type of payment (e.g., 'DownPayment', 'FullPayment')
+    refundAmount: { type: String },
     captureTime: { type: Date },
     errorDetails: {
       message: { type: String },

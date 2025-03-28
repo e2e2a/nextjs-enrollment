@@ -1,15 +1,12 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import LoaderPage from '@/components/shared/LoaderPage';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import { useCreateStudentReceiptMutation } from '@/lib/queries/studentReceipt/create';
 import { Icons } from '@/components/shared/Icons';
-import { useEnrollmentSetupQuery } from '@/lib/queries/enrollmentSetup/get';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-('@/components/ui/button');
 
 type IProps = {
   enrollment: any;
@@ -19,16 +16,17 @@ type IProps = {
   type: string;
   title: string;
   isScholarshipStart: boolean;
+  regMiscTotal: number;
 };
 
-const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart }: IProps) => {
+const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart, regMiscTotal }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [amountPayment, setAmountPayment] = useState(500.0);
   const [amountInput, setAmountInput] = useState(500.0);
   const amountInputRef = useRef(0);
   const [isPending, setIsPending] = useState(false);
   const [displayPayment, setDisplayPayment] = useState(true);
-
+  console.log('regMiscTotal', regMiscTotal)
   //to be deducted amount of scholarship payment
   const isPaidByScholarship = srData
     ?.filter((r: any) => r.isPaidByScholarship)
@@ -60,6 +58,7 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
   const mutation = useCreateStudentReceiptMutation();
   const onSubmit = async (e: any) => {
     e.preventDefault();
+    if (amountInput > regMiscTotal) return makeToastError('Down payment cannot exceed to the total of reg misc fee.');
     if (enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 && Number(balanceGrant) < Number(amountInput)) return makeToastError('Amount exceed on the balance total of scholarship grant amount.');
     if (Number(amountInput) < 500) return makeToastError('Down payment should atleast greater than 500.');
 
@@ -68,7 +67,7 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
       studentId: enrollment?.profileId?._id,
       category: 'College',
       amount: {
-        currency_code: 'Php',
+        currency_code: 'PHP',
         value: Number(amountInput).toFixed(2),
       },
       status: 'COMPLETED',

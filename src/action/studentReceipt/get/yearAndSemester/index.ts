@@ -140,30 +140,30 @@ const getTotalOfBalance = async (enrollment: any, studentReceipt: any) => {
 
       const paymentOfFullPayment = filteredReceipts.find((r: any) => r?.type?.toLowerCase() === 'fullpayment');
       let showPaymentOfFullPayment = paymentOfFullPayment;
-      const paymentOfDownPayment = filteredReceipts.find((r: any) => r?.type?.toLowerCase() === 'downpayment');
+      const paymentOfDownPayment = filteredReceipts?.filter((r: any) => r.type.toLowerCase() === 'downpayment')?.reduce((total: number, payment: any) => total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0), 0);
 
-      const totalWithoutDownPayment = Number(totalAmount) - Number(paymentOfDownPayment?.taxes?.amount);
+      const totalWithoutDownPayment = Number(totalAmount) - Number(paymentOfDownPayment);
       const totalPerTerm = Math.round(totalWithoutDownPayment * 100) / 100;
       const paymentPerTermNotRoundOff = Math.ceil((totalPerTerm / 4) * 100) / 100;
       const paymentPerTermRoundOff = paymentPerTermNotRoundOff % 100 >= 1 ? Math.ceil(paymentPerTermNotRoundOff / 100) * 100 : Math.floor(paymentPerTermNotRoundOff / 100) * 100;
       const paymentPerTerm = Number(paymentPerTermRoundOff);
 
-      const paymentOfPrelim = filteredReceipts?.filter((r: any) => r.type.toLowerCase() === 'prelim')?.reduce((total: number, payment: any) => total + (Number(payment?.taxes?.amount) || 0), 0);
+      const paymentOfPrelim = filteredReceipts?.filter((r: any) => r.type.toLowerCase() === 'prelim')?.reduce((total: number, payment: any) => total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0), 0);
       if (loop === 2) prelimBalance = Number(paymentPerTerm) - Number(paymentOfPrelim);
 
-      const paymentOfMidterm = filteredReceipts?.filter((r: any) => r.type.toLowerCase() === 'midterm')?.reduce((total: number, payment: any) => total + (Number(payment?.taxes?.amount) || 0), 0);
+      const paymentOfMidterm = filteredReceipts?.filter((r: any) => r.type.toLowerCase() === 'midterm')?.reduce((total: number, payment: any) => total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0), 0);
       if (loop === 2) midtermBalance = Number(paymentPerTerm) - Number(paymentOfMidterm);
 
-      const paymentOfSemiFinal = filteredReceipts?.filter((r: any) => r.type.toLowerCase() === 'semi-final')?.reduce((total: number, payment: any) => total + (Number(payment?.taxes?.amount) || 0), 0);
+      const paymentOfSemiFinal = filteredReceipts?.filter((r: any) => r.type.toLowerCase() === 'semi-final')?.reduce((total: number, payment: any) => total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0), 0);
       if (loop === 2) semiFinalBalance = Number(paymentPerTerm) - Number(paymentOfSemiFinal);
 
-      const paymentOfFinal = filteredReceipts?.filter((r: any) => r.type.toLowerCase() === 'final')?.reduce((total: number, payment: any) => total + (Number(payment?.taxes?.amount) || 0), 0);
-      const final = parseFloat((totalAmount - Number(paymentOfDownPayment?.taxes?.amount || 0) - 3 * paymentPerTerm).toFixed(2));
+      const paymentOfFinal = filteredReceipts?.filter((r: any) => r.type.toLowerCase() === 'final')?.reduce((total: number, payment: any) => total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0), 0);
+      const final = parseFloat((totalAmount - Number(paymentOfDownPayment || 0) - 3 * paymentPerTerm).toFixed(2));
       if (loop === 2) finalBalance = Number(final) - Number(paymentOfFinal);
 
       if (!showPaymentOfFullPayment) {
         const totalBalance = Number(totalAmount);
-        const paidAmount = Number(paymentOfDownPayment?.taxes?.amount || 0) + Number(paymentOfPrelim || 0) + Number(paymentOfMidterm || 0) + Number(paymentOfSemiFinal || 0) + Number(paymentOfFinal || 0);
+        const paidAmount = Number(paymentOfDownPayment || 0) + Number(paymentOfPrelim || 0) + Number(paymentOfMidterm || 0) + Number(paymentOfSemiFinal || 0) + Number(paymentOfFinal || 0);
 
         if (loop === 1) {
           remainingShowBalance = Math.round((totalBalance - paidAmount) * 100) / 100;

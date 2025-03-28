@@ -17,6 +17,7 @@ import { useEnrollmentQueryById } from '@/lib/queries/enrollment/get/id';
 import { isScholarshipApplicable } from '@/constant/scholarship';
 import { useStudentReceiptQueryByUserIdAndYearAndSemester } from '@/lib/queries/studentReceipt/get/yearAndSemester';
 import DownPayment from './components/DownPayment';
+import RefundPayment from './components/RefundPayment';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
@@ -58,13 +59,59 @@ const Page = ({ params }: { params: { id: string } }) => {
   const isScholarshipStart = scholarship && data?.enrollment?.profileId?.scholarshipId && data?.enrollment?.profileId?.scholarshipId;
   if (isScholarshipStart) showPaymentOfFullPayment = paymentOfFullPayment && Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 === Math.round(Number(total) * 100) / 100;
 
-  const paymentOfDownPayment = srData?.studentReceipt.find((r: any) => r.type.toLowerCase() === 'downpayment');
-  const showPaymentOfDownPayment = paymentOfDownPayment && Number(paymentOfDownPayment?.taxes?.amount) >= Number(500);
+  const paymentOfDownPayment = srData?.studentReceipt
+    ?.filter((r: any) => r.type.toLowerCase() === 'downpayment')
+    ?.reduce((total: number, payment: any) => {
+      return total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0);
+    }, 0);
+  const showPaymentOfDownPayment = paymentOfDownPayment && Number(paymentOfDownPayment) >= Number(500);
+  let refundPaymentData;
+  let refundButtonBoolean;
+  let refundAmount = 0;
+  if (isScholarshipStart) {
+    const filteredReceipts = srData?.studentReceipt.filter((s: any) => s?.type.toLowerCase() !== 'ssg' && s?.type.toLowerCase() !== 'departmental' && s?.type.toLowerCase() !== 'insurance' && s?.type.toLowerCase() !== 'passbook');
 
+    const filteredDownPayment = filteredReceipts
+      ?.filter((s: any) => s?.type?.toLowerCase() === 'downpayment' && !s?.isPaidByScholarship)
+      ?.reduce((total: number, payment: any) => {
+        return total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0);
+      }, 0);
+    const filteredPrelim = filteredReceipts
+      ?.filter((s: any) => s?.type?.toLowerCase() === 'prelim' && !s?.isPaidByScholarship)
+      ?.reduce((total: number, payment: any) => {
+        return total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0);
+      }, 0);
+    const filteredMidterm = filteredReceipts
+      ?.filter((s: any) => s?.type?.toLowerCase() === 'midterm' && !s?.isPaidByScholarship)
+      ?.reduce((total: number, payment: any) => {
+        return total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0);
+      }, 0);
+    const filteredSemiFinal = filteredReceipts
+      ?.filter((s: any) => s?.type?.toLowerCase() === 'semi-final' && !s?.isPaidByScholarship)
+      ?.reduce((total: number, payment: any) => {
+        return total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0);
+      }, 0);
+    const filteredFinal = filteredReceipts
+      ?.filter((s: any) => s?.type?.toLowerCase() === 'final' && !s?.isPaidByScholarship)
+      ?.reduce((total: number, payment: any) => {
+        return total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0);
+      }, 0);
+    const balanceGrant = parseFloat((Number(data?.enrollmentRecord?.profileId?.scholarshipId?.amount) - isPaidByScholarship).toFixed(0));
+    const totalToBeRefund = filteredDownPayment + filteredPrelim + filteredMidterm + filteredSemiFinal + filteredFinal;
+    const abc = Number(total || 0) - Number(balanceGrant || 0);
+    refundButtonBoolean = isScholarshipStart && totalToBeRefund > 0 && totalToBeRefund > abc;
+    if (totalToBeRefund > balanceGrant) {
+      refundAmount = balanceGrant;
+    } else {
+      refundAmount = totalToBeRefund;
+    }
+
+    refundPaymentData = { filteredDownPayment, filteredPrelim, filteredMidterm, filteredSemiFinal, filteredFinal };
+  }
   const paymentOfPrelim = srData?.studentReceipt
     ?.filter((r: any) => r.type.toLowerCase() === 'prelim')
     ?.reduce((total: number, payment: any) => {
-      return total + (Number(payment?.taxes?.amount) || 0);
+      return total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0);
     }, 0);
   const a = Number(paymentOfPrelim) > 0 && Number(paymentOfPrelim) !== Number(paymentPerTerm);
   const prelimPayment = Number(paymentOfPrelim) - Number(paymentPerTerm);
@@ -73,7 +120,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const paymentOfMidterm = srData?.studentReceipt
     ?.filter((r: any) => r.type.toLowerCase() === 'midterm')
     ?.reduce((total: number, payment: any) => {
-      return total + (Number(payment?.taxes?.amount) || 0);
+      return total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0);
     }, 0);
   const b = Number(paymentOfMidterm) > 0 && Number(paymentOfMidterm) !== Number(paymentPerTerm);
   const midtermPayment = Number(paymentOfMidterm) - Number(paymentPerTerm);
@@ -82,7 +129,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const paymentOfSemiFinal = srData?.studentReceipt
     ?.filter((r: any) => r.type.toLowerCase() === 'semi-final')
     ?.reduce((total: number, payment: any) => {
-      return total + (Number(payment?.taxes?.amount) || 0);
+      return total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0);
     }, 0);
   const c = Number(paymentOfSemiFinal) > 0 && Number(paymentOfSemiFinal) !== Number(paymentPerTerm);
   const semiFinalPayment = Number(paymentOfSemiFinal) - Number(paymentPerTerm);
@@ -91,9 +138,9 @@ const Page = ({ params }: { params: { id: string } }) => {
   const paymentOfFinal = srData?.studentReceipt
     ?.filter((r: any) => r.type.toLowerCase() === 'final')
     ?.reduce((total: number, payment: any) => {
-      return total + (Number(payment?.taxes?.amount) || 0);
+      return total + (Number(payment?.taxes?.amount) || 0) - (Number(payment?.refundAmount) || 0);
     }, 0);
-  const final = parseFloat((total - Number(showPaymentOfFullPayment ? tfData?.tFee?.downPayment || 0 : paymentOfDownPayment?.taxes?.amount || 0) - 3 * paymentPerTerm).toFixed(2));
+  const final = parseFloat((total - Number(showPaymentOfFullPayment ? tfData?.tFee?.downPayment || 0 : paymentOfDownPayment || 0) - 3 * paymentPerTerm).toFixed(2));
   const d = Number(paymentOfFinal) > 0 && Number(paymentOfFinal) !== Number(final);
   const finalPayment = Number(paymentOfFinal) - Number(final);
   const showPaymentOfFinal = paymentOfFinal && finalPayment >= 0;
@@ -128,7 +175,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     if (!showPaymentOfFullPayment) {
       const totalBalance = Number(total); // Total amount to be paid
-      const paidAmount = Number(paymentOfDownPayment?.taxes?.amount || 0) + Number(paymentOfPrelim || 0) + Number(paymentOfMidterm || 0) + Number(paymentOfSemiFinal || 0) + Number(paymentOfFinal || 0);
+      const paidAmount = Number(paymentOfDownPayment || 0) + Number(paymentOfPrelim || 0) + Number(paymentOfMidterm || 0) + Number(paymentOfSemiFinal || 0) + Number(paymentOfFinal || 0);
 
       const remainingBalance = Math.round((totalBalance - paidAmount) * 100) / 100;
       let remainingBalancePrevious = Number(srData?.balanceToShow || 0);
@@ -238,8 +285,8 @@ const Page = ({ params }: { params: { id: string } }) => {
         setTotalCurrent(formattedTotalCurrent);
         setTotal(formattedTotal);
         setTotalWithoutDownPayment(formattedTotal);
-        const totalWithoutDownPaymentCurrent = Number(formattedTotalCurrent) - Number(paymentOfDownPayment?.taxes?.amount);
-        const totalWithoutDownPayment = Number(formattedTotal || 0) - Number(showPaymentOfFullPayment ? tfData?.tFee?.downPayment || 0 : paymentOfDownPayment?.taxes?.amount || 0);
+        const totalWithoutDownPaymentCurrent = Number(formattedTotalCurrent) - Number(paymentOfDownPayment);
+        const totalWithoutDownPayment = Number(formattedTotal || 0) - Number(showPaymentOfFullPayment ? tfData?.tFee?.downPayment || 0 : paymentOfDownPayment || 0);
         const totalPerTermCurrent = Math.round(totalWithoutDownPaymentCurrent * 100) / 100;
         const totalPerTerm = Math.round(totalWithoutDownPayment * 100) / 100;
         const paymentPerTerm = Math.ceil((totalPerTerm / 4) * 100) / 100;
@@ -429,7 +476,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                       onClick={() =>
                         exportToPDF(
                           data?.enrollment,
-                          Number(paymentOfDownPayment?.taxes?.amount || tfData?.tFee?.downPayment),
+                          Number(paymentOfDownPayment || tfData?.tFee?.downPayment),
                           paymentPerTerm,
                           parseFloat((total - tfData?.tFee?.downPayment - 3 * paymentPerTerm).toFixed(2)),
                           showPaymentOfFullPayment,
@@ -519,6 +566,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                     type={'downPayment'}
                                     title='Down Payment'
                                     isScholarshipStart={isScholarshipStart}
+                                    regMiscTotal={Number(regMiscTotal || 0)}
                                   />
                                 </div>
                               </div>
@@ -560,6 +608,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                     type={'downPayment'}
                                     title='Down Payment'
                                     isScholarshipStart={isScholarshipStart}
+                                    regMiscTotal={Number(regMiscTotal || 0)}
                                   />
                                 </div>
                               </div>
@@ -625,6 +674,19 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <CardContent className='w-full'>
                       {showPaymentOfDownPayment || showPaymentOfFullPayment || data?.enrollment?.profileId?.scholarshipId?.amount ? (
                         <div className=''>
+                          {refundButtonBoolean && (
+                            <div className='w-full flex justify-end py-3'>
+                              <RefundPayment
+                                enrollment={data?.enrollment}
+                                tfData={tfData?.tFee}
+                                srData={srData?.studentReceipt || []}
+                                amountToPay={Number(refundAmount).toFixed(2)}
+                                type={'refundPayment'}
+                                title='Refund Payment'
+                                isScholarshipStart={isScholarshipStart}
+                              />
+                            </div>
+                          )}
                           <div className='grid grid-cols-1 sm:px-32 px-5'>
                             <Table className='table-auto border-collapse rounded-t-lg border '>
                               <TableHeader>
@@ -641,7 +703,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <>
                                     <TableRow>
                                       <TableCell className={`px-4 py-2 ${showPaymentOfDownPayment && 'text-green-400 line-through'}`}>Down Payment</TableCell>
-                                      <TableCell className={`px-4 py-2 ${showPaymentOfDownPayment && 'text-green-400 line-through'}`}>₱{Number(paymentOfDownPayment?.taxes?.amount || tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
+                                      <TableCell className={`px-4 py-2 ${showPaymentOfDownPayment && 'text-green-400 line-through'}`}>₱{Number(paymentOfDownPayment || tfData?.tFee?.downPayment).toFixed(2)}</TableCell>
                                       <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>{showPaymentOfDownPayment ? 'Paid' : 'unpaid'}</TableCell>
                                       <TableCell className={`px-4 py-2 uppercase font-semibold ${showPaymentOfDownPayment ? 'text-green-400' : 'text-red'}`}>
                                         {showPaymentOfDownPayment
@@ -655,6 +717,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                                 type={'downPayment'}
                                                 title='Down Payment'
                                                 isScholarshipStart={isScholarshipStart}
+                                                regMiscTotal={Number(regMiscTotal || 0)}
                                               />
                                             )}
                                       </TableCell>
@@ -740,7 +803,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                           'Completed'
                                         ) : !isWithdrawn && requiredPaymentsFulfill && showPaymentOfPrelim && showPaymentOfMidterm && showPaymentOfSemiFinal ? (
                                           <SettleTermPayment
-                                            perTermPayment={parseFloat((totalCurrent - Number(paymentOfDownPayment?.taxes?.amount || 0) - 3 * paymentPerTermCurrent).toFixed(2))}
+                                            perTermPayment={parseFloat((totalCurrent - Number(paymentOfDownPayment || 0) - 3 * paymentPerTermCurrent).toFixed(2))}
                                             enrollment={data?.enrollment}
                                             tfData={tfData?.tFee}
                                             srData={srData}
