@@ -39,10 +39,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <LoadingProvider>
                 <Providers session={session}>
                   <NextAuthProvider session={session}>
-                    {/* <MessageListener> */}
-                    {children}
-                    <Toaster position='top-center' reverseOrder={false} />
-                    {/* </MessageListener> */}
+                    <MessageListener>
+                      {children}
+                      <Toaster position='top-center' reverseOrder={false} />
+                    </MessageListener>
                   </NextAuthProvider>
                 </Providers>
               </LoadingProvider>
