@@ -1,6 +1,5 @@
 'use server';
 import dbConnect from '@/lib/db/db';
-import { getEnrollmentResponse } from '@/types';
 import { tryCatch } from '@/lib/helpers/tryCatch';
 import { checkAuth } from '@/utils/actions/session';
 import { categoryCollege } from './College';
@@ -27,6 +26,5 @@ export const createEnrollmentForOldStudentByCategoryAction = async (data: any) =
     }
 
     return res;
-    // return { message: 'hello world success', status: 201 };
   });
 };

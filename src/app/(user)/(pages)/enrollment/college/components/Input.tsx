@@ -21,7 +21,7 @@ const Input = ({ name, type, form, label, disabled, classNameInput }: IProps) =>
                 type={type}
                 disabled={disabled}
                 id={name}
-                className={`${classNameInput} ${disabled ? 'cursor-not-allowed bg-slate-200' : 'bg-slate-50'} block rounded-xl px-5 pb-2 pt-7 w-full text-sm  border border-gray-200 appearance-nonefocus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom`}
+                className={`${classNameInput} ${disabled ? 'cursor-not-allowed bg-slate-200' : 'bg-slate-50'} block capitalize rounded-xl px-5 pb-2 pt-7 w-full text-sm  border border-gray-200 appearance-nonefocus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom`}
                 onDragStart={(e) => e.preventDefault()}
                 placeholder=''
                 {...field}

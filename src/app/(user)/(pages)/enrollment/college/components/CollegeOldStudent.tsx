@@ -13,12 +13,15 @@ import Image from 'next/image';
 import Input from './Input';
 import { EnrollmentOldStudentFormValidator } from '@/lib/validators/enrollment/create/oldStudent';
 import { useCreateEnrollmentForOldStudentByCategoryMutation } from '@/lib/queries/enrollment/create/oldStudent';
+import { studentYearData } from '@/constant/enrollment';
+import { SelectInput } from './SelectInput';
 
 type IProps = {
   profile: any;
   enrollmentSetup: any;
 };
 const CollegeOldStudent = ({ profile, enrollmentSetup }: IProps) => {
+  const [isPending, setIsPending] = useState(false);
   const { data: s } = useSession();
   const mutation = useCreateEnrollmentForOldStudentByCategoryMutation();
 
@@ -41,32 +44,38 @@ const CollegeOldStudent = ({ profile, enrollmentSetup }: IProps) => {
   });
 
   useEffect(() => {
-    form.setValue('studentStatus', profile.studentStatus);
-    form.setValue('studentSemester', enrollmentSetup.enrollmentTertiary.semester);
-    form.setValue('schoolYear', enrollmentSetup.enrollmentTertiary.schoolYear);
-    if (profile.studentSemester === '1st semester') {
-      form.setValue('studentYear', profile.studentYear);
-    } else if (profile.studentSemester === '2nd semester') {
-      switch (profile.studentYear) {
-        case '1st year':
-          form.setValue('studentYear', '2nd year');
-          break;
-        case '2nd year':
-          form.setValue('studentYear', '3rd year');
-          break;
-        case '3rd year':
-          form.setValue('studentYear', '4th year');
-          break;
-        case '4th year':
-          form.setValue('studentYear', '5th year');
-          break;
-        default:
-          break;
+    form.setValue('studentStatus', profile?.studentStatus);
+    form.setValue('studentSemester', enrollmentSetup?.enrollmentTertiary?.semester);
+    form.setValue('schoolYear', enrollmentSetup?.enrollmentTertiary?.schoolYear);
+    form.setValue('studentYear', profile?.studentYear);
+    if (enrollmentSetup?.enrollmentTertiary?.semester.toLowerCase() !== 'summer') {
+      if (profile?.studentSemester === '1st semester') {
+        console.log('2');
+        form.setValue('studentYear', profile?.studentYear);
+      } else if (profile?.studentSemester === '2nd semester' && profile?.studentStatus.toLowerCase() === 'old student') {
+        console.log('3');
+        switch (profile?.studentYear) {
+          case '1st year':
+            form.setValue('studentYear', '2nd year');
+            break;
+          case '2nd year':
+            form.setValue('studentYear', '3rd year');
+            break;
+          case '3rd year':
+            form.setValue('studentYear', '4th year');
+            break;
+          case '4th year':
+            form.setValue('studentYear', '5th year');
+            break;
+          default:
+            break;
+        }
       }
     }
   }, [profile, form, enrollmentSetup]);
 
   const onSubmit: SubmitHandler<z.infer<typeof EnrollmentOldStudentFormValidator>> = async (data) => {
+    setIsPending(true);
     data.studentYear = data.studentYear.toLowerCase();
     data.studentSemester = data.studentSemester.toLowerCase();
     data.schoolYear = data.schoolYear.toLowerCase();
@@ -78,6 +87,7 @@ const CollegeOldStudent = ({ profile, enrollmentSetup }: IProps) => {
 
     mutation.mutate(dataa, {
       onSuccess: (res) => {
+        console.log('res', res)
         switch (res.status) {
           case 200:
           case 201:
@@ -91,9 +101,9 @@ const CollegeOldStudent = ({ profile, enrollmentSetup }: IProps) => {
             return;
         }
       },
-      // onSettled: () => {
-      //   setIsPending(false);
-      // },
+      onSettled: () => {
+        setIsPending(false);
+      },
     });
   };
 
@@ -123,7 +133,8 @@ const CollegeOldStudent = ({ profile, enrollmentSetup }: IProps) => {
                   {/* <SelectInput label='Select year' form={form} name={'studentYear'} selectItems={studentYearData} placeholder='Select year' /> */}
                   {/* <SelectInput label='Select semester' form={form} name={'studentSemester'} selectItems={studentSemesterData} placeholder='Select semester' /> */}
                   <Input label={`Student Status`} type='text' form={form} name={'studentStatus'} disabled={true} />
-                  <Input label={`Select Year`} type='text' form={form} name={'studentYear'} disabled={true} />
+                  {/* <Input label={`Select Year`} type='text' form={form} name={'studentYear'} disabled={false} /> */}
+                  <SelectInput label='Select year' form={form} name={'studentYear'} selectItems={studentYearData} placeholder='Select year' />
                   <Input label={`Select semester`} type='text' form={form} name={'studentSemester'} disabled={true} />
                   <Input label={`School Year`} type='text' form={form} name={'schoolYear'} disabled={true} />
                 </div>
