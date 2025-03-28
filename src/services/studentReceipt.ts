@@ -51,3 +51,12 @@ export const getStudentReceiptByStudentIdAndSchoolYear = async (studentId: any, 
     return [];
   }
 };
+
+export const updateStudentReceiptById = async (id: string, data: any) => {
+  try {
+    const updatedProfile = await StudentReceipt.findByIdAndUpdate(id, { $set: { ...data } }, { new: true });
+    return updatedProfile;
+  } catch (error) {
+    return null;
+  }
+};

@@ -2,11 +2,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
-import { useCreateStudentReceiptMutation } from '@/lib/queries/studentReceipt/create';
 import { Icons } from '@/components/shared/Icons';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { useRefundStudentReceiptMutation } from '@/lib/queries/studentReceipt/refund';
 
 type IProps = {
   enrollment: any;
@@ -16,12 +16,10 @@ type IProps = {
   type: string;
   title: string;
   isScholarshipStart: boolean;
-  regMiscTotal: number;
 };
 
-const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart, regMiscTotal }: IProps) => {
+const RefundPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isScholarshipStart }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [amountPayment, setAmountPayment] = useState(500.0);
   const [amountInput, setAmountInput] = useState(500.0);
   const amountInputRef = useRef(0);
   const [isPending, setIsPending] = useState(false);
@@ -42,47 +40,20 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
     if (!tfData) return;
 
     if (tfData) {
-      let totalAmountToPay = amountToPay;
-      //   setAmountPayment(totalAmountToPay);
-      setAmountInput(totalAmountToPay);
-      if (enrollment?.profileId?.scholarshipId?.amount) {
-        if (Number(balanceGrant) > 0) {
-          if (Number(balanceGrant) <= Number(totalAmountToPay)) setAmountInput(balanceGrant);
-        } else {
-          setAmountInput(totalAmountToPay);
-        }
-      }
     }
-  }, [srData, tfData, enrollment, amountToPay, type, isScholarshipStart, balanceGrant]);
+  }, [srData, tfData, enrollment]);
 
-  const mutation = useCreateStudentReceiptMutation();
+  const mutation = useRefundStudentReceiptMutation();
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    if (amountInput > regMiscTotal) return makeToastError('Down payment cannot exceed to the total of reg misc fee.');
-    if (enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 && Number(balanceGrant) < Number(amountInput)) return makeToastError('Amount exceed on the balance total of scholarship grant amount.');
-    if (Number(amountInput) < 500) return makeToastError('Down payment should atleast greater than 500.');
 
     setIsPending(true);
     const receipt = {
       studentId: enrollment?.profileId?._id,
-      enrollmentId: enrollment?._id,
       category: 'College',
-      amount: {
-        currency_code: 'PHP',
-        value: Number(amountInput).toFixed(2),
-      },
-      status: 'COMPLETED',
-      paymentMethod: 'CASH',
-      createTime: new Date(Date.now()),
-      updateTime: new Date(Date.now()),
-      isPaidByScholarship: enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 ? true : false,
-      taxes: {
-        fee: (0).toFixed(2),
-        fixed: (0).toFixed(2),
-        amount: Number(amountInputRef.current).toFixed(2),
-      },
-      type: type,
-      request: 'record',
+      srData: srData,
+      tFee: tfData,
+      refundAmount: amountToPay,
     };
 
     mutation.mutate(receipt, {
@@ -110,7 +81,7 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
       <AlertDialogTrigger asChild>
         <Button variant={'outline'} size={'sm'} className='select-none focus-visible:ring-0 text-[15px] bg-blue-500 hover:bg-blue-600 text-white tracking-normal font-medium font-poppins'>
           <Icons.Banknote className='h-4 w-4 mr-2' />
-          Pay Down Payment
+          Make Refund Payment
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className='bg-white h-[75%] w-full overflow-y-scroll'>
@@ -132,8 +103,7 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
             {enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 && (
               <div className='mt-5 flex text-sm text-muted-foreground'>
                 <span>
-                  <span className='text-orange-500'>Note:</span> The student has a scholarship grant of <span className='text-green-500'>₱{enrollment?.profileId?.scholarshipId?.amount}</span>. If a payment is processed for the student, the corresponding amount
-                  will be deducted from the total scholarship grant.
+                  <span className='text-orange-500'>Note:</span> Refund is issued in cash to avoid transaction fees and tax deductions from PayPal. The refund has been recorded accordingly in the financial records.
                 </span>
               </div>
             )}
@@ -158,7 +128,7 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
                         </div>
                         <div className='text-sm sm:mt-10 mt-5 w-ful flex flex-col '>
                           <span className='font-bold text-end w-full text-nowrap '>
-                            <span className={`font-bold text-end w-full text-black`}>₱{Number(amountInput).toFixed(2)}</span>
+                            <span className={`font-bold text-end w-full text-black`}>₱{Number(amountToPay).toFixed(2)}</span>
                           </span>
                         </div>
                       </div>
@@ -166,27 +136,7 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
                   </div>
                   <div className='mt-10 w-full'>
                     <form method='post' className='w-full space-y-4'>
-                      <CardContent className='w-full'>
-                        <div className='grid grid-cols-1 gap-4'>
-                          <div className={`relative`}>
-                            <input
-                              type={'text'}
-                              id={'amount'}
-                              className={`uppercase block rounded-xl px-5 pb-2 pt-7 w-full text-sm bg-slate-50 border border-gray-200 appearance-nonefocus:outline-none focus:ring-0 focus:border-gray-400 peer pl-4 align-text-bottom`}
-                              onDragStart={(e) => e.preventDefault()}
-                              value={Number(amountInput).toFixed(2)}
-                              onChange={(e) => setAmountInput(parseFloat(e.target.value) || 0)}
-                              placeholder='0.00'
-                            />
-                            <label
-                              htmlFor={'amount'}
-                              className='text-black absolute cursor-text text-md select-none text-muted-foreground duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] start-4 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5'
-                            >
-                              Amount
-                            </label>
-                          </div>
-                        </div>
-                      </CardContent>
+                      <CardContent className='w-full'></CardContent>
                       <CardFooter className=''>
                         <div className='flex w-full justify-center md:justify-end items-center mt-4'>
                           <Button type='submit' onClick={(e) => onSubmit(e)} variant={'destructive'} disabled={isPending} className='bg-blue-500 hover:bg-blue-700 text-white font-semibold tracking-wide'>
@@ -212,4 +162,4 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
   );
 };
 
-export default DownPayment;
+export default RefundPayment;

@@ -20,9 +20,10 @@ type IProps = {
   type: string;
   title: string;
   isScholarshipStart: Boolean;
+  regMiscTotal: number;
 };
 
-const DownPayment = ({ enrollment, tfData, srData, type, title, isScholarshipStart }: IProps) => {
+const DownPayment = ({ enrollment, tfData, srData, type, title, isScholarshipStart, regMiscTotal }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [amountInput, setAmountInput] = useState(1000.0);
@@ -37,7 +38,7 @@ const DownPayment = ({ enrollment, tfData, srData, type, title, isScholarshipSta
   }, [srData, tfData, enrollment]);
 
   let totalAmountToPay = amountInput;
-  amountInputRef.current = amountInput
+  amountInputRef.current = amountInput;
   const fee = Number(totalAmountToPay) * 0.039;
   totalTransactionFee.current = parseFloat(fee.toFixed(2));
   const totalPayment = Number(totalAmountToPay) + Number(fee) + 15;
@@ -48,6 +49,7 @@ const DownPayment = ({ enrollment, tfData, srData, type, title, isScholarshipSta
   };
 
   const createOrder = (data: any, actions: any) => {
+    if (amountInput > regMiscTotal) return makeToastError('Down payment cannot exceed to the total of reg misc fee.');
     if (Number(amountInput) < Number(tfData.downPayment)) return makeToastError(`Down payment should atleast greater than ${tfData.downPayment}.`);
     setIsPending(true);
     paymentMethod.current = data.paymentSource;
@@ -59,7 +61,7 @@ const DownPayment = ({ enrollment, tfData, srData, type, title, isScholarshipSta
         {
           description: 'e2e2a order-1234',
           amount: {
-            currency_code: 'USD',
+            currency_code: 'PHP',
             value: formattedAmount(payment),
           },
         },
@@ -218,7 +220,7 @@ const DownPayment = ({ enrollment, tfData, srData, type, title, isScholarshipSta
                       <PayPalScriptProvider
                         options={{
                           clientId: `${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string}`,
-                          currency: 'USD',
+                          currency: 'PHP',
                           // vault: true,
                           intent: 'capture',
                         }}
