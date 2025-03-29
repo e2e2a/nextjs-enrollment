@@ -19,7 +19,7 @@ const checkPaymentInDownPaymentExceed = async (user: any, student: any, data: an
         value: data?.amount?.value,
       },
     };
-
+    console.log('isScholarship', data.isPaidByScholarship)
     const data2 = {
       year: studentEnrollment.studentYear,
       semester: studentEnrollment.studentSemester,
