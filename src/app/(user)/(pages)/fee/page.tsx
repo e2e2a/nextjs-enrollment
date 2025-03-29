@@ -217,7 +217,7 @@ const Page = () => {
         const totalOfNew = ccFormatted;
 
         if (tfData?.tFee?.regOrMiscWithOldAndNew) {
-          if (data?.enrollment?.studentStatus.toLowerCase() === 'new student' || data?.enrollment?.studentStatus.toLowerCase() === 'transfer student') {
+          if (data?.enrollment?.studentStatus.toLowerCase() === 'new student' || data?.enrollment?.studentStatus.toLowerCase() === 'transfer student' || data?.enrollment?.studentStatus.toLowerCase() === 'transferee') {
             setRegMiscTotal(totalOfNew);
             RegMiscTotal = totalOfNew;
           } else {

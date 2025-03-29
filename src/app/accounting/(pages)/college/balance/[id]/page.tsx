@@ -156,7 +156,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   // Insurance Payment
   const paymentOfInsurance = srData?.studentReceipt
-    ?.filter((r: any) => r.type.toLowerCase() === 'insurance' && r.year.toLowerCase() === data?.enrollment?.studentYear.toLowerCase() && r.year.toLowerCase())
+    ?.filter((r: any) => r.type.toLowerCase() === 'insurance' && r.year?.toLowerCase() === data?.enrollment?.studentYear?.toLowerCase() && r.year?.toLowerCase())
     ?.reduce((total: number, payment: any) => {
       return total + (Number(payment?.taxes?.amount) || 0);
     }, 0);
@@ -254,7 +254,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         let RegMiscTotal = a;
         const totalOfNew = ccFormatted;
         if (tfData?.tFee?.regOrMiscWithOldAndNew) {
-          if (data?.enrollment?.studentStatus.toLowerCase() === 'new student' || data?.enrollment?.studentStatus.toLowerCase() === 'transfer student') {
+          if (data?.enrollment?.studentStatus.toLowerCase() === 'new student' || data?.enrollment?.studentStatus.toLowerCase() === 'transfer student' || data?.enrollment?.studentStatus.toLowerCase() === 'transferee') {
             setRegMiscTotal(totalOfNew);
             RegMiscTotal = totalOfNew;
           } else {
