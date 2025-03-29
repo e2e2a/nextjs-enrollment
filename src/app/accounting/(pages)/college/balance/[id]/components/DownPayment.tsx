@@ -26,7 +26,7 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
   const amountInputRef = useRef(0);
   const [isPending, setIsPending] = useState(false);
   const [displayPayment, setDisplayPayment] = useState(true);
-  console.log('regMiscTotal', regMiscTotal)
+
   //to be deducted amount of scholarship payment
   const isPaidByScholarship = srData
     ?.filter((r: any) => r.isPaidByScholarship)
@@ -74,7 +74,7 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
       paymentMethod: 'CASH',
       createTime: new Date(Date.now()),
       updateTime: new Date(Date.now()),
-      isPaidByScholarship: enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 ? true : false,
+      isPaidByScholarship: isPaidByScholarship && enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 ? true : false,
       taxes: {
         fee: (0).toFixed(2),
         fixed: (0).toFixed(2),
