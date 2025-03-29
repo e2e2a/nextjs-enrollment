@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ApiError, Client, Environment, LogLevel, OrdersController } from '@paypal/paypal-server-sdk';
 import { handleAccountingRole } from './helpers/cash';
 import { getEnrollmentRecordById, getEnrollmentRecordByProfileId } from '@/services/enrollmentRecord';
-import { getCourseFeeByCourseId } from '@/services/courseFee';
+import { getCourseFeeByCourseIdAndYear } from '@/services/courseFee';
 import { getCourseByCourseCode } from '@/services/course';
 import { getCourseFeeByCourseCodeAndYearAndSemester, getCourseFeeRecordByCourse, getCourseFeeRecordByCourseCode } from '@/services/courseFeeRecord';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
@@ -51,7 +51,7 @@ const checkRole = async (user: any, data: any, setup: any) => {
 
     let cFee = null;
     const course = await getCourseByCourseCode(studentEnrollment.courseCode);
-    cFee = await getCourseFeeByCourseId(studentEnrollment?.courseId?._id);
+    cFee = await getCourseFeeByCourseIdAndYear(studentEnrollment?.studentYear, studentEnrollment?.courseId?._id);
     if (data.request === 'record') {
       cFee = await getCourseFeeByCourseCodeAndYearAndSemester(studentEnrollment.studentYear, studentEnrollment.studentSemester, course?.courseCode);
     }
