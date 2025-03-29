@@ -859,7 +859,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                           </div>
                           {!data?.enrollment?.profileId?.scholarshipId?.amount && !isScholarshipStart && Number(total) > Number(totalCurrent) && (
                             <>
-                              {srData && srData?.previousBalance?.length > 0 && (
+                              {srData && srData?.previousBalance?.length > 0 && srData?.overAllBalance > 0 && (
                                 <>
                                   <div className='grid grid-cols-1 sm:px-36 px-5'>
                                     {srData?.previousBalance.map((balance: any, index: number) => (
