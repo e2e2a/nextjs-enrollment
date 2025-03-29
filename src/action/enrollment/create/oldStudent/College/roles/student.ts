@@ -121,7 +121,7 @@ const getTotalOfBalance = async (enrollment: any, studentReceipt: any) => {
 
     let RegMiscTotal = 0;
     if (tFee?.regOrMiscWithOldAndNew) {
-      if (enrollment?.studentStatus.toLowerCase() === 'new student' || enrollment?.studentStatus.toLowerCase() === 'transfer student') {
+      if (enrollment?.studentStatus.toLowerCase() === 'new student' || enrollment?.studentStatus.toLowerCase() === 'transfer student' || enrollment?.studentStatus.toLowerCase() === 'transferee') {
         RegMiscTotal = regMiscNewTotal;
       } else {
         RegMiscTotal = regMiscTotal;

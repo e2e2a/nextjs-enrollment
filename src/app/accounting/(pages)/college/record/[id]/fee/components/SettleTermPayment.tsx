@@ -87,7 +87,9 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
       createTime: new Date(Date.now()),
       updateTime: new Date(Date.now()),
       isPaidByScholarship:
-        type.toLowerCase() !== 'insurance' && type.toLowerCase() !== 'departmental' && type.toLowerCase() !== 'ssg' && type.toLowerCase() !== 'passbook' && enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 ? true : false,
+        type.toLowerCase() !== 'insurance' && type.toLowerCase() !== 'departmental' && type.toLowerCase() !== 'ssg' && type.toLowerCase() !== 'passbook' && isScholarshipStart && enrollment?.proifleId?.scholarshipId?.amount && Number(balanceGrant) > 0
+          ? true
+          : false,
       taxes: {
         fee: (0).toFixed(2),
         fixed: (0).toFixed(2),
@@ -117,6 +119,8 @@ const SettleTermPayment = ({ enrollment, tfData, srData, amountToPay, type, titl
     });
   };
 
+  console.log('asd1', type.toLowerCase() !== 'insurance' && type.toLowerCase() !== 'departmental' && type.toLowerCase() !== 'ssg' && type.toLowerCase() !== 'passbook' && isScholarshipStart && enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0);
+  console.log('asd2', type.toLowerCase() !== 'insurance' && type.toLowerCase() !== 'departmental' && type.toLowerCase() !== 'ssg' && type.toLowerCase() !== 'passbook' && enrollment?.proifleId?.scholarshipId?.amount && Number(balanceGrant) > 0 ? true : false);
   return (
     <AlertDialog open={isOpen} onOpenChange={(e) => setIsOpen(e)}>
       <AlertDialogTrigger asChild>
