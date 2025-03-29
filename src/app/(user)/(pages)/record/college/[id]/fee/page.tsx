@@ -41,8 +41,8 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data: srData, error: srError } = useStudentReceiptQueryByUserIdAndYearAndSemester(session?.user.id as string, data?.enrollmentRecord?.studentYear, data?.enrollmentRecord?.studentSemester, data?.enrollmentRecord?.schoolYear);
 
   const haveEnrollmentYearSemester =
-    (data?.latestEnrollment.year === data?.enrollmentRecord?.studentYear.toLowerCase() && data?.latestEnrollment?.semester.toLowerCase() !== data?.enrollmentRecord?.studentSemester.toLowerCase()) ||
-    (data?.latestEnrollment.semester === data?.enrollmentRecord?.studentSemester.toLowerCase() && data?.latestEnrollment?.year.toLowerCase() !== data?.enrollmentRecord?.studentYear.toLowerCase());
+    (data?.latestEnrollment.year === data?.enrollmentRecord?.studentYear?.toLowerCase() && data?.latestEnrollment?.semester?.toLowerCase() !== data?.enrollmentRecord?.studentSemester?.toLowerCase()) ||
+    (data?.latestEnrollment.semester === data?.enrollmentRecord?.studentSemester?.toLowerCase() && data?.latestEnrollment?.year?.toLowerCase() !== data?.enrollmentRecord?.studentYear?.toLowerCase());
   const haveLatestEnrollment = !enrollmentData?.enrollment && haveEnrollmentYearSemester;
 
   //to be deducted amount of scholarship payment
@@ -226,7 +226,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         const totalOfNew = ccFormatted;
 
         if (tfData?.tFee?.regOrMiscWithOldAndNew) {
-          if (data?.enrollmentRecord?.studentStatus.toLowerCase() === 'new student' || data?.enrollmentRecord?.studentStatus.toLowerCase() === 'transfer student') {
+          if (data?.enrollmentRecord?.studentStatus.toLowerCase() === 'new student' || data?.enrollmentRecord?.studentStatus.toLowerCase() === 'transfer student' || data?.enrollmentRecord?.studentStatus.toLowerCase() === 'transferee') {
             setRegMiscTotal(totalOfNew);
             RegMiscTotal = totalOfNew;
           } else {

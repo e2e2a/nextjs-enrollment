@@ -54,8 +54,8 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const isWithdrawn = data?.enrollmentRecord?.enrollStatus?.toLowerCase() === 'withdraw';
   const haveEnrollmentYearSemester =
-    (data?.latestEnrollment.year === data?.enrollmentRecord?.studentYear.toLowerCase() && data?.latestEnrollment?.semester.toLowerCase() !== data?.enrollmentRecord?.studentSemester.toLowerCase()) ||
-    (data?.latestEnrollment.semester === data?.enrollmentRecord?.studentSemester.toLowerCase() && data?.latestEnrollment?.year.toLowerCase() !== data?.enrollmentRecord?.studentYear.toLowerCase());
+    (data?.latestEnrollment.year === data?.enrollmentRecord?.studentYear?.toLowerCase() && data?.latestEnrollment?.semester?.toLowerCase() !== data?.enrollmentRecord?.studentSemester?.toLowerCase()) ||
+    (data?.latestEnrollment.semester === data?.enrollmentRecord?.studentSemester?.toLowerCase() && data?.latestEnrollment?.year?.toLowerCase() !== data?.enrollmentRecord?.studentYear?.toLowerCase());
   const haveLatestEnrollment = !enrollmentData?.enrollment && haveEnrollmentYearSemester;
 
   //full payment exclude all terms payment and downpayment
@@ -272,7 +272,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         const totalOfNew = ccFormatted;
 
         if (tfData?.tFee?.regOrMiscWithOldAndNew) {
-          if (data?.enrollmentRecord?.studentStatus.toLowerCase() === 'new student' || data?.enrollmentRecord?.studentStatus.toLowerCase() === 'transfer student') {
+          if (data?.enrollmentRecord?.studentStatus.toLowerCase() === 'new student' || data?.enrollmentRecord?.studentStatus.toLowerCase() === 'transfer student' || data?.enrollmentRecord?.studentStatus.toLowerCase() === 'transferee') {
             setRegMiscTotal(totalOfNew);
             RegMiscTotal = totalOfNew;
           } else {
@@ -571,7 +571,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                     </>
                                   )}
                                   <DownPayment
-                                    enrollment={data?.enrollment}
+                                    enrollment={data?.enrollmentRecord}
                                     tfData={tfData?.tFee}
                                     srData={srData?.studentReceipt}
                                     amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
@@ -611,7 +611,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                     </>
                                   )}
                                   <DownPayment
-                                    enrollment={data?.enrollment}
+                                    enrollment={data?.enrollmentRecord}
                                     tfData={tfData?.tFee}
                                     srData={srData?.studentReceipt || []}
                                     amountToPay={Number(tfData?.tFee?.downPayment).toFixed(2)}
@@ -657,7 +657,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   <span className='text-red'>
                                     Warning: <span className='text-muted-foreground'> Student has an outstanding balance from a previous enrollment that still needs to be paid.</span>
                                   </span>
-                                  {srData.previousBalance.map((balance: any, index: number) => (
+                                  {srData?.previousBalance.map((balance: any, index: number) => (
                                     <div key={index} className='grid grid-cols-1 xs:grid-cols-3 mt-5 xs:mt-0 text-start gap-x-5 w-full'>
                                       <span className='font-medium flex flex-col'>
                                         Outstanding Balance
@@ -930,7 +930,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                               {srData && srData?.previousBalance?.length > 0 && (
                                 <>
                                   <div className='grid grid-cols-1 sm:px-36 px-5'>
-                                    {srData.previousBalance.map((balance: any, index: number) => (
+                                    {srData?.previousBalance.map((balance: any, index: number) => (
                                       <div key={index} className='flex justify-between'>
                                         <span className='font-medium'>
                                           Outstanding Balance
