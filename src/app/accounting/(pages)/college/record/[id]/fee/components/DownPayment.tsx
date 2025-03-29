@@ -75,7 +75,7 @@ const DownPayment = ({ enrollment, tfData, srData, amountToPay, type, title, isS
       paymentMethod: 'CASH',
       createTime: new Date(Date.now()),
       updateTime: new Date(Date.now()),
-      isPaidByScholarship: enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 ? true : false,
+      isPaidByScholarship: isPaidByScholarship && enrollment?.profileId?.scholarshipId?.amount && Number(balanceGrant) > 0 ? true : false,
       taxes: {
         fee: (0).toFixed(2),
         fixed: (0).toFixed(2),
