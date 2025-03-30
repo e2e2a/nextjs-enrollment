@@ -30,6 +30,9 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data: tfData, error: isTFError } = useTuitionFeeQueryById(params.id);
   const { data: cData, error } = useCourseQueryByCategory('College');
 
+  const cFormatted = parseFloat(tfData?.tFee?.regOrMisc.reduce((acc: number, tFee: any) => acc + Number(tFee.amount), 0).toFixed(2));
+  const ccFormatted = parseFloat(tfData?.tFee?.regOrMiscNew?.reduce((acc: number, tFee: any) => acc + Number(tFee.amount), 0).toFixed(2));
+
   useEffect(() => {
     if (error || !cData) return;
     if (isTFError || !tfData) return;
@@ -215,15 +218,21 @@ const Page = ({ params }: { params: { id: string } }) => {
                       </Button>
                     </div>
                   )}
-                  <div className='w-full'>
+                  <div className='w-full mb-4'>
                     {regOrMiscWithOldAndNew && <span className='text-sm font-bold ml-7 uppercase'>Old Student</span>}
                     <RegOrMisc isNotEditable={isNotEditable} regMiscRows={regMiscRows} setRegMiscRows={setRegMiscRows} />
+                    <div className='px-6'>
+                      <span className='text-sm font-bold uppercase flex justify-between items-center w-full'>Total: {Number(cFormatted).toFixed(2)}</span>
+                    </div>
                   </div>
-                  {}
+
                   {regOrMiscWithOldAndNew ? (
-                    <div className='w-full'>
+                    <div className='w-full mb-4'>
                       {regOrMiscWithOldAndNew && <span className='text-sm font-bold ml-7 uppercase'>New Student</span>}
                       <RegOrMisc isNotEditable={isNotEditable} regMiscRows={regMiscRowsNew} setRegMiscRows={setRegMiscRowsNew} />
+                      <div className='px-6'>
+                        <span className='text-sm font-bold uppercase flex justify-between items-center w-full'>Total: {Number(ccFormatted).toFixed(2)}</span>
+                      </div>
                     </div>
                   ) : null}
                 </div>

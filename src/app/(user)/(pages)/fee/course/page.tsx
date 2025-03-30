@@ -15,6 +15,8 @@ const Page = () => {
   const { data: eData, error: eError } = useEnrollmentQueryBySessionId(s?.user?.id as string);
   const { data: tfData, error: isTFError } = useCourseFeeQueryByCourseIdAndYear(eData?.enrollment?.profileId?.studentYear, eData?.enrollment?.courseId?._id);
 
+  const cFormatted = parseFloat(regMisc.reduce((acc: number, tFee: any) => acc + Number(tFee.amount), 0).toFixed(2));
+
   useEffect(() => {
     if (isTFError || !tfData) return;
     if (eError || !eData) return;
@@ -103,6 +105,10 @@ const Page = () => {
                         <TableCell className='px-4 py-2'>₱{Number(row?.amount).toFixed(2)}</TableCell>
                       </TableRow>
                     ))}
+                    <TableRow>
+                      <TableCell className='px-4 py-2'>Total</TableCell>
+                      <TableCell className='px-4 py-2'>₱{Number(cFormatted).toFixed(2)}</TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </div>
