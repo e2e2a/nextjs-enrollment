@@ -13,7 +13,7 @@ const Page = () => {
   const [regMisc, setRegMisc] = useState([]);
   const { data: s } = useSession();
   const { data: eData, error: eError } = useEnrollmentQueryBySessionId(s?.user?.id as string);
-  const { data: tfData, error: isTFError } = useCourseFeeQueryByCourseIdAndYear(eData?.enrollment?.profileId?.studentYear, eData?.enrollment?.courseId?._id);
+  const { data: tfData, error: isTFError } = useCourseFeeQueryByCourseIdAndYear(eData?.enrollment?.studentYear, eData?.enrollment?.courseId?._id);
 
   const cFormatted = parseFloat(regMisc.reduce((acc: number, tFee: any) => acc + Number(tFee.amount), 0).toFixed(2));
 
@@ -21,10 +21,12 @@ const Page = () => {
     if (isTFError || !tfData) return;
     if (eError || !eData) return;
 
+    console.log('eData', eData);
+    console.log('tfData', tfData);
     if (eData && tfData) {
       if (eData.enrollment && tfData.tFee) {
         if (tfData?.tFee?.regOrMiscWithOldAndNew) {
-          if (eData?.enrollment?.studentStatus.toLowerCase() === 'new student' || eData.enrollment.studentStatus.toLowerCase() === 'transfer student') {
+          if (eData?.enrollment?.studentStatus?.toLowerCase() === 'new student' || eData?.enrollment?.studentStatus?.toLowerCase() === 'transfer student' || eData?.enrollment?.studentStatus?.toLowerCase() === 'transferee') {
             setRegMisc(tfData?.tFee?.regOrMiscNew);
           } else {
             setRegMisc(tfData?.tFee?.regOrMisc);
