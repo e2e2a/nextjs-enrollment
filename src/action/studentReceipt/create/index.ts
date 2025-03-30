@@ -88,7 +88,7 @@ const checkRole = async (user: any, data: any, setup: any) => {
     const downPayment = Number(paymentOfDownPayment) >= 500;
 
     const updateData = { payment: true, step: 6 };
-    if (studentEnrollment.step === 5 && downPayment) await updateEnrollmentById(studentEnrollment._id, updateData);
+    if (studentEnrollment.step >= 5) await updateEnrollmentById(studentEnrollment._id, updateData);
 
     return b;
   });
