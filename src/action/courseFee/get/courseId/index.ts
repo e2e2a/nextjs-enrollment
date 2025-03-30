@@ -11,8 +11,6 @@ import { getCourseFeeByCourseIdAndYear } from '@/services/courseFee';
 export const getCourseFeeByCourseIdAndYearAction = async (year: string, courseId: string) => {
   return tryCatch(async () => {
     await dbConnect();
-    console.log('year', year)
-    console.log('courseId', courseId)
     const tFee = await getCourseFeeByCourseIdAndYear(year, courseId);
 
     return { tFee: JSON.parse(JSON.stringify(tFee)), status: 200 };
