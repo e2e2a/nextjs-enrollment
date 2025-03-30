@@ -21,8 +21,6 @@ const Page = () => {
     if (isTFError || !tfData) return;
     if (eError || !eData) return;
 
-    console.log('eData', eData);
-    console.log('tfData', tfData);
     if (eData && tfData) {
       if (eData.enrollment && tfData.tFee) {
         if (tfData?.tFee?.regOrMiscWithOldAndNew) {
