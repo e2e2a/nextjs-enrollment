@@ -30,7 +30,7 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ cell, row }) => {
       const user = row.original.profileId;
 
-      const formattedName = `${user?.lastname ? user.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user.extensionName + '.' : ''}`
+      const formattedName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/(\S),/g, '$1,')
         .replace(/,(\S)/g, ', $1')
@@ -45,7 +45,7 @@ export const columns: ColumnDef<any>[] = [
 
     accessorFn: (row) => {
       const user = row.profileId;
-      return `${user?.lastname ? user.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user.extensionName + '.' : ''}`
+      return `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
         .replace(/\s+/g, ' ')
@@ -56,7 +56,7 @@ export const columns: ColumnDef<any>[] = [
     filterFn: (row, columnId, filterValue) => {
       const user = row.original.profileId;
 
-      const formattedFullName = `${user?.lastname ? user.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user.extensionName + '.' : ''}`
+      const formattedFullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
         .replace(/\s+/g, ' ')

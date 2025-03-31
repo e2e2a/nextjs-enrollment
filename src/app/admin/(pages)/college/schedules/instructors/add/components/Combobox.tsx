@@ -22,7 +22,7 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
   const getFullName = (item: any) => {
-    return item.extensionName ? `${item?.firstname ?? ''} ${item?.middlename ?? ''} ${item.lastname ?? ''} ${item?.extensionName ?? ''}` : `${item?.firstname ?? ''} ${item?.middlename ?? ''} ${item?.lastname ?? ''}`;
+    return item?.extensionName ? `${item?.firstname ?? ''} ${item?.middlename ?? ''} ${item?.lastname ?? ''} ${item?.extensionName ?? ''}` : `${item?.firstname ?? ''} ${item?.middlename ?? ''} ${item?.lastname ?? ''}`;
   };
   return (
     <FormField
@@ -39,7 +39,7 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
                       ? (() => {
                           const selectedItem = selectItems.find((item: any) => getFullName(item) === field.value);
                           if (selectedItem) {
-                            const fullName = selectedItem.extensionName
+                            const fullName = selectedItem?.extensionName
                               ? `${selectedItem?.firstname ?? ''} ${selectedItem?.middlename ?? ''} ${selectedItem?.lastname} ${selectedItem?.extensionName ?? ''}`
                               : `${selectedItem?.firstname ?? ''} ${selectedItem?.middlename ?? ''} ${selectedItem?.lastname ?? ''}`;
                             return `${fullName}`;
@@ -57,7 +57,7 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
                       <CommandEmpty>No Instructors found.</CommandEmpty>
                       <CommandGroup className='w-full'>
                         {selectItems.map((item: any, index: any) => {
-                          const fullName = item.extensionName ? `${item.firstname ?? ''} ${item.middlename ?? ''} ${item.lastname ?? ''} ${item.extensionName ?? ''}` : `${item.firstname ?? ''} ${item.middlename ?? ''} ${item.lastname ?? ''}`;
+                          const fullName = item?.extensionName ? `${item?.firstname ?? ''} ${item?.middlename ?? ''} ${item?.lastname ?? ''} ${item?.extensionName ?? ''}` : `${item?.firstname ?? ''} ${item?.middlename ?? ''} ${item?.lastname ?? ''}`;
                           return (
                             <CommandItem
                               key={index}
@@ -66,10 +66,10 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
                               onSelect={(currentValue) => {
                                 setValue(currentValue === value ? '' : currentValue);
                                 if (setTeacherId) {
-                                  setTeacherId(item._id);
+                                  setTeacherId(item?._id);
                                 }
                                 if (setRole) {
-                                  setRole(item.userId.role);
+                                  setRole(item?.userId?.role);
                                 }
                                 field.onChange(currentValue);
                                 setOpen(false);
@@ -78,15 +78,15 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
                               <Check className={cn('mr-2 h-4 w-4', field.value === getFullName(item) ? 'opacity-100' : 'opacity-0')} />
                               <div className='flex gap-2 items-center'>
                                 <div className=''>
-                                  <Image className='h-9 w-9' src={item.imageUrl ? item.imageUrl : '/icons/profile-placeholder.svg'} alt={item.firstname} width={10} height={10} />
+                                  <Image className='h-9 w-9' src={item?.imageUrl ? item?.imageUrl : '/icons/profile-placeholder.svg'} alt={item?.firstname} width={10} height={10} />
                                 </div>
                                 <div className='flex flex-col capitalize'>
-                                  {item.extensionName ? `${item.firstname ?? ''} ${item.middlename ?? ''} ${item.lastname ?? ''} ${item.extensionName ?? ''}` : `${item.firstname ?? ''} ${item.middlename ?? ''} ${item.lastname ?? ''}`}
+                                  {item?.extensionName ? `${item?.firstname ?? ''} ${item?.middlename ?? ''} ${item?.lastname ?? ''} ${item?.extensionName ?? ''}` : `${item?.firstname ?? ''} ${item?.middlename ?? ''} ${item?.lastname ?? ''}`}
                                   <div className=''>
-                                    <span>Age: {item.age}</span>
+                                    <span>Age: {item?.age}</span>
                                   </div>
                                   <div className=''>
-                                    <span>Role: {item.userId.role}</span>
+                                    <span>Role: {item?.userId?.role}</span>
                                   </div>
                                 </div>
                               </div>

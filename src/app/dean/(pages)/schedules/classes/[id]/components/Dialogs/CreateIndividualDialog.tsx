@@ -39,7 +39,7 @@ const CreateIndividualDialog = ({ teacher, data }: IProps) => {
   });
   //   useEffect(() => {
   //     const initialGrades = data.map((s: any) => ({
-  //       profileId: s.profileId._id,
+  //       profileId: s.profileId?._id,
   //       grade: s.grade,
   //       error: false, // for error messages
   //     }));

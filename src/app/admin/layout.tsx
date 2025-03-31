@@ -14,7 +14,7 @@ const AdminRootLayout = async ({ children }: { children: ReactNode }) => {
     return redirect('/sign-in');
   }
 
-  // if (sessionData && !sessionData.user.profileVerified) {
+  // if (sessionData && !sessionData.user?.profileVerified) {
   //   return redirect('/profile');
   // }
 

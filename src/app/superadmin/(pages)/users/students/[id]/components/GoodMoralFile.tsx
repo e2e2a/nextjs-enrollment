@@ -14,7 +14,7 @@ const GoodMoralFile = ({ user }: { user: any }) => {
 
   useEffect(() => {
     const fetchFileUrl = async () => {
-      if (navigator.onLine && user && user.goodMoralUrl) {
+      if (navigator.onLine && user && user?.goodMoralUrl) {
         const filePath = `enrollment/goodMoral/${user?._id}/${user?.goodMoralUrl}`;
         // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
         const fileRef = ref(storage, filePath);
@@ -37,7 +37,7 @@ const GoodMoralFile = ({ user }: { user: any }) => {
 
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `${user?.firstname ?? ''} ${user?.middlename && user?.middlename[0] + '.'} ${user?.lastname ?? ''} ${user?.extensionName ? user.extensionName : ''}.png`);
+        link.setAttribute('download', `${user?.firstname ?? ''} ${user?.middlename && user?.middlename[0] + '.'} ${user?.lastname ?? ''} ${user?.extensionName ? user?.extensionName : ''}.png`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -67,7 +67,7 @@ const GoodMoralFile = ({ user }: { user: any }) => {
                       <span className='font-medium sm:text-lg text-xs'>
                         Student:{' '}
                         <span className=' capitalize sm:text-lg text-xs'>
-                          {user?.firstname ?? ''} {user?.middlename && user?.middlename[0] + '.'} {user?.lastname ?? ''} {user?.extensionName ? user.extensionName + '.' : ''}
+                          {user?.firstname ?? ''} {user?.middlename && user?.middlename[0] + '.'} {user?.lastname ?? ''} {user?.extensionName ? user?.extensionName + '.' : ''}
                         </span>
                       </span>
                     </div>

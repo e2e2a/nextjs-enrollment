@@ -53,7 +53,7 @@ const Page = () => {
     if (!tData || !dData || !rData || !sData) return;
     if (rData && tData && sData) {
       if (rData.rooms) {
-        const filteredRooms = rData.rooms.filter((room: any) => room.educationLevel === 'tertiary');
+        const filteredRooms = rData.rooms.filter((room: any) => room?.educationLevel === 'tertiary');
         setRooms(filteredRooms);
       }
       if (tData && tData.profiles) {

@@ -29,7 +29,7 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
 
   useEffect(() => {
     const initialGrades = reportGrades.reportedGrade.map((s: any) => ({
-      profileId: s.profileId._id,
+      profileId: s.profileId?._id,
       grade: s.grade,
       error: false, // for error messages
     }));
@@ -207,12 +207,12 @@ const ViewDialog = ({ teacher, data, type, reportGrades }: IProps) => {
                     <tr key={index}>
                       <td className='px-6 py-4 whitespace-nowrap'>{index + 1}</td>
                       <td className='px-6 py-4 whitespace-nowrap capitalize'>
-                        {s?.profileId.firstname ?? ''} {s.profileId?.middlename ?? ''} {s?.profileId?.lastname ?? ''} {s?.profileId?.extensionName ? s.profileId?.extensionName + '.' : ''}
+                        {s?.profileId?.firstname ?? ''} {s.profileId?.middlename ?? ''} {s?.profileId?.lastname ?? ''} {s?.profileId?.extensionName ? s.profileId?.extensionName + '.' : ''}
                       </td>
                       <td className='px-6 py-4 whitespace-nowrap'>{reportGrades?.teacherScheduleId?.courseId?.courseCode}</td>
                       <td className='px-6 py-4 whitespace-nowrap'>{s?.profileId?.sex}</td>
                       <td className='px-6 py-4 whitespace-nowrap flex flex-col justify-center items-center w-full'>
-                        {isDisabled ? s.grade : <Input className='w-20 text-sm text-center border-2 border-blue-400' onChange={(e) => handleGradeChange(index, s.profileId._id, e.target.value)} placeholder='' value={grades[index]?.grade} />}
+                        {isDisabled ? s.grade : <Input className='w-20 text-sm text-center border-2 border-blue-400' onChange={(e) => handleGradeChange(index, s.profileId?._id, e.target.value)} placeholder='' value={grades[index]?.grade} />}
                         <div className=''>{grades && grades[index]?.error && <p className='text-xs text-red'>Only Number/INC are allowed</p>}</div>
                       </td>
                     </tr>

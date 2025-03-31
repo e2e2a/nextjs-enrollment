@@ -24,7 +24,7 @@ const ProfilePage = ({ params }: { params: { id: string } }) => {
 
     if (res) {
       if (res.profile) {
-        if (res.profile.userId.role !== 'ACCOUNTING') setIsError(true);
+        if (res.profile?.userId?.role !== 'ACCOUNTING') setIsError(true);
         setIsPageLoading(false);
       } else if (res.error) {
         setIsError(true);

@@ -48,7 +48,7 @@ export const columns: ColumnDef<any>[] = [
         </div>
       );
     },
-    accessorFn: (row) => `${row.teacherScheduleId.subjectId?.name}`,
+    accessorFn: (row) => `${row.teacherScheduleId?.subjectId?.name}`,
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
       const descriptiveTitle = `${user?.teacherScheduleId?.subjectId?.name}`.toLowerCase();
@@ -186,8 +186,8 @@ export const columns: ColumnDef<any>[] = [
         .trim();
       return (
         <div key={cell.id} className='capitalize'>
-          {user.deanId && <span>{deanName}</span>}
-          {user.profileId && <span>{instructorName}</span>}
+          {user?.deanId && <span>{deanName}</span>}
+          {user?.profileId && <span>{instructorName}</span>}
         </div>
       );
     },
@@ -219,8 +219,8 @@ export const columns: ColumnDef<any>[] = [
           .trim();
       };
 
-      const instructorName = user.profileId ? formatNameForSearch(user.profileId) : '';
-      const deanName = user.deanId ? formatNameForSearch(user.deanId) : '';
+      const instructorName = user?.profileId ? formatNameForSearch(user?.profileId) : '';
+      const deanName = user?.deanId ? formatNameForSearch(user?.deanId) : '';
 
       return instructorName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },

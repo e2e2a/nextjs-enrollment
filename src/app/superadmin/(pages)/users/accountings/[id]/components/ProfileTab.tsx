@@ -55,7 +55,7 @@ const ProfileTab = ({ profile }: IProps) => {
 
     const dataa = {
       ...data,
-      userId: profile.userId._id,
+      userId: profile?.userId?._id,
     };
     
     mutation.mutate(dataa, {

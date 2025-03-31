@@ -63,14 +63,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='justify-between items-center flex w-full'>
                     <span className='text-sm sm:text-[17px] font-bold'>
-                      Descriptive Title: <span className='font-normal'>{data?.reportedGrades?.teacherScheduleId.subjectId?.name}</span>
+                      Descriptive Title: <span className='font-normal'>{data?.reportedGrades?.teacherScheduleId?.subjectId?.name}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Time:{' '}
                       <span className='font-normal'>
-                        {data.reportedGrades.teacherScheduleId.startTime} - {data?.reportedGrades?.teacherScheduleId?.endTime}
+                        {data.reportedGrades?.teacherScheduleId?.startTime} - {data?.reportedGrades?.teacherScheduleId?.endTime}
                       </span>
                     </span>
                   </div>
@@ -89,7 +89,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Year:{' '}
                       <span className='font-normal'>
-                        {data?.reportedGrades.teacherScheduleId?.blockTypeId?.year} - {data?.reportedGrades?.teacherScheduleId?.blockTypeId?.semester}
+                        {data?.reportedGrades?.teacherScheduleId?.blockTypeId?.year} - {data?.reportedGrades?.teacherScheduleId?.blockTypeId?.semester}
                       </span>
                     </span>
                   </div>
@@ -101,7 +101,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <div className='flex w-full justify-start'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Request Type:
-                      <span className='font-normal'>{data.reportedGrades.requestType}</span>
+                      <span className='font-normal'>{data.reportedGrades?.requestType}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
@@ -109,10 +109,10 @@ const Page = ({ params }: { params: { id: string } }) => {
                       Type:
                       <span className='font-normal'>
                         {' '}
-                        {data.reportedGrades.type === 'firstGrade' && 'Prelim'}
-                        {data.reportedGrades.type === 'secondGrade' && 'Midterm'}
-                        {data.reportedGrades.type === 'thirdGrade' && 'Semi-final'}
-                        {data.reportedGrades.type === 'fourthGrade' && 'Final'}
+                        {data.reportedGrades?.type === 'firstGrade' && 'Prelim'}
+                        {data.reportedGrades?.type === 'secondGrade' && 'Midterm'}
+                        {data.reportedGrades?.type === 'thirdGrade' && 'Semi-final'}
+                        {data.reportedGrades?.type === 'fourthGrade' && 'Final'}
                         {''} Grade
                       </span>
                     </span>
@@ -134,7 +134,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <EvaluationButton user={data.reportedGrades} />
                 </div>
               </div>
-              <DataTable columns={columns} data={data.reportedGrades.reportedGrade as any[]} />
+              <DataTable columns={columns} data={data.reportedGrades?.reportedGrade as any[]} />
             </div>
           )}
         </div>

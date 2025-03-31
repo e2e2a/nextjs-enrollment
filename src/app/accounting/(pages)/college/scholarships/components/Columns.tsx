@@ -28,7 +28,7 @@ export const columns: ColumnDef<any>[] = [
       return `${name}`;
     },
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.courseId.name}`.toLowerCase();
+      const fullName = `${row.original.courseId?.name}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },

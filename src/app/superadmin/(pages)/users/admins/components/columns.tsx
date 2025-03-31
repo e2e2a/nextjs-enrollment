@@ -20,8 +20,8 @@ export const columns: ColumnDef<IAdminProfile>[] = [
     cell: ({ cell, row }) => {
       const user = row.original;
       const name =
-        user.lastname && user.firstname
-          ? `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim()
+        user?.lastname && user?.firstname
+          ? `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim()
           : 'Unknown';
 
       return (
@@ -38,7 +38,7 @@ export const columns: ColumnDef<IAdminProfile>[] = [
 
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
         .replace(/\s+/g, ' ')
@@ -76,7 +76,7 @@ export const columns: ColumnDef<IAdminProfile>[] = [
   },
   {
     accessorKey: 'emailVerified',
-    accessorFn: (row) => row.userId.emailVerified,
+    accessorFn: (row) => row.userId?.emailVerified,
     // header: 'Email Verified',
     header: ({ column }) => (
       <EmailVerifiedFilter
@@ -92,7 +92,7 @@ export const columns: ColumnDef<IAdminProfile>[] = [
       return <div className='font-medium'>{formatted}</div>;
     },
     filterFn: (row, columnId, filterValue) => {
-      const emailVerified = row.original.userId.emailVerified;
+      const emailVerified = row.original.userId?.emailVerified;
       if (filterValue === 'Not Verified') {
         return !emailVerified;
       } else if (filterValue === 'Verified') {

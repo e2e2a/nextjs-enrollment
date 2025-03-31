@@ -29,7 +29,7 @@ export function DataTableDrawer({ user }: IProps) {
   const onSubmit = (data: z.infer<typeof EnrollmentApprovedStep2>) => {
     const dataa = {
       ...data,
-      EId: user._id,
+      EId: user?._id,
     };
     // mutation.mutate(dataa, {
     //   onSuccess: (res) => {

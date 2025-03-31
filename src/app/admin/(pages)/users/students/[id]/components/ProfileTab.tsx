@@ -93,7 +93,7 @@ const ProfileTabEnrollCollege = ({ profile }: Iprops) => {
 
     const data = {
       ...profileData,
-      userId: profile?.userId._id,
+      userId: profile?.userId?._id,
       configuredExtension: false,
       formData: formData,
     };

@@ -223,7 +223,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' '>
-          {user?.studentSubjects?.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green'>{user.studentSubjects.length}</span>}
+          {user?.studentSubjects?.length === 0 ? <span className='text-red'>{user?.studentSubjects.length}</span> : <span className='text-green'>{user?.studentSubjects.length}</span>}
         </div>
       );
     },
@@ -236,7 +236,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user?.enrollStatus?.toLowerCase() === 'enrolled' ? <span className='text-green-500'>{user.enrollStatus}</span> : <span className='text-gren-500'>{user.enrollStatus}</span>}
+          {user?.enrollStatus?.toLowerCase() === 'enrolled' ? <span className='text-green-500'>{user?.enrollStatus}</span> : <span className='text-gren-500'>{user?.enrollStatus}</span>}
         </div>
       );
     },

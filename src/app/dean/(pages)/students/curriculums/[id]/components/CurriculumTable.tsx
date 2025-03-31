@@ -57,7 +57,7 @@ const CurriculumTable = ({ data, s }: IProps) => {
                               <Input className={'py-5 px-5'} />
                             </div>
                           ) : (
-                            subject.grade
+                            subject?.grade
                           )}
                         </td>
                         <td className='px-4 py-2 border text-center'>{subject?.subjectId?.subjectCode}</td>

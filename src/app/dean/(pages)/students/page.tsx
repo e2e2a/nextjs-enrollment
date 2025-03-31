@@ -11,7 +11,7 @@ export default function Page() {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data: res, isLoading: pLoading, error: pError } = useProfileQueryBySessionId();
 
-  const { data, isLoading, error } = useAllEnrollmentQueryByCourseId(res?.profile.courseId._id);
+  const { data, isLoading, error } = useAllEnrollmentQueryByCourseId(res?.profile.courseId?._id);
 
   useEffect(() => {
     if (error || !data) return;

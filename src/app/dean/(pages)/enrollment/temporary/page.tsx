@@ -14,13 +14,13 @@ const Page = () => {
   const [enrolledStudents, setEnrolledStudents] = useState<any>([]);
 
   const { data: pData, isLoading: pload, error: pError } = useProfileQueryBySessionId();
-  const { data, isLoading, error: isEnError } = useAllEnrollmentQueryByCourseId(pData?.profile?.courseId._id);
+  const { data, isLoading, error: isEnError } = useAllEnrollmentQueryByCourseId(pData?.profile?.courseId?._id);
 
   useEffect(() => {
     if (isEnError || !data) return;
     if (data) {
       if (data.students) {
-        const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment.enrollStatus === 'Temporary Enrolled');
+        const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment?.enrollStatus === 'Temporary Enrolled');
         setEnrolledStudents(filteredEnrollment);
         setIsPageLoading(false);
       }

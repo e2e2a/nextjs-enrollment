@@ -6,7 +6,7 @@ import Nav from '../components/Nav';
 const AdminRootLayout = async ({ children }: { children: ReactNode }) => {
   const sessionData = await auth();
 
-  if (!sessionData || sessionData.user.role !== 'ADMIN') {
+  if (!sessionData || sessionData.user?.role !== 'ADMIN') {
     return redirect('/sign-in');
   }
 

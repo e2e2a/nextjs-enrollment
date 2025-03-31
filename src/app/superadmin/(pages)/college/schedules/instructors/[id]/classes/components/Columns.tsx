@@ -39,7 +39,7 @@ export const columns: ColumnDef<any>[] = [
 
     accessorFn: (row) => {
       const user = row.profileId;
-      return `${user?.lastname ? user.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''} ${user?.extensionName ? ', ' + user.extensionName + '.' : ''}`
+      return `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''} ${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',') // Fix spaces before commas
         .replace(/,(\S)/g, ', $1') // Ensure proper comma spacing
         .replace(/\s+/g, ' ') // Remove extra spaces
@@ -48,7 +48,7 @@ export const columns: ColumnDef<any>[] = [
 
     filterFn: (row, columnId, filterValue) => {
       const user = row.original.profileId;
-      const fullName = `${user?.lastname ? user.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''} ${user?.extensionName ? ', ' + user.extensionName + '.' : ''}`
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''} ${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
         .replace(/\s+/g, ' ')
@@ -59,14 +59,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.profileId.sex,
+    accessorFn: (row) => row.profileId?.sex,
     id: 'Gender',
     header: 'Gender',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.profileId.sex}
+          {user?.profileId?.sex}
         </div>
       );
     },

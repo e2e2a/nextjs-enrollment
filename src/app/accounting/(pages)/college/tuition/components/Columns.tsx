@@ -19,7 +19,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.courseId.name}
+          {user?.courseId?.name}
         </div>
       );
     },
@@ -28,19 +28,19 @@ export const columns: ColumnDef<any>[] = [
       return `${name}`;
     },
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.courseId.name}`.toLowerCase();
+      const fullName = `${row.original.courseId?.name}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
   {
-    accessorFn: (row) => row.courseId.courseCode,
+    accessorFn: (row) => row.courseId?.courseCode,
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.courseId.courseCode}
+          {user?.courseId?.courseCode}
         </div>
       );
     },

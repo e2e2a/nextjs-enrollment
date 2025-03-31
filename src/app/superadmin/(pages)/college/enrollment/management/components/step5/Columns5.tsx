@@ -218,7 +218,7 @@ export const columns5: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' '>
-          {user?.studentSubjects?.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green'>{user.studentSubjects.length}</span>}
+          {user?.studentSubjects?.length === 0 ? <span className='text-red'>{user?.studentSubjects?.length}</span> : <span className='text-green'>{user?.studentSubjects?.length}</span>}
         </div>
       );
     },

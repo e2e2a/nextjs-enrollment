@@ -46,7 +46,7 @@ const ActionsCell = ({ user }: IProps) => {
     const parseRejectData = formReject.getValues();
 
     const dataa = {
-      EId: user._id,
+      EId: user?._id,
       step: 1,
       request,
       category: 'College',

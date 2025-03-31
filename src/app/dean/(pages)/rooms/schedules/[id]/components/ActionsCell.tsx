@@ -16,8 +16,8 @@ const ActionsCell = ({ user }: IProps) => {
   const actionFormSubmit = () => {
     setIsPending(true);
     const data = {
-      teacherScheduleId: user.teacherScheduleId._id,
-      profileId: user.profileId._id,
+      teacherScheduleId: user?.teacherScheduleId?._id,
+      profileId: user?.profileId?._id,
     };
 
     mutation.mutate(data, {

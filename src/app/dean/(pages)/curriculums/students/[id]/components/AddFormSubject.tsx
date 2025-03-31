@@ -22,8 +22,8 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [subjects, setSubjects] = useState<any>({});
-  const [selectedItems, setSelectedItems] = useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId._id) || []);
-  const [initialStateSelect, setInitialStateSelect] = useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId._id) || []);
+  const [selectedItems, setSelectedItems] = useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId?._id) || []);
+  const [initialStateSelect, setInitialStateSelect] = useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId?._id) || []);
   const hasChanges = selectedItems.length !== initialStateSelect.length || selectedItems.some((item) => !initialStateSelect.includes(item)) || initialStateSelect.some((item) => !selectedItems.includes(item));
   const mutation = useUpdateStudentCurriculumLayerSubjectsMutation();
 
@@ -43,7 +43,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
   const handleSelect = (subjectId: string) => {
     setSelectedItems((prevSelected) => {
       const updatedSelection = prevSelected.includes(subjectId) ? prevSelected.filter((d) => d !== subjectId) : [...prevSelected, subjectId];
-      return updatedSelection.sort((a, b) => subjectId.indexOf(a) - subjectId.indexOf(b));
+      return updatedSelection.sort((a, b) => subjectId?.indexOf(a) - subjectId?.indexOf(b));
     });
   };
 
@@ -102,11 +102,11 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                 Add list:
                 <div className='flex flex-col'>
                   {selectedItems.map((value) => {
-                    const selectedItem = subjects.find((item: any) => item.subjectId._id === value);
+                    const selectedItem = subjects.find((item: any) => item.subjectId?._id === value);
                     return selectedItem ? (
-                      <span key={selectedItem.subjectId._id} className='text-green-500 flex items-center gap-3'>
-                        • {selectedItem.subjectId.name}
-                        <span className='text-red cursor-pointer' onClick={() => handleRemove(selectedItem.subjectId._id)}>
+                      <span key={selectedItem.subjectId?._id} className='text-green-500 flex items-center gap-3'>
+                        • {selectedItem.subjectId?.name}
+                        <span className='text-red cursor-pointer' onClick={() => handleRemove(selectedItem.subjectId?._id)}>
                           <Icons.trash className='h-3 w-3' />
                         </span>
                       </span>
@@ -148,12 +148,12 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                   <span className='w-[150px] flex justify-center'>Total Unit/s</span>
                                 </div>
                                 {subjects.map((item: any, index: any) => (
-                                  <CommandItem className='border w-full block' key={item.subjectId._id} value={item.subjectId.name}>
+                                  <CommandItem className='border w-full block' key={item.subjectId?._id} value={item.subjectId?.name}>
                                     <div className='flex w-full'>
                                       <div className='sm:min-w-[140px] lg:min-w-[145px] justify-center flex items-center'>
-                                        {selectedItems.includes(item.subjectId._id) ? (
+                                        {selectedItems.includes(item.subjectId?._id) ? (
                                           <Button
-                                            onClick={() => handleSelect(item.subjectId._id)}
+                                            onClick={() => handleSelect(item.subjectId?._id)}
                                             disabled={isPending}
                                             type='button'
                                             size={'sm'}
@@ -163,7 +163,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                                           </Button>
                                         ) : (
                                           <Button
-                                            onClick={() => handleSelect(item.subjectId._id)}
+                                            onClick={() => handleSelect(item.subjectId?._id)}
                                             disabled={isPending}
                                             type='button'
                                             size={'sm'}
@@ -187,17 +187,17 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
                             </div>
                             <div className='flex flex-col gap-y-6 lg:hidden'>
                               {subjects.map((item: any, index: any) => (
-                                <CommandItem className='border w-full block' key={item.subjectId._id} value={item.subjectId.name}>
+                                <CommandItem className='border w-full block' key={item.subjectId?._id} value={item.subjectId?.name}>
                                   <div className='flex flex-col w-full '>
                                     <div className='flex items-center justify-end bg-gray-200 border border-neutral-50'>
-                                      {selectedItems.includes(item.subjectId._id) ? (
-                                        <Button onClick={() => handleSelect(item.subjectId._id)} type='button' size={'sm'} className={'focus-visible:ring-0 flex bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}>
+                                      {selectedItems.includes(item.subjectId?._id) ? (
+                                        <Button onClick={() => handleSelect(item.subjectId?._id)} type='button' size={'sm'} className={'focus-visible:ring-0 flex bg-transparent bg-red px-2 py-0 gap-x-0 sm:gap-x-1 justify-center  text-neutral-50 font-medium'}>
                                           <Icons.trash className='h-4 w-4' />
                                           <span className='sm:flex hidden text-xs sm:text-sm'>Remove</span>
                                         </Button>
                                       ) : (
                                         <Button
-                                          onClick={() => handleSelect(item.subjectId._id)}
+                                          onClick={() => handleSelect(item.subjectId?._id)}
                                           disabled={isPending}
                                           type='button'
                                           size={'sm'}

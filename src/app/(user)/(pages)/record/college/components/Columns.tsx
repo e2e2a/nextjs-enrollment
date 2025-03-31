@@ -18,7 +18,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.course}
+          {user?.course}
         </div>
       );
     },
@@ -32,14 +32,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.blockType.section,
+    accessorFn: (row) => row.blockType?.section,
     id: 'block',
     header: 'Block',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.blockType?.section}
+          {user?.blockType?.section}
         </div>
       );
     },
@@ -78,7 +78,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.schoolYear}
+          {user?.schoolYear}
         </div>
       );
     },

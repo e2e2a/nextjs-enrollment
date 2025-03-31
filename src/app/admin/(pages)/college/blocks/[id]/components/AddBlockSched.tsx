@@ -148,7 +148,7 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                 <div className='overflow-x-auto w-full '>
                   <div className=' bg-white border border-gray-300'>
                     {s.map((s: any, index: any) => (
-                      <CommandItem className='border w-full block mb-3 bg-gray-300' key={s._id} value={s.subjectId.name}>
+                      <CommandItem className='border w-full block mb-3 bg-gray-300' key={s._id} value={s.subjectId?.name}>
                         <div className='grid sm:grid-cols-2 grid-cols-1 w-full'>
                           <div className='flex flex-col text-xs sm:text-sm order-2 sm:order-1'>
                             <span className=' font-semibold'>

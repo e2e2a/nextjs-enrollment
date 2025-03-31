@@ -13,7 +13,7 @@ const COCFile = ({ user }: { user: any }) => {
 
   useEffect(() => {
     const fetchFileUrl = async () => {
-      if (navigator.onLine && user && user.profileId.cocUrl) {
+      if (navigator.onLine && user && user?.profileId?.cocUrl) {
         const filePath = `enrollment/coc/${user?.profileId?._id}/${user?.profileId?.cocUrl}`;
         const fileRef = ref(storage, filePath);
 
@@ -35,7 +35,7 @@ const COCFile = ({ user }: { user: any }) => {
 
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `${user?.profileId?.firstname ?? ''} ${user?.profileId?.middlename && user?.profileId?.middlename[0] + '.'} ${user?.profileId?.lastname  ?? ''} ${user?.profileId?.extensionName ? user.profileId.extensionName : ''}.png`);
+        link.setAttribute('download', `${user?.profileId?.firstname ?? ''} ${user?.profileId?.middlename && user?.profileId?.middlename[0] + '.'} ${user?.profileId?.lastname  ?? ''} ${user?.profileId?.extensionName ? user?.profileId?.extensionName : ''}.png`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -62,7 +62,7 @@ const COCFile = ({ user }: { user: any }) => {
                       <span className='font-medium sm:text-lg text-xs'>
                         Student:{' '}
                         <span className=' capitalize sm:text-lg text-xs'>
-                          {user?.profileId?.firstname ?? ''} {user?.profileId?.middlename && user?.profileId?.middlename[0] + '.'} {user?.profileId.lastname ?? ''} {user?.profileId?.extensionName ? user?.profileId?.extensionName + '.' : ''}
+                          {user?.profileId?.firstname ?? ''} {user?.profileId?.middlename && user?.profileId?.middlename[0] + '.'} {user?.profileId?.lastname ?? ''} {user?.profileId?.extensionName ? user?.profileId?.extensionName + '.' : ''}
                         </span>
                       </span>
                     </div>

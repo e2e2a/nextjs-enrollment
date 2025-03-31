@@ -20,7 +20,7 @@ const AddGrades = ({ teacher, data, type, reportGrades }: IProps) => {
       return;
     }
 
-    const found = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId._id && e.type === type);
+    const found = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId?._id && e.type === type);
 
     setFiteredType(found || null);
   }, [reportGrades, teacher, type]);

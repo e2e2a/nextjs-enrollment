@@ -13,7 +13,7 @@ const CoCFile = ({ user }: { user: any }) => {
 
   useEffect(() => {
     const fetchFileUrl = async () => {
-      if (navigator.onLine && user && user.cocUrl) {
+      if (navigator.onLine && user && user?.cocUrl) {
         const filePath = `enrollment/coc/${user?._id}/${user?.cocUrl}`;
         const fileRef = ref(storage, filePath);
 
@@ -35,7 +35,7 @@ const CoCFile = ({ user }: { user: any }) => {
 
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `${user?.firstname ?? ''} ${user?.middlename && user?.middlename[0] + '.'} ${user?.lastname ?? ''} ${user.extensionName ? user.extensionName : ''}.png`);
+        link.setAttribute('download', `${user?.firstname ?? ''} ${user?.middlename && user?.middlename[0] + '.'} ${user?.lastname ?? ''} ${user?.extensionName ? user?.extensionName : ''}.png`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -65,7 +65,7 @@ const CoCFile = ({ user }: { user: any }) => {
                       <span className='font-medium sm:text-lg text-xs'>
                         Student:{' '}
                         <span className=' capitalize sm:text-lg text-xs'>
-                          {user?.firstname ?? ''} {user?.middlename && user?.middlename[0] + '.'} {user?.lastname ?? ''} {user?.extensionName ? user.extensionName + '.' : ''}
+                          {user?.firstname ?? ''} {user?.middlename && user?.middlename[0] + '.'} {user?.lastname ?? ''} {user?.extensionName ? user?.extensionName + '.' : ''}
                         </span>
                       </span>
                     </div>

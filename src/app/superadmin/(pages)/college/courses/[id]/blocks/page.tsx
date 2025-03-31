@@ -34,7 +34,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             data.blockTypes && (
               <div className=''>
                 <div className='flex items-center justify-center py-4 text-black'>
-                  <h1 className='text-lg sm:text-3xl font-semibold tracking-wide uppercase'>{data?.blockTypes[0]?.courseId.courseCode} Blocks </h1>
+                  <h1 className='text-lg sm:text-3xl font-semibold tracking-wide uppercase'>{data?.blockTypes[0]?.courseId?.courseCode} Blocks </h1>
                 </div>
                 <DataTable columns={columns} data={data?.blockTypes as IBlockType[]} />
               </div>

@@ -167,7 +167,7 @@ const UpdateDialog = ({ teacher, type, reportGrades }: IProps) => {
                           {reportGrades.statusInDean === 'Approved' ? (
                             s.grade
                           ) : (
-                            <Input className='w-20 text-sm text-center border-2 border-blue-400' onChange={(e) => handleGradeChange(index, s.profileId._id, e.target.value)} placeholder='' value={grades[index]?.grade} />
+                            <Input className='w-20 text-sm text-center border-2 border-blue-400' onChange={(e) => handleGradeChange(index, s.profileId?._id, e.target.value)} placeholder='' value={grades[index]?.grade} />
                           )}
                         </td>
                       </tr>

@@ -28,7 +28,7 @@ export const columns: ColumnDef<any>[] = [
       return `${name}`;
     },
     filterFn: (row, columnId, filterValue) => {
-      const fullName = `${row.original.courseId.name}`.toLowerCase();
+      const fullName = `${row.original.courseId?.name}`.toLowerCase();
       return fullName.includes(filterValue.toLowerCase());
     },
   },
@@ -87,7 +87,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.exemptedFees.length > 0 ? user.exemptedFees.join(', ') : <span className='text-red font-semibold'>N/A</span>}
+          {user?.exemptedFees.length > 0 ? user?.exemptedFees.join(', ') : <span className='text-red font-semibold'>N/A</span>}
         </div>
       );
     },

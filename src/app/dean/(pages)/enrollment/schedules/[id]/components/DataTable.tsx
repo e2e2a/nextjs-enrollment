@@ -86,7 +86,7 @@ export function DataTable<TData, TValue>({ columns, data, enrollmentSetup, enrol
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
-                  if (enrollment.step >= 4) {
+                  if (enrollment?.step >= 4) {
                     // if (header.id === 'requesting') return;
                     if (header.id === 'actions') return;
                   } else {
@@ -109,7 +109,7 @@ export function DataTable<TData, TValue>({ columns, data, enrollmentSetup, enrol
               table.getRowModel().rows.map((row) => (
                 <TableRow className='whitespace-pre' key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => {
-                    if (enrollment.step >= 4) {
+                    if (enrollment?.step >= 4) {
                       // if (cell.column.id === 'requesting') return;
                       if (cell.column.id === 'actions') return;
                     } else {

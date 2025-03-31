@@ -218,7 +218,7 @@ export const columns6: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.studentSubjects.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green'>{user.studentSubjects.length}</span>}
+          {user?.studentSubjects.length === 0 ? <span className='text-red'>{user?.studentSubjects.length}</span> : <span className='text-green'>{user?.studentSubjects.length}</span>}
         </div>
       );
     },
@@ -234,14 +234,14 @@ export const columns6: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.profileId.payment,
+    accessorFn: (row) => row.profileId?.payment,
     accessorKey: 'payment status',
     header: 'Payment Status',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.payment ? <span className='text-green-500'>TRUE</span> : <span className='text-red'>FALSE</span>}
+          {user?.payment ? <span className='text-green-500'>TRUE</span> : <span className='text-red'>FALSE</span>}
         </div>
       );
     },

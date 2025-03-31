@@ -22,7 +22,7 @@ const ActionsCell = ({ user }: IProps) => {
   const onSubmit = async (revoke: boolean) => {
     setIsPending(true);
     mutation.mutate(
-      { id: user?.userId._id, revoke },
+      { id: user?.userId?._id, revoke },
       {
         onSuccess: (res) => {
           switch (res.status) {

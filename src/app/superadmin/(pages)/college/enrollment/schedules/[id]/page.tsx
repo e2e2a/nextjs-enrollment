@@ -27,7 +27,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     if (b && data && ESetup) {
       if (data.enrollment && b.blockTypes && ESetup.enrollmentSetup) {
-        const filteredSchedules = b?.blockTypes?.filter((block: any) => block?.courseId?._id === data?.enrollment?.courseId._id);
+        const filteredSchedules = b?.blockTypes?.filter((block: any) => block?.courseId?._id === data?.enrollment?.courseId?._id);
         setSchedules(filteredSchedules);
         setIsPageLoading(false);
       } else if (data.error) {
@@ -107,7 +107,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                 </div>
               </div>
-              {data.enrollment.step >= 3 && (
+              {data.enrollment?.step >= 3 && (
                 <div className='w-full flex justify-end items-center'>
                   <AddStudentSched student={data.enrollment} b={schedules} />
                 </div>

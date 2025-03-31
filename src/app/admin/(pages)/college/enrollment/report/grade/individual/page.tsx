@@ -17,7 +17,7 @@ const Page = () => {
     if (isEnError || !data) return;
     if (data) {
       if (data.reportedGrades) {
-        const filteredRG = data?.reportedGrades.filter((rg: any) => rg.statusInDean === 'Approved');
+        const filteredRG = data?.reportedGrades?.filter((rg: any) => rg.statusInDean === 'Approved');
         setTeacherRG(filteredRG);
         setIsPageLoading(false);
       }

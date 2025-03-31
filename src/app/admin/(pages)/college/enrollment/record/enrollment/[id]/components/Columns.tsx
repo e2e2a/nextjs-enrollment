@@ -17,7 +17,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.blockType.section,
+    accessorFn: (row) => row.blockType?.section,
     id: 'block type',
     header: 'Block Type',
     cell: ({ cell, row }) => {
@@ -281,16 +281,16 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase font-bold'>
-          {user.status?.toLowerCase() === 'approved' ? (
-            <span className='text-green-500 text-xs'>{user.status}</span>
-          ) : user.status?.toLowerCase() === 'pending' ? (
-            <span className='text-blue-500 text-xs'>{user.status}</span>
-          ) : user.status?.toLowerCase() === 'suggested' ? (
-            <span className='text-orange-500 text-xs'>{user.status}</span>
-          ) : user.status?.toLowerCase() === 'dropped' ? (
-            <span className='text-red text-xs'>{user.status}</span>
-          ) : user.status?.toLowerCase() === 'declined' ? (
-            <span className='text-red text-xs'>{user.status}</span>
+          {user?.status?.toLowerCase() === 'approved' ? (
+            <span className='text-green-500 text-xs'>{user?.status}</span>
+          ) : user?.status?.toLowerCase() === 'pending' ? (
+            <span className='text-blue-500 text-xs'>{user?.status}</span>
+          ) : user?.status?.toLowerCase() === 'suggested' ? (
+            <span className='text-orange-500 text-xs'>{user?.status}</span>
+          ) : user?.status?.toLowerCase() === 'dropped' ? (
+            <span className='text-red text-xs'>{user?.status}</span>
+          ) : user?.status?.toLowerCase() === 'declined' ? (
+            <span className='text-red text-xs'>{user?.status}</span>
           ) : null}
         </div>
       );
@@ -308,12 +308,12 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase '>
-          {!user.request && <div className='text-gray-500 text-xs'>N/A</div>}
-          {user.request && user.request === 'add' ? (
+          {!user?.request && <div className='text-gray-500 text-xs'>N/A</div>}
+          {user?.request && user?.request === 'add' ? (
             <div className='text-green-500 text-xs font-bold'>Add</div>
-          ) : user.request === 'drop' ? (
+          ) : user?.request === 'drop' ? (
             <div className='text-red text-xs font-bold'>Drop</div>
-          ) : user.request === 'suggested' ? (
+          ) : user?.request === 'suggested' ? (
             <div className='text-orange-300 text-xs font-bold'>Suggested</div>
           ) : null}
         </div>
@@ -327,12 +327,12 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.requestStatusInDean === 'Approved' ? (
-            <span className='text-green-500 text-xs'>{user.requestStatusInDean}</span>
-          ) : user.requestStatusInDean === 'Pending' ? (
-            <span className='text-blue-500 text-xs'>{user.requestStatusInDean}</span>
-          ) : user.requestStatusInDean === 'Declined' ? (
-            <span className='text-red text-xs'>{user.requestStatusInDean}</span>
+          {user?.requestStatusInDean === 'Approved' ? (
+            <span className='text-green-500 text-xs'>{user?.requestStatusInDean}</span>
+          ) : user?.requestStatusInDean === 'Pending' ? (
+            <span className='text-blue-500 text-xs'>{user?.requestStatusInDean}</span>
+          ) : user?.requestStatusInDean === 'Declined' ? (
+            <span className='text-red text-xs'>{user?.requestStatusInDean}</span>
           ) : (
             <span className='text-gray-400 font-normal text-xs'>N/A</span>
           )}
@@ -347,12 +347,12 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.requestStatusInRegistrar === 'Approved' ? (
-            <span className='text-green-500 text-xs'>{user.requestStatusInRegistrar}</span>
-          ) : user.requestStatusInRegistrar === 'Pending' ? (
-            <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
-          ) : user.requestStatusInRegistrar === 'Declined' ? (
-            <span className='text-red text-xs'>{user.requestStatusInRegistrar}</span>
+          {user?.requestStatusInRegistrar === 'Approved' ? (
+            <span className='text-green-500 text-xs'>{user?.requestStatusInRegistrar}</span>
+          ) : user?.requestStatusInRegistrar === 'Pending' ? (
+            <span className='text-blue-500 text-xs'>{user?.requestStatusInRegistrar}</span>
+          ) : user?.requestStatusInRegistrar === 'Declined' ? (
+            <span className='text-red text-xs'>{user?.requestStatusInRegistrar}</span>
           ) : (
             <span className='text-gray-400 font-normal text-xs'>N/A</span>
           )}
@@ -367,14 +367,14 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase font-bold'>
-          {user.requestStatus?.toLowerCase() === 'approved' ? (
-            <span className='text-green-500 text-xs'>{user.requestStatus}</span>
-          ) : user.requestStatus?.toLowerCase() === 'pending' ? (
-            <span className='text-blue-500 text-xs'>{user.requestStatus}</span>
-          ) : user.requestStatus?.toLowerCase() === 'declined' ? (
-            <span className='text-red text-xs'>{user.requestStatus}</span>
-          ) : user.requestStatus?.toLowerCase() === 'suggested' ? (
-            <span className='text-orange-500 text-xs'>{user.requestStatus}</span>
+          {user?.requestStatus?.toLowerCase() === 'approved' ? (
+            <span className='text-green-500 text-xs'>{user?.requestStatus}</span>
+          ) : user?.requestStatus?.toLowerCase() === 'pending' ? (
+            <span className='text-blue-500 text-xs'>{user?.requestStatus}</span>
+          ) : user?.requestStatus?.toLowerCase() === 'declined' ? (
+            <span className='text-red text-xs'>{user?.requestStatus}</span>
+          ) : user?.requestStatus?.toLowerCase() === 'suggested' ? (
+            <span className='text-orange-500 text-xs'>{user?.requestStatus}</span>
           ) : (
             <span className='text-gray-400 font-normal text-xs'>N/A</span>
           )}

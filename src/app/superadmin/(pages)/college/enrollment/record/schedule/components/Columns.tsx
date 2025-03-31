@@ -27,8 +27,8 @@ export const columns: ColumnDef<any>[] = [
           .trim();
       };
 
-      const instructorName = user.profileId ? formatName(user.profileId) : '';
-      const deanName = user.deanId ? formatName(user.deanId) : '';
+      const instructorName = user?.profileId ? formatName(user?.profileId) : '';
+      const deanName = user?.deanId ? formatName(user?.deanId) : '';
 
       return (
         <div key={cell.id} className='capitalize'>
@@ -67,8 +67,8 @@ export const columns: ColumnDef<any>[] = [
           .trim();
       };
 
-      const instructorName = user.profileId ? formatNameForSearch(user.profileId) : '';
-      const deanName = user.deanId ? formatNameForSearch(user.deanId) : '';
+      const instructorName = user?.profileId ? formatNameForSearch(user?.profileId) : '';
+      const deanName = user?.deanId ? formatNameForSearch(user?.deanId) : '';
 
       return instructorName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },
@@ -81,7 +81,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.category}
+          {user?.category}
         </div>
       );
     },

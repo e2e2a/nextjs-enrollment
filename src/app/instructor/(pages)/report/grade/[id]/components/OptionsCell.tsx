@@ -30,7 +30,7 @@ const OptionsCell = ({ user }: IProps) => {
           <Command>
             <CommandList>
               <CommandGroup className=''>
-                {user.statusInDean.toLowerCase() === 'pending' && <UpdateDialog teacher={user?.teacherId} type={'Approve'} reportGrades={user} />}
+                {user?.statusInDean.toLowerCase() === 'pending' && <UpdateDialog teacher={user?.teacherId} type={'Approve'} reportGrades={user} />}
                 <DeleteAlert isUploading={isUploading} setIsOpen={setIsOpen} reportGrades={user} />
               </CommandGroup>
             </CommandList>

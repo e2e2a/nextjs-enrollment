@@ -44,7 +44,7 @@ const ViewMissingGrades = ({ s, yearSem }: IProps) => {
                 subjects.map((subject: any, index) => (
                   <div className='flex flex-col w-full' key={index}>
                     <div className='bg-gray-200 border border-neutral-50 pl-3'>Subject Code: {subject?.subjectId?.subjectCode}</div>
-                    <div className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {subject.subjectId?.name}</div>
+                    <div className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {subject?.subjectId?.name}</div>
                     <div className='bg-gray-200 border border-neutral-50 pl-3'>Pre Req.: {subject?.subjectId?.preReq ?? ''}</div>
                     <div className='bg-gray-200 border border-neutral-50 pl-3'>lec: {subject?.subjectId?.lec}</div>
                     <div className='bg-gray-200 border border-neutral-50 pl-3'>lab: {subject?.subjectId?.lab}</div>

@@ -6,7 +6,7 @@ import Nav from '../components/Nav';
 const Layout = async ({ children }: { children: ReactNode }) => {
   const sessionData = await auth();
 
-  if (!sessionData || sessionData.user.role !== 'TEACHER') {
+  if (!sessionData || sessionData.user?.role !== 'TEACHER') {
     return redirect('/sign-in');
   }
 

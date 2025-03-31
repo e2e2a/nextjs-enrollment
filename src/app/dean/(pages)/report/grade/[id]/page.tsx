@@ -103,7 +103,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <div className='flex w-full justify-start'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Request Type:
-                      <span className='font-normal'>{data.reportedGrades.requestType}</span>
+                      <span className='font-normal'>{data.reportedGrades?.requestType}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
@@ -111,10 +111,10 @@ const Page = ({ params }: { params: { id: string } }) => {
                       Type:
                       <span className='font-normal'>
                         {' '}
-                        {data.reportedGrades.type === 'firstGrade' && 'Prelim'}
-                        {data.reportedGrades.type === 'secondGrade' && 'Midterm'}
-                        {data.reportedGrades.type === 'thirdGrade' && 'Semi-final'}
-                        {data.reportedGrades.type === 'fourthGrade' && 'Final'}
+                        {data.reportedGrades?.type === 'firstGrade' && 'Prelim'}
+                        {data.reportedGrades?.type === 'secondGrade' && 'Midterm'}
+                        {data.reportedGrades?.type === 'thirdGrade' && 'Semi-final'}
+                        {data.reportedGrades?.type === 'fourthGrade' && 'Final'}
                         {''} Grade
                       </span>
                     </span>

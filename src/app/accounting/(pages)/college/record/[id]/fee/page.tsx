@@ -54,8 +54,8 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const isWithdrawn = data?.enrollmentRecord?.enrollStatus?.toLowerCase() === 'withdraw';
   const haveEnrollmentYearSemester =
-    (data?.latestEnrollment.year === data?.enrollmentRecord?.studentYear?.toLowerCase() && data?.latestEnrollment?.semester?.toLowerCase() !== data?.enrollmentRecord?.studentSemester?.toLowerCase()) ||
-    (data?.latestEnrollment.semester === data?.enrollmentRecord?.studentSemester?.toLowerCase() && data?.latestEnrollment?.year?.toLowerCase() !== data?.enrollmentRecord?.studentYear?.toLowerCase());
+    (data?.latestEnrollment?.year === data?.enrollmentRecord?.studentYear?.toLowerCase() && data?.latestEnrollment?.semester?.toLowerCase() !== data?.enrollmentRecord?.studentSemester?.toLowerCase()) ||
+    (data?.latestEnrollment?.semester === data?.enrollmentRecord?.studentSemester?.toLowerCase() && data?.latestEnrollment?.year?.toLowerCase() !== data?.enrollmentRecord?.studentYear?.toLowerCase());
   const haveLatestEnrollment = !enrollmentData?.enrollment && haveEnrollmentYearSemester;
 
   //full payment exclude all terms payment and downpayment
@@ -66,8 +66,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     paymentOfFullPayment && Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 >= Math.round(Number(totalofPerTermFullPayment + Number(tfData?.tFee?.ssgFee || 0) + Number(tfData?.tFee?.departmentalFee || 0)) * 100) / 100;
 
   const scholarship = isScholarshipApplicable(data?.enrollmentRecord?.studentYear, data?.enrollmentRecord?.studentSemester, data?.enrollmentRecord?.profileId?.scholarshipId);
-  const scholarshipNew = isScholarshipApplicable(enrollmentData?.enrollment?.studentYear || data?.latestEnrollment.year, enrollmentData?.enrollment?.studentSemester || data?.latestEnrollment.semester, data?.enrollmentRecord?.profileId?.scholarshipId);
-  const isScholarshipNewStart = scholarshipNew && data?.enrollmentRecord?.profileId?.scholarshipId.amount && data?.enrollmentRecord?.profileId?.scholarshipId;
+  const scholarshipNew = isScholarshipApplicable(enrollmentData?.enrollment?.studentYear || data?.latestEnrollment?.year, enrollmentData?.enrollment?.studentSemester || data?.latestEnrollment?.semester, data?.enrollmentRecord?.profileId?.scholarshipId);
+  const isScholarshipNewStart = scholarshipNew && data?.enrollmentRecord?.profileId?.scholarshipId?.amount && data?.enrollmentRecord?.profileId?.scholarshipId;
   const isScholarshipStart = scholarship && data?.enrollmentRecord?.profileId?.scholarshipId && data?.enrollmentRecord?.profileId?.scholarshipId;
   if (isScholarshipStart) showPaymentOfFullPayment = paymentOfFullPayment && Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 === Math.round(Number(total) * 100) / 100;
   const paymentOfDownPayment = srData?.studentReceipt
@@ -582,7 +582,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                   />
                                 </div>
                               </div>
-                            ) : Number(data?.enrollmentRecord?.profileId?.scholarshipId.amount) >= Number(total) ? (
+                            ) : Number(data?.enrollmentRecord?.profileId?.scholarshipId?.amount) >= Number(total) ? (
                               <div className='flex flex-col justify-center items-center w-full border-[0.5px] rounded-lg px-5 py-3'>
                                 {(!srData?.overAllBalance || srData?.overAllBalance <= 0) && (
                                   <div className='px-5 w-full sm:px-1 flex justify-center flex-col mt-5'>

@@ -9,7 +9,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   if (!sessionData) {
     return redirect('/sign-in');
   }
-  //   if (sessionData && !sessionData.user.profileVerified) {
+  //   if (sessionData && !sessionData.user?.profileVerified) {
   //     return redirect('/profile');
   //   }
 

@@ -108,7 +108,7 @@ const AddBlockSched = ({ blockType, s }: IProps) => {
                             <span className='border rounded-full border-gray-600 px-1.5'>{index + 1}</span>
                           </div>{' '}
                           <span>
-                            Instructor: {selectedItem?.profileId?.firstname ?? ''} {selectedItem?.profileId?.middlename ?? ''} {selectedItem.profileId.lastname ?? ''}
+                            Instructor: {selectedItem?.profileId?.firstname ?? ''} {selectedItem?.profileId?.middlename ?? ''} {selectedItem?.profileId?.lastname ?? ''}
                           </span>
                           <span>Subject Code: {selectedItem?.subjectId?.subjectCode}</span>
                           <span>Descriptive Title: {selectedItem?.subjectId?.name}</span>

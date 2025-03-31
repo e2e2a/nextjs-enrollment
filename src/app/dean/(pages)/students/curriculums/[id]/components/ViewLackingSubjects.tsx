@@ -27,12 +27,12 @@ const ViewLackingSubjects = ({ c, sData }: IProps) => {
         if (curriculumByYearAndSemester) {
           const requiredSubjects = curriculumByYearAndSemester.subjectsFormat;
 
-          const studentSub = studentCurr.subjectsFormat.map((subject: any) => subject.subjectId._id.toString()); // Extract student subject IDs
-          const studentSubjects = studentCurr.subjectsFormat.filter((subject: any) => !subject.grade || (subject.grade && subject.grade.toLowerCase() === 'inc')).map((s: any) => s);
+          const studentSub = studentCurr.subjectsFormat.map((subject: any) => subject?.subjectId?._id.toString()); // Extract student subject IDs
+          const studentSubjects = studentCurr.subjectsFormat.filter((subject: any) => !subject?.grade || (subject?.grade && subject?.grade.toLowerCase() === 'inc')).map((s: any) => s);
           missingSubjectsGradeObj[yearKey] = studentSubjects;
 
           // Find missing subjects
-          const notTakenSubjects = requiredSubjects.filter((currSubject: any) => !studentSub.includes(currSubject.subjectId._id)).map((currSubject: any) => currSubject);
+          const notTakenSubjects = requiredSubjects.filter((currSubject: any) => !studentSub.includes(currSubject?.subjectId?._id)).map((currSubject: any) => currSubject);
           missingSubjectsObj[yearKey] = notTakenSubjects;
         }
       });
@@ -94,7 +94,7 @@ const ViewLackingSubjects = ({ c, sData }: IProps) => {
                     {subjects.map((subject: any, index) => (
                       <div className='flex flex-col w-full' key={index}>
                         <div className='bg-gray-200 border border-neutral-50 pl-3'>Subject Code: {subject?.subjectId?.subjectCode}</div>
-                        <div className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {subject.subjectId?.name}</div>
+                        <div className='bg-gray-200 border border-neutral-50 pl-3'>Descriptive Title: {subject?.subjectId?.name}</div>
                         <div className='bg-gray-200 border border-neutral-50 pl-3'>Pre Req.: {subject?.subjectId?.preReq ?? ''}</div>
                         <div className='bg-gray-200 border border-neutral-50 pl-3'>lec: {subject?.subjectId?.lec}</div>
                         <div className='bg-gray-200 border border-neutral-50 pl-3'>lab: {subject?.subjectId?.lab}</div>

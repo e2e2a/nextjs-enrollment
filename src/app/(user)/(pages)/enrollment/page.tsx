@@ -13,12 +13,12 @@ const Page = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { data: s } = useSession();
   const router = useRouter();
-  const { data: resE, isLoading: ELoading, error: eError } = useEnrollmentQueryBySessionId(s?.user.id!);
+  const { data: resE, isLoading: ELoading, error: eError } = useEnrollmentQueryBySessionId(s?.user?.id!);
   useEffect(() => {
     if (eError || !resE) return;
     if (resE) {
       if (resE.enrollment) {
-        router.push(`/enrollment/${resE.enrollment.category.toLowerCase()}`);
+        router.push(`/enrollment/${resE?.enrollment?.category.toLowerCase()}`);
         return;
       } else {
         setIsPageLoading(false);

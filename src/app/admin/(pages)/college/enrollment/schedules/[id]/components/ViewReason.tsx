@@ -26,7 +26,7 @@ const ViewReason = ({ user }: IProps) => {
       <AlertDialogContent className='bg-white text-black'>
         <AlertDialogHeader>
           <AlertDialogTitle>Reason</AlertDialogTitle>
-          <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;{user.reason}.</AlertDialogDescription>
+          <AlertDialogDescription className=''>&nbsp;&nbsp;&nbsp;&nbsp;{user?.reason}.</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>

@@ -30,7 +30,7 @@ const EnrollmentForms = ({ search, enrollment, profile, courses }: IProps) => {
 
   useEffect(() => {
     if (!enrollment) return setValue('0');
-    if (enrollment && enrollment.step) return setValue(enrollment.step as string);
+    if (enrollment && enrollment?.step) return setValue(enrollment?.step as string);
   }, [value, enrollment]);
 
   return (
@@ -39,7 +39,7 @@ const EnrollmentForms = ({ search, enrollment, profile, courses }: IProps) => {
         <LoaderPage />
       ) : (
         <div className=''>
-          {enrollment && profile.enrollStatus === 'Pending' && (
+          {enrollment && profile?.enrollStatus === 'Pending' && (
             <div className='flex flex-col gap-y-4 justify-center items-center mb-5'>
               <div className='text-center font-semibold tracking-wider pointer-events-none select-none'>Enrollment Progress</div>
               <div className='w-full flex flex-row gap-6 bg-transparent justify-center pointer-events-none select-none'>

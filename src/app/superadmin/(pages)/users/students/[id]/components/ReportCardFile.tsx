@@ -14,8 +14,8 @@ const ReportCardFile = ({ user }: { user: any }) => {
 
   useEffect(() => {
     const fetchFileUrl = async () => {
-      if (navigator.onLine && user && user.reportCardUrl) {
-        const filePath = `enrollment/reportCard/${user._id}/${user.reportCardUrl}`;
+      if (navigator.onLine && user && user?.reportCardUrl) {
+        const filePath = `enrollment/reportCard/${user?._id}/${user?.reportCardUrl}`;
         // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
         const fileRef = ref(storage, filePath);
 
@@ -37,7 +37,7 @@ const ReportCardFile = ({ user }: { user: any }) => {
 
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `${user?.firstname ?? ''} ${user?.middlename && user?.middlename[0] + '.'} ${user?.lastname ?? ''} ${user?.extensionName ? user.extensionName : ''}.png`);
+        link.setAttribute('download', `${user?.firstname ?? ''} ${user?.middlename && user?.middlename[0] + '.'} ${user?.lastname ?? ''} ${user?.extensionName ? user?.extensionName : ''}.png`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

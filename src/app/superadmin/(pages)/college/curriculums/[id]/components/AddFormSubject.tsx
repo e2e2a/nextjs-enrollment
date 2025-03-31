@@ -21,8 +21,8 @@ interface IProps {
 const AddFormSubject = ({ curriculum, s }: IProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedItems, setSelectedItems] = useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId._id) || []);
-  const [initialStateSelect, setInitialStateSelect] = useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId._id) || []);
+  const [selectedItems, setSelectedItems] = useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId?._id) || []);
+  const [initialStateSelect, setInitialStateSelect] = useState<string[]>(curriculum?.subjectsFormat?.map((s: any) => s.subjectId?._id) || []);
   const hasChanges = selectedItems.length !== initialStateSelect.length || selectedItems.some((item) => !initialStateSelect.includes(item)) || initialStateSelect.some((item) => !selectedItems.includes(item));
 
   const mutation = useUpdateCurriculumLayerSubjectsMutation();
@@ -36,7 +36,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
     setSelectedItems((prevSelected) => {
       const updatedSelection = prevSelected.includes(subjectId) ? prevSelected.filter((d) => d !== subjectId) : [...prevSelected, subjectId];
       // Sort the selected days according to the standard day order
-      return updatedSelection.sort((a, b) => subjectId.indexOf(a) - subjectId.indexOf(b));
+      return updatedSelection.sort((a, b) => subjectId?.indexOf(a) - subjectId?.indexOf(b));
     });
   };
 

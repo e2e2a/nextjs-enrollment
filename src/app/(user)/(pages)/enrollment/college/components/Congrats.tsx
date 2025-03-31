@@ -27,7 +27,7 @@ const Congrats = ({ enrollment, enrollmentSetup }: IProps) => {
         <LoaderPage />
       ) : (
         <>
-          {enrollment.enrollStatus.toLowerCase() === 'withdraw' ? (
+          {enrollment?.enrollStatus.toLowerCase() === 'withdraw' ? (
             <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
               <Card className={`min-h-[35vh] my-[10%] shadow-none drop-shadow-none items-center justify-center flex border-0`}>
                 <CardHeader className='space-y-3 hidden'>
@@ -83,14 +83,14 @@ const Congrats = ({ enrollment, enrollmentSetup }: IProps) => {
                     </span>
                     <span className='text-sm text-left mt-4 px-5 sm:px-10 w-full'>
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thank you for your patience throughout the enrollment process. We are pleased to confirm that you are now{' '}
-                      <span className='text-green-500'> {enrollment.enrollStatus === 'Enrolled' ? 'officially enrolled' : 'Temporary Enrolled'}</span> . You can view your official study load{' '}
+                      <span className='text-green-500'> {enrollment?.enrollStatus === 'Enrolled' ? 'officially enrolled' : 'Temporary Enrolled'}</span> . You can view your official study load{' '}
                       <Link href={'/schedules'} className='text-blue-500 hover:underline'>
                         here
                       </Link>
                       .
                     </span>
                   </div>
-                  <div className=''>{enrollment.requestWithdraw ? <CancelWithdrawDialog user={enrollment} /> : <WithdrawDialog user={enrollment} enrollmentSetup={enrollmentSetup} />}</div>
+                  <div className=''>{enrollment?.requestWithdraw ? <CancelWithdrawDialog user={enrollment} /> : <WithdrawDialog user={enrollment} enrollmentSetup={enrollmentSetup} />}</div>
                   <div className='flex flex-col w-full '>
                     <span className='text-left sm:text-center w-full px-5 sm:px-10 mt-5 sm:mt-10 text-sm text-muted-foreground'>
                       <span className=' relative sm:hidden'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>

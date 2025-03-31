@@ -28,7 +28,7 @@ const EmailTab = ({ profile }: IProps) => {
   });
 
   useEffect(() => {
-    form.setValue('email', `${profile?.userId.email}`);
+    form.setValue('email', `${profile?.userId?.email}`);
   }, [form, profile]);
 
   const onSubmit = async (data: z.infer<typeof EmailValidator>) => {
@@ -36,7 +36,7 @@ const EmailTab = ({ profile }: IProps) => {
 
     const dataa = {
       ...data,
-      userId: profile.userId._id,
+      userId: profile?.userId?._id,
     };
 
     mutation.mutate(dataa, {

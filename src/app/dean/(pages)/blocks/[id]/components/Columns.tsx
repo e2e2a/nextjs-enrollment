@@ -51,7 +51,7 @@ export const columns: ColumnDef<any>[] = [
     accessorFn: (row) => `${row.teacherScheduleId?.subjectId?.name}`,
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const descriptiveTitle = `${user.teacherScheduleId?.subjectId?.name}`.toLowerCase();
+      const descriptiveTitle = `${user?.teacherScheduleId?.subjectId?.name}`.toLowerCase();
       return descriptiveTitle.includes(filterValue.toLowerCase());
     },
   },
@@ -95,7 +95,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.subjectId.unit,
+    accessorFn: (row) => row.teacherScheduleId?.subjectId?.unit,
     id: 'unit',
     header: 'Unit',
     cell: ({ cell, row }) => {
@@ -141,7 +141,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.teacherScheduleId.endTime}
+          {user?.teacherScheduleId?.endTime}
         </div>
       );
     },
@@ -186,8 +186,8 @@ export const columns: ColumnDef<any>[] = [
 
       return (
         <div key={cell.id} className='capitalize'>
-          {user.teacherScheduleId?.deanId && <span>{deanName}</span>}
-          {user.teacherScheduleId?.profileId && <span>{instructorName}</span>}
+          {user?.teacherScheduleId?.deanId && <span>{deanName}</span>}
+          {user?.teacherScheduleId?.profileId && <span>{instructorName}</span>}
         </div>
       );
     },
@@ -201,8 +201,8 @@ export const columns: ColumnDef<any>[] = [
           .trim();
       };
 
-      const instructorName = row.teacherScheduleId?.profileId ? formatName(row.teacherScheduleId.profileId) : '';
-      const deanName = row.teacherScheduleId?.deanId ? formatName(row.teacherScheduleId.deanId) : '';
+      const instructorName = row.teacherScheduleId?.profileId ? formatName(row.teacherScheduleId?.profileId) : '';
+      const deanName = row.teacherScheduleId?.deanId ? formatName(row.teacherScheduleId?.deanId) : '';
 
       return `${instructorName} ${deanName}`.trim();
     },
@@ -219,8 +219,8 @@ export const columns: ColumnDef<any>[] = [
           .trim();
       };
 
-      const instructorName = user.profileId ? formatNameForSearch(user.profileId) : '';
-      const deanName = user.deanId ? formatNameForSearch(user.deanId) : '';
+      const instructorName = user?.profileId ? formatNameForSearch(user?.profileId) : '';
+      const deanName = user?.deanId ? formatNameForSearch(user?.deanId) : '';
 
       return instructorName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },

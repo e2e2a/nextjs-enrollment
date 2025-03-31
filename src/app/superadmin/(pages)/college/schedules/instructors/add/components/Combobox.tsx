@@ -69,7 +69,7 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
                                   setTeacherId(item._id);
                                 }
                                 if (setRole) {
-                                  setRole(item.userId.role);
+                                  setRole(item.userId?.role);
                                 }
                                 field.onChange(currentValue);
                                 setOpen(false);
@@ -86,7 +86,7 @@ export function Combobox({ form, name, label, selectItems, placeholder, setTeach
                                     <span>Age: {item.age}</span>
                                   </div>
                                   <div className=''>
-                                    <span>Role: {item.userId.role}</span>
+                                    <span>Role: {item.userId?.role}</span>
                                   </div>
                                 </div>
                               </div>

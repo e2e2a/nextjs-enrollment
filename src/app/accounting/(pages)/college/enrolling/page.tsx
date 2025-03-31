@@ -17,7 +17,7 @@ const Page = () => {
     if (isEnError || !data) return;
     if (data) {
       if (data.enrollment) {
-        const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Pending' && enrollment.step === 5);
+        const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment?.enrollStatus === 'Pending' && enrollment?.step === 5);
         setEnrolledStudents(filteredEnrollment);
         setIsPageLoading(false);
       }

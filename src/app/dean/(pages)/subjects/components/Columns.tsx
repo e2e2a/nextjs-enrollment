@@ -14,7 +14,7 @@ export const columns: ColumnDef<ISubject>[] = [
   //     const user = row.original;
   //     return (
   //       <div key={cell.id} className=' uppercase'>
-  //         {user.fixedRateAmount}
+  //         {user?.fixedRateAmount}
   //       </div>
   //     );
   //   },

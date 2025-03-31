@@ -48,11 +48,11 @@ const TertiaryContent = () => {
 
     if (esData && eData) {
       if (esData.enrollmentSetup && eData.enrollment) {
-        const filteredTemporaryEnrolled = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Temporary Enrolled');
+        const filteredTemporaryEnrolled = eData?.enrollment?.filter((enrollment: any) => enrollment?.enrollStatus === 'Temporary Enrolled');
         setTemporaryEnrolledStudents(filteredTemporaryEnrolled);
-        const filteredEnrolled = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled');
+        const filteredEnrolled = eData?.enrollment?.filter((enrollment: any) => enrollment?.enrollStatus === 'Enrolled');
         setEnrolledStudents(filteredEnrolled);
-        const filteredEnrolling = eData?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus === 'Pending');
+        const filteredEnrolling = eData?.enrollment?.filter((enrollment: any) => enrollment?.enrollStatus === 'Pending');
         setEnrollingStudents(filteredEnrolling);
 
         setIsPageLoading(false);

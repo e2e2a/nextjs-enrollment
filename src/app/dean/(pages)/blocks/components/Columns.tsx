@@ -78,7 +78,7 @@ export const columns: ColumnDef<IBlockType>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.year}
+          {user?.year}
         </div>
       );
     },
@@ -91,7 +91,7 @@ export const columns: ColumnDef<IBlockType>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.semester}
+          {user?.semester}
         </div>
       );
     },
@@ -104,7 +104,7 @@ export const columns: ColumnDef<IBlockType>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' '>
-          {user.blockSubjects.length === 0 ? <span className='text-red'>{user.blockSubjects.length}</span> : <span className='text-green-500'>{user.blockSubjects.length}</span>}
+          {user?.blockSubjects.length === 0 ? <span className='text-red'>{user?.blockSubjects.length}</span> : <span className='text-green-500'>{user?.blockSubjects.length}</span>}
         </div>
       );
     },

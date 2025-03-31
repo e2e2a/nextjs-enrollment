@@ -82,7 +82,7 @@ export function Combobox({ form, name, label, selectItems, placeholder, setStude
                                     <span>Age: {item.age}</span>
                                   </div>
                                   <div className=''>
-                                    <span>Role: {item.userId.role}</span>
+                                    <span>Role: {item.userId?.role}</span>
                                   </div>
                                 </div>
                               </div>

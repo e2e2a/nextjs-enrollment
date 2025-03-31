@@ -31,14 +31,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.courseId.courseCode,
+    accessorFn: (row) => row.courseId?.courseCode,
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.courseId?.courseCode && user.courseId?.courseCode ? user?.courseId?.courseCode : <div className='text-red'>NOT ASSIGN</div>}
+          {user?.courseId?.courseCode && user?.courseId?.courseCode ? user?.courseId?.courseCode : <div className='text-red'>NOT ASSIGN</div>}
         </div>
       );
     },
@@ -217,7 +217,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.subjectId?.unit}
+          {user?.subjectId?.unit}
         </div>
       );
     },

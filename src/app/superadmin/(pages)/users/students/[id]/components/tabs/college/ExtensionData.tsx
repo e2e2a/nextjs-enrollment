@@ -184,7 +184,7 @@ const ExtensionData = ({ form, profile, isNotEditable, photoPreview, filePreview
           <h1 className='text-sm sm:text-[18px] font-medium border-b text-center mb-4 flex flex-col'>
             <div className='flex flex-col'>
               <div className=''>
-                Applicant in: <span className='text-green-500'>{profile.courseId.category}</span>
+                Applicant in: <span className='text-green-500'>{profile.courseId?.category}</span>
               </div>
               <div className=''>
                 Enrollment Status:
@@ -194,7 +194,7 @@ const ExtensionData = ({ form, profile, isNotEditable, photoPreview, filePreview
                 {profile.enrollStatus === 'Rejected' && <span className='font-normal text-red'>{profile.enrollStatus}</span>}
               </div>
               <div className=''>
-                Department: <span className='text-green-500 capitalize'>{profile.courseId.name}</span>
+                Department: <span className='text-green-500 capitalize'>{profile.courseId?.name}</span>
               </div>
             </div>
             <div className='text-sm font-normal flex w-full justify-center items-center'>

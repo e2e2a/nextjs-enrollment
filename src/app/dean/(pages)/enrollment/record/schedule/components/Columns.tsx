@@ -19,13 +19,13 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       if (!user) return <div key={cell.id}>Unknown</div>;
 
-      const deanName = `${user.deanId?.lastname ? user.deanId?.lastname + ',' : ''} ${user.deanId?.firstname ?? ''} ${user.deanId?.middlename ?? ''}${user.deanId?.extensionName ? ', ' + user.deanId?.extensionName + '.' : ''}`
+      const deanName = `${user?.deanId?.lastname ? user?.deanId?.lastname + ',' : ''} ${user?.deanId?.firstname ?? ''} ${user?.deanId?.middlename ?? ''}${user?.deanId?.extensionName ? ', ' + user?.deanId?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/(\S),/g, '$1,')
         .replace(/,(\S)/g, ', $1')
         .trim();
 
-      const teacherName = `${user.profileId?.lastname ? user.profileId?.lastname + ',' : ''}${user.profileId?.firstname ?? ''} ${user.profileId?.middlename ?? ''}${user.profileId?.extensionName ? ', ' + user.profileId?.extensionName + '.' : ''}`
+      const teacherName = `${user?.profileId?.lastname ? user?.profileId?.lastname + ',' : ''}${user?.profileId?.firstname ?? ''} ${user?.profileId?.middlename ?? ''}${user?.profileId?.extensionName ? ', ' + user?.profileId?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/(\S),/g, '$1,')
         .replace(/,(\S)/g, ', $1')
@@ -33,8 +33,8 @@ export const columns: ColumnDef<any>[] = [
 
       return (
         <div key={cell.id} className='capitalize'>
-          {user.deanId && <span>{deanName}</span>}
-          {user.profileId && <span>{teacherName}</span>}
+          {user?.deanId && <span>{deanName}</span>}
+          {user?.profileId && <span>{teacherName}</span>}
         </div>
       );
     },
@@ -44,8 +44,8 @@ export const columns: ColumnDef<any>[] = [
       if (!user) return '';
 
       return `
-        ${user.deanId ? `${user.deanId?.lastname ? user.deanId?.lastname + ',' : ''} ${user.deanId?.firstname ?? ''} ${user.deanId?.middlename ?? ''} ${user.deanId?.extensionName ?? ''}` : ''}
-        ${user.profileId ? `${user.profileId?.lastname ? user.profileId?.lastname + ',' : ''} ${user.profileId?.firstname ?? ''} ${user.profileId?.middlename ?? ''} ${user.profileId?.extensionName ?? ''}` : ''}`
+        ${user?.deanId ? `${user?.deanId?.lastname ? user?.deanId?.lastname + ',' : ''} ${user?.deanId?.firstname ?? ''} ${user?.deanId?.middlename ?? ''} ${user?.deanId?.extensionName ?? ''}` : ''}
+        ${user?.profileId ? `${user?.profileId?.lastname ? user?.profileId?.lastname + ',' : ''} ${user?.profileId?.firstname ?? ''} ${user?.profileId?.middlename ?? ''} ${user?.profileId?.extensionName ?? ''}` : ''}`
         .trim()
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
@@ -56,14 +56,14 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       if (!user) return false;
 
-      const fullName = `${user.profileId?.lastname ? user.profileId?.lastname + ',' : ''} ${user.profileId?.firstname ?? ''} ${user.profileId?.middlename ?? ''}${user.profileId?.extensionName ? ', ' + user.profileId?.extensionName + '.' : ''}`
+      const fullName = `${user?.profileId?.lastname ? user?.profileId?.lastname + ',' : ''} ${user?.profileId?.firstname ?? ''} ${user?.profileId?.middlename ?? ''}${user?.profileId?.extensionName ? ', ' + user?.profileId?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
         .replace(/\s+/g, ' ')
         .toLowerCase()
         .trim();
 
-      const deanName = `${user.deanId?.lastname ? user.deanId?.lastname + ',' : ''} ${user.deanId?.firstname ?? ''} ${user.deanId?.middlename ?? ''}${user.deanId?.extensionName ? ', ' + user.deanId?.extensionName + '.' : ''}`
+      const deanName = `${user?.deanId?.lastname ? user?.deanId?.lastname + ',' : ''} ${user?.deanId?.firstname ?? ''} ${user?.deanId?.middlename ?? ''}${user?.deanId?.extensionName ? ', ' + user?.deanId?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
         .replace(/\s+/g, ' ')
