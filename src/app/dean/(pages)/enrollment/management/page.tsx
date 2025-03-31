@@ -36,7 +36,7 @@ const Page = () => {
       setIsError(true);
     } else if (pData && pData.profile) {
       setToFilterData({
-        category: pData?.profile?.courseId.category,
+        category: pData?.profile?.courseId?.category,
         step: search,
       });
       setIsError(false);
@@ -52,7 +52,7 @@ const Page = () => {
 
     if (data && ESetup && pData) {
       if (data.enrollment && ESetup.enrollmentSetup && pData.profile) {
-        const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment.enrollStatus !== 'Enrolled' && enrollment.enrollStatus !== 'Temporary Enrolled');
+        const filteredEnrollment = data?.enrollment?.filter((enrollment: any) => enrollment?.enrollStatus !== 'Enrolled' && enrollment?.enrollStatus !== 'Temporary Enrolled');
         setEnrolledStudents(filteredEnrollment);
         setIsPageLoading(false);
         return;
@@ -81,7 +81,7 @@ const Page = () => {
                 <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
                   <div className='justify-between items-start flex w-full'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{pData?.profile.courseId.name}</span>
+                      Department: <span className='font-normal'>{pData?.profile.courseId?.name}</span>
                     </span>
                   </div>
                 </div>
@@ -96,7 +96,7 @@ const Page = () => {
                 <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
                   <div className='justify-between items-start flex w-full'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{pData?.profile.courseId.name}</span>
+                      Department: <span className='font-normal'>{pData?.profile?.courseId?.name}</span>
                     </span>
                   </div>
                 </div>
@@ -111,7 +111,7 @@ const Page = () => {
                 <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
                   <div className='justify-between items-start flex w-full'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{pData?.profile.courseId.name}</span>
+                      Department: <span className='font-normal'>{pData?.profile?.courseId?.name}</span>
                     </span>
                   </div>
                 </div>
@@ -127,11 +127,11 @@ const Page = () => {
                 <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
                   <div className='justify-between items-start flex w-full'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{pData?.profile.courseId.name}</span>
+                      Department: <span className='font-normal'>{pData?.profile?.courseId?.name}</span>
                     </span>
                   </div>
                 </div>
-                <DataTable4 columns={columns4} data={data.enrollment as IEnrollment[]} />
+                <DataTable4 columns={columns4} data={data?.enrollment as IEnrollment[]} />
               </div>
             ) : search === '5' ? (
               <div className=''>
@@ -142,7 +142,7 @@ const Page = () => {
                 <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
                   <div className='justify-between items-start flex w-full'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{pData?.profile.courseId.name}</span>
+                      Department: <span className='font-normal'>{pData?.profile?.courseId?.name}</span>
                     </span>
                   </div>
                 </div>
@@ -157,7 +157,7 @@ const Page = () => {
                 <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
                   <div className='justify-between items-start flex w-full'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{pData?.profile.courseId.name}</span>
+                      Department: <span className='font-normal'>{pData?.profile.courseId?.name}</span>
                     </span>
                   </div>
                 </div>

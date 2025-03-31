@@ -36,13 +36,13 @@ const Page = ({ params }: { params: { id: string } }) => {
               <OptionsExport data={data?.room || []} />
               <div className='flex items-center py-4 text-black w-full text-center flex-col'>
                 <div>
-                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>{data.room.roomName}</h1>
+                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>{data.room?.roomName}</h1>
                 </div>
                 <div className=''>
-                  <h1 className='text-sm sm:text-lg font-bold capitalize'>Type: {data.room.roomType}</h1>
+                  <h1 className='text-sm sm:text-lg font-bold capitalize'>Type: {data.room?.roomType}</h1>
                 </div>
               </div>
-              <DataTable columns={columns} data={data.room.schedules} />
+              <DataTable columns={columns} data={data.room?.schedules} />
             </div>
           )}
         </div>

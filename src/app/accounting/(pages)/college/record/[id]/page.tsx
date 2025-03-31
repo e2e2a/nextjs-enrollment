@@ -59,8 +59,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Fullname:{' '}
                       <span className='font-normal'>
-                        {data?.enrollmentRecord?.profileId.firstname ?? ''} {data?.enrollmentRecord?.profileId?.middlename ?? ''} {data?.enrollmentRecord?.profileId?.lastname ?? ''}{' '}
-                        {data?.enrollmentRecord?.profileId.extensionName ? data?.enrollmentRecord?.profileId.extensionName + '.' : ''}
+                        {data?.enrollmentRecord?.profileId?.firstname ?? ''} {data?.enrollmentRecord?.profileId?.middlename ?? ''} {data?.enrollmentRecord?.profileId?.lastname ?? ''}{' '}
+                        {data?.enrollmentRecord?.profileId?.extensionName ? data?.enrollmentRecord?.profileId?.extensionName + '.' : ''}
                       </span>
                     </span>
                   </div>

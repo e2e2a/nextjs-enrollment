@@ -22,7 +22,7 @@ const ActionsCell = ({ user }: IProps) => {
   const onSubmit = async (revoke: boolean) => {
     setIsPending(true);
     mutation.mutate(
-      { id: user?.userId._id, revoke },
+      { id: user?.userId?._id, revoke },
       {
         onSuccess: (res) => {
           switch (res.status) {
@@ -60,7 +60,7 @@ const ActionsCell = ({ user }: IProps) => {
               <CommandGroup className=''>
                 <Button disabled={isPending} size={'sm'} className={'w-full group focus-visible:ring-0 flex mb-2 text-black bg-transparent hover:bg-blue-600 px-2 py-0 gap-x-1 justify-start items-center hover:text-neutral-50 font-medium'}>
                   <Link
-                    href={`${isPending ? '' : `/superadmin/users/admins/${user.userId._id}`}`}
+                    href={`${isPending ? '' : `/superadmin/users/admins/${user?.userId?._id}`}`}
                     className={'w-full h-full group/item rounded-md focus-visible:ring-0 flex text-black bg-transparent gap-x-1 justify-start items-center group-hover:hover:text-neutral-50'}
                   >
                     <Icons.eye className='h-4 w-4' />

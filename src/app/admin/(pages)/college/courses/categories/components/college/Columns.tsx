@@ -24,7 +24,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.name}
+          {user?.name}
         </div>
       );
     },
@@ -46,7 +46,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.courseCode}
+          {user?.courseCode}
         </div>
       );
     },

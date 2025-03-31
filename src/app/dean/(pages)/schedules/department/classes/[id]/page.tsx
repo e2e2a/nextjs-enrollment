@@ -62,7 +62,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         {ts?.teacherSchedule?.profileId && (
                           <>
                             {ts?.teacherSchedule?.profileId?.firstname ?? ''} {ts?.teacherSchedule?.profileId?.middlename ?? ''} {ts?.teacherSchedule?.profileId?.lastname ?? ''}
-                            {ts?.teacherSchedule?.profileId?.extensionName ? ' ' + ts?.teacherSchedule?.profileId.extensionName + '.' : ''}
+                            {ts?.teacherSchedule?.profileId?.extensionName ? ' ' + ts?.teacherSchedule?.profileId?.extensionName + '.' : ''}
                             <br />
                           </>
                         )}

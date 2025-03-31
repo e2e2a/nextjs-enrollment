@@ -18,7 +18,7 @@ const Page = () => {
   const { data: session } = useSession();
   const [schedule, setSchedule] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const { data, error: isEnError } = useEnrollmentQueryBySessionId(session?.user.id!);
+  const { data, error: isEnError } = useEnrollmentQueryBySessionId(session?.user?.id!);
   const { data: b, error: bError } = useTeacherScheduleQueryByCategory('College');
   const { data: ESetup, error: ESetupError } = useEnrollmentSetupQuery();
 
@@ -121,7 +121,7 @@ const Page = () => {
               <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
                 <div className='mb-3'>
                   <h1 className='text-lg sm:text-2xl font-bold uppercase'>Student&apos;s Schedules</h1>
-                  {data.enrollment.enrollStatus === 'Pending' && data.enrollment.step > 3 && (
+                  {data?.enrollment?.enrollStatus === 'Pending' && data?.enrollment?.step > 3 && (
                     <span className='text-[15px] font-semibold'>
                       Drop/Add Subjects: {ESetup?.enrollmentSetup?.addOrDropSubjects ? <span className='text-green-500 text-[15px] font-semibold'>Open</span> : <span className='text-red text-[15px] font-semibold'>Closed</span>}
                     </span>

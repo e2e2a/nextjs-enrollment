@@ -27,7 +27,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
   useEffect(() => {
     if (!student) return setPageLoader(true);
     if (student) {
-      setStudentCourse(student.courseId.courseCode);
+      setStudentCourse(student.courseId?.courseCode);
       setStudentBlockType(student?.blockTypeId?.section);
       setStudentYear(student.studentYear);
       setStudentSemester(student.studentSemester);
@@ -41,7 +41,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
       return;
     }
 
-    // const filteredSchedules = b.filter((schedule) => schedule.courseId !== undefined && schedule.courseId !== null && schedule.courseId.courseCode === studentCourse);
+    // const filteredSchedules = b.filter((schedule) => schedule.courseId !== undefined && schedule.courseId !== null && schedule.courseId?.courseCode === studentCourse);
     const filteredSchedules = b.filter((schedule) => schedule.courseId !== undefined && schedule.courseId !== null && schedule.year === studentYear && schedule.semester === studentSemester);
 
     setSchedules(filteredSchedules);
@@ -192,14 +192,14 @@ const AddStudentSched = ({ student, b }: IProps) => {
                             const section = (b.section ?? '').toLowerCase();
                             const studentType = (studentBlockType ?? '').toLowerCase();
                             if (section === studentType) {
-                              const enrolledTeacherScheduleIds = new Set(student.studentSubjects.filter((sched: any) => sched.status !== 'suggested').map((sched: any) => sched.teacherScheduleId._id));
+                              const enrolledTeacherScheduleIds = new Set(student.studentSubjects.filter((sched: any) => sched.status !== 'suggested').map((sched: any) => sched.teacherScheduleId?._id));
                               return (
                                 <div className='' key={b._id}>
                                   {b.blockSubjects.length > 0 ? (
                                     b.blockSubjects
-                                      .filter((s: any) => !enrolledTeacherScheduleIds.has(s.teacherScheduleId._id))
+                                      .filter((s: any) => !enrolledTeacherScheduleIds.has(s.teacherScheduleId?._id))
                                       .map((s: any, index: any) => (
-                                        <CommandItem className='border w-full block mb-3 bg-gray-300' key={s._id} value={s.teacherScheduleId.subjectId.name}>
+                                        <CommandItem className='border w-full block mb-3 bg-gray-300' key={s._id} value={s.teacherScheduleId?.subjectId?.name}>
                                           <div className='grid sm:grid-cols-2 grid-cols-1 w-full'>
                                             <div className='flex flex-col text-xs sm:text-sm order-2 sm:order-1'>
                                               <span className=' font-semibold border-1 sm:border-0'>
@@ -226,7 +226,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                               </span>
                                             </div>
                                             <div className='justify-end sm:items-center flex items-end order-1 '>
-                                              {isSelected(s.teacherScheduleId._id) ? (
+                                              {isSelected(s.teacherScheduleId?._id) ? (
                                                 <Button
                                                   disabled={isEnabled}
                                                   onClick={() => handleSelect(s?.teacherScheduleId?._id)}
@@ -249,7 +249,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                     <Icons.add className='h-4 w-4' />
                                                     <span className='sm:flex text-xs sm:text-sm'>Add</span>
                                                   </Button>
-                                                  {student?.step > 3 && <SuggestDialog isPending={isPending} isOpen={isOpen} setIsOpen={setIsOpen} teacherScheduleId={s.teacherScheduleId._id} actionFormSubmit={actionFormSubmit} />}
+                                                  {student?.step > 3 && <SuggestDialog isPending={isPending} isOpen={isOpen} setIsOpen={setIsOpen} teacherScheduleId={s.teacherScheduleId?._id} actionFormSubmit={actionFormSubmit} />}
                                                 </div>
                                               )}
                                             </div>

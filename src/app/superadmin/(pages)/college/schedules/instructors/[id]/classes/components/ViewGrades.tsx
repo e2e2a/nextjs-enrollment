@@ -25,10 +25,10 @@ const ViewGrades = ({ teacher, data, type, reportGrades }: IProps) => {
       return;
     }
 
-    const found1 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId._id && e.type === 'firstGrade' && e.statusInDean === 'Approved');
-    const found2 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId._id && e.type === 'secondGrade' && e.statusInDean === 'Approved');
-    const found3 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId._id && e.type === 'thirdGrade' && e.statusInDean === 'Approved');
-    const found4 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId._id && e.type === 'fourthGrade' && e.statusInDean === 'Approved');
+    const found1 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId?._id && e.type === 'firstGrade' && e.statusInDean === 'Approved');
+    const found2 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId?._id && e.type === 'secondGrade' && e.statusInDean === 'Approved');
+    const found3 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId?._id && e.type === 'thirdGrade' && e.statusInDean === 'Approved');
+    const found4 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId?._id && e.type === 'fourthGrade' && e.statusInDean === 'Approved');
 
     setFirstGrade(found1 || null);
     setSecondGrade(found2 || null);

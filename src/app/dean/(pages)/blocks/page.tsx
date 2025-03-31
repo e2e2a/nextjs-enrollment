@@ -45,7 +45,7 @@ const Page = () => {
             <div className=''>
               <OptionsExport data={blocks || []} />
               <div className='flex flex-col items-center justify-center py-4 text-black'>
-                <h1 className='text-lg sm:text-3xl font-bold capitalize'>{pData?.profile?.courseId.name}</h1>
+                <h1 className='text-lg sm:text-3xl font-bold capitalize'>{pData?.profile?.courseId?.name}</h1>
                 <h1 className='text-lg sm:text-3xl font-semibold'>Blocks Management</h1>
               </div>
               <div className='flex items-center w-full justify-center py-4 text-black'>

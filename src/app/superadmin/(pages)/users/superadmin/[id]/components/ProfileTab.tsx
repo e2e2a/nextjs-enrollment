@@ -53,7 +53,7 @@ const ProfileTab = ({ profile }: IProps) => {
     data.lastname = data.lastname.toLowerCase();
     data.middlename = data.middlename?.toLowerCase();
 
-    const dataa = { ...data, userId: profile.userId._id };
+    const dataa = { ...data, userId: profile?.userId?._id };
 
     mutation.mutate(dataa, {
       onSuccess: (res) => {

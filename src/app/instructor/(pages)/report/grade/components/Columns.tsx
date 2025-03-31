@@ -184,8 +184,8 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.requestType === 'Class Report' && user.requestType}
-          {user?.requestType === 'Individual' && `${user.requestType} Report`}
+          {user?.requestType === 'Class Report' && user?.requestType}
+          {user?.requestType === 'Individual' && `${user?.requestType} Report`}
         </div>
       );
     },
@@ -198,9 +198,9 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.statusInDean && user?.statusInDean === 'Pending' && <span className='text-blue-500'>{user.statusInDean}</span>}
-          {user?.statusInDean && user?.statusInDean === 'Approved' && <span className='text-green-500'>{user.statusInDean}</span>}
-          {user?.statusInDean && user?.statusInDean === 'Declined' && <span className='text-red'>{user.statusInDean}</span>}
+          {user?.statusInDean && user?.statusInDean === 'Pending' && <span className='text-blue-500'>{user?.statusInDean}</span>}
+          {user?.statusInDean && user?.statusInDean === 'Approved' && <span className='text-green-500'>{user?.statusInDean}</span>}
+          {user?.statusInDean && user?.statusInDean === 'Declined' && <span className='text-red'>{user?.statusInDean}</span>}
         </div>
       );
     },

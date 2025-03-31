@@ -13,7 +13,7 @@ const StudentPhoto = ({ user }: { user: any }) => {
 
   useEffect(() => {
     const fetchFileUrl = async () => {
-      if (navigator.onLine && user && user.profileId.photoUrl) {
+      if (navigator.onLine && user && user?.profileId?.photoUrl) {
         const photoPath = `enrollment/studentphoto/${user?.profileId?._id}/${user?.profileId?.photoUrl}`;
         // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
 
@@ -67,7 +67,7 @@ const StudentPhoto = ({ user }: { user: any }) => {
                       <span className='font-medium sm:text-lg text-xs'>
                         Student:{' '}
                         <span className=' capitalize sm:text-lg text-xs'>
-                          {user?.profileId?.firstname ?? ''} {user.profileId?.middlename && user.profileId?.middlename[0] + '.'} {user?.profileId?.lastname ?? ''} {user?.profileId?.extensionName ? user?.profileId?.extensionName : ''}
+                          {user?.profileId?.firstname ?? ''} {user?.profileId?.middlename && user?.profileId?.middlename[0] + '.'} {user?.profileId?.lastname ?? ''} {user?.profileId?.extensionName ? user?.profileId?.extensionName : ''}
                         </span>
                       </span>
                     </div>
@@ -82,7 +82,7 @@ const StudentPhoto = ({ user }: { user: any }) => {
               </DialogHeader>
               {photoUrl ? (
                 <div className='overflow-y-auto max-h-[400px] '>
-                  {/* <Image src={user.photoUrl} alt={user.profileId.firstname || 'Image'} width={600} priority height={600} className='object-contain' /> */}
+                  {/* <Image src={user?.photoUrl} alt={user?.profileId?.firstname || 'Image'} width={600} priority height={600} className='object-contain' /> */}
                   <Image src={photoUrl} alt={user?.profileId?.firstname || 'nothing to say'} width={600} priority height={600} quality={80} className='object-contain' />
                 </div>
               ) : (

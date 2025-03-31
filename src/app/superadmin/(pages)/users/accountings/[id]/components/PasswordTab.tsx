@@ -52,7 +52,7 @@ const PasswordTab = ({ profile }: IProps) => {
     const parseData = form.getValues();
     const dataa = {
       ...parseData,
-      userId: profile.userId._id,
+      userId: profile.userId?._id,
     };
 
     mutation.mutate(dataa, {

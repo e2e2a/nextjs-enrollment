@@ -22,8 +22,8 @@ const OptionsCell = ({ user }: IProps) => {
     setIsOpen(false);
     setIsPending(true);
     const data = {
-      teacherScheduleId: user.teacherScheduleId._id,
-      profileId: user.profileId._id,
+      teacherScheduleId: user?.teacherScheduleId?._id,
+      profileId: user?.profileId?._id,
     };
 
     mutation.mutate(data, {
@@ -51,9 +51,9 @@ const OptionsCell = ({ user }: IProps) => {
     let data;
     data = {
       category: 'College',
-      enrollmentId: user.profileId._id,
-      request: user.request === 'add' ? 'Add' : user.request === 'drop' ? 'Drop' : null,
-      teacherScheduleId: user.teacherScheduleId._id,
+      enrollmentId: user?.profileId?._id,
+      request: user?.request === 'add' ? 'Add' : user?.request === 'drop' ? 'Drop' : null,
+      teacherScheduleId: user?.teacherScheduleId?._id,
       type,
     };
 
@@ -89,7 +89,7 @@ const OptionsCell = ({ user }: IProps) => {
           <Command>
             <CommandList>
               <CommandGroup className=''>
-                {user.request && user.request !== 'suggested' && (
+                {user?.request && user?.request !== 'suggested' && (
                   <>
                     {/* <Button
                       disabled={isPending}
@@ -141,7 +141,7 @@ const OptionsCell = ({ user }: IProps) => {
                     </Button>
                   </>
                 )}
-                {/* {user.request && user.request === 'drop' && (
+                {/* {user?.request && user?.request === 'drop' && (
                   <Button
                     disabled={isPending}
                     type='button'
@@ -153,7 +153,7 @@ const OptionsCell = ({ user }: IProps) => {
                     <span className=' text-[15px] font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Remove Subject'}</span>
                   </Button>
                 )} */}
-                {user.request && user.request === 'suggested' && (
+                {user?.request && user?.request === 'suggested' && (
                   <Button
                     disabled={isPending}
                     type='button'
@@ -165,7 +165,7 @@ const OptionsCell = ({ user }: IProps) => {
                     <span className=' text-[15px] font-medium'>{isPending ? <Image src='/icons/buttonloader.svg' alt='loader' width={26} height={26} className='animate-spin' /> : 'Cancel Suggest'}</span>
                   </Button>
                 )}
-                {(!user?.request || user.request !== 'Suggested') && (
+                {(!user?.request || user?.request !== 'Suggested') && (
                   <Button
                     disabled={isPending}
                     type='button'

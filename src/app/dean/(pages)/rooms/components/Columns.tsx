@@ -68,7 +68,7 @@ export const columns: ColumnDef<IRoom>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.isRoomAvailable ? 'TRUE' : 'FALSE'}
+          {user?.isRoomAvailable ? 'TRUE' : 'FALSE'}
         </div>
       );
     },

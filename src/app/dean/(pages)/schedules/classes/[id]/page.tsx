@@ -68,7 +68,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         {ts?.teacherSchedule?.profileId && (
                           <>
                             {ts?.teacherSchedule?.profileId?.firstname ?? ''} {ts?.teacherSchedule?.profileId?.middlename ?? ''} {ts?.teacherSchedule?.profileId?.lastname ?? ''}
-                            {ts?.teacherSchedule?.profileId?.extensionName ? ' ' + ts?.teacherSchedule?.profileId.extensionName + '.' : ''}
+                            {ts?.teacherSchedule?.profileId?.extensionName ? ' ' + ts?.teacherSchedule?.profileId?.extensionName + '.' : ''}
                             <br />
                           </>
                         )}
@@ -120,7 +120,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Room: <span className='font-normal'>{ts?.teacherSchedule?.roomId.roomName}</span>
+                      Room: <span className='font-normal'>{ts?.teacherSchedule?.roomId?.roomName}</span>
                     </span>
                   </div>
                 </div>

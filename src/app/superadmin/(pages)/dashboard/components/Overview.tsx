@@ -22,7 +22,7 @@ export function Overview({users}: IProps) {
   if (users && users.length > 0) {
     const currentYear = new Date().getFullYear();
     users.forEach((user: any) => {
-      const userDate = new Date(user.createdAt);
+      const userDate = new Date(user?.createdAt);
       const monthIndex = userDate.getMonth(); // Get month index (0-11)
 
       // Check if the year matches the current year

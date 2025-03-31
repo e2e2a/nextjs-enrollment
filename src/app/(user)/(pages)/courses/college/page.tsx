@@ -39,20 +39,20 @@ const Page = () => {
                   <CardContent className='w-full border space-y-2 p-0 group-hover:bg-gray-300 group-hover:bg-opacity-55 group-hover:border-blue-200'>
                     <div className='w-full flex sm:flex-row flex-col rounded-lg'>
                       <div className='w-full sm:w-56 p-5 '>
-                        <Image src={`${course.imageUrl ? course.imageUrl : ''}`} className='w-full sm:w-56 border rounded-lg sm:h-48 lg:h-44 bg-white group-hover:border-blue-200' width={200} height={200} priority alt={'nothing to say'} />
+                        <Image src={`${course?.imageUrl ? course?.imageUrl : ''}`} className='w-full sm:w-56 border rounded-lg sm:h-48 lg:h-44 bg-white group-hover:border-blue-200' width={200} height={200} priority alt={'nothing to say'} />
                       </div>
                       <div className='flex justify-between flex-1 p-5'>
                         <div className='flex flex-col w-full justify-start'>
-                          <Link href={`/curriculums/${course.courseCode}`} className='flex gap-2 items-center text-sm hover:underline'>
+                          <Link href={`/curriculums/${course?.courseCode}`} className='flex gap-2 items-center text-sm hover:underline'>
                             <span className='text-blue-700'>View Curriculum</span> <Icons.graduationCap className='h-5 w-5 stroke-orange-300' />
                           </Link>
-                          <h1 className=' text-xl tracking-tight capitalize font-semibold'>{course.name}</h1>
+                          <h1 className=' text-xl tracking-tight capitalize font-semibold'>{course?.name}</h1>
                           <div className='space-y-1.5 flex flex-col px-2'>
-                            <p className='text-sm text-muted-foreground text-justify first-letter:uppercase'>&nbsp;&nbsp;&nbsp;&nbsp;{course.description}</p>
+                            <p className='text-sm text-muted-foreground text-justify first-letter:uppercase'>&nbsp;&nbsp;&nbsp;&nbsp;{course?.description}</p>
                           </div>
                         </div>
                         <div className='flex w-full justify-end items-start'>
-                          <Link href={`/enrollment/college?courses=${course.courseCode}`} className='flex gap-2 items-center text-sm hover:underline'>
+                          <Link href={`/enrollment/college?courses=${course?.courseCode}`} className='flex gap-2 items-center text-sm hover:underline'>
                             <span className='text-blue-700'>Enroll</span> <Icons.arrowRight className='h-4 w-4' />
                           </Link>
                         </div>

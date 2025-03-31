@@ -38,11 +38,11 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data, error } = useEnrollmentRecordQueryById(params.id);
   const { data: enrollmentData, error: enrollmentError } = useEnrollmentQueryBySessionId(session?.user?.id!);
   const { data: tfData, error: isTFError } = useCourseFeeRecordQueryByCourseCodeAndYearAndSemester(data?.enrollmentRecord?.studentYear, data?.enrollmentRecord?.studentSemester, data?.enrollmentRecord?.courseCode || 'e2e2a');
-  const { data: srData, error: srError } = useStudentReceiptQueryByUserIdAndYearAndSemester(session?.user.id as string, data?.enrollmentRecord?.studentYear, data?.enrollmentRecord?.studentSemester, data?.enrollmentRecord?.schoolYear);
+  const { data: srData, error: srError } = useStudentReceiptQueryByUserIdAndYearAndSemester(session?.user?.id as string, data?.enrollmentRecord?.studentYear, data?.enrollmentRecord?.studentSemester, data?.enrollmentRecord?.schoolYear);
 
   const haveEnrollmentYearSemester =
-    (data?.latestEnrollment.year === data?.enrollmentRecord?.studentYear?.toLowerCase() && data?.latestEnrollment?.semester?.toLowerCase() !== data?.enrollmentRecord?.studentSemester?.toLowerCase()) ||
-    (data?.latestEnrollment.semester === data?.enrollmentRecord?.studentSemester?.toLowerCase() && data?.latestEnrollment?.year?.toLowerCase() !== data?.enrollmentRecord?.studentYear?.toLowerCase());
+    (data?.latestEnrollment?.year === data?.enrollmentRecord?.studentYear?.toLowerCase() && data?.latestEnrollment?.semester?.toLowerCase() !== data?.enrollmentRecord?.studentSemester?.toLowerCase()) ||
+    (data?.latestEnrollment?.semester === data?.enrollmentRecord?.studentSemester?.toLowerCase() && data?.latestEnrollment?.year?.toLowerCase() !== data?.enrollmentRecord?.studentYear?.toLowerCase());
   const haveLatestEnrollment = !enrollmentData?.enrollment && haveEnrollmentYearSemester;
 
   //to be deducted amount of scholarship payment
@@ -61,9 +61,9 @@ const Page = ({ params }: { params: { id: string } }) => {
     paymentOfFullPayment && Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 >= Math.round(Number(totalofPerTermFullPayment + Number(tfData?.tFee?.ssgFee || 0) + Number(tfData?.tFee?.departmentalFee || 0)) * 100) / 100;
 
   const scholarship = isScholarshipApplicable(data?.enrollmentRecord?.studentYear, data?.enrollmentRecord?.studentSemester, data?.enrollmentRecord?.profileId?.scholarshipId);
-  const scholarshipNew = isScholarshipApplicable(enrollmentData?.enrollment?.studentYear || data?.latestEnrollment.year, enrollmentData?.enrollment?.studentSemester || data?.latestEnrollment.semester, data?.enrollmentRecord?.profileId?.scholarshipId);
+  const scholarshipNew = isScholarshipApplicable(enrollmentData?.enrollment?.studentYear || data?.latestEnrollment?.year, enrollmentData?.enrollment?.studentSemester || data?.latestEnrollment?.semester, data?.enrollmentRecord?.profileId?.scholarshipId);
   const isScholarshipNewStart = scholarshipNew && data?.enrollmentRecord?.profileId?.scholarshipId?.amount && data?.enrollmentRecord?.profileId?.scholarshipId;
-  const isScholarshipStart = scholarship && data?.enrollmentRecord?.profileId?.scholarshipId.amount && data?.enrollmentRecord?.profileId?.scholarshipId;
+  const isScholarshipStart = scholarship && data?.enrollmentRecord?.profileId?.scholarshipId?.amount && data?.enrollmentRecord?.profileId?.scholarshipId;
   if (isScholarshipStart) showPaymentOfFullPayment = paymentOfFullPayment && Math.round(Number(paymentOfFullPayment?.taxes?.amount) * 100) / 100 === Math.round(Number(total) * 100) / 100;
 
   // Down Payment

@@ -40,7 +40,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original.profileId;
       if (!user) return <div key={cell.id}>Unknown</div>;
 
-      const name = `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`
+      const name = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',') // Fix spaces before commas
         .replace(/,(\S)/g, ', $1') // Ensure proper comma spacing
         .replace(/\s+/g, ' ') // Remove extra spaces
@@ -64,7 +64,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original.profileId;
       if (!user) return false;
 
-      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
         .replace(/\s+/g, ' ')
@@ -182,7 +182,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.blockTypeId?.section ?? 'N/A'}
+          {user?.blockTypeId?.section ?? 'N/A'}
         </div>
       );
     },
@@ -221,7 +221,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' '>
-          {user?.studentSubjects?.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green'>{user.studentSubjects.length}</span>}
+          {user?.studentSubjects?.length === 0 ? <span className='text-red'>{user?.studentSubjects.length}</span> : <span className='text-green'>{user?.studentSubjects.length}</span>}
         </div>
       );
     },
@@ -234,7 +234,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user?.enrollStatus?.toLowerCase() === 'enrolled' ? <span className='text-green-500'>{user.enrollStatus}</span> : <span className='text-gren-500'>{user.enrollStatus}</span>}
+          {user?.enrollStatus?.toLowerCase() === 'enrolled' ? <span className='text-green-500'>{user?.enrollStatus}</span> : <span className='text-gren-500'>{user?.enrollStatus}</span>}
         </div>
       );
     },

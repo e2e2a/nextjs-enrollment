@@ -145,12 +145,12 @@ export const columns3: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.profileId.reportCardUrl,
+    accessorFn: (row) => row.profileId?.reportCardUrl,
     accessorKey: 'Report Card',
     header: 'Report Card',
     cell: ({ row }) => {
       const user = row.original;
-      return user.profileId.reportCardUrl ? <ReportCardFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
+      return user?.profileId?.reportCardUrl ? <ReportCardFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
@@ -163,12 +163,12 @@ export const columns3: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.profileId.photoUrl,
+    accessorFn: (row) => row.profileId?.photoUrl,
     accessorKey: 'student photo',
     header: 'Student Photo',
     cell: ({ row }) => {
       const user = row.original;
-      return user.profileId.photoUrl ? <StudentPhoto user={user} /> : <span className=' text-red font-medium'>N/A</span>;
+      return user?.profileId?.photoUrl ? <StudentPhoto user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
@@ -218,7 +218,7 @@ export const columns3: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' '>
-          {user?.studentSubjects?.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green'>{user.studentSubjects.length}</span>}
+          {user?.studentSubjects?.length === 0 ? <span className='text-red'>{user?.studentSubjects.length}</span> : <span className='text-green'>{user?.studentSubjects.length}</span>}
         </div>
       );
     },

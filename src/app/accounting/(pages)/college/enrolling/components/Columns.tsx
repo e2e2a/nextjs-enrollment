@@ -54,7 +54,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
     filterFn: (row, columnId, filterValue) => {
       const user = row.original.profileId;
 
-      const fullName = `${user?.lastname ? user.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user.extensionName : ''}`
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName : ''}`
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
         .replace(/\s+/g, ' ')
@@ -66,14 +66,14 @@ export const columns: ColumnDef<IEnrollment>[] = [
   },
 
   {
-    accessorFn: (row) => row.courseId.courseCode, // Use accessorFn for nested fields
+    accessorFn: (row) => row.courseId?.courseCode, // Use accessorFn for nested fields
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.courseId.courseCode}
+          {user?.courseId?.courseCode}
         </div>
       );
     },
@@ -114,13 +114,13 @@ export const columns: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.studentStatus}
+          {user?.studentStatus}
         </div>
       );
     },
   },
   // {
-  //   accessorFn: (row) => row.profileId.psaUrl,
+  //   accessorFn: (row) => row.profileId?.psaUrl,
   //   accessorKey: 'psa file',
   //   header: 'PSA file',
   //   cell: ({ row }) => {
@@ -130,7 +130,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
   //   },
   // },
   // {
-  //   accessorFn: (row) => row.profileId.goodMoralUrl,
+  //   accessorFn: (row) => row.profileId?.goodMoralUrl,
   //   accessorKey: 'good moral',
   //   header: 'Good Moral',
   //   cell: ({ row }) => {
@@ -140,7 +140,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
   //   },
   // },
   // {
-  //   accessorFn: (row) => row.profileId.reportCardUrl,
+  //   accessorFn: (row) => row.profileId?.reportCardUrl,
   //   accessorKey: 'Report Card',
   //   header: 'Report Card',
   //   cell: ({ row }) => {
@@ -150,7 +150,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
   //   },
   // },
   {
-    accessorFn: (row) => row.profileId.photoUrl,
+    accessorFn: (row) => row.profileId?.photoUrl,
     accessorKey: 'student photo',
     header: 'Student Photo',
     cell: ({ row }) => {
@@ -167,20 +167,20 @@ export const columns: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.blockTypeId?.section && `block ${user.blockTypeId?.section}`}
+          {user?.blockTypeId?.section && `block ${user?.blockTypeId?.section}`}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.profileId.studentType,
+    accessorFn: (row) => row.profileId?.studentType,
     accessorKey: 'student type',
     header: 'Student Type',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.profileId.studentType}
+          {user?.profileId?.studentType}
         </div>
       );
     },
@@ -193,7 +193,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.schoolYear}
+          {user?.schoolYear}
         </div>
       );
     },
@@ -206,7 +206,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' '>
-          {user.studentSubjects.length === 0 ? <span className='text-red'>{user.studentSubjects.length}</span> : <span className='text-green'>{user.studentSubjects.length}</span>}
+          {user?.studentSubjects?.length === 0 ? <span className='text-red'>{user?.studentSubjects?.length}</span> : <span className='text-green'>{user?.studentSubjects?.length}</span>}
         </div>
       );
     },
@@ -219,7 +219,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.enrollStatus?.toLowerCase() === 'enrolled' ? <span className='text-green-500'>{user.enrollStatus}</span> : <span className='text-gren-500'>{user.enrollStatus}</span>}
+          {user?.enrollStatus?.toLowerCase() === 'enrolled' ? <span className='text-green-500'>{user?.enrollStatus}</span> : <span className='text-gren-500'>{user?.enrollStatus}</span>}
         </div>
       );
     },

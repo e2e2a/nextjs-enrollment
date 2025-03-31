@@ -61,7 +61,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Time:{' '}
                       <span className='font-normal'>
-                        {data.reportedGrades.teacherScheduleId.startTime} - {data?.reportedGrades?.teacherScheduleId?.endTime}
+                        {data.reportedGrades?.teacherScheduleId?.startTime} - {data?.reportedGrades?.teacherScheduleId?.endTime}
                       </span>
                     </span>
                   </div>
@@ -83,10 +83,10 @@ const Page = ({ params }: { params: { id: string } }) => {
                       Type:
                       <span className='font-normal'>
                         {' '}
-                        {data.reportedGrades.type === 'firstGrade' && 'Prelim'}
-                        {data.reportedGrades.type === 'secondGrade' && 'Midterm'}
-                        {data.reportedGrades.type === 'thirdGrade' && 'Semi-final'}
-                        {data.reportedGrades.type === 'fourthGrade' && 'Final'}
+                        {data.reportedGrades?.type === 'firstGrade' && 'Prelim'}
+                        {data.reportedGrades?.type === 'secondGrade' && 'Midterm'}
+                        {data.reportedGrades?.type === 'thirdGrade' && 'Semi-final'}
+                        {data.reportedGrades?.type === 'fourthGrade' && 'Final'}
                         {''} Grade
                       </span>
                     </span>

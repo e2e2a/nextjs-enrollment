@@ -20,7 +20,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       const name =
         user?.lastname && user?.firstname
-          ? `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`
+          ? `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
               .replace(/\s+,/g, ',') // Fix spaces before commas
               .replace(/,(\S)/g, ', $1') // Ensure proper comma spacing
               .replace(/\s+/g, ' ') // Remove extra spaces
@@ -41,7 +41,7 @@ export const columns: ColumnDef<any>[] = [
 
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user?.lastname ? user.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user.extensionName + '.' : ''}`
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
         .replace(/\s+/g, ' ')
@@ -95,7 +95,7 @@ export const columns: ColumnDef<any>[] = [
       return <div className='font-medium'>{formatted}</div>;
     },
     filterFn: (row, columnId, filterValue) => {
-      const emailVerified = row.original.userId.emailVerified;
+      const emailVerified = row.original.userId?.emailVerified;
       if (filterValue === 'Not Verified') {
         return !emailVerified;
       } else if (filterValue === 'Verified') {

@@ -78,10 +78,10 @@ export function Combobox({ form, name, label, selectItems, placeholder, setStude
                                 <div className='flex flex-col capitalize'>
                                   {getFullName(item)}
                                   <div>
-                                    <span>Age: {item.age}</span>
+                                    <span>Age: {item?.age}</span>
                                   </div>
                                   <div>
-                                    <span>Role: {item.userId.role}</span>
+                                    <span>Role: {item?.userId?.role}</span>
                                   </div>
                                 </div>
                               </div>

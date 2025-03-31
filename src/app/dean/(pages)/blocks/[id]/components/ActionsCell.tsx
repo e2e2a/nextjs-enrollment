@@ -15,8 +15,8 @@ const ActionsCell = ({ user }: IProps) => {
   const mutation = useArchiveCourseBlockScheduleMutation();
   const actionFormSubmit = () => {
     const data = {
-      teacherScheduleId: user.teacherScheduleId._id,
-      blockTypeId: user.teacherScheduleId.blockTypeId._id,
+      teacherScheduleId: user?.teacherScheduleId?._id,
+      blockTypeId: user?.teacherScheduleId?.blockTypeId?._id,
     };
 
     mutation.mutate(data, {

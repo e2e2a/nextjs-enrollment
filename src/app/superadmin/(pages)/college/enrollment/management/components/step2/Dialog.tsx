@@ -31,7 +31,7 @@ export function DialogStep2Button({ isPending, user, form, isDialogOpen, setIsDi
 
     if (bData) {
       if (bData.blockTypes) {
-        const filteredBlocks = bData.blockTypes.filter((block: any) => block.courseId._id === user.courseId._id && block.semester === user.studentSemester && block.year === user.studentYear);
+        const filteredBlocks = bData.blockTypes.filter((block: any) => block?.courseId?._id === user?.courseId?._id && block?.semester === user?.studentSemester && block.year === user?.studentYear);
         setBlocks(filteredBlocks);
         setLoader(false);
       }

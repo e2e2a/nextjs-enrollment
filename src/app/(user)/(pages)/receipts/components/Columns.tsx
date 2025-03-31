@@ -135,7 +135,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase font-semibold'>
-          {user.semester ?? ''}
+          {user?.semester ?? ''}
         </div>
       );
     },

@@ -13,7 +13,7 @@ const StudentPhoto = ({ user }: { user: any }) => {
 
   useEffect(() => {
     const fetchFileUrl = async () => {
-      if (navigator.onLine && user && user.photoUrl) {
+      if (navigator.onLine && user && user?.photoUrl) {
         const photoPath = `enrollment/studentphoto/${user?._id}/${user?.photoUrl}`;
         // if(!fireAuth.currentUser) await signInWithEmailAndPassword(fireAuth, 'admin@gmail.com', 'qweqwe')
 
@@ -67,7 +67,7 @@ const StudentPhoto = ({ user }: { user: any }) => {
                       <span className='font-medium sm:text-lg text-xs'>
                         Student:{' '}
                         <span className=' capitalize sm:text-lg text-xs'>
-                          {user?.firstname ?? ''} {user?.middlename && user?.middlename[0] + '.'} {user?.lastname ?? ''} {user?.extensionName ? user.extensionName : ''}
+                          {user?.firstname ?? ''} {user?.middlename && user?.middlename[0] + '.'} {user?.lastname ?? ''} {user?.extensionName ? user?.extensionName : ''}
                         </span>
                       </span>
                     </div>

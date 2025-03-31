@@ -36,7 +36,7 @@ const AddFormSubject = ({ curriculum, s }: IProps) => {
     setSelectedItems((prevSelected) => {
       const updatedSelection = prevSelected.includes(subjectId) ? prevSelected.filter((d) => d !== subjectId) : [...prevSelected, subjectId];
       // Sort the selected days according to the standard day order
-      return updatedSelection.sort((a, b) => subjectId.indexOf(a) - subjectId.indexOf(b));
+      return updatedSelection.sort((a, b) => subjectId?.indexOf(a) - subjectId?.indexOf(b));
     });
   };
 

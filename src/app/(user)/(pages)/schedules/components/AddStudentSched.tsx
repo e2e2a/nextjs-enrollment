@@ -25,7 +25,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
   useEffect(() => {
     if (!student) return;
     if (student) {
-      setStudentCourse(student.courseId.courseCode);
+      setStudentCourse(student.courseId?.courseCode);
       setStudentBlockType(student?.blockTypeId?.section);
       setStudentYear(student.studentYear);
       setStudentSemester(student.studentSemester);
@@ -117,7 +117,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                 <span>Add New Student Subjects</span>
                 <span className=''>Course: {student?.courseId?.name}</span>
                 <span className='text-sm font-bold uppercase'>
-                  {student?.profileId?.firstname ?? ''} {student?.profileId?.middlename ?? ''} {student?.profileId?.lastname ?? ''} {student.profileId.extensionName ? student.profileId.extensionName + '.' : ''}
+                  {student?.profileId?.firstname ?? ''} {student?.profileId?.middlename ?? ''} {student?.profileId?.lastname ?? ''} {student?.profileId?.extensionName ? student.profileId?.extensionName + '.' : ''}
                 </span>
                 <span className='text-sm font-bold capitalize'>Block: {student?.blockTypeId?.section ? student?.blockTypeId?.section : 'N/A'}</span>
               </DialogTitle>
@@ -137,7 +137,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                           let selectedItem = null;
                           for (const schedule of schedules) {
                             if (Array.isArray(schedule.blockSubjects)) {
-                              const a = schedule.blockSubjects.find((blockSubject: any) => blockSubject.teacherScheduleId._id === item.teacherScheduleId);
+                              const a = schedule.blockSubjects.find((blockSubject: any) => blockSubject?.teacherScheduleId?._id === item.teacherScheduleId);
                               selectedItem = a?.teacherScheduleId
                               if (selectedItem) break;
                             }
@@ -230,13 +230,13 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                   <span className=' font-semibold'>
                                                     Instructor:
                                                     {s.teacherScheduleId &&
-                                                      s.teacherScheduleId.profileId &&
+                                                      s.teacherScheduleId?.profileId &&
                                                       `${s?.teacherScheduleId?.profileId?.firstname ?? ''} ${s?.teacherScheduleId?.profileId?.middlename ?? ''} ${s.teacherScheduleId?.profileId?.lastname ?? ''}${' '}
-                                                      ${s?.teacherScheduleId.profileId?.extensionName ? s?.teacherScheduleId?.profileId?.extensionName : ''}`}
+                                                      ${s?.teacherScheduleId?.profileId?.extensionName ? s?.teacherScheduleId?.profileId?.extensionName : ''}`}
                                                     {s.teacherScheduleId &&
-                                                      s.teacherScheduleId.deanId &&
+                                                      s.teacherScheduleId?.deanId &&
                                                       `${s?.teacherScheduleId?.deanId?.firstname ?? ''} ${s?.teacherScheduleId?.deanId?.middlename ?? ''} ${s?.teacherScheduleId?.deanId?.lastname ?? ''}${' '}
-                                                      ${s?.teacherScheduleId.deanId?.extensionName ? s?.teacherScheduleId?.deanId?.extensionName : ''}`}
+                                                      ${s?.teacherScheduleId?.deanId?.extensionName ? s?.teacherScheduleId?.deanId?.extensionName : ''}`}
                                                   </span>
                                                   <span className=' font-semibold'>
                                                     Course Code: <span className=''>{s?.teacherScheduleId?.courseId?.courseCode}</span>

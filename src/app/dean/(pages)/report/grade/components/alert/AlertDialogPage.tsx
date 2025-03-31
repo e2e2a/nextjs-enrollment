@@ -24,7 +24,7 @@ const AlertDialogPage = ({ request, user, isPending, setIsPending }: IProps) => 
 
     const dataa = {
       category: 'College',
-      reportGradeId: user._id,
+      reportGradeId: user?._id,
       statusInDean: request === 'Approve' ? 'Approved' : 'Rejected',
     };
 

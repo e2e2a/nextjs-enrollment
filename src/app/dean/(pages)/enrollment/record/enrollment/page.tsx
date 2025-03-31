@@ -20,7 +20,7 @@ const Page = () => {
 
     if (data && pData) {
       if (data.enrollmentRecords && pData.profile) {
-        const filteredEnrollment = data?.enrollmentRecords?.filter((enrollment: any) => enrollment.course === pData?.profile.courseId.name && enrollment.courseCode === pData?.profile.courseId.courseCode);
+        const filteredEnrollment = data?.enrollmentRecords?.filter((enrollment: any) => enrollment?.course === pData?.profile.courseId?.name && enrollment?.courseCode === pData?.profile.courseId?.courseCode);
         setFilteredEnrollments(filteredEnrollment);
       }
       setIsPageLoading(false);

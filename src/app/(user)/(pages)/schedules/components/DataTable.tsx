@@ -22,7 +22,7 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
       return;
     }
     if (enrollment) {
-      setEnrollmentStudentStatus(enrollment.enrollStatus);
+      setEnrollmentStudentStatus(enrollment?.enrollStatus);
     }
   }, [data, enrollment]);
 
@@ -92,7 +92,7 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
                         if (header.id === 'requestStatusInRegistrar') return;
                         // if (header.id === 'request status') return;
                       } else {
-                        if (enrollment.step >= 4) {
+                        if (enrollment?.step >= 4) {
                           if (header.id === 'requesting') return;
                           if (header.id === 'status') return;
                         } else {
@@ -139,7 +139,7 @@ export function DataTable<TData, TValue>({ columns, data, enrollment, enrollment
                             if (cell.column.id === 'requestStatusInRegistrar') return;
                             // if (cell.column.id === 'request status') return;
                           } else {
-                            if (enrollment.step >= 4) {
+                            if (enrollment?.step >= 4) {
                               if (cell.column.id === 'requesting') return;
                               if (cell.column.id === 'status') return;
                             } else {

@@ -19,7 +19,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original.profileId;
       if (!user) return <div key={cell.id}>Unknown</div>;
 
-      const name = `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`
+      const name = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',') // Fix spaces before commas
         .replace(/,(\S)/g, ', $1') // Ensure proper comma spacing
         .replace(/\s+/g, ' ') // Remove extra spaces
@@ -36,14 +36,14 @@ export const columns: ColumnDef<any>[] = [
       const user = row.profileId;
       if (!user) return '';
 
-      return `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim();
+      return `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim();
     },
 
     filterFn: (row, columnId, filterValue) => {
       const user = row.original.profileId;
       if (!user) return false;
 
-      const fullName = `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
         .replace(/\s+/g, ' ')

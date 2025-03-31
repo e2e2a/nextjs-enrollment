@@ -29,7 +29,7 @@ export function DataTableDrawer({ user }: IProps) {
     // setIsPending(true);
     const dataa = {
       ...data,
-      EId: user._id,
+      EId: user?._id,
     };
     // mutation.mutate(dataa, {
     //   onSuccess: (res) => {

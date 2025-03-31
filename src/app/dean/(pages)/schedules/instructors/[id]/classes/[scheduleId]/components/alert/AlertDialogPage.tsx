@@ -23,7 +23,7 @@ const AlertDialogPage = ({ user, isPending, setIsPending }: IProps) => {
 
     const dataa = {
       category: 'College',
-      reportGradeId: user._id,
+      reportGradeId: user?._id,
     };
 
     mutation.mutate(dataa, {

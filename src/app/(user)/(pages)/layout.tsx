@@ -6,7 +6,7 @@ import { auth } from '@/auth';
 const Layout = async ({ children }: { children: ReactNode }) => {
   const sessionData = await auth();
 
-  if (!sessionData || sessionData.user.role !== 'STUDENT') {
+  if (!sessionData || sessionData?.user?.role !== 'STUDENT') {
     return redirect('/sign-in');
   }
 

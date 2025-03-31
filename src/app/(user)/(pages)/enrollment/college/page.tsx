@@ -30,7 +30,7 @@ const Page = () => {
     if (res && resE && resP) {
       if (resP.profile && res.courses) {
         if (search) {
-          const courseTitles = res?.courses?.map((course: any) => course.courseCode.toLowerCase());
+          const courseTitles = res?.courses?.map((course: any) => course?.courseCode?.toLowerCase());
           if (!courseTitles.includes(search.toLowerCase())) return setIsError(true);
         }
 

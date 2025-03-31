@@ -25,7 +25,7 @@ const ActionsCell = ({ user }: IProps) => {
     const value = e.target.value;
     setInputValue(value);
 
-    if (value.toLowerCase().trim() === user.teacherScheduleId.subjectId.name.toLowerCase().trim()) {
+    if (value.toLowerCase().trim() === user?.teacherScheduleId?.subjectId?.name.toLowerCase().trim()) {
       setErrorInSUbjectInput(false);
     } else {
       setErrorInSUbjectInput(true);
@@ -57,7 +57,7 @@ const ActionsCell = ({ user }: IProps) => {
   const actionFormEnable = (request: string, reason?: string) => {
     setIsUploading(true);
     if (request !== 'Suggested') {
-      if (inputValue.toLowerCase().trim() !== user.teacherScheduleId.subjectId.name.toLowerCase()) {
+      if (inputValue.toLowerCase().trim() !== user?.teacherScheduleId?.subjectId?.name.toLowerCase()) {
         setIsUploading(false);
         setErrorInSUbjectInput(true);
         return;
@@ -73,7 +73,7 @@ const ActionsCell = ({ user }: IProps) => {
     const data = {
       category: 'College',
       profileId: user?.profileId?._id,
-      teacherScheduleId: user.teacherScheduleId?._id,
+      teacherScheduleId: user?.teacherScheduleId?._id,
       request,
       ...(inputValueReason ? { reason: inputValueReason } : {}),
     };
@@ -100,7 +100,7 @@ const ActionsCell = ({ user }: IProps) => {
 
   return (
     <>
-      {!user.request && (
+      {!user?.request && (
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
           <AlertDialogTrigger asChild>
             <Button type='button' disabled={isUploading} variant='outline' size={'sm'} className='sm:text-sm text-xs bg-red text-white'>
@@ -120,7 +120,7 @@ const ActionsCell = ({ user }: IProps) => {
               </div>
               <div className='grid grid-cols-1 gap-y-1'>
                 <div className='text-[14px] text-muted-foreground'>
-                  Enter the subject name <span className='font-bold'>{user.teacherScheduleId.subjectId.name}</span> to conitinue
+                  Enter the subject name <span className='font-bold'>{user?.teacherScheduleId?.subjectId?.name}</span> to conitinue
                 </div>
                 <div className=''>
                   <Input type='text' name='subject' className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none ring-0 focus:ring-1 focus:ring-red' value={inputValue} onChange={handleInputChange} placeholder='Enter subject name' />
@@ -163,9 +163,9 @@ const ActionsCell = ({ user }: IProps) => {
           </form>
         </AlertDialog>
       )}
-      {user.request && user.request === 'drop' && <span className='uppercase text-red'>DROP</span>}
-      {user.request && user.request === 'add' && <span className='uppercase text-green-500'>add</span>}
-      {user.request && user.requestStatus.toLowerCase() === 'suggested' && (
+      {user?.request && user?.request === 'drop' && <span className='uppercase text-red'>DROP</span>}
+      {user?.request && user?.request === 'add' && <span className='uppercase text-green-500'>add</span>}
+      {user?.request && user?.requestStatus.toLowerCase() === 'suggested' && (
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
           <AlertDialogTrigger asChild>
             <Button type='button' disabled={isUploading} variant='outline' size={'sm'} className='sm:text-sm text-xs bg-green-500 text-white'>

@@ -64,7 +64,7 @@ export const columns: ColumnDef<IEnrollment>[] = [
     },
   },
   {
-    accessorFn: (row) => row.courseId.courseCode,
+    accessorFn: (row) => row.courseId?.courseCode,
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
@@ -112,54 +112,54 @@ export const columns: ColumnDef<IEnrollment>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.studentStatus}
+          {user?.studentStatus}
         </div>
       );
     },
   },
   {
-    accessorFn: (row) => row.profileId.psaUrl,
+    accessorFn: (row) => row.profileId?.psaUrl,
     accessorKey: 'psa file',
     header: 'PSA file',
     cell: ({ row }) => {
       const user = row.original;
-      return user.profileId.psaUrl ? <PSAFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
+      return user?.profileId?.psaUrl ? <PSAFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
-    accessorFn: (row) => row.profileId.goodMoralUrl,
+    accessorFn: (row) => row.profileId?.goodMoralUrl,
     accessorKey: 'good moral',
     header: 'Good Moral',
     cell: ({ row }) => {
       const user = row.original;
-      return user.profileId.goodMoralUrl ? <GoodMoralFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
+      return user?.profileId?.goodMoralUrl ? <GoodMoralFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
-    accessorFn: (row) => row.profileId.reportCardUrl,
+    accessorFn: (row) => row.profileId?.reportCardUrl,
     accessorKey: 'Report Card',
     header: 'Report Card',
     cell: ({ row }) => {
       const user = row.original;
-      return user.profileId.reportCardUrl ? <ReportCardFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
+      return user?.profileId?.reportCardUrl ? <ReportCardFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
-    accessorFn: (row) => row.profileId.cocUrl,
+    accessorFn: (row) => row.profileId?.cocUrl,
     accessorKey: 'Certification of Completion',
     header: 'Certification of Completion',
     cell: ({ row }) => {
       const user = row.original;
-      return user.profileId.cocUrl ? <COCFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
+      return user?.profileId?.cocUrl ? <COCFile user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {
-    accessorFn: (row) => row.profileId.photoUrl,
+    accessorFn: (row) => row.profileId?.photoUrl,
     accessorKey: 'student photo',
     header: 'Student Photo',
     cell: ({ row }) => {
       const user = row.original;
-      return user.profileId.photoUrl ? <StudentPhoto user={user} /> : <span className=' text-red font-medium'>N/A</span>;
+      return user?.profileId?.photoUrl ? <StudentPhoto user={user} /> : <span className=' text-red font-medium'>N/A</span>;
     },
   },
   {

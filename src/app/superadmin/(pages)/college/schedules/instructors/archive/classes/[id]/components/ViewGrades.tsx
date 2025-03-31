@@ -25,10 +25,10 @@ const ViewGrades = ({ teacher, data, type, reportGrades }: IProps) => {
       return;
     }
 
-    const found1 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId._id && e.type === 'firstGrade');
-    const found2 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId._id && e.type === 'secondGrade');
-    const found3 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId._id && e.type === 'thirdGrade');
-    const found4 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId._id && e.type === 'fourthGrade');
+    const found1 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId?._id && e.type === 'firstGrade');
+    const found2 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId?._id && e.type === 'secondGrade');
+    const found3 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId?._id && e.type === 'thirdGrade');
+    const found4 = reportGrades.find((e: any) => teacher?._id === e.teacherScheduleId?._id && e.type === 'fourthGrade');
 
     setFirstGrade(found1 || null);
     setSecondGrade(found2 || null);

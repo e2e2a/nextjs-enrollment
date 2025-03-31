@@ -21,7 +21,7 @@ const Page = () => {
 
     if (data && pData) {
       if (data.teacherScheduleRecord && pData.profile) {
-        // const filteredRG = data?.teacherScheduleRecord.filter((rg: any) => rg.teacherId._id === pData.profile._id);
+        // const filteredRG = data?.teacherScheduleRecord?.filter((rg: any) => rg.teacherId._id === pData.profile._id);
         // setTeacherRG(filteredRG);
         setIsPageLoading(false);
       }

@@ -27,7 +27,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
   useEffect(() => {
     if (!student) return setPageLoader(true);
     if (student) {
-      setStudentCourse(student.courseId.courseCode);
+      setStudentCourse(student.courseId?.courseCode);
       setStudentBlockType(studentBlockType || student?.blockTypeId?.section);
       setStudentYear(student.studentYear);
       setStudentSemester(student.studentSemester);
@@ -124,7 +124,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
             <span>Add New Student Subjects</span>
             <span className='capitalize'>Course: {student.courseId?.name}</span>
             <span className='text-sm font-bold uppercase'>
-              {student.profileId.firstname} {student.profileId.middlename ?? ''} {student.profileId.lastname} {student.profileId.extensionName ? student.profileId.extensionName + '.' : ''}
+              {student.profileId?.firstname} {student.profileId?.middlename ?? ''} {student.profileId?.lastname} {student.profileId?.extensionName ? student.profileId?.extensionName + '.' : ''}
             </span>
             <span className='text-sm font-bold capitalize'>Block: {student?.blockTypeId?.section ? student.blockTypeId?.section : 'N/A'}</span>
           </DialogTitle>
@@ -144,7 +144,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                       let selectedItem = null;
                       for (const schedule of schedules) {
                         if (Array.isArray(schedule.blockSubjects)) {
-                          selectedItem = schedule.blockSubjects.find((blockSubject: any) => blockSubject.teacherScheduleId._id === item.teacherScheduleId);
+                          selectedItem = schedule.blockSubjects.find((blockSubject: any) => blockSubject.teacherScheduleId?._id === item.teacherScheduleId);
                           if (selectedItem) break;
                         }
                       }
@@ -199,12 +199,12 @@ const AddStudentSched = ({ student, b }: IProps) => {
                             const section = (b.section ?? '').toLowerCase();
                             const studentType = (studentBlockType ?? '').toLowerCase();
                             if (section === studentType) {
-                              const enrolledTeacherScheduleIds = new Set(student.studentSubjects.filter((sched: any) => sched.status !== 'suggested').map((sched: any) => sched.teacherScheduleId._id));
+                              const enrolledTeacherScheduleIds = new Set(student.studentSubjects.filter((sched: any) => sched.status !== 'suggested').map((sched: any) => sched.teacherScheduleId?._id));
                               return (
                                 <div className='' key={b._id}>
                                   {b.blockSubjects.length > 0 ? (
                                     b.blockSubjects
-                                      .filter((s: any) => !enrolledTeacherScheduleIds.has(s.teacherScheduleId._id))
+                                      .filter((s: any) => !enrolledTeacherScheduleIds.has(s.teacherScheduleId?._id))
                                       .map((s: any, index: any) => (
                                         <CommandItem className='border w-full block mb-3 bg-gray-300' key={s._id} value={s?.teacherScheduleId?.subjectId?.name}>
                                           <div className='grid sm:grid-cols-2 grid-cols-1 w-full'>
@@ -212,13 +212,13 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                               <span className=' font-semibold border-1 sm:border-0'>
                                                 Instructor:{' '}
                                                 {s.teacherScheduleId &&
-                                                  s.teacherScheduleId.profileId &&
+                                                  s.teacherScheduleId?.profileId &&
                                                   `${s.teacherScheduleId?.profileId?.firstname} ${s.teacherScheduleId?.profileId?.middlename} ${s.teacherScheduleId?.profileId?.lastname}${' '}
-                                                ${s.teacherScheduleId.profileId?.extensionName ? s.teacherScheduleId.profileId.extensionName : ''}`}
+                                                ${s.teacherScheduleId?.profileId?.extensionName ? s.teacherScheduleId?.profileId?.extensionName : ''}`}
                                                 {s.teacherScheduleId &&
-                                                  s.teacherScheduleId.deanId &&
+                                                  s.teacherScheduleId?.deanId &&
                                                   `${s.teacherScheduleId?.deanId?.firstname} ${s.teacherScheduleId?.deanId?.middlename} ${s.teacherScheduleId?.deanId?.lastname}${' '}
-                                                ${s.teacherScheduleId.deanId?.extensionName ? s.teacherScheduleId.deanId.extensionName : ''}`}
+                                                ${s.teacherScheduleId?.deanId?.extensionName ? s.teacherScheduleId?.deanId.extensionName : ''}`}
                                               </span>
                                               <span className=' font-semibold'>
                                                 Department: <span className=''>{s?.teacherScheduleId?.courseId?.name}</span>
@@ -263,7 +263,7 @@ const AddStudentSched = ({ student, b }: IProps) => {
                                                     <Icons.add className='h-4 w-4' />
                                                     <span className='sm:flex text-xs sm:text-sm'>Add</span>
                                                   </Button>
-                                                  {student.step > 3 && <SuggestDialog isPending={isPending} isOpen={isOpen} setIsOpen={setIsOpen} teacherScheduleId={s.teacherScheduleId._id} actionFormSubmit={actionFormSubmit} />}
+                                                  {student.step > 3 && <SuggestDialog isPending={isPending} isOpen={isOpen} setIsOpen={setIsOpen} teacherScheduleId={s.teacherScheduleId?._id} actionFormSubmit={actionFormSubmit} />}
                                                 </div>
                                               )}
                                             </div>

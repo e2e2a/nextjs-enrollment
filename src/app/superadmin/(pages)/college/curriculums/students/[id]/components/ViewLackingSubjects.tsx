@@ -27,12 +27,12 @@ const ViewLackingSubjects = ({ c, sData }: IProps) => {
         if (curriculumByYearAndSemester) {
           const requiredSubjects = curriculumByYearAndSemester.subjectsFormat;
 
-          const studentSub = studentCurr.subjectsFormat.map((subject: any) => subject.subjectId._id.toString()); // Extract student subject IDs
-          const studentSubjects = studentCurr.subjectsFormat.filter((subject: any) => !subject.grade || (subject.grade && subject.grade.toLowerCase() === 'inc')).map((s: any) => s);
+          const studentSub = studentCurr.subjectsFormat.map((subject: any) => subject?.subjectId?._id.toString()); // Extract student subject IDs
+          const studentSubjects = studentCurr.subjectsFormat.filter((subject: any) => !subject?.grade || (subject?.grade && subject?.grade.toLowerCase() === 'inc')).map((s: any) => s);
           missingSubjectsGradeObj[yearKey] = studentSubjects;
 
           // Find missing subjects
-          const notTakenSubjects = requiredSubjects.filter((currSubject: any) => !studentSub.includes(currSubject.subjectId._id)).map((currSubject: any) => currSubject);
+          const notTakenSubjects = requiredSubjects.filter((currSubject: any) => !studentSub.includes(currSubject?.subjectId?._id)).map((currSubject: any) => currSubject);
           missingSubjectsObj[yearKey] = notTakenSubjects;
         }
       });

@@ -20,7 +20,7 @@ export const columns: ColumnDef<ICurriculum>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' capitalize'>
-          {user.courseId.name}
+          {user?.courseId?.name}
         </div>
       );
     },
@@ -29,7 +29,7 @@ export const columns: ColumnDef<ICurriculum>[] = [
       return `${name}`;
     },
     filterFn: (row, columnId, filterValue) => {
-      const name = `${row.original.courseId.name}`.toLowerCase();
+      const name = `${row.original.courseId?.name}`.toLowerCase();
       return name.includes(filterValue.toLowerCase());
     },
   },

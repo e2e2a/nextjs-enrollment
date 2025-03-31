@@ -7,15 +7,15 @@ const Layout = async ({ children }: { children: ReactNode }) => {
   if (sessionData) {
     if (sessionData.user?.role === 'ADMIN') {
       return redirect('/admin');
-    } else if (sessionData.user.role === 'STUDENT') {
+    } else if (sessionData?.user?.role === 'STUDENT') {
       return redirect('/');
-    } else if (sessionData.user.role === 'TEACHER') {
+    } else if (sessionData?.user?.role === 'TEACHER') {
       return redirect('/instructor');
-    } else if (sessionData.user.role === 'DEAN') {
+    } else if (sessionData?.user?.role === 'DEAN') {
       return redirect('/dean');
-    } else if (sessionData.user.role === 'ACCOUNTING') {
+    } else if (sessionData?.user?.role === 'ACCOUNTING') {
       return redirect('/accounting');
-    } else if (sessionData.user.role === 'SUPER ADMIN') {
+    } else if (sessionData?.user?.role === 'SUPER ADMIN') {
       return redirect('/superadmin');
     }
     // return redirect('/');

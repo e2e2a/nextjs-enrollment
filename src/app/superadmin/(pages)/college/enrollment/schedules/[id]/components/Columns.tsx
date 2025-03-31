@@ -27,7 +27,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId?.blockTypeId?.section ?? 'N/A'}
+          {user?.teacherScheduleId?.blockTypeId?.section ?? 'N/A'}
         </div>
       );
     },
@@ -41,7 +41,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user.teacherScheduleId?.subjectId?.subjectCode}
+          {user?.teacherScheduleId?.subjectId?.subjectCode}
         </div>
       );
     },
@@ -186,8 +186,8 @@ export const columns: ColumnDef<any>[] = [
           .trim();
       };
 
-      const instructorName = user.profileId ? formatName(user.profileId) : '';
-      const deanName = user.deanId ? formatName(user.deanId) : '';
+      const instructorName = user?.profileId ? formatName(user?.profileId) : '';
+      const deanName = user?.deanId ? formatName(user?.deanId) : '';
 
       return (
         <div key={cell.id} className='capitalize'>
@@ -207,8 +207,8 @@ export const columns: ColumnDef<any>[] = [
           .trim();
       };
 
-      const instructorName = row.teacherScheduleId?.profileId ? formatName(row.teacherScheduleId.profileId) : '';
-      const deanName = row.teacherScheduleId?.deanId ? formatName(row.teacherScheduleId.deanId) : '';
+      const instructorName = row.teacherScheduleId?.profileId ? formatName(row.teacherScheduleId?.profileId) : '';
+      const deanName = row.teacherScheduleId?.deanId ? formatName(row.teacherScheduleId?.deanId) : '';
 
       return `${instructorName} ${deanName}`.trim();
     },
@@ -226,8 +226,8 @@ export const columns: ColumnDef<any>[] = [
           .trim();
       };
 
-      const instructorName = user.profileId ? formatNameForSearch(user.profileId) : '';
-      const deanName = user.deanId ? formatNameForSearch(user.deanId) : '';
+      const instructorName = user?.profileId ? formatNameForSearch(user?.profileId) : '';
+      const deanName = user?.deanId ? formatNameForSearch(user?.deanId) : '';
 
       return instructorName.includes(filterValue.toLowerCase()) || deanName.includes(filterValue.toLowerCase());
     },
@@ -241,19 +241,19 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.teacherScheduleId.roomId.roomName,
+    accessorFn: (row) => row.teacherScheduleId?.roomId?.roomName,
     id: 'requesting',
     header: 'Requesting',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase '>
-          {!user.request && <div className='text-gray-500 text-xs'>N/A</div>}
-          {user.request && user.request === 'add' ? (
+          {!user?.request && <div className='text-gray-500 text-xs'>N/A</div>}
+          {user?.request && user?.request === 'add' ? (
             <div className='text-green-500 text-xs font-bold'>Add</div>
-          ) : user.request === 'drop' ? (
+          ) : user?.request === 'drop' ? (
             <div className='text-red text-xs font-bold'>Drop</div>
-          ) : user.request === 'suggested' ? (
+          ) : user?.request === 'suggested' ? (
             <div className='text-orange-300 text-xs font-bold'>Suggested</div>
           ) : null}
         </div>
@@ -267,12 +267,12 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.requestStatusInDean === 'Approved' ? (
-            <span className='text-green-500 text-xs'>{user.requestStatusInDean}</span>
-          ) : user.requestStatusInDean === 'Pending' ? (
-            <span className='text-blue-500 text-xs'>{user.requestStatusInDean}</span>
-          ) : user.requestStatusInDean === 'Declined' ? (
-            <span className='text-red text-xs'>{user.requestStatusInDean}</span>
+          {user?.requestStatusInDean === 'Approved' ? (
+            <span className='text-green-500 text-xs'>{user?.requestStatusInDean}</span>
+          ) : user?.requestStatusInDean === 'Pending' ? (
+            <span className='text-blue-500 text-xs'>{user?.requestStatusInDean}</span>
+          ) : user?.requestStatusInDean === 'Declined' ? (
+            <span className='text-red text-xs'>{user?.requestStatusInDean}</span>
           ) : (
             <span className='text-gray-400 text-xs'>N/A</span>
           )}
@@ -287,12 +287,12 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className='uppercase'>
-          {user.requestStatusInRegistrar === 'Approved' ? (
-            <span className='text-green-500 text-xs'>{user.requestStatusInRegistrar}</span>
-          ) : user.requestStatusInRegistrar === 'Pending' ? (
-            <span className='text-blue-500 text-xs'>{user.requestStatusInRegistrar}</span>
-          ) : user.requestStatusInRegistrar === 'Declined' ? (
-            <span className='text-red text-xs'>{user.requestStatusInRegistrar}</span>
+          {user?.requestStatusInRegistrar === 'Approved' ? (
+            <span className='text-green-500 text-xs'>{user?.requestStatusInRegistrar}</span>
+          ) : user?.requestStatusInRegistrar === 'Pending' ? (
+            <span className='text-blue-500 text-xs'>{user?.requestStatusInRegistrar}</span>
+          ) : user?.requestStatusInRegistrar === 'Declined' ? (
+            <span className='text-red text-xs'>{user?.requestStatusInRegistrar}</span>
           ) : (
             <span className='text-gray-400 text-xs'>N/A</span>
           )}
@@ -307,7 +307,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' '>
-          {user.reason ? (
+          {user?.reason ? (
             <>
               <ViewReason user={user} />
             </>

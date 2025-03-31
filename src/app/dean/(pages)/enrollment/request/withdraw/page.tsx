@@ -22,7 +22,7 @@ const Page = () => {
 
     if (data && pData) {
       if (data.students && pData.profile) {
-        const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment.requestWithdraw); // filtered withdraw enrollment
+        const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment?.requestWithdraw); // filtered withdraw enrollment
         setEnrolledStudents(filteredEnrollment);
         setIsError(false);
       } else if (data.error) {

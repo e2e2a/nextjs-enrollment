@@ -50,7 +50,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user?.blockTypeId?.year ? user.blockTypeId?.year : <span className='text-xs text-red'>N/A</span>}
+          {user?.blockTypeId?.year ? user?.blockTypeId?.year : <span className='text-xs text-red'>N/A</span>}
         </div>
       );
     },
@@ -82,7 +82,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.subjectId.name,
+    accessorFn: (row) => row.subjectId?.name,
     id: 'Descriptive title',
     header: 'Descriptive Title',
     cell: ({ cell, row }) => {
@@ -95,7 +95,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.subjectId.preReq,
+    accessorFn: (row) => row.subjectId?.preReq,
     id: 'Pre Req.',
     header: 'Pre Req.',
     cell: ({ cell, row }) => {

@@ -13,7 +13,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
 
   const { data, isLoading, error } = useStudentCurriculumQueryById(params.id);
-  const { data: sData, isLoading: sLoading, error: sError } = useCurriculumQueryByCourseId(data?.curriculum?.courseId._id ?? 'a');
+  const { data: sData, isLoading: sLoading, error: sError } = useCurriculumQueryByCourseId(data?.curriculum?.courseId?._id ?? 'a');
 
   useEffect(() => {
     if (error || !data) return;

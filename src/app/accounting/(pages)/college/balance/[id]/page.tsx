@@ -199,8 +199,8 @@ const Page = ({ params }: { params: { id: string } }) => {
         setRegMiscTotal(0);
         setTotal(0);
         setTotalWithoutDownPayment(0);
-        const lab = data.enrollment.studentSubjects.reduce((acc: number, subjects: any) => acc + Number(subjects?.teacherScheduleId?.subjectId?.lab), 0);
-        const unit = data.enrollment.studentSubjects.reduce((acc: number, subjects: any) => acc + Number(subjects?.teacherScheduleId?.subjectId?.unit), 0);
+        const lab = data?.enrollment?.studentSubjects.reduce((acc: number, subjects: any) => acc + Number(subjects?.teacherScheduleId?.subjectId?.lab), 0);
+        const unit = data?.enrollment?.studentSubjects.reduce((acc: number, subjects: any) => acc + Number(subjects?.teacherScheduleId?.subjectId?.unit), 0);
 
         // Ensure correct calculations at every step
         const aFormatted = parseFloat((lab * tfData?.tFee?.ratePerLab).toFixed(2));
@@ -229,7 +229,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
         let addOjtFee = false;
         const ojtFee = Number(tfData?.tFee?.ojtFee) || 0;
-        const ojt = data.enrollment.studentSubjects.find((sub: any) => {
+        const ojt = data?.enrollment?.studentSubjects.find((sub: any) => {
           if (sub?.teacherScheduleId?.subjectId?.subjectCode.trim().toLowerCase() === 'prac1' || sub?.teacherScheduleId?.subjectId?.subjectCode.trim().toLowerCase() === 'prac2') {
             setShowOJT(true);
             addOjtFee = true;
@@ -338,7 +338,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         <>
           {data?.enrollment ? (
             <>
-              {tfData?.tFee && data.enrollment.step >= 5 ? (
+              {tfData?.tFee && data?.enrollment?.step >= 5 ? (
                 <div className='border-0 bg-white rounded-xl min-h-[87vh]'>
                   {tfData?.tFee && (
                     <Accordion type='single' collapsible className='w-full p-10'>
@@ -1084,7 +1084,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                       </Card>
                     </div>
                   )}
-                  {data && data.enrollment.step < 5 && (
+                  {data && data.enrollment?.step < 5 && (
                     <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
                       <Card className={`min-h-[35vh] my-[10%] shadow-none drop-shadow-none items-center justify-center flex border-0`}>
                         <CardHeader className='space-y-3 hidden'>

@@ -186,7 +186,7 @@ export const columns: ColumnDef<any>[] = [
     accessorFn: (row) => `${row.teacher?.lastname ? row?.teacher?.lastname + ',' : ''} ${row.teacher.firstname ?? ''} ${row.teacher.middlename ?? ''}${row.teacher?.extensionName ? ', ' + row?.teacher?.extensionName : ''}`.trim(),
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user.teacher?.lastname ? user?.teacher?.lastname + ',' : ''} ${user.teacher?.firstname ?? ''} ${user?.teacher?.middlename ?? ''}${user?.teacher?.extensionName ? ', ' + user?.teacher?.extensionName : ''}`
+      const fullName = `${user?.teacher?.lastname ? user?.teacher?.lastname + ',' : ''} ${user?.teacher?.firstname ?? ''} ${user?.teacher?.middlename ?? ''}${user?.teacher?.extensionName ? ', ' + user?.teacher?.extensionName : ''}`
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
         .replace(/\s+/g, ' ')

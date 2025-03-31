@@ -48,19 +48,19 @@ const Page = ({ params }: { params: { id: string } }) => {
                 <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
                   <div className='justify-between items-center flex w-full'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Department: <span className='font-normal'>{data.blockType.courseId.name}</span>
+                      Department: <span className='font-normal'>{data.blockType?.courseId?.name}</span>
                     </span>
                   </div>
                   <div className='flex w-full justify-start sm:justify-end'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Block: <span className='font-normal'>{data.blockType.section}</span>
+                      Block: <span className='font-normal'>{data.blockType?.section}</span>
                     </span>
                   </div>
                   <div className='justify-between items-center flex w-full'>
                     <span className='text-sm sm:text-[17px] font-bold capitalize'>
                       Year:{' '}
                       <span className='font-normal'>
-                        {data.blockType.year} - {data.blockType.semester}
+                        {data.blockType?.year} - {data.blockType?.semester}
                       </span>
                     </span>
                   </div>
@@ -69,7 +69,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               <div className='w-full flex justify-end items-center'>
                 <AddBlockSched blockType={data} s={teachersSchedules} />
               </div>
-              <DataTable columns={columns} data={data?.blockType.blockSubjects} />
+              <DataTable columns={columns} data={data?.blockType?.blockSubjects} />
             </>
           ) : (
             <div className=''>404</div>

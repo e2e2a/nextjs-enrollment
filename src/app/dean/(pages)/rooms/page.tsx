@@ -17,7 +17,7 @@ const Page = () => {
     if (error || !data) return;
     if (data) {
       if (data.rooms) {
-        const filteredRooms = data?.rooms.filter((room: IRoom) => room.educationLevel === 'tertiary');
+        const filteredRooms = data?.rooms.filter((room: IRoom) => room?.educationLevel === 'tertiary');
         setRooms(filteredRooms);
       }
       setIsPageLoading(false);

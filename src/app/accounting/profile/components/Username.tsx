@@ -27,7 +27,7 @@ const Username = ({ profile }: IProps) => {
   form.watch('username');
 
   useEffect(() => {
-    form.setValue('username', `${profile.userId.username}`);
+    form.setValue('username', `${profile.userId?.username}`);
   }, [form, profile]);
 
   const onChange = () => {
@@ -35,7 +35,7 @@ const Username = ({ profile }: IProps) => {
   };
 
   const onSubmit: SubmitHandler<z.infer<typeof UsernameValidator>> = async (data) => {
-    if (data.username === profile.userId.username) return;
+    if (data.username === profile.userId?.username) return;
     mutation.mutate(data, {
       onSuccess: (res) => {
         switch (res.status) {
@@ -103,7 +103,7 @@ const Username = ({ profile }: IProps) => {
         </>
       ) : (
         <>
-          <p className='small-regular md:body-medium text-light-3 text-center'>@{profile.userId.username}</p>
+          <p className='small-regular md:body-medium text-light-3 text-center'>@{profile?.userId?.username}</p>
           <div className='hidden group-hover:flex'>
             <Icons.squarePen className='h-4 w-4 text-blue-600 cursor-pointer' onClick={onChange} />
           </div>

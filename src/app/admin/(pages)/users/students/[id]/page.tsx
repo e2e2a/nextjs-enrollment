@@ -27,7 +27,7 @@ const ProfilePage = ({ params }: { params: { id: string } }) => {
     if (res) {
       if (res.profile) {
         //check role
-        if (res.profile.userId.role !== 'STUDENT') setIsError(true);
+        if (res.profile.userId?.role !== 'STUDENT') setIsError(true);
         setIsPageLoading(false);
       } else if (res.error) {
         setIsError(true);
@@ -64,7 +64,7 @@ const ProfilePage = ({ params }: { params: { id: string } }) => {
                   <div className='w-full flex flex-col justify-center items-center bg-slate-100 '>
                     <TabsContent value='profile' className={`w-full bg-white my-3 max-w-[69rem] rounded-lg`}>
                       {!res.profile.enrollStatus && <ProfileTab profile={res?.profile} />}
-                      {res.profile.enrollStatus && res.profile.courseId && res.profile.courseId.category.toLowerCase() === 'college' && <ProfileTabEnrollCollege profile={res?.profile} />}
+                      {res?.profile?.enrollStatus && res.profile.courseId && res.profile?.courseId?.category.toLowerCase() === 'college' && <ProfileTabEnrollCollege profile={res?.profile} />}
                     </TabsContent>
                     <TabsContent value='email' className='w-full bg-neutral-50  my-10 max-w-[69rem] rounded-lg'>
                       <EmailTab profile={res?.profile} />

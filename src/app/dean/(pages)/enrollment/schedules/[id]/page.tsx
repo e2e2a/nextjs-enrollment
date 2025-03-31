@@ -26,7 +26,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     if (b && data && ESetup) {
       if (data.enrollment && b.blockTypes && ESetup.enrollmentSetup) {
-        const filteredSchedules = b?.blockTypes?.filter((block: any) => block.courseId._id === data?.enrollment?.courseId._id);
+        const filteredSchedules = b?.blockTypes?.filter((block: any) => block.courseId?._id === data?.enrollment?.courseId?._id);
         setSchedules(filteredSchedules);
         setIsPageLoading(false);
       }

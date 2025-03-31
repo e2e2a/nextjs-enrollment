@@ -82,12 +82,11 @@ const CollegeOldStudent = ({ profile, enrollmentSetup }: IProps) => {
     const dataa = {
       ...data,
       category: 'College',
-      userId: s?.user.id,
+      userId: s?.user?.id,
     };
 
     mutation.mutate(dataa, {
       onSuccess: (res) => {
-        console.log('res', res)
         switch (res.status) {
           case 200:
           case 201:

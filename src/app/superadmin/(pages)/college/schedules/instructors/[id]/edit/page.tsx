@@ -51,7 +51,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     if (rData && sData) {
       if (rData.rooms) {
-        const filteredRooms = rData.rooms.filter((room: any) => room.educationLevel === 'tertiary');
+        const filteredRooms = rData.rooms.filter((room: any) => room?.educationLevel === 'tertiary');
         setRooms(filteredRooms);
       }
 

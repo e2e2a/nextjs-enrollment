@@ -22,7 +22,7 @@ const EvaluationButton = ({ user }: IProps) => {
 
     const dataa = {
       category: 'College',
-      reportGradeId: user._id,
+      reportGradeId: user?._id,
     };
 
     mutation.mutate(dataa, {
@@ -45,8 +45,8 @@ const EvaluationButton = ({ user }: IProps) => {
   };
 
   return (
-    <div className={`w-full flex justify-start items-center ${user.evaluated ? ' mt-1 ' : ' mt-4 sm:mt-0'}`}>
-      {!user.evaluated && (
+    <div className={`w-full flex justify-start items-center ${user?.evaluated ? ' mt-1 ' : ' mt-4 sm:mt-0'}`}>
+      {!user?.evaluated && (
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
           <AlertDialogTrigger asChild>
             <div className='flex justify-start sm:justify-center w-full'>

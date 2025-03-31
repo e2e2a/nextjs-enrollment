@@ -20,7 +20,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       const name =
         user?.lastname && user?.firstname
-          ? `${user.lastname ? user.lastname + ',' : ''} ${user.firstname ?? ''} ${user.middlename ?? ''}${user.extensionName ? ', ' + user.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim()
+          ? `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`.replace(/\s+,/g, ',').replace(/,(\S)/g, ', $1').replace(/\s+/g, ' ').trim()
           : 'Unknown';
 
       return (
@@ -37,7 +37,7 @@ export const columns: ColumnDef<any>[] = [
 
     filterFn: (row, columnId, filterValue) => {
       const user = row.original;
-      const fullName = `${user?.lastname ? user.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user.extensionName + '.' : ''}`
+      const fullName = `${user?.lastname ? user?.lastname + ',' : ''} ${user?.firstname ?? ''} ${user?.middlename ?? ''}${user?.extensionName ? ', ' + user?.extensionName + '.' : ''}`
         .replace(/\s+,/g, ',')
         .replace(/,(\S)/g, ', $1')
         .replace(/\s+/g, ' ')
@@ -61,7 +61,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.userId.email,
+    accessorFn: (row) => row.userId?.email,
     id: 'email',
     header: 'Email',
     cell: ({ cell, row }) => {
@@ -109,7 +109,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.userId?.role}
+          {user?.userId?.role}
         </div>
       );
     },

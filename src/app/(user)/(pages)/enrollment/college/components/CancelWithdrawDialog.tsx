@@ -82,8 +82,8 @@ const CancelWithdrawDialog = ({ user }: IProps) => {
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell className='px-4 py-2 text-center'>{user.withdrawApprovedByDean ? <span className='text-green-400 uppercase font-semibold'>APPROVED</span> : <span className='text-blue-400 uppercase font-semibold'>PENDING</span>}</TableCell>
-              <TableCell className='px-4 py-2 text-center'>{user.withdrawApprovedByAdmin ? <span className='text-green-400 uppercase font-semibold'>APPROVED</span> : <span className='text-blue-400 uppercase font-semibold'>PENDING</span>}</TableCell>
+              <TableCell className='px-4 py-2 text-center'>{user?.withdrawApprovedByDean ? <span className='text-green-400 uppercase font-semibold'>APPROVED</span> : <span className='text-blue-400 uppercase font-semibold'>PENDING</span>}</TableCell>
+              <TableCell className='px-4 py-2 text-center'>{user?.withdrawApprovedByAdmin ? <span className='text-green-400 uppercase font-semibold'>APPROVED</span> : <span className='text-blue-400 uppercase font-semibold'>PENDING</span>}</TableCell>
             </TableRow>
           </TableBody>
         </Table>

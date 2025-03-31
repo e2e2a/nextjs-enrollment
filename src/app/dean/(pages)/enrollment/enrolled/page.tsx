@@ -22,7 +22,7 @@ const Page = () => {
 
     if (data && pData) {
       if (data.students && pData.profile) {
-        const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment.enrollStatus === 'Enrolled');
+        const filteredEnrollment = data?.students?.filter((enrollment: any) => enrollment?.enrollStatus === 'Enrolled');
         setEnrolledStudents(filteredEnrollment);
         setIsError(false);
       } else if (data.error) {

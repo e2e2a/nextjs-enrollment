@@ -78,14 +78,14 @@ export function Combobox({ form, name, label, selectItems, placeholder, fullname
                             >
                               <Check className={cn('mr-2 h-4 w-4', field.value === getFullName(item) ? 'opacity-100' : 'opacity-0')} />
                               <div className='flex gap-2 items-center'>
-                                <Image className='h-9 w-9 rounded-full' src={item.imageUrl || '/icons/profile-placeholder.svg'} alt={item.firstname} width={10} height={10} />
+                                <Image className='h-9 w-9 rounded-full' src={item?.imageUrl || '/icons/profile-placeholder.svg'} alt={item?.firstname} width={10} height={10} />
                                 <div className='flex flex-col capitalize'>
                                   {getFullName(item)}
                                   <div>
-                                    <span>Age: {item.age}</span>
+                                    <span>Age: {item?.age}</span>
                                   </div>
                                   <div>
-                                    <span>Role: {item.userId.role}</span>
+                                    <span>Role: {item?.userId?.role}</span>
                                   </div>
                                 </div>
                               </div>

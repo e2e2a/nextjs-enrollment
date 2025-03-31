@@ -62,7 +62,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.category}
+          {user?.category}
         </div>
       );
     },
@@ -153,7 +153,7 @@ export const columns: ColumnDef<any>[] = [
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.blockType?.semester}
+          {user?.blockType?.semester}
         </div>
       );
     },

@@ -25,7 +25,7 @@ export const columns: ColumnDef<IStudentCurriculum>[] = [
         .replace(/,(\S)/g, ', $1')
         .trim();
 
-      return <div key={cell.id} className=' capitalize'>{user.firstname && user.lastname ? formattedName : 'Unknown'}</div>;
+      return <div key={cell.id} className=' capitalize'>{user?.firstname && user?.lastname ? formattedName : 'Unknown'}</div>;
     },
 
     accessorFn: (row) => {
@@ -69,7 +69,7 @@ export const columns: ColumnDef<IStudentCurriculum>[] = [
       return `${name}`;
     },
     filterFn: (row, columnId, filterValue) => {
-      const name = `${row.original.courseId.name}`.toLowerCase();
+      const name = `${row.original.courseId?.name}`.toLowerCase();
       return name.includes(filterValue.toLowerCase());
     },
   },

@@ -86,14 +86,14 @@ export function DataTable<TData, TValue>({ columns, data, enrollmentSetup, enrol
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
-                  if (enrollment.enrollStatus !== 'Enrolled' && enrollment.enrollStatus !== 'Temporary Enrolled') {
+                  if (enrollment?.enrollStatus !== 'Enrolled' && enrollment?.enrollStatus !== 'Temporary Enrolled') {
                     if (header.id === 'prelim') return;
                     if (header.id === 'midterm') return;
                     if (header.id === 'semi-final') return;
                     if (header.id === 'final') return;
                     if (header.id === 'averageTotal') return;
                   }
-                  if (enrollment.step >= 4) {
+                  if (enrollment?.step >= 4) {
                     if (header.id === 'actions') return;
                   } else {
                     if (header.id === 'requesting') return;
@@ -115,14 +115,14 @@ export function DataTable<TData, TValue>({ columns, data, enrollmentSetup, enrol
               table.getRowModel().rows.map((row) => (
                 <TableRow className='whitespace-pre' key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => {
-                    if (enrollment.enrollStatus !== 'Enrolled' && enrollment.enrollStatus !== 'Temporary Enrolled') {
+                    if (enrollment?.enrollStatus !== 'Enrolled' && enrollment?.enrollStatus !== 'Temporary Enrolled') {
                       if (cell.column.id === 'prelim') return;
                       if (cell.column.id === 'midterm') return;
                       if (cell.column.id === 'semi-final') return;
                       if (cell.column.id === 'final') return;
                       if (cell.column.id === 'averageTotal') return;
                     }
-                    if (enrollment.step >= 4) {
+                    if (enrollment?.step >= 4) {
                       if (cell.column.id === 'actions') return;
                     } else {
                       if (cell.column.id === 'requesting') return;

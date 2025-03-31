@@ -18,7 +18,7 @@ const Page = () => {
     if (pError || !pData) return;
 
     if (data && pData) {
-      const a = data?.teacherScheduleRecords?.filter((s: any) => s.course.name.toLowerCase() === pData?.profile.courseId.name.toLowerCase() && s.course.courseCode.toLowerCase() === pData?.profile.courseId.courseCode.toLowerCase());
+      const a = data?.teacherScheduleRecords?.filter((s: any) => s?.course?.name.toLowerCase() === pData?.profile?.courseId?.name.toLowerCase() && s?.course?.courseCode.toLowerCase() === pData?.profile?.courseId?.courseCode.toLowerCase());
       setTeacherScheduleRecord(a);
 
       setIsPageLoading(false);

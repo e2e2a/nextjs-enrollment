@@ -17,14 +17,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.courseId.courseCode,
+    accessorFn: (row) => row.courseId?.courseCode,
     id: 'course code',
     header: 'Course Code',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=''>
-          {user?.courseId?.courseCode ? user.courseId?.courseCode : <span className='text-red uppercase text-xs'>not assigned</span>}
+          {user?.courseId?.courseCode ? user?.courseId?.courseCode : <span className='text-red uppercase text-xs'>not assigned</span>}
         </div>
       );
     },
@@ -108,14 +108,14 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.subjectId.lec,
+    accessorFn: (row) => row.subjectId?.lec,
     id: 'lec',
     header: 'Lec',
     cell: ({ cell, row }) => {
       const user = row.original;
       return (
         <div key={cell.id} className=' uppercase'>
-          {user.subjectId.lec}
+          {user?.subjectId?.lec}
         </div>
       );
     },
@@ -186,7 +186,7 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorFn: (row) => row.roomId.roomName,
+    accessorFn: (row) => row.roomId?.roomName,
     id: 'room name',
     header: 'Room Name',
     cell: ({ cell, row }) => {
