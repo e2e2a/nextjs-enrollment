@@ -1,6 +1,7 @@
 {
-  "extends": "next/core-web-vitals"
-  // "rules": {
-  //   "no-console": ["error", { "allow": ["warn", "error"] }]
-  // }
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-undef": "off"
+  // "no-console": ["error", { "allow": ["warn", "error"] }]
+  }
 }
