@@ -4,7 +4,7 @@ import { saveAs } from 'file-saver';
 
 // Automatically download the PDF
 export const exportToPDF = async (data: any, schedules: any, fileName: string) => {
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<void>(async (resolve, reject) => {
     try {
       if (!data || data.length === 0) {
         return;
@@ -26,7 +26,34 @@ export const exportToPDF = async (data: any, schedules: any, fileName: string) =
         .trim();
 
       // Function to add a header
-      const addHeader = () => {
+      const addHeader = async () => {
+        const logoPath = '/pdf/pdf-header.png';
+
+        const logoImage = await fetch(logoPath)
+          .then((response) => response.blob())
+          .then((blob) => {
+            return new Promise<string>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result as string);
+              reader.onerror = reject;
+              reader.readAsDataURL(blob);
+            });
+          })
+          .catch((error) => {
+            console.error('Error loading image:', error);
+            return null;
+          });
+
+        if (logoImage) {
+          const logoWidth = 210;
+          const logoHeight = 70;
+          const pageWidth = doc.internal.pageSize.getWidth();
+          const xPosition = (pageWidth - logoWidth) / 2;
+
+          doc.addImage(logoImage, 'PNG', xPosition, yOffset, logoWidth, logoHeight);
+          yOffset += logoHeight + 5;
+        }
+
         doc.setFontSize(14);
         doc.text('Student Schedule Record', pageWidth / 2, yOffset, { align: 'center' });
         yOffset += 8;
@@ -51,11 +78,11 @@ export const exportToPDF = async (data: any, schedules: any, fileName: string) =
       };
 
       // Add the first header
-      addHeader();
+      await addHeader();
 
       // Format the schedule data
       const formattedData = schedules.map((item: any) => {
-        const teacher = item?.teacher
+        const teacher = item?.teacher;
         const formattedName = `${teacher?.lastname ? teacher?.lastname + ',' : ''} ${teacher?.firstname ?? ''} ${teacher?.middlename ?? ''}${teacher?.extensionName ? ', ' + teacher?.extensionName + '.' : ''}`
           .replace(/\s+,/g, ',')
           .replace(/(\S),/g, '$1,')

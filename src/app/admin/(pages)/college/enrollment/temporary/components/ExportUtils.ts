@@ -12,7 +12,37 @@ export const exportToPDF = async (data: any[], fileName: string) => {
       }
 
       const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      let yOffset = 10;
+
+      // Load image
+      const logoPath = '/pdf/pdf-header.png';
+      const logoImage = await fetch(logoPath)
+        .then((res) => res.blob())
+        .then((blob) => {
+          return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+          });
+        })
+        .catch(() => null);
+
+      // Add image
+      if (logoImage) {
+        const logoWidth = 210;
+        const logoHeight = 70;
+        const xPosition = (pageWidth - logoWidth) / 2;
+        doc.addImage(logoImage, 'PNG', xPosition, yOffset, logoWidth, logoHeight);
+        yOffset += logoHeight + 5;
+      }
+
+      // Title
+      doc.setFontSize(14);
       doc.text(`Temporary Enrolled Management`, 10, 10);
+      yOffset += 10;
+
       let formattedData: any = [];
 
       formattedData = data.map((item: any) => {
@@ -40,6 +70,7 @@ export const exportToPDF = async (data: any[], fileName: string) => {
       tableHeaders = [['FullName', 'Course Code', 'Student Year', 'Student Semester', 'Student Status', 'Block Type', 'Student Type', 'School Year', 'Subjects Count']];
 
       autoTable(doc, {
+        startY: yOffset,
         head: tableHeaders,
         body: formattedData,
       });
