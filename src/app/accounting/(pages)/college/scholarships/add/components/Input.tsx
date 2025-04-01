@@ -1,5 +1,6 @@
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import React from 'react';
+
 interface IProps {
   name: string;
   type: string;
@@ -7,6 +8,7 @@ interface IProps {
   label: string;
   classNameInput?: string;
 }
+
 const Input = ({ name, type, form, label, classNameInput }: IProps) => {
   return (
     <FormField

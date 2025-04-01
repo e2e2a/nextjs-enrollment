@@ -16,6 +16,7 @@ import { useAllProfileQueryByUserRoles } from '@/lib/queries/profile/get/roles/a
 import { Combobox } from './components/Combobox';
 import { useCreateScholarshipMutation } from '@/lib/queries/scholarship/create';
 import { studentSemesterData, studentYearData } from '@/constant/enrollment';
+import InputList from './components/InputList';
 
 const availableScholarship = [{ title: 'Working Student' }, { title: 'Alay Lakad Scholar' }, { title: 'Tulong Dunong Scholarship' }, { title: 'TES Scholarship' }, { title: 'Corporate Scholar' }];
 
@@ -104,7 +105,8 @@ const Page = () => {
                 <CardContent className='w-full'>
                   <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                     <Combobox name={'studentId'} selectItems={data?.profiles || []} form={form} label={'Select Student:'} placeholder={'Select Student'} setStudentId={setStudentId} />
-                    <SelectInput name={'name'} selectItems={availableScholarship} form={form} label={'Scholarship Name:'} placeholder={'Select Scholarship Name'} />
+                    <InputList name={'name'} type={'text'} form={form} label={'Scholarship Name:'} list={availableScholarship} classNameInput={''} />
+                    {/* <SelectInput name={'name'} selectItems={availableScholarship} form={form} label={'Scholarship Name:'} placeholder={'Select Scholarship Name'} /> */}
                     <SelectInput name={'year'} selectItems={studentYearData} form={form} label={'Year:'} placeholder={'Select Year'} />
                     <SelectInput name={'semester'} selectItems={studentSemesterData} form={form} label={'Semester:'} placeholder={'Select Semester'} />
                     <Input name={'amount'} type={'number'} form={form} label={'Amount:'} classNameInput={'uppercase'} />
