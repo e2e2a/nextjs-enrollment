@@ -11,13 +11,37 @@ export const exportToPDF = async (data: any, fileName: string) => {
   }
 
   const doc = new jsPDF();
-  doc.setFont('helvetica', 'bold');
+  const pageWidth = doc.internal.pageSize.getWidth();
+  let yOffset = 10;
 
-  // Course Title
-  doc.setFontSize(16);
+  // Load image
+  const logoPath = '/pdf/pdf-header.png';
+  const logoImage = await fetch(logoPath)
+    .then((res) => res.blob())
+    .then((blob) => {
+      return new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    })
+    .catch(() => null);
+
+  // Add image
+  if (logoImage) {
+    const logoWidth = 210;
+    const logoHeight = 70;
+    const xPosition = (pageWidth - logoWidth) / 2;
+    doc.addImage(logoImage, 'PNG', xPosition, yOffset, logoWidth, logoHeight);
+    yOffset += logoHeight + 5;
+  }
+
+  // Title
+  doc.setFontSize(14);
   doc.text(data?.courseId?.name || 'Course Name', 105, 15, { align: 'center' });
-
-  let yOffset = 30;
+  yOffset += 20;
+  // let yOffset = 30;
 
   // Loop through each curriculum entry
   data.curriculum.forEach((curriculumItem: any) => {
@@ -27,7 +51,7 @@ export const exportToPDF = async (data: any, fileName: string) => {
     yOffset += 5;
 
     // Define table headers
-    const tableHeaders = [[ 'Subject Code', 'Descriptive Title', 'Pre. Req.', 'Lec', 'Lab', 'Unit/s']];
+    const tableHeaders = [['Subject Code', 'Descriptive Title', 'Pre. Req.', 'Lec', 'Lab', 'Unit/s']];
 
     // Format the subject data
     const formattedData = curriculumItem.subjectsFormat.map((subjectItem: any) => [
@@ -56,4 +80,3 @@ export const exportToPDF = async (data: any, fileName: string) => {
   // Save the PDF
   doc.save(`${fileName}.pdf`);
 };
-

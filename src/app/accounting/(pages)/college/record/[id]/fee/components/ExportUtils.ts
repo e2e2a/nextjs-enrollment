@@ -33,7 +33,7 @@ export const exportToPDF = async (
   isScholarshipStart: boolean,
   fileName: string
 ) => {
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<void>(async (resolve, reject) => {
     try {
       if (!data || data?.length === 0) return;
 
@@ -53,7 +53,34 @@ export const exportToPDF = async (
         .trim();
 
       // Function to add header
-      const addHeader = () => {
+      const addHeader = async () => {
+        const logoPath = '/pdf/pdf-header.png';
+
+        const logoImage = await fetch(logoPath)
+          .then((response) => response.blob())
+          .then((blob) => {
+            return new Promise<string>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result as string);
+              reader.onerror = reject;
+              reader.readAsDataURL(blob);
+            });
+          })
+          .catch((error) => {
+            console.error('Error loading image:', error);
+            return null;
+          });
+
+        if (logoImage) {
+          const logoWidth = 210;
+          const logoHeight = 70;
+          const pageWidth = doc.internal.pageSize.getWidth();
+          const xPosition = (pageWidth - logoWidth) / 2;
+
+          doc.addImage(logoImage, 'PNG', xPosition, yOffset, logoWidth, logoHeight);
+          yOffset += logoHeight + 5;
+        }
+
         doc.setFontSize(14);
         doc.text('Student Payment', pageWidth / 2, yOffset, { align: 'center' });
         yOffset += 8;
@@ -75,7 +102,7 @@ export const exportToPDF = async (
       };
 
       // Add the header
-      addHeader();
+      await addHeader();
       // Table 1: Payment Details (Moved up)
       const paymentType = ['Down Payment', 'Prelim', 'Midterm', 'Semi-final', 'Final'];
       const paymentAmount = [downPaymentAmount.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), finalPayment.toFixed(2) || (0).toFixed(2)];

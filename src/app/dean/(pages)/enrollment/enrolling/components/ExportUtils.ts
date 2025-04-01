@@ -14,7 +14,35 @@ export const exportToPDF = async (data: any[], fileName: string) => {
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       let yOffset = 10;
-      const addHeader = () => {
+
+      const addHeader = async () => {
+        const logoPath = '/pdf/pdf-header.png';
+
+        const logoImage = await fetch(logoPath)
+          .then((response) => response.blob())
+          .then((blob) => {
+            return new Promise<string>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result as string);
+              reader.onerror = reject;
+              reader.readAsDataURL(blob);
+            });
+          })
+          .catch((error) => {
+            console.error('Error loading image:', error);
+            return null;
+          });
+
+        if (logoImage) {
+          const logoWidth = 210;
+          const logoHeight = 70;
+          const pageWidth = doc.internal.pageSize.getWidth();
+          const xPosition = (pageWidth - logoWidth) / 2;
+
+          doc.addImage(logoImage, 'PNG', xPosition, yOffset, logoWidth, logoHeight);
+          yOffset += logoHeight + 5;
+        }
+
         doc.setFontSize(14);
         doc.text(`Enrolling Management`, pageWidth / 2, yOffset, { align: 'center' });
         yOffset += 8;
@@ -28,7 +56,8 @@ export const exportToPDF = async (data: any[], fileName: string) => {
         yOffset += 6;
       };
 
-      addHeader();
+      await addHeader();
+
       let formattedData: any = [];
 
       formattedData = data.map((item: any) => {
