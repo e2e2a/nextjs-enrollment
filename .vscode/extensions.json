@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "ms-azuretools.vscode-docker",
+    "mikestead.dotenv",
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
+    "oderwat.indent-rainbow",
+    "visualstudioexptteam.vscodeintellicode",
+    "shd101wyy.markdown-preview-enhanced",
+    "leizongmin.node-module-intellisense",
+    "esbenp.prettier-vscode",
+    "rvest.vs-code-prettier-eslint",
+    "ms-vscode.vscode-typescript-tslint-plugin"
+  ]
+}
