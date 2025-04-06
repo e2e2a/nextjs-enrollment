@@ -23,6 +23,13 @@
     },
     "downlevelIteration": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/lib/supabaseClient.js", "src/seeders/index.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/lib/supabaseClient.js",
+    "src/seeders/index.js"
+  ],
   "exclude": ["node_modules"]
 }

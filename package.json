@@ -7,10 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "ts-node src/seeders/index.js"
+    "seed": "npx tsx src/seeders/index.ts"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.4.1",
+    "@faker-js/faker": "^9.6.0",
     "@fontsource/poppins": "^5.0.14",
     "@hookform/resolvers": "^3.4.2",
     "@paypal/checkout-server-sdk": "^1.0.3",
