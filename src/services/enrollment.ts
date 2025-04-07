@@ -268,13 +268,3 @@ export const updateEnrollmentById = async (id: any, data: any) => {
   }
 };
 
-export const deleteEnrollmentById = async (id: any) => {
-  try {
-    const e = await Enrollment.findByIdAndDelete(id);
-    if (!e) return false;
-    return true;
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
-};

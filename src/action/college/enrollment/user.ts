@@ -1,6 +1,6 @@
 'use server';
 import dbConnect from '@/lib/db/db';
-import { createEnrollment, deleteEnrollmentById, getEnrollmentById, getEnrollmentByUserId } from '@/services/enrollment';
+import { createEnrollment, getEnrollmentById, getEnrollmentByUserId } from '@/services/enrollment';
 import { getStudentProfileByUserId } from '@/services/studentProfile';
 import { getEnrollmentResponse, IResponse } from '@/types';
 import StudentProfile from '@/models/StudentProfile';
@@ -54,19 +54,5 @@ export const createEnrollmentContinuingAction = async (data: any): Promise<getEn
   } catch (error) {
     console.log(error);
     return { error: 'hello world error', status: 500 };
-  }
-};
-
-export const deleteEnrollmentAction = async (EId: any): Promise<IResponse> => {
-  try {
-    await dbConnect();
-    const e = await getEnrollmentById(EId);
-    if (!e) return { error: 'You are deleting with non-existing enrollment.', status: 403 };
-    if (e.step != 1) return { error: 'You are deleting with non-existing enrollment.', status: 403 };
-    const deletedE = await deleteEnrollmentById(EId);
-    if (!deletedE) return { error: 'Something went wrong.', status: 500 };
-    return { message: 'Deleted successfully', status: 201 };
-  } catch (error) {
-    return { error: 'Something went wrong', status: 500 };
   }
 };
