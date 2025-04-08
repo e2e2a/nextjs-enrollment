@@ -91,7 +91,7 @@ const Page = () => {
         <div className='border-0 bg-white rounded-xl min-h-[87vh]'>
           <Card className='border-0 py-5 bg-transparent'>
             <CardHeader className='space-y-3'>
-              <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Add Scholarship Student</CardTitle>
+              <CardTitle className='text-lg xs:text-2xl sm:text-3xl tracking-tight w-full text-center uppercase'>Add Student Scholarship</CardTitle>
               <CardDescription className='text-xs sm:text-sm hidden'></CardDescription>
               <div className='text-xs sm:text-sm'>
                 <div className=''>
