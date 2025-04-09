@@ -60,7 +60,7 @@ async function dbConnect() {
 
     cached.promise = mongoose
       .connect(MONGODB_URI, opts)
-      .then(async (mongoose) => {
+      .then(async mongoose => {
         try {
           await initializeModel(modelsToInitialize);
           const dbStats = await mongoose.connection.db.command({ ping: 1 });
@@ -77,7 +77,7 @@ async function dbConnect() {
           throw err;
         }
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('err', err);
       });
   }
