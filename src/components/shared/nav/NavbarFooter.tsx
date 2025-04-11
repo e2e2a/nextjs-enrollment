@@ -10,8 +10,7 @@ const NavbarFooter = ({ classname }: IProps) => {
       <span className=" text-[8px] flex items-center">•</span>
       <Link href="/school">About</Link>
       <span className=" text-[8px] flex items-center">•</span>
-      {/* Upcoming my portfolio website */}
-      <Link href="/">Developers</Link>
+      <Link href="https://portfolio-dun-five-49.vercel.app/">Developer</Link>
       <span className="ml-1 flex gap-x-[1px]">
         &#169;<Link href="/">2024</Link>
       </span>
