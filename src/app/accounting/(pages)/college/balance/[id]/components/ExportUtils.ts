@@ -37,16 +37,20 @@ export const exportToPDF = async (
     try {
       if (!data || data?.length === 0) return;
 
-      const doc = new jsPDF({ orientation: 'landscape', format: [297, 297] });
+      const doc = new jsPDF({ orientation: 'landscape', format: [310, 310] });
       const pageWidth = doc.internal.pageSize.getWidth();
       let yOffset = 10;
 
       const student = data?.profileId;
       const capitalize = (str: string) => {
-        return str ? str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase()) : '';
+        return str ? str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase()) : '';
       };
 
-      const formattedName = `${student?.lastname ? capitalize(student?.lastname) + ',' : ''} ${capitalize(student?.firstname ?? '')} ${capitalize(student?.middlename ?? '')}${student?.extensionName ? ', ' + capitalize(student?.extensionName) + '.' : ''}`
+      const formattedName = `${
+        student?.lastname ? capitalize(student?.lastname) + ',' : ''
+      } ${capitalize(student?.firstname ?? '')} ${capitalize(student?.middlename ?? '')}${
+        student?.extensionName ? ', ' + capitalize(student?.extensionName) + '.' : ''
+      }`
         .replace(/\s+,/g, ',')
         .replace(/(\S),/g, '$1,')
         .replace(/,(\S)/g, ', $1')
@@ -57,8 +61,8 @@ export const exportToPDF = async (
         const logoPath = '/pdf/pdf-header.png';
 
         const logoImage = await fetch(logoPath)
-          .then((response) => response.blob())
-          .then((blob) => {
+          .then(response => response.blob())
+          .then(blob => {
             return new Promise<string>((resolve, reject) => {
               const reader = new FileReader();
               reader.onloadend = () => resolve(reader.result as string);
@@ -66,7 +70,7 @@ export const exportToPDF = async (
               reader.readAsDataURL(blob);
             });
           })
-          .catch((error) => {
+          .catch(error => {
             console.error('Error loading image:', error);
             return null;
           });
@@ -90,11 +94,18 @@ export const exportToPDF = async (
         yOffset += 6;
 
         doc.text(`Department: ${data.courseId?.name || 'N/A'}`, 10, yOffset);
-        doc.text(`Year: ${data?.studentYear || 'N/A'} - Semester: ${data?.studentSemester || 'N/A'}`, pageWidth - 10, yOffset, { align: 'right' });
+        doc.text(
+          `Year: ${data?.studentYear || 'N/A'} - Semester: ${data?.studentSemester || 'N/A'}`,
+          pageWidth - 10,
+          yOffset,
+          { align: 'right' }
+        );
         yOffset += 6;
 
         doc.text(`Block: ${data?.blockTypeId?.section || 'N/A'}`, 10, yOffset);
-        doc.text(`Enrollment Status: ${data?.enrollStatus || 'N/A'}`, pageWidth - 10, yOffset, { align: 'right' });
+        doc.text(`Enrollment Status: ${data?.enrollStatus || 'N/A'}`, pageWidth - 10, yOffset, {
+          align: 'right',
+        });
         yOffset += 6;
 
         doc.line(10, yOffset, pageWidth - 10, yOffset);
@@ -104,17 +115,32 @@ export const exportToPDF = async (
       await addHeader();
       // Table 1: Payment Details (Moved up)
       const paymentType = ['Down Payment', 'Prelim', 'Midterm', 'Semi-final', 'Final'];
-      const paymentAmount = [downPaymentAmount.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), paymentPerTerm.toFixed(2) || (0).toFixed(2), finalPayment.toFixed(2) || (0).toFixed(2)];
+      const paymentAmount = [
+        downPaymentAmount.toFixed(2) || (0).toFixed(2),
+        paymentPerTerm.toFixed(2) || (0).toFixed(2),
+        paymentPerTerm.toFixed(2) || (0).toFixed(2),
+        paymentPerTerm.toFixed(2) || (0).toFixed(2),
+        finalPayment.toFixed(2) || (0).toFixed(2),
+      ];
 
       const paymentStatus = showPaymentOfFullPayment
         ? ['PAID', 'PAID', 'PAID', 'PAID', 'PAID']
-        : [showPaymentOfDownPayment ? 'PAID' : 'UNPAID', showPaymentOfPrelim ? 'PAID' : 'UNPAID', showPaymentOfMidterm ? 'PAID' : 'UNPAID', showPaymentOfSemiFinal ? 'PAID' : 'UNPAID', showPaymentOfFinal ? 'PAID' : 'UNPAID'];
+        : [
+            showPaymentOfDownPayment ? 'PAID' : 'UNPAID',
+            showPaymentOfPrelim ? 'PAID' : 'UNPAID',
+            showPaymentOfMidterm ? 'PAID' : 'UNPAID',
+            showPaymentOfSemiFinal ? 'PAID' : 'UNPAID',
+            showPaymentOfFinal ? 'PAID' : 'UNPAID',
+          ];
 
       const formattedData = paymentType.map((item, index) => {
         return [item, paymentAmount[index], paymentStatus[index]];
       });
-      const prev = prevBalance.map((balance: any, index: number) => {
-        return { year: `${balance?.year}-${balance?.semester}`, balance: Number(balance?.balanceToShow || 0) };
+      const prev = prevBalance?.map((balance: any, index: number) => {
+        return {
+          year: `${balance?.year}-${balance?.semester}`,
+          balance: Number(balance?.balanceToShow || 0),
+        };
       });
       autoTable(doc, {
         startY: yOffset,
@@ -124,10 +150,18 @@ export const exportToPDF = async (
         styles: { fontSize: 10, cellPadding: 3 },
         foot: [
           //put here the Outstanding Balance which is the prev variable
-          ...(!data?.profileId?.scholarshipId?.amount && !isScholarshipStart && prev.length > 0 ? prev.map((item: any) => [`Outstanding Balance (${item.year})`, '', item.balance.toFixed(2)]) : []),
-          ...(!data?.profileId?.scholarshipId?.amount && !isScholarshipStart && prev.length > 0 ? [[`Current Semester Fees`, '', Number(totalCurrent || 0).toFixed(2)]] : []),
-          [prevBalance.length > 0 ? 'Overall Total' : 'Total', '', Number(total).toFixed(2)],
-          [prevBalance.length > 0 ? 'Overall Balance' : 'Balance', '', Number(balance).toFixed(2)],
+          ...(!data?.profileId?.scholarshipId?.amount && !isScholarshipStart && prev.length > 0
+            ? prev.map((item: any) => [
+                `Outstanding Balance (${item.year})`,
+                '',
+                item.balance.toFixed(2),
+              ])
+            : []),
+          ...(!data?.profileId?.scholarshipId?.amount && !isScholarshipStart && prev.length > 0
+            ? [[`Current Semester Fees`, '', Number(totalCurrent || 0).toFixed(2)]]
+            : []),
+          [prevBalance?.length > 0 ? 'Overall Total' : 'Total', '', Number(total).toFixed(2)],
+          [prevBalance?.length > 0 ? 'Overall Balance' : 'Balance', '', Number(balance).toFixed(2)],
         ],
         footStyles: { fillColor: [230, 230, 230], textColor: [0, 0, 0], fontStyle: 'bold' },
         headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
@@ -137,10 +171,39 @@ export const exportToPDF = async (
 
       // Table 2: Additional Fees (Moved down)
       const additionalData = [
-        ['Departmental Fee', Number(departmentalAmount).toFixed(2), departmentalShow || showPaymentOfFullPayment ? 'PAID' : 'UNPAID'],
-        ...(!insurancePayment || insurancePaidInThisSemester ? [['Insurance Payment', Number(insuranceAmount).toFixed(2), insuranceShow || showPaymentOfFullPayment || insurancePayment || insurancePaidInThisSemester ? 'PAID' : 'UNPAID']] : []),
-        ...(!passbookPayment || passbookPaidInThisSemester ? [['Passbook Payment', Number(passbookAmount).toFixed(2), showPaymentOfFullPayment || passbookPaidInThisSemester ? 'PAID' : 'UNPAID']] : []),
-        ['SSG Payment', Number(ssgAmount).toFixed(2), ssgShow || showPaymentOfFullPayment ? 'PAID' : 'UNPAID'],
+        [
+          'Departmental Fee',
+          Number(departmentalAmount).toFixed(2),
+          departmentalShow || showPaymentOfFullPayment ? 'PAID' : 'UNPAID',
+        ],
+        ...(!insurancePayment || insurancePaidInThisSemester
+          ? [
+              [
+                'Insurance Payment',
+                Number(insuranceAmount).toFixed(2),
+                insuranceShow ||
+                showPaymentOfFullPayment ||
+                insurancePayment ||
+                insurancePaidInThisSemester
+                  ? 'PAID'
+                  : 'UNPAID',
+              ],
+            ]
+          : []),
+        ...(!passbookPayment || passbookPaidInThisSemester
+          ? [
+              [
+                'Passbook Payment',
+                Number(passbookAmount).toFixed(2),
+                showPaymentOfFullPayment || passbookPaidInThisSemester ? 'PAID' : 'UNPAID',
+              ],
+            ]
+          : []),
+        [
+          'SSG Payment',
+          Number(ssgAmount).toFixed(2),
+          ssgShow || showPaymentOfFullPayment ? 'PAID' : 'UNPAID',
+        ],
       ];
 
       autoTable(doc, {
@@ -156,7 +219,42 @@ export const exportToPDF = async (
         footStyles: { fillColor: [230, 230, 230], textColor: [0, 0, 0], fontStyle: 'bold' },
         headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
       });
+      yOffset = (doc as any).lastAutoTable.finalY + 10;
+      const addFooter = async () => {
+        const logoPath = '/pdf/signature.png'; // Path to the image in the public folder
+        yOffset += 6;
+        // Load the image as a base64 URL
+        const logoImage = await fetch(logoPath)
+          .then(response => response.blob()) // Get the image as a Blob
+          .then(blob => {
+            return new Promise<string>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result as string); // Convert to Base64 string
+              reader.onerror = reject;
+              reader.readAsDataURL(blob); // Read the image as Data URL (Base64)
+            });
+          })
+          .catch(error => {
+            console.error('Error loading image:', error);
+            return null;
+          });
 
+        if (logoImage) {
+          const logoWidth = 35; // Adjust width of the logo
+          const logoHeight = 35; // Adjust height of the logo
+          doc.addImage(logoImage, 'PNG', pageWidth - 45, yOffset - 8, logoWidth, logoHeight);
+        }
+        doc.setFontSize(14);
+        doc.text(`Dionelyn D. Gabrinez`, pageWidth - 10, yOffset, {
+          align: 'right',
+        });
+        yOffset += 6;
+        doc.setFontSize(11);
+        doc.text(`School Cashier`, pageWidth - 20, yOffset, {
+          align: 'right',
+        });
+      };
+      await addFooter();
       // Save as PDF
       const pdfBlob = doc.output('blob');
       saveAs(pdfBlob, `${fileName}.pdf`);

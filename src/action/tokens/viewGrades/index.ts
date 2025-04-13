@@ -15,8 +15,12 @@ export const getVGTokenByParamsTokenAction = async (token: string) => {
     if (!token) return { error: 'no token provided', status: 403 };
 
     const checkedToken = await checkParentToken(token);
-    if (checkedToken && checkedToken.error) return { error: 'Invalid Token Request', status: checkedToken.status };
-    if (checkedToken.token.tokenType !== 'View Grades') return { error: 'Invalid Type Request', status: 403 };
+    console.log('a', checkedToken);
+    if (checkedToken && checkedToken.error)
+      return { error: 'Invalid Token Request', status: checkedToken.status };
+    console.log('b');
+    if (checkedToken.token.tokenType !== 'View Grades')
+      return { error: 'Invalid Type Request', status: 403 };
 
     const a = await getEnrollmentByUserId(checkedToken.token.parentId);
     if (!a) return { error: 'Not found', status: 404 };

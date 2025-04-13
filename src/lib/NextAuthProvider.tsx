@@ -45,5 +45,5 @@ export default function NextAuthProvider({ children, session }: IProps) {
       }
     }
   }, [session, setLoading, mutation]);
-  return <div className=''>{children}</div>;
+  return <div className="">{children}</div>;
 }
