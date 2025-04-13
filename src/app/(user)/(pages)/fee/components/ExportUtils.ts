@@ -164,8 +164,8 @@ export const exportToPDF = async (
           ...(!data?.profileId?.scholarshipId?.amount && !isScholarshipStart && prev.length > 0
             ? [[`Current Semester Fees`, '', Number(totalCurrent || 0).toFixed(2)]]
             : []),
-          [prevBalance.length > 0 ? 'Overall Total' : 'Total', '', Number(total).toFixed(2)],
-          [prevBalance.length > 0 ? 'Overall Balance' : 'Balance', '', Number(balance).toFixed(2)],
+          [prevBalance?.length > 0 ? 'Overall Total' : 'Total', '', Number(total).toFixed(2)],
+          [prevBalance?.length > 0 ? 'Overall Balance' : 'Balance', '', Number(balance).toFixed(2)],
         ],
         footStyles: { fillColor: [230, 230, 230], textColor: [0, 0, 0], fontStyle: 'bold' },
         headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
@@ -246,7 +246,7 @@ export const exportToPDF = async (
         if (logoImage) {
           const logoWidth = 35; // Adjust width of the logo
           const logoHeight = 35; // Adjust height of the logo
-          doc.addImage(logoImage, 'PNG', pageWidth - 45, yOffset - 8, logoWidth, logoHeight);
+          doc.addImage(logoImage, 'PNG', pageWidth - 48, yOffset - 12, logoWidth, logoHeight);
         }
         doc.setFontSize(14);
         doc.text(`Dionelyn D. Gabrinez`, pageWidth - 10, yOffset, {

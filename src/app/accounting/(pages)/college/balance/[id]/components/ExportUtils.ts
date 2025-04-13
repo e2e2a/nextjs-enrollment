@@ -242,7 +242,7 @@ export const exportToPDF = async (
         if (logoImage) {
           const logoWidth = 35; // Adjust width of the logo
           const logoHeight = 35; // Adjust height of the logo
-          doc.addImage(logoImage, 'PNG', pageWidth - 45, yOffset - 8, logoWidth, logoHeight);
+          doc.addImage(logoImage, 'PNG', pageWidth - 48, yOffset - 12, logoWidth, logoHeight);
         }
         doc.setFontSize(14);
         doc.text(`Dionelyn D. Gabrinez`, pageWidth - 10, yOffset, {
