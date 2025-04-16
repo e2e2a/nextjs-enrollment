@@ -5,7 +5,6 @@ import { MainNav } from '@/components/shared/nav/MainNav';
 import { MobileNav } from '@/components/shared/nav/MobileNav';
 import { useSession } from 'next-auth/react';
 import Loader from '@/components/shared/Loader';
-import { decryptData } from '@/lib/helpers/encryption';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const UserRootLayout = ({ children }: { children: ReactNode }) => {
@@ -20,8 +19,6 @@ const UserRootLayout = ({ children }: { children: ReactNode }) => {
     }
     if (res) {
       if (res.profile) {
-        // const decrypt = decryptData(res.profile, 'mysecret7777');
-        // setProfile(decrypt);
         setProfile(res.profile);
         setLoading(false);
       }

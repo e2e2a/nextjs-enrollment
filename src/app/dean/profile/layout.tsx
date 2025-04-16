@@ -4,13 +4,11 @@ import { ReactNode, useEffect, useState } from 'react';
 import { MainNav } from '@/components/shared/nav/MainNav';
 import { MobileNav } from '@/components/shared/nav/MobileNav';
 import { useSession } from 'next-auth/react';
-import { decryptData } from '@/lib/helpers/encryption';
 import LoaderPage from '@/components/shared/LoaderPage';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const UserRootLayout = ({ children }: { children: ReactNode }) => {
   const { data } = useSession();
-  // const session = await auth();
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const { data: res, isLoading, error } = useProfileQueryBySessionId();
@@ -20,8 +18,6 @@ const UserRootLayout = ({ children }: { children: ReactNode }) => {
     }
     if (res) {
       if (res.profile) {
-        // const decrypt = decryptData(res.profile, 'mysecret7777');
-        // setProfile(decrypt);
         setProfile(res.profile);
         setLoading(false);
       }

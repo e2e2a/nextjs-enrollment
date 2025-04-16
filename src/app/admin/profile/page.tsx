@@ -8,15 +8,12 @@ import PasswordTab from './components/PasswordTab';
 import ProfileTab from './components/ProfileTab';
 import ProfileDialog from './components/ProfileDialog';
 import LoaderPage from '@/components/shared/LoaderPage';
-import ErrorPage from './components/ErrorPage';
-import { decryptData } from '@/lib/helpers/encryption';
 import { useProfileQueryBySessionId } from '@/lib/queries/profile/get/session';
 
 const ProfilePage = () => {
   const { data } = useSession();
   const [isOpen, setIsOpen] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
   const [profile, setProfile] = useState<any>(null);
   const [activeTab, setActiveTab] = useState('profile');
   const handleClose = () => {
@@ -33,8 +30,6 @@ const ProfilePage = () => {
       return;
     }
     if (res && res.profile) {
-      // const decrypt = decryptData(res.profile, 'mysecret7777')
-      // setProfile(JSON.parse(decrypt))
       setProfile(res.profile)
       setLoading(false);
       return 
