@@ -8,7 +8,6 @@ import { Form } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEnrollmentDeleteMutation } from '@/lib/queries';
 import { selectType, studentYearData } from '@/constant/enrollment';
 import { makeToastError, makeToastSucess } from '@/lib/toast/makeToast';
 import FileBirth from './FileBirth';
@@ -163,7 +162,6 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
   const handleRemoveFileTOR = () => setFileTORPreview(null);
   const handleRemoveCerificationOfCompletion = () => setFileCerificationOfCompletionPreview(null);
   const mutation = useCreateEnrollmentForNewStudentByCategoryMutation();
-  const deleteMutation = useEnrollmentDeleteMutation();
   const form = useForm<z.infer<typeof StudentProfileExtension>>({
     resolver: zodResolver(StudentProfileExtension),
     defaultValues: {
@@ -298,21 +296,6 @@ const Step0 = ({ search, enrollmentSetup, courses }: IProps) => {
     });
   };
 
-  const handleDeleteEnrollment = (EId: any) => {
-    deleteMutation.mutate(EId, {
-      onSuccess: (res) => {
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            if (res.error) return window.location.reload();
-            return;
-          default:
-            return;
-        }
-      },
-    });
-  };
   return (
     <TabsContent value='0' className=' focus-visible:ring-0 border-0'>
       <Card className={`border-0 shadow-none drop-shadow-none `}>

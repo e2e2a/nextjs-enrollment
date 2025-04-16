@@ -1,8 +1,7 @@
 'use client';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { TabsContent } from '@/components/ui/tabs';
 import React, { useEffect, useState } from 'react';
-import { useEnrollmentDeleteMutation } from '@/lib/queries';
 import { useSession } from 'next-auth/react';
 import { Icons } from '@/components/shared/Icons';
 import LoaderPage from '@/components/shared/LoaderPage';
@@ -12,10 +11,10 @@ type IProps = {
   search: any;
   enrollment: any;
 };
+
 const Step1 = ({ search, enrollment }: IProps) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [isUploading, setIsUploading] = useState(false);
-  const { data: s } = useSession();
+
   useEffect(() => {
     if (!enrollment) return;
     if (enrollment) return setIsPageLoading(false);
@@ -23,27 +22,6 @@ const Step1 = ({ search, enrollment }: IProps) => {
     console.log('me and you');
   }, [enrollment]);
 
-  const deleteMutation = useEnrollmentDeleteMutation();
-
-  const handleDeleteEnrollment = (EId: any) => {
-    deleteMutation.mutate(EId, {
-      onSuccess: (res) => {
-        switch (res.status) {
-          case 200:
-          case 201:
-          case 203:
-            // if (res.error) return window.location.reload();
-            // setMessage(res?.message);
-            // return (window.location.reload());
-            return;
-          default:
-            // setMessage(res.error);
-            // setTypeMessage('error');
-            return;
-        }
-      },
-    });
-  };
   return (
     <>
       {isPageLoading ? (
@@ -94,54 +72,7 @@ const Step1 = ({ search, enrollment }: IProps) => {
                   </Link>
                   or visit our office for assistance.
                 </span>
-                <div className=' w-full  justify-center items-center flex'>
-                  {/* <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant={'outline'} size={'sm'} className='select-none focus-visible:ring-0 text-[15px] bg-red text-white tracking-normal font-medium font-poppins'>
-                    Cancel Enrollment
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent className='bg-white'>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>This action cannot be undone. This will permanently delete your account and remove your data from our servers.</AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel className='hover:bg-slate-100 focus-visible:ring-0 '>Cancel</AlertDialogCancel>
-                    <AlertDialogAction type='submit' className='border rounded-lg hover:bg-slate-100 focus-visible:ring-0 ' onClick={() => handleDeleteEnrollment(enrollment._id)}>
-                      Continue
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog> */}
-                </div>
               </div>
-              {/* <div className='flex flex-col w-full space-y-3'>
-            <span className='text-left sm:text-center w-full px-5 sm:px-10 mt-5 sm:mt-10 text-sm text-muted-foreground'>
-              <span className=' relative sm:hidden'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>If you are undecided with your course you can cancel it anytime.
-            </span>
-            <div className=' w-full flex justify-center items-center'>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant={'outline'} size={'sm'} className='select-none focus-visible:ring-0 text-[15px] bg-red text-white tracking-normal font-medium font-poppins'>
-                    Cancel Enrollment
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent className='bg-white'>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>This action cannot be undone. This will permanently delete your account and remove your data from our servers.</AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel className='hover:bg-slate-100 focus-visible:ring-0 '>Cancel</AlertDialogCancel>
-                    <AlertDialogAction type='submit' className='border rounded-lg hover:bg-slate-100 focus-visible:ring-0 ' onClick={() => handleDeleteEnrollment(enrollment._id)}>
-                      Continue
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
-          </div> */}
             </CardContent>
           </Card>
         </TabsContent>
