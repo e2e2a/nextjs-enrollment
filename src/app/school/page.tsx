@@ -1,8 +1,13 @@
-'use client';
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Icons } from '@/components/shared/Icons';
+
+export const metadata = {
+  title: 'About Us',
+  description:
+    'Learn about Dipolog City Institute of Technology’s trusted Enrollment Management System — empowering students and staff to manage academic journeys efficiently.',
+};
 
 const Page = () => {
   return (

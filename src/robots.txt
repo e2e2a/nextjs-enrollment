@@ -1,0 +1,11 @@
+Sitemap: https://dcit.mondrey.dev/sitemap.xml
+
+User-Agent: *
+Allow: /
+Disallow: /user/
+Disallow: /admin/
+Disallow: /dean/
+Disallow: /instructor/
+Disallow: /superadmin/
+Disallow: /accounting/
+Disallow: /view/
