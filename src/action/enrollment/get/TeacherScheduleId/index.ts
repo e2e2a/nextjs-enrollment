@@ -16,7 +16,8 @@ export const getEnrollmentByTeacherScheduleIdAction = async (data: any) => {
 
     const res = await checkSessionRole(session.user, data);
     if (res && res.error) return { error: res.error, status: res.status };
-
+    console.log('res.2', res.students[2]._id);
+    console.log('res.3', res.students[3]._id);
     return { students: JSON.parse(JSON.stringify(res.students)), status: 200 };
   });
 };
@@ -40,7 +41,8 @@ const checkSessionRole = async (user: any, data: any) => {
       default:
         return { error: 'forbidden', status: 403 };
     }
-    if (enrollments && enrollments.error) return { error: enrollments.error, status: enrollments.status };
+    if (enrollments && enrollments.error)
+      return { error: enrollments.error, status: enrollments.status };
     return { success: true, students: enrollments.students, status: enrollments.status };
   });
 };
@@ -51,12 +53,16 @@ const adminRole = async (data: any) => {
     if (!ts) return { error: 'forbidden', status: 500 };
     let s;
     const a = await getAllEnrollmentByTeacherScheduleId(data.id);
-    s = a?.filter((e) => e.enrollStatus.toLowerCase() !== 'withdraw');
+    s = a?.filter(e => e.enrollStatus.toLowerCase() !== 'withdraw');
     let students;
     if (s && s.length > 0) {
       students = s
         .map((ss: any) => {
-          return ss.studentSubjects.filter((sss: any) => sss.teacherScheduleId._id.toString() === ts._id.toString() && sss.status === 'Approved');
+          return ss.studentSubjects.filter(
+            (sss: any) =>
+              sss.teacherScheduleId._id.toString() === ts._id.toString() &&
+              sss.status === 'Approved'
+          );
         })
         .flat();
     }
@@ -71,16 +77,21 @@ const deanRole = async (user: any, data: any) => {
     const ts = await getTeacherScheduleById(data.id);
     if (!ts) return { error: 'forbidden', status: 500 };
     //double check if the courseId is not equal
-    if (p.courseId._id.toString() !== ts.courseId._id.toString()) return { error: 'Dont have permission.', status: 403 };
+    if (p.courseId._id.toString() !== ts.courseId._id.toString())
+      return { error: 'Dont have permission.', status: 403 };
     let s;
     const a = await getAllEnrollmentByTeacherScheduleId(data.id);
-    s = a?.filter((e) => e.enrollStatus.toLowerCase() !== 'withdraw');
+    s = a?.filter(e => e.enrollStatus.toLowerCase() !== 'withdraw');
 
     let students;
     if (s && s.length > 0) {
       students = s
         .map((ss: any) => {
-          return ss.studentSubjects.filter((sss: any) => sss.teacherScheduleId._id.toString() === ts._id.toString() && sss.status === 'Approved');
+          return ss.studentSubjects.filter(
+            (sss: any) =>
+              sss.teacherScheduleId._id.toString() === ts._id.toString() &&
+              sss.status === 'Approved'
+          );
         })
         .flat();
     } else {
@@ -98,17 +109,26 @@ const teacherRole = async (user: any, data: any) => {
     const ts = await getTeacherScheduleById(data.id);
     if (!ts) return { error: 'TS not found', status: 500 };
     //double check if the courseId is not equal
-    if (p._id.toString() !== ts.profileId._id.toString()) return { error: 'Dont have permission.', status: 403 };
+    if (p._id.toString() !== ts.profileId._id.toString())
+      return { error: 'Dont have permission.', status: 403 };
 
     let s;
+    console.log('data.id', data.id);
     const a = await getAllEnrollmentByTeacherScheduleId(data.id);
-    s = a?.filter((e) => e.enrollStatus.toLowerCase() !== 'withdraw');
-
+    console.log('a2', a ? a[2] : []);
+    console.log('a3', a ? a[3] : []);
+    const b = a?.filter(e => e._id.toString() === '67e1559754f8de622fa30ded');
+    console.log('b', b);
+    s = a?.filter(e => e.enrollStatus.toLowerCase() !== 'withdraw');
     let students;
     if (s && s.length > 0) {
       students = s
         .map((ss: any) => {
-          return ss.studentSubjects.filter((sss: any) => sss.teacherScheduleId._id.toString() === ts._id.toString() && sss.status === 'Approved');
+          return ss.studentSubjects.filter(
+            (sss: any) =>
+              sss.teacherScheduleId._id.toString() === ts._id.toString() &&
+              sss.status === 'Approved'
+          );
         })
         .flat();
     } else {

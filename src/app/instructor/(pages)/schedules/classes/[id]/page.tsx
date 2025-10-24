@@ -16,9 +16,21 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [isPageLoading, setIsPageLoading] = useState(true);
 
   const { data, isLoading, error: isEnError } = useProfileQueryBySessionId();
-  const { data: rgData, isLoading: rpLoading, error: rgError } = useReportGradeQueryByTeacherId(data?.profile?._id as string);
-  const { data: ts, isLoading: tsLoading, error: tsError } = useTeacherScheduleQueryById(params.id, 'College');
-  const { data: s, isLoading: sLoading, error: sError } = useEnrollmentQueryByTeacherScheduleId({ id: ts?.teacherSchedule?._id, category: 'College' });
+  const {
+    data: rgData,
+    isLoading: rpLoading,
+    error: rgError,
+  } = useReportGradeQueryByTeacherId(data?.profile?._id as string);
+  const {
+    data: ts,
+    isLoading: tsLoading,
+    error: tsError,
+  } = useTeacherScheduleQueryById(params.id, 'College');
+  const {
+    data: s,
+    isLoading: sLoading,
+    error: sError,
+  } = useEnrollmentQueryByTeacherScheduleId({ id: ts?.teacherSchedule?._id, category: 'College' });
   const { data: esData, isLoading: esLoading, isError: esError } = useEnrollmentSetupQuery();
 
   useEffect(() => {
@@ -46,76 +58,119 @@ const Page = ({ params }: { params: { id: string } }) => {
   return (
     <>
       {isPageLoading ? (
-        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center'>
+        <div className="bg-white min-h-[86vh] py-5 px-5 rounded-xl items-center flex justify-center">
           <LoaderPage />
         </div>
       ) : (
-        <div className='bg-white min-h-[86vh] py-5 px-5 rounded-xl'>
+        <div className="bg-white min-h-[86vh] py-5 px-5 rounded-xl">
           {isError ? (
-            <div className=''>404</div>
+            <div className="">404</div>
           ) : data && data.profile ? (
             <>
               <OptionsExport data={ts?.teacherSchedule || []} students={s?.students} />
-              <div className='flex items-center py-4 text-black text-center flex-col mb-7'>
-                <div className='mb-3'>
-                  <h1 className='text-lg sm:text-2xl font-bold uppercase'>Instructor&apos;s Students</h1>
+              <div className="flex items-center py-4 text-black text-center flex-col mb-7">
+                <div className="mb-3">
+                  <h1 className="text-lg sm:text-2xl font-bold uppercase">
+                    Instructor&apos;s Students
+                  </h1>
                 </div>
-                <div className='grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1'>
-                  <div className='justify-between items-center flex w-full'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                <div className="grid sm:grid-cols-2 grid-cols-1 items-start w-full gap-y-1">
+                  <div className="justify-between items-center flex w-full">
+                    <span className="text-sm sm:text-[17px] font-bold capitalize">
                       Fullname:{' '}
-                      <span className='font-normal'>
-                        {ts?.teacherSchedule?.profileId?.firstname ?? ''} {ts?.teacherSchedule?.profileId?.middlename ?? ''} {ts?.teacherSchedule?.profileId?.lastname ?? ''}{' '}
-                        {ts?.teacherSchedule?.profileId?.extensionName ? ts?.teacherSchedule?.profileId?.extensionName + '.' : ''}
+                      <span className="font-normal">
+                        {ts?.teacherSchedule?.profileId?.firstname ?? ''}{' '}
+                        {ts?.teacherSchedule?.profileId?.middlename ?? ''}{' '}
+                        {ts?.teacherSchedule?.profileId?.lastname ?? ''}{' '}
+                        {ts?.teacherSchedule?.profileId?.extensionName
+                          ? ts?.teacherSchedule?.profileId?.extensionName + '.'
+                          : ''}
                       </span>
                     </span>
                   </div>
-                  <div className='flex w-full justify-start sm:justify-end'>
-                    <span className='text-sm sm:text-[17px] font-bold'>
-                      Department: <span className='font-normal'>{ts?.teacherSchedule?.courseId?.name}</span>
+                  <div className="flex w-full justify-start sm:justify-end">
+                    <span className="text-sm sm:text-[17px] font-bold">
+                      Department:{' '}
+                      <span className="font-normal">{ts?.teacherSchedule?.courseId?.name}</span>
                     </span>
                   </div>
-                  <div className='flex w-full justify-start '>
-                    <span className='text-sm sm:text-[17px] font-bold'>
-                      SUBJECT: <span className='font-normal'>{ts?.teacherSchedule?.subjectId?.name}</span>
+                  <div className="flex w-full justify-start ">
+                    <span className="text-sm sm:text-[17px] font-bold">
+                      SUBJECT:{' '}
+                      <span className="font-normal">{ts?.teacherSchedule?.subjectId?.name}</span>
                     </span>
                   </div>
-                  <div className='flex w-full justify-start sm:justify-end'>
-                    <span className='text-sm sm:text-[17px] font-bold'>
-                      Block: <span className='font-normal'>{ts?.teacherSchedule?.blockTypeId?.section ? ts?.teacherSchedule?.blockTypeId?.section : 'N/A'}</span>
+                  <div className="flex w-full justify-start sm:justify-end">
+                    <span className="text-sm sm:text-[17px] font-bold">
+                      Block:{' '}
+                      <span className="font-normal">
+                        {ts?.teacherSchedule?.blockTypeId?.section
+                          ? ts?.teacherSchedule?.blockTypeId?.section
+                          : 'N/A'}
+                      </span>
                     </span>
                   </div>
-                  <div className='flex w-full justify-start'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                  <div className="flex w-full justify-start">
+                    <span className="text-sm sm:text-[17px] font-bold capitalize">
                       Year:{' '}
-                      <span className='font-normal'>
-                        {ts?.teacherSchedule?.blockTypeId?.year} - {ts?.teacherSchedule?.blockTypeId?.semester}
+                      <span className="font-normal">
+                        {ts?.teacherSchedule?.blockTypeId?.year} -{' '}
+                        {ts?.teacherSchedule?.blockTypeId?.semester}
                       </span>
                     </span>
                   </div>
-                  <div className='flex w-full justify-start  sm:justify-end'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
+                  <div className="flex w-full justify-start  sm:justify-end">
+                    <span className="text-sm sm:text-[17px] font-bold capitalize">
                       Time:{' '}
-                      <span className='font-normal'>
+                      <span className="font-normal">
                         {ts?.teacherSchedule?.startTime} - {ts?.teacherSchedule?.endTime}
                       </span>
                     </span>
                   </div>
-                  <div className='flex w-full justify-start'>
-                    <span className='text-sm sm:text-[17px] font-bold capitalize'>
-                      Room: <span className='font-normal'>{ts?.teacherSchedule?.roomId?.roomName}</span>
+                  <div className="flex w-full justify-start">
+                    <span className="text-sm sm:text-[17px] font-bold capitalize">
+                      Room:{' '}
+                      <span className="font-normal">{ts?.teacherSchedule?.roomId?.roomName}</span>
                     </span>
                   </div>
                 </div>
               </div>
               {ts?.teacherSchedule?.courseId && (
                 <>
-                  <div className='w-full flex justify-start items-center'>
-                    <div className='flex flex-col'>
-                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.firstGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'firstGrade'} reportGrades={rgData?.reportGrades} />}
-                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.secondGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'secondGrade'} reportGrades={rgData?.reportGrades} />}
-                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.thirdGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'thirdGrade'} reportGrades={rgData?.reportGrades} />}
-                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.fourthGrade.open && <AddGrades data={s.students} teacher={ts?.teacherSchedule} type={'fourthGrade'} reportGrades={rgData?.reportGrades} />}
+                  <div className="w-full flex justify-start items-center">
+                    <div className="flex flex-col">
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.firstGrade.open && (
+                        <AddGrades
+                          data={s.students}
+                          teacher={ts?.teacherSchedule}
+                          type={'firstGrade'}
+                          reportGrades={rgData?.reportGrades}
+                        />
+                      )}
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.secondGrade.open && (
+                        <AddGrades
+                          data={s.students}
+                          teacher={ts?.teacherSchedule}
+                          type={'secondGrade'}
+                          reportGrades={rgData?.reportGrades}
+                        />
+                      )}
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.thirdGrade.open && (
+                        <AddGrades
+                          data={s.students}
+                          teacher={ts?.teacherSchedule}
+                          type={'thirdGrade'}
+                          reportGrades={rgData?.reportGrades}
+                        />
+                      )}
+                      {esData && esData.enrollmentSetup?.enrollmentTertiary?.fourthGrade.open && (
+                        <AddGrades
+                          data={s.students}
+                          teacher={ts?.teacherSchedule}
+                          type={'fourthGrade'}
+                          reportGrades={rgData?.reportGrades}
+                        />
+                      )}
                     </div>
                   </div>
                   <DataTable teacher={ts?.teacherSchedule} columns={columns} data={s.students} />{' '}
@@ -123,7 +178,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               )}
             </>
           ) : (
-            <div className=''>404</div>
+            <div className="">404</div>
           )}
         </div>
       )}

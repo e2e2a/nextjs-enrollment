@@ -59,7 +59,11 @@ export const getAdminProfileByUserId = async (userId: any) => {
 
 export const updateAdminProfileById = async (id: string, data: any) => {
   try {
-    const updatedProfile = await AdminProfile.findByIdAndUpdate(id, { ...data, isVerified: true }, { new: true });
+    const updatedProfile = await AdminProfile.findByIdAndUpdate(
+      id,
+      { ...data, isVerified: true },
+      { new: true }
+    );
     return updatedProfile;
   } catch (error) {
     console.log(error);
@@ -69,7 +73,11 @@ export const updateAdminProfileById = async (id: string, data: any) => {
 
 export const updateAdminProfileByUserId = async (userId: string, data: any) => {
   try {
-    const updatedProfile = await AdminProfile.findOneAndUpdate({ userId }, { ...data }, { new: true });
+    const updatedProfile = await AdminProfile.findOneAndUpdate(
+      { userId },
+      { ...data },
+      { new: true }
+    );
     return updatedProfile;
   } catch (error) {
     console.log(error);
